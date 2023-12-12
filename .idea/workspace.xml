@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="064231cc-4d29-44c8-bd4e-c040034bb228" name="Changes" comment="git init">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/kr/co/yigil/member/domain/MemberStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/ISSUE_TEMPLATE/yigil-issue-template.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/settings.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/kr/co/yigil/BackendApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/kr/co/yigil/BackendApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="064231cc-4d29-44c8-bd4e-c040034bb228" name="Changes" comment="chore: add Member Entity" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -97,8 +83,8 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -180,7 +166,7 @@
       <workItem from="1702372001160" duration="638000" />
       <workItem from="1702375548743" duration="150000" />
       <workItem from="1702375708573" duration="82000" />
-      <workItem from="1702375806749" duration="6152000" />
+      <workItem from="1702375806749" duration="6459000" />
     </task>
     <task id="LOCAL-00001" summary="git init">
       <option name="closed" value="true" />
@@ -206,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702370266286</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="chore: add Member Entity">
+      <option name="closed" value="true" />
+      <created>1702383521114</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702383521114</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,6 +208,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="git init" />
-    <option name="LAST_COMMIT_MESSAGE" value="git init" />
+    <MESSAGE value="chore: add Member Entity" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: add Member Entity" />
   </component>
 </project>
