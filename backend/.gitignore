@@ -38,3 +38,4 @@ out/
 
 ### application*.yml ###
 src/main/resources/*.yml
+application.yml
