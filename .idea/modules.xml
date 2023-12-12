@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/f1-Yigil.iml" filepath="$PROJECT_DIR$/.idea/f1-Yigil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/yigil.main.iml" filepath="$PROJECT_DIR$/.idea/modules/yigil.main.iml" />
     </modules>
   </component>
 </project>
