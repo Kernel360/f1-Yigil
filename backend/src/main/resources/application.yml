@@ -1,15 +1,1 @@
-spring:
-  jpa:
-    database: postgresql
-    database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
-    show-sql: true
-    properties:
-      format_sql : true
-    hibernate:
-      ddl-auto: create
-    defer-datasource-initialization: true
-  datasource:
-    url: jdbc:postgresql://localhost:5432/yigil-db
-    username: postgres
-    password: 1234
-    driver-class-name: org.postgresql.Driver
+
