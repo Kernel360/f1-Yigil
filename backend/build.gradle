@@ -36,6 +36,7 @@ dependencies {
 	implementation 'org.postgresql:postgresql'
 	implementation 'org.hibernate:hibernate-core:6.4.0.Final'
 	implementation 'org.hibernate:hibernate-spatial:6.4.0.Final'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 }
 
 tasks.named('test') {
