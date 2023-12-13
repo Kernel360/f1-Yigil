@@ -27,7 +27,7 @@ public class Member {
     private Long id;
 
     @Id
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 50)
     private String email;
 
     @Column(nullable = false, length = 30)
