@@ -12,6 +12,11 @@ body {
   width: 100vw;
   height: 100vh;
 }
+@layer base {
+  html {
+    font-family: 'Jalnan', system-ui, sans-serif;
+  }
+}
 
 @font-face {
   font-family: 'Jalnan';
