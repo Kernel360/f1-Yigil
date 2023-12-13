@@ -3,23 +3,26 @@ package kr.co.yigil.global.config;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
+@PropertySource("classpath:config.properties")
 public class JasyptConfig {
+
+    @Value("${Jasypt-Secret-Key}")
+    private String key;
 
     @Bean(name = "jasyptStringEncryptor")
     public StringEncryptor stringEncryptor() {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         encryptor.setConfig(createSimpleStringPBEConfig());
-        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-        encryptor.setConfig(config);
         return encryptor;
     }
 
     private SimpleStringPBEConfig createSimpleStringPBEConfig() {
-        String key = "yigil_jasypt_key";
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         setEncryptionConfigDetails(config, key);
         return config;
