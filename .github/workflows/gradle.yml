@@ -33,7 +33,7 @@ jobs:
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x ./gradlew
     
     # Gradle Build (test 제외)
     - name: Build with Gradle
