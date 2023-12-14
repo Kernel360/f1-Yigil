@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+}
+@layer base {
+  html {
+    font-family: 'Jalnan', system-ui, sans-serif;
+  }
+}
+
+@font-face {
+  font-family: 'Jalnan';
+  src: url('/fonts/Jalnan2TTF.ttf');
+}
