@@ -7,7 +7,7 @@ import kr.co.yigil.login.dto.response.LoginResponse;
 public class GoogleLoginStratgy implements LoginStrategy{
 
     @Override
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request, String accessToken) {
         return new GoogleLoginResponse();
     }
 
