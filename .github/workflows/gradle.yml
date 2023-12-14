@@ -50,7 +50,10 @@ jobs:
 
     # Docker 이미지 빌드
     - name: Docker Image Build
-      run: docker build -t ${{secrets.DOCKERHUB_USERNAME}}/${{secrets.PROJECT_NAME}} . --platform=linux/amd64
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+      run: |
+        docker build -t "$DOCKERHUB_USERNAME" . --platform=linux/amd64
 
     # DockerHub Push
     - name: DockerHub Push
