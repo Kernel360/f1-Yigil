@@ -62,7 +62,7 @@ jobs:
       with:
         host: ${{ secrets.VULTR_HOST }}
         username: ${{ secrets.VULTR_USERNAME }}
-        key: ${{ secrets.VULTR_KEY }}
+        key: yigilottae
 
         script: |
           sudo docker kill ${{ secrets.PROJECT_NAME }}
