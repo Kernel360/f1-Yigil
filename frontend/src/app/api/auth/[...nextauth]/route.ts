@@ -18,7 +18,7 @@ const handler = NextAuth({
       console.log(user)
       /**
        * 백엔드와 api 통신
-       * 회원가입 해야 하는 
+       * 회원가입 해야 하는
        * if(user.email)
        */
       // 로그인 된 다면 true 안되면 redirect end
