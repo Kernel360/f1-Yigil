@@ -3,6 +3,7 @@
 import React from 'react'
 import KakaoBtn from '@/app/_components/ui/button/Kakao'
 import MainLogo from '@/app/_components/ui/main-logo/MainLogo'
+import { useSession } from 'next-auth/react'
 // import GoogleBtn from '@/app/_components/ui/button/Google'
 
 export default function LoginPage() {

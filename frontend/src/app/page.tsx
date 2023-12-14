@@ -14,9 +14,5 @@ export default function Home() {
     }, 1500)
     return () => clearTimeout(timer)
   }, [])
-  return (
-    <>
-      <LandingPage />
-    </>
-  )
+  return <LandingPage />
 }
