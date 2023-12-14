@@ -26,11 +26,10 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Id
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 50, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 30, unique = true)
     private String socialLoginId;
 
     @Column(nullable = false, length = 20)
