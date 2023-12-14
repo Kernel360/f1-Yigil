@@ -1,5 +1,7 @@
 package kr.co.yigil.login.presentation;
 
+import static kr.co.yigil.login.util.LoginUtils.extractToken;
+
 import jakarta.servlet.http.HttpSession;
 import kr.co.yigil.login.application.LoginStrategyManager;
 import kr.co.yigil.login.application.strategy.LoginStrategy;
@@ -25,8 +27,9 @@ public class LoginController {
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody LoginRequest loginRequest) {
 
+        String accessToken = extractToken(authorizationHeader);
         LoginStrategy strategy = loginStrategyManager.getLoginStrategy(provider);
-        LoginResponse response = strategy.login(loginRequest);
+        LoginResponse response = strategy.login(loginRequest, accessToken);
         return ResponseEntity.ok(response);
     }
 }
