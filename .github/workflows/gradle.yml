@@ -29,7 +29,8 @@ jobs:
         distribution: 'temurin'
     ## application.yml 생성 후 secret 값 복붙
 
-    # change directory to backend
+
+     # change directory to backend
     - name: Move to backend directory
       run: cd ./backend
 
