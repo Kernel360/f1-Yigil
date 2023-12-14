@@ -4,4 +4,5 @@ public enum MemberStatus {
     ACTIVE,
     BANNED,
     WITHDRAW
+
 }
