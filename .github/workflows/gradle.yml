@@ -50,10 +50,7 @@ jobs:
 
     # Docker 이미지 빌드
     - name: Docker Image Build
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}/yigil
-      run: |
-        docker build -t "$DOCKERHUB_USERNAME" . --platform=linux/amd64
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }} . --platform=linux/amd64
 
     # DockerHub Push
     - name: DockerHub Push
@@ -65,7 +62,7 @@ jobs:
       with:
         host: ${{ secrets.VULTR_HOST }}
         username: ${{ secrets.VULTR_USERNAME }}
-        key: ${{ secrets.VULTR_KEY }}
+        password: ${{ secrets.VULTR_KEY }}
 
         script: |
           sudo docker kill ${{ secrets.PROJECT_NAME }}
