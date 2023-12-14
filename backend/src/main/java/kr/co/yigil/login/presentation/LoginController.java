@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,12 +19,12 @@ public class LoginController {
 
     private final LoginStrategyManager loginStrategyManager;
 
-    @PostMapping("/api/v1/{provider}")
+    @PostMapping("/api/v1/login/{provider}")
     public ResponseEntity<LoginResponse> login(
             @PathVariable final String provider,
-            @RequestBody final LoginRequest loginRequest,
-            HttpSession session
-    ) {
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody LoginRequest loginRequest) {
+
         LoginStrategy strategy = loginStrategyManager.getLoginStrategy(provider);
         LoginResponse response = strategy.login(loginRequest);
         return ResponseEntity.ok(response);
