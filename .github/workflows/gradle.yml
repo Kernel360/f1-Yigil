@@ -16,6 +16,8 @@ permissions:
 
 jobs:
   build:
+    env:
+      working-directory: ./backend
 
     runs-on: ubuntu-latest
 
@@ -31,10 +33,7 @@ jobs:
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
-      run: chmod +x backend/gradlew
-    
-    - name: move directory
-      run: cd backend
+      run: chmod +x gradlew
     
     # Gradle Build (test 제외)
     - name: Build with Gradle
