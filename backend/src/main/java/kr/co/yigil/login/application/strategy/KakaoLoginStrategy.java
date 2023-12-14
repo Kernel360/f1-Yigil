@@ -1,6 +1,7 @@
 package kr.co.yigil.login.application.strategy;
 
 import kr.co.yigil.login.dto.request.LoginRequest;
+import kr.co.yigil.login.dto.response.KakaoLoginResponse;
 import kr.co.yigil.login.dto.response.LoginResponse;
 
 public class KakaoLoginStrategy implements LoginStrategy {
@@ -9,7 +10,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-
+        return new KakaoLoginResponse();
     }
 
     @Override
