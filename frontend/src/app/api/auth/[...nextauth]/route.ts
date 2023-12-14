@@ -13,6 +13,7 @@ const handler = NextAuth({
       clientSecret: process.env.KAKAO_SECRET || '',
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET || '',
   callbacks: {
     async signIn({ user }) {
       console.log(user)
@@ -36,6 +37,7 @@ const handler = NextAuth({
 
   pages: {
     signIn: '/login',
+    error: '/login_error',
   },
 })
 
