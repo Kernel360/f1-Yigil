@@ -13,12 +13,13 @@ const handler = NextAuth({
       clientSecret: process.env.KAKAO_SECRET || '',
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET || '',
   callbacks: {
     async signIn({ user }) {
       console.log(user)
       /**
        * 백엔드와 api 통신
-       * 회원가입 해야 하는 
+       * 회원가입 해야 하는
        * if(user.email)
        */
       // 로그인 된 다면 true 안되면 redirect end
@@ -36,6 +37,7 @@ const handler = NextAuth({
 
   pages: {
     signIn: '/login',
+    error: '/login_error',
   },
 })
 
