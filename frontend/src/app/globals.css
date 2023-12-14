@@ -12,8 +12,3 @@ body {
   width: 100vw;
   height: 100vh;
 }
-
-@font-face {
-  font-family: 'Jalnan';
-  src: url('/fonts/Jalnan2TTF.ttf');
-}
