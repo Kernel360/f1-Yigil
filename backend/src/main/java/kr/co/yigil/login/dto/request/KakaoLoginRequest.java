@@ -1,5 +1,8 @@
 package kr.co.yigil.login.dto.request;
 
-public class KakaoLoginRequest {
+import lombok.Data;
 
+@Data
+public class KakaoLoginRequest {
+    private Long id;
 }
