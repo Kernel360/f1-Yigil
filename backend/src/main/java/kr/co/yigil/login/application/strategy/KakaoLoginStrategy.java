@@ -37,14 +37,13 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
     @Override
     public LoginResponse login(LoginRequest request, String accessToken, HttpSession session) {
-        LoginRequest loginRequest = request;
 
-        if(!isTokenValid(accessToken, loginRequest.getId())) {
+        if(!isTokenValid(accessToken, request.getId())) {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
 
-        Member member = memberRepository.findMemberBySocialLoginId(loginRequest.getId().toString())
-                .orElseGet(() -> registerNewMember(loginRequest));
+        Member member = memberRepository.findMemberBySocialLoginId(request.getId().toString())
+                .orElseGet(() -> registerNewMember(request));
 
         session.setAttribute("memberId", member.getId());
 
