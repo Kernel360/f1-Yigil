@@ -23,13 +23,15 @@ public class LoginController {
 
     @PostMapping("/api/v1/login/{provider}")
     public ResponseEntity<LoginResponse> login(
-            @PathVariable final String provider,
-            @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody LoginRequest loginRequest) {
-
+            @PathVariable("provider") final String provider,
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestBody LoginRequest loginRequest,
+            HttpSession session
+    ) {
         String accessToken = extractToken(authorizationHeader);
         LoginStrategy strategy = loginStrategyManager.getLoginStrategy(provider);
-        LoginResponse response = strategy.login(loginRequest, accessToken);
+        LoginResponse response = strategy.login(loginRequest, accessToken, session);
         return ResponseEntity.ok(response);
     }
+
 }

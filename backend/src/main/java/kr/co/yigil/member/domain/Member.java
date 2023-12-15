@@ -45,8 +45,7 @@ public class Member {
     @Column(updatable = false)
     private LocalDateTime joinedAt;
 
-    public Member(final Long id, final String email, final String socialLoginId, final String nickname, final String profileImageUrl) {
-        this.id = id;
+    public Member(final String email, final String socialLoginId, final String nickname, final String profileImageUrl) {
         this.email = email;
         this.socialLoginId = socialLoginId;
         this.nickname = nickname;

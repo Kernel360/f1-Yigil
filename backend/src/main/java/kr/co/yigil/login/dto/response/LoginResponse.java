@@ -1,5 +1,10 @@
 package kr.co.yigil.login.dto.response;
 
-public interface LoginResponse {
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Data
+public class LoginResponse {
+    private String message;
 }
