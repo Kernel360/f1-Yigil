@@ -38,6 +38,8 @@ public class KakaoLoginStrategy implements LoginStrategy {
         if(!isTokenValid(accessToken, loginRequest.getId())) {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
+
+
         return new KakaoLoginResponse();
     }
 

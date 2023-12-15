@@ -6,4 +6,5 @@ import kr.co.yigil.login.dto.response.LoginResponse;
 public interface LoginStrategy {
     LoginResponse login(LoginRequest request, String accessToken);
     String getProviderName();
+    
 }
