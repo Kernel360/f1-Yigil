@@ -48,9 +48,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
         session.setAttribute("memberId", member.getId());
 
-        LoginResponse response = new LoginResponse();
-        response.setMessage("로그인 성공");
-        return response;
+        return new LoginResponse("로그인 성공");
     }
 
     @Override
