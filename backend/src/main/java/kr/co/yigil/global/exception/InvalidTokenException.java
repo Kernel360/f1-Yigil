@@ -7,5 +7,6 @@ public class InvalidTokenException extends AuthException {
 
     public InvalidTokenException(final ExceptionCode exceptionCode) {
         super(exceptionCode);
+
     }
 }
