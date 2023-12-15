@@ -9,6 +9,7 @@ import kr.co.yigil.login.dto.request.LoginRequest;
 import kr.co.yigil.login.dto.response.KakaoLoginResponse;
 import kr.co.yigil.login.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.login.dto.response.LoginResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
@@ -17,14 +18,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Service
+@Slf4j
 @PropertySource("classpath:url.properties")
 public class KakaoLoginStrategy implements LoginStrategy {
 
     private static final String PROVIDER_NAME = "kakao";
 
-    @Value("${Kakao-Token-Info-Url}")
+    @Value("${kakao.token.info.url}")
     private String KAKAO_TOKEN_INFO_URL;
 
     @Override
@@ -43,6 +47,11 @@ public class KakaoLoginStrategy implements LoginStrategy {
     }
 
     private boolean isTokenValid(String accessToken, Long expectedUserId) {
+        KakaoTokenInfoResponse tokenInfo = requestKakaoTokenInfo(accessToken);
+        return isUserIdValid(tokenInfo, expectedUserId);
+    }
+
+    private KakaoTokenInfoResponse requestKakaoTokenInfo(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,13 +61,17 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
         try {
             ResponseEntity<KakaoTokenInfoResponse> response = restTemplate.exchange(
-                    KAKAO_TOKEN_INFO_URL, HttpMethod.GET, entity, KakaoTokenInfoResponse.class);
-
-            KakaoTokenInfoResponse tokenInfo = response.getBody();
-            return tokenInfo != null && tokenInfo.getId().equals(expectedUserId);
+                    KAKAO_TOKEN_INFO_URL, HttpMethod.GET, entity, KakaoTokenInfoResponse.class
+            );
+            return response.getBody();
         } catch (Exception e) {
-            return false;
+            log.warn(e.getMessage(), e);
+            throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
+    }
+
+    private boolean isUserIdValid(KakaoTokenInfoResponse tokenInfo, Long expectedUserId) {
+        return tokenInfo != null && tokenInfo.getId().equals(expectedUserId);
     }
 
 }
