@@ -1,8 +1,12 @@
 package kr.co.yigil.login.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class KakaoTokenInfoResponse {
     private Long id;
     private int expiresIn;

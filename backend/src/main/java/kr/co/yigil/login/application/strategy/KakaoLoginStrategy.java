@@ -11,6 +11,7 @@ import kr.co.yigil.login.dto.response.LoginResponse;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -35,6 +36,9 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
     private final MemberRepository memberRepository;
 
+    @Setter
+    private RestTemplate restTemplate = new RestTemplate();
+
     @Override
     public LoginResponse login(LoginRequest request, String accessToken, HttpSession session) {
 
@@ -46,7 +50,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
                 .orElseGet(() -> registerNewMember(request));
 
         session.setAttribute("memberId", member.getId());
-
+        System.out.println("로그인 성공이다앗!");
         return new LoginResponse("로그인 성공");
     }
 
@@ -61,8 +65,6 @@ public class KakaoLoginStrategy implements LoginStrategy {
     }
 
     private KakaoTokenInfoResponse requestKakaoTokenInfo(String accessToken) {
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
