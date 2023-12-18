@@ -31,6 +31,7 @@ jobs:
       run: |
         'echo Jasypt-Secret-Key="$JASYPT_SECRET_KEY" > ./src/main/resources/config.properties'
         'echo kakao.token.info.url="$KAKAO_TOKEN_INFO_URL" > ./src/main/resources/url.properties'
+
     
     ## jdk setting
     - uses: actions/checkout@v3
