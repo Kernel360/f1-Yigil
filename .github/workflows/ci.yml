@@ -25,12 +25,7 @@ jobs:
       JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
       KAKAO_TOKEN_INFO_URL: ${{ secrets.KAKAO_TOKEN_INFO_URL }}
     
-    steps:    
-    - name: make properties files
-  
-      run: |
-        'echo Jasypt-Secret-Key="$JASYPT_SECRET_KEY" > ./src/main/resources/config.properties'
-        'echo kakao.token.info.url="$KAKAO_TOKEN_INFO_URL" > ./src/main/resources/url.properties'
+    steps:
     
     ## jdk setting
     - uses: actions/checkout@v3
@@ -40,6 +35,11 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
     ## application.yml 생성 후 secret 값 복붙
+
+    - name: make properties files
+      run: |
+        echo Jasypt-Secret-Key="$JASYPT_SECRET_KEY" > ./src/main/resources/config.properties
+        echo kakao.token.info.url="$KAKAO_TOKEN_INFO_URL" > ./src/main/resources/url.properties
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
