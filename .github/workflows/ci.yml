@@ -28,7 +28,7 @@ jobs:
       run: |
         echo "Jasypt-Secret-Key=${{ secrets.JASYPT_SECRET_KEY }}" >> config.properties
         echo "kakao.token.info.url=${{ secrets.KAKAO_TOKEN_INFO_URL }}" >> url.properties
-      working-directory: ./backend/src/main/resources
+      working-directory: ./src/main/resources
     
     ## jdk setting
     - uses: actions/checkout@v3
