@@ -32,7 +32,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = KakaoLoginStrategyTest.class)
+@SpringBootTest(KakaoLoginStrategy.class)
 public class KakaoLoginStrategyTest {
 
     @MockBean
