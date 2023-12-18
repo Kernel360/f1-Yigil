@@ -33,10 +33,12 @@ jobs:
         distribution: 'temurin'
 
     # Setup Gradle
-    - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
-      with: 
-        gradle-version: 8.5
+    - name: Gradle Build Action
+    - uses: gradle/gradle-build-action@v2.11.0
+      with:
+        # Gradle version to use. If specified, this Gradle version will be downloaded, added to the PATH and used for invoking Gradle.
+        gradle-version: current
+        # Path to the Gradle executable. If specified, this executable will be added to the PATH and used for invoking Gradle.
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
@@ -44,4 +46,6 @@ jobs:
     
     # Gradle Build (test 제외)
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew build
+
+  
