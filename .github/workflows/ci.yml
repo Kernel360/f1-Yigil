@@ -41,6 +41,7 @@ jobs:
       run: |
         echo "Jasypt-Secret-Key=$JASYPT_SECRET_KEY" > ./src/main/resources/config.properties
         echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./src/main/resources/url.properties
+        cat ./src/main/resources/*
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
