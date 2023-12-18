@@ -43,3 +43,8 @@ jobs:
     # Gradle Build (test 제외)
     - name: Build with Gradle
       run: ./gradlew clean build
+
+    - name: Run tests
+      run: |
+        ./gradlew test --tests "kr/co/yigil/global/config/JasyptApplicationTest.java" \
+          -Pjasypt.secret.key=${JASYPT_SECRET_KEY}
