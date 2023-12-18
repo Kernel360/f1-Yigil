@@ -23,6 +23,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
+
     steps:
     ## jdk setting
     - uses: actions/checkout@v3
