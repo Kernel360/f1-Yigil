@@ -26,7 +26,9 @@ jobs:
     steps:
     - name: properties 파일 생성
       run: |
+        echo "Jasypt-Secret-Key=${{ secrets.JASYPT_SECRET_KEY }}"
         echo "Jasypt-Secret-Key=${{ secrets.JASYPT_SECRET_KEY }}" > ./src/main/resources/config.properties
+        echo "kakao.token.info.url=${{ secrets.KAKAO_TOKEN_INFO_URL }}"
         echo "kakao.token.info.url=${{ secrets.KAKAO_TOKEN_INFO_URL }}" > ./src/main/resources/url.properties
     
     ## jdk setting
