@@ -21,9 +21,6 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: 
-      JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
-      KAKAO_TOKEN_INFO_URL: ${{ secrets.KAKAO_TOKEN_INFO_URL }}
     
     steps:    
     ## jdk setting
@@ -37,8 +34,8 @@ jobs:
 
     - name: make properties files
       run: |
-        echo Jasypt-Secret-Key=$JASYPT_SECRET_KEY > ./src/main/resources/config.properties
-        echo kakao.token.info.url=$KAKAO_TOKEN_INFO_URL > ./src/main/resources/url.properties
+        echo Jasypt-Secret-Key='${{ secrets.JASYPT_SECRET_KEY }}' > ./src/main/resources/config.properties
+        echo kakao.token.info.url='${{ secrets.JASYPT_SECRET_KEY }}' > ./src/main/resources/url.properties
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
