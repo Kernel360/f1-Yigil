@@ -25,8 +25,7 @@ jobs:
       JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
       KAKAO_TOKEN_INFO_URL: ${{ secrets.KAKAO_TOKEN_INFO_URL }}
     
-    steps:
-    
+    steps:    
     ## jdk setting
     - uses: actions/checkout@v3
     - name: Set up JDK 21
