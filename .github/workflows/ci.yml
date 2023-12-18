@@ -23,10 +23,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    env:
-      JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
-
     steps:
+    - name: properties 파일 생성
+      run: |
+        echo "Jasypt-Secret-Key=${{ secrets.JASYPT_SECRET_KEY }}" >> src/main/resources/config.properties
+        echo "kakao.token.info.url=${{ secrets.KAKAO_TOKEN_INFO_URL }}" >> src/main/resources/url.properties
+    
     ## jdk setting
     - uses: actions/checkout@v3
     - name: Set up JDK 21
@@ -44,7 +46,3 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew clean build
 
-    - name: Run tests
-      run: |
-        ./gradlew test --tests "kr/co/yigil/global/config/JasyptApplicationTest.java" \
-          -Pjasypt.secret.key=${JASYPT_SECRET_KEY}
