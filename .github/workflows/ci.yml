@@ -35,10 +35,9 @@ jobs:
     - name: make properties files
       shell: bash
       env:
-        JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
-        KAKAO_TOKEN_INFO_URL: ${{ secrets.KAKAO_TOKEN_INFO_URL }}
+        JASYPT_SECRET_KEY: SECRET_KEY!!
+        KAKAO_TOKEN_INFO_URL: SECRET_KEY!!
       run: |
-        echo "Secret Token : ${{ secrets.JASYPT_SECRET_KEY }}"
         echo "Jasypt-Secret-Key=$JASYPT_SECRET_KEY" > ./src/main/resources/config.properties
         echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./src/main/resources/url.properties
 
