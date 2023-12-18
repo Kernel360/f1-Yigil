@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
-import java.time.LocalDateTime;
 import java.util.List;
 import kr.co.yigil.member.domain.Member;
 import lombok.AccessLevel;

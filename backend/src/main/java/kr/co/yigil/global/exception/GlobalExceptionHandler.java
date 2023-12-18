@@ -4,6 +4,7 @@ import static kr.co.yigil.global.exception.ExceptionCode.INVALID_REQUEST;
 
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            final MethodArgumentNotValidException e,
-            final HttpHeaders headers,
-            final HttpStatusCode status,
-            final WebRequest request
+            @NotNull final MethodArgumentNotValidException e,
+            @NotNull final HttpHeaders headers,
+            @NotNull final HttpStatusCode status,
+            @NotNull final WebRequest request
     ) {
         log.warn(e.getMessage(), e);
 

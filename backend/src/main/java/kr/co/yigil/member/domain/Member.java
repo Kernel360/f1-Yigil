@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
@@ -45,6 +46,9 @@ public class Member {
     @Column(updatable = false)
     private LocalDateTime joinedAt;
 
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
     public Member(final String email, final String socialLoginId, final String nickname, final String profileImageUrl) {
         this.email = email;
         this.socialLoginId = socialLoginId;
@@ -52,6 +56,7 @@ public class Member {
         this.profileImageUrl = profileImageUrl;
         this.status = MemberStatus.ACTIVE;
         this.joinedAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
     }
 
 }

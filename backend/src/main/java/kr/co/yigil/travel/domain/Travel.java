@@ -10,7 +10,6 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import kr.co.yigil.member.domain.Member;
 import lombok.AccessLevel;
