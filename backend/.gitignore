@@ -168,5 +168,3 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
-
-src/test/java/kr/co/yigil/global/config/JasyptApplicationTest.java
