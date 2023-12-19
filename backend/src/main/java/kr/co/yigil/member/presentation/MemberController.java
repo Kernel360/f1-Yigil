@@ -30,12 +30,12 @@ public class MemberController {
     }
 
 
-    @PutMapping("/api/v1/member")
-    public ResponseEntity<MemberUpdateResponse> updateMyInfo(
-            @PathVariable("member_id") final Long memberId,
-            @RequestBody MemberUpdateRequest request
-    ) {
-        MemberUpdateResponse response = memberService.updateMemberInfo(memberId, request);
-        return ResponseEntity.ok(response);
-    }
+//    @PutMapping("/api/v1/member")
+//    public ResponseEntity<MemberUpdateResponse> updateMyInfo(
+//            @PathVariable("member_id") final Long memberId,
+//            @RequestBody MemberUpdateRequest request
+//    ) {
+//        MemberUpdateResponse response = memberService.updateMemberInfo(memberId, request);
+//        return ResponseEntity.ok(response);
+//    }
 }
