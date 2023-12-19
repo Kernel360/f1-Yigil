@@ -18,6 +18,7 @@ import kr.co.yigil.login.dto.request.LoginRequest;
 import kr.co.yigil.login.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.login.dto.response.LoginResponse;
 import kr.co.yigil.member.domain.Member;
+import kr.co.yigil.member.domain.SocialLoginType;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -61,9 +62,9 @@ public class KakaoLoginStrategyTest {
                 eq(KakaoTokenInfoResponse.class))
         ).thenReturn(ResponseEntity.ok(mockResponse));
 
-        Member mockMember = new Member("email@example.com", "12345678", "user", "image_url");
+        Member mockMember = new Member("email@example.com", "12345678", "user", "image_url", "kakao");
 
-        when(memberRepository.findMemberBySocialLoginId("12345678")).thenReturn(Optional.of(mockMember));
+        when(memberRepository.findMemberBySocialLoginIdAndType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.of(mockMember));
 
         HttpSession mockSession = mock(HttpSession.class);
 
@@ -96,7 +97,7 @@ public class KakaoLoginStrategyTest {
         when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(KakaoTokenInfoResponse.class)))
                 .thenReturn(ResponseEntity.ok(mockResponse));
 
-        when(memberRepository.findMemberBySocialLoginId("12345678")).thenReturn(Optional.empty());
+        when(memberRepository.findMemberBySocialLoginIdAndType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.empty());
         when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         HttpSession mockSession = mock(HttpSession.class);

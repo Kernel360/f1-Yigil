@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,6 +21,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"socialLoginId", "type"})
+})
 @SQLDelete(sql = "UPDATE member SET status = 'WITHDRAW' WHERE id = ?")
 @Where(clause = "status = 'ACTIVE'")
 public class Member {
@@ -30,7 +35,7 @@ public class Member {
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
-    @Column(nullable = false, length = 30, unique = true)
+    @Column(nullable = false, length = 30)
     private String socialLoginId;
 
     @Column(nullable = false, length = 20)
@@ -42,6 +47,9 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private MemberStatus status;
 
+    @Enumerated(value = EnumType.STRING)
+    private SocialLoginType type;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime joinedAt;
@@ -49,12 +57,13 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public Member(final String email, final String socialLoginId, final String nickname, final String profileImageUrl) {
+    public Member(final String email, final String socialLoginId, final String nickname, final String profileImageUrl, final String socialLoginTypeString) {
         this.email = email;
         this.socialLoginId = socialLoginId;
         this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
         this.status = MemberStatus.ACTIVE;
+        this.type = SocialLoginType.valueOf(socialLoginTypeString.toUpperCase());
         this.joinedAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
