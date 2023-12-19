@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.travel.domain.Travel;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,4 +23,8 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "travel_id")
     private Travel travel;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 }
