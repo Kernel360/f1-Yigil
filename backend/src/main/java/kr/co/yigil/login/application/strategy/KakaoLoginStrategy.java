@@ -50,7 +50,6 @@ public class KakaoLoginStrategy implements LoginStrategy {
                 .orElseGet(() -> registerNewMember(request));
 
         session.setAttribute("memberId", member.getId());
-        System.out.println("로그인 성공이다앗!");
         return new LoginResponse("로그인 성공");
     }
 
