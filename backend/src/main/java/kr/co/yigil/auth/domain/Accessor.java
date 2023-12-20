@@ -27,4 +27,5 @@ public class Accessor {
     public boolean isMember() {
         return MEMBER.equals(authority);
     }
+
 }

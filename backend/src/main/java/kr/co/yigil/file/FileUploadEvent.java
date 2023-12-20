@@ -24,7 +24,6 @@ public class FileUploadEvent extends ApplicationEvent {
         this.file = file;
         this.callback = callback;
         fileType = determineFileType(file);
-        System.out.println(file.getSize());
         validateFileSize(fileType, file.getSize());
     }
 
