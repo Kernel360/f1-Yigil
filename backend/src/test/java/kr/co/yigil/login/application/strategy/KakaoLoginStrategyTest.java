@@ -64,7 +64,7 @@ public class KakaoLoginStrategyTest {
 
         Member mockMember = new Member("email@example.com", "12345678", "user", "image_url", "kakao");
 
-        when(memberRepository.findMemberBySocialLoginIdAndType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.of(mockMember));
+        when(memberRepository.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.of(mockMember));
 
         HttpSession mockSession = mock(HttpSession.class);
 
@@ -97,7 +97,7 @@ public class KakaoLoginStrategyTest {
         when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(KakaoTokenInfoResponse.class)))
                 .thenReturn(ResponseEntity.ok(mockResponse));
 
-        when(memberRepository.findMemberBySocialLoginIdAndType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.empty());
+        when(memberRepository.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.empty());
         when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         HttpSession mockSession = mock(HttpSession.class);

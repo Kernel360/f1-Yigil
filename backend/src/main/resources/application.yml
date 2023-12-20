@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
@@ -17,6 +21,19 @@ spring:
     redis:
       host: localhost
       port: 6379
+
+cloud:
+  aws:
+    s3:
+      bucket: yigilbucket
+    credentials:
+      access-key: AKIA57RFG4SU5VO6U3PQ
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 server:
   servlet:

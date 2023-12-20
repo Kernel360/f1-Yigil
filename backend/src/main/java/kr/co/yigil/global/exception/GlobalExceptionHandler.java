@@ -1,5 +1,6 @@
 package kr.co.yigil.global.exception;
 
+import static kr.co.yigil.global.exception.ExceptionCode.INTERNAL_SERVER_ERROR;
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_REQUEST;
 
 import java.util.Objects;
@@ -37,6 +38,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn(e.getMessage(), e);
 
         return ResponseEntity.badRequest()
+               . body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionResponse> handleBadRequestException(final BadRequestException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.badRequest()
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionResponse> handleException(final Exception e) {
+        log.error(e.getMessage(), e);
+
+        return ResponseEntity.internalServerError()
+                .body(new ExceptionResponse(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMessage()));
     }
 }

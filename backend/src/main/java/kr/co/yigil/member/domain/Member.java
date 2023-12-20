@@ -22,7 +22,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"socialLoginId", "type"})
+        @UniqueConstraint(columnNames = {"socialLoginId", "socialLoginType"})
 })
 @SQLDelete(sql = "UPDATE member SET status = 'WITHDRAW' WHERE id = ?")
 @Where(clause = "status = 'ACTIVE'")
