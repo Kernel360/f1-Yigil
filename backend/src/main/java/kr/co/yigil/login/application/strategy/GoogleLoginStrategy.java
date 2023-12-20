@@ -1,14 +1,14 @@
 package kr.co.yigil.login.application.strategy;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.yigil.login.dto.request.LoginRequest;
-import kr.co.yigil.login.dto.response.GoogleLoginResponse;
 import kr.co.yigil.login.dto.response.LoginResponse;
 
-public class GoogleLoginStratgy implements LoginStrategy{
+public class GoogleLoginStrategy implements LoginStrategy{
 
     @Override
-    public LoginResponse login(LoginRequest request) {
-        return new GoogleLoginResponse();
+    public LoginResponse login(LoginRequest request, String accessToken, HttpSession session) {
+        return new LoginResponse();
     }
 
     @Override

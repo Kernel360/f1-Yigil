@@ -1,5 +1,7 @@
 package kr.co.yigil.login.presentation;
 
+import static kr.co.yigil.login.util.LoginUtils.extractToken;
+
 import jakarta.servlet.http.HttpSession;
 import kr.co.yigil.login.application.LoginStrategyManager;
 import kr.co.yigil.login.application.strategy.LoginStrategy;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,14 +21,17 @@ public class LoginController {
 
     private final LoginStrategyManager loginStrategyManager;
 
-    @PostMapping("/api/v1/{provider}")
+    @PostMapping("/api/v1/login/{provider}")
     public ResponseEntity<LoginResponse> login(
-            @PathVariable final String provider,
-            @RequestBody final LoginRequest loginRequest,
+            @PathVariable("provider") final String provider,
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestBody LoginRequest loginRequest,
             HttpSession session
     ) {
+        String accessToken = extractToken(authorizationHeader);
         LoginStrategy strategy = loginStrategyManager.getLoginStrategy(provider);
-        LoginResponse response = strategy.login(loginRequest);
+        LoginResponse response = strategy.login(loginRequest, accessToken, session);
         return ResponseEntity.ok(response);
     }
+
 }
