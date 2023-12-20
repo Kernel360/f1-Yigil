@@ -1,5 +1,8 @@
 import React from 'react';
+
 import KakaoBtn from '@/app/_components/ui/button/Kakao';
+import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
+
 import LoginLogo from './_components/ui/LoginLogo';
 
 export default function LoginPage() {
@@ -11,6 +14,7 @@ export default function LoginPage() {
       </div>
       <div className="mt-8 flex flex-col items-center justify-center gap-4">
         <KakaoBtn />
+        <GoogleLoginButton />
       </div>
     </div>
   );
