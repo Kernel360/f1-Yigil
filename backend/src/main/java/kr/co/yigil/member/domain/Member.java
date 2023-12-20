@@ -48,7 +48,7 @@ public class Member {
     private MemberStatus status;
 
     @Enumerated(value = EnumType.STRING)
-    private SocialLoginType type;
+    private SocialLoginType socialLoginType;
 
     @CreatedDate
     @Column(updatable = false)
@@ -63,7 +63,7 @@ public class Member {
         this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
         this.status = MemberStatus.ACTIVE;
-        this.type = SocialLoginType.valueOf(socialLoginTypeString.toUpperCase());
+        this.socialLoginType = SocialLoginType.valueOf(socialLoginTypeString.toUpperCase());
         this.joinedAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
