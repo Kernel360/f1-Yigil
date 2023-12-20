@@ -51,4 +51,17 @@ public class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+    @DisplayName("사용자 정보를 조회할 때 200 응답과 response가 잘 반환되는지")
+    @Test
+    void whenGetMemberInfo_thenReturns200AndMemberInfoResponse() throws Exception {
+        MemberInfoResponse mockResponse = new MemberInfoResponse();
+        Long memberId = 1L;
+
+        given(memberService.getMemberInfo(memberId)).willReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/member/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 }

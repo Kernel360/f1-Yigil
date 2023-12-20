@@ -1,0 +1,35 @@
+spring:
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
+    show-sql: true
+    properties:
+      format_sql : true
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+  datasource:
+    url: ENC(qzhGNxDdTMrfKZ2aOD3O6F9kwBJqfx8WiLT8rCmyV5FlSpauXOVCr4V3QZTiueg0vbh+JIC+gMw=)
+    username: ENC(7X2Dna+5eL+qNm2Yb6N3GO090wNqjMNA)
+    password: ENC(7H6b3HZsLx/eRe4Ko7IlaA==)
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+server:
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: false
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+logging:
+  level:
+    root: info
+
