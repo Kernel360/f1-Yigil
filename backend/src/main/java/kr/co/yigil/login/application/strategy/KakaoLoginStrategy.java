@@ -47,7 +47,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
 
-        Member member = memberRepository.findMemberBySocialLoginIdAndType(request.getId().toString(),
+        Member member = memberRepository.findMemberBySocialLoginIdAndSocialLoginType(request.getId().toString(),
                         SocialLoginType.valueOf(PROVIDER_NAME.toUpperCase()))
                 .orElseGet(() -> registerNewMember(request));
 

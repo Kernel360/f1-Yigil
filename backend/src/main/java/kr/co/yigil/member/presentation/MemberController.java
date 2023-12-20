@@ -40,7 +40,7 @@ public class MemberController {
 
     @DeleteMapping("/api/v1/member")
     @MemberOnly
-    public ResponseEntity<MemberDeleteResponse> withdrawService(@Auth final Accessor accessor) {
+    public ResponseEntity<MemberDeleteResponse> withdraw(@Auth final Accessor accessor) {
         return ResponseEntity.ok().body(new MemberDeleteResponse());
     }
 
