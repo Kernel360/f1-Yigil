@@ -8,6 +8,7 @@ import kr.co.yigil.login.application.strategy.LoginStrategy;
 import kr.co.yigil.login.dto.request.LoginRequest;
 import kr.co.yigil.login.dto.response.LoginResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class LoginController {
 
     private final LoginStrategyManager loginStrategyManager;
@@ -28,6 +30,7 @@ public class LoginController {
             @RequestBody LoginRequest loginRequest,
             HttpSession session
     ) {
+        log.warn("login request is accepted");
         String accessToken = extractToken(authorizationHeader);
         LoginStrategy strategy = loginStrategyManager.getLoginStrategy(provider);
         LoginResponse response = strategy.login(loginRequest, accessToken, session);

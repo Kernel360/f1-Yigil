@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.travel.domain.Travel;
 import lombok.AccessLevel;
@@ -20,7 +21,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "travel_id")
     private Travel travel;
 
