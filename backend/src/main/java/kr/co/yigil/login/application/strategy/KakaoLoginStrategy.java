@@ -9,6 +9,7 @@ import kr.co.yigil.login.dto.request.LoginRequest;
 import kr.co.yigil.login.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.login.dto.response.LoginResponse;
 import kr.co.yigil.member.domain.Member;
+import kr.co.yigil.member.domain.SocialLoginType;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -46,10 +47,11 @@ public class KakaoLoginStrategy implements LoginStrategy {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
 
-        Member member = memberRepository.findMemberBySocialLoginId(request.getId().toString())
+        Member member = memberRepository.findMemberBySocialLoginIdAndType(request.getId().toString(),
+                        SocialLoginType.valueOf(PROVIDER_NAME.toUpperCase()))
                 .orElseGet(() -> registerNewMember(request));
 
-        session.setAttribute("memberId", member.getId());
+        session.setAttribute(  "memberId", member.getId());
         return new LoginResponse("로그인 성공");
     }
 
@@ -85,7 +87,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
     }
 
     private Member registerNewMember(LoginRequest request) {
-        Member newMember = new Member(request.getEmail(), request.getId().toString(), request.getNickname(), request.getProfileImageUrl());
+        Member newMember = new Member(request.getEmail(), request.getId().toString(), request.getNickname(), request.getProfileImageUrl(), PROVIDER_NAME);
         return memberRepository.save(newMember);
     }
 
