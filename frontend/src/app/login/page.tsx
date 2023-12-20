@@ -1,9 +1,5 @@
-'use client';
-
 import React from 'react';
 import KakaoBtn from '@/app/_components/ui/button/Kakao';
-
-import { useSession } from 'next-auth/react';
 import LoginLogo from './_components/ui/LoginLogo';
 
 export default function LoginPage() {
