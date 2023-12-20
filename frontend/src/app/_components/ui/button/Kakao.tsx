@@ -1,7 +1,9 @@
-import { signIn } from 'next-auth/react'
-import Image from 'next/image'
-import React from 'react'
-import kakaoLogo from '../../../../../public/loginBtns/kakao_logo.png'
+'use client';
+
+import { signIn } from 'next-auth/react';
+import Image from 'next/image';
+import React from 'react';
+import kakaoLogo from '../../../../../public/loginBtns/kakao_logo.png';
 
 export default function KakaoBtn() {
   return (
@@ -18,5 +20,5 @@ export default function KakaoBtn() {
       </span>
       <span className="ml-[40px] text-lg text-center">Kakao 로그인하기</span>
     </button>
-  )
+  );
 }
