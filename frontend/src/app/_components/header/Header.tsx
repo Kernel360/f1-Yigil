@@ -4,7 +4,7 @@ import HeaderLogo from './ui/HeaderLogo';
 
 export default function Header() {
   return (
-    <div className="w-full h-[80px] flex justify-center items-center relative border-2 border-[black]">
+    <div className="w-full h-[80px] flex justify-center items-center relative">
       <HeaderLogo />
       <HeaderIcons />
     </div>
