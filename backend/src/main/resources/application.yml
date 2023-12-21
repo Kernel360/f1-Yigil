@@ -19,7 +19,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   data:
     redis:
-      host: localhost
+      host: UWM+zx0ZWpdDd4zbilBldqHPKIoEbMyo
       port: 6379
 
 cloud:
