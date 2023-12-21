@@ -19,7 +19,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   data:
     redis:
-      url: ENC(XWdbpR7mrzPcnb+ZRwIl3CL2lN2fJGL+ny60tI7BXIW0vEzCrtCyUQ==)
+      host: ENC(pTz02jIdpMhcYG6Grhq2FgNimXiapVYl)
+      port: 6379
 
 cloud:
   aws:
