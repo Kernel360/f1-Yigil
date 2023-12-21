@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
   <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$/../../build/generated/sources/annotationProcessor/java/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../src/main" dumb="true">
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
     </content>
@@ -16,5 +19,8 @@
         <naming-strategy-map />
       </configuration>
     </facet>
+  </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="ff85542c-cb13-4550-b17e-2bead0477ec8" />
   </component>
 </module>

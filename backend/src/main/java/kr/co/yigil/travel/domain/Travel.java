@@ -13,12 +13,14 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import kr.co.yigil.member.domain.Member;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 
 @Entity
+@Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,9 +30,9 @@ public abstract class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+//    @ManyToOne
+//    @JoinColumn(name = "member_id")
+//    private Member member;
 
     @CreatedDate
     @Column(updatable = false)
@@ -39,7 +41,7 @@ public abstract class Travel {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    protected Travel(final Member member) {
-        this.member = member;
-    }
+//    protected Travel(final Member member) {
+//        this.member = member;
+//    }
 }

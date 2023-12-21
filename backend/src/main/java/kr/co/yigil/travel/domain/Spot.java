@@ -5,6 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import kr.co.yigil.member.domain.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
@@ -32,9 +33,19 @@ public class Spot extends Travel{
     @Column(columnDefinition = "TEXT")
     private String videoUrl;
 
+//    @Builder
+//    public Spot(final Member member, final Point location, final boolean isInCourse, final String title, final String description, final String imageUrl, final String videoUrl) {
+//        super(member);
+//        this.location = location;
+//        this.isInCourse = isInCourse;
+//        this.title = title;
+//        this.description = description;
+//        this.imageUrl = imageUrl;
+//        this.videoUrl = videoUrl;
+//    }
 
-    public Spot(final Member member, final Point location, final boolean isInCourse, final String title, final String description, final String imageUrl, final String videoUrl) {
-        super(member);
+    @Builder
+    public Spot(final Point location, final boolean isInCourse, final String title, final String description, final String imageUrl, final String videoUrl) {
         this.location = location;
         this.isInCourse = isInCourse;
         this.title = title;

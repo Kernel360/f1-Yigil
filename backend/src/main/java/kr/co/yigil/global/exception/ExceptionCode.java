@@ -18,7 +18,11 @@ public enum ExceptionCode {
     INVALID_ACCESS_TOKEN(9101, "올바르지 않은 형식의 Access Token입니다."),
     INVALID_AUTHORITY(9201, "해당 요청에 대한 접근 권한이 없습니다."),
 
-    INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생했습니다.");
+    INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생했습니다."),
+
+    // GeoJson
+    INVALID_LINESTRING_JSON(3001, "올바르지 않은 형식의 JSON String 입니다"),
+    NOT_FOUND_SPOT_ID(3002, "해당하는 spot이없 습니다");
 
     private final int code;
     private final String message;
