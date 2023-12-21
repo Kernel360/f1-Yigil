@@ -13,13 +13,13 @@ spring:
       ddl-auto: create
     defer-datasource-initialization: true
   datasource:
-    url: ENC(CLE/4mw1dFeX8rNwrN+66qUIBbo2dwOSQC5aKoEp3DJna2viB0VAtbugdRFL91XxSaYLpo9YlsQ=)
+    url: ENC(rVF2MqSZu/7CPpk9vdTU+wC13hLpMpUbBl2G3v0PDnGizcMYwcg8PC2OS01GW9x85kSLZZWojUQ=)
     username: ENC(7X2Dna+5eL+qNm2Yb6N3GO090wNqjMNA)
     password: ENC(7H6b3HZsLx/eRe4Ko7IlaA==)
     driver-class-name: org.postgresql.Driver
   data:
     redis:
-      host: UWM+zx0ZWpdDd4zbilBldqHPKIoEbMyo
+      host: ENC(pTz02jIdpMhcYG6Grhq2FgNimXiapVYl)
       port: 6379
 
 cloud:
