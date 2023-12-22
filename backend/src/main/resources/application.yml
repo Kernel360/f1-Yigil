@@ -13,13 +13,13 @@ spring:
       ddl-auto: create
     defer-datasource-initialization: true
   datasource:
-    url: ENC(m2FeaU7Y4QwO5t4njEH5BLNmjMc9lVqjnVTUmuuiXK2/JWXL1FyNMrVqwRuQmw77)
+    url: ENC(qzhGNxDdTMrfKZ2aOD3O6F9kwBJqfx8WiLT8rCmyV5FlSpauXOVCr4V3QZTiueg0vbh+JIC+gMw=)
     username: ENC(7X2Dna+5eL+qNm2Yb6N3GO090wNqjMNA)
     password: ENC(7H6b3HZsLx/eRe4Ko7IlaA==)
     driver-class-name: org.postgresql.Driver
   data:
     redis:
-      host: ENC(YScPSXHJxoe/2AePHe7PkQ==)
+      host: localhost
       port: 6379
 
 cloud:
@@ -48,5 +48,7 @@ jasypt:
 
 logging:
   level:
-    root: info
+    root: INFO
+  slack:
+    webhook-uri: https://hooks.slack.com/services/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
 
