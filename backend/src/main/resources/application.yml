@@ -48,5 +48,5 @@ jasypt:
 
 logging:
   level:
-    root: info
+    root: TRACE
 

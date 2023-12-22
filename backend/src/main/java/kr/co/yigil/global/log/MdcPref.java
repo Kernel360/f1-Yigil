@@ -1,4 +1,4 @@
-package kr.co.yigil.global.log.filter;
+package kr.co.yigil.global.log;
 
 public enum MdcPref {
     REQUEST_ID,

@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
+
+  <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+  <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+  <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+
   <property name="moduleId" value="around_hub_spring_boot"/>
   <property name="type" value="around_hub"/>
   <property name="logback" value="logback"/>
+
+  <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){green} %clr(%-5level){yellow} %clr(%-40.40logger{39}){cyan} %clr([%X{REQUEST_METHOD} %X{REQUEST_URI}]){blue} %clr(%X{REQUEST_ID}){magenta} %clr(%X{REQUEST_IP}){yellow} %clr(%X{REQUEST_TIME}){blue} %m%n"/>
+  <property name="CONSOLE_LOG_CHARSET" value="${CONSOLE_LOG_CHARSET:-default}"/>
 
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
       <level>INFO</level>
     </filter>
     <encoder>
-      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%thread] %logger [%X{REQUEST_ID}] [%X{REQUEST_METHOD}] [%X{REQUEST_URI}] [%X{REQUEST_TIME}] [%X{REQUEST_IP}] %msg%n</pattern>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
     </encoder>
   </appender>
 
