@@ -13,6 +13,7 @@ import kr.co.yigil.member.dto.response.MemberInfoResponse;
 import kr.co.yigil.member.dto.response.MemberUpdateResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
@@ -62,6 +64,7 @@ public class MemberController {
 
     @GetMapping("/test")
     public String getTest() {
+        log.error("놀라지 마세요 테스트 에러입니다.");
         return "test";
     }
 
