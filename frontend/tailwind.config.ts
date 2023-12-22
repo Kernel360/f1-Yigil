@@ -1,5 +1,3 @@
-import type { Config } from 'tailwindcss'
-
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,9 +7,9 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {},
-    },
-    colors: {
-      main: '#FC5230',
+      colors: {
+        main: '#FC5230',
+      },
     },
   },
 
@@ -19,4 +17,4 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-}
+};
