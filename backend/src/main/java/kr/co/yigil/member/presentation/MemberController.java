@@ -5,32 +5,24 @@ import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.member.dto.request.MemberUpdateRequest;
 import kr.co.yigil.member.dto.response.MemberDeleteResponse;
 import kr.co.yigil.member.dto.response.MemberInfoResponse;
 import kr.co.yigil.member.dto.response.MemberUpdateResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
-
 
     @GetMapping("/api/v1/member")
     @MemberOnly
@@ -60,12 +52,6 @@ public class MemberController {
     public ResponseEntity<MemberInfoResponse> getMemberInfo(@PathVariable("member_id") final Long memberId) {
         MemberInfoResponse response = memberService.getMemberInfo(memberId);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/test")
-    public String getTest() {
-        log.error("놀라지 마세요 테스트 에러입니다.");
-        return "test";
     }
 
 
