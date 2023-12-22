@@ -51,7 +51,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
                         SocialLoginType.valueOf(PROVIDER_NAME.toUpperCase()))
                 .orElseGet(() -> registerNewMember(request));
 
-        session.setAttribute(  "memberId", member.getId());
+        session.setAttribute("memberId", member.getId());
         return new LoginResponse("로그인 성공");
     }
 

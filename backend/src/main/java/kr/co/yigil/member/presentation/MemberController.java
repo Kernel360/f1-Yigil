@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
-
 
     @GetMapping("/api/v1/member")
     @MemberOnly
@@ -55,5 +53,6 @@ public class MemberController {
         MemberInfoResponse response = memberService.getMemberInfo(memberId);
         return ResponseEntity.ok(response);
     }
+
 
 }
