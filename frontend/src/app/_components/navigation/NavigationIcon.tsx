@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { usePathname } from 'next/navigation';
-
 import type { ReactNode } from 'react';
 
 export default function NavigationIcon({
@@ -18,11 +16,15 @@ export default function NavigationIcon({
   imgAlt: string;
   children: ReactNode;
 }) {
-  const flexCenter = 'flex flex-col gap-2 justify-center items-center';
-  const textStyles = 'text-xs no-underline';
+  const styles = [
+    'w-16',
+    'flex flex-col gap-2 justify-center items-center',
+    'text-xs text-[#000000]/[.4] no-underline',
+    'hover:text-main focus:text-main',
+  ].join(' ');
 
   return (
-    <Link href={href} className={`w-16 ${flexCenter} ${textStyles}`}>
+    <Link href={href} className={styles}>
       <Image src={imgSrc} alt={imgAlt} width={32} height={32} />
       {children}
     </Link>
