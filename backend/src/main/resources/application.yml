@@ -6,9 +6,6 @@ spring:
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
-    show-sql: true
-    properties:
-      format_sql : true
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
@@ -52,3 +49,7 @@ logging:
   slack:
     webhook-uri: https://hooks.slack.com/services/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
 
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
