@@ -12,4 +12,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     void deleteByTravelId(Long id);
 
     List<Post> findAllByMember(Member member);
+
+    boolean existsByMemberIdAndId(Long memberId, Long postId);
 }

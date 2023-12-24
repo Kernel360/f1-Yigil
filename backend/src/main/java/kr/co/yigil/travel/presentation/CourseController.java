@@ -4,9 +4,9 @@ import java.net.URI;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.post.dto.request.CourseRequest;
-import kr.co.yigil.post.dto.request.SpotRequest;
-import kr.co.yigil.post.dto.response.CourseResponse;
+import kr.co.yigil.travel.dto.request.CourseCreateRequest;
+import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
+import kr.co.yigil.travel.dto.response.CourseResponse;
 import kr.co.yigil.travel.application.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,16 +28,15 @@ public class CourseController {
     @PostMapping("/course")
     @MemberOnly
     public ResponseEntity<Long> createCourse(
-            @RequestBody CourseRequest courseRequest,
+            @RequestBody CourseCreateRequest courseCreateRequest,
             @Auth final Accessor accessor
     ){
-        Long courseId =  courseService.createCourse(accessor.getMemberId(), courseRequest);
+        Long courseId =  courseService.createCourse(accessor.getMemberId(), courseCreateRequest);
         URI uri = URI.create("api/v1/post/course" + courseId);
         return ResponseEntity.created(uri).body(courseId);
     }
 
     @GetMapping("/course/{postId}")
-    @MemberOnly
     public ResponseEntity<CourseResponse> findCourse(
             @PathVariable Long postId
     ){
@@ -45,16 +44,14 @@ public class CourseController {
         return ResponseEntity.ok().body(post);
     }
 
-
-
     @PutMapping("/course/{postId}")
     @MemberOnly
     public ResponseEntity<CourseResponse> updateCourse(
             @PathVariable Long postId,
-            @RequestBody CourseRequest courseRequest,
+            @RequestBody CourseUpdateRequest courseUpdateRequest,
             @Auth final Accessor accessor
     ){
-        return ResponseEntity.ok().body(courseService.updateCourse( postId,accessor.getMemberId(), courseRequest));
+        return ResponseEntity.ok().body(courseService.updateCourse( postId,accessor.getMemberId(), courseUpdateRequest));
     }
 
     @DeleteMapping("/course/{postId}")

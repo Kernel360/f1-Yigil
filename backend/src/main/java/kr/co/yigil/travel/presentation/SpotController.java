@@ -5,13 +5,18 @@ import java.net.URI;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.post.dto.request.SpotRequest;
-import kr.co.yigil.post.dto.response.SpotResponse;
+import kr.co.yigil.travel.dto.request.SpotCreateRequest;
+import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.dto.response.SpotCreateResponse;
+import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
+import kr.co.yigil.travel.dto.response.SpotFindResponse;
 import kr.co.yigil.travel.application.SpotService;
+import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,58 +31,62 @@ public class SpotController {
     private final SpotService spotService;
 
     @PostMapping("/spot")
-    @MemberOnly
-    public ResponseEntity<Long> createSpotPost(
-            @RequestBody SpotRequest spotRequest,
-            @Auth final Accessor accessor
+//    @MemberOnly
+    public ResponseEntity<SpotCreateResponse> createSpot(
+            @ModelAttribute SpotCreateRequest spotCreateRequest // file 추가해야담
+//            @Auth final Accessor accessor
 
     ){
-        Long spotId = spotService.createSpotPost(accessor.getMemberId(), spotRequest);
-        URI uri = URI.create("api/v1/spot/" + spotId);
-        return ResponseEntity.created(uri).body(spotId);
+//        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(), spotCreateRequest);
+        SpotCreateResponse spotCreateResponse = spotService.createSpot(1L, spotCreateRequest);
+        URI uri = URI.create("api/v1/spot/" + spotCreateResponse.getPostId());
+        return ResponseEntity.created(uri).body(spotCreateResponse);
     }
 
-    @PostMapping("/course/{courseId}/spot")
-    @MemberOnly
-    public ResponseEntity<SpotResponse> createSpot(
-            @PathVariable Long courseId,
-            @RequestBody SpotRequest spotRequest,
-            @Auth final Accessor accessor
-    ){
-        SpotResponse spotResponse = spotService.createSpot(accessor.getMemberId(), courseId, spotRequest);
-        URI uri = URI.create("api/v1/post/spot/" + spot.getId());
-        return ResponseEntity.created(uri).body(spotResponse);
-    }
-    )
+//    @PostMapping("/course/{courseId}/spot")
+//    @MemberOnly
+//    public ResponseEntity<SpotFindResponse> createSpotInCourse(
+//            @PathVariable Long courseId,
+//            @RequestBody SpotCreateRequest spotRequest,
+//            @Auth final Accessor accessor
+//    ){
+//        SpotFindResponse spotResponse = spotService.createSpot(accessor.getMemberId(), courseId, spotRequest);
+//        URI uri = URI.create("api/v1/post/spot/" + spot.getId());
+//        return ResponseEntity.created(uri).body(spotResponse);
+//    }
+//    )
 
 
-    @GetMapping("/spot/{postId}")
-    @MemberOnly
-    public ResponseEntity<SpotResponse> findSpot(
-            @PathVariable Long postId
+    @GetMapping("/spot/{post_id}")
+    public ResponseEntity<SpotFindResponse> findSpot(
+            @PathVariable("post_id") Long postId
     ) {
-        SpotResponse post = spotService.findSpot(postId);
+        SpotFindResponse post = spotService.findSpot(postId);
         return ResponseEntity.ok().body(post);
     }
 
-    @PostMapping("/spot/{id}")
-    public ResponseEntity<Long> updateSpot(
-            @PathVariable Long id,
-            @Auth final Accessor accessor,
-            @RequestBody SpotRequest spotRequest
+    // public findAllSpotPost() - 코스에 넣을 spot list
+
+    @PostMapping("/spot/{post_id}")
+//    @MemberOnly
+    public ResponseEntity<SpotUpdateResponse> updateSpot(
+            @PathVariable("post_id") Long postId,
+//            @Auth final Accessor accessor,
+            @ModelAttribute SpotUpdateRequest spotUpdateRequest
     ){
-        Long updatedPost = spotService.updateSpot(accessor.getMemberId(), id, spotRequest);
-        return ResponseEntity.ok().body(updatedPost);
+        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(1L, postId, spotUpdateRequest);
+//        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(), postId, spotUpdateRequest);
+        return ResponseEntity.ok().body(spotUpdateResponse);
     }
 
-    @DeleteMapping("/spot/{postId}")
-    @MemberOnly
-    public ResponseEntity<String> deletePost(
-            @PathVariable Long postId
-    ){
-        spotService.deleteSpot(postId);
-        String message = "해당 게시글은 삭제되었습니다";
-        return ResponseEntity.ok().body(message);
+    @DeleteMapping("/spot/{post_id}")
+//    @MemberOnly
+    public ResponseEntity<SpotDeleteResponse> deleteSpot(
+            @PathVariable("post_id") Long postId
+//            @Auth final Accessor accessor
+            ){
+//        SpotDeleteResponse spotDeleteResponse = spotService.deleteSpot(accessor.getMemberId(), postId);
+        SpotDeleteResponse spotDeleteResponse = spotService.deleteSpot(1L, postId);
+        return ResponseEntity.ok().body(spotDeleteResponse);
     }
-
 }

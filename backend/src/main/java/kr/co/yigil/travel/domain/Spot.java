@@ -53,4 +53,18 @@ public class Spot extends Travel{
         this.imageUrl = imageUrl;
         this.videoUrl = videoUrl;
     }
+
+    public Spot(final Long spotId, final Point location, final boolean isInCourse, final String title, final String description, final String imageUrl, final String videoUrl) {
+        super.setId(spotId);
+        this.location = location;
+        this.isInCourse = isInCourse;
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.videoUrl = videoUrl;
+    }
+
+    public  void setId(Long id){
+        super.setId(id);
+    }
 }

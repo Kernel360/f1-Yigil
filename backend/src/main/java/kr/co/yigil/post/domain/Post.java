@@ -1,5 +1,8 @@
 package kr.co.yigil.post.domain;
 
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.REMOVE;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,18 +17,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
+@SQLDelete(sql = "UPDATE post SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = {REMOVE, PERSIST})
     @JoinColumn(name = "travel_id")
     private Travel travel;
 
@@ -33,21 +38,20 @@ public class Post {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static Post of(Travel travel, Member member) {
-        return Post.builder()
-                .travel(travel)
-                .member(member)
-                .build();
+    private boolean isDeleted = false;
+
+    public Post(Travel travel, Member member) {
+        this.travel = travel;
+        this.member = member;
     }
 
-    public static Post of(Long id, Travel travel, Member member){
-        var post = Post.of(travel, member);
-        post.id = id;
-        return post;
+    public Post(Long id, Travel travel, Member member) {
+        this.id = id;
+        this.travel = travel;
+        this.member = member;
     }
 
-    public void updatePost(Travel travel){
+    public void setTravel(Travel travel) {
         this.travel = travel;
     }
-
 }

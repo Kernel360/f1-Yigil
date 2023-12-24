@@ -1,7 +1,7 @@
 package kr.co.yigil.post.presentation;
 
 import kr.co.yigil.post.application.PostService;
-import kr.co.yigil.post.dto.response.PostsFindAllResponse;
+import kr.co.yigil.post.dto.response.PostListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +16,8 @@ public class PostController {
 
 
     @GetMapping("/posts")
-    public ResponseEntity<PostsFindAllResponse> findAllPosts() {
-        PostsFindAllResponse posts = postService.findAllPosts();
+    public ResponseEntity<PostListResponse> findAllPosts() {
+        PostListResponse posts = postService.findAllPosts();
         return ResponseEntity.ok().body(posts);
     }
 

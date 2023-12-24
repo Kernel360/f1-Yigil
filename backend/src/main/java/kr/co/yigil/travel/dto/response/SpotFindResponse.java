@@ -1,13 +1,18 @@
-package kr.co.yigil.post.dto.response;
+package kr.co.yigil.travel.dto.response;
 
+import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.util.GeojsonConverter;
+import kr.co.yigil.travel.dto.util.GeojsonConverter;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class SpotResponse {
+public class SpotFindResponse {
     // 세부 spot response
     private String title;
     private String imageUrl;
@@ -20,19 +25,19 @@ public class SpotResponse {
     private Integer likeCount;
     private Integer commentCount;
 
-    private String pointGeoJson;
+    private String pointJson;
 
-    public static SpotResponse from(Spot spot) {
-        return SpotResponse.builder()
+    public static SpotFindResponse from(Member member, Spot spot) {
+        return SpotFindResponse.builder()
                 .title(spot.getTitle())
                 .imageUrl(spot.getImageUrl())
                 .videoUrl(spot.getVideoUrl())
                 .description(spot.getDescription())
-                .memberNickname(spot.getMember().getNickname())
-                .memberImageUrl(spot.getMember().getProfileImageUrl())
+                .memberNickname(member.getNickname())
+                .memberImageUrl(member.getProfileImageUrl())
                 .likeCount(0)
                 .commentCount(0)
-                .pointGeoJson(GeojsonConverter.convertToJson(spot.getLocation()))
+                .pointJson(GeojsonConverter.convertToJson(spot.getLocation()))
                 .build();
     }
 }

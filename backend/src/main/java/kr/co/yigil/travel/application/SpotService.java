@@ -1,21 +1,28 @@
 package kr.co.yigil.travel.application;
 
-import jakarta.transaction.Transactional;
+import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
-import kr.co.yigil.post.dto.request.SpotRequest;
-import kr.co.yigil.post.dto.response.SpotResponse;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.domain.repository.SpotRepository;
+import kr.co.yigil.travel.domain.repository.TravelRepository;
+import kr.co.yigil.travel.dto.request.SpotCreateRequest;
+import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.dto.response.SpotCreateResponse;
+import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
+import kr.co.yigil.travel.dto.response.SpotFindResponse;
+import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SpotService {
     private final SpotRepository spotRepository;
@@ -23,38 +30,42 @@ public class SpotService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long createSpotPost(Long memberId, SpotRequest spotRequest) {
+    public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {
         Member member = findMemberById(memberId);
-        Spot spotTravel = SpotRequest.toEntity(spotRequest);
-        spotRepository.save(spotTravel);
-        return postRepository.save(Post.of(spotTravel, member)).getId();
+        Spot spot = spotRepository.save(SpotCreateRequest.toEntity(spotCreateRequest));
+        Long postId = postRepository.save(new Post(spot, member)).getId();
+        return new SpotCreateResponse(postId);
     }
-    // todo: post로 감싸지 않은 findSpot 메서드 필요
 
-
-    public SpotResponse findSpot(Long postId) {
+    public SpotFindResponse findSpot(Long postId) {
         Post post = findPostById(postId);
-        Spot spot = (Spot) post.getTravel();
-        return SpotResponse.from(spot);
+        Member member = post.getMember();
+        if (post.getTravel() instanceof Spot spot) {
+            return SpotFindResponse.from(member, spot);
+        } else throw new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID);
     }
 
     @Transactional
-    public Long updateSpot(Long memberId, Long postId, SpotRequest spotRequest) {
+    public SpotUpdateResponse updateSpot(Long memberId, Long postId, SpotUpdateRequest spotUpdateRequest) {
+        Post post = findPostById(postId);
+        validatePostWriter(memberId, postId);
         Member member = findMemberById(memberId);
-        Travel spotTravel = SpotRequest.toEntity(spotRequest);
-        spotRepository.save(spotTravel);
-        var post = new Post(postId, spotTravel, member);
+        
+        // 기존 포스트의 spot 정보
+        Long spotId = post.getTravel().getId();
+        Spot spot = SpotUpdateRequest.toEntity(spotUpdateRequest);
+        spot.setId(spotId);
+        spotRepository.save(spot);
 
-        return postRepository.save(post).getId();
+        return SpotUpdateResponse.from(member, spot);
     }
 
     @Transactional
-    public void deleteSpot(Long postId){
-
+    public SpotDeleteResponse deleteSpot(Long memberId, Long postId){
         Post post = findPostById(postId);
-        Travel travel = post.getTravel();
-        spotRepository.delete(travel);
-        postRepository.deleteById(postId);
+        validatePostWriter(memberId, postId);
+        postRepository.delete(post);
+        return new SpotDeleteResponse("spot 삭제 성공");
     }
 
     public Member findMemberById(Long memberId) {
@@ -62,12 +73,15 @@ public class SpotService {
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_ID)
         );
     }
-
     public Post findPostById(Long postId) {
         return postRepository.findById(postId).orElseThrow(
-                // todo: custome error code 정의
-                () -> new RuntimeException("해당하는 포스트가 없습니다.")
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID)
         );
+    }
+    private void validatePostWriter(Long memberId, Long postId) {
+        if (!postRepository.existsByMemberIdAndId(memberId, postId)) {
+            throw new BadRequestException(ExceptionCode.HAS_NO_PERMISSION);
+        }
     }
 }
 

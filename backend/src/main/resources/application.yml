@@ -10,7 +10,7 @@ spring:
     properties:
       format_sql : true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     defer-datasource-initialization: true
   datasource:
     url: ENC(qzhGNxDdTMrfKZ2aOD3O6F9kwBJqfx8WiLT8rCmyV5FlSpauXOVCr4V3QZTiueg0vbh+JIC+gMw=)

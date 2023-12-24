@@ -36,15 +36,6 @@ public class Course extends Travel{
     @Column(nullable = false, length = 20)
     private String title;
 
-//    @Builder
-//    public Course(final Member member, final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
-//        super(member);
-//        this.path = path;
-//        this.spots = spots;
-//        this.representativeSpotOrder = representativeSpotOrder;
-//        this.title = title;
-//    }
-
     @Builder
     public Course(final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
         this.path = path;
@@ -62,7 +53,7 @@ public class Course extends Travel{
     }
 
     public void addSpot(Spot spot){
-        // spots에 이미 spot이 있는지 검증하는 로직이 필요할까요?
+        // spots에 이미 spot이 있는지 검증하는 로직이 필요할까?
         // 의심병 환자처럼 하겠습니다.
         if(spots.contains(spot)){
             return;

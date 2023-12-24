@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.util;
+package kr.co.yigil.travel.dto.util;
 
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
@@ -16,7 +16,7 @@ public class GeojsonConverter {
             return (LineString) reader.read(geoJson);
         } catch (ParseException e) {
 
-            throw new BadRequestException(ExceptionCode.INVALID_LINESTRING_JSON);
+            throw new BadRequestException(ExceptionCode.INVALID_GEO_JSON_FORMAT);
         }
     }
 
@@ -26,7 +26,7 @@ public class GeojsonConverter {
             return (Point) reader.read(geoJson);
         } catch (ParseException e) {
 
-            throw new BadRequestException(ExceptionCode.INVALID_LINESTRING_JSON);
+            throw new BadRequestException(ExceptionCode.INVALID_GEO_JSON_FORMAT);
         }
     }
 

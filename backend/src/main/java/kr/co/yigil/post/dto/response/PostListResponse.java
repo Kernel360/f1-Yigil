@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PostsFindAllResponse {
+public class PostListResponse {
     private List<PostResponse> posts;
 
-    public static PostsFindAllResponse from(List<PostResponse> posts) {
-        return new PostsFindAllResponse(posts);
+    public static PostListResponse from(List<PostResponse> posts) {
+        return new PostListResponse(posts);
     }
 }
