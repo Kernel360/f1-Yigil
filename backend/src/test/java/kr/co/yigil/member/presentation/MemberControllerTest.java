@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+import java.util.Queue;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.member.dto.request.MemberUpdateRequest;

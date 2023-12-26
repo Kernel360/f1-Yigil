@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.FileUploadEvent;
+import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.SocialLoginType;
@@ -29,8 +31,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 public class MemberServiceTest {
 
@@ -42,6 +45,9 @@ public class MemberServiceTest {
 
     @InjectMocks
     private MemberService memberService;
+
+    @Mock
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
@@ -57,9 +63,13 @@ public class MemberServiceTest {
         Long memberId = 1L;
         Member mockMember = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         List<Post> mockPostList = new ArrayList<>();
+        FollowCount mockFollowCount = new FollowCount(1L, 0, 0);
+        ValueOperations<String, Object> valueOperationsMock = mock(ValueOperations.class);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
         when(postRepository.findAllByMember(mockMember)).thenReturn(mockPostList);
+        when(redisTemplate.opsForValue()).thenReturn(valueOperationsMock);
+        when(valueOperationsMock.get(anyString())).thenReturn(mockFollowCount);
 
         MemberInfoResponse response = memberService.getMemberInfo(memberId);
 

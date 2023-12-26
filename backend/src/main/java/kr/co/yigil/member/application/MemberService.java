@@ -4,6 +4,8 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 
 import java.util.List;
 import kr.co.yigil.file.FileUploadEvent;
+import kr.co.yigil.follow.application.FollowRedisIntegrityService;
+import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
@@ -15,6 +17,7 @@ import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,13 +26,28 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final FollowRedisIntegrityService followRedisIntegrityService;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public MemberInfoResponse getMemberInfo(final Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
         List<Post> postList = postRepository.findAllByMember(member);
-        return MemberInfoResponse.from(member, postList);
+        FollowCount followCount = getMemberFollowCount(member);
+        return MemberInfoResponse.from(member, postList, followCount);
+    }
+
+    private FollowCount getMemberFollowCount(Member member) {
+        String key = "followCount:" + member.getId();
+        FollowCount followCount = (FollowCount) redisTemplate.opsForValue().get(key);
+
+        if (followCount == null) {
+            followRedisIntegrityService.ensureFollowCounts(member);
+            followCount = (FollowCount) redisTemplate.opsForValue().get(key);
+        }
+
+        return followCount;
     }
 
     public MemberUpdateResponse updateMemberInfo(final Long memberId, MemberUpdateRequest request) {
