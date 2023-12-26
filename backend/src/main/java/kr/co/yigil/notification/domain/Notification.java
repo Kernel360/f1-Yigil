@@ -1,36 +1,36 @@
-package kr.co.yigil.travel.domain;
+package kr.co.yigil.notification.domain;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import kr.co.yigil.member.domain.Member;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.joda.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class Travel {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name ="member_id")
     private Member member;
+
+    private String message;
+
+    private boolean isRead;
 
     @CreatedDate
     @Column(updatable = false)
@@ -39,8 +39,10 @@ public abstract class Travel {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    protected Travel(final Member member) {
+    public Notification(final Member member, final String message) {
         this.member = member;
+        this.message = message;
+        isRead = false;
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
     }
