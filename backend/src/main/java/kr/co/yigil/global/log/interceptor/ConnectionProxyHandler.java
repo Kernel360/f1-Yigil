@@ -10,7 +10,7 @@ import org.springframework.aop.framework.ProxyFactory;
 @RequiredArgsConstructor
 public class ConnectionProxyHandler implements MethodInterceptor {
 
-    private static final String JDBC_PREPATE_STATEMENT_METHOD_NAME = "prepareStatement";
+    private static final String JDBC_PREPARE_STATEMENT_METHOD_NAME = "prepareStatement";
 
     private final Object connection;
     private final LoggingForm loggingForm;
@@ -33,7 +33,7 @@ public class ConnectionProxyHandler implements MethodInterceptor {
     }
 
     private boolean hasPreparedStatementInvoked(final MethodInvocation invocation) {
-        return invocation.getMethod().getName().equals(JDBC_PREPATE_STATEMENT_METHOD_NAME);
+        return invocation.getMethod().getName().equals(JDBC_PREPARE_STATEMENT_METHOD_NAME);
     }
 
     public Object getProxy() {
