@@ -48,8 +48,8 @@ public class MemberController {
     }
 
 
-    @GetMapping("/api/v1/member/{member_id}")
-    public ResponseEntity<MemberInfoResponse> getMemberInfo(@PathVariable("member_id") final Long memberId) {
+    @GetMapping("/api/v1/member/{memberId}")
+    public ResponseEntity<MemberInfoResponse> getMemberInfo(@PathVariable("memberId") final Long memberId) {
         MemberInfoResponse response = memberService.getMemberInfo(memberId);
         return ResponseEntity.ok(response);
     }
