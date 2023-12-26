@@ -13,13 +13,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.FileUploadEvent;
+import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.SocialLoginType;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.member.dto.request.MemberUpdateRequest;
 import kr.co.yigil.member.dto.response.MemberDeleteResponse;
+import kr.co.yigil.member.dto.response.MemberFollowerListResponse;
+import kr.co.yigil.member.dto.response.MemberFollowingListResponse;
 import kr.co.yigil.member.dto.response.MemberInfoResponse;
 import kr.co.yigil.member.dto.response.MemberUpdateResponse;
 import kr.co.yigil.post.domain.Post;
@@ -48,6 +52,9 @@ public class MemberServiceTest {
 
     @Mock
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Mock
+    private FollowRepository followRepository;
 
     @Mock
     private ApplicationEventPublisher applicationEventPublisher;
@@ -138,4 +145,47 @@ public class MemberServiceTest {
         assertThrows(BadRequestException.class, () -> memberService.withdraw(invalidMemberId));
     }
 
+    @DisplayName("getFollowerList 메서드가 유효한 사용자 ID가 주어졌을 때 팔로워 목록을 잘 반환하는지")
+    @Test
+    void whenGetFollowerList_shouldReturnFollowerList_withValidMemberInfo() {
+        Long validMemberId = 1L;
+        Member mockMember = new Member(1L, "kiit0901@gmail.com", "123456", "stone", "profile.jpg", SocialLoginType.KAKAO);
+        List<Follow> mockFollows = new ArrayList<>();
+
+        Member follower1 = new Member(2L, "follower1@gmail.com", "123456", "follower1", "profile1.jpg", SocialLoginType.KAKAO);
+        Member follower2 = new Member(3L, "follower2@gmail.com", "123456", "follower2", "profile2.jpg", SocialLoginType.KAKAO);
+        mockFollows.add(new Follow(follower1, mockMember));
+        mockFollows.add(new Follow(follower2, mockMember));
+
+        when(memberRepository.findById(validMemberId)).thenReturn(Optional.of(mockMember));
+        when(followRepository.findAllByFollowing(mockMember)).thenReturn(mockFollows);
+
+        MemberFollowerListResponse response = memberService.getFollowerList(validMemberId);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getFollowerList()).hasSize(2);
+        assertThat(response.getFollowerList()).extracting("nickname").contains("follower1", "follower2");
+    }
+
+    @DisplayName("getFollowingList 메서드가 유효한 사용자 ID가 주어졌을 때 팔로잉 목록을 잘 반혼하는지")
+    @Test
+    void whenGetFollowingList_shouldReturnFollowingList_withValidMemberInfo() {
+        Long validMemberId = 1L;
+        Member mockMember = new Member(1L, "kiit0901@gmail.com", "123456", "stone", "profile.jpg", SocialLoginType.KAKAO);
+        List<Follow> mockFollows = new ArrayList<>();
+
+        Member following1 = new Member(2L, "following1@gmail.com", "123456", "following1", "profile1.jpg", SocialLoginType.KAKAO);
+        Member following2 = new Member(3L, "following2@gmail.com", "123456", "following2", "profile2.jpg", SocialLoginType.KAKAO);
+        mockFollows.add(new Follow(mockMember, following1));
+        mockFollows.add(new Follow(mockMember, following2));
+
+        when(memberRepository.findById(validMemberId)).thenReturn(Optional.of(mockMember));
+        when(followRepository.findAllByFollower(mockMember)).thenReturn(mockFollows);
+
+        MemberFollowingListResponse response = memberService.getFollowingList(validMemberId);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getFollowingList()).hasSize(2);
+        assertThat(response.getFollowingList()).extracting("nickname").contains("following1", "following2");
+    }
 }
