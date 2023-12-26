@@ -1,47 +1,56 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+
 import NavigationIcon from './NavigationIcon';
 
-import homeIcon from '@/../public/icons/home.svg';
-import heartIcon from '@/../public/icons/heart.svg';
-import locationIcon from '@/../public/icons/location.svg';
-import newIcon from '@/../public/icons/add.svg';
-import userIcon from '@/../public/icons/mypage.svg';
+import HomeIcon from '/public/icons/home.svg';
+import HeartIcon from '/public/icons/heart.svg';
+import LocationIcon from '/public/icons/location.svg';
+import NewIcon from '/public/icons/add.svg';
+import UserIcon from '/public/icons/mypage.svg';
 
 const navigationData = [
-  { href: '/', imgSrc: homeIcon, label: '홈' },
   {
-    href: '/follow',
-    imgSrc: heartIcon,
+    label: '홈',
+    href: '/',
+    icon: HomeIcon,
+  },
+  {
     label: '팔로우',
+    href: '/follow',
+    icon: HeartIcon,
   },
   {
-    href: '/nearby',
-    imgSrc: locationIcon,
     label: '주변',
+    href: '/nearby',
+    icon: LocationIcon,
   },
   {
+    label: '경로 추가',
     href: '/new/spot',
-    imgSrc: newIcon,
-    label: '장소 추가',
+    icon: NewIcon,
   },
   {
-    href: '/mypage',
-    imgSrc: userIcon,
     label: '마이페이지',
+    href: '/mypage',
+    icon: UserIcon,
   },
 ];
 
 export default function NavigationBar() {
+  const pathName = usePathname();
+
   return (
     <nav className="w-full flex justify-evenly py-4">
-      {navigationData.map(({ href, imgSrc, label }) => (
+      {navigationData.map(({ label, href, icon }) => (
         <NavigationIcon
           key={label}
           href={href}
-          imgSrc={imgSrc}
-          imgAlt={`${label} 아이콘`}
-        >
-          {label}
-        </NavigationIcon>
+          label={label}
+          active={pathName === href}
+          Icon={icon}
+        />
       ))}
     </nav>
   );
