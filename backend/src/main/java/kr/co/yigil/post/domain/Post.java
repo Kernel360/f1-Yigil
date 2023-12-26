@@ -30,7 +30,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = {REMOVE, PERSIST})
+    @OneToOne(cascade = {PERSIST})
     @JoinColumn(name = "travel_id")
     private Travel travel;
 
@@ -45,6 +45,7 @@ public class Post {
         this.member = member;
     }
 
+    @Builder
     public Post(Long id, Travel travel, Member member) {
         this.id = id;
         this.travel = travel;

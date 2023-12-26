@@ -2,9 +2,11 @@ package kr.co.yigil.travel.dto.request;
 
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class SpotCreateRequest {
     private String pointJson;
     private Boolean isInCourse;

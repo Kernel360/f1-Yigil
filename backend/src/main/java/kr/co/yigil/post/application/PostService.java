@@ -1,6 +1,8 @@
 package kr.co.yigil.post.application;
 
 import java.util.List;
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.post.domain.Post;
@@ -13,6 +15,10 @@ import kr.co.yigil.post.dto.response.PostDeleteResponse;
 import kr.co.yigil.post.dto.response.PostListResponse;
 import kr.co.yigil.post.dto.response.PostResponse;
 import kr.co.yigil.post.dto.response.PostUpdateResponse;
+import kr.co.yigil.post.util.PostUtils;
+import kr.co.yigil.travel.domain.Travel;
+import kr.co.yigil.travel.domain.repository.TravelRepository;
+import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,28 +28,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final PostUtils postUtils;
+    private final TravelRepository travelRepository;
 
     public PostListResponse findAllPosts() { // querydsl? 검색 쿼리 추가
         List<Post> posts = postRepository.findAll();
         List<PostResponse> postResponses = posts.stream().map(PostResponse::from).toList();
         return PostListResponse.from(postResponses);
     }
-    //Follower 객체 생성 이후 구현
-//    public PostListResponse findFollowerPosts() {
-//
-//    }
-    // 생성 response, request 별도 생성
-    public PostResponse createPost(Member member, PostCreateRequest postcreateRequest) {
-        return PostCreateResponse.ok;
-    }
-    // 업데이트 response, request 별도 생성
-    public PostResponse updatePost(Member member, PostUpdateRequest postRequest) {
-        return PostUpdateResponse;
-    }
-    // 삭제 response, request 별도 생성
-    public PostResponse deletePost(Member member, PostDeleteRequest postRequest) {
 
-        return PostDeleteResponse;
+    @Transactional
+    public PostDeleteResponse deletePost(Long memberId, Long postId) {
+        Post post = postUtils.findPostById(postId);
+        postUtils.validatePostWriter(memberId, postId);
+        Travel travel = post.getTravel();
+        travelRepository.delete(travel);
+        postRepository.delete(post);
+        return new PostDeleteResponse("post 삭제 성공");
     }
-
 }

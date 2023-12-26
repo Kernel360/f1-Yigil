@@ -32,6 +32,7 @@ public class Course extends Travel{
     private List<Spot> spots;
 
     private int representativeSpotOrder;
+    // private Long representativeSpotId;
 
     @Column(nullable = false, length = 20)
     private String title;

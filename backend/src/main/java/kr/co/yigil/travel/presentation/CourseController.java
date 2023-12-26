@@ -4,6 +4,7 @@ import java.net.URI;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.post.application.PostService;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseResponse;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
+    private final PostService postService;
 
     @PostMapping("/course")
     @MemberOnly
@@ -57,9 +59,10 @@ public class CourseController {
     @DeleteMapping("/course/{postId}")
     @MemberOnly
     public ResponseEntity<String> deleteCoursePost(
-            @PathVariable Long postId
+            @PathVariable Long postId,
+            @Auth final Accessor accessor
     ){
-        courseService.deleteCourse(postId);
+        postService.deletePost(accessor.getMemberId(), postId);
         String message = "해당 코스 삭제되었습니다";
         return ResponseEntity.ok().body(message);
     }

@@ -1,21 +1,20 @@
 package kr.co.yigil.travel.application;
 
 import java.util.List;
-
-import java.util.stream.Collectors;
+import kr.co.yigil.member.util.MemberUtils;
+import kr.co.yigil.post.util.PostUtils;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseResponse;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.domain.repository.CourseRepository;
-import kr.co.yigil.travel.domain.repository.SpotRepository;
+import kr.co.yigil.travel.util.TravelUtils;
 import org.springframework.stereotype.Service;
 
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import kr.co.yigil.travel.domain.Spot;
@@ -31,17 +30,19 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
     private final PostRepository postRepository;
-    private final SpotRepository spotRepository;
     private final TravelRepository travelRepository;
-    private final MemberRepository memberRepository;
+    private final MemberUtils memberUtils;
+    private final TravelUtils travelUtils;
+    private final PostUtils postUtils;
+
 
     @Transactional
     public Long createCourse(Long memberId, CourseCreateRequest courseCreateRequest) {
-        Member member = findMemberById(memberId);
+        Member member = memberUtils.findMemberById(memberId);
         List<Long> spotIdList = courseCreateRequest.getSpotIds();
 
         List<Spot> spots = spotIdList.stream()
-                .map(this::findSpotById)
+                .map(travelUtils::findSpotById)
                 .map(Spot.class::cast)
                 .toList();
 
@@ -57,18 +58,18 @@ public class CourseService {
     }
 
     public CourseResponse findCourse(Long postId) {
-        Post post = findPostById(postId);
+        Post post = postUtils.findPostById(postId);
         if(post.getTravel() instanceof Course course) {
             List<Spot> spots = course.getSpots();
             return CourseResponse.from(post, course, spots);
         }else {
-            throw new BadRequestException(ExceptionCode.POST_NOT_CONTAIN_COURSE);
+            throw new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID);
         }
     }
 
     public CourseResponse updateCourse(Long postId, Long memberId, CourseUpdateRequest courseUpdateRequest) {
 
-        Member member = findMemberById(memberId);
+        Member member = memberUtils.findMemberById(memberId);
         List<Long> spotIdList = courseUpdateRequest.getSpotIds();
         List<Spot> spots = travelRepository.findAllById(spotIdList).stream().map(Spot.class::cast).toList();
 
@@ -76,7 +77,7 @@ public class CourseService {
         
         // todo:  삭제된 spot은 spot post로 다시 올리기
         List<Travel> deletedSpots = courseUpdateRequest.getRemovedSpotIds().stream()
-                .map(this::findSpotById)
+                .map(travelUtils::findSpotById)
                 .toList()
                 ;
         // 이거 post에 등록해줘야함
@@ -99,36 +100,21 @@ public class CourseService {
         return CourseResponse.from(post, course, spots);
     }
 
-    @Transactional
-    public void deleteCourse(Long postId) {
-        // 코스를 포함하는 포스트를 삭제할 때, 해당 포스트와 travel 모두 삭제한다고 가정
-        Post post = findPostById(postId);
 
-        Travel travel = post.getTravel();
-        if(travel instanceof Spot){
-            throw new BadRequestException(ExceptionCode.POST_NOT_CONTAIN_COURSE);
-        }
-//        travelRepository.delete(travel); // todo 이게맞나..? 팔로 팔로미
-        postRepository.delete(post);
-    }
 
-    public Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_ID)
-        );
-    }
+//    public Member findMemberById(Long memberId) {
+//        return memberRepository.findById(memberId).orElseThrow(
+//                () -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_ID)
+//        );
+//    }
 
-    public Post findPostById(Long postId) {
-        return postRepository.findById(postId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID)
-        );
-    }
+//    public Post findPostById(Long postId) {
+//        return postRepository.findById(postId).orElseThrow(
+//                () -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID)
+//        );
+//    }
 
-    private Travel findSpotById(Long spotId){
-        return spotRepository.findById(spotId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
-        );
-    }
+
 
 
 }
