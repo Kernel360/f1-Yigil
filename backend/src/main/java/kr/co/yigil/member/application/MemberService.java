@@ -3,14 +3,19 @@ package kr.co.yigil.member.application;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.application.FollowRedisIntegrityService;
+import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.member.dto.request.MemberUpdateRequest;
 import kr.co.yigil.member.dto.response.MemberDeleteResponse;
+import kr.co.yigil.member.dto.response.MemberFollowerListResponse;
+import kr.co.yigil.member.dto.response.MemberFollowingListResponse;
 import kr.co.yigil.member.dto.response.MemberInfoResponse;
 import kr.co.yigil.member.dto.response.MemberUpdateResponse;
 import kr.co.yigil.post.domain.Post;
@@ -26,6 +31,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final FollowRepository followRepository;
     private final FollowRedisIntegrityService followRedisIntegrityService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -70,5 +76,19 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
         memberRepository.delete(member);
         return new MemberDeleteResponse("회원 탈퇴 성공");
+    }
+
+    public MemberFollowerListResponse getFollowerList(final Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+        List<Member> followers = followRepository.findAllByFollowing(member)
+                .stream().map(Follow::getFollower).collect(Collectors.toList());
+        return new MemberFollowerListResponse(followers);
+    }
+
+    public MemberFollowingListResponse getFollowingList(final Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+        List<Member> followings = followRepository.findAllByFollower(member)
+                .stream().map(Follow::getFollowing).collect(Collectors.toList());
+        return new MemberFollowingListResponse(followings);
     }
 }
