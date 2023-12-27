@@ -25,11 +25,15 @@ public class FollowService {
     private final FollowCountRedisRepository followCountRedisRepository;
     private final MemberRepository memberRepository;
     private final NotificationService notificationService;
+    private final FollowRedisIntegrityService followRedisIntegrityService;
 
     @Transactional
     public FollowResponse follow(final Long followerId, final Long followingId) {
         Member follower = getMemberById(followerId);
         Member following = getMemberById(followingId);
+
+        followRedisIntegrityService.ensureFollowCounts(follower);
+        followRedisIntegrityService.ensureFollowCounts(following);
 
         followRepository.save(new Follow(follower, following));
         followCountRedisRepository.incrementFollowersCount(followingId);
@@ -44,6 +48,9 @@ public class FollowService {
     public UnfollowResponse unfollow(final Long followerId, final Long followingId) {
         Member unfollower = getMemberById(followerId);
         Member unfollowing = getMemberById(followingId);
+
+        followRedisIntegrityService.ensureFollowCounts(unfollower);
+        followRedisIntegrityService.ensureFollowCounts(unfollowing);
 
         followRepository.deleteByFollowerAndFollowing(unfollower, unfollowing);
         followCountRedisRepository.decrementFollowersCount(followingId);

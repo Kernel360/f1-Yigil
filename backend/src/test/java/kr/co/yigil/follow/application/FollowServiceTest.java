@@ -37,6 +37,9 @@ public class FollowServiceTest {
     @Mock
     private NotificationService notificationService;
 
+    @Mock
+    private FollowRedisIntegrityService followRedisIntegrityService;
+
     @InjectMocks
     private FollowService followService;
 
