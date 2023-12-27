@@ -47,11 +47,11 @@ public class KakaoLoginStrategy implements LoginStrategy {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
 
-        Member member = memberRepository.findMemberBySocialLoginIdAndType(request.getId().toString(),
+        Member member = memberRepository.findMemberBySocialLoginIdAndSocialLoginType(request.getId().toString(),
                         SocialLoginType.valueOf(PROVIDER_NAME.toUpperCase()))
                 .orElseGet(() -> registerNewMember(request));
 
-        session.setAttribute(  "memberId", member.getId());
+        session.setAttribute("memberId", member.getId());
         return new LoginResponse("로그인 성공");
     }
 
@@ -75,6 +75,11 @@ public class KakaoLoginStrategy implements LoginStrategy {
             ResponseEntity<KakaoTokenInfoResponse> response = restTemplate.exchange(
                     KAKAO_TOKEN_INFO_URL, HttpMethod.GET, entity, KakaoTokenInfoResponse.class
             );
+
+            if(response.getStatusCode().is4xxClientError()) {
+                throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
+            }
+
             return response.getBody();
         } catch (Exception e) {
             log.warn(e.getMessage(), e);

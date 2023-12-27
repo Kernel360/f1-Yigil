@@ -1,5 +1,6 @@
 package kr.co.yigil.global.config;
 
+import lombok.Setter;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 public class JasyptConfig {
 
     @Value("${Jasypt-Secret-Key}")
+    @Setter
     private String key;
 
     @Bean(name = "jasyptStringEncryptor")
@@ -22,7 +24,7 @@ public class JasyptConfig {
         return encryptor;
     }
 
-    private SimpleStringPBEConfig createSimpleStringPBEConfig() {
+    SimpleStringPBEConfig createSimpleStringPBEConfig() {
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         setEncryptionConfigDetails(config, key);
         return config;

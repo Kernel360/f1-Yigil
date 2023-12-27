@@ -5,15 +5,15 @@ import KaKaoProvider from 'next-auth/providers/kakao';
 const handler = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     KaKaoProvider({
-      clientId: process.env.KAKAO_ID || '',
-      clientSecret: process.env.KAKAO_SECRET || '',
+      clientId: process.env.KAKAO_ID,
+      clientSecret: process.env.KAKAO_SECRET,
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET || '',
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user }) {
       console.log(user);

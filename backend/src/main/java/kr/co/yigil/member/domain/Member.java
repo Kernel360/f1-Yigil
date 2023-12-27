@@ -22,7 +22,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"socialLoginId", "type"})
+        @UniqueConstraint(columnNames = {"socialLoginId", "socialLoginType"})
 })
 @SQLDelete(sql = "UPDATE member SET status = 'WITHDRAW' WHERE id = ?")
 @Where(clause = "status = 'ACTIVE'")
@@ -48,7 +48,7 @@ public class Member {
     private MemberStatus status;
 
     @Enumerated(value = EnumType.STRING)
-    private SocialLoginType type;
+    private SocialLoginType socialLoginType;
 
     @CreatedDate
     @Column(updatable = false)
@@ -63,7 +63,19 @@ public class Member {
         this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
         this.status = MemberStatus.ACTIVE;
-        this.type = SocialLoginType.valueOf(socialLoginTypeString.toUpperCase());
+        this.socialLoginType = SocialLoginType.valueOf(socialLoginTypeString.toUpperCase());
+        this.joinedAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public Member(final Long id, final String email, final String socialLoginId, final String nickname, final String profileImageUrl, final SocialLoginType socialLoginType) {
+        this.id = id;
+        this.email = email;
+        this.socialLoginId = socialLoginId;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+        this.status = MemberStatus.ACTIVE;
+        this.socialLoginType = socialLoginType;
         this.joinedAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }

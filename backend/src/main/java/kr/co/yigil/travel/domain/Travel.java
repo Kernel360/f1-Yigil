@@ -41,5 +41,7 @@ public abstract class Travel {
 
     protected Travel(final Member member) {
         this.member = member;
+        createdAt = LocalDateTime.now();
+        modifiedAt = LocalDateTime.now();
     }
 }

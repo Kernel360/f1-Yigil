@@ -32,6 +32,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.528'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -46,6 +49,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+	testImplementation 'io.projectreactor:reactor-test:3.4.10'
+
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+	implementation 'com.github.maricn:logback-slack-appender:1.6.1'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'

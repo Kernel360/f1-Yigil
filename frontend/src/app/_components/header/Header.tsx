@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import HeaderIcons from './ui/HeaderIcons';
-import HeaderLogo from './ui/HeaderLogo';
+
+import HeaderLogo from '/public/logo/header-logo.svg';
 
 export default function Header() {
   const [isHeaderFolded, setIsHeaderFolded] = useState(false);
