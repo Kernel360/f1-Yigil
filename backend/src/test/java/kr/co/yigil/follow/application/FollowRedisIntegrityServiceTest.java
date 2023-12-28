@@ -44,7 +44,7 @@ public class FollowRedisIntegrityServiceTest {
     @Test
     void testEnsureFollowCountsWhenNotExist() {
         Member member = new Member(1L, "email", "12345678", "member", "image.jpg", SocialLoginType.KAKAO);
-        FollowCountDto followCountDto = new FollowCountDto(10, 5);
+        FollowCountDto followCountDto = new FollowCountDto(10L, 5L);
         FollowCount followCount = new FollowCount(1L, 10, 5);
 
         when(redisTemplate.hasKey("followCount:1")).thenReturn(false);
