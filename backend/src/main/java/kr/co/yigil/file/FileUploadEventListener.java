@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -19,7 +21,7 @@ public class FileUploadEventListener {
 
     @Async
     @EventListener
-    public void handleFileUpload(FileUploadEvent event) throws IOException {
+    public Future<String> handleFileUpload(FileUploadEvent event) throws IOException {
         MultipartFile file = event.getFile();
         FileType fileType = event.getFileType();
         String fileName = generateUniqueFileName(file.getOriginalFilename());
@@ -29,6 +31,7 @@ public class FileUploadEventListener {
         metadata.setContentLength(file.getSize());
         amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
         event.getCallback().accept(s3Path);
+        return CompletableFuture.completedFuture(s3Path);
     }
 
     private String getS3Path(FileType fileType, String fileName) {

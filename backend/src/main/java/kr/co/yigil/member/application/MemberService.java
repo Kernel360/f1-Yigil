@@ -3,6 +3,7 @@ package kr.co.yigil.member.application;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.application.FollowRedisIntegrityService;
@@ -33,7 +34,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
-    private final FollowCountRepository followCountRepository;
     private final FollowRedisIntegrityService followRedisIntegrityService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -53,11 +53,16 @@ public class MemberService {
     public MemberUpdateResponse updateMemberInfo(final Long memberId, MemberUpdateRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
+        CompletableFuture<String> fileUploadResult = new CompletableFuture<>();
         FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile(), fileUrl -> {
             Member updateMember = setMemberInfoUpdated(member, fileUrl, request.getNickname());
             memberRepository.save(updateMember);
+            fileUploadResult.complete(fileUrl);
         });
         applicationEventPublisher.publishEvent(event);
+
+        String fileUrl = fileUploadResult.join();
+        System.out.println("fileUrl = " + fileUrl);
         return new MemberUpdateResponse("회원 정보 업데이트 성공");
     }
 
