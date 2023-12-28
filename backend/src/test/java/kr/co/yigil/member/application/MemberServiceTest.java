@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.FileUploadEvent;
+import kr.co.yigil.follow.application.FollowRedisIntegrityService;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
@@ -57,6 +59,9 @@ public class MemberServiceTest {
     private FollowRepository followRepository;
 
     @Mock
+    private FollowRedisIntegrityService followRedisIntegrityService;
+
+    @Mock
     private ApplicationEventPublisher applicationEventPublisher;
 
     @BeforeEach
@@ -71,13 +76,10 @@ public class MemberServiceTest {
         Member mockMember = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         List<Post> mockPostList = new ArrayList<>();
         FollowCount mockFollowCount = new FollowCount(1L, 0, 0);
-        ValueOperations<String, Object> valueOperationsMock = mock(ValueOperations.class);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
         when(postRepository.findAllByMember(mockMember)).thenReturn(mockPostList);
-        when(redisTemplate.opsForValue()).thenReturn(valueOperationsMock);
-        when(valueOperationsMock.get(anyString())).thenReturn(mockFollowCount);
-
+        when(followRedisIntegrityService.ensureFollowCounts(mockMember)).thenReturn(mockFollowCount);
         MemberInfoResponse response = memberService.getMemberInfo(memberId);
 
         assertThat(response).isNotNull();

@@ -1,6 +1,8 @@
 package kr.co.yigil.follow.application;
 
+import java.util.Optional;
 import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.follow.dto.FollowCountDto;
 import kr.co.yigil.member.domain.Member;
@@ -11,15 +13,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class FollowRedisIntegrityService {
-    private final RedisTemplate<String, Object> redisTemplate;
     private final FollowRepository followRepository;
+    private final FollowCountRepository followCountRepository;
 
-    public void ensureFollowCounts(Member member) {
+    public FollowCount ensureFollowCounts(Member member) {
         Long memberId = member.getId();
-        Boolean exists = redisTemplate.hasKey("followCount:" + memberId);
-        if(Boolean.FALSE.equals(exists)) {
+        Optional<FollowCount> existingFollowCount = followCountRepository.findByMemberId(memberId);
+        if (existingFollowCount.isPresent()) {
+            return existingFollowCount.get();
+        } else {
             FollowCount followCount = getFollowCount(member);
-            redisTemplate.opsForValue().set("followCount:" + memberId, followCount);
+            followCountRepository.save(followCount);
+            return followCount;
         }
     }
 

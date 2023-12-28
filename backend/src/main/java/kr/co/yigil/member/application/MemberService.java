@@ -8,6 +8,7 @@ import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.application.FollowRedisIntegrityService;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
@@ -32,9 +33,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
+    private final FollowCountRepository followCountRepository;
     private final FollowRedisIntegrityService followRedisIntegrityService;
-    private final RedisTemplate<String, Object> redisTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
+
 
     public MemberInfoResponse getMemberInfo(final Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -45,15 +47,7 @@ public class MemberService {
     }
 
     private FollowCount getMemberFollowCount(Member member) {
-        String key = "followCount:" + member.getId();
-        FollowCount followCount = (FollowCount) redisTemplate.opsForValue().get(key);
-
-        if (followCount == null) {
-            followRedisIntegrityService.ensureFollowCounts(member);
-            followCount = (FollowCount) redisTemplate.opsForValue().get(key);
-        }
-
-        return followCount;
+        return followRedisIntegrityService.ensureFollowCounts(member);
     }
 
     public MemberUpdateResponse updateMemberInfo(final Long memberId, MemberUpdateRequest request) {
