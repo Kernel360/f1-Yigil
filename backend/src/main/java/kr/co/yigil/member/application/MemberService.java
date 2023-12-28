@@ -3,7 +3,6 @@ package kr.co.yigil.member.application;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.application.FollowRedisIntegrityService;
@@ -24,7 +23,6 @@ import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service

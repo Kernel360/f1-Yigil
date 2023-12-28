@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+
 public class FollowRedisIntegrityServiceTest {
 
     @Mock
@@ -31,9 +32,11 @@ public class FollowRedisIntegrityServiceTest {
     @InjectMocks
     private FollowRedisIntegrityService followRedisIntegrityService;
 
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
     }
 
     @DisplayName("ensureFollowCounts 메서드가 이미 존재하는 FollowCount를 반환하는지")
@@ -75,4 +78,6 @@ public class FollowRedisIntegrityServiceTest {
         verify(followRepository).getFollowCounts(member);
         verify(followCountRepository).save((FollowCount) any());
     }
+
+
 }

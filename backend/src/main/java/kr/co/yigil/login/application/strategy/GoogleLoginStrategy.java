@@ -19,6 +19,7 @@ public class GoogleLoginStrategy implements LoginStrategy{
 
     private final MemberRepository memberRepository;
 
+
     @Override
     public LoginResponse login(LoginRequest request, String accessToken, HttpSession session) {
         return new LoginResponse();

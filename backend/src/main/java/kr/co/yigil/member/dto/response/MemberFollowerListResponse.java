@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class MemberFollowerListResponse {
 
     private List<Member> followerList;
-
 }

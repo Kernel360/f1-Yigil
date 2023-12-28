@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+
 public class FollowCountDto {
     private int followerCount;
     private int followingCount;
