@@ -1,16 +1,27 @@
-import type { Config } from 'jest';
 import nextJest from 'next/jest.js';
 
-const createJestConfig = nextJest({
-  dir: './',
-});
+import type { Config } from 'jest';
 
 /**
  * For a detailed explanation regarding each configuration property, visit:
  * https://jestjs.io/docs/configuration
  */
 
-const config: Config = {
+export const customJestConfig: Config = {
+  // The test environment that will be used for testing
+  testEnvironment: 'jsdom',
+
+  // Indicates whether each individual test should be reported during the run
+  verbose: true,
+
+  // Indicates which provider should be used to instrument code for coverage
+  coverageProvider: 'v8',
+
+  // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
+  moduleNameMapper: {
+    '^@/*$': '<rootDir>/$1',
+  },
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -36,9 +47,6 @@ const config: Config = {
   // coveragePathIgnorePatterns: [
   //   "/node_modules/"
   // ],
-
-  // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -94,9 +102,6 @@ const config: Config = {
   //   "node"
   // ],
 
-  // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
-
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
 
@@ -150,9 +155,6 @@ const config: Config = {
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   // snapshotSerializers: [],
 
-  // The test environment that will be used for testing
-  testEnvironment: 'jsdom',
-
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
 
@@ -191,7 +193,6 @@ const config: Config = {
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
 
-  // Indicates whether each individual test should be reported during the run
   // verbose: undefined,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
@@ -201,4 +202,21 @@ const config: Config = {
   // watchman: true,
 };
 
-export default createJestConfig(config);
+export const createJestConfig = nextJest({
+  dir: './',
+});
+
+const config = async () => {
+  const nextJestConfig = await createJestConfig(customJestConfig)();
+
+  return {
+    ...nextJestConfig,
+    moduleNameMapper: {
+      // Workaround to put our SVG mock first
+      '\\.svg$': '<rootDir>/__mocks__/svg.js',
+      ...nextJestConfig.moduleNameMapper,
+    },
+  };
+};
+
+export default config;
