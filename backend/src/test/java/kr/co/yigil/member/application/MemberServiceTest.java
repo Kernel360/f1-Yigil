@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -78,6 +79,13 @@ public class MemberServiceTest {
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
         when(postRepository.findAllByMember(mockMember)).thenReturn(mockPostList);
         when(followRedisIntegrityService.ensureFollowCounts(mockMember)).thenReturn(mockFollowCount);
+
+        doAnswer(invocation -> {
+            FileUploadEvent event = invocation.getArgument(0);
+            event.getCallback().accept("mockUrl");
+            return null;
+        }).when(applicationEventPublisher).publishEvent(any(FileUploadEvent.class));
+
         MemberInfoResponse response = memberService.getMemberInfo(memberId);
 
         assertThat(response).isNotNull();
@@ -106,6 +114,12 @@ public class MemberServiceTest {
         Member mockMember = new Member(1L, "kiit0901@gmail.com", "123456", "stone", "profile.jpg", SocialLoginType.KAKAO);
         when(memberRepository.findById(validMemberId)).thenReturn(Optional.of(mockMember));
         when(memberRepository.save(mockMember)).thenReturn(mockMember);
+
+        doAnswer(invocation -> {
+            FileUploadEvent event = invocation.getArgument(0);
+            event.getCallback().accept("mockUrl");
+            return null;
+        }).when(applicationEventPublisher).publishEvent(any(FileUploadEvent.class));
 
         MemberUpdateResponse response = memberService.updateMemberInfo(validMemberId, request);
 
