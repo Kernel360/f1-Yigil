@@ -6,8 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class FollowCountDto {
     private int followerCount;
     private int followingCount;
+
+    public FollowCountDto(Long followerCount, Long followingCount) {
+        this.followerCount = followerCount != null ? followerCount.intValue() : 0;
+        this.followingCount = followingCount != null ? followingCount.intValue() : 0;
+    }
 }

@@ -10,6 +10,9 @@ group = 'kr.co'
 version = '0.0.1-SNAPSHOT'
 
 java {
+	compileJava {
+		options.compilerArgs << '-parameters'
+	}
 }
 
 ext {
@@ -57,6 +60,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 }
 
 tasks.named('test') {

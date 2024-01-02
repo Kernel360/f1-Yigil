@@ -3,11 +3,13 @@ package kr.co.yigil.member.application;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.application.FollowRedisIntegrityService;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
@@ -33,8 +35,8 @@ public class MemberService {
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
     private final FollowRedisIntegrityService followRedisIntegrityService;
-    private final RedisTemplate<String, Object> redisTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
+
 
     public MemberInfoResponse getMemberInfo(final Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -45,25 +47,22 @@ public class MemberService {
     }
 
     private FollowCount getMemberFollowCount(Member member) {
-        String key = "followCount:" + member.getId();
-        FollowCount followCount = (FollowCount) redisTemplate.opsForValue().get(key);
-
-        if (followCount == null) {
-            followRedisIntegrityService.ensureFollowCounts(member);
-            followCount = (FollowCount) redisTemplate.opsForValue().get(key);
-        }
-
-        return followCount;
+        return followRedisIntegrityService.ensureFollowCounts(member);
     }
 
     public MemberUpdateResponse updateMemberInfo(final Long memberId, MemberUpdateRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
+        CompletableFuture<String> fileUploadResult = new CompletableFuture<>();
         FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile(), fileUrl -> {
             Member updateMember = setMemberInfoUpdated(member, fileUrl, request.getNickname());
             memberRepository.save(updateMember);
+            fileUploadResult.complete(fileUrl);
         });
         applicationEventPublisher.publishEvent(event);
+
+        String fileUrl = fileUploadResult.join();
+        System.out.println("fileUrl = " + fileUrl);
         return new MemberUpdateResponse("회원 정보 업데이트 성공");
     }
 
