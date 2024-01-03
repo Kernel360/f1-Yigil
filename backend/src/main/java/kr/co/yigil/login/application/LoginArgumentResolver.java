@@ -15,7 +15,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.withContainingClass(Long.class)

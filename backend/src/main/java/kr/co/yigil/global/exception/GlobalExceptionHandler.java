@@ -3,10 +3,14 @@ package kr.co.yigil.global.exception;
 import static kr.co.yigil.global.exception.ExceptionCode.INTERNAL_SERVER_ERROR;
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_REQUEST;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +22,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
@@ -36,6 +43,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ExceptionResponse> handleAuthException(final AuthException e) {
         log.warn(e.getMessage(), e);
+
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
 
         return ResponseEntity.badRequest()
                . body(new ExceptionResponse(e.getCode(), e.getMessage()));
