@@ -16,7 +16,6 @@ export default function Header() {
     if (scrollY == 0) setIsHeaderFolded(false);
   };
 
-  console.log(isHeaderFolded, scrollY);
   useEffect(() => {
     window.addEventListener('scroll', scrollYHandler);
     return () => removeEventListener('scroll', scrollYHandler);

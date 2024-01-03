@@ -2,7 +2,7 @@ import Header from '@/app/_components/header/Header';
 
 export default function Home() {
   return (
-    <main>
+    <main className="h-[1000px]">
       <Header />
     </main>
   );
