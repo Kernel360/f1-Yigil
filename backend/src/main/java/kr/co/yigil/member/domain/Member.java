@@ -68,6 +68,17 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
+    public Member(final String email, final String socialLoginId, final String nickname, final String profileImageUrl, final SocialLoginType socialLoginType) {
+        this.email = email;
+        this.socialLoginId = socialLoginId;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+        this.status = MemberStatus.ACTIVE;
+        this.socialLoginType = socialLoginType;
+        this.joinedAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
     public Member(final Long id, final String email, final String socialLoginId, final String nickname, final String profileImageUrl, final SocialLoginType socialLoginType) {
         this.id = id;
         this.email = email;

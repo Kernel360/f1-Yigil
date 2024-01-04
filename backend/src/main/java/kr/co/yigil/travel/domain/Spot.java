@@ -1,14 +1,19 @@
 package kr.co.yigil.travel.domain;
 
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.member.domain.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
-
 
 @Entity
 @Getter
@@ -27,19 +32,37 @@ public class Spot extends Travel{
     private String description;
 
     @Column(columnDefinition = "TEXT")
-    private String imageUrl;
+    private String fileUrl;
 
-    @Column(columnDefinition = "TEXT")
-    private String videoUrl;
+    public Spot(final Long id) {
+        super.setId(id);
+    }
 
-
-    public Spot(final Member member, final Point location, final boolean isInCourse, final String title, final String description, final String imageUrl, final String videoUrl) {
-        super(member);
+    public Spot(final Long id,final Point location, final boolean isInCourse, final String title, final String description, final String fileUrl) {
+        super.setId(id);
         this.location = location;
         this.isInCourse = isInCourse;
         this.title = title;
         this.description = description;
-        this.imageUrl = imageUrl;
-        this.videoUrl = videoUrl;
+        this.fileUrl = fileUrl;
     }
+    public Spot(final Point location, final boolean isInCourse, final String title, final String description, final String fileUrl) {
+        this.location = location;
+        this.isInCourse = isInCourse;
+        this.title = title;
+        this.description = description;
+        this.fileUrl = fileUrl;
+    }
+
+    public Spot(final Point location, final String title, final String description, final String fileUrl) {
+        this.location = location;
+        this.isInCourse = false;
+        this.title = title;
+        this.description = description;
+        this.fileUrl = fileUrl;
+    }
+
+//    public void setId(Long id){
+//        super.setId(id);
+//    }
 }

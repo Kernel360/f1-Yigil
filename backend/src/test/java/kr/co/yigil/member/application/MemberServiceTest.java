@@ -51,9 +51,6 @@ public class MemberServiceTest {
     private MemberService memberService;
 
     @Mock
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Mock
     private FollowRepository followRepository;
 
     @Mock

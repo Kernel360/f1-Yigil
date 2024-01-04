@@ -16,7 +16,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     @Query("SELECT new kr.co.yigil.follow.dto.FollowCountDto(" +
             "   (SELECT COUNT(f1) FROM Follow f1 WHERE f1.following = :member), " +
-            "   (SELECT COUNT(f2) FROM Follow f2 WHERE f2.follower = :member))")
+            "   (SELECT COUNT(f2) FROM Follow f2 WHERE f2.follower = :member))"   )
     FollowCountDto getFollowCounts(@Param("member") Member member);
 
     public void deleteByFollowerAndFollowing(Member Follower, Member Following);

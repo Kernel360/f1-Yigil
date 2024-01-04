@@ -31,6 +31,7 @@ public class FileUploadEventListener {
         metadata.setContentLength(file.getSize());
         amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
         event.getCallback().accept(s3Path);
+
         return CompletableFuture.completedFuture(s3Path);
     }
 
