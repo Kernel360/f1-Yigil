@@ -1,0 +1,10 @@
+version: '3'
+services:
+  postgres-master:
+    build: .
+    ports:
+      - "5432:5432"
+  postgres-slave:
+    build: .
+    ports:
+      - "5433:5432"
