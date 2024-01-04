@@ -1,4 +1,4 @@
-package kr.co.yigil.post.domain;
+package kr.co.yigil.travel.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,7 +18,7 @@ import org.locationtech.jts.geom.LineString;
 @Getter
 @DiscriminatorValue("COURSE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Course extends Travel{
+public class Course extends Travel {
     @Column(columnDefinition = "geometry(Point,4326)")
     private LineString path;
 

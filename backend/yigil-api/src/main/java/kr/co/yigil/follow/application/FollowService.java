@@ -5,11 +5,11 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import jakarta.transaction.Transactional;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.repository.FollowCountRedisRepository;
-import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.follow.dto.response.FollowResponse;
 import kr.co.yigil.follow.dto.response.UnfollowResponse;
 import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.notification.application.NotificationService;
@@ -60,7 +60,7 @@ public class FollowService {
 
     private Member getMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_ID));
     }
 
     private void sendFollowNotification(Member follower, Member following) {

@@ -5,6 +5,7 @@ import static kr.co.yigil.global.exception.ExceptionCode.EXCEED_FILE_CAPACITY;
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_FILE_TYPE;
 
 import java.util.function.Consumer;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.FileException;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
@@ -29,11 +30,11 @@ public class FileUploadEvent extends ApplicationEvent {
 
     private void validateFileSize(FileType fileType, long size) {
         long maxSize = fileType == FileType.IMAGE ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE;
-        if(size > maxSize) throw new FileException(EXCEED_FILE_CAPACITY);
+        if(size > maxSize) throw new FileException(ExceptionCode.EXCEED_FILE_CAPACITY);
     }
 
     private FileType determineFileType(MultipartFile file) {
-        if (file.getContentType() == null) throw new FileException(EMPTY_FILE);
+        if (file.getContentType() == null) throw new FileException(ExceptionCode.EMPTY_FILE);
 
         if(file.getContentType().startsWith("image/")) {
             return FileType.IMAGE;
@@ -43,7 +44,7 @@ public class FileUploadEvent extends ApplicationEvent {
             return FileType.VIDEO;
         }
 
-        throw new FileException(INVALID_FILE_TYPE);
+        throw new FileException(ExceptionCode.INVALID_FILE_TYPE);
      }
 
 }

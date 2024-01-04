@@ -9,7 +9,6 @@ import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.application.FollowRedisIntegrityService;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
-import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
@@ -24,7 +23,6 @@ import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
