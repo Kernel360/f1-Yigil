@@ -1,6 +1,5 @@
 package kr.co.yigil.global.config;
 
-import java.util.concurrent.ThreadPoolExecutor;
 import kr.co.yigil.global.exception.AsyncExceptionHandler;
 import kr.co.yigil.global.log.decorator.MdcDecorator;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
