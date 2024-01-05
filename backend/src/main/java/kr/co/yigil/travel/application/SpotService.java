@@ -9,6 +9,7 @@ import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.post.application.PostService;
 import kr.co.yigil.post.domain.Post;
+import kr.co.yigil.post.domain.repository.PostRepository;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.domain.repository.SpotRepository;
@@ -29,6 +30,8 @@ public class SpotService {
     private final MemberService memberService;
     private final PostService postService;
     private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final PostRepository postRepository;
 
     @Transactional
     public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {

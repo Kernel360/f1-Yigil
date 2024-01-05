@@ -63,19 +63,15 @@ public class CourseService {
         List<Long> spotIdList = courseUpdateRequest.getSpotIds();
         List<Spot> spots = travelRepository.findAllById(spotIdList).stream().map(Spot.class::cast).toList();
 
-        // 추가된 course에 추가된 spot id는 course에 추가 후 post에서 삭제
-        List<Travel> deletedSpots = courseUpdateRequest.getRemovedSpotIds().stream()
-            .map(spotService::findSpotById)
-            .toList();
-
-        // 이거 post에 등록해줘야함
-        for(Travel spot: deletedSpots){
-            postService.createPost(spot, member);
-        }
-
-        // 코스에 포함된 스팟을 담은 포스트 삭제
+        // 코스에 스팟을 넣을 때
         for(Long id: courseUpdateRequest.getAddedSpotIds()){
             postService.deleteOnlyPost(memberId, id);
+        }
+
+        // 코스에 있던 spot을 뺄때 다시 post에 등록, post 필드의 deleted 가 true인 것을 false로 변경
+        for(Long spotId: courseUpdateRequest.getRemovedSpotIds()){
+            // spotId와 member Id로 post를 찾아서 해당 포스트의 deleted 필드를 false로 변경
+            postService.recreatePost(memberId, spotId);
         }
 
         // 코스 정보 업데이트

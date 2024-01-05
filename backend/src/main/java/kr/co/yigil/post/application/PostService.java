@@ -1,6 +1,7 @@
 package kr.co.yigil.post.application;
 
 import java.util.List;
+import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
@@ -41,6 +42,15 @@ public class PostService {
     }
 
     @Transactional
+    public void recreatePost(Long memberId, Long spotId) {
+        Post post = postRepository.findByMemberIdAndTravelId(memberId, spotId)
+            .orElseThrow(
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID)
+            );
+        post.setIsDeleted(false);
+    }
+
+    @Transactional
     public void updatePost(Long postId, Travel travel, Member member) {
         postRepository.save(new Post(postId, travel, member));
     }
@@ -52,12 +62,17 @@ public class PostService {
         Travel travel = post.getTravel();
         travelRepository.delete(travel);
         postRepository.delete(post);
+//        post.setIsDeleted(true);
         return new PostDeleteResponse("post 삭제 성공");
     }
 
     @Transactional
     public void deleteOnlyPost(Long memberId, Long travelId) {
-        postRepository.deleteByTravelIdAndMemberId(memberId, travelId);
+        Post post = postRepository.findByMemberIdAndTravelId(memberId, travelId)
+            .orElseThrow(
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID)
+            );
+        post.setIsDeleted(true);
     }
 
     @Transactional(readOnly = true)
