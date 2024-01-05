@@ -1,8 +1,5 @@
 package kr.co.yigil.post.domain;
 
-import static jakarta.persistence.CascadeType.PERSIST;
-import static jakarta.persistence.CascadeType.REMOVE;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +12,7 @@ import kr.co.yigil.travel.domain.Travel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Builder;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -29,7 +26,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = {PERSIST})
+    @OneToOne
     @JoinColumn(name = "travel_id")
     private Travel travel;
 
@@ -37,7 +34,7 @@ public class Post {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     public Post(Travel travel, Member member) {
         this.travel = travel;
@@ -52,6 +49,10 @@ public class Post {
 //    public Post(Long id) {
 //        this.id = id;
 //    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public void setTravel(Travel travel) {
         this.travel = travel;

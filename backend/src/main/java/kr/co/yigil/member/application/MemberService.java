@@ -56,6 +56,7 @@ public class MemberService {
 
         });
         applicationEventPublisher.publishEvent(event);
+
         return new MemberUpdateResponse("회원 정보 업데이트 성공");
     }
 
