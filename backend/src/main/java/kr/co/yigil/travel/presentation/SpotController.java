@@ -27,12 +27,13 @@ public class SpotController {
     private final SpotService spotService;
 
     @PostMapping
-    @MemberOnly
+//    @MemberOnly
     public ResponseEntity<SpotCreateResponse> createSpot(
-        @ModelAttribute SpotCreateRequest spotCreateRequest, // file 추가해야담
-        @Auth final Accessor accessor
+        @ModelAttribute SpotCreateRequest spotCreateRequest // file 추가해야담
+//        @Auth final Accessor accessor
     ){
-        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(), spotCreateRequest);
+//        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(), spotCreateRequest);
+        SpotCreateResponse spotCreateResponse = spotService.createSpot(1L, spotCreateRequest);
         return ResponseEntity.ok().body(spotCreateResponse);
     }
 
