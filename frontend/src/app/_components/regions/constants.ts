@@ -32,7 +32,7 @@ export const regions = [
     label: '충남',
   },
   {
-    slug: 'chungnam',
+    slug: 'chungbuk',
     label: '충북',
   },
 ];
