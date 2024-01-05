@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={Jalnan.className}>
+    <html lang="ko" className={Jalnan.className}>
       <body>
         <MSWComponent />
         <AuthContext>
