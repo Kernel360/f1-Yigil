@@ -24,7 +24,7 @@ export default function Header() {
     <div
       className={`w-full ${
         isHeaderFolded ? 'h-[50px] shadow-md' : 'h-[80px]'
-      } flex justify-center items-center fixed  duration-300`}
+      } flex justify-center items-center fixed top-0 duration-300 py-1 bg-[white]`}
     >
       <HeaderLogo />
       <HeaderIcons />

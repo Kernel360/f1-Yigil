@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 };
 import localFont from 'next/font/local';
 import { NavigationBar } from './_components/navigation';
+import MSWComponent from './_components/MSWComponent';
 
 const Jalnan = localFont({
   src: '../../public/fonts/Jalnan2TTF.ttf',
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={Jalnan.className}>
       <body>
+        <MSWComponent />
         <AuthContext>
           {children}
           <NavigationBar />

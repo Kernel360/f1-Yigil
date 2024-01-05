@@ -1,9 +1,13 @@
 import Header from '@/app/_components/header/Header';
+import Carousel from './_components/carousel/Carousel';
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main className="h-[1000px]">
+    <main className="h-[500px]">
       <Header />
+      <div className="mt-[80px]">
+        <Carousel />
+      </div>
     </main>
   );
 }
