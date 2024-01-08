@@ -1,4 +1,4 @@
-package kr.co.yigil.test;
+package kr.co.yigil.login.presentation;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.yigil.member.domain.Member;
