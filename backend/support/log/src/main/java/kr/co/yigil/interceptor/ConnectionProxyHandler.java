@@ -1,7 +1,7 @@
-package kr.co.yigil.global.log.interceptor;
+package kr.co.yigil.interceptor;
 
 import jakarta.annotation.Nullable;
-import kr.co.yigil.global.log.LoggingForm;
+import kr.co.yigil.LoggingForm;
 import lombok.RequiredArgsConstructor;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -41,6 +41,4 @@ public class ConnectionProxyHandler implements MethodInterceptor {
         proxyFactory.addAdvice(this);
         return proxyFactory.getProxy();
     }
-
-
 }

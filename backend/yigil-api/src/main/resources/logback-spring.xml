@@ -28,6 +28,7 @@
     <layout class="ch.qos.logback.classic.PatternLayout">
       <Pattern>
         ${PID:-} --- [%15.15thread] %-40.40logger{36} %msg%n%n
+        [CURRENT_MODULE] : CLIENT-API%n
         [REQUEST_ID] : %X{REQUEST_ID:-NO REQUEST ID}%n
         [REQUEST_METHOD] : %X{REQUEST_METHOD:-NO REQUEST METHOD}%n
         [REQUEST_URI] : %X{REQUEST_URI:-NO REQUEST URI}%n

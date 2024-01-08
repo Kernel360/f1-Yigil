@@ -1,8 +1,8 @@
-package kr.co.yigil.global.log.aspect;
+package kr.co.yigil.aspect;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kr.co.yigil.global.log.LoggingForm;
-import kr.co.yigil.global.log.interceptor.ConnectionProxyHandler;
+import kr.co.yigil.LoggingForm;
+import kr.co.yigil.interceptor.ConnectionProxyHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;

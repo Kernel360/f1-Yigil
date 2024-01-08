@@ -1,6 +1,6 @@
-package kr.co.yigil.global.log;
+package kr.co.yigil;
 
-public enum MdcPref {
+public enum MdcPreference {
     REQUEST_ID,
     REQUEST_METHOD,
     REQUEST_URI,

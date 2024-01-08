@@ -1,4 +1,4 @@
-package kr.co.yigil.global.log.decorator;
+package kr.co.yigil.decorator;
 
 import java.util.Map;
 import org.slf4j.MDC;
@@ -14,4 +14,5 @@ public class MdcDecorator implements TaskDecorator {
             runnable.run();
         };
     }
+
 }

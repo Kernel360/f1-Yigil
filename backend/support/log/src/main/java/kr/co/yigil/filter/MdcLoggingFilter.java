@@ -1,23 +1,22 @@
-package kr.co.yigil.global.log.filter;
+package kr.co.yigil.filter;
 
-import static kr.co.yigil.global.log.MdcPref.REQUEST_ID;
-import static kr.co.yigil.global.log.MdcPref.REQUEST_IP;
-import static kr.co.yigil.global.log.MdcPref.REQUEST_METHOD;
-import static kr.co.yigil.global.log.MdcPref.REQUEST_TIME;
-import static kr.co.yigil.global.log.MdcPref.REQUEST_URI;
-import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
+import static kr.co.yigil.MdcPreference.REQUEST_ID;
+import static kr.co.yigil.MdcPreference.REQUEST_IP;
+import static kr.co.yigil.MdcPreference.REQUEST_METHOD;
+import static kr.co.yigil.MdcPreference.REQUEST_TIME;
+import static kr.co.yigil.MdcPreference.REQUEST_URI;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.Filter;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import lombok.extern.slf4j.Slf4j;
-import org.joda.time.LocalDateTime;
-import org.slf4j.MDC;
+import java.time.LocalDateTime;
 import java.util.UUID;
+import jakarta.servlet.Filter;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -29,11 +28,10 @@ public class MdcLoggingFilter implements Filter {
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final
-            FilterChain chain) throws ServletException, IOException {
+    FilterChain chain) throws ServletException, IOException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         setMdc(httpRequest);
         chain.doFilter(request, response);
-//        log.info("Received request: Method: {}, URI: {}, IP: {}", httpRequest.getMethod(), httpRequest.getRequestURI(), httpRequest.getRemoteAddr());
         MDC.clear();
     }
 
@@ -44,5 +42,4 @@ public class MdcLoggingFilter implements Filter {
         MDC.put(REQUEST_TIME.name(), LocalDateTime.now().toString());
         MDC.put(REQUEST_IP.name(), request.getRemoteAddr());
     }
-
 }
