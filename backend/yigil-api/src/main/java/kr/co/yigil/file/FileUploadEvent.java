@@ -1,9 +1,5 @@
 package kr.co.yigil.file;
 
-import static kr.co.yigil.global.exception.ExceptionCode.EMPTY_FILE;
-import static kr.co.yigil.global.exception.ExceptionCode.EXCEED_FILE_CAPACITY;
-import static kr.co.yigil.global.exception.ExceptionCode.INVALID_FILE_TYPE;
-
 import java.util.function.Consumer;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.FileException;
