@@ -24,7 +24,6 @@ import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +33,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
+    private final FollowCountRepository followCountRepository;
     private final FollowRedisIntegrityService followRedisIntegrityService;
     private final ApplicationEventPublisher applicationEventPublisher;
 
