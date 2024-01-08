@@ -1,4 +1,4 @@
-package kr.co.yigil.global.log;
+package kr.co.yigil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +10,12 @@ public class LoggingForm {
 
     @Setter
     private String apiUrl;
+
     @Setter
     private String apiMethod;
+
     private Long queryCounts = 0L;
+
     private Long queryTime = 0L;
 
     public void queryCountUp() {
@@ -22,5 +25,4 @@ public class LoggingForm {
     public void addQueryTime(final Long queryTime) {
         this.queryTime += queryTime;
     }
-
 }

@@ -13,6 +13,8 @@ repositories {
 }
 
 dependencies {
+    implementation project(':support:log')
+
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

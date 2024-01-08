@@ -1,7 +1,7 @@
 package kr.co.yigil.global.config;
 
+import kr.co.yigil.decorator.MdcDecorator;
 import kr.co.yigil.global.exception.AsyncExceptionHandler;
-import kr.co.yigil.global.log.decorator.MdcDecorator;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
