@@ -37,6 +37,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mock.web.MockMultipartFile;
 
 public class MemberServiceTest {
@@ -201,5 +202,4 @@ public class MemberServiceTest {
         assertThat(response.getFollowingList()).hasSize(2);
         assertThat(response.getFollowingList()).extracting("nickname").contains("following1", "following2");
     }
-
 }

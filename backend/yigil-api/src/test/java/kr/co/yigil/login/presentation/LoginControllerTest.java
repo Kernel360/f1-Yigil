@@ -59,4 +59,3 @@ public class LoginControllerTest {
                 .andExpect(status().isOk());
     }
 }
-
