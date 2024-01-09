@@ -30,7 +30,7 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource("classpath:url.properties")
 public class KakaoLoginStrategy implements LoginStrategy {
 
-    private final String PROVIDER_NAME = "kakao";
+    private final static String PROVIDER_NAME = "kakao";
 
     @Value("${kakao.token.info.url}")
     private String KAKAO_TOKEN_INFO_URL;
@@ -82,7 +82,6 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
             return response.getBody();
         } catch (Exception e) {
-            log.warn(e.getMessage(), e);
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
     }
