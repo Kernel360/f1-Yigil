@@ -35,3 +35,7 @@ kotlin {
 	jvmToolchain(21)
 }
 
+project(':support:log') {
+	bootJar { enabled = false }
+	jar { enabled = true }
+}
