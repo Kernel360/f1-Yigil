@@ -36,6 +36,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mock.web.MockMultipartFile;
 
 public class MemberServiceTest {
@@ -50,10 +52,10 @@ public class MemberServiceTest {
     private MemberService memberService;
 
     @Mock
-    private FollowRepository followRepository;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Mock
-    private FollowRedisIntegrityService followRedisIntegrityService;
+    private FollowRepository followRepository;
 
     @Mock
     private FollowRedisIntegrityService followRedisIntegrityService;
