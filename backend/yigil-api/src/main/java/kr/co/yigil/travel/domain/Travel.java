@@ -1,4 +1,4 @@
-package kr.co.yigil.post.domain;
+package kr.co.yigil.travel.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
