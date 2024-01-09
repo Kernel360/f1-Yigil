@@ -1,8 +1,6 @@
 package kr.co.yigil.travel.presentation;
 
-import java.net.URI;
 import kr.co.yigil.auth.Auth;
-import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
 import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,11 +26,10 @@ public class SpotController {
     @PostMapping
 //    @MemberOnly
     public ResponseEntity<SpotCreateResponse> createSpot(
-        @ModelAttribute SpotCreateRequest spotCreateRequest // file 추가해야담
-//        @Auth final Accessor accessor
+        @ModelAttribute SpotCreateRequest spotCreateRequest, // file 추가해야담
+        @Auth final Accessor accessor
     ){
-//        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(), spotCreateRequest);
-        SpotCreateResponse spotCreateResponse = spotService.createSpot(1L, spotCreateRequest);
+        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(), spotCreateRequest);
         return ResponseEntity.ok().body(spotCreateResponse);
     }
 
@@ -53,7 +49,7 @@ public class SpotController {
     public ResponseEntity<SpotFindResponse> findSpot(
         @PathVariable("post_id") Long postId
     ) {
-        SpotFindResponse post = spotService.findSpot(postId);
+        SpotFindResponse post = spotService.findSpotByPostId(postId);
         return ResponseEntity.ok().body(post);
     }
 

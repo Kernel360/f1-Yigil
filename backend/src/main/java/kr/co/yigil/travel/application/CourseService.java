@@ -37,12 +37,17 @@ public class CourseService {
         List<Long> spotIdList = courseCreateRequest.getSpotIds();
         List<Spot> spots = spotService.getSpotListFromSpotIds(spotIdList);
 
-        // 코스에 포함된 스팟을 담은 포스트 삭제
-         spotIdList.forEach(spotId -> postService.deleteOnlyPost(memberId, spotId));
-
+        // 코스를 저장
         Course course = CourseCreateRequest.toEntity(courseCreateRequest, spots);
         courseRepository.save(course);
         postService.createPost(course, member);
+
+        //코스에 포함된 spot들 isIncourse 속성 true로 변경
+        course.getSpots().forEach(spot -> spot.setIsInCourse(true));
+
+        // 코스에 포함된 스팟을 담은 포스트 삭제
+        spotIdList.forEach(spotId -> postService.deleteOnlyPost(memberId, spotId));
+
         return new CourseCreateResponse("경로 생성 성공");
     }
 
@@ -63,15 +68,19 @@ public class CourseService {
         List<Long> spotIdList = courseUpdateRequest.getSpotIds();
         List<Spot> spots = travelRepository.findAllById(spotIdList).stream().map(Spot.class::cast).toList();
 
-        // 코스에 스팟을 넣을 때
+        // 코스에 스팟을 넣을 때 Post는 삭제하고 spot 정보는 업데이트.
         for(Long id: courseUpdateRequest.getAddedSpotIds()){
             postService.deleteOnlyPost(memberId, id);
+            Spot spot = spotService.findSpotById(id);
+            spot.setIsInCourse(true);
         }
 
         // 코스에 있던 spot을 뺄때 다시 post에 등록, post 필드의 deleted 가 true인 것을 false로 변경
-        for(Long spotId: courseUpdateRequest.getRemovedSpotIds()){
+        for(Long id: courseUpdateRequest.getRemovedSpotIds()){
             // spotId와 member Id로 post를 찾아서 해당 포스트의 deleted 필드를 false로 변경
-            postService.recreatePost(memberId, spotId);
+            postService.recreatePost(memberId, id);
+            Spot spot = spotService.findSpotById(id);
+            spot.setIsInCourse(false);
         }
 
         // 코스 정보 업데이트
@@ -82,6 +91,7 @@ public class CourseService {
         Course updatedCourse = courseRepository.save(newCourse);
 
         postService.updatePost(postId, newCourse, member);
+
         return CourseUpdateResponse.from(member, updatedCourse, spots);
     }
 

@@ -1,7 +1,6 @@
 package kr.co.yigil.post.application;
 
 import java.util.List;
-import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
@@ -43,7 +42,7 @@ public class PostService {
 
     @Transactional
     public void recreatePost(Long memberId, Long spotId) {
-        Post post = postRepository.findByMemberIdAndTravelId(memberId, spotId)
+        Post post = postRepository.findByMemberIdAndTravelIdAndIsDeleted(memberId, spotId, true)
             .orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID)
             );
@@ -57,18 +56,18 @@ public class PostService {
 
     @Transactional
     public PostDeleteResponse deletePost(Long memberId, Long postId) {
-        Post post = findPostById(postId);
         validatePostWriter(memberId, postId);
+
+        Post post = findPostById(postId);
         Travel travel = post.getTravel();
         travelRepository.delete(travel);
         postRepository.delete(post);
-//        post.setIsDeleted(true);
         return new PostDeleteResponse("post 삭제 성공");
     }
 
     @Transactional
     public void deleteOnlyPost(Long memberId, Long travelId) {
-        Post post = postRepository.findByMemberIdAndTravelId(memberId, travelId)
+        Post post = postRepository.findByMemberIdAndTravelIdAndIsDeleted(memberId, travelId, false)
             .orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID)
             );
@@ -76,7 +75,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public void validatePostWriter(Long memberId, Long postId) {
+    public void                  validatePostWriter(Long memberId, Long postId) {
         if (!postRepository.existsByMemberIdAndId(memberId, postId)) {
             throw new BadRequestException(ExceptionCode.INVALID_AUTHORITY);
         }

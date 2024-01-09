@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.SocialLoginType;
@@ -176,12 +177,18 @@ class PostServiceTest {
         // Given
         Long memberId = 1L;
         Long travelId = 1L;
+        Long postId = 1L;
+        Travel mockTravel = new Travel(1L);
+        Member mockMember = new Member(1L, "kiit0901@gmail.com", "123456", "stone", "profile.jpg", SocialLoginType.KAKAO);
+        Post mockPost = new Post(postId, mockTravel, mockMember);
 
+        when(postRepository.findByMemberIdAndTravelIdAndIsDeleted(memberId, travelId, false)).thenReturn(
+            Optional.of(mockPost));
         // When
         assertDoesNotThrow(() -> postService.deleteOnlyPost(memberId, travelId));
 
         // Then: Verify that deleteByTravelIdAndMemberId method was called
-//        verify(postRepository, times(1)).deleteByTravelIdAndMemberId(memberId, travelId);
+        verify(postRepository, times(1)).findByMemberIdAndTravelIdAndIsDeleted(anyLong(), anyLong(), anyBoolean());
     }
 
     @DisplayName("When validating post writer with invalid authority, then throw BadRequestException")

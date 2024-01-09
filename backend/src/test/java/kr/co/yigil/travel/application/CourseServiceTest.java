@@ -178,27 +178,19 @@ class CourseServiceTest {
 
         List<Spot> mockSpotList = List.of(mockSpot1, mockSpot2, mockSpot3);
         List<Travel> mockTravelList = mockSpotList.stream().map(Travel.class::cast).toList();
+        LineString mockPath = geometryFactory.createLineString(coordinates.toArray(new Coordinate[0]));
 
-        when(travelRepository.findAllById(spotIdList)).thenReturn(mockTravelList);
-
-        when(spotService.findSpotById(anyLong())).thenReturn(mockTravelList.get(0));
-
+        //  postService.findPostById 모킹
         Travel mockTravel = new Course(lineString, mockSpotList, 1, "");
         Member mockMember = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         when(postService.findPostById(postId)).thenReturn(new Post(postId, mockTravel, mockMember));
-
-
         when(memberService.findMemberById(anyLong())).thenReturn(mockMember);
-
-        LineString mockPath = geometryFactory.createLineString(coordinates.toArray(new Coordinate[0]));
-
-        doNothing().when(postService).createPost(Mockito.any(), Mockito.any());  // createPost 메서드가 호출되면 아무런 동작도 하지 않음
+        when(travelRepository.findAllById(spotIdList)).thenReturn(mockTravelList);
+        when(spotService.findSpotById(anyLong())).thenReturn(mockSpotList.get(0));
         doNothing().when(postService).deleteOnlyPost(Mockito.anyLong(), Mockito.anyLong());  // deleteOnlyPost 메서드가 호출되면 아무런 동작도 하지 않음
         when(courseRepository.save(Mockito.any())).thenReturn(new Course(mockPath, mockSpotList, 1, mockSpot1.getTitle()));  // save 메서드가 호출되면 가상의 Course 객체 반환
         doNothing().when(postService).updatePost(Mockito.anyLong(), Mockito.any(), Mockito.any());  // updatePost 메서드가 호출되면 아무런 동작도 하지 않음
 
         assertThat(courseService.updateCourse(postId, memberId, request)).isInstanceOf(CourseUpdateResponse.class);
     }
-
-
 }

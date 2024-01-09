@@ -62,6 +62,10 @@ public class Spot extends Travel{
         this.fileUrl = fileUrl;
     }
 
+    public void setIsInCourse(boolean isInCourse){
+        this.isInCourse = isInCourse;
+    }
+
 //    public void setId(Long id){
 //        super.setId(id);
 //    }

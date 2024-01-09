@@ -11,8 +11,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     void deleteByMemberIdAndTravelId(Long memberId, Long travelId);
 
-    @Query(value = "SELECT p.* FROM Post p WHERE p.member_id = :memberId AND p.travel_id = :travelId", nativeQuery = true)
-    Optional<Post> findByMemberIdAndTravelId(Long memberId, Long travelId);
+    @Query(value = "SELECT p.* FROM Post p WHERE p.member_id = :memberId AND p.travel_id = :travelId AND p.is_deleted = :isDeleted", nativeQuery = true)
+    Optional<Post> findByMemberIdAndTravelIdAndIsDeleted(Long memberId, Long travelId, boolean isDeleted);
 
     List<Post> findAllByMember(Member member);
 

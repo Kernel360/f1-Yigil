@@ -48,7 +48,7 @@ public class SpotService {
     }
 
     @Transactional(readOnly = true)
-    public SpotFindResponse findSpot(Long postId) {
+    public SpotFindResponse findSpotByPostId(Long postId) {
 
         Post post = postService.findPostById(postId);
         Member member = post.getMember();
@@ -84,17 +84,18 @@ public class SpotService {
     }
 
     @Transactional(readOnly = true)
-    public Travel findSpotById(Long spotId){
-        return spotRepository.findById(spotId).orElseThrow(
+    public Spot findSpotById(Long spotId){
+        Travel travel = spotRepository.findById(spotId).orElseThrow(
             () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
+
+        return castTravelToSpot(travel);
     }
 
     @Transactional(readOnly = true)
     public List<Spot> getSpotListFromSpotIds(List<Long> spotIdList){
         return spotIdList.stream()
             .map(this::findSpotById)
-            .map(this::castTravelToSpot)
             .toList();
     }
 

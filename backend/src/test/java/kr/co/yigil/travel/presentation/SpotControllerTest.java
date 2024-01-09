@@ -71,7 +71,7 @@ class SpotControllerTest {
     @Test
     void whenGetSpotPost_thenReturns200AndSpotFindResponse() throws Exception {
         SpotFindResponse mockResponse = new SpotFindResponse();
-        given(spotService.findSpot(anyLong())).willReturn(mockResponse);
+        given(spotService.findSpotByPostId(anyLong())).willReturn(mockResponse);
         mockMvc.perform(get("/api/v1/spots/1")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());

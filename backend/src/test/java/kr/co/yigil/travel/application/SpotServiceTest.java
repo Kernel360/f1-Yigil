@@ -94,7 +94,7 @@ class SpotServiceTest {
 
         SpotFindResponse spotFindResponse = SpotFindResponse.from(mockMember, mockSpot);
 
-        assertThat(spotService.findSpot(postId)).isEqualTo(spotFindResponse);
+        assertThat(spotService.findSpotByPostId(postId)).isEqualTo(spotFindResponse);
     }
 
     @DisplayName("findSpot 메서드에서 Travel을 course로 가지고 있는 Post Id로 Spot을 찾을때 예외가 제대로 나오는지 확인")
@@ -120,7 +120,7 @@ class SpotServiceTest {
         Post mockPost = new Post(postId, mockCourse, mockMember);
         when(postService.findPostById(anyLong())).thenReturn(mockPost);
 
-        assertThrows(BadRequestException.class, ()-> spotService.findSpot(postId));
+        assertThrows(BadRequestException.class, ()-> spotService.findSpotByPostId(postId));
     }
 
     @DisplayName("updateSpot 메서드가 유효한 인자를 받았을 때 올바른 응답을 반환하는지")
