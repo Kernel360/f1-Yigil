@@ -7,7 +7,6 @@ import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.follow.dto.FollowCountDto;
 import kr.co.yigil.member.domain.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service

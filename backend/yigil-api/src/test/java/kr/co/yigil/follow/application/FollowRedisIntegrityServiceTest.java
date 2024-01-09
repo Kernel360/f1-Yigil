@@ -76,4 +76,3 @@ public class FollowRedisIntegrityServiceTest {
         verify(followCountRepository).save((FollowCount) any());
     }
 }
-
