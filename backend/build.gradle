@@ -15,6 +15,10 @@ java {
 	}
 }
 
+project(':support:log') {
+	bootJar { enabled = false }
+}
+
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
 }
@@ -35,7 +39,4 @@ kotlin {
 	jvmToolchain(21)
 }
 
-project(':support:log') {
-	bootJar { enabled = false }
-	jar { enabled = true }
-}
+
