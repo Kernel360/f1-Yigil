@@ -94,4 +94,5 @@ public class FollowServiceTest {
         verify(followCountRedisRepository, times(1)).decrementFollowersCount(followingId);
         verify(followCountRedisRepository, times(1)).decrementFollowingsCount(followerId);
     }
+
 }

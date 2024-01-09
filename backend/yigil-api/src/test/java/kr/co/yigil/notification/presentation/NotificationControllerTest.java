@@ -47,3 +47,4 @@ public class NotificationControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
+

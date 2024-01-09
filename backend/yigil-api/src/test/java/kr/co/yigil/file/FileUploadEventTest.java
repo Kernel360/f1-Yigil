@@ -48,3 +48,4 @@ public class FileUploadEventTest {
                 Consumer.class)));
     }
 }
+

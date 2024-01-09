@@ -46,3 +46,4 @@ public class JasyptConfigTest {
         assertEquals("base64", config.getStringOutputType());
     }
 }
+

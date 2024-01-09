@@ -102,3 +102,4 @@ public class MemberControllerTest {
                 .andExpect(status().isOk());
     }
 }
+

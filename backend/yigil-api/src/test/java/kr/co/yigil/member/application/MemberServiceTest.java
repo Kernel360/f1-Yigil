@@ -201,4 +201,5 @@ public class MemberServiceTest {
         assertThat(response.getFollowingList()).hasSize(2);
         assertThat(response.getFollowingList()).extracting("nickname").contains("following1", "following2");
     }
+
 }
