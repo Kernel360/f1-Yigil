@@ -34,3 +34,9 @@ tasks.named('test') {
 kotlin {
 	jvmToolchain(21)
 }
+
+project(':support:log') {
+	bootJar {
+		enabled = false
+	}
+}
