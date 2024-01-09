@@ -60,4 +60,5 @@ public class FollowCountRedisRepositoryTest {
         followCountRedisRepository.decrementFollowingsCount(memberId);
         verify(hashOperations, times(1)).increment("followCount", memberId + ":followingCount", -1);
     }
+
 }

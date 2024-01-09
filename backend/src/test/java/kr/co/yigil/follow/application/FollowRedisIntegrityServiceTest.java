@@ -20,7 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-
 public class FollowRedisIntegrityServiceTest {
 
     @Mock
@@ -31,7 +30,6 @@ public class FollowRedisIntegrityServiceTest {
 
     @InjectMocks
     private FollowRedisIntegrityService followRedisIntegrityService;
-
 
     @BeforeEach
     void setUp() {
@@ -77,6 +75,4 @@ public class FollowRedisIntegrityServiceTest {
         verify(followRepository).getFollowCounts(member);
         verify(followCountRepository).save((FollowCount) any());
     }
-
-
 }
