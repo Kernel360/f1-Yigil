@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth/core": "^0.18.5",
     "axios": "^1.6.2",
+    "embla-carousel-react": "^8.0.0-rc18",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
     "react": "^18",
