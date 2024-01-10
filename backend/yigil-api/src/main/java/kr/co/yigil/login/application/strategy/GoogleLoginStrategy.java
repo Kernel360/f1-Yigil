@@ -3,6 +3,7 @@ package kr.co.yigil.login.application.strategy;
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.Collections;
 import kr.co.yigil.global.exception.InvalidTokenException;
 import kr.co.yigil.login.dto.request.LoginRequest;
 import kr.co.yigil.login.dto.response.LoginResponse;
@@ -13,7 +14,10 @@ import kr.co.yigil.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -56,11 +60,15 @@ public class GoogleLoginStrategy implements LoginStrategy{
     }
 
     private GoogleTokenInfoResponse requestGoogleTokenInfo(String accessToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Basic " + accessToken);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>(headers);
         try {
             ResponseEntity<GoogleTokenInfoResponse> response = restTemplate.exchange(
                     "https://oauth2.googleapis.com/tokeninfo?access_token={accessToken}",
                     HttpMethod.GET,
-                    null,
+                    entity,
                     GoogleTokenInfoResponse.class,
                     accessToken
             );
