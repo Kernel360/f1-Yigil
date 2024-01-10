@@ -50,6 +50,11 @@ public class MemberOnlyCheckerTest {
         Object[] args = new Object[]{accessor};
         when(joinPoint.getArgs()).thenReturn(args);
 
+        try {
+            memberOnlyChecker.check(joinPoint);
+        } catch (AuthException e) {
+            fail("AuthException should not be thrown");
+        }
     }
 
 }
