@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.jetbrains.kotlin.jvm'
+    id 'jacoco'
 }
 
 bootJar {
@@ -53,5 +54,26 @@ dependencies {
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml {
+            enabled true
+            destination file("${buildDir}/jacoco/index.xml")
+        }
+        csv {
+            enabled true
+            destination file("${buildDir}/jacoco/index.csv")
+        }
+        html {
+            enabled true
+            destination file("${buildDir}/jacoco/index.html")
+        }
+    }
+}
+
+test {
+    finalizedBy 'jacocoTestReport'
 }
 
