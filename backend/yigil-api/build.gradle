@@ -5,6 +5,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
+bootJar {
+    mainClass = 'kr.co.yigil.BackendApplication'
+}
+
 group = 'kr.co.yigil'
 version = '0.0.1-SNAPSHOT'
 
