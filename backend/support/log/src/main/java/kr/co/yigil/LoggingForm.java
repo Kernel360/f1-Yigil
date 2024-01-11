@@ -25,4 +25,5 @@ public class LoggingForm {
     public void addQueryTime(final Long queryTime) {
         this.queryTime += queryTime;
     }
+
 }

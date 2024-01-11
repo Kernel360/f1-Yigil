@@ -66,7 +66,7 @@ public class MemberControllerTest {
         given(memberService.getMemberInfo(memberId)).willReturn(mockResponse);
 
         mockMvc.perform(get("/api/v1/member/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -83,9 +83,9 @@ public class MemberControllerTest {
 
 
         mockMvc.perform(multipart("/api/v1/member")
-                        .file(file)
-                        .param("nickname", "nickname")
-                        .sessionAttr("memberId", accessor.getMemberId()))
+                .file(file)
+                .param("nickname", "nickname")
+                .sessionAttr("memberId", accessor.getMemberId()))
                 .andExpect(status().isOk());
     }
 
@@ -98,7 +98,7 @@ public class MemberControllerTest {
         given(memberService.withdraw(accessor.getMemberId())).willReturn(mockResponse);
 
         mockMvc.perform(delete("/api/v1/member")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
