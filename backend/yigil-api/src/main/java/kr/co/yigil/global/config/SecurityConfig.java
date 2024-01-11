@@ -34,10 +34,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.addAllowedMethod(
-                Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS").toString());
         configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("*"));
+        configuration.addAllowedMethod(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS").toString());
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 적용
