@@ -2,8 +2,8 @@ package kr.co.yigil.login.application.strategy;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.yigil.login.dto.request.LoginRequest;
-import kr.co.yigil.login.dto.response.LoginResponse;
 import kr.co.yigil.login.dto.response.GoogleTokenInfoResponse;
+import kr.co.yigil.login.dto.response.LoginResponse;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

@@ -17,8 +17,8 @@ public class RoutingDataSourceConfig {
         ReplicationRoutingDataSource routingDataSource = new ReplicationRoutingDataSource();
 
         Map<Object, Object> dataSourceMap = Map.of(
-                DataSourceType.Master, masterDataSource,
-                DataSourceType.Slave, slaveDataSource
+                DataSourceType.MASTER, masterDataSource,
+                DataSourceType.SLAVE, slaveDataSource
         );
 
         routingDataSource.setTargetDataSources(dataSourceMap);

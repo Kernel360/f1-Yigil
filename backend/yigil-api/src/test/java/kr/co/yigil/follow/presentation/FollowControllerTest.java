@@ -47,7 +47,7 @@ public class FollowControllerTest {
         given(followService.follow(accessorId, memberId)).willReturn(mockResponse);
 
         mockMvc.perform(post("/api/v1/follow/" + memberId)
-                        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -61,7 +61,7 @@ public class FollowControllerTest {
         given(followService.unfollow(accessorId, memberId)).willReturn(mockResponse);
 
         mockMvc.perform(post("/api/v1/unfollow/" + memberId)
-                        .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }

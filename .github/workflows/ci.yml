@@ -43,6 +43,7 @@ jobs:
         echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./yigil-api/src/main/resources/url.properties
         cat ./yigil-api/src/main/resources/*
 
+
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew

@@ -9,6 +9,6 @@ public class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
     @Override
     protected Object determineCurrentLookupKey() {
         return TransactionSynchronizationManager.isCurrentTransactionReadOnly() ?
-                DataSourceType.Slave : DataSourceType.Master;
+                DataSourceType.SLAVE : DataSourceType.MASTER;
     }
 }

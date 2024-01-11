@@ -37,6 +37,6 @@ tasks.named('test') {
 
 kotlin {
 	jvmToolchain(21)
-}
 
+}
 
