@@ -1,4 +1,5 @@
 import Header from '@/app/_components/header/Header';
+import { RegionLinks } from './_components/regions';
 import Carousel from './_components/carousel/Carousel';
 
 export default async function Home() {
@@ -8,6 +9,7 @@ export default async function Home() {
       <div className="mt-[80px]">
         <Carousel />
       </div>
+      <RegionLinks />
     </main>
   );
 }
