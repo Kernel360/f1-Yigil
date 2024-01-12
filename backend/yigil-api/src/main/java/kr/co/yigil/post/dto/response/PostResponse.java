@@ -11,7 +11,9 @@ import lombok.Setter;
 
 @Data
 public class PostResponse {
-    // 리스트 response
+    private Long postId;
+    private Long travelId;
+
     private String title;
     private String imageUrl;
     private String description;
@@ -24,16 +26,18 @@ public class PostResponse {
 
     public static PostResponse from(Post post) {
         if (post.getTravel() instanceof Spot spot) {
-            return fromSpot(spot, post.getMember());
+            return fromSpot(post.getId(), spot, post.getMember());
         } else if(post.getTravel() instanceof Course course){
-            return fromCourse(course, post.getMember());
+            return fromCourse(post.getId(), course, post.getMember());
         } else{
             throw new BadRequestException(ExceptionCode.TRAVEL_CASTING_ERROR);
         }
     }
 
-    public static PostResponse fromSpot(Spot spot, Member member) {
+    public static PostResponse fromSpot(Long postId, Spot spot, Member member) {
         return new PostResponse(
+            postId,
+            spot.getId(),
             spot.getTitle(),
             spot.getFileUrl(),
             spot.getDescription(),
@@ -42,12 +46,16 @@ public class PostResponse {
         );
     }
 
-    public static PostResponse fromCourse(Course course, Member member) {
-        var representativeSpot = course.getSpots().                                                                                                                                                                     get(course.getRepresentativeSpotOrder());
-        var imgUrl = representativeSpot.getFileUrl();
-        var description = representativeSpot.getDescription();
+    public static PostResponse fromCourse(Long postId, Course course, Member member) {
+        System.out.println("-------------------");
+        System.out.println();
+        Spot representativeSpot = course.getSpots().get(course.getRepresentativeSpotOrder());
+        String imgUrl = representativeSpot.getFileUrl();
+        String description = representativeSpot.getDescription();
 
         return new PostResponse(
+            postId,
+            course.getId(),
             course.getTitle(),
             imgUrl,
             description,
@@ -57,7 +65,9 @@ public class PostResponse {
     }
 
     // 생성자 추가
-    public PostResponse(String title, String imageUrl, String description, String memberNickname, String memberImageUrl) {
+    public PostResponse(Long postId, Long travelId, String title, String imageUrl, String description, String memberNickname, String memberImageUrl) {
+        this.postId = postId;
+        this.travelId = travelId;
         this.title = title;
         this.imageUrl = imageUrl;
         this.description = description;

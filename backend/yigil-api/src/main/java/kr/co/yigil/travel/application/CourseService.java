@@ -1,6 +1,8 @@
 package kr.co.yigil.travel.application;
 
 import java.util.List;
+import kr.co.yigil.comment.application.CommentService;
+import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.post.application.PostService;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
@@ -11,6 +13,7 @@ import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.domain.repository.CourseRepository;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
+import kr.co.yigil.travel.dto.response.SpotFindResponse;
 import org.springframework.stereotype.Service;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -30,6 +33,7 @@ public class CourseService {
     private final MemberService memberService;
     private final PostService postService;
     private final SpotService spotService;
+    private final CommentService commentService;
 
     @Transactional
     public CourseCreateResponse createCourse(Long memberId, CourseCreateRequest courseCreateRequest) {
@@ -56,7 +60,9 @@ public class CourseService {
         Post post = postService.findPostById(postId);
         Course course = castTravelToCourse(post.getTravel());
         List<Spot> spots = course.getSpots();
-        return CourseFindResponse.from(post, course, spots);
+
+        List<CommentResponse> comments = commentService.getCommentList(course.getId());
+        return CourseFindResponse.from(post, course, spots, comments);
     }
 
     @Transactional

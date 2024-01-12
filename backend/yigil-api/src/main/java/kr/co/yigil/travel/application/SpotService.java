@@ -2,6 +2,8 @@ package kr.co.yigil.travel.application;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import kr.co.yigil.comment.application.CommentService;
+import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -30,6 +32,7 @@ public class SpotService {
     private final MemberService memberService;
     private final PostService postService;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final CommentService commentService;
 
     @Transactional
     public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {
@@ -51,7 +54,9 @@ public class SpotService {
         Post post = postService.findPostById(postId);
         Member member = post.getMember();
         Spot spot = castTravelToSpot(post.getTravel());
-        return SpotFindResponse.from(member, spot);
+
+        List<CommentResponse> comments = commentService.getCommentList(spot.getId());
+        return SpotFindResponse.from(member, spot, comments);
     }
 
     @Transactional

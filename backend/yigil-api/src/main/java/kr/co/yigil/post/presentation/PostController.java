@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
     private final PostService postService;
 
-
     @GetMapping
     public ResponseEntity<PostListResponse> findAllPosts() {
         PostListResponse posts = postService.findAllPosts();
