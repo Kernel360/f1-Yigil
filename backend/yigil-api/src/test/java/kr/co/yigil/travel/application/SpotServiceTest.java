@@ -88,7 +88,7 @@ class SpotServiceTest {
 
     @DisplayName("findSpot 메서드가 올바른 응답을 내리는지")
     @Test
-    void GivenValidPostId_WhenfindSpotByPostId_ThenReturnSpotFindResponse() {
+    void GivenValidPostId_WhenFindSpot_ThenReturnSpotFindResponse() {
 
         Long postId = 123L;
         GeometryFactory geometryFactory = new GeometryFactory();
@@ -98,7 +98,6 @@ class SpotServiceTest {
         Post mockPost = new Post(postId, mockSpot, mockMember);
         when(postService.findPostById(anyLong())).thenReturn(mockPost);
 
-        //todo commentList 추가
         CommentResponse mockCommentResponse1 = new CommentResponse();
         CommentResponse mockCommentResponse2 = new CommentResponse();
         List<CommentResponse> mockCommentResponseList = List.of(mockCommentResponse1, mockCommentResponse2);

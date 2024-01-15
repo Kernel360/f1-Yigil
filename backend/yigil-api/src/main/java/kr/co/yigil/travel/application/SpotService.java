@@ -34,6 +34,8 @@ public class SpotService {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final CommentService commentService;
 
+    private final PostRepository postRepository;
+
     @Transactional
     public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {
         Member member = memberService.findMemberById(memberId);

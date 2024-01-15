@@ -79,7 +79,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public void validatePostWriter(Long memberId, Long postId) {
+    public void                  validatePostWriter(Long memberId, Long postId) {
         if (!postRepository.existsByMemberIdAndId(memberId, postId)) {
             throw new BadRequestException(ExceptionCode.INVALID_AUTHORITY);
         }
