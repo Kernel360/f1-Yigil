@@ -25,7 +25,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
-@SQLDelete(sql = "UPDATE Travel SET is_deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE Comment SET is_deleted = true WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Where(clause = "is_deleted = false")
 public class Comment {
@@ -44,7 +44,7 @@ public class Comment {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)

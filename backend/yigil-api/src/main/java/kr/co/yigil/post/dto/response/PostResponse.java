@@ -6,6 +6,7 @@ import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.Travel;
 import lombok.Data;
 import lombok.Setter;
 
@@ -21,51 +22,50 @@ public class PostResponse {
     private String memberNickname;
     private String memberImageUrl;
 
-//    private Integer likeCount;
-//    private Integer commentCount;
+//    private int likeCount;
+    private int commentCount;
 
-    public static PostResponse from(Post post) {
-        if (post.getTravel() instanceof Spot spot) {
-            return fromSpot(post.getId(), spot, post.getMember());
-        } else if(post.getTravel() instanceof Course course){
-            return fromCourse(post.getId(), course, post.getMember());
+    public static PostResponse from(Travel travel, Post post, int commentCount) {
+        if (travel instanceof Spot spot) {
+            return from(spot, post, commentCount);
+        } else if(travel instanceof Course course){
+            return from(course, post, commentCount);
         } else{
             throw new BadRequestException(ExceptionCode.TRAVEL_CASTING_ERROR);
         }
     }
 
-    public static PostResponse fromSpot(Long postId, Spot spot, Member member) {
+    public static PostResponse from(Spot spot, Post post, int commentCount) {
         return new PostResponse(
-            postId,
+            post.getId(),
             spot.getId(),
             spot.getTitle(),
             spot.getFileUrl(),
             spot.getDescription(),
-            member.getNickname(),
-            member.getProfileImageUrl()
+            post.getMember().getNickname(),
+            post.getMember().getProfileImageUrl(),
+            commentCount
         );
     }
 
-    public static PostResponse fromCourse(Long postId, Course course, Member member) {
-        System.out.println("-------------------");
-        System.out.println();
+    public static PostResponse from(Course course, Post post, int commentCount) {
         Spot representativeSpot = course.getSpots().get(course.getRepresentativeSpotOrder());
         String imgUrl = representativeSpot.getFileUrl();
         String description = representativeSpot.getDescription();
 
         return new PostResponse(
-            postId,
+            post.getId(),
             course.getId(),
             course.getTitle(),
             imgUrl,
             description,
-            member.getNickname(),
-            member.getProfileImageUrl()
+            post.getMember().getNickname(),
+            post.getMember().getProfileImageUrl(),
+            commentCount
         );
     }
 
-    // 생성자 추가
-    public PostResponse(Long postId, Long travelId, String title, String imageUrl, String description, String memberNickname, String memberImageUrl) {
+    public PostResponse(Long postId, Long travelId, String title, String imageUrl, String description, String memberNickname, String memberImageUrl, int commentCount) {
         this.postId = postId;
         this.travelId = travelId;
         this.title = title;
@@ -73,6 +73,7 @@ public class PostResponse {
         this.description = description;
         this.memberNickname = memberNickname;
         this.memberImageUrl = memberImageUrl;
+        this.commentCount = commentCount;
     }
 
 }
