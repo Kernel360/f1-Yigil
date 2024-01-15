@@ -1,10 +1,7 @@
 package kr.co.yigil.follow.application;
 
-import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
-
 import jakarta.transaction.Transactional;
 import kr.co.yigil.follow.domain.Follow;
-import kr.co.yigil.follow.domain.repository.FollowCountRedisRepository;
 import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.follow.dto.response.FollowResponse;
