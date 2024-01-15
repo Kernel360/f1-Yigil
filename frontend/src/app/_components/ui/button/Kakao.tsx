@@ -3,22 +3,20 @@
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import React from 'react';
-import kakaoLogo from '../../../../../public/loginBtns/kakao_logo.png';
+import kakaoLogo from '/public/loginBtns/kakao_logo.png';
 
 export default function KakaoBtn() {
   return (
     <button
-      className="bg-[#fee500] w-[300px] h-[45px] flex justify-start text-center items-center rounded-md p-[15px] cursor-pointer border-none"
+      className="w-[300px] flex justify-start text-center items-center rounded-full px-[24px] py-[8px] cursor-pointer border-none bg-[#fee500] hover:bg-[#e6cf00] active:bg-[#ccb800]"
       onClick={() =>
         signIn('kakao', {
-          callbackUrl: '/',
+          // callbackUrl: '/',
         })
       }
     >
-      <span className="mx-2 flex items-center ">
-        <Image src={kakaoLogo} alt="logo" width={25} height={25} />
-      </span>
-      <span className="ml-[40px] text-lg text-center">Kakao 로그인하기</span>
+      <Image src={kakaoLogo} alt="logo" width={24} height={24} />
+      <span className="ml-[60px] text-lg text-center">Kakao 로그인</span>
     </button>
   );
 }
