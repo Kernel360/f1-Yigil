@@ -5,6 +5,7 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import jakarta.transaction.Transactional;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.repository.FollowCountRedisRepository;
+import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.follow.dto.response.FollowResponse;
 import kr.co.yigil.follow.dto.response.UnfollowResponse;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class FollowService {
 
     private final FollowRepository followRepository;
-    private final FollowCountRedisRepository followCountRedisRepository;
+    private final FollowCountRepository followCountRepository;
     private final MemberRepository memberRepository;
     private final NotificationService notificationService;
     private final FollowRedisIntegrityService followRedisIntegrityService;
@@ -36,8 +37,8 @@ public class FollowService {
         followRedisIntegrityService.ensureFollowCounts(following);
 
         followRepository.save(new Follow(follower, following));
-        followCountRedisRepository.incrementFollowersCount(followingId);
-        followCountRedisRepository.incrementFollowingsCount(followerId);
+        incrementFollowersCount(followingId);
+        incrementFollowingsCount(followerId);
 
         sendFollowNotification(follower, following);
 
@@ -53,8 +54,8 @@ public class FollowService {
         followRedisIntegrityService.ensureFollowCounts(unfollowing);
 
         followRepository.deleteByFollowerAndFollowing(unfollower, unfollowing);
-        followCountRedisRepository.decrementFollowersCount(followingId);
-        followCountRedisRepository.decrementFollowingsCount(followerId);
+        decrementFollowersCount(followingId);
+        decrementFollowingsCount(followerId);
         return new UnfollowResponse("팔로우가 취소되었습니다.");
     }
 
@@ -67,6 +68,38 @@ public class FollowService {
         String message = follower.getNickname() + "님이 팔로우 하였습니다.";
         Notification notify = new Notification(following, message);
         notificationService.sendNotification(notify);
+    }
+
+    private void incrementFollowersCount(Long memberId) {
+        followCountRepository.findById(memberId)
+                .ifPresent(followCount -> {
+                    followCount.incrementFollowerCount();
+                    followCountRepository.save(followCount);
+                });
+    }
+
+    private void decrementFollowersCount(Long memberId) {
+        followCountRepository.findById(memberId)
+                .ifPresent(followCount -> {
+                    followCount.decrementFollowerCount();
+                    followCountRepository.save(followCount);
+                });
+    }
+
+    private void incrementFollowingsCount(Long memberId) {
+        followCountRepository.findById(memberId)
+                .ifPresent(followCount -> {
+                    followCount.incrementFollowingCount();
+                    followCountRepository.save(followCount);
+                });
+    }
+
+    private void decrementFollowingsCount(Long memberId) {
+        followCountRepository.findById(memberId)
+                .ifPresent(followCount -> {
+                    followCount.decrementFollowingCount();
+                    followCountRepository.save(followCount);
+                });
     }
 }
 

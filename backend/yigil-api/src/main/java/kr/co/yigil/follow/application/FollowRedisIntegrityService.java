@@ -1,5 +1,6 @@
 package kr.co.yigil.follow.application;
 
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.repository.FollowCountRepository;
@@ -15,9 +16,10 @@ public class FollowRedisIntegrityService {
     private final FollowRepository followRepository;
     private final FollowCountRepository followCountRepository;
 
+    @Transactional
     public FollowCount ensureFollowCounts(Member member) {
         Long memberId = member.getId();
-        Optional<FollowCount> existingFollowCount = followCountRepository.findByMemberId(memberId);
+        Optional<FollowCount> existingFollowCount = followCountRepository.findById(memberId);
         if (existingFollowCount.isPresent()) {
             return existingFollowCount.get();
         } else {

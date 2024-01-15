@@ -8,4 +8,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface FollowCountRepository extends CrudRepository<FollowCount, Long> {
 
     Optional<FollowCount> findByMemberId(Long memberId);
+
 }

@@ -15,8 +15,24 @@ public class FollowCount {
     @Id
     private Long memberId;
 
-    private final int followerCount;
+    private int followerCount;
 
-    private final int followingCount;
+    private int followingCount;
+
+    public void incrementFollowerCount() {
+        followerCount++;
+    }
+
+    public void decrementFollowerCount() {
+        followerCount--;
+    }
+
+    public void incrementFollowingCount() {
+        followingCount++;
+    }
+
+    public void decrementFollowingCount() {
+        followingCount--;
+    }
 
 }
