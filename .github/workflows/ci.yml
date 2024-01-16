@@ -45,7 +45,7 @@ jobs:
     - name: Set application.yml
       uses: microsoft/variable-substitution@v1
       with:
-        path: ./src/main/resources/application.yml
+        files: ~/src/main/resources/application.yml
       env:
         spring.datasource.master.hikari.jdbc-url: ${{ secrets.MASTER_DB_URL }} 
         spring.datasource.master.hikari.username: ${{ secrets.MASTER_DB_USERNAME }} 
