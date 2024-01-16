@@ -42,7 +42,23 @@ jobs:
         echo "Jasypt-Secret-Key=$JASYPT_SECRET_KEY" > ./yigil-api/src/main/resources/config.properties
         echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./yigil-api/src/main/resources/url.properties
         cat ./yigil-api/src/main/resources/*
-
+    - name: Set application.yml
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: ./src/main/resources/application-prod.yml
+      env:
+        spring.datasource.master.hikari.jdbc-url: ${{ secrets.MASTER_DB_URL }} 
+        spring.datasource.master.hikari.username: ${{ secrets.MASTER_DB_USERNAME }} 
+        spring.datasource.master.hikari.password: ${{ secrets.MASTER_DB_PASSWORD }}
+        spring.datasource.slave.hikari.jdbc-url: ${{ secrets.SLAVE_DB_URL }} 
+        spring.datasource.slave.hikari.username: ${{ secrets.SLAVE_DB_USERNAME }} 
+        spring.datasource.slave.hikari.password: ${{ secrets.SLAVE_DB_PASSWORD }}
+        spring.data.redis.host: ${{ secrets.REDIS_HOST }}
+        spring.data.redis.port: ${{ secrets.REDIS_PORT }}
+        cloud.aws.bucket: ${{ secrets.S3_BUCKET }}
+        cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY }}
+        cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_KEY }}
+        logging.slack: ${{ secrets.SLACK_WEBHOOK_URI }}
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
