@@ -1,13 +1,13 @@
 package kr.co.yigil.like.domain;
 
-import jakarta.persistence.Id;
+import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @AllArgsConstructor
-@RedisHash("likeCount")
+@RedisHash("\"likeCount\"")
 public class LikeCount {
 
     @Id

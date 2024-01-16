@@ -10,11 +10,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long>  {
 
     @Query("SELECT c FROM Comment c " +
             "LEFT JOIN FETCH c.parent " +
-            "WHERE c.travel.id = :travelId " +
+            "WHERE c.post.id = :postId " +
             "ORDER BY c.parent.id ASC NULLS FIRST, c.createdAt ASC")
-    List<Comment> findCommentListByTravelId(@Param("travelId") Long travelId);
+    List<Comment> findCommentListByPostId(@Param("postId") Long postId);
 
     boolean existsByMemberIdAndId(Long memberId, Long commentId);
 
-    int countByTravelId(Long id);
+    int countByPostId(Long id);
 }

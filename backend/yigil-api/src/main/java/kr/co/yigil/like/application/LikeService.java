@@ -12,6 +12,7 @@ import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.repository.MemberRepository;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
+import kr.co.yigil.post.application.PostService;
 import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class LikeService {
 
     private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
+    private final PostService postService;
     private final LikeRepository likeRepository;
     private final LikeCountRepository likeCountRepository;
     private final NotificationService notificationService;
@@ -31,7 +32,7 @@ public class LikeService {
     @Transactional
     public LikeResponse like(final Long memberId, final Long postId) {
         Member member = getMemberById(memberId);
-        Post post = getPostById(postId);
+        Post post = postService.findPostById(postId);
 
         likeRedisIntegrityService.ensureLikeCounts(post);
 
@@ -46,7 +47,7 @@ public class LikeService {
     @Transactional
     public UnlikeResponse unlike(final Long memberId, final Long postId) {
         Member member = getMemberById(memberId);
-        Post post = getPostById(postId);
+        Post post = postService.findPostById(postId);
 
         likeRedisIntegrityService.ensureLikeCounts(post);
 
@@ -66,10 +67,6 @@ public class LikeService {
                 .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_ID));
     }
 
-    private Post getPostById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID));
-    }
 
     private void incrementLikesCount(Long postId) {
         likeCountRepository.findById(postId)

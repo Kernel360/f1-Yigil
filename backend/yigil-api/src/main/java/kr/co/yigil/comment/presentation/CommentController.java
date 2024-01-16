@@ -22,25 +22,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/{travel_id}")
+    @PostMapping("/{post_id}")
     @MemberOnly
     public ResponseEntity<CommentCreateResponse> createComment(
             @RequestBody CommentCreateRequest commentCreateRequest,
             @Auth final Accessor accessor,
-            @PathVariable("travel_id") Long travelId
+            @PathVariable("post_id") Long postId
     ){
-        CommentCreateResponse commentCreateResponse = commentService.createComment(accessor.getMemberId(), travelId, commentCreateRequest);
+        CommentCreateResponse commentCreateResponse = commentService.createComment(accessor.getMemberId(), postId, commentCreateRequest);
         return ResponseEntity.ok().body(commentCreateResponse);
     }
 
-    @DeleteMapping("/{travel_id}/{comment_id}")
+    @DeleteMapping("/{post_id}/{comment_id}")
     @MemberOnly
     public ResponseEntity<CommentDeleteResponse> deleteComment(
             @PathVariable("comment_id") Long commentId,
-            @PathVariable("travel_id") Long travelId,
+            @PathVariable("post_id") Long postId,
             @Auth final Accessor accessor
     ){
-        CommentDeleteResponse commentDeleteResponse = commentService.deleteComment(accessor.getMemberId(), travelId, commentId);
+        CommentDeleteResponse commentDeleteResponse = commentService.deleteComment(accessor.getMemberId(), postId, commentId);
         return ResponseEntity.ok().body(commentDeleteResponse);
     }
 

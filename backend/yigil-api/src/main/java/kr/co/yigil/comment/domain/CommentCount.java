@@ -13,5 +13,9 @@ public class CommentCount {
     @Id
     private Long travelId;
 
-    private final int commentCount;
+    private int commentCount;
+
+    public void incrementCommentCount() { commentCount++; }
+
+    public void decrementCommentCount(int deletedCommentCount) { commentCount-=deletedCommentCount;}
 }

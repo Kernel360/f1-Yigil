@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.travel.domain.Travel;
+import kr.co.yigil.post.domain.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,8 +48,8 @@ public class Comment {
     private List<Comment> children = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "travel_id")
-    private Travel travel;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @CreatedDate
     @Column(updatable = false)
@@ -60,19 +60,19 @@ public class Comment {
 
     boolean isDeleted;
 
-    public Comment(String content, Member member, Travel travel) {
+    public Comment(String content, Member member, Post post) {
         this.content = content;
         this.member = member;
-        this.travel = travel;
+        this.post = post;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Comment(Long id, String content, Member member, Travel travel) {
+    public Comment(Long id, String content, Member member, Post post) {
         this.id = id;
         this.content = content;
         this.member = member;
-        this.travel = travel;
+        this.post = post;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }

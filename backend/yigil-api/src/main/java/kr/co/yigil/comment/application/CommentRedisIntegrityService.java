@@ -2,11 +2,12 @@ package kr.co.yigil.comment.application;
 
 import java.util.Optional;
 import kr.co.yigil.comment.domain.CommentCount;
-import kr.co.yigil.comment.domain.CommentCountRepository;
+import kr.co.yigil.comment.domain.repository.CommentCountRepository;
 import kr.co.yigil.comment.domain.repository.CommentRepository;
-import kr.co.yigil.travel.domain.Travel;
+import kr.co.yigil.post.domain.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,14 +15,16 @@ public class CommentRedisIntegrityService {
     private final CommentRepository commentRepository;
     private final CommentCountRepository commentCountRepository;
 
-    public CommentCount ensureCommentCount(Travel travel) {
-        Optional<CommentCount> existingCommentCount = commentCountRepository.findByTravelId(travel.getId());
+    @Transactional
+    public CommentCount ensureCommentCount(Post post) {
+        Long postId = post.getId();
+        Optional<CommentCount> existingCommentCount = commentCountRepository.findByPostId(postId);
         if (existingCommentCount.isPresent()) {
             return existingCommentCount.get();
         } else {
             CommentCount commentCount = new CommentCount(
-                    travel.getId(),
-                    commentRepository.countByTravelId(travel.getId())
+                postId,
+                commentRepository.countByPostId(postId)
             );
             return commentCountRepository.save(commentCount);
         }

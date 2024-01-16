@@ -27,7 +27,7 @@ public class PostService {
     public PostListResponse findAllPosts() { // querydsl? 검색 쿼리 추가
         List<Post> posts = postRepository.findAll();
         List<PostResponse> postResponses = posts.stream()
-                .map(post -> PostResponse.from(post.getTravel(), post, commentRedisIntegrityService.ensureCommentCount(post.getTravel()).getCommentCount()))
+                .map(post -> PostResponse.from(post.getTravel(), post, commentRedisIntegrityService.ensureCommentCount(post).getCommentCount()))
                 .toList();
         return PostListResponse.from(postResponses);
     }
