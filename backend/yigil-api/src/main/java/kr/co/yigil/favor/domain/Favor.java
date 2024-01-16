@@ -1,4 +1,4 @@
-package kr.co.yigil.like.domain;
+package kr.co.yigil.favor.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Like {
+public class Favor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class Like {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Like(final Member member, final Post post) {
+    public Favor(final Member member, final Post post) {
         this.member = member;
         this.post = post;
     }
