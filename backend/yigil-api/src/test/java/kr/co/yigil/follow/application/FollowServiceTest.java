@@ -8,7 +8,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import kr.co.yigil.follow.domain.Follow;
-import kr.co.yigil.follow.domain.repository.FollowCountRedisRepository;
+import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
@@ -29,7 +30,7 @@ public class FollowServiceTest {
     private FollowRepository followRepository;
 
     @Mock
-    private FollowCountRedisRepository followCountRedisRepository;
+    private FollowCountRepository followCountRepository;
 
     @Mock
     private MemberRepository memberRepository;
@@ -55,15 +56,17 @@ public class FollowServiceTest {
         Long followingId = 1L;
         Member follower = new Member(followerId, "email", "12345678", "follower", "image.jpg", SocialLoginType.KAKAO);
         Member following = new Member(followingId, "email2", "87654321", "following", "profile.png", SocialLoginType.KAKAO);
+        FollowCount followerCount = new FollowCount(followerId, 1, 0);
+        FollowCount followingCount = new FollowCount(followingId, 0, 1);
 
         when(memberRepository.findById(followerId)).thenReturn(Optional.of(follower));
         when(memberRepository.findById(followingId)).thenReturn(Optional.of(following));
+        when(followCountRepository.findById(followerId)).thenReturn(Optional.of(followerCount));
+        when(followCountRepository.findById(followingId)).thenReturn(Optional.of(followingCount));
 
         followService.follow(followerId, followingId);
 
         verify(followRepository, times(1)).save(any(Follow.class));
-        verify(followCountRedisRepository, times(1)).incrementFollowersCount(followingId);
-        verify(followCountRedisRepository, times(1)).incrementFollowingsCount(followerId);
         verify(notificationService, times(1)).sendNotification(any(Notification.class));
     }
 
@@ -84,15 +87,17 @@ public class FollowServiceTest {
         Long followingId = 2L;
         Member unfollower = new Member(followerId, "email", "12345678", "follower", "image.jpg", SocialLoginType.KAKAO);
         Member unfollowing = new Member(followingId, "email2", "87654321", "following", "profile.png", SocialLoginType.KAKAO);
+        FollowCount followerCount = new FollowCount(followerId, 0, 0);
+        FollowCount followingCount = new FollowCount(followingId, 0, 0);
 
         when(memberRepository.findById(followerId)).thenReturn(Optional.of(unfollower));
         when(memberRepository.findById(followingId)).thenReturn(Optional.of(unfollowing));
+        when(followCountRepository.findById(followerId)).thenReturn(Optional.of(followerCount));
+        when(followCountRepository.findById(followingId)).thenReturn(Optional.of(followingCount));
 
         followService.unfollow(followerId, followingId);
 
         verify(followRepository, times(1)).deleteByFollowerAndFollowing(unfollower, unfollowing);
-        verify(followCountRedisRepository, times(1)).decrementFollowersCount(followingId);
-        verify(followCountRedisRepository, times(1)).decrementFollowingsCount(followerId);
     }
 
 }
