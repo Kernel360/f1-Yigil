@@ -63,5 +63,5 @@ jobs:
     
     # Gradle Build (test 제외)
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew clean build --stacktrace --info
 
