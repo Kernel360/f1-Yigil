@@ -1,12 +1,12 @@
-package kr.co.yigil.like.presentation;
+package kr.co.yigil.favor.presentation;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import kr.co.yigil.like.application.LikeService;
-import kr.co.yigil.like.dto.response.LikeResponse;
-import kr.co.yigil.like.dto.response.UnlikeResponse;
+import kr.co.yigil.favor.application.FavorService;
+import kr.co.yigil.favor.dto.response.AddFavorResponse;
+import kr.co.yigil.favor.dto.response.DeleteFavorResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,16 +21,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(LikeController.class)
-public class LikeControllerTest {
+@WebMvcTest(FavorController.class)
+public class FavorControllerTest {
 
     private MockMvc mockMvc;
 
     @MockBean
-    private LikeService likeService;
+    private FavorService favorService;
 
     @InjectMocks
-    private LikeController likeController;
+    private FavorController favorController;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {
@@ -39,12 +39,12 @@ public class LikeControllerTest {
 
     @DisplayName("좋아요가 요청되었을 때 200 응답과 response가 잘 반환되는지")
     @Test
-    void whenLike_thenReturns200AndLikeResponse() throws Exception {
+    void whenAddFavor_thenReturns200AndAddFavorResponse() throws Exception {
         Long accessorId = 1L;
         Long postId = 1L;
-        LikeResponse mockResponse = new LikeResponse();
+        AddFavorResponse mockResponse = new AddFavorResponse();
 
-        given(likeService.like(accessorId, postId)).willReturn(mockResponse);
+        given(favorService.addFavor(accessorId, postId)).willReturn(mockResponse);
 
         mockMvc.perform(post("/api/v1/like/" + postId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -53,12 +53,12 @@ public class LikeControllerTest {
 
     @DisplayName("좋아요 취소가 요청되었을 때 200 응답과 response가 잘 반환되는지")
     @Test
-    void whenUnlike_thenReturns200AndUnlikeResponse() throws Exception {
+    void whenDeleteFavor_thenReturns200AndDeleteFavorResponse() throws Exception {
         Long accessorId = 1L;
         Long postId = 1L;
-        UnlikeResponse mockResponse = new UnlikeResponse();
+        DeleteFavorResponse mockResponse = new DeleteFavorResponse();
 
-        given(likeService.unlike(accessorId, postId)).willReturn(mockResponse);
+        given(favorService.deleteFavor(accessorId, postId)).willReturn(mockResponse);
 
         mockMvc.perform(post("/api/v1/unlike/" + postId)
                         .contentType(MediaType.APPLICATION_JSON))
