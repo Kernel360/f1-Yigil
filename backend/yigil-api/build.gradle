@@ -3,8 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.jetbrains.kotlin.jvm'
-
-//    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'jacoco'
 }
 
 bootJar {
@@ -13,12 +12,6 @@ bootJar {
 
 group = 'kr.co.yigil'
 version = '0.0.1-SNAPSHOT'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
 
 repositories {
     mavenCentral()
@@ -59,34 +52,31 @@ dependencies {
 
     implementation 'org.locationtech.jts:jts-core:1.19.0'
     implementation 'org.locationtech.jts.io:jts-io-common:1.19.0'
-
-//    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-//    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-//    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-//    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
 }
-//
-//// queryDSL 추가 : QueryDSL 빌드 옵션
-//def querydslDir = "$buildDir/generated/querydsl"
-//
-//querydsl {
-//    jpa = true
-//    querydslSourcesDir = querydslDir
-//}
-//sourceSets {
-//    main.java.srcDir querydslDir
-//}
-//configurations {
-//    querydsl.extendsFrom compileClasspath
-//}
-//compileQuerydsl {
-//    options.annotationProcessorPath = configurations.querydsl
-//}
-//
-//compileQuerydsl.doFirst {if(file(querydslDir).exists() )delete(file(querydslDir))}
-//// 여기까지
+
+jacocoTestReport {
+    reports {
+        xml {
+            enabled true
+            destination file("${buildDir}/jacoco/index.xml")
+        }
+        csv {
+            enabled true
+            destination file("${buildDir}/jacoco/index.csv")
+        }
+        html {
+            enabled true
+            destination file("${buildDir}/jacoco/index.html")
+        }
+    }
+}
+
+test {
+    finalizedBy 'jacocoTestReport'
+}
+

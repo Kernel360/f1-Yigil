@@ -43,7 +43,7 @@ public class FollowRedisIntegrityServiceTest {
         Member member = new Member(1L, "email", "12345678", "member", "image.jpg", SocialLoginType.KAKAO);
         FollowCount existingFollowCount = new FollowCount(1L, 10, 5);
 
-        when(followCountRepository.findByMemberId(member.getId())).thenReturn(Optional.of(existingFollowCount));
+        when(followCountRepository.findById(member.getId())).thenReturn(Optional.of(existingFollowCount));
 
         // When
         FollowCount result = followRedisIntegrityService.ensureFollowCounts(member);
@@ -62,7 +62,7 @@ public class FollowRedisIntegrityServiceTest {
         FollowCountDto followCountDto = new FollowCountDto(10L, 5L);
         FollowCount newFollowCount = new FollowCount(1L, 10, 5);
 
-        when(followCountRepository.findByMemberId(member.getId())).thenReturn(Optional.empty());
+        when(followCountRepository.findById(member.getId())).thenReturn(Optional.empty());
         when(followRepository.getFollowCounts(member)).thenReturn(followCountDto);
         when(followCountRepository.save(any())).thenReturn(newFollowCount);
 
