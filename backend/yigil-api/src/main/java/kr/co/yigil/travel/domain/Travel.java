@@ -27,16 +27,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @SQLDelete(sql = "UPDATE Travel SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Travel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")
-//    private Member member;
 
     @CreatedDate
     @Column(updatable = false)
