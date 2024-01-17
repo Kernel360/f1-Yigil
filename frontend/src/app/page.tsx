@@ -1,15 +1,11 @@
-import Header from '@/app/_components/header/Header';
-import { RegionLinks } from './_components/regions';
-import Carousel from './_components/carousel/Carousel';
+import { Post } from './_components/Post';
 
-export default async function Home() {
+import { postData } from './_components/Post/constants';
+
+export default async function RootPage() {
   return (
-    <main className="h-[500px]">
-      <Header />
-      <div className="mt-[80px]">
-        <Carousel />
-      </div>
-      <RegionLinks />
+    <main className="pt-[88px]">
+      <Post {...postData} />
     </main>
   );
 }
