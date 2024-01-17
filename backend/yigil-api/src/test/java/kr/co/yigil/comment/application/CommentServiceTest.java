@@ -63,7 +63,7 @@ class CommentServiceTest {
     void whenCreateComment_thenReturnCommentCreateResponse() {
 
         Long memberId = 1L;
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint1 = geometryFactory.createPoint(new Coordinate(0,0));
@@ -143,7 +143,7 @@ class CommentServiceTest {
         String content = "댓글 내용";
 
         Comment mockComment = new Comment(content, mockMember, mockPost);
-        when(commentRepository.findCommentListByPostId(anyLong())).thenReturn(List.of(mockComment));
+        when(commentRepository.findByPostId(anyLong())).thenReturn(List.of(mockComment));
 
         assertThat(commentService.getCommentList(postId)).isInstanceOf(List.class);
     }

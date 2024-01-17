@@ -40,19 +40,21 @@ public class SpotService {
     public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {
         Member member = memberService.findMemberById(memberId);
 
+//        Spot spot = spotRepository.save(SpotCreateRequest.toEntity(spotCreateRequest, "fileUrl"));
+//        postService.createPost(spot, member);
+
         FileUploadEvent event = new FileUploadEvent(this, spotCreateRequest.getFile(),
             fileUrl -> {
+                System.out.println("fileUrl = " + fileUrl);
                 Spot spot = spotRepository.save(SpotCreateRequest.toEntity(spotCreateRequest, fileUrl));
                 postService.createPost(spot, member);
             });
-
         applicationEventPublisher.publishEvent(event);
         return new SpotCreateResponse("스팟 정보 생성 성공");
     }
 
     @Transactional(readOnly = true)
     public SpotFindResponse findSpotByPostId(Long postId) {
-
         Post post = postService.findPostById(postId);
         Member member = post.getMember();
         Spot spot = castTravelToSpot(post.getTravel());
@@ -85,16 +87,13 @@ public class SpotService {
         postService.updatePost(postId, updatedSpot, member);
 
         return SpotUpdateResponse.from(member, updatedSpot);
-
     }
 
     @Transactional(readOnly = true)
     public Spot findSpotById(Long spotId){
-        Travel travel = spotRepository.findById(spotId).orElseThrow(
+        return spotRepository.findById(spotId).orElseThrow(
             () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
-
-        return castTravelToSpot(travel);
     }
 
     @Transactional(readOnly = true)

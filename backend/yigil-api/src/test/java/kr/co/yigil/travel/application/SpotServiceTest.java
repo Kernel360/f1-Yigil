@@ -73,7 +73,7 @@ class SpotServiceTest {
 
         // mock member 설정
         Long memberId = 1L;
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
         // MockMvc를 사용하여 파일 업로드 시뮬레이션
@@ -102,7 +102,7 @@ class SpotServiceTest {
         CommentResponse mockCommentResponse2 = new CommentResponse();
         List<CommentResponse> mockCommentResponseList = List.of(mockCommentResponse1, mockCommentResponse2);
         when(commentService.getCommentList(mockSpot.getId())).thenReturn(mockCommentResponseList);
-//        when(commentService.getCommentList(anyLong())).thenReturn(mockCommentResponseList);  todo 이건 왜 안되나요 ㅜㅜㅜㅜ
+//        when(commentService.getCommentList(anyLong())).thenReturn(mockCommentResponseList);  //todo 이건 왜 안되나요 ㅜㅜㅜㅜ
 
         SpotFindResponse spotFindResponse = SpotFindResponse.from(mockMember, mockSpot, mockCommentResponseList);
 

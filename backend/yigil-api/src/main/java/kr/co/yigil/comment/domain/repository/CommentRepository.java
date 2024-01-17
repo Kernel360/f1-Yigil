@@ -8,11 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>  {
 
-    @Query("SELECT c FROM Comment c " +
-            "LEFT JOIN FETCH c.parent " +
-            "WHERE c.post.id = :postId " +
-            "ORDER BY c.parent.id ASC NULLS FIRST, c.createdAt ASC")
-    List<Comment> findCommentListByPostId(@Param("postId") Long postId);
+//    @Query("SELECT c FROM Comment c " +
+//            "LEFT JOIN FETCH c.parent " +
+//            "WHERE c.post.id = :postId " +
+//            "ORDER BY c.parent.id ASC NULLS FIRST, c.createdAt ASC")
+//    List<Comment> findCommentListByPostId(@Param("postId") Long postId);
+
+    List<Comment> findByPostId(Long postId);
 
     boolean existsByMemberIdAndId(Long memberId, Long commentId);
 

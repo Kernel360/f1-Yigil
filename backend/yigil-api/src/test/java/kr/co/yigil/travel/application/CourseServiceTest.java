@@ -72,7 +72,7 @@ class CourseServiceTest {
             "title1", 1, List.of(11L, 12L, 13L), lineStringJson
         );
 
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", "kakao");
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
 
         Mockito.when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
@@ -111,7 +111,7 @@ class CourseServiceTest {
     void Given_WhenfindCourse_Then(){
 
         Long postId = 1L;
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", "kakao");
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
 
         GeometryFactory geometryFactory = new GeometryFactory();
         List<Coordinate> coordinates = List.of(

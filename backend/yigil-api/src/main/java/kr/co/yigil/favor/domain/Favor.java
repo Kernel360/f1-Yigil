@@ -1,4 +1,4 @@
-package kr.co.yigil.like.domain;
+package kr.co.yigil.favor.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

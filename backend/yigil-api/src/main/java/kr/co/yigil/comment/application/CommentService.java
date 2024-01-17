@@ -59,7 +59,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentList(Long postId) {
-        List<Comment> comments = commentRepository.findCommentListByPostId(postId);
+        List<Comment> comments = commentRepository.findByPostId(postId);
 
         List<CommentResponse> commentResponses = new ArrayList<>();
         Map<Long, CommentResponse> commentResponseMap = new HashMap<>();

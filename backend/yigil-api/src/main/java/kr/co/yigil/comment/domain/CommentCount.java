@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.RedisHash;
 public class CommentCount {
 
     @Id
-    private Long travelId;
+    private Long postId;
 
     private int commentCount;
 

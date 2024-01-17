@@ -45,7 +45,7 @@ public class CommentRedisIntegrityServiceTest {
     void testEnsureCommentCountWhenAlreadyExists() {
 
         Long memberId = 1L;
-        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "God", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint1 = geometryFactory.createPoint(new Coordinate(0,0));
