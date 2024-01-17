@@ -32,14 +32,21 @@ public class CommentResponse {
     }
 
     public static CommentResponse from(Comment comment) {
+        String content;
+
+        if(comment.isDeleted()){
+            content = "삭제된 댓글입니다.";
+        }else{
+            content = comment.getContent();
+        }
         return new CommentResponse(
-                comment.getId(),
-                comment.getContent(),
-                comment.getMember().getId(),
-                comment.getMember().getNickname(),
-                comment.getMember().getProfileImageUrl(),
-                comment.getCreatedAt().toString()
-                );
+            comment.getId(),
+            content,
+            comment.getMember().getId(),
+            comment.getMember().getNickname(),
+            comment.getMember().getProfileImageUrl(),
+            comment.getCreatedAt().toString()
+        );
     }
 
 }

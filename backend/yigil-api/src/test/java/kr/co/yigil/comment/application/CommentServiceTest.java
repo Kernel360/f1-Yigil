@@ -162,9 +162,10 @@ class CommentServiceTest {
         Long commentId = 1L;
         Long memberId = 1L;
         String content = "댓글 내용";
-        Comment mockChildComment1 = new Comment(2L, "자식1", mockMember, mockPost);
+
         Comment mockComment = new Comment(commentId, content, mockMember, mockPost);
-        mockChildComment1.setParent(mockComment);
+        Comment mockChildComment1 = new Comment(2L, "자식1", mockMember, mockPost, mockComment);
+
 
         int commentCount = 3;
         CommentCount mockCommentCount = new CommentCount(postId, commentCount);

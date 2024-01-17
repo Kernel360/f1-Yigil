@@ -1,10 +1,10 @@
 package kr.co.yigil.comment.domain.repository;
 
-import io.lettuce.core.dynamic.annotation.Param;
 import java.util.List;
 import kr.co.yigil.comment.domain.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>  {
 
@@ -14,9 +14,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long>  {
 //            "ORDER BY c.parent.id ASC NULLS FIRST, c.createdAt ASC")
 //    List<Comment> findCommentListByPostId(@Param("postId") Long postId);
 
-    List<Comment> findByPostId(Long postId);
+    List<Comment> findByPostIdOrderById(Long postId);
 
     boolean existsByMemberIdAndId(Long memberId, Long commentId);
 
+
     int countByPostId(Long id);
+    @Query("SELECT COUNT(c) FROM Comment c WHERE c.post.id = :postId AND c.isDeleted = false")
+    int countNonDeletedCommentsByPostId(@Param("postId") Long postId);
+
 }

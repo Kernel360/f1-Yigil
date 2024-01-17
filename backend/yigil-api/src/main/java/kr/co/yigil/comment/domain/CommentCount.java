@@ -17,5 +17,5 @@ public class CommentCount {
 
     public void incrementCommentCount() { commentCount++; }
 
-    public void decrementCommentCount(int deletedCommentCount) { commentCount-=deletedCommentCount;}
+    public void decrementCommentCount() { commentCount--;}
 }

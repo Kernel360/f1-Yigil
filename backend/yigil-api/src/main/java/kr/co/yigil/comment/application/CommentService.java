@@ -41,15 +41,14 @@ public class CommentService {
         Member member = memberService.findMemberById(memberId);
         Post post = postService.findPostById(postId);
 
-        Comment newComment = new Comment(commentCreateRequest.getContent(), member, post);
-
+        Comment parentComment = null;
         if (commentCreateRequest.getParentId() != null && commentCreateRequest.getNotifiedMemberId() != null) {
-            Comment parentComment = findCommentById(commentCreateRequest.getParentId());
-            newComment.setParent(parentComment);
-
+            parentComment = findCommentById(commentCreateRequest.getParentId());
             Member notifiedMember = memberService.findMemberById(commentCreateRequest.getNotifiedMemberId());
-            sendCommentNotification(notifiedMember, newComment.getContent());
+            sendCommentNotification(notifiedMember, commentCreateRequest.getContent());
         }
+
+        Comment newComment = new Comment(commentCreateRequest.getContent(), member, post, parentComment);
         commentRedisIntegrityService.ensureCommentCount(post);
         commentRepository.save(newComment);
         incrementCommentCount(postId);
@@ -59,24 +58,38 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentList(Long postId) {
-        List<Comment> comments = commentRepository.findByPostId(postId);
-
         List<CommentResponse> commentResponses = new ArrayList<>();
         Map<Long, CommentResponse> commentResponseMap = new HashMap<>();
+//        List<Comment> comments = commentRepository.findByPostIdOrderById(postId);
 
-        comments.forEach(comment -> {
-            CommentResponse commentResponse = CommentResponse.from(comment);
-            commentResponseMap.put(commentResponse.getId(), commentResponse);
-            if (comment.getParent() != null) {
-                commentResponseMap.get(comment.getParent().getId()).getChildren().add(commentResponse);
-            } else {
-                commentResponses.add(commentResponse);
-            }
-        });
-        // comment count를 위한 redis cache
+//        comments.forEach(comment -> {
+//            CommentResponse commentResponse = CommentResponse.from(comment);
+//
+//            commentResponseMap.put(commentResponse.getId(), commentResponse);
+//            if (comment.getParent() != null) {
+//                commentResponseMap.get(comment.getParent().getId()).getChildren().add(commentResponse);
+//            } else {
+//                commentResponses.add(commentResponse);
+//            }
+//        });
+
+        List<Comment> comments = commentRepository.findByPostIdOrderById(postId);
+
+        comments.stream()
+            .filter(comment -> comment.getParent() == null)
+                .forEach(comment -> {
+                    CommentResponse commentResponse = CommentResponse.from(comment);
+                    commentResponseMap.put(commentResponse.getId(), commentResponse);
+                    commentResponses.add(commentResponse);
+                });
+        comments.stream()
+            .filter(comment -> comment.getParent() != null)
+                .forEach(comment -> {
+                    CommentResponse commentResponse = CommentResponse.from(comment);
+                    commentResponseMap.get(comment.getParent().getId()).getChildren().add(commentResponse);
+                });
+
         commentRedisIntegrityService.ensureCommentCount(postService.findPostById(postId));
-        // post의 comment count를 위한 redis cache
-
         return commentResponses;
     }
 
@@ -86,10 +99,9 @@ public class CommentService {
         validateCommentWriter(memberId, commentId);
         Comment comment = findCommentById(commentId);
 
-        int deletedCommentCount = 1 + comment.getChildren().size();
         commentRedisIntegrityService.ensureCommentCount(post);
         commentRepository.delete(comment);
-        decrementCommentCount(postId, deletedCommentCount);
+        decrementCommentCount(postId);
         return new CommentDeleteResponse("댓글 삭제 성공");
     }
 
@@ -98,11 +110,9 @@ public class CommentService {
             .ifPresent(CommentCount::incrementCommentCount);
     }
 
-    private void decrementCommentCount(Long postId, int deletedCommentCount) {
+    private void decrementCommentCount(Long postId) {
         commentCountRepository.findByPostId(postId)
-            .ifPresent(commentCount ->
-                commentCount.decrementCommentCount(deletedCommentCount)
-            );
+            .ifPresent(CommentCount::decrementCommentCount);
     }
 
     @Transactional(readOnly = true)
