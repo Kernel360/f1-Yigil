@@ -41,7 +41,7 @@ jobs:
       run: |
         echo "Jasypt-Secret-Key=$JASYPT_SECRET_KEY" > ./yigil-api/src/main/resources/config.properties
         echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./yigil-api/src/main/resources/url.properties
-        cat ./yigil-api/src/main/resources/*
+        
     - name: Set application.yml
       run: |
         echo "spring.datasource.master.hikari.jdbc-url=${{ secrets.MASTER_DB_URL }}" >> ./yigil-api/src/main/resources/application.yml
@@ -56,6 +56,7 @@ jobs:
         echo "cloud.aws.credentials.access-key=${{ secrets.AWS_ACCESS_KEY }}" >> ./yigil-api/src/main/resources/application.yml
         echo "cloud.aws.credentials.secret-key=${{ secrets.AWS_SECRET_KEY }}" >> ./yigil-api/src/main/resources/application.yml
         echo "logging.slack=${{ secrets.SLACK_WEBHOOK_URI }}" >> ./yigil-api/src/main/resources/application.yml
+        cat ./yigil-api/src/main/resources/*
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
