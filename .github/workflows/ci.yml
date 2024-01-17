@@ -41,21 +41,23 @@ jobs:
       run: |
         echo "Jasypt-Secret-Key=$JASYPT_SECRET_KEY" > ./yigil-api/src/main/resources/config.properties
         echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./yigil-api/src/main/resources/url.properties
-        cat ./yigil-api/src/main/resources/*
+        
     - name: Set application.yml
       run: |
-        echo "spring.datasource.master.hikari.jdbc-url=${{ secrets.MASTER_DB_URL }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "spring.datasource.master.hikari.username=${{ secrets.MASTER_DB_USERNAME }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "spring.datasource.master.hikari.password=${{ secrets.MASTER_DB_PASSWORD }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "spring.datasource.slave.hikari.jdbc-url=${{ secrets.SLAVE_DB_URL }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "spring.datasource.slave.hikari.username=${{ secrets.SLAVE_DB_USERNAME }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "spring.datasource.slave.hikari.password=${{ secrets.SLAVE_DB_PASSWORD }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "spring.data.redis.host=${{ secrets.REDIS_HOST }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "spring.data.redis.port=${{ secrets.REDIS_PORT }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "cloud.aws.bucket=${{ secrets.S3_BUCKET }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "cloud.aws.credentials.access-key=${{ secrets.AWS_ACCESS_KEY }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "cloud.aws.credentials.secret-key=${{ secrets.AWS_SECRET_KEY }}" >> ./yigil-api/src/main/resources/application.yml
-        echo "logging.slack=${{ secrets.SLACK_WEBHOOK_URI }}" >> ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_PORT@|${{ secrets.REDIS_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@S3_BUCKET@|${{ secrets.S3_BUCKET }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
+        cat ./yigil-api/src/main/resources/*
+
 
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
