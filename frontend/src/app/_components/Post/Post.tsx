@@ -27,7 +27,7 @@ export interface TPost {
 // 차후 next/image 사용하게 변경 예정
 export default function Post({ region, liked, imageUrl, title, user }: TPost) {
   return (
-    <article className="w-[200px] h-[300px] p-2 relative flex flex-col gap-2">
+    <article className="w-[200px] h-[300px] p-2 relative flex shrink-0 flex-col gap-2">
       <span className="absolute top-5 left-4 bg-white px-4 py-1 rounded-full">
         {region}
       </span>
