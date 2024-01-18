@@ -31,6 +31,10 @@ public class CommentResponse {
         this.createdAt = createdAt;
     }
 
+    public void addChild(CommentResponse commentResponse){
+        this.children.add(commentResponse);
+    }
+
     public static CommentResponse from(Comment comment) {
         String content;
 

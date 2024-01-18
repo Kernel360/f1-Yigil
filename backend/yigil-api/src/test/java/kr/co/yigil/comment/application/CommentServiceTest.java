@@ -19,7 +19,9 @@ import kr.co.yigil.comment.domain.repository.CommentRepository;
 import kr.co.yigil.comment.dto.request.CommentCreateRequest;
 import kr.co.yigil.comment.dto.response.CommentCreateResponse;
 import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
+import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.SocialLoginType;
@@ -142,10 +144,16 @@ class CommentServiceTest {
         Post mockPost = new Post(postId, mockSpot1, mockMember);
         String content = "댓글 내용";
 
-        Comment mockComment = new Comment(content, mockMember, mockPost);
-        when(commentRepository.findByPostId(anyLong())).thenReturn(List.of(mockComment));
+        Comment mockComment = new Comment(1L, content, mockMember, mockPost);
+        Comment mockChildComment1 = new Comment(2L, "자식1", mockMember, mockPost, mockComment);
+        Comment mockChildComment2 = new Comment(3L, "자식1", mockMember, mockPost, mockComment);
+
+        when(commentRepository.findTopLevelCommentsByPostId(anyLong())).thenReturn(List.of(mockComment));
+        when(commentRepository.findRepliesByPostIdAndParentId(anyLong(), anyLong())).thenReturn(List.of(mockChildComment1, mockChildComment2));
 
         assertThat(commentService.getCommentList(postId)).isInstanceOf(List.class);
+        assertThat(commentService.getCommentList(postId).get(0)).isInstanceOf(CommentResponse.class);
+        assert(commentService.getCommentList(postId).size() == 1);
     }
 
     @DisplayName("deleteComment 메서드가 유효한 인자를 받았을 때 comment 가 잘 삭제되는지")
@@ -179,7 +187,7 @@ class CommentServiceTest {
         verify(commentRedisIntegrityService,times(1)).ensureCommentCount(mockPost);
         verify(commentRepository, times(1)).delete(any());
         
-        assertThat(commentCountRepository.findByPostId(postId).get().getCommentCount()).isEqualTo(commentCount-2);
+        assertThat(commentCountRepository.findByPostId(postId).get().getCommentCount()).isEqualTo(commentCount-1);
         assertEquals("댓글 삭제 성공", commentDeleteResponse.getMessage());
     }
 
@@ -232,5 +240,60 @@ class CommentServiceTest {
 
     }
 
+    @DisplayName("deleteComment 메서드가 유효하지 않은 인자를 받았을 때 예외가 발생하는지")
+    @Test
+    void givenInvalidParameter_whenDeleteComment_thenThrowException() {
+        Long memberId = 1L;
+        Long postId = 1L;
+        Long commentId = 1L;
+        when(postService.findPostById(anyLong())).thenThrow(new BadRequestException(ExceptionCode.NOT_FOUND_POST_ID));
+        assertThrows(BadRequestException.class, () -> commentService.deleteComment(memberId, postId, commentId));
+    }
 
+    @DisplayName("getTopLevelCommentList 메서드가 유효한 인자를 받았을 때 comment list 가 잘 반환되는지")
+    @Test
+    void givenValidParameter_whenGetTopLevelCommentList_thenReturnCommentResponse() {
+        Long postId = 1L;
+        Long memberId = 1L;
+
+        Member mockMember = new Member("shin@gmail.com", "123456", "떫", "profile.jpg", SocialLoginType.KAKAO);
+
+        Post mockPost = new Post(1L, null, mockMember);
+        Comment mockComment1 = new Comment(1L, "content", mockMember, mockPost);
+        Comment mockComment2 = new Comment(2L, "content", mockMember, mockPost);
+        Comment mockComment3 = new Comment(3L, "content", mockMember, mockPost);
+
+        when(commentRepository.findTopLevelCommentsByPostId(anyLong())).thenReturn(
+            List.of(mockComment1, mockComment2, mockComment3));
+
+        assertThat(commentService.getTopLevelCommentList(postId)).isInstanceOf(List.class);
+        assertThat(commentService.getTopLevelCommentList(postId).get(0)).isInstanceOf(
+            CommentResponse.class);
+        assert (commentService.getTopLevelCommentList(postId).size() == 3);
+    }
+
+    @DisplayName("getReplyCommentList 메서드가 유효한 인자를 받았을 때 comment list 가 잘 반환되는지")
+    @Test
+    void givenValidParameter_whenGetReplyCommentList_thenReturnCommentResponse() {
+        Long postId = 1L;
+        Long parentId = 1L;
+        Long memberId = 1L;
+
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "떫", "profile.jpg",
+            SocialLoginType.KAKAO);
+
+        Post mockPost = new Post(1L, null, mockMember);
+        Comment mockParentComment = new Comment(1L, "content", mockMember, mockPost);
+        Comment mockComment1 = new Comment(2L, "content", mockMember, mockPost, mockParentComment);
+        Comment mockComment2 = new Comment(3L, "content", mockMember, mockPost, mockParentComment);
+        Comment mockComment3 = new Comment(4L, "content", mockMember, mockPost, mockParentComment);
+
+        when(commentRepository.findRepliesByPostIdAndParentId(anyLong(), anyLong())).thenReturn(
+            List.of(mockComment1, mockComment2, mockComment3));
+
+        assertThat(commentService.getReplyCommentList(postId, parentId)).isInstanceOf(List.class);
+        assertThat(commentService.getReplyCommentList(postId, parentId).get(0)).isInstanceOf(
+            CommentResponse.class);
+        assert (commentService.getReplyCommentList(postId, parentId).size() == 3);
+    }
 }

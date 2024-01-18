@@ -89,9 +89,9 @@ public class Comment {
         this.modifiedAt = LocalDateTime.now();
     }
 
-//    public void setParent(Comment parent) {
-//        this.parent = parent;
-////        parent.getChildren().add(this);
-//    }
+    public void updateComment(String content) {
+        this.content = content;
+        this.modifiedAt = LocalDateTime.now();
+    }
 
 }

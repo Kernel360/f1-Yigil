@@ -59,37 +59,41 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentList(Long postId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
-        Map<Long, CommentResponse> commentResponseMap = new HashMap<>();
-//        List<Comment> comments = commentRepository.findByPostIdOrderById(postId);
 
-//        comments.forEach(comment -> {
-//            CommentResponse commentResponse = CommentResponse.from(comment);
-//
-//            commentResponseMap.put(commentResponse.getId(), commentResponse);
-//            if (comment.getParent() != null) {
-//                commentResponseMap.get(comment.getParent().getId()).getChildren().add(commentResponse);
-//            } else {
-//                commentResponses.add(commentResponse);
-//            }
-//        });
-
-        List<Comment> comments = commentRepository.findByPostIdOrderById(postId);
-
-        comments.stream()
-            .filter(comment -> comment.getParent() == null)
-                .forEach(comment -> {
-                    CommentResponse commentResponse = CommentResponse.from(comment);
-                    commentResponseMap.put(commentResponse.getId(), commentResponse);
-                    commentResponses.add(commentResponse);
-                });
-        comments.stream()
-            .filter(comment -> comment.getParent() != null)
-                .forEach(comment -> {
-                    CommentResponse commentResponse = CommentResponse.from(comment);
-                    commentResponseMap.get(comment.getParent().getId()).getChildren().add(commentResponse);
-                });
+        commentRepository.findTopLevelCommentsByPostId(postId)
+            .forEach(comment -> {
+                CommentResponse commentResponse = CommentResponse.from(comment);
+                commentResponses.add(commentResponse);
+                commentRepository.findRepliesByPostIdAndParentId(postId, comment.getId())
+                    .forEach(reply -> {
+                        CommentResponse replyResponse = CommentResponse.from(reply);
+                        commentResponse.addChild(replyResponse);
+                    });
+            })
+        ;
 
         commentRedisIntegrityService.ensureCommentCount(postService.findPostById(postId));
+        return commentResponses;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponse> getTopLevelCommentList(Long postId) {
+
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        List<Comment> comments = commentRepository.findTopLevelCommentsByPostId(postId);
+        comments.stream()
+            .map(CommentResponse::from)
+            .forEach(commentResponses::add);
+        return commentResponses;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponse> getReplyCommentList(Long postId, Long parentId) {
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        List<Comment> comments = commentRepository.findRepliesByPostIdAndParentId(postId, parentId);
+        comments.stream()
+            .map(CommentResponse::from)
+            .forEach(commentResponses::add);
         return commentResponses;
     }
 
@@ -115,13 +119,12 @@ public class CommentService {
             .ifPresent(CommentCount::decrementCommentCount);
     }
 
-    @Transactional(readOnly = true)
     public Comment findCommentById(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_COMMENT_ID));
     }
 
-    @Transactional(readOnly = true)
+
     public void validateCommentWriter(Long memberId, Long commentId) {
         if (!commentRepository.existsByMemberIdAndId(memberId, commentId)) {
             throw new BadRequestException(ExceptionCode.INVALID_AUTHORITY);
