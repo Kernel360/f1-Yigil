@@ -26,6 +26,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "travel_id")
     private Travel travel;
@@ -34,6 +35,7 @@ public class Post {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Setter
     private Boolean isDeleted = false;
 
     public Post(Travel travel, Member member) {
@@ -50,11 +52,4 @@ public class Post {
 //        this.id = id;
 //    }
 
-    public void setIsDeleted(Boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public void setTravel(Travel travel) {
-        this.travel = travel;
-    }
 }

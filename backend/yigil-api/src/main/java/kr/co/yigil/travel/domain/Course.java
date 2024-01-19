@@ -21,7 +21,6 @@ public class Course extends Travel{
     @Column(columnDefinition = "geometry(LineString,4326)")
     private LineString path;
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     @OrderColumn(name = "spot_order")

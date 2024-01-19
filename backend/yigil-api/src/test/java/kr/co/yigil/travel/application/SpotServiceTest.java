@@ -11,6 +11,10 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import kr.co.yigil.comment.application.CommentService;
+import kr.co.yigil.comment.domain.Comment;
+import kr.co.yigil.comment.domain.repository.CommentRepository;
+import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -54,6 +58,8 @@ class SpotServiceTest {
     private ApplicationEventPublisher applicationEventPublisher;
     @Mock
     private SpotRepository spotRepository;
+    @Mock
+    private CommentService commentService;
 
     @DisplayName("createSpot 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지.")
     @Test
@@ -67,7 +73,7 @@ class SpotServiceTest {
 
         // mock member 설정
         Long memberId = 1L;
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
         // MockMvc를 사용하여 파일 업로드 시뮬레이션
@@ -92,7 +98,13 @@ class SpotServiceTest {
         Post mockPost = new Post(postId, mockSpot, mockMember);
         when(postService.findPostById(anyLong())).thenReturn(mockPost);
 
-        SpotFindResponse spotFindResponse = SpotFindResponse.from(mockMember, mockSpot);
+        CommentResponse mockCommentResponse1 = new CommentResponse();
+        CommentResponse mockCommentResponse2 = new CommentResponse();
+        List<CommentResponse> mockCommentResponseList = List.of(mockCommentResponse1, mockCommentResponse2);
+        when(commentService.getCommentList(mockSpot.getId())).thenReturn(mockCommentResponseList);
+//        when(commentService.getCommentList(anyLong())).thenReturn(mockCommentResponseList);  //todo 이건 왜 안되나요 ㅜㅜㅜㅜ
+
+        SpotFindResponse spotFindResponse = SpotFindResponse.from(mockMember, mockSpot, mockCommentResponseList);
 
         assertThat(spotService.findSpotByPostId(postId)).isEqualTo(spotFindResponse);
     }
