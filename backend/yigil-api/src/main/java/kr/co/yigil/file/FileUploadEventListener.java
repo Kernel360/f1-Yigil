@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadEventListener {
 
     private final AmazonS3Client amazonS3Client;
-    private String bucketName = "yigilbucket";
+
+    private final String bucketName = "cdn.yigil.co.kr";
+
 
     @Async
     @EventListener

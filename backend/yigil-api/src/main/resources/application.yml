@@ -29,6 +29,7 @@ spring:
       host: @REDIS_HOST@
       port: @REDIS_PORT@
 
+
 cloud:
   aws:
     s3:
@@ -58,6 +59,7 @@ logging:
     root: DEBUG
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
+
 
 decorator:
   datasource:

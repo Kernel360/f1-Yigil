@@ -2,6 +2,8 @@ package kr.co.yigil.travel.application;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import kr.co.yigil.comment.application.CommentService;
+import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -30,6 +32,7 @@ public class SpotService {
     private final MemberService memberService;
     private final PostService postService;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final CommentService commentService;
 
     private final PostRepository postRepository;
 
@@ -37,23 +40,27 @@ public class SpotService {
     public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {
         Member member = memberService.findMemberById(memberId);
 
+//        Spot spot = spotRepository.save(SpotCreateRequest.toEntity(spotCreateRequest, "fileUrl"));
+//        postService.createPost(spot, member);
+
         FileUploadEvent event = new FileUploadEvent(this, spotCreateRequest.getFile(),
             fileUrl -> {
+                System.out.println("fileUrl = " + fileUrl);
                 Spot spot = spotRepository.save(SpotCreateRequest.toEntity(spotCreateRequest, fileUrl));
                 postService.createPost(spot, member);
             });
-
         applicationEventPublisher.publishEvent(event);
         return new SpotCreateResponse("스팟 정보 생성 성공");
     }
 
     @Transactional(readOnly = true)
     public SpotFindResponse findSpotByPostId(Long postId) {
-
         Post post = postService.findPostById(postId);
         Member member = post.getMember();
         Spot spot = castTravelToSpot(post.getTravel());
-        return SpotFindResponse.from(member, spot);
+
+        List<CommentResponse> comments = commentService.getCommentList(spot.getId());
+        return SpotFindResponse.from(member, spot, comments);
     }
 
     @Transactional
@@ -80,16 +87,13 @@ public class SpotService {
         postService.updatePost(postId, updatedSpot, member);
 
         return SpotUpdateResponse.from(member, updatedSpot);
-
     }
 
     @Transactional(readOnly = true)
     public Spot findSpotById(Long spotId){
-        Travel travel = spotRepository.findById(spotId).orElseThrow(
+        return spotRepository.findById(spotId).orElseThrow(
             () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
-
-        return castTravelToSpot(travel);
     }
 
     @Transactional(readOnly = true)
