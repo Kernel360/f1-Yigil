@@ -59,7 +59,7 @@ public class CommentRedisIntegrityServiceTest {
         CommentCount result = commentRedisIntegrityService.ensureCommentCount(post);
 
         assertThat(result).isEqualTo(existingCommentCount);
-        verify(commentRepository, never()).countByPostId(post.getId());
+        verify(commentRepository, never()).countNonDeletedCommentsByPostId(post.getId());
         verify(commentCountRepository, never()).save(any());
     }
 
@@ -78,13 +78,13 @@ public class CommentRedisIntegrityServiceTest {
         CommentCount newCommentCount = new CommentCount(1L, 10);
 
         when(commentCountRepository.findByPostId(post.getId())).thenReturn(Optional.empty());
-        when(commentRepository.countByPostId(post.getId())).thenReturn(10);
+        when(commentRepository.countNonDeletedCommentsByPostId(post.getId())).thenReturn(10);
         when(commentCountRepository.save(any())).thenReturn(newCommentCount);
 
         CommentCount count = commentRedisIntegrityService.ensureCommentCount(post);
 
         assertThat(count.getCommentCount()).isEqualTo(newCommentCount.getCommentCount());
-        verify(commentRepository).countByPostId(post.getId());
+        verify(commentRepository).countNonDeletedCommentsByPostId(post.getId());
         verify(commentCountRepository).save(any());
     }
 }
