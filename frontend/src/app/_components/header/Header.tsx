@@ -14,7 +14,7 @@ export default function Header() {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
 
   return (
-    <div className="w-full h-[80px] flex justify-between items-center fixed top-0 bg-main">
+    <div className="w-[430px] h-[80px] flex justify-between items-center fixed top-0 bg-main">
       <div className="ml-4 cursor-pointer" onClick={() => router.push('/')}>
         <HeaderLogo />
       </div>
@@ -27,6 +27,7 @@ export default function Header() {
               img={data.user?.image as string}
               size={40}
               style="cursor-pointer"
+              height="h-[40px]"
             />
           </span>
           {isOpenedModal && (
@@ -36,26 +37,22 @@ export default function Header() {
                 onClick={() => setIsOpenedModal(false)}
               ></div>
               <div className="absolute bottom-[-90px] right-4 w-[134px] h-[104px] bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center gap-5">
-                <div
+                <Link
+                  href="/mypage"
                   className="flex items-center"
-                  onClick={() => {
-                    router.push('/mypage');
-                    setIsOpenedModal(false);
-                  }}
+                  onClick={() => setIsOpenedModal(false)}
                 >
                   <div>마이페이지</div>
                   <MapPin />
-                </div>
-                <div
+                </Link>
+                <Link
+                  href="/"
                   className="flex items-center"
-                  onClick={() => {
-                    signOut();
-                    router.push('/');
-                  }}
+                  onClick={() => signOut()}
                 >
                   <div>로그아웃</div>
                   <Bell />
-                </div>
+                </Link>
               </div>
             </>
           )}
