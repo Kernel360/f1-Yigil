@@ -44,6 +44,7 @@ cloud:
       auto: false
 
 server:
+  port: 8080
   servlet:
     session:
       cookie:
