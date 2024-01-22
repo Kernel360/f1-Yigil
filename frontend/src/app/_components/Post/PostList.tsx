@@ -27,7 +27,7 @@ export default function PostList({
 
   return (
     <section className="flex flex-col" aria-label="posts">
-      <div className="flex justify-between px-2">
+      <div className="flex justify-between px-4">
         <span className="text-xl">{title}</span>
         <select name="" id="">
           {options.map(({ slug, label }) => (
@@ -37,7 +37,7 @@ export default function PostList({
           ))}
         </select>
       </div>
-      <div className="overflow-hidden" ref={emblaRef}>
+      <div className="overflow-hidden px-4" ref={emblaRef}>
         <div className="flex justify-between">
           {data.map((post) => (
             <Post key={post.id} {...post} />

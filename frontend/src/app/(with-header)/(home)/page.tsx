@@ -5,7 +5,7 @@ import { postData, popularListOptions } from '../../_components/Post/constants';
 
 export default async function HomePage() {
   return (
-    <main className="flex flex-col gap-8">
+    <main className="max-w-full flex flex-col gap-8">
       <SearchBar />
       <PostList
         title="인기 일정"
