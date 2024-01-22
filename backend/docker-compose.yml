@@ -1,0 +1,21 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  yigil-api:
+    image: minson9608/backend-yigil-api
+    #platform: linux/amd64
+    build:
+      context: ./yigil-api
+    ports:
+      - "8080:8080"
+
+  support:
+    image: minson9608/backend-support
+    #platform: linux/amd64
+    build:
+      context: ./support
+    ports:
+      - "9090:9090"
