@@ -46,7 +46,7 @@ public class FileUploadEventListenerTest {
         FileUploadEvent event = new FileUploadEvent(new Object(), mockFile, mock(Consumer.class));
         fileUploadEventListener.handleFileUpload(event);
 
-        verify(mockAmazonS3Client).putObject(eq("yigilbucket"), anyString(), any(), any(
+        verify(mockAmazonS3Client).putObject(eq("cdn.yigil.co.kr"), anyString(), any(), any(
                 ObjectMetadata.class));
     }
 

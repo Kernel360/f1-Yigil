@@ -1,6 +1,7 @@
 package kr.co.yigil.travel.dto.response;
 
 import java.util.List;
+import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.dto.response.PostResponse;
@@ -28,7 +29,9 @@ public class CourseFindResponse {
     private List<SpotInCourseDto> spotInfos;
     private String lineStringJson;
 
-    public static CourseFindResponse from(Post post, Course course, List<Spot> spots) {
+    private List<CommentResponse> comments;
+
+    public static CourseFindResponse from(Post post, Course course, List<Spot> spots, List<CommentResponse> comments) {
         return new CourseFindResponse(
             course.getTitle(),
             post.getMember().getNickname(),
@@ -36,7 +39,8 @@ public class CourseFindResponse {
             0, // likeCount 초기화
             0, // commentCount 초기화
             spots.stream().map(SpotInCourseDto::from).toList(),
-            GeojsonConverter.convertToJson(course.getPath())
+            GeojsonConverter.convertToJson(course.getPath()),
+            comments
         );
     }
 }

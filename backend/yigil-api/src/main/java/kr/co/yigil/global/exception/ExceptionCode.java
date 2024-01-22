@@ -12,6 +12,8 @@ public enum ExceptionCode {
     NOT_FOUND_POST_ID(1011, "해당하는 post가 없습니다"),
     NOT_FOUND_SPOT_ID(1021, "해당하는 spot이 없습니다"),
     NOT_FOUND_COURSE_ID(1031, "해당하는 course가 없습니다"),
+    NOT_FOUND_TRAVEL_ID(1041, "해당하는 travel이 없습니다"),
+    NOT_FOUND_COMMENT_ID(1051, "해당하는 comment가 없습니다"),
 
     //post 2000
 

@@ -1,6 +1,5 @@
 package kr.co.yigil.follow.domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;

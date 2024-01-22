@@ -48,7 +48,7 @@ class SpotControllerTest {
 
     @DisplayName("spot 게시글 생성 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
     @Test
-    void whenCreateSpotPost_thenReturns201AndSpotCreateResponse() throws Exception {
+    void whenCreateSpotPost_thenReturns200AndSpotCreateResponse() throws Exception {
         SpotCreateResponse mockResponse = new SpotCreateResponse();
         Accessor accessor = Accessor.member(1L);
 
