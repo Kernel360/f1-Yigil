@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.jetbrains.kotlin.jvm'
-    id 'jacoco'
 }
 
 bootJar {
@@ -33,35 +32,17 @@ dependencies {
     implementation 'org.postgresql:postgresql'
     implementation 'org.hibernate:hibernate-core:6.4.0.Final'
     implementation 'org.hibernate:hibernate-spatial:6.4.0.Final'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.session:spring-session-data-redis'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
-    testImplementation 'io.projectreactor:reactor-test:3.4.10'
 
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'com.github.maricn:logback-slack-appender:1.6.1'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-
-    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
-
-    implementation 'org.locationtech.jts:jts-core:1.19.0'
-    implementation 'org.locationtech.jts.io:jts-io-common:1.19.0'
 }
 
 test {
-    outputs.dir snippetsDir
     useJUnitPlatform()
-}
-
-jar {
-    enabled = false
-}
-
-bootJar {
-    enabled = true
 }
