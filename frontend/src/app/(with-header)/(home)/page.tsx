@@ -6,9 +6,10 @@ import PlusIcon from '@/../public/icons/plus.svg';
 
 export default async function HomePage() {
   return (
-    <main className="relative max-w-full flex flex-col gap-8 grow">
-      <PostList title="인기 일정" data={postData} />
-      <button className="absolute p-4 bottom-10 right-6 bg-blue-600 rounded-full">
+    <main className="max-w-full flex flex-col gap-8 grow">
+      <PostList title="인기 장소" data={postData} />
+      <PostList title="관심 지역 장소" data={postData} />
+      <button className="fixed p-4 bottom-8 bg-blue-600 rounded-full">
         <PlusIcon />
       </button>
     </main>

@@ -10,7 +10,7 @@ export default function WithHeaderLayout({
   children: ReactNode;
 }) {
   return (
-    <section className="w-full flex flex-col">
+    <section className="relative w-full flex flex-col">
       <Header />
       {children}
     </section>

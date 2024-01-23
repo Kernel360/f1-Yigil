@@ -6,11 +6,6 @@ import { Post } from '@/app/_components/Post';
 
 import type { TPost } from './Post';
 
-export interface TListOptions {
-  slug: string;
-  label: string;
-}
-
 export default function PostList({
   title,
   data,
@@ -30,7 +25,7 @@ export default function PostList({
         <span className="self-center">더보기</span>
       </div>
       <div className="overflow-hidden px-4" ref={emblaRef}>
-        <div className="flex justify-between">
+        <div className="relative flex justify-between -z-10">
           {data.map((post) => (
             <Post key={post.id} {...post} />
           ))}

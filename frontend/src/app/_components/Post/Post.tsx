@@ -17,17 +17,13 @@ export interface TPost {
   liked: boolean;
   imageUrl: string;
   title: string;
-  user: {
-    profileImageUrl: string;
-    nickname: string;
-  };
 }
 
 // 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
 // 차후 next/image 사용하게 변경 예정
-export default function Post({ region, liked, imageUrl, title, user }: TPost) {
+export default function Post({ region, liked, imageUrl, title }: TPost) {
   return (
-    <article className="w-[200px] h-[300px] p-2 relative flex shrink-0 flex-col gap-2">
+    <article className="w-[300px] h-[350px] p-2 relative flex shrink-0 flex-col gap-2">
       <span className="absolute top-5 left-4 bg-white px-4 py-1 rounded-full">
         {region}
       </span>
@@ -37,14 +33,9 @@ export default function Post({ region, liked, imageUrl, title, user }: TPost) {
         src={imageUrl}
         alt={`${title} 대표 이미지`}
       />
-      <p className="text-xl">{title}</p>
-      <section className="flex items-center gap-2">
-        <img
-          className="rounded-full max-w-full"
-          src={user.profileImageUrl}
-          alt={`${user.nickname} 프로필 이미지`}
-        />
-        {user.nickname}
+      <section className="flex items-center gap-2 px-4">
+        <p className="text-xl">{title}</p>
+        {/* 평점 */}
       </section>
     </article>
   );
