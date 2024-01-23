@@ -8,8 +8,8 @@ import type { Metadata } from 'next';
 
 import './globals.css';
 
-const Jalnan = localFont({
-  src: '../../public/fonts/Jalnan2TTF.ttf',
+const Pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
 });
 
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ko" className={Jalnan.className}>
+    <html lang="ko" className={Pretendard.className}>
       <body className="max-w-[430px] mx-auto flex">
         <MSWComponent />
         <AuthContext>{children}</AuthContext>

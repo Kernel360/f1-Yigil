@@ -1,17 +1,11 @@
-import SearchBar from '../../_components/SearchBar';
-import { PostList } from '../../_components/Post';
+import { PostList } from '@/app/_components/Post';
 
-import { postData, popularListOptions } from '../../_components/Post/constants';
+import { postData } from '@/app/_components/Post/constants';
 
 export default async function HomePage() {
   return (
     <main className="max-w-full flex flex-col gap-8">
-      <SearchBar />
-      <PostList
-        title="인기 일정"
-        options={popularListOptions}
-        data={postData}
-      />
+      <PostList title="인기 일정" data={postData} />
     </main>
   );
 }

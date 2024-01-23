@@ -13,11 +13,9 @@ export interface TListOptions {
 
 export default function PostList({
   title,
-  options,
   data,
 }: {
   title: string;
-  options: TListOptions[];
   data: TPost[];
 }) {
   const [emblaRef] = useEmblaCarousel({
@@ -27,15 +25,9 @@ export default function PostList({
 
   return (
     <section className="flex flex-col" aria-label="posts">
-      <div className="flex justify-between px-4">
-        <span className="text-xl">{title}</span>
-        <select name="" id="">
-          {options.map(({ slug, label }) => (
-            <option key={slug} value={slug}>
-              {label}
-            </option>
-          ))}
-        </select>
+      <div className="flex justify-between px-8">
+        <span className="text-2xl">{title}</span>
+        <span className="self-center">더보기</span>
       </div>
       <div className="overflow-hidden px-4" ref={emblaRef}>
         <div className="flex justify-between">

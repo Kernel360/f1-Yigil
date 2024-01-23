@@ -36,9 +36,3 @@ export const postData: TPost[] = [
     },
   },
 ];
-
-export const popularListOptions: TListOptions[] = [
-  { label: '오늘', slug: 'daily' },
-  { label: '이번 주', slug: 'weekly' },
-  { label: '이번 달', slug: 'monthly' },
-];
