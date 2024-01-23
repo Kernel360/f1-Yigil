@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko" className={Pretendard.className}>
-      <body className="max-w-[430px] mx-auto flex">
+      <body className="max-w-[430px] mx-auto">
         <MSWComponent />
         <AuthContext>{children}</AuthContext>
       </body>

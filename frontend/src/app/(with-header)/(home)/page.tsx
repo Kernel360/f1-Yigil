@@ -1,6 +1,6 @@
-import { PostList } from '@/app/_components/Post';
+import { PostList } from '@/app/_components/post';
 
-import { postData } from '@/app/_components/Post/constants';
+import { postData } from '@/app/_components/post/constants';
 
 import PlusIcon from '@/../public/icons/plus.svg';
 
