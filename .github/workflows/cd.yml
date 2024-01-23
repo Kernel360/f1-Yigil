@@ -17,6 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    
     ## jdk setting
     - uses: actions/checkout@v3
     - name: Set up JDK 21
@@ -24,7 +25,26 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-    ## application.yml 생성 후 secret 값 복붙
+    ## docker-compose.yml 생성 후 secret 값 복붙
+    - uses: actions/checkout@v3
+    - run: touch docker-compose.yml
+    - run: echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
+    ## application secrets 값 주입
+    - name: Set application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_PORT@|${{ secrets.REDIS_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@S3_BUCKET@|${{ secrets.S3_BUCKET }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
+        cat ./yigil-api/src/main/resources/*
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -53,9 +73,6 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         
         script: |
-          sudo docker kill ${{ secrets.PROJECT_NAME }}
-          sudo docker rm -f ${{ secrets.PROJECT_NAME }}
-          sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
-
-          sudo docker run -p ${{ secrets.PORT }}:${{ secrets.PORT }} -v postgre-volume:/data  --name ${{ secrets.PROJECT_NAME }} -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+          sudo docker-compose pull
+          sudo docker-compose down
+          sudo docker-compose up -d

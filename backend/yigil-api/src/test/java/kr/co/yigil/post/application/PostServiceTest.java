@@ -6,6 +6,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
+import kr.co.yigil.comment.application.CommentRedisIntegrityService;
+import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.SocialLoginType;
@@ -13,6 +15,7 @@ import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import kr.co.yigil.post.dto.response.PostDeleteResponse;
 import kr.co.yigil.post.dto.response.PostListResponse;
+import kr.co.yigil.post.dto.response.PostResponse;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.Travel;
@@ -41,6 +44,8 @@ class PostServiceTest {
 
     @Mock
     private TravelRepository travelRepository;
+    @Mock
+    private CommentRedisIntegrityService commentRedisIntegrityService;
 
     @DisplayName("When finding all posts, then return PostListResponse")
     @Test
@@ -75,12 +80,21 @@ class PostServiceTest {
 
         List<Post> posts = List.of(mockPost1, mockPost2, mockPost3);
         when(postRepository.findAll()).thenReturn(posts);
+        when(commentRedisIntegrityService.ensureCommentCount(any())).thenReturn(new CommentCount(1L, 1));
+
+        PostResponse mockPostResponse1 = PostResponse.from(mockSpot1, mockPost1, 1);
+        PostResponse mockPostResponse2 = PostResponse.from(mockSpot2, mockPost2, 1);
+        PostResponse mockPostResponse3 = PostResponse.from(mockCourse1, mockPost3, 1);
+
+        List<PostResponse> postResponses = List.of(mockPostResponse1, mockPostResponse2, mockPostResponse3);
+        PostListResponse mockPostListResponse = PostListResponse.from(postResponses);
 
         // When
         PostListResponse postListResponse = postService.findAllPosts();
         // Then
         assertNotNull(postListResponse);
         assertThat(postService.findAllPosts()).isInstanceOf(PostListResponse.class);
+        assertThat(postService.findAllPosts()).isEqualTo(mockPostListResponse);
         assertEquals(posts.size(), postListResponse.getPosts().size());
 
     }

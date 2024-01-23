@@ -1,16 +1,9 @@
 package kr.co.yigil.travel.domain;
 
-import com.fasterxml.jackson.databind.annotation.EnumNaming;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import kr.co.yigil.file.FileType;
-import kr.co.yigil.member.domain.Member;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;

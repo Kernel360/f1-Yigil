@@ -26,7 +26,7 @@ public class SpotController {
     @PostMapping
 //    @MemberOnly
     public ResponseEntity<SpotCreateResponse> createSpot(
-        @ModelAttribute SpotCreateRequest spotCreateRequest, // file 추가해야담
+        @ModelAttribute SpotCreateRequest spotCreateRequest,
         @Auth final Accessor accessor
     ){
         SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(), spotCreateRequest);

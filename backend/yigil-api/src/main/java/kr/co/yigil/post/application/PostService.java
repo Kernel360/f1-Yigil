@@ -1,6 +1,7 @@
 package kr.co.yigil.post.application;
 
 import java.util.List;
+import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
@@ -20,11 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
     private final PostRepository postRepository;
     private final TravelRepository travelRepository;
+    private final CommentRedisIntegrityService commentRedisIntegrityService;
 
     @Transactional(readOnly = true)
     public PostListResponse findAllPosts() { // querydsl? 검색 쿼리 추가
         List<Post> posts = postRepository.findAll();
-        List<PostResponse> postResponses = posts.stream().map(PostResponse::from).toList();
+        List<PostResponse> postResponses = posts.stream()
+                .map(post -> PostResponse.from(post.getTravel(), post, commentRedisIntegrityService.ensureCommentCount(post).getCommentCount()))
+                .toList();
         return PostListResponse.from(postResponses);
     }
 

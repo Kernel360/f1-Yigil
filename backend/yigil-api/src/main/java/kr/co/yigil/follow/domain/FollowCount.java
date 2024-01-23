@@ -1,6 +1,5 @@
 package kr.co.yigil.follow.domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -15,8 +14,24 @@ public class FollowCount {
     @Id
     private Long memberId;
 
-    private final int followerCount;
+    private int followerCount;
 
-    private final int followingCount;
+    private int followingCount;
+
+    public void incrementFollowerCount() {
+        followerCount++;
+    }
+
+    public void decrementFollowerCount() {
+        followerCount--;
+    }
+
+    public void incrementFollowingCount() {
+        followingCount++;
+    }
+
+    public void decrementFollowingCount() {
+        followingCount--;
+    }
 
 }

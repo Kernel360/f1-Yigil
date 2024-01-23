@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.post.application.PostService;
@@ -57,6 +58,9 @@ class CourseServiceTest {
     @Mock
     private TravelRepository travelRepository;
 
+    @Mock
+    private CommentService commentService;
+
     @DisplayName("createCourse 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지.")
     @Test
     void GivenValidInput_WhenCreateCourse_ThenReturnValidPostCreateReponse(){
@@ -68,7 +72,7 @@ class CourseServiceTest {
             "title1", 1, List.of(11L, 12L, 13L), lineStringJson
         );
 
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", "kakao");
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
 
         Mockito.when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
@@ -107,7 +111,7 @@ class CourseServiceTest {
     void Given_WhenfindCourse_Then(){
 
         Long postId = 1L;
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", "kakao");
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
 
         GeometryFactory geometryFactory = new GeometryFactory();
         List<Coordinate> coordinates = List.of(
@@ -133,6 +137,8 @@ class CourseServiceTest {
         Post mockPost = new Post(postId, mockCourse, mockMember);
 
         when(postService.findPostById(anyLong())).thenReturn(mockPost);
+
+        when(commentService.getCommentList(mockCourse.getId())).thenReturn(List.of());
 
         CourseFindResponse response =  courseService.findCourse(postId);
         assertThat(response).isInstanceOf(CourseFindResponse.class);
