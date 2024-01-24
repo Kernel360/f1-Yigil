@@ -9,7 +9,7 @@ export default function HomeNavigation() {
   const selected = 'border-b-4 border-black text-black';
 
   return (
-    <nav className="mt-[80px] px-8 py-4 flex gap-4 text-3xl font-semibold text-gray-300">
+    <nav className="px-8 py-4 flex gap-4 text-3xl font-semibold text-gray-300">
       <Link className={`${pathname === '/' && selected}`} href="/">
         홈
       </Link>
