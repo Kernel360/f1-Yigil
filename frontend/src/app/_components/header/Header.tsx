@@ -14,7 +14,7 @@ export default function Header() {
   const [isOpenedModal, setIsOpenedModal] = useState(false);
 
   return (
-    <div className="w-[430px] h-[80px] flex justify-between items-center fixed top-0 bg-main">
+    <div className="w-full h-[80px] flex justify-between items-center sticky top-0 bg-main">
       <div className="ml-4 cursor-pointer" onClick={() => router.push('/')}>
         <HeaderLogo />
       </div>
@@ -38,6 +38,8 @@ export default function Header() {
               ></div>
               <div className="absolute bottom-[-90px] right-4 w-[134px] h-[104px] bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center gap-5">
                 <Link
+                  aria-role="tab0"
+                  tabIndex={1}
                   href="/mypage"
                   className="flex items-center"
                   onClick={() => setIsOpenedModal(false)}
@@ -46,6 +48,8 @@ export default function Header() {
                   <MapPin />
                 </Link>
                 <Link
+                  aria-role="tab1"
+                  tabIndex={2}
                   href="/"
                   className="flex items-center"
                   onClick={() => signOut()}
