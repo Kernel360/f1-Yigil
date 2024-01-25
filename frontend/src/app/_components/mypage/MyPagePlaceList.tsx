@@ -1,3 +1,4 @@
+import { EventFor } from '@/types/type';
 import React, { useState } from 'react';
 import MyPagePlaceItem from './MyPagePlaceItem';
 
@@ -16,7 +17,7 @@ interface PropsType {
 export default function MyPagePlaceList({ placeList }: PropsType) {
   const [selected, setSelected] = useState('');
 
-  const onChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeSelect = (e: EventFor<'select', 'onChange'>) => {
     setSelected(e.target.value);
   };
   console.log(placeList);

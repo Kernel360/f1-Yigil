@@ -1,5 +1,13 @@
+import UserModifyForm from '@/app/_components/setting/UserModifyForm';
+import { getServerSession } from 'next-auth';
 import React from 'react';
 
-export default function SettingPage() {
-  return <div>SettingPage</div>;
+export default async function SettingPage() {
+  const session = await getServerSession();
+
+  return (
+    <div className="flex flex-col">
+      <UserModifyForm session={session} />
+    </div>
+  );
 }
