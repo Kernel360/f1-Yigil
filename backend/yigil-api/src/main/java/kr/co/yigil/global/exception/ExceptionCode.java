@@ -29,7 +29,7 @@ public enum ExceptionCode {
     EXCEED_FILE_CAPACITY(5003, "업로드 가능한 파일 용량을 초과했습니다."),
 
     // GeoJson
-//    INVALID_GEOMETRY_TYPE(6001, "geometry 타입이 다릅니다"),
+    //    INVALID_GEOMETRY_TYPE(6001, "geometry 타입이 다릅니다"),
     INVALID_GEO_JSON_FORMAT(6002, "올바르지 않은 형식의 JSON String입니다."),
     GEO_JSON_CASTING_ERROR(6003, "JSON String Casting 오류가 발생했습니다."),
     INVALID_POINT_GEO_JSON(6011, "Point GeoJson 형식이 아닙니다"),

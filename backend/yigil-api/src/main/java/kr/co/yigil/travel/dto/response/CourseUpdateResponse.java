@@ -2,10 +2,8 @@ package kr.co.yigil.travel.dto.response;
 
 import java.util.List;
 import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.post.domain.Post;
-import kr.co.yigil.post.dto.response.PostResponse;
-import kr.co.yigil.travel.domain.Course;
-import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.Course;
+import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.SpotInCourseDto;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
 import lombok.AllArgsConstructor;

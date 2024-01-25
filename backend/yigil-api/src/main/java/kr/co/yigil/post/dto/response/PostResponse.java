@@ -2,13 +2,11 @@ package kr.co.yigil.post.dto.response;
 
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.post.domain.Post;
-import kr.co.yigil.travel.domain.Course;
-import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.Travel;
+import kr.co.yigil.travel.Course;
+import kr.co.yigil.travel.Spot;
+import kr.co.yigil.travel.Travel;
 import lombok.Data;
-import lombok.Setter;
 
 @Data
 public class PostResponse {
@@ -40,7 +38,6 @@ public class PostResponse {
             post.getId(),
             spot.getId(),
             spot.getTitle(),
-            spot.getFileUrl(),
             spot.getDescription(),
             post.getMember().getNickname(),
             post.getMember().getProfileImageUrl(),
@@ -50,14 +47,12 @@ public class PostResponse {
 
     public static PostResponse from(Course course, Post post, int commentCount) {
         Spot representativeSpot = course.getSpots().get(course.getRepresentativeSpotOrder());
-        String imgUrl = representativeSpot.getFileUrl();
         String description = representativeSpot.getDescription();
 
         return new PostResponse(
             post.getId(),
             course.getId(),
             course.getTitle(),
-            imgUrl,
             description,
             post.getMember().getNickname(),
             post.getMember().getProfileImageUrl(),
@@ -65,11 +60,10 @@ public class PostResponse {
         );
     }
 
-    public PostResponse(Long postId, Long travelId, String title, String imageUrl, String description, String memberNickname, String memberImageUrl, int commentCount) {
+    public PostResponse(Long postId, Long travelId, String title, String description, String memberNickname, String memberImageUrl, int commentCount) {
         this.postId = postId;
         this.travelId = travelId;
         this.title = title;
-        this.imageUrl = imageUrl;
         this.description = description;
         this.memberNickname = memberNickname;
         this.memberImageUrl = memberImageUrl;
