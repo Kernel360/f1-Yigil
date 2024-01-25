@@ -35,4 +35,11 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/api/v1/logout")
+    public ResponseEntity<LoginResponse> logout(
+            HttpSession session
+    ) {
+        session.invalidate();
+        return ResponseEntity.ok(new LoginResponse("로그아웃 성공"));
+    }
 }

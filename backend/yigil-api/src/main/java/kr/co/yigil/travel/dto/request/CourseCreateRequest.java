@@ -2,11 +2,10 @@ package kr.co.yigil.travel.dto.request;
 
 import java.util.List;
 
-import kr.co.yigil.travel.domain.Course;
-import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.Course;
+import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import java.util.function.Consumer;
+import kr.co.yigil.File.FileType;
 import kr.co.yigil.global.exception.FileException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

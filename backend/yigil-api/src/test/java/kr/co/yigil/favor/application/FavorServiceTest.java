@@ -19,7 +19,7 @@ import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
-import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.Spot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

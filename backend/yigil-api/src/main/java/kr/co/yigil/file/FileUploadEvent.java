@@ -1,6 +1,7 @@
 package kr.co.yigil.file;
 
 import java.util.function.Consumer;
+import kr.co.yigil.File.FileType;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.FileException;
 import lombok.Getter;
