@@ -13,7 +13,7 @@ import kr.co.yigil.comment.domain.repository.CommentRepository;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.SocialLoginType;
 import kr.co.yigil.post.domain.Post;
-import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.Spot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

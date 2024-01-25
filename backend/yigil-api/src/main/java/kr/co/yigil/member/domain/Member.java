@@ -50,6 +50,12 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private SocialLoginType socialLoginType;
 
+    @Enumerated(value = EnumType.STRING)
+    private Gender gender;
+
+    @Enumerated(value = EnumType.STRING)
+    private Ages ages;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime joinedAt;

@@ -9,18 +9,17 @@ import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseCreateResponse;
 import kr.co.yigil.travel.dto.response.CourseFindResponse;
-import kr.co.yigil.travel.domain.Course;
-import kr.co.yigil.travel.domain.Travel;
-import kr.co.yigil.travel.domain.repository.CourseRepository;
+import kr.co.yigil.travel.Course;
+import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.repository.CourseRepository;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
-import kr.co.yigil.travel.dto.response.SpotFindResponse;
 import org.springframework.stereotype.Service;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.post.domain.Post;
-import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.repository.TravelRepository;
+import kr.co.yigil.travel.Spot;
+import kr.co.yigil.travel.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +46,7 @@ public class CourseService {
         postService.createPost(course, member);
 
         //코스에 포함된 spot들 isIncourse 속성 true로 변경
-        course.getSpots().forEach(spot -> spot.setIsInCourse(true));
+        course.getSpots().forEach(spot -> spot.setInCourse(true));
 
         // 코스에 포함된 스팟을 담은 포스트 삭제
         spotIdList.forEach(spotId -> postService.deleteOnlyPost(memberId, spotId));
@@ -78,7 +77,7 @@ public class CourseService {
         for(Long id: courseUpdateRequest.getAddedSpotIds()){
             postService.deleteOnlyPost(memberId, id);
             Spot spot = spotService.findSpotById(id);
-            spot.setIsInCourse(true);
+            spot.setInCourse(true);
         }
 
         // 코스에 있던 spot을 뺄때 다시 post에 등록, post 필드의 deleted 가 true인 것을 false로 변경
@@ -86,7 +85,7 @@ public class CourseService {
             // spotId와 member Id로 post를 찾아서 해당 포스트의 deleted 필드를 false로 변경
             postService.recreatePost(memberId, id);
             Spot spot = spotService.findSpotById(id);
-            spot.setIsInCourse(false);
+            spot.setInCourse(false);
         }
 
         // 코스 정보 업데이트

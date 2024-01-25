@@ -11,4 +11,6 @@ include 'yigil-api'
 include 'support:log'
 findProject(':support:log')?.name = 'log'
 include 'yigil-admin'
+include 'support:domain'
+findProject(':support:domain')?.name = 'domain'
 

@@ -8,7 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.travel.domain.Travel;
+import kr.co.yigil.travel.Travel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
