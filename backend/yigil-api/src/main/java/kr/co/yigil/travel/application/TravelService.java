@@ -1,11 +1,10 @@
 package kr.co.yigil.travel.application;
 
-import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_TRAVEL_ID;
 
 import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.travel.domain.Travel;
-import kr.co.yigil.travel.domain.repository.TravelRepository;
+import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

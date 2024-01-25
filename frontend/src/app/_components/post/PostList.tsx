@@ -5,6 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { Post } from '@/app/_components/post';
 
 import type { TPost } from './Post';
+import Link from 'next/link';
 
 export default function PostList({
   title,
@@ -25,9 +26,11 @@ export default function PostList({
         <span className="self-center">더보기</span>
       </div>
       <div className="overflow-hidden px-4" ref={emblaRef}>
-        <div className="relative flex justify-between -z-10">
+        <div className="flex">
           {data.map((post) => (
-            <Post key={post.id} {...post} />
+            <Link href={`#`} key={post.id}>
+              <Post {...post} />
+            </Link>
           ))}
         </div>
       </div>

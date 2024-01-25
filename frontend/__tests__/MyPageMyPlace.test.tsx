@@ -5,10 +5,9 @@ import { myPlaceData } from '@/mocks/api/data/myPlaceData';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
-test('MyPageMyPlace', () => {
+describe('MyPageMyPlace', () => {
   const placeDatas = myPlaceData.map((data) => [data]);
-  // render(<MyPagePlaceList placeList={myPlaceData} />);
-  it.each(placeDatas)('render each place item', (data) => {
+  it.each(placeDatas)('render each place item', async (data) => {
     const {
       imageUrl,
       post_id,
@@ -29,5 +28,7 @@ test('MyPageMyPlace', () => {
         post_date={post_date}
       />,
     );
+    const text = await screen.findAllByText(/여행/i);
+    expect(text).toHaveLength(1);
   });
 });
