@@ -1,4 +1,4 @@
-package kr.co.yigil.member.domain;
+package kr.co.yigil.member;
 
 public enum MemberStatus {
     ACTIVE,

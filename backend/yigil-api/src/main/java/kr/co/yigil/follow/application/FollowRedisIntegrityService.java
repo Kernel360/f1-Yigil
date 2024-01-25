@@ -6,7 +6,7 @@ import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.follow.dto.FollowCountDto;
-import kr.co.yigil.member.domain.Member;
+import kr.co.yigil.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

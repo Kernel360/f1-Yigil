@@ -1,7 +1,7 @@
 package kr.co.yigil.travel.dto.response;
 
 import java.util.List;
-import kr.co.yigil.member.domain.Member;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.Course;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.SpotInCourseDto;

@@ -10,10 +10,11 @@ import kr.co.yigil.comment.dto.response.CommentCreateResponse;
 import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +39,10 @@ public class CommentController {
     }
     @GetMapping("/{post_id}")
     public ResponseEntity<List<CommentResponse>> getTopCommentList(
-        @PathVariable("post_id") Long postId
+        @PathVariable("post_id") Long postId,
+        @PageableDefault(page = 0, size = 5)
+        Pageable pageable
+
     ){
         List<CommentResponse> commentListResponse = commentService.getTopLevelCommentList(postId);
         return ResponseEntity.ok().body(commentListResponse);

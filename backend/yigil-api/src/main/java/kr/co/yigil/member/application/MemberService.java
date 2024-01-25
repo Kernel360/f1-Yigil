@@ -3,7 +3,6 @@ package kr.co.yigil.member.application;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.application.FollowRedisIntegrityService;
@@ -12,8 +11,8 @@ import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.repository.FollowCountRepository;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.repository.MemberRepository;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.repository.MemberRepository;
 import kr.co.yigil.member.dto.request.MemberUpdateRequest;
 import kr.co.yigil.member.dto.response.MemberDeleteResponse;
 import kr.co.yigil.member.dto.response.MemberFollowerListResponse;

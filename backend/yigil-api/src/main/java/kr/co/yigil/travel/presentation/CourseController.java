@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
     private final CourseService courseService;
 
+    // todo getCourseList api 추가
+
     @PostMapping
     @MemberOnly
     public ResponseEntity<CourseCreateResponse> createCourse(
@@ -35,22 +37,22 @@ public class CourseController {
         return ResponseEntity.ok(courseCreateResponse);
     }
 
-    @GetMapping("/{post_id}")
+    @GetMapping("/{course_id}")
     public ResponseEntity<CourseFindResponse> findCourse(
-        @PathVariable("post_id") Long postId
+        @PathVariable("course_id") Long courseId
     ){
-        CourseFindResponse courseFindResponse = courseService.findCourse(postId);
+        CourseFindResponse courseFindResponse = courseService.getCourse(courseId);
         return ResponseEntity.ok().body(courseFindResponse);
     }
 
-    @PutMapping("/{post_id}")
+    @PutMapping("/{course_id}")
     @MemberOnly
     public ResponseEntity<CourseUpdateResponse> updateCourse(
-        @PathVariable("post_id") Long postId,
+        @PathVariable("course_id") Long courseId,
         @RequestBody CourseUpdateRequest courseUpdateRequest,
         @Auth final Accessor accessor
     ){
-        CourseUpdateResponse courseUpdateResponse = courseService.updateCourse( postId,accessor.getMemberId(), courseUpdateRequest);
+        CourseUpdateResponse courseUpdateResponse = courseService.updateCourse( courseId,accessor.getMemberId(), courseUpdateRequest);
         return ResponseEntity.ok().body(courseUpdateResponse);
     }
 

@@ -12,9 +12,16 @@ import kr.co.yigil.favor.domain.Favor;
 import kr.co.yigil.favor.domain.FavorCount;
 import kr.co.yigil.favor.domain.repository.FavorCountRepository;
 import kr.co.yigil.favor.domain.repository.FavorRepository;
+<<<<<<< Updated upstream
 import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.member.domain.SocialLoginType;
 import kr.co.yigil.member.domain.repository.MemberRepository;
+=======
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.member.repository.MemberRepository;
+>>>>>>> Stashed changes
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.post.domain.Post;

@@ -1,7 +1,7 @@
 package kr.co.yigil.comment.dto.request;
 
 import kr.co.yigil.comment.domain.Comment;
-import kr.co.yigil.member.domain.Member;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.post.domain.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;

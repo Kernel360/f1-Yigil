@@ -3,9 +3,7 @@ package kr.co.yigil.comment.application;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_COMMENT_ID;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import kr.co.yigil.comment.domain.Comment;
 import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.comment.domain.repository.CommentCountRepository;
@@ -17,7 +15,7 @@ import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.member.domain.Member;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.post.application.PostService;
@@ -69,8 +67,7 @@ public class CommentService {
                         CommentResponse replyResponse = CommentResponse.from(reply);
                         commentResponse.addChild(replyResponse);
                     });
-            })
-        ;
+            });
 
         commentRedisIntegrityService.ensureCommentCount(postService.findPostById(postId));
         return commentResponses;
@@ -84,6 +81,7 @@ public class CommentService {
         comments.stream()
             .map(CommentResponse::from)
             .forEach(commentResponses::add);
+
         return commentResponses;
     }
 

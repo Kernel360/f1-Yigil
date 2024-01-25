@@ -8,11 +8,13 @@ import kr.co.yigil.favor.domain.repository.FavorCountRepository;
 import kr.co.yigil.favor.domain.repository.FavorRepository;
 import kr.co.yigil.favor.dto.response.AddFavorResponse;
 import kr.co.yigil.favor.dto.response.DeleteFavorResponse;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.repository.MemberRepository;
+
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.repository.MemberRepository;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
-import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,8 @@
 package kr.co.yigil.file;
 
+import java.util.List;
 import java.util.function.Consumer;
+import kr.co.yigil.File.AttachFiles;
 import kr.co.yigil.File.FileType;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.FileException;
@@ -15,9 +17,9 @@ public class FileUploadEvent extends ApplicationEvent {
 
     private MultipartFile file;
     private FileType fileType;
-    private Consumer<String> callback;
+    private Consumer<AttachFiles> callback;
 
-    public FileUploadEvent(Object source, MultipartFile file, Consumer<String> callback) {
+    public FileUploadEvent(Object source, List<MultipartFile> files, Consumer<AttachFiles> callback) {
         super(source);
         this.file = file;
         this.callback = callback;

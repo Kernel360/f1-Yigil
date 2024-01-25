@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import kr.co.yigil.member.domain.Member;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.post.domain.Post;
 import lombok.AccessLevel;
 import lombok.Getter;

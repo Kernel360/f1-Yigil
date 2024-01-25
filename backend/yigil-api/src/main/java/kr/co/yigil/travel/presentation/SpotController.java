@@ -6,7 +6,11 @@ import kr.co.yigil.travel.dto.request.SpotCreateRequest;
 import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
 import kr.co.yigil.travel.dto.response.SpotFindResponse;
+<<<<<<< Updated upstream
 import kr.co.yigil.travel.application.SpotService;
+=======
+import kr.co.yigil.travel.dto.response.SpotFindListResponse;
+>>>>>>> Stashed changes
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/spots")
 public class SpotController {
     private final SpotService spotService;
+<<<<<<< Updated upstream
+=======
+
+    @GetMapping("/{place_id}")
+    public ResponseEntity<SpotFindListResponse> getSpotList(
+        @PathVariable("place_id") Long placeId
+    ) {
+        SpotFindListResponse spotFindListResponse = spotService.getSpotList(placeId);
+        return ResponseEntity.ok().body(spotFindListResponse);
+    }
+>>>>>>> Stashed changes
 
     @PostMapping
 //    @MemberOnly
@@ -33,36 +48,33 @@ public class SpotController {
         return ResponseEntity.ok().body(spotCreateResponse);
     }
 
-//    @PostMapping("/course/{courseId}/spot")
-//    @MemberOnly
-//    public ResponseEntity<SpotFindResponse> createSpotInCourse(
-//            @PathVariable Long courseId,
-//            @RequestBody SpotCreateRequest spotRequest,
-//            @Auth final Accessor accessor
-//    ){
-//        SpotFindResponse spotResponse = spotService.createSpot(accessor.getMemberId(), courseId, spotRequest);
-//        URI uri = URI.create("api/v1/post/spot/" + spot.getId());
-//        return ResponseEntity.created(uri).body(spotResponse);
-//    }
-
-    @GetMapping("/{post_id}")
+    @GetMapping("/{spot_id}")
     public ResponseEntity<SpotFindResponse> findSpot(
-        @PathVariable("post_id") Long postId
+        @PathVariable("spot_id") Long spotId
     ) {
-        SpotFindResponse post = spotService.findSpotByPostId(postId);
-        return ResponseEntity.ok().body(post);
+        SpotFindResponse spotFindResponse = spotService.getSpot(spotId);
+        return ResponseEntity.ok().body(spotFindResponse);
     }
 
+<<<<<<< Updated upstream
     // public findAllSpotPost() - 코스에 넣을 spot list
     @PostMapping("/{post_id}")
 //    @MemberOnly
+=======
+    @PostMapping("/{spot_id}")
+    @MemberOnly
+>>>>>>> Stashed changes
     public ResponseEntity<SpotUpdateResponse> updateSpot(
-        @PathVariable("post_id") Long postId,
+        @PathVariable("spot_id") Long spotId,
         @Auth final Accessor accessor,
         @ModelAttribute SpotUpdateRequest spotUpdateRequest
     ){
+<<<<<<< Updated upstream
 //        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(1L, postId, spotUpdateRequest);
         SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(), postId, spotUpdateRequest);
+=======
+        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(), spotId, spotUpdateRequest);
+>>>>>>> Stashed changes
         return ResponseEntity.ok().body(spotUpdateResponse);
     }
 

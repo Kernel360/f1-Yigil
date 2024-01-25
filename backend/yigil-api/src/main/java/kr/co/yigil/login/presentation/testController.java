@@ -1,9 +1,7 @@
 package kr.co.yigil.login.presentation;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.SocialLoginType;
-import kr.co.yigil.member.domain.repository.MemberRepository;
+import kr.co.yigil.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

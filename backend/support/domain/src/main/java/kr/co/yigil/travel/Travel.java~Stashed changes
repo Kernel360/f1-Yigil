@@ -1,36 +1,42 @@
-package kr.co.yigil.notification.domain;
+package kr.co.yigil.travel;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.LocalDateTime;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Notification {
+@SQLDelete(sql = "UPDATE Travel SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
+public class Travel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name ="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
-
-    private String message;
-
-    private boolean isRead;
 
     @CreatedDate
     @Column(updatable = false)
@@ -39,11 +45,22 @@ public class Notification {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public Notification(final Member member, final String message) {
+    boolean isDeleted;
+
+    protected Travel(Member member) {
         this.member = member;
-        this.message = message;
-        isRead = false;
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
+    }
+
+    public Travel(final Long id, Member member) {
+        this.id = id;
+        this.member = member;
+        createdAt = LocalDateTime.now();
+        modifiedAt = LocalDateTime.now();
+    }
+
+    protected void setId(Long id) {
+        this.id = id;
     }
 }

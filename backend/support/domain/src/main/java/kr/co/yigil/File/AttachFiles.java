@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class AttachFiles {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "travel_id")
     private List<AttachFile> files;
 
     public AttachFiles(final List<AttachFile> files) {
