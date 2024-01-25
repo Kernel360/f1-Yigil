@@ -12,9 +12,9 @@ import kr.co.yigil.member.domain.Member;
 import kr.co.yigil.post.application.PostService;
 import kr.co.yigil.post.domain.Post;
 import kr.co.yigil.post.domain.repository.PostRepository;
-import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.Travel;
-import kr.co.yigil.travel.domain.repository.SpotRepository;
+import kr.co.yigil.travel.Spot;
+import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.repository.SpotRepository;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
 import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
@@ -46,7 +46,7 @@ public class SpotService {
         FileUploadEvent event = new FileUploadEvent(this, spotCreateRequest.getFile(),
             fileUrl -> {
                 System.out.println("fileUrl = " + fileUrl);
-                Spot spot = spotRepository.save(SpotCreateRequest.toEntity(spotCreateRequest, fileUrl));
+                Spot spot = spotRepository.save(SpotCreateRequest.toEntity(spotCreateRequest));
                 postService.createPost(spot, member);
             });
         applicationEventPublisher.publishEvent(event);
@@ -80,7 +80,7 @@ public class SpotService {
         // 기존 포스트의 spot 정보
         Spot spot = castTravelToSpot(post.getTravel());
         Long spotId = spot.getId();
-        Spot newSpot = SpotUpdateRequest.toEntity(spotId, spotUpdateRequest, fileUrl);
+        Spot newSpot = SpotUpdateRequest.toEntity(spotId, spotUpdateRequest);
         Spot updatedSpot = spotRepository.save(newSpot);
 
         Member member = memberService.findMemberById(memberId);

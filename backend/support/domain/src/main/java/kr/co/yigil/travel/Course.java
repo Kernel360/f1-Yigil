@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.domain;
+package kr.co.yigil.travel;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

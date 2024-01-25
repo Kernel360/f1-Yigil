@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.travel.domain.Travel;
-import kr.co.yigil.travel.domain.repository.TravelRepository;
+import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.repository.TravelRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

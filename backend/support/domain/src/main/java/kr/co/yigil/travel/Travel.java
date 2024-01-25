@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.domain;
+package kr.co.yigil.travel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -27,7 +27,6 @@ public class Travel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @CreatedDate
     @Column(updatable = false)

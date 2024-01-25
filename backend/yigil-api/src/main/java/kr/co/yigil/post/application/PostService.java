@@ -10,8 +10,8 @@ import kr.co.yigil.post.domain.repository.PostRepository;
 import kr.co.yigil.post.dto.response.PostDeleteResponse;
 import kr.co.yigil.post.dto.response.PostListResponse;
 import kr.co.yigil.post.dto.response.PostResponse;
-import kr.co.yigil.travel.domain.Travel;
-import kr.co.yigil.travel.domain.repository.TravelRepository;
+import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,7 +79,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public void                  validatePostWriter(Long memberId, Long postId) {
+    public void validatePostWriter(Long memberId, Long postId) {
         if (!postRepository.existsByMemberIdAndId(memberId, postId)) {
             throw new BadRequestException(ExceptionCode.INVALID_AUTHORITY);
         }

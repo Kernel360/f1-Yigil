@@ -1,6 +1,6 @@
-package kr.co.yigil.travel.domain.repository;
+package kr.co.yigil.travel.repository;
 
-import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.Spot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
