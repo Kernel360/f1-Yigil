@@ -7,10 +7,13 @@ import kr.co.yigil.travel.application.CourseService;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseCreateResponse;
+import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
+import kr.co.yigil.travel.dto.response.CourseFindListResponse;
 import kr.co.yigil.travel.dto.response.CourseFindResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
     private final CourseService courseService;
 
-    // todo getCourseList api 추가
+    @GetMapping("/{place_id}")
+    public ResponseEntity<CourseFindListResponse> getCourseList(
+        @PathVariable("place_id") Long placeId
+    ){
+        CourseFindListResponse courseFindListResponse = courseService.getCourseList(placeId);
+        return ResponseEntity.ok().body(courseFindListResponse);
+    }
 
     @PostMapping
     @MemberOnly
@@ -54,6 +63,16 @@ public class CourseController {
     ){
         CourseUpdateResponse courseUpdateResponse = courseService.updateCourse( courseId,accessor.getMemberId(), courseUpdateRequest);
         return ResponseEntity.ok().body(courseUpdateResponse);
+    }
+
+    @DeleteMapping("/{course_id}")
+    @MemberOnly
+    public ResponseEntity<CourseDeleteResponse> deleteCourse(
+        @PathVariable("course_id") Long courseId,
+        @Auth final Accessor accessor
+    ){
+        CourseDeleteResponse courseDeleteResponse = courseService.deleteCourse( courseId,accessor.getMemberId());
+        return ResponseEntity.ok().body(courseDeleteResponse);
     }
 
 }

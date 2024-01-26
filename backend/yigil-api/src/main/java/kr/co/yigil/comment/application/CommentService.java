@@ -14,12 +14,12 @@ import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.member.Member;
+import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
-import kr.co.yigil.post.application.PostService;
-import kr.co.yigil.post.domain.Post;
+import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.application.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +32,12 @@ public class CommentService {
     private final NotificationService notificationService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final CommentCountRepository commentCountRepository;
-    private final PostService postService;
+    private final TravelService travelService;
 
     @Transactional
-    public CommentCreateResponse createComment(Long memberId, Long postId, CommentCreateRequest commentCreateRequest) {
+    public CommentCreateResponse createComment(Long memberId, Long travelId, CommentCreateRequest commentCreateRequest) {
         Member member = memberService.findMemberById(memberId);
-        Post post = postService.findPostById(postId);
+        Travel travel = travelService.findTravelById(travelId);
 
         Comment parentComment = null;
         if (commentCreateRequest.getParentId() != null && commentCreateRequest.getNotifiedMemberId() != null) {
@@ -46,38 +46,39 @@ public class CommentService {
             sendCommentNotification(notifiedMember, commentCreateRequest.getContent());
         }
 
-        Comment newComment = new Comment(commentCreateRequest.getContent(), member, post, parentComment);
-        commentRedisIntegrityService.ensureCommentCount(post);
+        Comment newComment = new Comment(commentCreateRequest.getContent(), member, travel, parentComment);
+        commentRedisIntegrityService.ensureCommentCount(travel);
         commentRepository.save(newComment);
-        incrementCommentCount(postId);
+        incrementCommentCount(travelId);
 
         return new CommentCreateResponse("댓글 생성 성공");
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getCommentList(Long postId) {
+    public List<CommentResponse> getCommentList(Long travelId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
+        Travel travel = travelService.findTravelById(travelId);
 
-        commentRepository.findTopLevelCommentsByPostId(postId)
+        commentRepository.findTopLevelCommentsByTravelId(travelId)
             .forEach(comment -> {
                 CommentResponse commentResponse = CommentResponse.from(comment);
                 commentResponses.add(commentResponse);
-                commentRepository.findRepliesByPostIdAndParentId(postId, comment.getId())
+                commentRepository.findRepliesByTravelIdAndParentId(travelId, comment.getId())
                     .forEach(reply -> {
                         CommentResponse replyResponse = CommentResponse.from(reply);
                         commentResponse.addChild(replyResponse);
                     });
             });
 
-        commentRedisIntegrityService.ensureCommentCount(postService.findPostById(postId));
+        commentRedisIntegrityService.ensureCommentCount(travel);
         return commentResponses;
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getTopLevelCommentList(Long postId) {
+    public List<CommentResponse> getTopLevelCommentList(Long travelId) {
 
         List<CommentResponse> commentResponses = new ArrayList<>();
-        List<Comment> comments = commentRepository.findTopLevelCommentsByPostId(postId);
+        List<Comment> comments = commentRepository.findTopLevelCommentsByTravelId(travelId);
         comments.stream()
             .map(CommentResponse::from)
             .forEach(commentResponses::add);
@@ -86,9 +87,9 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getReplyCommentList(Long postId, Long parentId) {
+    public List<CommentResponse> getReplyCommentList(Long travelId, Long parentId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
-        List<Comment> comments = commentRepository.findRepliesByPostIdAndParentId(postId, parentId);
+        List<Comment> comments = commentRepository.findRepliesByTravelIdAndParentId(travelId, parentId);
         comments.stream()
             .map(CommentResponse::from)
             .forEach(commentResponses::add);
@@ -96,24 +97,24 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentDeleteResponse deleteComment(Long memberId, Long postId, Long commentId) {
-        Post post = postService.findPostById(postId);
+    public CommentDeleteResponse deleteComment(Long memberId, Long travelId, Long commentId) {
+        Travel travel = travelService.findTravelById(travelId);
         validateCommentWriter(memberId, commentId);
         Comment comment = findCommentById(commentId);
 
-        commentRedisIntegrityService.ensureCommentCount(post);
+        commentRedisIntegrityService.ensureCommentCount(travel);
         commentRepository.delete(comment);
-        decrementCommentCount(postId);
+        decrementCommentCount(travelId);
         return new CommentDeleteResponse("댓글 삭제 성공");
     }
 
-    private void incrementCommentCount(Long postId) {
-        commentCountRepository.findByPostId(postId)
+    private void incrementCommentCount(Long travelId) {
+        commentCountRepository.findByTravelId(travelId)
             .ifPresent(CommentCount::incrementCommentCount);
     }
 
-    private void decrementCommentCount(Long postId) {
-        commentCountRepository.findByPostId(postId)
+    private void decrementCommentCount(Long travelId) {
+        commentCountRepository.findByTravelId(travelId)
             .ifPresent(CommentCount::decrementCommentCount);
     }
 

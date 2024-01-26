@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpotUpdateResponse {
-
+public class SpotDeleteResponse {
     private String message;
-
 }

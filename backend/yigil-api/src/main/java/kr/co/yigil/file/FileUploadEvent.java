@@ -1,5 +1,6 @@
 package kr.co.yigil.file;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import kr.co.yigil.File.AttachFiles;
@@ -12,11 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 public class FileUploadEvent extends ApplicationEvent {
+
     private static final long MAX_IMAGE_SIZE = 10485760;
     private static final long MAX_VIDEO_SIZE = MAX_IMAGE_SIZE * 5;
 
-    private MultipartFile file;
-    private FileType fileType;
+    private List<MultipartFile> files;
+    private List<FileType> fileTypes = new ArrayList<>();
     private Consumer<AttachFiles> callback;
 
     public FileUploadEvent(Object source, List<MultipartFile> files, Consumer<AttachFiles> callback) {
@@ -29,17 +31,21 @@ public class FileUploadEvent extends ApplicationEvent {
 
     private void validateFileSize(FileType fileType, long size) {
         long maxSize = fileType == FileType.IMAGE ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE;
-        if(size > maxSize) throw new FileException(ExceptionCode.EXCEED_FILE_CAPACITY);
+        if (size > maxSize) {
+            throw new FileException(ExceptionCode.EXCEED_FILE_CAPACITY);
+        }
     }
 
     private FileType determineFileType(MultipartFile file) {
-        if (file.getContentType() == null) throw new FileException(ExceptionCode.EMPTY_FILE);
+        if (file.getContentType() == null) {
+            throw new FileException(ExceptionCode.EMPTY_FILE);
+        }
 
-        if(file.getContentType().startsWith("image/")) {
+        if (file.getContentType().startsWith("image/")) {
             return FileType.IMAGE;
         }
 
-        if(file.getContentType().startsWith("video/")) {
+        if (file.getContentType().startsWith("video/")) {
             return FileType.VIDEO;
         }
 

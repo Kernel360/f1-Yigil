@@ -1,9 +1,5 @@
 package kr.co.yigil.member.dto.response;
 
-import java.util.List;
-import kr.co.yigil.follow.domain.FollowCount;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.post.domain.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,15 +13,15 @@ public class MemberInfoResponse {
 
     private String profileImageUrl;
 
-    private List<Post> postList;
+//    private List<Travel> travelList;
 
     private int followerCount;
 
     private int followingCount;
 
-    public static MemberInfoResponse from(final Member member, final List<Post> postList, final
-            FollowCount followCount) {
-        return new MemberInfoResponse(member.getNickname(), member.getProfileImageUrl(), postList, followCount.getFollowerCount(),
-                followCount.getFollowingCount());
-    }
+//    public static MemberInfoResponse from(final Member member, final List<Post> postList, final
+//            FollowCount followCount) {
+//        return new MemberInfoResponse(member.getNickname(), member.getProfileImageUrl(), postList, followCount.getFollowerCount(),
+//                followCount.getFollowingCount());
+//    }
 }

@@ -3,6 +3,7 @@ package kr.co.yigil.file;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -14,7 +15,6 @@ import kr.co.yigil.File.AttachFiles;
 >>>>>>> Stashed changes
 import kr.co.yigil.File.FileType;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

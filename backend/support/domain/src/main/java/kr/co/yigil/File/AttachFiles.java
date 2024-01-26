@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
@@ -15,7 +16,7 @@ public class AttachFiles {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "travel_id")
-    private List<AttachFile> files;
+    private List<AttachFile> files = new ArrayList<>();
 
     public AttachFiles(final List<AttachFile> files) {
         this.files = files;

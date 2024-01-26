@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
     private final FollowRepository followRepository;
     private final FollowCountRepository followCountRepository;
     private final FollowRedisIntegrityService followRedisIntegrityService;

@@ -26,10 +26,10 @@ public class Favor {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Travel travel;
 
-    public Favor(final Member member, final Post post) {
+    public Favor(final Member member, final Travel travel) {
         this.member = member;
-        this.post = post;
+        this.travel = travel;
     }
 }

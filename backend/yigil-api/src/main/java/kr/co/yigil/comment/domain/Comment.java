@@ -11,7 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.post.domain.Post;
+import kr.co.yigil.travel.Travel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,12 +39,9 @@ public class Comment {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
-//    @OneToMany(mappedBy = "parent", orphanRemoval = true)
-//    private final List<Comment> children = new ArrayList<>();
-
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "travel_id")
+    private Travel travel;
 
     @CreatedDate
     @Column(updatable = false)
@@ -55,35 +52,35 @@ public class Comment {
 
     boolean isDeleted;
 
-    public Comment(String content, Member member, Post post) {
+    public Comment(String content, Member member, Travel travel) {
         this.content = content;
         this.member = member;
-        this.post = post;
+        this.travel = travel;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
-    public Comment(String content, Member member, Post post, Comment parent) {
+    public Comment(String content, Member member, Travel travel, Comment parent) {
         this.content = content;
         this.member = member;
-        this.post = post;
+        this.travel = travel;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
         this.parent = parent;
     }
 
-    public Comment(Long id, String content, Member member, Post post) {
+    public Comment(Long id, String content, Member member, Travel travel) {
         this.id = id;
         this.content = content;
         this.member = member;
-        this.post = post;
+        this.travel = travel;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
-    public Comment(Long id, String content, Member member, Post post, Comment parent) {
+    public Comment(Long id, String content, Member member, Travel travel, Comment parent) {
         this.id = id;
         this.content = content;
         this.member = member;
-        this.post = post;
+        this.travel = travel;
         this.parent = parent;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();

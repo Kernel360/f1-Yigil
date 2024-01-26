@@ -22,7 +22,6 @@ public class CourseUpdateResponse {
     private Integer likeCount;
     private Integer commentCount;
 
-    // 코스에 포함된 스팟 정보
     private List<SpotInCourseDto> spotInfos;
     private String lineStringJson;
 
@@ -31,8 +30,8 @@ public class CourseUpdateResponse {
             course.getTitle(),
             member.getNickname(),
             member.getProfileImageUrl(),
-            0, // likeCount 초기화
-            0, // commentCount 초기화
+            0,
+            0,
             spots.stream().map(SpotInCourseDto::from).toList(),
             GeojsonConverter.convertToJson(course.getPath())
         );

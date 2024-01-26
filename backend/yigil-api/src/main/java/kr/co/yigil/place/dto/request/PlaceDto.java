@@ -9,17 +9,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlaceRequestDto {
+public class PlaceDto {
+
     private String name;
     private String address;
     private String pointJson;
 
-    public static Place toEntity(PlaceRequestDto placeRequestDto) {
+    public static Place toEntity(String name, String address, String pointJson) {
         return new Place(
-            placeRequestDto.getName(),
-            placeRequestDto.getAddress(),
-            GeojsonConverter.convertToPoint(placeRequestDto.getPointJson()),
-            null
+                name,
+                address,
+                GeojsonConverter.convertToPoint(pointJson),
+                null
         );
     }
 }

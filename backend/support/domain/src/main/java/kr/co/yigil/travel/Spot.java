@@ -16,7 +16,6 @@ import lombok.Setter;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.locationtech.jts.geom.Point;
-import org.springframework.data.relational.core.mapping.Embedded.Empty;
 
 @Entity
 @Getter

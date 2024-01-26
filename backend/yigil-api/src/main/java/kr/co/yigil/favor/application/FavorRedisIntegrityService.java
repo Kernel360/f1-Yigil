@@ -23,13 +23,13 @@ public class FavorRedisIntegrityService {
         if (existingFavorCount.isPresent()) {
             return existingFavorCount.get();
         } else {
-            FavorCount favorCount = getFavorCount(post);
+            FavorCount favorCount = getFavorCount(travel);
             favorCountRepository.save(favorCount);
             return favorCount;
         }
     }
 
-    private FavorCount getFavorCount(Post post) {
-        return new FavorCount(post.getId(), favorRepository.countByPostId(post.getId()));
+    private FavorCount getFavorCount(Travel travel) {
+        return new FavorCount(travel.getId(), favorRepository.countByTravelId(travel.getId()));
     }
 }
