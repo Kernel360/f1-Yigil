@@ -11,7 +11,7 @@ export default function SearchBox({ showHistory }: { showHistory?: boolean }) {
 
   return (
     <section className="flex flex-col grow">
-      <SearchBar />
+      <SearchBar cancellable />
       <section className="grow"></section>
     </section>
   );
