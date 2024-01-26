@@ -1,9 +1,10 @@
 import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import { regions } from '../regions/constants';
 import { ages } from './contants';
-import { UserType } from './UserModifyForm';
+import { UserType } from './ModifyUser';
 
-interface PropsType {
+export interface PropsType {
   userForm: UserType | undefined;
   setUserForm: Dispatch<SetStateAction<UserType | undefined>>;
 }
@@ -19,6 +20,18 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
     setUserForm({ ...userForm, [name]: value });
   };
 
+  const onClickArea = (e: EventFor<'input', 'onClick'>) => {
+    const addedArea = userForm?.area && [
+      ...userForm.area,
+      e.currentTarget.value,
+    ];
+    setUserForm({
+      ...userForm,
+      area: addedArea,
+    });
+  };
+  console.log(userForm);
+
   return (
     <div className="mx-4">
       <label htmlFor="name" className="flex flex-col">
@@ -29,7 +42,7 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
           name="name"
           placeholder="닉네임"
           value={userForm?.name || ''}
-          className="border-2 px-4 py-2 text-2xl rounded-md"
+          className="border-[1px] px-4 py-2 text-2xl rounded-md"
           onChange={onChangeInput}
         />
       </label>
@@ -67,11 +80,27 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
         <div className="flex gap-x-[6px]">
           {ages.map((age) => (
             <input
+              key={age}
               id="age"
               type="button"
               value={age}
-              placeholder="닉네임"
               className="border-[1px] px-4 py-3 text-xl text-gray-500 rounded-md cursor-pointer"
+              onClick={onClickInput}
+            />
+          ))}
+        </div>
+      </label>
+      <label htmlFor="area" className="flex">
+        <span className="text-gray-500 my-2">관심 지역</span>
+        <div className="flex gap-x-[6px]">
+          {regions.map(({ label }) => (
+            <input
+              key={label}
+              id="area"
+              type="button"
+              value={label}
+              className="border-[1px] px-4 py-3 text-xl text-gray-500 rounded-md cursor-pointer"
+              onClick={onClickArea}
             />
           ))}
         </div>

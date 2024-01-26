@@ -2,7 +2,7 @@
 import { Session } from 'next-auth';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import RoundProfile from '../ui/profile/RoundProfile';
-import { UserType } from './UserModifyForm';
+import { UserType } from './ModifyUser';
 import { EventFor } from '@/types/type';
 
 export default function SettingProfile({

@@ -1,4 +1,4 @@
-import UserModifyForm from '@/app/_components/setting/UserModifyForm';
+import UserModifyForm from '@/app/_components/setting/ModifyUser';
 import { getServerSession } from 'next-auth';
 import React from 'react';
 
