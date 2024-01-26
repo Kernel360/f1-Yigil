@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 
-interface PropsType {
+interface TPopOver {
   popOverData: {
     href: string;
     label: string;
@@ -14,9 +14,18 @@ interface PropsType {
     onClick?: () => void;
   }[];
   setIsModalOpened: Dispatch<SetStateAction<boolean>>;
+  position: string;
+  style?: string;
+  backDropStyle?: string;
 }
 
-export default function PopOver({ popOverData, setIsModalOpened }: PropsType) {
+export default function PopOver({
+  popOverData,
+  setIsModalOpened,
+  position,
+  style,
+  backDropStyle,
+}: TPopOver) {
   const mouseEventPrevent = (e: Event) => {
     e.preventDefault();
   };
@@ -34,23 +43,28 @@ export default function PopOver({ popOverData, setIsModalOpened }: PropsType) {
   return (
     <>
       <div
-        className="fixed inset-0"
+        className={`fixed inset-0 max-w-[430px] mx-auto ${backDropStyle}`}
         onClick={() => setIsModalOpened(false)}
       ></div>
-      <div className="absolute bottom-[-90px] right-4 w-[134px] h-[104px] bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center gap-5">
-        {popOverData.map(({ href, label, Icon, onClick }) => (
-          <Link
-            href={href}
-            onClick={() => {
-              onClick && onClick();
-              setIsModalOpened(false);
-            }}
-            className="flex items-center"
-          >
-            <div>{label}</div>
-            <Icon />
-          </Link>
-        ))}
+      <div
+        className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${style}`}
+      >
+        <div className="flex flex-col gap-5 justify-center items-center p-4">
+          {popOverData.map(({ href, label, Icon, onClick }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => {
+                onClick && onClick();
+                setIsModalOpened(false);
+              }}
+              className="flex items-center"
+            >
+              <div>{label}</div>
+              <Icon />
+            </Link>
+          ))}
+        </div>
       </div>
     </>
   );
