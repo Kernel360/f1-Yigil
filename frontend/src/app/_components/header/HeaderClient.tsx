@@ -12,6 +12,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
   const router = useRouter();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
+  console.log(isModalOpened);
 
   return (
     <>
@@ -33,6 +34,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
             <PopOver
               popOverData={headerPopOverData}
               setIsModalOpened={setIsModalOpened}
+              position="bottom-[-90px] right-4"
             />
           )}
         </>
