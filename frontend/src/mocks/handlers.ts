@@ -1,4 +1,4 @@
 import eventBannerHandler from './api/eventBanner';
-
-const handlers = [...eventBannerHandler];
+import myPlaceHandler from './api/myPlace';
+const handlers = [...eventBannerHandler, ...myPlaceHandler];
 export default handlers;
