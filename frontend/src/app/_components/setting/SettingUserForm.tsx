@@ -2,11 +2,11 @@ import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { regions } from '../regions/constants';
 import { ages } from './contants';
-import { UserType } from './ModifyUser';
+import { TModifyUser } from './ModifyUser';
 
 export interface PropsType {
-  userForm: UserType | undefined;
-  setUserForm: Dispatch<SetStateAction<UserType | undefined>>;
+  userForm: TModifyUser | undefined;
+  setUserForm: Dispatch<SetStateAction<TModifyUser | undefined>>;
 }
 
 export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
@@ -35,7 +35,6 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
       });
     }
   };
-  console.log(userForm);
 
   return (
     <div className="mx-4">

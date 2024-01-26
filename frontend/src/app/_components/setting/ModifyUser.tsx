@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import SettingProfile from './SettingProfile';
 import SettingUserForm from './SettingUserForm';
 
-export interface UserType {
+export interface TModifyUser {
   name?: string | null;
   email?: string | null;
   image?: string | null;
+  postImageFile?: File;
   gender?: string;
   age?: string;
   area?: string[];
@@ -18,12 +19,13 @@ export default function UserModifyForm({
 }: {
   session: Session | null;
 }) {
-  const [userForm, setUserForm] = useState<UserType | undefined>({
+  const [userForm, setUserForm] = useState<TModifyUser | undefined>({
     ...session?.user,
     gender: '',
     age: '',
     area: [],
   });
+  // 디자인 나오면 api 요청 보내는 로직
 
   return (
     <>

@@ -2,7 +2,7 @@
 import { Session } from 'next-auth';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import RoundProfile from '../ui/profile/RoundProfile';
-import { UserType } from './ModifyUser';
+import { TModifyUser } from './ModifyUser';
 import { EventFor } from '@/types/type';
 
 export default function SettingProfile({
@@ -11,13 +11,9 @@ export default function SettingProfile({
   setUserForm,
 }: {
   session: Session | null;
-  userForm: UserType | undefined;
-  setUserForm: Dispatch<SetStateAction<UserType | undefined>>;
+  userForm: TModifyUser | undefined;
+  setUserForm: Dispatch<SetStateAction<TModifyUser | undefined>>;
 }) {
-  const [image, setImage] = useState<string | undefined>(
-    session?.user?.image || '',
-  );
-
   const onChangeImg = (e: EventFor<'input', 'onChange'>) => {
     if (!e.target.files?.length) return;
     const imageFile = e.target.files[0];
@@ -26,10 +22,13 @@ export default function SettingProfile({
     reader.onload = function (e: ProgressEvent<FileReader>) {
       if (!e || !e.target) return;
       if (typeof e.target.result !== 'string') return;
-      setUserForm({ ...userForm, image: e.target.result });
+      setUserForm({
+        ...userForm,
+        image: e.target.result,
+        postImageFile: imageFile,
+      });
     };
   };
-  /** 저장 누르면 서버에 image 보내는 로직 */
 
   return (
     <div>
