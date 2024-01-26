@@ -23,10 +23,14 @@ public class FileUploadEvent extends ApplicationEvent {
 
     public FileUploadEvent(Object source, List<MultipartFile> files, Consumer<AttachFiles> callback) {
         super(source);
-        this.file = file;
+        this.files = files;
         this.callback = callback;
-        fileType = determineFileType(file);
-        validateFileSize(fileType, file.getSize());
+
+        files.forEach(file -> {
+            FileType fileType = determineFileType(file);
+            validateFileSize(fileType, file.getSize());
+            fileTypes.add(fileType);
+        });
     }
 
     private void validateFileSize(FileType fileType, long size) {
@@ -50,6 +54,6 @@ public class FileUploadEvent extends ApplicationEvent {
         }
 
         throw new FileException(ExceptionCode.INVALID_FILE_TYPE);
-     }
+    }
 
 }

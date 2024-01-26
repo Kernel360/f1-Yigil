@@ -48,7 +48,7 @@ public class FavorService {
         Member member = getMemberById(memberId);
         Travel travel = travelService.findTravelById(travelId);
 
-        favorRedisIntegrityService.ensureFavorCounts(post);
+        favorRedisIntegrityService.ensureFavorCounts(travel);
 
         favorRepository.deleteByMemberAndTravel(member, travel);
         decrementFavorCount(travelId);
