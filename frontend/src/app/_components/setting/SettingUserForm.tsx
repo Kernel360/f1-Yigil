@@ -21,14 +21,19 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
   };
 
   const onClickArea = (e: EventFor<'input', 'onClick'>) => {
-    const addedArea = userForm?.area && [
-      ...userForm.area,
-      e.currentTarget.value,
-    ];
-    setUserForm({
-      ...userForm,
-      area: addedArea,
-    });
+    if (userForm?.area?.includes(e.currentTarget.value)) {
+      const popArea = userForm?.area.filter((i) => i !== e.currentTarget.value);
+      setUserForm({ ...userForm, area: popArea });
+    } else {
+      const addedArea = userForm?.area && [
+        ...userForm.area,
+        e.currentTarget.value,
+      ];
+      setUserForm({
+        ...userForm,
+        area: addedArea,
+      });
+    }
   };
   console.log(userForm);
 
@@ -47,7 +52,7 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
         />
       </label>
 
-      <label className="flex flex-col">
+      <div className="flex flex-col">
         <span className="text-gray-500 my-2">성별</span>
         <div className="flex items-center text-gray-300 text-2xl text-center gap-x-2">
           <input
@@ -55,7 +60,7 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
             value={'남성'}
             name="gender"
             className={`grow  rounded-md py-2 cursor-pointer ${
-              userForm?.gender && userForm.gender === '남성'
+              userForm?.gender === '남성'
                 ? 'bg-gray-700 border-white border-[1px] text-white'
                 : 'border-gray-300 border-[1px]'
             }`}
@@ -66,45 +71,53 @@ export default function SettingUserForm({ userForm, setUserForm }: PropsType) {
             value={'여성'}
             name="gender"
             className={`grow border-gray-300 border-[1px] rounded-md py-2 cursor-pointer ${
-              userForm?.gender && userForm.gender === '여성'
+              userForm?.gender === '여성'
                 ? 'bg-gray-700 border-white border-[1px] text-white'
                 : 'border-gray-300 border-[1px]'
             }`}
             onClick={onClickInput}
           />
         </div>
-        {/** 나이와 지역에 대한 contants 파일 만든 후 map으로 표시 및 input onClick 이벤트 사용 */}
-      </label>
-      <label htmlFor="age" className="flex flex-col">
+      </div>
+      <div className="flex flex-col">
         <span className="text-gray-500 my-2">나이</span>
         <div className="flex gap-x-[6px]">
           {ages.map((age) => (
             <input
               key={age}
-              id="age"
               type="button"
               value={age}
-              className="border-[1px] px-4 py-3 text-xl text-gray-500 rounded-md cursor-pointer"
+              name="age"
+              className={`border-[1px] px-4 py-3 text-xl text-gray-500 rounded-md cursor-pointer
+              ${
+                userForm?.age === age
+                  ? 'bg-gray-700 border-white border-[1px] text-white'
+                  : 'border-gray-300 border-[1px]'
+              }`}
               onClick={onClickInput}
             />
           ))}
         </div>
-      </label>
-      <label htmlFor="area" className="flex">
+      </div>
+      <div className="flex flex-col">
         <span className="text-gray-500 my-2">관심 지역</span>
-        <div className="flex gap-x-[6px]">
+        <div className="grid grid-cols-5 gap-x-[6px] gap-y-2">
           {regions.map(({ label }) => (
             <input
               key={label}
-              id="area"
               type="button"
               value={label}
-              className="border-[1px] px-4 py-3 text-xl text-gray-500 rounded-md cursor-pointer"
+              className={`border-[1px] px-4 py-3 text-xl text-gray-500 rounded-md cursor-pointer
+              ${
+                userForm?.area?.includes(label)
+                  ? 'bg-gray-700 border-white border-[1px] text-white'
+                  : 'border-gray-300 border-[1px]'
+              }`}
               onClick={onClickArea}
             />
           ))}
         </div>
-      </label>
+      </div>
     </div>
   );
 }
