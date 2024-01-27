@@ -37,9 +37,16 @@ export default function PopOver({ popOverData, setIsModalOpened }: PropsType) {
         className="fixed inset-0"
         onClick={() => setIsModalOpened(false)}
       ></div>
-      <div className="absolute bottom-[-90px] right-4 w-[134px] h-[104px] bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center gap-5">
+      <div
+        className="absolute bottom-[-90px] right-4 w-[134px] h-[104px] bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center gap-5"
+        onKeyDown={(e) =>
+          (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') &&
+          setIsModalOpened(false)
+        }
+      >
         {popOverData.map(({ href, label, Icon, onClick }) => (
           <Link
+            key={href}
             href={href}
             onClick={() => {
               onClick && onClick();
