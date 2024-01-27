@@ -6,7 +6,7 @@ import RoundProfile from '../ui/profile/RoundProfile';
 export default function MyPageInfo() {
   const { data } = useSession();
   return (
-    <div className="h-[72px] pl-4 flex items-center border-b-[1px]">
+    <div className="h-[72px] ml-4 flex items-center border-b-[1px]">
       <RoundProfile
         img={data?.user?.image as string}
         size={40}
