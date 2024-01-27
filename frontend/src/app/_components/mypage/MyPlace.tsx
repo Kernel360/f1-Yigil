@@ -24,7 +24,7 @@ export default function MyPageMyPlace() {
 
   return (
     <>
-      <div className="flex items-center gap-x-2 ml-4">
+      <div className="flex items-center gap-x-2">
         {myPageMyPlaceTab.map((place, idx) => (
           <div
             key={idx}
