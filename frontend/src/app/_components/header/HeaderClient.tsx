@@ -33,6 +33,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
             <PopOver
               popOverData={headerPopOverData}
               setIsModalOpened={setIsModalOpened}
+              position="bottom-[-90px] right-4"
             />
           )}
         </>
