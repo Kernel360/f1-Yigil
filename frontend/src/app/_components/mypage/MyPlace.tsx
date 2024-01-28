@@ -28,6 +28,7 @@ export default function MyPageMyPlace() {
         {myPageMyPlaceTab.map((place, idx) => (
           <div
             key={idx}
+            tabIndex={0}
             className={`border-2 rounded-full px-4 py-2 text-xl leading-6 cursor-pointer ${
               tabState === idx
                 ? 'bg-gray-700 text-white border-white'
