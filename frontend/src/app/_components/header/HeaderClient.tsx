@@ -7,12 +7,17 @@ import Link from 'next/link';
 import { Session } from 'next-auth';
 import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from './constants';
+import { EventFor } from '@/types/type';
 
 export default function HeaderClient({ session }: { session: Session | null }) {
   const router = useRouter();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
-  console.log(isModalOpened);
+
+  const onKeyDown = (e: EventFor<'span', 'onKeyDown'>) => {
+    if (e.key === 'Enter') setIsModalOpened(true);
+    else if (e.key === 'Escape') setIsModalOpened(false);
+  };
 
   return (
     <>
@@ -22,7 +27,12 @@ export default function HeaderClient({ session }: { session: Session | null }) {
 
       {session ? (
         <>
-          <span onClick={() => setIsModalOpened(true)}>
+          <span
+            className="mr-4"
+            onClick={() => setIsModalOpened(true)}
+            onKeyDown={onKeyDown}
+            tabIndex={0}
+          >
             <RoundProfile
               img={session.user?.image as string}
               size={40}
