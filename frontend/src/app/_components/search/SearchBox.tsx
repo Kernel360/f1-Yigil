@@ -3,16 +3,17 @@
 import { useSearchParams } from 'next/navigation';
 
 import SearchBar from './SearchBar';
+import SearchHistory from './SearchHistory';
 
 export default function SearchBox({ showHistory }: { showHistory?: boolean }) {
   const searchParams = useSearchParams();
 
-  const showResult = showHistory || searchParams.size !== 0;
-
   return (
     <section className="flex flex-col grow">
       <SearchBar cancellable />
-      <section className="grow"></section>
+      <div className="grow">
+        {showHistory ? searchParams.size === 0 && <SearchHistory /> : <></>}
+      </div>
     </section>
   );
 }
