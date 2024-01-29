@@ -5,6 +5,7 @@ import React, {
   SetStateAction,
   useEffect,
 } from 'react';
+import PopOverIcon from './PopOverItem';
 
 interface TPopOver {
   popOverData: {
@@ -59,19 +60,13 @@ export default function PopOver({
         }
       >
         <div className="flex flex-col gap-5 justify-center items-center p-4">
-          {popOverData.map(({ href, label, Icon, onClick }) => (
-            <Link
+          {popOverData.map(({ href, ...data }) => (
+            <PopOverIcon
               key={href}
               href={href}
-              onClick={() => {
-                onClick && onClick();
-                setIsModalOpened(false);
-              }}
-              className="flex items-center"
-            >
-              <div>{label}</div>
-              <Icon />
-            </Link>
+              {...data}
+              setIsModalOpened={setIsModalOpened}
+            />
           ))}
         </div>
       </div>
