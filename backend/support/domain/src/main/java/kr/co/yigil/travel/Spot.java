@@ -6,7 +6,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import kr.co.yigil.File.AttachFiles;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
 import lombok.AccessLevel;

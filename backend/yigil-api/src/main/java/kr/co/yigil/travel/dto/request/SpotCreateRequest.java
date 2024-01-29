@@ -1,7 +1,7 @@
 package kr.co.yigil.travel.dto.request;
 
 
-import kr.co.yigil.File.AttachFiles;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.Spot;
