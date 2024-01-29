@@ -1,4 +1,4 @@
-package kr.co.yigil.File;
+package kr.co.yigil.file;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

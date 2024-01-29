@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/spots")
 public class SpotController {
+
     private final SpotService spotService;
 
-
-    @GetMapping("/{place_id}")
+    @GetMapping("/places/{place_id}")
     public ResponseEntity<SpotFindListResponse> getSpotList(
-        @PathVariable("place_id") Long placeId
+            @PathVariable("place_id") Long placeId
     ) {
         SpotFindListResponse spotFindListResponse = spotService.getSpotList(placeId);
         return ResponseEntity.ok().body(spotFindListResponse);
@@ -39,16 +39,17 @@ public class SpotController {
     @PostMapping
     @MemberOnly
     public ResponseEntity<SpotCreateResponse> createSpot(
-        @ModelAttribute SpotCreateRequest spotCreateRequest,
-        @Auth final Accessor accessor
-    ){
-        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(), spotCreateRequest);
+            @ModelAttribute SpotCreateRequest spotCreateRequest,
+            @Auth final Accessor accessor
+    ) {
+        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(),
+                spotCreateRequest);
         return ResponseEntity.ok().body(spotCreateResponse);
     }
 
     @GetMapping("/{spot_id}")
-    public ResponseEntity<SpotFindResponse> findSpot(
-        @PathVariable("spot_id") Long spotId
+    public ResponseEntity<SpotFindResponse> getSpot(
+            @PathVariable("spot_id") Long spotId
     ) {
         SpotFindResponse spotFindResponse = spotService.getSpot(spotId);
         return ResponseEntity.ok().body(spotFindResponse);
@@ -58,21 +59,23 @@ public class SpotController {
     @PostMapping("/{spot_id}")
     @MemberOnly
     public ResponseEntity<SpotUpdateResponse> updateSpot(
-        @PathVariable("spot_id") Long spotId,
-        @Auth final Accessor accessor,
-        @ModelAttribute SpotUpdateRequest spotUpdateRequest
-    ){
-        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(), spotId, spotUpdateRequest);
+            @PathVariable("spot_id") Long spotId,
+            @Auth final Accessor accessor,
+            @ModelAttribute SpotUpdateRequest spotUpdateRequest
+    ) {
+        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(),
+                spotId, spotUpdateRequest);
         return ResponseEntity.ok().body(spotUpdateResponse);
     }
 
     @DeleteMapping("/{spot_id}")
     @MemberOnly
     public ResponseEntity<SpotDeleteResponse> deleteSpot(
-        @PathVariable("spot_id") Long spotId,
-        @Auth final Accessor accessor
-    ){
-        SpotDeleteResponse spotDeleteResponse = spotService.deleteSpot(accessor.getMemberId(), spotId);
+            @PathVariable("spot_id") Long spotId,
+            @Auth final Accessor accessor
+    ) {
+        SpotDeleteResponse spotDeleteResponse = spotService.deleteSpot(accessor.getMemberId(),
+                spotId);
         return ResponseEntity.ok().body(spotDeleteResponse);
     }
 
