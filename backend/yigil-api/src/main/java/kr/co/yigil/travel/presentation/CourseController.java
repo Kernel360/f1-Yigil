@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
     private final CourseService courseService;
 
-    @GetMapping("/{place_id}")
+    @GetMapping("/places/{place_id}")
     public ResponseEntity<CourseFindListResponse> getCourseList(
         @PathVariable("place_id") Long placeId
     ){
@@ -47,7 +47,7 @@ public class CourseController {
     }
 
     @GetMapping("/{course_id}")
-    public ResponseEntity<CourseFindResponse> findCourse(
+    public ResponseEntity<CourseFindResponse> getCourse(
         @PathVariable("course_id") Long courseId
     ){
         CourseFindResponse courseFindResponse = courseService.getCourse(courseId);
