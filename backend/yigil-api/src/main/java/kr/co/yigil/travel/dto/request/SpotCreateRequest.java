@@ -1,6 +1,7 @@
 package kr.co.yigil.travel.dto.request;
 
 
+import java.util.List;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;

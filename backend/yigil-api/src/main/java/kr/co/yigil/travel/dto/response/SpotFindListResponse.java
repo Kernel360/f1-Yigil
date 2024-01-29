@@ -1,7 +1,6 @@
 package kr.co.yigil.travel.dto.response;
 
 import java.util.List;
-import kr.co.yigil.travel.Spot;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
