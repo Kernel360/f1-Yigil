@@ -26,7 +26,6 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                //.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.anyRequest().permitAll())
                 .securityContext(AbstractHttpConfigurer::disable)
                 .sessionManagement((sessionManagement) -> sessionManagement.maximumSessions(1));
@@ -37,7 +36,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOriginPatterns(List.of("https://yigil.co.kr"));
         configuration.addAllowedMethod(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS").toString());
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 
