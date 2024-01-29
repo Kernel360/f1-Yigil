@@ -13,9 +13,7 @@ public class SpotFindListResponse {
     private List<SpotFindDto> spotFindDtos;
 
     public static SpotFindListResponse from(List<SpotFindDto> spots) {
-        return new SpotFindListResponse(
-                spots
-        );
+        return new SpotFindListResponse(spots);
     }
 
 

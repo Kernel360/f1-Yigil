@@ -1,8 +1,10 @@
 package kr.co.yigil.travel.application;
 
 import java.util.List;
+import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.comment.dto.response.CommentResponse;
+import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
@@ -20,9 +22,9 @@ import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
 import kr.co.yigil.travel.repository.CourseRepository;
 import kr.co.yigil.travel.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +34,23 @@ public class CourseService {
     private final MemberService memberService;
     private final SpotService spotService;
     private final CommentService commentService;
+    private final FavorRedisIntegrityService favorRedisIntegrityService;
+    private final CommentRedisIntegrityService commentRedisIntegrityService;
 
     @Transactional(readOnly = true)
     public CourseFindListResponse getCourseList(Long placeId) {
         List<Course> courses = courseRepository.findBySpotPlaceId(placeId);
         List<CourseFindDto> courseFindDtoList = courses.stream()
-                .map(course -> CourseFindDto.from(course, 1, 1)) // todo 좋아요, 댓글 수 추가
+                .map(this::getCourseFindDto)
                 .toList();
         return CourseFindListResponse.from(courseFindDtoList);
+    }
+
+    @NotNull
+    private CourseFindDto getCourseFindDto(Course course) {
+        Integer favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
+        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
+        return CourseFindDto.from(course, favorCount, commentCount);
     }
 
     @Transactional

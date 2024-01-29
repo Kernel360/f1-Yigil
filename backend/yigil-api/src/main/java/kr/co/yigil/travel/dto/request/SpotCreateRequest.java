@@ -20,8 +20,8 @@ public class SpotCreateRequest {
     private String pointJson;
     private String title;
     private String description;
-//    private List<MultipartFile> files;
-    private MultipartFile file;
+    private List<MultipartFile> files;
+//    private MultipartFile file;
 
     private String placeName;
     private String placeAddress;
