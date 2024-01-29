@@ -6,7 +6,13 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import SearchIcon from '/public/icons/search.svg';
 import XMarkIcon from '/public/icons/x-mark.svg';
 
-export default function SearchBar({ cancellable }: { cancellable?: boolean }) {
+export default function SearchBar({
+  cancellable,
+  addResult,
+}: {
+  cancellable?: boolean;
+  addResult: (result: string) => void;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -55,7 +61,9 @@ export default function SearchBar({ cancellable }: { cancellable?: boolean }) {
             <XMarkIcon className="w-3 h-3 stroke-white stroke-[1.25]" />
           </button>
         )}
-        <SearchIcon className="w-6 h-6 shrink-0" />
+        <button onClick={() => addResult(searchValue)}>
+          <SearchIcon className="w-6 h-6 shrink-0" />
+        </button>
       </div>
       {cancellable && (
         <button className="shrink-0" onClick={() => back()}>
