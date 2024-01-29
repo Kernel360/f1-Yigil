@@ -29,15 +29,20 @@ export default function PopOver({
   const mouseEventPrevent = (e: Event) => {
     e.preventDefault();
   };
+  const keyBoardArrowPrevent = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') e.preventDefault();
+  };
 
   useEffect(() => {
     window.addEventListener('DOMMouseScroll', mouseEventPrevent, false); // older FF
     window.addEventListener('wheel', mouseEventPrevent, { passive: false }); // modern desktop
     window.addEventListener('touchmove', mouseEventPrevent, { passive: false }); // mobile
+    window.addEventListener('keydown', keyBoardArrowPrevent);
     return () => {
       window.removeEventListener('DOMMouseScroll', mouseEventPrevent, false);
       window.removeEventListener('wheel', mouseEventPrevent, false);
       window.removeEventListener('touchmove', mouseEventPrevent);
+      window.removeEventListener('keydown', keyBoardArrowPrevent);
     };
   }, []);
   return (
