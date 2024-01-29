@@ -21,9 +21,9 @@ import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.SocialLoginType;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.post.application.PostService;
@@ -147,7 +147,7 @@ class CommentServiceTest {
         Comment mockChildComment1 = new Comment(2L, "자식1", mockMember, mockPost, mockComment);
         Comment mockChildComment2 = new Comment(3L, "자식1", mockMember, mockPost, mockComment);
 
-        when(commentRepository.findTopLevelCommentsByPostId(anyLong())).thenReturn(List.of(mockComment));
+        when(commentRepository.findTopLevelCommentsByTravelId(anyLong())).thenReturn(List.of(mockComment));
         when(commentRepository.findRepliesByPostIdAndParentId(anyLong(), anyLong())).thenReturn(List.of(mockChildComment1, mockChildComment2));
 
         assertThat(commentService.getCommentList(postId)).isInstanceOf(List.class);
@@ -262,7 +262,7 @@ class CommentServiceTest {
         Comment mockComment2 = new Comment(2L, "content", mockMember, mockPost);
         Comment mockComment3 = new Comment(3L, "content", mockMember, mockPost);
 
-        when(commentRepository.findTopLevelCommentsByPostId(anyLong())).thenReturn(
+        when(commentRepository.findTopLevelCommentsByTravelId(anyLong())).thenReturn(
             List.of(mockComment1, mockComment2, mockComment3));
 
         assertThat(commentService.getTopLevelCommentList(postId)).isInstanceOf(List.class);

@@ -27,4 +27,11 @@ public class Place {
     private Point location;
 
     private String imageUrl;
+
+    public Place(final String name, final String address, final Point location, final String imageUrl) {
+        this.name = name;
+        this.address = address;
+        this.location = location;
+        this.imageUrl = imageUrl;
+    }
 }

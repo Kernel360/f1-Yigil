@@ -3,8 +3,8 @@ package kr.co.yigil.notification.application;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.SocialLoginType;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.notification.domain.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;

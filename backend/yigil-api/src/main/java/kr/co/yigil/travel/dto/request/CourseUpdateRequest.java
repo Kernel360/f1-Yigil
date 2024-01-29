@@ -1,6 +1,7 @@
 package kr.co.yigil.travel.dto.request;
 
 import java.util.List;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.Course;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
@@ -21,13 +22,14 @@ public class CourseUpdateRequest {
     private List<Long> removedSpotIds;
     private List<Long> addedSpotIds;
 
-    public static Course toEntity(Long courseId, CourseUpdateRequest courseUpdateRequest, List<Spot> spots) {
+    public static Course toEntity(Member member, Long courseId, CourseUpdateRequest courseUpdateRequest, List<Spot> spots) {
         return new Course(
-            courseId,
-            GeojsonConverter.convertToLineString(courseUpdateRequest.getLineStringJson()),
-            spots,
-            courseUpdateRequest.getRepresentativeSpotOrder(),
-            courseUpdateRequest.getTitle()
+                member,
+                courseId,
+                GeojsonConverter.convertToLineString(courseUpdateRequest.getLineStringJson()),
+                spots,
+                courseUpdateRequest.getRepresentativeSpotOrder(),
+                courseUpdateRequest.getTitle()
         );
     }
 }

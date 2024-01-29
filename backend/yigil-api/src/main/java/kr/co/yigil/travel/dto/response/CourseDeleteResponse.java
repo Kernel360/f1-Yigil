@@ -1,11 +1,13 @@
-package kr.co.yigil.post.dto.response;
+package kr.co.yigil.travel.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDeleteResponse {
+public class CourseDeleteResponse {
     private String message;
+
 }

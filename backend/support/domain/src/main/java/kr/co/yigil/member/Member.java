@@ -1,4 +1,4 @@
-package kr.co.yigil.member.domain;
+package kr.co.yigil.member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

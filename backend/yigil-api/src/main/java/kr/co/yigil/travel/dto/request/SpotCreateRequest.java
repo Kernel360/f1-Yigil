@@ -1,8 +1,11 @@
 package kr.co.yigil.travel.dto.request;
 
+
+import kr.co.yigil.File.AttachFiles;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,17 +15,30 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SpotCreateRequest {
+
     private String pointJson;
     private String title;
     private String description;
+//    private List<MultipartFile> files;
     private MultipartFile file;
 
-    public static Spot toEntity(SpotCreateRequest spotCreateRequest) {
+    private String placeName;
+    private String placeAddress;
+    private String placePointJson;
+
+    private double rate;
+
+
+    public static Spot toEntity(Member member, Place place, SpotCreateRequest spotCreateRequest, AttachFiles attachFiles) {
         return new Spot(
-            GeojsonConverter.convertToPoint(spotCreateRequest.getPointJson()),
-            spotCreateRequest.getTitle(),
-            spotCreateRequest.getDescription(),
-                null
+                member,
+                GeojsonConverter.convertToPoint(spotCreateRequest.getPointJson()),
+                false,
+                spotCreateRequest.getTitle(),
+                spotCreateRequest.getDescription(),
+                attachFiles,
+                place,
+                spotCreateRequest.getRate()
         );
     }
 }

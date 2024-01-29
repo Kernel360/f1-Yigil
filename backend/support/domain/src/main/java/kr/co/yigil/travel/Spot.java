@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import kr.co.yigil.File.AttachFiles;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +16,6 @@ import lombok.Setter;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.locationtech.jts.geom.Point;
-import org.springframework.data.relational.core.mapping.Embedded.Empty;
 
 @Entity
 @Getter
@@ -44,32 +44,32 @@ public class Spot extends Travel{
 
     private double rate;
 
-    public Spot(final Long id) {
-        super.setId(id);
-    }
-
-    public Spot(final Long id,final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles) {
-        super.setId(id);
+    public Spot(final Long id, Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final Place place, final double rate) {
+        super(id, member);
         this.location = location;
         this.isInCourse = isInCourse;
         this.title = title;
         this.description = description;
         this.attachFiles = attachFiles;
+        this.place = place;
+        this.rate = rate;
     }
-    public Spot(final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles) {
+    public Spot(Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final Place place, final double rate) {
+        super(member);
         this.location = location;
         this.isInCourse = isInCourse;
         this.title = title;
         this.description = description;
         this.attachFiles = attachFiles;
+        this.place = place;
+        this.rate = rate;
     }
 
-    public Spot(final Point location, final String title, final String description, final AttachFiles attachFiles) {
-        this.location = location;
-        this.isInCourse = false;
+    public void update(AttachFiles attachFiles, String title, String description, double rate) {
+        this.attachFiles = attachFiles;
         this.title = title;
         this.description = description;
-        this.attachFiles = attachFiles;
+        this.rate = rate;
     }
 
 }
