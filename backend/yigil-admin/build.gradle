@@ -6,7 +6,7 @@ plugins {
 }
 
 bootJar {
-    mainClass = 'kr.co.yigil.BackendApplication'
+    mainClass = 'kr.co.yigil.AdminApplication'
 }
 
 group = 'kr.co.yigil'

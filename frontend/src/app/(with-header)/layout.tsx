@@ -1,17 +1,18 @@
-import Header from '@/app/_components/header/Header';
-
+import { getServerSession } from 'next-auth';
 import type { ReactNode } from 'react';
 
 import '../globals.css';
+import Header from '../_components/header/Header';
 
-export default function WithHeaderLayout({
+export default async function WithHeaderLayout({
   children,
 }: {
   children: ReactNode;
 }) {
+  const session = await getServerSession();
   return (
     <section className="w-full flex flex-col">
-      <Header />
+      <Header session={session} />
       {children}
     </section>
   );
