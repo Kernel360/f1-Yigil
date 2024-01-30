@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import kr.co.yigil.File.AttachFile;
 import kr.co.yigil.File.FileType;
 import lombok.RequiredArgsConstructor;
 
@@ -25,18 +26,21 @@ public class FileUploadEventListener {
 
     @Async
     @EventListener
-    public Future<String> handleFileUpload(FileUploadEvent event) throws IOException {
+    public Future<AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
         MultipartFile file = event.getFile();
         FileType fileType = event.getFileType();
         String fileName = generateUniqueFileName(file.getOriginalFilename());
         String s3Path = getS3Path(fileType, fileName);
+
+        AttachFile attachFile = new AttachFile(fileType, s3Path, file.getOriginalFilename(),
+                file.getSize());
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
         amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
         event.getCallback().accept(s3Path);
 
-        return CompletableFuture.completedFuture(s3Path);
+        return CompletableFuture.completedFuture(attachFile);
     }
 
     private String getS3Path(FileType fileType, String fileName) {

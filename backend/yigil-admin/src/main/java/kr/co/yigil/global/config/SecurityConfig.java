@@ -22,10 +22,9 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                //.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.anyRequest().permitAll())
                 .securityContext(AbstractHttpConfigurer::disable)
-                .sessionManagement((sessionManagement) -> sessionManagement.maximumSessions(1));
+                .sessionManagement((sessionManagement) -> sessionManaement.maximumSessions(1));
         return http.build();
     }
 
