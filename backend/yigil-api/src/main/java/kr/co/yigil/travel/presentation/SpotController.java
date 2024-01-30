@@ -55,8 +55,8 @@ public class SpotController {
     public ResponseEntity<SpotInfoResponse> getSpotInfo(
             @PathVariable("spot_id") Long spotId
     ) {
-        SpotFindResponse spotFindResponse = spotService.getSpot(spotId);
-        return ResponseEntity.ok().body(spotFindResponse);
+        SpotInfoResponse spotInfoResponse = spotService.getSpotInfo(spotId);
+        return ResponseEntity.ok().body(spotInfoResponse);
     }
 
 

@@ -1,7 +1,5 @@
 package kr.co.yigil.file;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.FileException;
@@ -15,20 +13,16 @@ public class FileUploadEvent extends ApplicationEvent {
     private static final long MAX_IMAGE_SIZE = 10485760;
     private static final long MAX_VIDEO_SIZE = MAX_IMAGE_SIZE * 5;
 
-    private List<MultipartFile> files;
-    private List<FileType> fileTypes = new ArrayList<>();
-    private Consumer<AttachFiles> callback;
+    private final MultipartFile file;
+    private final FileType fileType;
+    private final Consumer<AttachFile> callback;
 
-    public FileUploadEvent(Object source, List<MultipartFile> files, Consumer<AttachFiles> callback) {
+    public FileUploadEvent(Object source, MultipartFile file, Consumer<AttachFile> callback) {
         super(source);
-        this.files = files;
+        this.file = file;
         this.callback = callback;
-
-        files.forEach(file -> {
-            FileType fileType = determineFileType(file);
-            validateFileSize(fileType, file.getSize());
-            fileTypes.add(fileType);
-        });
+        this.fileType = determineFileType(file);
+        validateFileSize(fileType, file.getSize());
     }
 
     private void validateFileSize(FileType fileType, long size) {

@@ -34,4 +34,11 @@ public class Place {
         this.location = location;
         this.imageUrl = imageUrl;
     }
+    public Place(Long id, final String name, final String address, final Point location, final String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.location = location;
+        this.imageUrl = imageUrl;
+    }
 }

@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
-    private final TravelRepository travelRepository;
+    private final SpotRepository spotRepository;
     private final MemberService memberService;
     private final SpotService spotService;
     private final CommentService commentService;
@@ -85,7 +85,7 @@ public class CourseService {
     public CourseUpdateResponse updateCourse(Long courseId, Long memberId, CourseUpdateRequest courseUpdateRequest) {
         Member member = memberService.findMemberById(memberId);
         List<Long> spotIdList = courseUpdateRequest.getSpotIds();
-        List<Spot> spots = travelRepository.findAllById(spotIdList).stream().map(Spot.class::cast).toList();
+        List<Spot> spots = spotRepository.findAllById(spotIdList);
 
         for(Long id: courseUpdateRequest.getAddedSpotIds()){
             Spot spot = spotService.findSpotById(id);

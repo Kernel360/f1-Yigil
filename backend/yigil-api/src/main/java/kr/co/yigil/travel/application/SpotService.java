@@ -1,18 +1,19 @@
 package kr.co.yigil.travel.application;
 
+import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.place.Place;
-import kr.co.yigil.place.dto.request.PlaceDto;
-import kr.co.yigil.place.repository.PlaceRepository;
+import kr.co.yigil.place.application.PlaceService;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
 import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class SpotService {
     private final MemberService memberService;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final CommentService commentService;
-    private final PlaceRepository placeRepository;
+    private final PlaceService placeService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
 

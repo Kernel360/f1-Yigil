@@ -3,6 +3,7 @@ package kr.co.yigil.travel.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -31,7 +32,6 @@ import kr.co.yigil.travel.dto.response.SpotInfoResponse;
 import kr.co.yigil.travel.dto.response.SpotListResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import kr.co.yigil.travel.repository.SpotRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -162,7 +162,7 @@ public class SpotServiceTest {
 
         doAnswer(invocation -> {
             FileUploadEvent event = invocation.getArgument(0);
-            event.getCallback().accept(mockAttachFiles);
+            event.getCallback().accept(mockAttachFile);
             return null;
         }).when(applicationEventPublisher).publishEvent(any(FileUploadEvent.class));
 

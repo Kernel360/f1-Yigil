@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CourseInfoResponse {
 
+    private Long courseId;
     private String title;
 
     private String memberNickname;
@@ -27,7 +28,8 @@ public class CourseInfoResponse {
 
     public static CourseInfoResponse from(Course course, List<Spot> spots,
             List<CommentResponse> comments) {
-        return new CourseFindResponse(
+        return new CourseInfoResponse(
+                course.getId(),
                 course.getTitle(),
                 course.getMember().getNickname(),
                 course.getMember().getProfileImageUrl(),
