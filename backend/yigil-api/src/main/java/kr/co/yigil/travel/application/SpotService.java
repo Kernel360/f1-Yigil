@@ -96,14 +96,14 @@ public class SpotService {
     }
 
 
-    @Transactional(readOnly = true)
+
     public Spot findSpotByIdAndMemberId(Long spotId, Long memberId) {
         return spotRepository.findByIdAndMemberId(spotId, memberId).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
     }
 
-    @Transactional(readOnly = true)
+
     public Spot findSpotById(Long spotId) {
         return spotRepository.findById(spotId).orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
