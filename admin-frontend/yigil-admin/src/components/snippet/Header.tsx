@@ -12,11 +12,19 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "@/components/snippet/mode-toggle";
+import UserInfo from "@/components/snippet/UserInfo";
+
+import ReactComponent from "@/assets/logo.svg?react";
 
 export function Header() {
   return (
     <NavigationMenu>
-      <NavigationMenuList className="justify-between">
+      <NavigationMenuList className=" flex justify-between">
+        <NavigationMenuItem>
+          <Link to="/">
+            <ReactComponent className="w-[100px] h-[58px] h-4 stroke-black stroke-[2px] fill-slate-100" />
+          </Link>
+        </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>서비스 관리</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -44,6 +52,9 @@ export function Header() {
               </ListItem>
             </ul>
           </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <UserInfo />
         </NavigationMenuItem>
         <NavigationMenuItem>
           <ModeToggle />

@@ -10,11 +10,10 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <header>
+      <header className="border-b-4 px-20 py-2">
         <Header />
       </header>
       <main>{children}</main>
-      <footer>여기는 푸터입니다</footer>
     </ThemeProvider>
   );
 };
