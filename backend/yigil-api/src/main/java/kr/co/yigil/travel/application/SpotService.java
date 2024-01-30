@@ -44,7 +44,11 @@ public class SpotService {
     public SpotFindListResponse getSpotList(Long placeId) {
         List<Spot> spots = spotRepository.findAllByPlaceIdAndIsInCourseFalse(placeId);
         List<SpotFindDto> spotFindDtoList = spots.stream()
-                .map(spot -> SpotFindDto.from(spot,1,1))// todo 좋아요, 댓글 수 추가
+                .map(spot -> SpotFindDto.from(
+                        spot,
+                        favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
+                        commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount())
+                )
                 .toList();
         return SpotFindListResponse.from(spotFindDtoList); // todo 페이징 적용
     }
@@ -53,11 +57,9 @@ public class SpotService {
     public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {
         Member member = memberService.findMemberById(memberId);
 
-
-        FileUploadEvent event = new FileUploadEvent(this, List.of(spotCreateRequest.getFile()),
+        FileUploadEvent event = new FileUploadEvent(this, spotCreateRequest.getFiles(),
                 attachFiles -> {
-                    Place place = placeRepository.findByName(
-                                    spotCreateRequest.getPlaceName())
+                    Place place = placeRepository.findByName(spotCreateRequest.getPlaceName())
                             .orElseGet(
                                     () -> placeRepository.save(PlaceDto.toEntity(
                                             spotCreateRequest.getPlaceName(),
@@ -75,21 +77,20 @@ public class SpotService {
     public SpotFindResponse getSpot(Long spotId) {
         Spot spot = findSpotById(spotId);
         List<CommentResponse> comments = commentService.getCommentList(spotId);
-        return SpotFindResponse.from(spot, comments); // todo 세부 필드 추가
+        return SpotFindResponse.from(spot, comments);
     }
 
     @Transactional
     public SpotUpdateResponse updateSpot(Long memberId, Long spotId,
             SpotUpdateRequest spotUpdateRequest) {
-        Spot spot = findSpotByIdAndMemberId(spotId, memberId);
+        Member member = memberService.findMemberById(memberId);
 
-        FileUploadEvent event = new FileUploadEvent(this, spotUpdateRequest.getFiles(),
+        FileUploadEvent event = new FileUploadEvent(this, List.of(spotUpdateRequest.getFiles()),
                 attachFiles -> {
-                    spot.update(attachFiles, spotUpdateRequest.getTitle(),
-                            spotUpdateRequest.getDescription(), spotUpdateRequest.getRate());
+                    SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, attachFiles);
+
                 });
         applicationEventPublisher.publishEvent(event);
-
 
         return new SpotUpdateResponse("스팟 정보 수정 성공");
     }

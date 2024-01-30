@@ -1,6 +1,7 @@
 package kr.co.yigil.travel.dto.request;
 
 
+import java.util.List;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
@@ -19,8 +20,8 @@ public class SpotCreateRequest {
     private String pointJson;
     private String title;
     private String description;
-//    private List<MultipartFile> files;
-    private MultipartFile file;
+    private List<MultipartFile> files;
+//    private MultipartFile file;
 
     private String placeName;
     private String placeAddress;
