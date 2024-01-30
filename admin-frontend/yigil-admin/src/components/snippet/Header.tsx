@@ -16,7 +16,7 @@ import { ModeToggle } from "@/components/snippet/mode-toggle";
 export function Header() {
   return (
     <NavigationMenu>
-      <NavigationMenuList>
+      <NavigationMenuList className="justify-between">
         <NavigationMenuItem>
           <NavigationMenuTrigger>서비스 관리</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -25,7 +25,7 @@ export function Header() {
                 <NavigationMenuLink asChild>
                   <a
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="https://yigil.vercel.app/"
+                    href="https://yigil.co.kr/"
                   >
                     <div className="mb-2 mt-4 text-lg font-medium">
                       yigil-log

@@ -12,6 +12,9 @@ declare global {
 
       KAKAO_ID: string;
       KAKAO_SECRET: string;
+
+      BASE_URL: string;
+      NEXT_PUBLIC_BASE_URL: string;
     }
   }
 }

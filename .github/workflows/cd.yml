@@ -25,6 +25,11 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
+    ## docker-compose 설치
+    - name: Set up Docker-Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
     ## docker-compose.yml 생성 후 secret 값 복붙
     - uses: actions/checkout@v3
     - run: touch docker-compose.yml
@@ -44,7 +49,12 @@ jobs:
         sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
-        cat ./yigil-api/src/main/resources/*
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+    ## Dockerfile secrets 값 주입
+    - name: Set Dockerfile
+      run: |
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/Dockerfile
+        sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/Dockerfile
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -58,11 +68,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     # Docker 이미지 빌드
-    - name: Docker Image Build
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }} . --platform=linux/amd64
+    - name: Docker-Compose Image Build
+      run: docker-compose build
     # DockerHub Push
     - name: DockerHub Push
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.PROJECT_NAME }}
+      run: docker-compose push
     
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
@@ -73,6 +83,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         
         script: |
-          sudo docker-compose pull
           sudo docker-compose down
+          sudo docker image prune -af
+          sudo docker-compose pull
           sudo docker-compose up -d
