@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseFindResponse {
+public class CourseInfoResponse {
 
     private String title;
 
@@ -25,7 +25,7 @@ public class CourseFindResponse {
 
     private List<CommentResponse> comments;
 
-    public static CourseFindResponse from(Course course, List<Spot> spots,
+    public static CourseInfoResponse from(Course course, List<Spot> spots,
             List<CommentResponse> comments) {
         return new CourseFindResponse(
                 course.getTitle(),

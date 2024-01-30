@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpotFindListResponse {
+public class SpotListResponse {
 
     private List<SpotFindDto> spotFindDtos;
 
-    public static SpotFindListResponse from(List<SpotFindDto> spots) {
-        return new SpotFindListResponse(spots);
+    public static SpotListResponse from(List<SpotFindDto> spots) {
+        return new SpotListResponse(spots);
     }
 
 

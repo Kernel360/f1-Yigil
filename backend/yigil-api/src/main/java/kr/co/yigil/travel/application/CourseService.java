@@ -16,11 +16,11 @@ import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseCreateResponse;
 import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
 import kr.co.yigil.travel.dto.response.CourseFindDto;
-import kr.co.yigil.travel.dto.response.CourseFindListResponse;
-import kr.co.yigil.travel.dto.response.CourseFindResponse;
+import kr.co.yigil.travel.dto.response.CourseInfoResponse;
+import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
 import kr.co.yigil.travel.repository.CourseRepository;
-import kr.co.yigil.travel.repository.TravelRepository;
+import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -38,12 +38,12 @@ public class CourseService {
     private final CommentRedisIntegrityService commentRedisIntegrityService;
 
     @Transactional(readOnly = true)
-    public CourseFindListResponse getCourseList(Long placeId) {
+    public CourseListResponse getCourseList(Long placeId) {
         List<Course> courses = courseRepository.findBySpotPlaceId(placeId);
         List<CourseFindDto> courseFindDtoList = courses.stream()
                 .map(this::getCourseFindDto)
                 .toList();
-        return CourseFindListResponse.from(courseFindDtoList);
+        return CourseListResponse.from(courseFindDtoList);
     }
 
     @NotNull
@@ -64,16 +64,16 @@ public class CourseService {
 
         course.getSpots().forEach(spot -> spot.setInCourse(true));
 
-        return new CourseCreateResponse("경로 생성 성공");
+        return new CourseCreateResponse(course.getId(), "경로 생성 성공");
     }
 
     @Transactional(readOnly = true)
-    public CourseFindResponse getCourse(Long courseId) {
+    public CourseInfoResponse getCourseInfo(Long courseId) {
         Course course = findCourseById(courseId);
         List<Spot> spots = course.getSpots();
 
         List<CommentResponse> comments = commentService.getCommentList(course.getId());
-        return CourseFindResponse.from(course, spots, comments);
+        return CourseInfoResponse.from(course, spots, comments);
     }
 
     private Course findCourseById(Long courseId) {
@@ -98,9 +98,8 @@ public class CourseService {
         }
 
         Course newCourse = CourseUpdateRequest.toEntity(member, courseId, courseUpdateRequest, spots);
-        Course updatedCourse = courseRepository.save(newCourse);
-
-        return CourseUpdateResponse.from(member, updatedCourse, spots);
+        courseRepository.save(newCourse);
+        return new CourseUpdateResponse("경로 수정 성공");
     }
 
     @Transactional

@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseFindListResponse {
+public class CourseListResponse {
     private List<CourseFindDto> courseFindDtos;
 
-    public static CourseFindListResponse from(List<CourseFindDto> courses) {
-        return new CourseFindListResponse(
+    public static CourseListResponse from(List<CourseFindDto> courses) {
+        return new CourseListResponse(
                 courses
         );
     }

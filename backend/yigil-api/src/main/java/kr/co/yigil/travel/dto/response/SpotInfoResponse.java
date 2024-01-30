@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpotFindResponse {
+public class SpotInfoResponse {
 
+    private Long spotId;
     private String title;
     private String description;
 
@@ -26,9 +27,9 @@ public class SpotFindResponse {
 
     private List<CommentResponse> comments;
 
-    public static SpotFindResponse from(Spot spot, List<CommentResponse> comments) {
-        return new SpotFindResponse(
-
+    public static SpotInfoResponse from(Spot spot, List<CommentResponse> comments) {
+        return new SpotInfoResponse(
+                spot.getId(),
                 spot.getTitle(),
                 spot.getDescription(),
                 spot.getMember().getNickname(),

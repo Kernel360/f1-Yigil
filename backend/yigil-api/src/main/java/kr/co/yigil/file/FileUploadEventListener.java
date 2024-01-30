@@ -3,8 +3,6 @@ package kr.co.yigil.file;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
@@ -22,33 +20,23 @@ public class FileUploadEventListener {
 
     private final String bucketName = "cdn.yigil.co.kr";
 
-
     @Async
     @EventListener
-    public Future<AttachFiles> handleFileUpload(FileUploadEvent event) throws IOException {
-        List<MultipartFile> files = event.getFiles();
-        List<FileType> fileTypes = event.getFileTypes();
+    public Future<AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
+        MultipartFile file = event.getFile();
+        FileType fileType = event.getFileType();
+        String fileName = generateUniqueFileName(file.getOriginalFilename());
+        String s3Path = getS3Path(fileType, fileName);
 
-        AttachFiles attachFiles = new AttachFiles(new ArrayList<>());
+        AttachFile attachFile = new AttachFile(fileType, s3Path, file.getOriginalFilename(),
+                file.getSize());
 
-        for(int i=0; i<files.size(); i++) {
-            MultipartFile file = files.get(i);
-            FileType fileType = fileTypes.get(i);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
+        event.getCallback().accept(attachFile);
 
-            String fileName = generateUniqueFileName(file.getOriginalFilename());
-            String s3Path = getS3Path(fileType, fileName);
-
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentLength(file.getSize());
-            amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
-
-            AttachFile attachFile = new AttachFile(FileType.IMAGE, s3Path, file.getOriginalFilename(),
-                    file.getSize());
-            attachFiles.addFile(attachFile);
-        }
-        event.getCallback().accept(attachFiles);
-
-        return CompletableFuture.completedFuture(attachFiles);
+        return CompletableFuture.completedFuture(attachFile);
     }
 
     private String getS3Path(FileType fileType, String fileName) {
