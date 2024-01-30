@@ -15,7 +15,7 @@ export default function SearchItem({
   erasable?: boolean;
 }) {
   return (
-    <div className="flex justify-between" key={item}>
+    <div className="flex justify-between">
       <Link className="flex py-3 grow items-center" href={href}>
         <span className="flex gap-1 items-center">
           <SearchIcon className="w-6 h-6 mr-4" />
