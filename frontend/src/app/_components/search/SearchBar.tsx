@@ -14,9 +14,10 @@ export default function SearchBar({
   addResult: (result: string) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { back, replace } = useRouter();
+  const { back, push, replace } = useRouter();
 
   const initialSearchValue = searchParams.get('keyword') || '';
 
@@ -34,6 +35,13 @@ export default function SearchBar({
     }
 
     replace(`${pathname}?${params.toString()}`);
+  }
+
+  function handleSearch() {
+    addResult(searchValue);
+    const params = new URLSearchParams(searchParams);
+
+    push(`${pathname}/result?${params.toString()}`);
   }
 
   function handleErase() {
@@ -61,7 +69,8 @@ export default function SearchBar({
             <XMarkIcon className="w-3 h-3 stroke-white stroke-[1.25]" />
           </button>
         )}
-        <button onClick={() => addResult(searchValue)}>
+        {/*  */}
+        <button onClick={handleSearch}>
           <SearchIcon className="w-6 h-6 shrink-0" />
         </button>
       </div>

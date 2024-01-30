@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 
 import SearchBar from './SearchBar';
 import SearchHistory from './SearchHistory';
@@ -17,8 +16,6 @@ function parseSearchHistory(historyStr: string | null) {
 }
 
 export default function SearchBox({ showHistory }: { showHistory?: boolean }) {
-  const searchParams = useSearchParams();
-
   const [searchResults, setSearchResults] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       return parseSearchHistory(localStorage.getItem(SEARCH_HISTORY_KEY));
@@ -42,8 +39,10 @@ export default function SearchBox({ showHistory }: { showHistory?: boolean }) {
   }
 
   function addResult(result: string) {
-    const nextResults = [...searchResults, result];
-    setSearchResults(nextResults);
+    if (!searchResults.includes(result)) {
+      const nextResults = [...searchResults, result];
+      setSearchResults(nextResults);
+    }
   }
 
   const searchHistoryProps = {
@@ -52,15 +51,12 @@ export default function SearchBox({ showHistory }: { showHistory?: boolean }) {
     searchResults,
   };
 
+  // 검색어 자동완성 기능 구현될 시 conditional rendering
   return (
     <section className="flex flex-col grow">
       <SearchBar addResult={addResult} cancellable />
-      <div className="grow">
-        {showHistory ? (
-          searchParams.size === 0 && <SearchHistory {...searchHistoryProps} />
-        ) : (
-          <></>
-        )}
+      <div className="grow" aria-label="Result/History container">
+        {showHistory && <SearchHistory {...searchHistoryProps} />}
       </div>
     </section>
   );

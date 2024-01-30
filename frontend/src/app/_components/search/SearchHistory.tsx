@@ -1,10 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 
-import SearchIcon from '/public/icons/search.svg';
-import XMarkIcon from '/public/icons/x-mark.svg';
+import SearchItem from './SearchItem';
 
 export default function SearchHistory({
   deleteResult,
@@ -36,17 +34,13 @@ export default function SearchHistory({
       </div>
       <ul className="pl-3 py-4 grow">
         {searchResults.map((item) => (
-          <div className="flex justify-between" key={item}>
-            <Link className="flex py-3 grow items-center" href="#">
-              <span className="flex gap-1 items-center">
-                <SearchIcon className="w-6 h-6 mr-4" />
-                {item}
-              </span>
-            </Link>
-            <button className="p-3" onClick={() => deleteResult(item)}>
-              <XMarkIcon className="w-4 h-4" />
-            </button>
-          </div>
+          <SearchItem
+            key={item}
+            item={item}
+            href="#"
+            deleteResult={deleteResult}
+            erasable
+          />
         ))}
       </ul>
     </section>
