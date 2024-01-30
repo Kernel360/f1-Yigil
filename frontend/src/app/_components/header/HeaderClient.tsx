@@ -22,7 +22,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
   return (
     <>
       <div className="ml-4 cursor-pointer" onClick={() => router.push('/')}>
-        <HeaderLogo />
+        <HeaderLogo className="w-[145px] h-[48px]" />
       </div>
 
       {session ? (
