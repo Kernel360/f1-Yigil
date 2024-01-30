@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
-import MyPagePlaceItem from './MyPagePlaceItem';
+import MyPagePlaceItem, { TMyPagePlaceItem } from './MyPagePlaceItem';
 
-interface PropsType {
-  placeList: {
-    post_id: number;
-    travel_id: number;
-    title: string;
-    imageUrl: string;
-    description: string;
-    isSecret: boolean;
-    post_date: string;
-  }[];
-}
-
-export default function MyPagePlaceList({ placeList }: PropsType) {
+export default function MyPagePlaceList({
+  placeList,
+}: {
+  placeList: TMyPagePlaceItem[];
+}) {
   const [selected, setSelected] = useState('');
 
   const onChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelected(e.target.value);
   };
-  console.log(placeList);
   // 필터링 처리 방법 백엔드 요청 | 프론트에서 처리
   return (
-    <div>
+    <>
       <div className="flex justify-end">
         <select
           className="mr-4 pr-1 text-sm"
@@ -34,28 +25,9 @@ export default function MyPagePlaceList({ placeList }: PropsType) {
           <option value="거리순">거리순</option>
         </select>
       </div>
-      {placeList.map(
-        ({
-          imageUrl,
-          post_id,
-          travel_id,
-          title,
-          description,
-          isSecret,
-          post_date,
-        }) => (
-          <MyPagePlaceItem
-            key={travel_id}
-            travel_id={travel_id}
-            imageUrl={imageUrl}
-            title={title}
-            description={description}
-            post_id={post_id}
-            isSecret={isSecret}
-            post_date={post_date}
-          />
-        ),
-      )}
-    </div>
+      {placeList.map(({ travel_id, ...data }) => (
+        <MyPagePlaceItem key={travel_id} travel_id={travel_id} {...data} />
+      ))}
+    </>
   );
 }

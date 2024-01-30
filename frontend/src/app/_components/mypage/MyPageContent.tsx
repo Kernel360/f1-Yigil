@@ -9,12 +9,12 @@ export default function MyPageContent() {
 
   return (
     <>
-      <div className="flex items-center">
+      <div className=" grid grid-cols-2 items-center">
         {myPageTabs.map((tab, idx) => (
           <div
             key={idx}
             tabIndex={0}
-            className={`w-[214px] h-[64px] flex justify-center items-center text-2xl cursor-pointer ${
+            className={`w-full h-[64px] flex justify-center items-center text-2xl cursor-pointer ${
               tabState === idx
                 ? 'text-black border-b-2 border-black'
                 : 'text-gray-300 border-b-2 border-white'
@@ -26,7 +26,7 @@ export default function MyPageContent() {
         ))}
       </div>
       {tabState === 0 ? (
-        <div className="mt-3">
+        <div className="">
           <MyPageMyPlace />
         </div>
       ) : (

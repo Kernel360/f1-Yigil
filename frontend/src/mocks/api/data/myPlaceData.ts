@@ -6,7 +6,8 @@ export const myPlaceData = [
     imageUrl: 'https://picsum.photos/seed/picsum/400/174',
     description: '설명',
     isSecret: false,
-    post_date: new Date(Date.now()).toString(),
+    post_date: new Date(Date.now()).toLocaleString(),
+    rating: 5,
   },
   {
     post_id: 2,
@@ -15,6 +16,7 @@ export const myPlaceData = [
     imageUrl: 'https://picsum.photos/seed/picsum/400/174',
     description: '설영우',
     isSecret: false,
-    post_date: new Date(Date.now()).toString(),
+    post_date: new Date(Date.now()).toLocaleString(),
+    rating: 4,
   },
 ];

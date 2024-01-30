@@ -24,15 +24,13 @@ export default function MyPageMyPlace() {
 
   return (
     <>
-      <div className="flex items-center gap-x-2 ml-4">
+      <div className="items-center grid grid-cols-4">
         {myPageMyPlaceTab.map((place, idx) => (
           <div
             key={idx}
             tabIndex={0}
-            className={`border-2 rounded-full px-4 py-2 text-xl leading-6 cursor-pointer ${
-              tabState === idx
-                ? 'bg-gray-700 text-white border-white'
-                : 'border-gray-500'
+            className={`py-[14px] flex justify-center text-xl leading-6 cursor-pointer ${
+              tabState !== idx && 'text-gray-300 bg-gray-200'
             } `}
             onClick={() => setTabState(idx)}
           >
@@ -40,6 +38,7 @@ export default function MyPageMyPlace() {
           </div>
         ))}
       </div>
+
       <div className="mt-3">
         <MyPagePlaceList placeList={placeList} />
       </div>
