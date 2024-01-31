@@ -52,7 +52,7 @@ export default function SearchBar({
 
   return (
     <div className="flex gap-4 px-6">
-      <div className="px-4 py-2 bg-[#e5e7eb] shadow-xl rounded-full flex gap-4 items-center">
+      <div className="w-full px-4 py-2 bg-[#e5e7eb] shadow-xl rounded-full flex gap-4 items-center">
         <input
           className="w-full text-lg bg-transparent outline-none focus:border-b-2 focus:border-black"
           ref={inputRef}
