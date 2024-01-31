@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "./Layout";
+import withAuthProtection from "./snippet/withAuthProtection";
 
 const HomePage: React.FC = () => {
   return (
@@ -10,4 +11,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default withAuthProtection(HomePage);
