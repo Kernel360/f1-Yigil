@@ -25,7 +25,7 @@ export default function SearchHistory({
   }
 
   return (
-    <section className="mt-4 py-4 border-t-2">
+    <section className="mt-4 pl-8 pr-4 py-4 border-t-2">
       <div className="flex justify-between">
         <p className="text-xl font-semibold">최근 검색어</p>
         <button className="text-gray-500" onClick={() => deleteResultAll()}>
