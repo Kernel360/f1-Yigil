@@ -2,7 +2,6 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import XLogo from '/public/icons/x.svg';
-
 interface TButtonProps {
   containerStyle?: string;
   style?: string;
@@ -10,13 +9,10 @@ interface TButtonProps {
 
 export default function CloseButton({ containerStyle, style }: TButtonProps) {
   const router = useRouter();
+
   return (
-    <div
-      className={`${containerStyle}`}
-      onClick={() => router.back()}
-      tabIndex={0}
-    >
-      <XLogo className={`cursor-pointer ${style}`} />
-    </div>
+    <button className={containerStyle} onClick={() => router.back()}>
+      <XLogo className={style} />
+    </button>
   );
 }
