@@ -13,6 +13,7 @@ export default function MyPageContent() {
         {myPageTabs.map((tab, idx) => (
           <div
             key={idx}
+            tabIndex={0}
             className={`w-[214px] h-[64px] flex justify-center items-center text-2xl cursor-pointer ${
               tabState === idx
                 ? 'text-black border-b-2 border-black'

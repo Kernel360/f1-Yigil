@@ -42,7 +42,7 @@ public class LoginControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @DisplayName("로그인이 되었을 때 200 응답과 response가 잘 반환되는지")
+    @DisplayName("카카오 로그인이 요청 되었을 때 200 응답과 response가 잘 반환되는지")
     @Test
     void whenLogin_thenReturns200AndLoginResponse() throws Exception {
         String provider = "kakao";
@@ -52,7 +52,7 @@ public class LoginControllerTest {
         given(loginStrategyManager.getLoginStrategy(provider)).willReturn(mockStrategy);
         given(mockStrategy.login(loginRequest, "mockAccessToken", null)).willReturn(mockResponse);
 
-        mockMvc.perform(post("/api/v1/login/" + provider)
+        mockMvc.perform(post("/api/v1/login")
                         .header("Authorization", "Bearer mockAccessToken")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":123, \"nickname\":\"TestUser\", \"profileImageUrl\":\"test.jpg\", \"email\":\"test@example.com\"}"))
