@@ -27,7 +27,10 @@ public class AttachFiles {
     }
 
     public AttachFile getRepresentativeFile() {
-        return files.getFirst();
+        if (files.isEmpty()) {
+            return null;
+        }
+        return files.get(0);
     }
 
     public void addFile(AttachFile file) {
@@ -36,8 +39,8 @@ public class AttachFiles {
     }
 
     private void validateFilesSize() {
-        if (files.size() > 6) {
-            throw new IllegalArgumentException("files length must not over 6");
+        if (files.size() > 5) {
+            throw new IllegalArgumentException("files length must not over 5");
         }
     }
 }

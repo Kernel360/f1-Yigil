@@ -71,20 +71,20 @@ public class SpotServiceTest {
     @Test
     void GivenValidPlaceId_WhenGetSpotListTest_ThenReturnSpotFindListResponse() {
         Member mockMember = new Member("hoyoon@gmail.com", "123456", "회고부장", "profile.jpg",
-            "kakao");
+                "kakao");
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
         Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-            1L);
+                1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-            2L);
+                2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        Spot spot1 = new Spot(1L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles,
-            mockPlace, 5.0);
-        Spot spot2 = new Spot(2L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles,
-            mockPlace, 5.0);
+        Spot spot1 = new Spot(1L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
+                mockPlace, 5.0);
+        Spot spot2 = new Spot(2L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
+                mockPlace, 5.0);
 
         List<Spot> spotList = Arrays.asList(spot1, spot2);
 
@@ -93,14 +93,14 @@ public class SpotServiceTest {
         when(spotRepository.findAllByPlaceIdAndIsInCourseFalse(anyLong())).thenReturn(spotList);
 
         when(favorRedisIntegrityService.ensureFavorCounts(spot1)).thenReturn(
-            new FavorCount(spot1.getId(), 4));
+                new FavorCount(spot1.getId(), 4));
         when(favorRedisIntegrityService.ensureFavorCounts(spot2)).thenReturn(
-            new FavorCount(spot2.getId(), 3));
+                new FavorCount(spot2.getId(), 3));
 
         when(commentRedisIntegrityService.ensureCommentCount(spot1)).thenReturn(
-            new CommentCount(spot1.getId(), 2));
+                new CommentCount(spot1.getId(), 2));
         when(commentRedisIntegrityService.ensureCommentCount(spot2)).thenReturn(
-            new CommentCount(spot2.getId(), 1));
+                new CommentCount(spot2.getId(), 1));
 
         // Act
         SpotListResponse spotListResponse = spotService.getSpotList(placeId);
@@ -109,7 +109,7 @@ public class SpotServiceTest {
         assertThat(spotListResponse).isInstanceOf(SpotListResponse.class);
         assertThat(spotListResponse.getSpotFindDtos()).hasSize(2);
         assertThat(spotListResponse.getSpotFindDtos()).extracting("spotId")
-            .containsExactlyInAnyOrder(spot1.getId(), spot2.getId());
+                .containsExactlyInAnyOrder(spot1.getId(), spot2.getId());
     }
 
     @DisplayName("createSpot 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
@@ -122,7 +122,7 @@ public class SpotServiceTest {
         String mockTitle = "mockTitle";
         String mockDescription = "mockDescription";
         MultipartFile mockFile = new MockMultipartFile("mockFile", "mockFile.jpg", "image/jpeg",
-            "mockFile".getBytes());
+                "mockFile".getBytes());
         List<MultipartFile> mockFiles = List.of(mockFile);
         String mockPlaceName = "mockPlaceName";
         String mockPlaceAddress = "mockPlaceAddress";
@@ -130,14 +130,15 @@ public class SpotServiceTest {
         double mockRate = 5.0;
 
         SpotCreateRequest spotCreateRequest = new SpotCreateRequest(
-            mockPointJson,
-            mockTitle,
-            mockDescription,
-            mockFiles,
-            mockPlaceName,
-            mockPlaceAddress,
-            mockPlacePointJson,
-            mockRate
+                mockPointJson,
+                mockTitle,
+                mockDescription,
+                mockFiles,
+                mockFile,
+                mockPlaceName,
+                mockPlaceAddress,
+                mockPlacePointJson,
+                mockRate
         );
 
         Point mockPoint = new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456));
@@ -148,23 +149,24 @@ public class SpotServiceTest {
 //        when(spotService.getAttachFiles(spotCreateRequest.getFiles())).thenReturn(mockAttachFiles);
 
         when(placeService.getOrCreatePlace(
-            anyString(),
-            anyString(),
-            anyString()
+                anyString(),
+                anyString(),
+                anyString()
         )).thenReturn(mockPlace);
 
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
-
-        Spot mockSpot = new Spot(mockMember, mockPoint, false, mockTitle, mockDescription,
-            mockAttachFiles, mockPlace, mockRate);
-        when(spotRepository.save(any(Spot.class))).thenReturn(mockSpot);
 
         doAnswer(invocation -> {
             FileUploadEvent event = invocation.getArgument(0);
             event.getCallback().accept(mockAttachFile);
             return null;
         }).when(applicationEventPublisher).publishEvent(any(FileUploadEvent.class));
+
+        Spot mockSpot = new Spot(mockMember, mockPoint, false, mockTitle, mockDescription,
+                mockAttachFiles, mockAttachFile,  mockPlace, mockRate);
+        when(spotRepository.save(any(Spot.class))).thenReturn(mockSpot);
+
 
         // Act
         SpotCreateResponse spotCreateResponse = spotService.createSpot(memberId, spotCreateRequest);
@@ -180,8 +182,11 @@ public class SpotServiceTest {
         String mockPointJson = "{\"type\":\"Point\",\"coordinates\":[127.123456,37.123456]}";
         String mockTitle = "mockTitle";
         String mockDescription = "mockDescription";
-        MultipartFile mockFile = new MockMultipartFile("mockFile", "mockFile.jpg", "image/jpeg", "mockFile".getBytes());
-        List<MultipartFile> mockFiles = List.of(mockFile);
+        MultipartFile mockFile = new MockMultipartFile("mockFile", "mockFile.jpg", "image/jpeg",
+                "mockFile".getBytes());
+        MultipartFile mockFil2 = new MockMultipartFile("mockFile", "mockFile.jpg", "image/jpeg",
+                "mockFile".getBytes());
+        List<MultipartFile> mockFiles = List.of(mockFile, mockFil2);
         String mockPlaceName = "mockPlaceName";
         String mockPlaceAddress = "mockPlaceAddress";
         String mockPlacePointJson = "{\"type\":\"Point\",\"coordinates\":[127.123456,37.123456]}";
@@ -192,6 +197,7 @@ public class SpotServiceTest {
                 mockTitle,
                 mockDescription,
                 mockFiles,
+                mockFile,
                 mockPlaceName,
                 mockPlaceAddress,
                 mockPlacePointJson,
@@ -201,14 +207,28 @@ public class SpotServiceTest {
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
-        Place mockPlace = new Place("mockPlaceName", "mockImageUrl", new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), "mockDescription");
-        when(placeService.getOrCreatePlace(anyString(), anyString(), anyString())).thenReturn(mockPlace);
+        Place mockPlace = new Place("mockPlaceName", "mockImageUrl",
+                new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
+                "mockDescription");
+        when(placeService.getOrCreatePlace(anyString(), anyString(), anyString())).thenReturn(
+                mockPlace);
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
 
-        Spot mockSpot = new Spot(spotId, mockMember, new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false, mockTitle, mockDescription, new AttachFiles(new ArrayList<>()), mockPlace, mockRate);
+        doAnswer(invocation -> {
+            FileUploadEvent event = invocation.getArgument(0);
+            event.getCallback().accept(mockAttachFile);
+            return null;
+        }).when(applicationEventPublisher).publishEvent(any(FileUploadEvent.class));
+
+        Spot mockSpot = new Spot(spotId, mockMember,
+                new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false,
+                mockTitle, mockDescription, new AttachFiles(new ArrayList<>()), mockAttachFile, mockPlace,
+                mockRate);
         when(spotRepository.save(any(Spot.class))).thenReturn(mockSpot);
 
         // Act
-        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(memberId, spotId, spotUpdateRequest);
+        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(memberId, spotId,
+                spotUpdateRequest);
 
         // Assert
         assertThat(spotUpdateResponse).isNotNull();
@@ -220,8 +240,15 @@ public class SpotServiceTest {
     void GivenValidInput_WhenGetSpotInfoTest_ThenReturnSpotFindResponse() {
         // Arrange
         Long spotId = 1L;
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
 
-        Spot mockSpot = new Spot(new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao"), new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false, "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()), new Place("mockPlaceName", "mockImageUrl", new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), "mockDescription"), 5.0);
+        Spot mockSpot = new Spot(
+                new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao"),
+                new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false,
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()), mockAttachFile,
+                new Place("mockPlaceName", "mockImageUrl",
+                        new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
+                        "mockDescription"), 5.0);
         when(spotRepository.findById(spotId)).thenReturn(Optional.of(mockSpot));
 
         // Act

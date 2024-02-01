@@ -2,6 +2,7 @@ package kr.co.yigil.favor.application;
 
 import jakarta.transaction.Transactional;
 import kr.co.yigil.favor.domain.Favor;
+import kr.co.yigil.favor.domain.FavorCount;
 import kr.co.yigil.favor.domain.repository.FavorCountRepository;
 import kr.co.yigil.favor.domain.repository.FavorRepository;
 import kr.co.yigil.favor.dto.response.AddFavorResponse;
@@ -32,14 +33,9 @@ public class FavorService {
     public AddFavorResponse addFavor(final Long memberId, final Long travelId) {
         Member member = getMemberById(memberId);
         Travel travel = travelService.findTravelById(travelId);
-
-        favorRedisIntegrityService.ensureFavorCounts(travel);
-
         favorRepository.save(new Favor(member, travel));
-        incrementFavorCount(travelId);
-
+        incrementFavorCount(travel);
         sendFavorNotification(travel, member);
-
         return new AddFavorResponse("좋아요가 완료되었습니다.");
     }
 
@@ -47,11 +43,8 @@ public class FavorService {
     public DeleteFavorResponse deleteFavor(final Long memberId, final Long travelId) {
         Member member = getMemberById(memberId);
         Travel travel = travelService.findTravelById(travelId);
-
-        favorRedisIntegrityService.ensureFavorCounts(travel);
-
         favorRepository.deleteByMemberAndTravel(member, travel);
-        decrementFavorCount(travelId);
+        decrementFavorCount(travel);
         return new DeleteFavorResponse("좋아요가 취소되었습니다.");
     }
 
@@ -66,12 +59,10 @@ public class FavorService {
                 .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_ID));
     }
 
-    private void incrementFavorCount(Long travelId) {
-        favorCountRepository.findById(travelId)
-                .ifPresent(favorCount -> {
-                    favorCount.incrementFavorCount();
-                    favorCountRepository.save(favorCount);
-                });
+    private void incrementFavorCount(Travel travel) {
+        FavorCount favorCount = favorRedisIntegrityService.ensureFavorCounts(travel);
+        favorCount.incrementFavorCount();
+        favorCountRepository.save(favorCount);
     }
 
     private void decrementFavorCount(Long travelId) {

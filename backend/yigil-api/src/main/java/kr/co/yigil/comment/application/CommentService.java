@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.comment.domain.Comment;
 import kr.co.yigil.comment.domain.CommentCount;
-import kr.co.yigil.comment.domain.repository.CommentCountRepository;
 import kr.co.yigil.comment.domain.repository.CommentRepository;
 import kr.co.yigil.comment.dto.request.CommentCreateRequest;
 import kr.co.yigil.comment.dto.response.CommentCreateResponse;
@@ -31,7 +30,6 @@ public class CommentService {
     private final MemberService memberService;
     private final NotificationService notificationService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
-    private final CommentCountRepository commentCountRepository;
     private final TravelService travelService;
 
     @Transactional
@@ -47,11 +45,20 @@ public class CommentService {
         }
 
         Comment newComment = new Comment(commentCreateRequest.getContent(), member, travel, parentComment);
-        commentRedisIntegrityService.ensureCommentCount(travel);
+        incrementCommentCount(travel);
         commentRepository.save(newComment);
-        incrementCommentCount(travelId);
 
         return new CommentCreateResponse("댓글 생성 성공");
+    }
+
+    private Comment findCommentById(Long parentId) {
+        return commentRepository.findById(parentId)
+            .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COMMENT_ID));
+    }
+
+    private void incrementCommentCount(Travel travel) {
+        CommentCount commentCount = commentRedisIntegrityService.ensureCommentCount(travel);
+        commentCount.incremenCommentCount();
     }
 
     @Transactional(readOnly = true)
@@ -99,35 +106,21 @@ public class CommentService {
     @Transactional
     public CommentDeleteResponse deleteComment(Long memberId, Long travelId, Long commentId) {
         Travel travel = travelService.findTravelById(travelId);
-        validateCommentWriter(memberId, commentId);
-        Comment comment = findCommentById(commentId);
+        decrementCommentCount(travel);
 
-        commentRedisIntegrityService.ensureCommentCount(travel);
+        Comment comment = findCommentByIdAndMemberId(commentId, memberId);
         commentRepository.delete(comment);
-        decrementCommentCount(travelId);
         return new CommentDeleteResponse("댓글 삭제 성공");
     }
 
-    private void incrementCommentCount(Long travelId) {
-        commentCountRepository.findByTravelId(travelId)
-            .ifPresent(CommentCount::incrementCommentCount);
+    private void decrementCommentCount(Travel travel) {
+        CommentCount commentcount = commentRedisIntegrityService.ensureCommentCount(travel);
+        commentcount.decrementCommentCount();
     }
 
-    private void decrementCommentCount(Long travelId) {
-        commentCountRepository.findByTravelId(travelId)
-            .ifPresent(CommentCount::decrementCommentCount);
-    }
-
-    public Comment findCommentById(Long commentId) {
-        return commentRepository.findById(commentId)
+    private Comment findCommentByIdAndMemberId(Long commentId, Long memberId) {
+        return commentRepository.findByIdAndMemberId(commentId, memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_COMMENT_ID));
-    }
-
-
-    public void validateCommentWriter(Long memberId, Long commentId) {
-        if (!commentRepository.existsByMemberIdAndId(memberId, commentId)) {
-            throw new BadRequestException(ExceptionCode.INVALID_AUTHORITY);
-        }
     }
 
     private void sendCommentNotification(Member notifiedMember, String content) {

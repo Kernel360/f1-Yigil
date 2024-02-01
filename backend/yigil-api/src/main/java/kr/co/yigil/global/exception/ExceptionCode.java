@@ -15,6 +15,7 @@ public enum ExceptionCode {
     NOT_FOUND_TRAVEL_ID(1041, "해당하는 travel이 없습니다"),
     NOT_FOUND_COMMENT_ID(1051, "해당하는 comment가 없습니다"),
     NOT_FOUND_PLACE_ID(1061, "해당하는 place가 없습니다"),
+    NOT_FOUND_FAVOR_COUNT(1071, "해당하는 favor count가 없습니다"),
 
     //post 2000
 
@@ -25,9 +26,10 @@ public enum ExceptionCode {
 
     // course 3200
 
-    EMPTY_FILE(5001, "업로드한 파일이 비어있습니다."),
+    EMPTY_FILE(5001, "업로드한 파일이 비어있습니다."), // todo 현재  모듈 구조상 AttachFiles에서  사용 불가
     INVALID_FILE_TYPE(5002, "지원하지 않는 형식의 파일입니다."),
     EXCEED_FILE_CAPACITY(5003, "업로드 가능한 파일 용량을 초과했습니다."),
+    EXCEED_FILE_COUNT(5004, "업로드 가능한 파일 개수를 초과했습니다."), // todo 현재  모듈 구조상 AttachFiles에서  사용 불가
 
     // GeoJson
     //    INVALID_GEOMETRY_TYPE(6001, "geometry 타입이 다릅니다"),

@@ -1,6 +1,7 @@
 package kr.co.yigil.travel.dto.request;
 
 import java.util.List;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
@@ -20,14 +21,14 @@ public class  SpotUpdateRequest {
     private String title;
     private String description;
     private List<MultipartFile> files;
-
+    private MultipartFile mapStaticImageFile;
     private String placeName;
     private String placeAddress;
     private String placePointJson;
 
     private double rate;
 
-    public static Spot toEntity(Member member, Long spotId, SpotUpdateRequest spotUpdateRequest, Place place, AttachFiles attachFiles) {
+    public static Spot toEntity(Member member, Long spotId, SpotUpdateRequest spotUpdateRequest, Place place, AttachFiles attachFiles, AttachFile mapStaticImageFile) {
         return new Spot(
                 spotId,
                 member,
@@ -36,6 +37,7 @@ public class  SpotUpdateRequest {
                 spotUpdateRequest.getTitle(),
                 spotUpdateRequest.getDescription(),
                 attachFiles,
+                mapStaticImageFile,
                 place,
                 spotUpdateRequest.getRate()
         );

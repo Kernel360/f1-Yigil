@@ -2,10 +2,12 @@ package kr.co.yigil.travel.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.global.exception.BadRequestException;
@@ -59,7 +61,9 @@ public class SpotService {
     public SpotCreateResponse createSpot(Long memberId, SpotCreateRequest spotCreateRequest) {
         Member member = memberService.findMemberById(memberId);
 
+        // spot 생성
         AttachFiles attachFiles = getAttachFiles(spotCreateRequest.getFiles());
+        AttachFile mapStaticImageFile = getAttachFile(spotCreateRequest.getMapStaticImageFile());
 
         Place place = placeService.getOrCreatePlace(
                 spotCreateRequest.getPlaceName(),
@@ -67,7 +71,7 @@ public class SpotService {
                 spotCreateRequest.getPlacePointJson()
         );
         Spot spot = spotRepository.save(
-                SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles));
+                SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles, mapStaticImageFile));
 
         return new SpotCreateResponse(spot.getId(), "스팟 정보 생성 성공");
     }
@@ -84,6 +88,7 @@ public class SpotService {
             SpotUpdateRequest spotUpdateRequest) {
         Member member = memberService.findMemberById(memberId);
         AttachFiles attachFiles = getAttachFiles(spotUpdateRequest.getFiles());
+        AttachFile mapStaticImageFile = getAttachFile(spotUpdateRequest.getMapStaticImageFile());
 
         Place place = placeService.getOrCreatePlace(
                 spotUpdateRequest.getPlaceName(),
@@ -91,7 +96,7 @@ public class SpotService {
                 spotUpdateRequest.getPlacePointJson()
         );
         spotRepository.save(
-                SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, place, attachFiles));
+                SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, place, attachFiles, mapStaticImageFile));
 
         return new SpotUpdateResponse("스팟 정보 수정 성공");
     }
@@ -104,14 +109,45 @@ public class SpotService {
         return new SpotDeleteResponse("스팟 정보 삭제 성공");
     }
 
+//    private AttachFiles getAttachFiles(List<MultipartFile> files) {
+//        AttachFiles attachFiles = new AttachFiles(new ArrayList<>());
+//        files.forEach(file -> {
+//                    FileUploadEvent event = new FileUploadEvent(this, file, attachFiles::addFile);
+//                    applicationEventPublisher.publishEvent(event);
+//                }
+//        );
+//        return attachFiles;
+//    }
+
     private AttachFiles getAttachFiles(List<MultipartFile> files) {
+        List<CompletableFuture<AttachFile>> futures = new ArrayList<>();
         AttachFiles attachFiles = new AttachFiles(new ArrayList<>());
-        files.forEach(file -> {
-                    FileUploadEvent event = new FileUploadEvent(this, file, attachFiles::addFile);
+
+
+        files.forEach(
+                file ->{
+                    CompletableFuture<AttachFile> future = new CompletableFuture<>();
+                    FileUploadEvent event = new FileUploadEvent(this, file, future::complete);
                     applicationEventPublisher.publishEvent(event);
+                    futures.add(future);
                 }
         );
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+        for (CompletableFuture<AttachFile> future : futures) {
+            attachFiles.addFile(future.join());
+        }
+
         return attachFiles;
+    }
+
+
+    private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
+        CompletableFuture<AttachFile> fileCompletableFuture = new CompletableFuture<>();
+        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile, fileCompletableFuture::complete);
+        applicationEventPublisher.publishEvent(event);
+        return fileCompletableFuture.join();
     }
 
     public Spot findSpotByIdAndMemberId(Long spotId, Long memberId) {

@@ -15,7 +15,9 @@ import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.favor.domain.FavorCount;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.place.Place;
@@ -101,9 +103,11 @@ public class CourseServiceTest {
         Long memberId = 1L;
         Long spotId = 1L;
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
+                1L);
         Spot mockSpot = new Spot(spotId, mockMember,
                 new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false,
-                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),mockAttachFile,
                 new Place("mockPlaceName", "mockImageUrl",
                         new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
                         "mockDescription"), 5.0);
@@ -193,12 +197,14 @@ public class CourseServiceTest {
                 "mockDescription");
         Place mockPlace2 = new Place("mockPlaceName", "mockImageUrl", mockPoint2,
                 "mockDescription");
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
+                1L);
         Spot mockSpot1 = new Spot(spotId1, mockMember, mockPoint1, false,
-                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),mockAttachFile,
                 mockPlace1, 4.0);
 
         Spot mockSpot2 = new Spot(spotId2, mockMember, mockPoint2, false,
-                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),mockAttachFile,
                 mockPlace2, 4.5);
 
         when(spotRepository.findAllById(anyList())).thenReturn(List.of(mockSpot2));

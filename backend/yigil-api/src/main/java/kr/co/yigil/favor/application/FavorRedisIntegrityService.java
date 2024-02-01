@@ -18,7 +18,7 @@ public class FavorRedisIntegrityService {
     @Transactional
     public FavorCount ensureFavorCounts(Travel travel) {
         Long travelId = travel.getId();
-        Optional<FavorCount> existingFavorCount = favorCountRepository.findById(travelId);
+        Optional<FavorCount> existingFavorCount = favorCountRepository.findByTravelId(travelId);
         if (existingFavorCount.isPresent()) {
             return existingFavorCount.get();
         } else {

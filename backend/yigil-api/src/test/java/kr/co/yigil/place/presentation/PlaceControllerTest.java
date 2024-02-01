@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,9 +23,6 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest(PlaceController.class)
 public class PlaceControllerTest {
     private MockMvc mockMvc;
-
-    @InjectMocks
-    private PlaceController placeController;
 
     @MockBean
     private PlaceService placeService;

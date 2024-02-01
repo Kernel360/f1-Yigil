@@ -24,7 +24,6 @@ public class CommentRedisIntegrityService {
         } else {
             CommentCount commentCount = new CommentCount(
                 travelId,
-//                commentRepository.countByPostId(travelId)
                 commentRepository.countNonDeletedCommentsByTravelId(travelId)
             );
             return commentCountRepository.save(commentCount);
