@@ -23,7 +23,7 @@ public class PlaceService {
     }
 
     public Place getOrCreatePlace(String placeName, String placeAddress, String placePointJson) {
-        return placeRepository.findByName(placeName)
+        return placeRepository. findByName(placeName)
                 .orElseGet(
                         () -> placeRepository.save(PlaceDto.toEntity(
                                 placeName,

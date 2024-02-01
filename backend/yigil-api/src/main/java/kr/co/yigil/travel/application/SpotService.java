@@ -44,7 +44,7 @@ public class SpotService {
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public SpotListResponse getSpotList(Long placeId) {
         List<Spot> spots = spotRepository.findAllByPlaceIdAndIsInCourseFalse(placeId);
         List<SpotFindDto> spotFindDtoList = spots.stream()

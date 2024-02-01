@@ -186,9 +186,9 @@ class CommentServiceTest {
         Comment mockComment1 = new Comment(2L, "content", mockMember, mockSpot, mockParentComment);
         Comment mockComment2 = new Comment(3L, "content", mockMember, mockSpot, mockParentComment);
 
-        when(commentRepository.findTopLevelCommentsByTravelId(anyLong())).thenReturn(
+        when(commentRepository.findParentCommentsByTravelId(anyLong())).thenReturn(
                 List.of(mockParentComment));
-        when(commentRepository.findRepliesByTravelIdAndParentId(anyLong(), anyLong())).thenReturn(
+        when(commentRepository.findChildCommentsByTravelIdAndParentId(anyLong(), anyLong())).thenReturn(
                 List.of(mockComment1, mockComment2));
 
         assertThat(commentService.getCommentList(travelId)).isInstanceOf(List.class);
@@ -265,13 +265,13 @@ class CommentServiceTest {
 
         Comment mockParentComment = new Comment(parentCommentId, "content", mockMember, mockSpot);
 
-        when(commentRepository.findTopLevelCommentsByTravelId(anyLong())).thenReturn(
+        when(commentRepository.findParentCommentsByTravelId(anyLong())).thenReturn(
             List.of(mockParentComment));
 
-        assertThat(commentService.getTopLevelCommentList(travelId)).isInstanceOf(List.class);
-        assertThat(commentService.getTopLevelCommentList(travelId).get(0)).isInstanceOf(
+        assertThat(commentService.getParentCommentList(travelId)).isInstanceOf(List.class);
+        assertThat(commentService.getParentCommentList(travelId).get(0)).isInstanceOf(
             CommentResponse.class);
-        assert (commentService.getTopLevelCommentList(travelId).size() == 1);
+        assert (commentService.getParentCommentList(travelId).size() == 1);
     }
 
     @DisplayName("getReplyCommentList 메서드가 유효한 인자를 받았을 때 comment list 가 잘 반환되는지")
@@ -302,14 +302,14 @@ class CommentServiceTest {
         Comment mockComment2 = new Comment(3L, "content", mockMember, mockSpot, mockParentComment);
         Comment mockComment3 = new Comment(4L, "content", mockMember, mockSpot, mockParentComment);
 
-        when(commentRepository.findRepliesByTravelIdAndParentId(anyLong(), anyLong())).thenReturn(
+        when(commentRepository.findChildCommentsByTravelIdAndParentId(anyLong(), anyLong())).thenReturn(
                 List.of(mockComment1, mockComment2, mockComment3));
 
-        assertThat(commentService.getReplyCommentList(travelId, parentCommentId)).isInstanceOf(
+        assertThat(commentService.getChildCommentList(travelId, parentCommentId)).isInstanceOf(
                 List.class);
         assertThat(
-                commentService.getReplyCommentList(travelId, parentCommentId).get(0)).isInstanceOf(
+                commentService.getChildCommentList(travelId, parentCommentId).get(0)).isInstanceOf(
                 CommentResponse.class);
-        assert (commentService.getReplyCommentList(travelId, parentCommentId).size() == 3);
+        assert (commentService.getChildCommentList(travelId, parentCommentId).size() == 3);
     }
 }

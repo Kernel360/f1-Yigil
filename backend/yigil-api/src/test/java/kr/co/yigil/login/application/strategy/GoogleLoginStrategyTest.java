@@ -71,7 +71,7 @@ public class GoogleLoginStrategyTest {
 
         HttpSession mockSession = mock(HttpSession.class);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "google");
 
         LoginResponse response = googleLoginStrategy.login(loginRequest, accessToken, mockSession);
 

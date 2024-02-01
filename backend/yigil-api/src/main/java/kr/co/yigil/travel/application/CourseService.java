@@ -37,7 +37,7 @@ public class CourseService {
     private final FavorRedisIntegrityService favorRedisIntegrityService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CourseListResponse getCourseList(Long placeId) {
         List<Course> courses = courseRepository.findBySpotPlaceId(placeId);
         List<CourseFindDto> courseFindDtoList = courses.stream()

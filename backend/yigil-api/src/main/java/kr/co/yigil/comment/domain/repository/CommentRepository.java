@@ -22,12 +22,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long>  {
     @Query("SELECT c FROM Comment c WHERE c.travel.id = :travelId AND c.parent IS NULL "
         + "ORDER BY c.createdAt ASC "
     )
-    List<Comment> findTopLevelCommentsByTravelId(@Param("travelId") Long travelId);
+    List<Comment> findParentCommentsByTravelId(@Param("travelId") Long travelId);
 
     @Query("SELECT c FROM Comment c WHERE c.travel.id = :travelId AND c.isDeleted = false AND c.parent.id = :parentId "
         + "ORDER BY c.createdAt ASC "
     )
-    List<Comment> findRepliesByTravelIdAndParentId(@Param("travelId") Long travelId, @Param("parentId") Long parentId);
+    List<Comment> findChildCommentsByTravelIdAndParentId(@Param("travelId") Long travelId, @Param("parentId") Long parentId);
 
     @Query("SELECT COUNT(c) FROM Comment c WHERE c.travel.id = :travelId AND c.isDeleted = false")
     int countNonDeletedCommentsByTravelId(@Param("travelId") Long travelId);

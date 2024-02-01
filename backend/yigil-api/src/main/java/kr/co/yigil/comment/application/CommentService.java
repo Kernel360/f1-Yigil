@@ -64,28 +64,26 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentList(Long travelId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
-        Travel travel = travelService.findTravelById(travelId);
 
-        commentRepository.findTopLevelCommentsByTravelId(travelId)
+        commentRepository.findParentCommentsByTravelId(travelId)
             .forEach(comment -> {
                 CommentResponse commentResponse = CommentResponse.from(comment);
                 commentResponses.add(commentResponse);
-                commentRepository.findRepliesByTravelIdAndParentId(travelId, comment.getId())
+                commentRepository.findChildCommentsByTravelIdAndParentId(travelId, comment.getId())
                     .forEach(reply -> {
                         CommentResponse replyResponse = CommentResponse.from(reply);
                         commentResponse.addChild(replyResponse);
                     });
             });
 
-        commentRedisIntegrityService.ensureCommentCount(travel);
-        return commentResponses;
+        return  commentResponses;
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getTopLevelCommentList(Long travelId) {
+    public List<CommentResponse> getParentCommentList(Long travelId) {
 
         List<CommentResponse> commentResponses = new ArrayList<>();
-        List<Comment> comments = commentRepository.findTopLevelCommentsByTravelId(travelId);
+        List<Comment> comments = commentRepository.findParentCommentsByTravelId(travelId);
         comments.stream()
             .map(CommentResponse::from)
             .forEach(commentResponses::add);
@@ -94,9 +92,9 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getReplyCommentList(Long travelId, Long parentId) {
+    public List<CommentResponse> getChildCommentList(Long travelId, Long parentId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
-        List<Comment> comments = commentRepository.findRepliesByTravelIdAndParentId(travelId, parentId);
+        List<Comment> comments = commentRepository.findChildCommentsByTravelIdAndParentId(travelId, parentId);
         comments.stream()
             .map(CommentResponse::from)
             .forEach(commentResponses::add);

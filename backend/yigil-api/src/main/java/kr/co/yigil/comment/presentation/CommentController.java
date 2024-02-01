@@ -44,7 +44,7 @@ public class CommentController {
         Pageable pageable
 
     ){
-        List<CommentResponse> commentListResponse = commentService.getTopLevelCommentList(travelId);
+        List<CommentResponse> commentListResponse = commentService.getParentCommentList(travelId);
         return ResponseEntity.ok().body(commentListResponse);
     }
 
@@ -53,7 +53,7 @@ public class CommentController {
         @PathVariable("travel_id") Long travelId,
         @PathVariable("comment_id") Long commentId
     ){
-        List<CommentResponse> commentListResponse = commentService.getReplyCommentList(travelId, commentId);
+        List<CommentResponse> commentListResponse = commentService.getChildCommentList(travelId, commentId);
         return ResponseEntity.ok().body(commentListResponse);
     }
 

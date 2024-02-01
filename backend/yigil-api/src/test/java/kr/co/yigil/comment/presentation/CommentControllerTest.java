@@ -65,7 +65,7 @@ class CommentControllerTest {
         CommentResponse mockCommentResponse1 = new CommentResponse();
         CommentResponse mockCommentResponse2 = new CommentResponse();
 
-        given(commentService.getTopLevelCommentList(anyLong())).willReturn(
+        given(commentService.getParentCommentList(anyLong())).willReturn(
             List.of(mockCommentResponse1, mockCommentResponse2));
 
         mockMvc.perform(get("/api/v1/comments/1")
@@ -79,7 +79,7 @@ class CommentControllerTest {
         CommentResponse mockCommentResponse1 = new CommentResponse();
         CommentResponse mockCommentResponse2 = new CommentResponse();
 
-        given(commentService.getReplyCommentList(anyLong(), anyLong())).willReturn(List.of(mockCommentResponse1, mockCommentResponse2));
+        given(commentService.getChildCommentList(anyLong(), anyLong())).willReturn(List.of(mockCommentResponse1, mockCommentResponse2));
 
         mockMvc.perform(get("/api/v1/comments/1/1")
                 .contentType(MediaType.APPLICATION_JSON))
