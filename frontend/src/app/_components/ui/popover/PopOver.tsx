@@ -43,7 +43,7 @@ export default function PopOver({
   return (
     <>
       <div
-        className={`fixed inset-0 max-w-[430px] mx-auto ${backDropStyle}`}
+        className={`fixed inset-0 max-w-[430px] mx-auto z-20 ${backDropStyle}`}
         onClick={closeModal}
       ></div>
       <div
