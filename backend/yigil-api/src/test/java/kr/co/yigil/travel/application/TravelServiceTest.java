@@ -1,12 +1,13 @@
 package kr.co.yigil.travel.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.Travel;
 import kr.co.yigil.travel.repository.TravelRepository;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class TravelServiceTest {
+public class TravelServiceTest {
     @InjectMocks
     private TravelService travelService;
     @Mock
@@ -24,7 +25,8 @@ class TravelServiceTest {
 
     @Test
     void GivenValidTravelId_WhenFindTravelById_ThenReturnTravel() {
-        Travel travel = new Travel(1L);
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
+        Travel travel = new Travel(1L, mockMember);
         when(travelRepository.findById(anyLong())).thenReturn(Optional.of(travel));
         assertThat(travelService.findTravelById(anyLong())).isInstanceOf(Travel.class);
     }

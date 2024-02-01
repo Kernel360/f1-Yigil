@@ -19,6 +19,7 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //private String uniquePlaceId;
     private String name;
 
     private String address;
@@ -27,4 +28,18 @@ public class Place {
     private Point location;
 
     private String imageUrl;
+
+    public Place(final String name, final String address, final Point location, final String imageUrl) {
+        this.name = name;
+        this.address = address;
+        this.location = location;
+        this.imageUrl = imageUrl;
+    }
+    public Place(Long id, final String name, final String address, final Point location, final String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.location = location;
+        this.imageUrl = imageUrl;
+    }
 }

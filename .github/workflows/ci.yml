@@ -55,6 +55,7 @@ jobs:
         sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
         cat ./yigil-api/src/main/resources/*
 
 
