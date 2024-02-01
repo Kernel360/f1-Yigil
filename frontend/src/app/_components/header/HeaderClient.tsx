@@ -19,6 +19,9 @@ export default function HeaderClient({ session }: { session: Session | null }) {
     else if (e.key === 'Escape') setIsModalOpened(false);
   };
 
+  const closeModal = () => {
+    setIsModalOpened(false);
+  };
   return (
     <>
       <div className="ml-4 cursor-pointer" onClick={() => router.push('/')}>
@@ -43,7 +46,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
           {isModalOpened && (
             <PopOver
               popOverData={headerPopOverData}
-              setIsModalOpened={setIsModalOpened}
+              closeModal={closeModal}
               position="bottom-[-90px] right-4"
             />
           )}

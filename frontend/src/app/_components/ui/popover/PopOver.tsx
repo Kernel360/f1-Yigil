@@ -1,10 +1,4 @@
-import Link from 'next/link';
-import React, {
-  ComponentType,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from 'react';
+import React, { ComponentType, useEffect } from 'react';
 import PopOverIcon from './PopOverItem';
 
 interface TPopOver {
@@ -14,7 +8,7 @@ interface TPopOver {
     Icon: ComponentType<{ className?: string }>;
     onClick?: () => void;
   }[];
-  setIsModalOpened: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
   position: string;
   style?: string;
   backDropStyle?: string;
@@ -22,7 +16,7 @@ interface TPopOver {
 
 export default function PopOver({
   popOverData,
-  setIsModalOpened,
+  closeModal,
   position,
   style,
   backDropStyle,
@@ -50,13 +44,12 @@ export default function PopOver({
     <>
       <div
         className={`fixed inset-0 max-w-[430px] mx-auto ${backDropStyle}`}
-        onClick={() => setIsModalOpened(false)}
+        onClick={closeModal}
       ></div>
       <div
         className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${style}`}
         onKeyDown={(e) =>
-          (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') &&
-          setIsModalOpened(false)
+          (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') && closeModal()
         }
       >
         <div className="flex flex-col gap-5 justify-center items-center p-4">
@@ -65,7 +58,7 @@ export default function PopOver({
               key={href}
               href={href}
               {...data}
-              setIsModalOpened={setIsModalOpened}
+              closeModal={closeModal}
             />
           ))}
         </div>
