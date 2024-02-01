@@ -18,8 +18,10 @@ function toBase64(file: File) {
 
 export default function ImageInput({
   availableSpace,
+  addImages,
 }: {
   availableSpace: number;
+  addImages: (newImages: TImageData[]) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -37,10 +39,10 @@ export default function ImageInput({
 
       for (let i = 0; i < fileList.length; i++) {
         const uri = await toBase64(fileList[i]);
-        images.push({ index: i, filename: fileList[i].name, uri });
+        images.push({ filename: fileList[i].name, uri });
       }
 
-      console.log(images);
+      addImages(images);
     } catch (error) {
       alert(error);
     }
@@ -49,7 +51,7 @@ export default function ImageInput({
   return (
     <div className="aspect-square border-2 rounded-2xl border-gray-200 bg-gray-100 shrink-0">
       <label
-        className="w-full h-full rounded-2xl flex justify-center items-center"
+        className="w-full h-full rounded-2xl flex justify-center items-center hover:cursor-pointer"
         tabIndex={0}
         htmlFor="add-image"
         onKeyDown={(event) => {
