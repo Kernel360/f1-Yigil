@@ -1,17 +1,32 @@
+'use client';
 import Link from 'next/link';
-import React from 'react';
+import { usePathname } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import InfoTitle from './InfoTitle';
 
-export default function AddConfirmPage() {
+export default function AddConfirmContent() {
+  const url = usePathname();
+  const [isAddSpotPage, setIsAddSpotPage] = useState(false);
+  useEffect(() => {
+    if (url.includes('course')) setIsAddSpotPage(false);
+    else setIsAddSpotPage(true);
+  }, []);
   return (
-    <div className="h-full">
-      {/** 위의 상태 바 */}
-      {/** 안내 문구 */}
+    <>
+      <InfoTitle
+        label={`${isAddSpotPage ? '장소' : '일정'}`}
+        additionalLabel={`${
+          isAddSpotPage ? '를 추가했어요!' : '을 추가했어요!'
+        }`}
+        textSizeAndLineHeight="text-[48px] leading-[60px]"
+        fontBold="font-bold"
+      />
 
       <div className="text-2xl ml-10 p-2 leading-9 h-1/3">
         <div>
           <span className="font-bold">마이페이지</span>에서
         </div>
-        <div>장소를 확인하세요.</div>
+        <div>{isAddSpotPage ? '장소를' : '일정을'} 확인하세요.</div>
       </div>
       <ul className="mx-10 flex flex-col items-center gap-y-4">
         <Link
@@ -27,6 +42,6 @@ export default function AddConfirmPage() {
           홈으로 바로가기
         </Link>
       </ul>
-    </div>
+    </>
   );
 }
