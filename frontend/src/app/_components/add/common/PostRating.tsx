@@ -33,7 +33,7 @@ export default function PostRating() {
               onClick={() => onClickStar(i + 1)}
             />
             <StarIcon
-              className={`cursor-pointer w-12 h-12 ${
+              className={`cursor-pointer w-12 h-12 transition-all delay-80 ${
                 i + 1 <= hoverValue
                   ? ' fill-[#FAbb15]'
                   : i + 1 <= ratingValue
