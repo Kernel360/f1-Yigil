@@ -24,10 +24,10 @@ export default function PopOverIcon({
         onClick && onClick();
         closeModal();
       }}
-      className="flex items-center"
+      className="flex items-center gap-x-2 cursor-pointer"
     >
       <div>{label}</div>
-      <Icon />
+      <Icon className="w-6 h-6" />
     </Link>
   );
 }
