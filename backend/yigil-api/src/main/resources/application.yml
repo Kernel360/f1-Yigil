@@ -47,7 +47,7 @@ cloud:
 
 server:
   port: @YIGIL_API_PORT@
-    servlet:
+  servlet:
       session:
         cookie:
           http-only: true
