@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SpotCreateResponse {
+    private Long spotId;
     private String message;
 
 }

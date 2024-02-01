@@ -28,7 +28,7 @@ spring:
     redis:
       host: @REDIS_HOST@
       port: @REDIS_PORT@
-	jackson:
+  jackson:
     property-naming-strategy: SNAKE_CASE
 
 
@@ -46,7 +46,7 @@ cloud:
       auto: false
 
 server:
-	port: @YIGIL_ADMIN_PORT@
+  port: @YIGIL_ADMIN_PORT@
   servlet:
     session:
       cookie:

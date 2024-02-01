@@ -55,7 +55,7 @@ public class LoginControllerTest {
         mockMvc.perform(post("/api/v1/login")
                         .header("Authorization", "Bearer mockAccessToken")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":123, \"nickname\":\"TestUser\", \"profileImageUrl\":\"test.jpg\", \"email\":\"test@example.com\"}"))
+                        .content("{\"id\":123, \"nickname\":\"TestUser\", \"profileImageUrl\":\"test.jpg\", \"email\":\"test@example.com\", \"provider\":\"kakao\"}"))
                 .andExpect(status().isOk());
     }
 }

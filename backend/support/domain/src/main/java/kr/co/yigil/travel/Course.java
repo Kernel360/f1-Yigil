@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import java.util.List;
+import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +32,16 @@ public class Course extends Travel{
     @Column(nullable = false, length = 20)
     private String title;
 
-    public Course(final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
+    public Course(final Member member, final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
+        super(member);
         this.path = path;
         this.spots = spots;
         this.representativeSpotOrder = representativeSpotOrder;
         this.title = title;
     }
 
-    public Course(final Long id, final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
-        super.setId(id);
+    public Course(final Member member, final Long id, final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
+        super(id, member);
         this.path = path;
         this.spots = spots;
         this.representativeSpotOrder = representativeSpotOrder;

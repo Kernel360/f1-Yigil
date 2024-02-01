@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import java.util.function.Consumer;
-import kr.co.yigil.File.FileType;
 import kr.co.yigil.global.exception.FileException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ public class FileUploadEventTest {
     void shouldDetermineFileTypeAsImage() {
         MultipartFile file = new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[10]);
         FileUploadEvent event = new FileUploadEvent(new Object(), file,
-                (java.util.function.Consumer<String>) mock(Consumer.class));
+                (java.util.function.Consumer<AttachFile>) mock(Consumer.class));
         assertEquals(FileType.IMAGE, event.getFileType());
     }
 

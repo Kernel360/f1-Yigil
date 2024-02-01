@@ -1,38 +1,57 @@
 package kr.co.yigil.travel.application;
 
 import java.util.List;
+import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.comment.dto.response.CommentResponse;
+import kr.co.yigil.favor.application.FavorRedisIntegrityService;
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.post.application.PostService;
+import kr.co.yigil.travel.Course;
+import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseCreateResponse;
-import kr.co.yigil.travel.dto.response.CourseFindResponse;
-import kr.co.yigil.travel.Course;
-import kr.co.yigil.travel.Travel;
-import kr.co.yigil.travel.repository.CourseRepository;
+import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
+import kr.co.yigil.travel.dto.response.CourseFindDto;
+import kr.co.yigil.travel.dto.response.CourseInfoResponse;
+import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
-import org.springframework.stereotype.Service;
-import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.post.domain.Post;
-import kr.co.yigil.travel.Spot;
-import kr.co.yigil.travel.repository.TravelRepository;
+import kr.co.yigil.travel.repository.CourseRepository;
+import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
-    private final TravelRepository travelRepository;
+    private final SpotRepository spotRepository;
     private final MemberService memberService;
-    private final PostService postService;
     private final SpotService spotService;
     private final CommentService commentService;
+    private final FavorRedisIntegrityService favorRedisIntegrityService;
+    private final CommentRedisIntegrityService commentRedisIntegrityService;
+
+    @Transactional
+    public CourseListResponse getCourseList(Long placeId) {
+        List<Course> courses = courseRepository.findBySpotPlaceId(placeId);
+        List<CourseFindDto> courseFindDtoList = courses.stream()
+                .map(this::getCourseFindDto)
+                .toList();
+        return CourseListResponse.from(courseFindDtoList);
+    }
+
+    @NotNull
+    private CourseFindDto getCourseFindDto(Course course) {
+        Integer favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
+        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
+        return CourseFindDto.from(course, favorCount, commentCount);
+    }
 
     @Transactional
     public CourseCreateResponse createCourse(Long memberId, CourseCreateRequest courseCreateRequest) {
@@ -40,71 +59,54 @@ public class CourseService {
         List<Long> spotIdList = courseCreateRequest.getSpotIds();
         List<Spot> spots = spotService.getSpotListFromSpotIds(spotIdList);
 
-        // 코스를 저장
-        Course course = CourseCreateRequest.toEntity(courseCreateRequest, spots);
+        Course course = CourseCreateRequest.toEntity(member, courseCreateRequest, spots);
         courseRepository.save(course);
-        postService.createPost(course, member);
 
-        //코스에 포함된 spot들 isIncourse 속성 true로 변경
         course.getSpots().forEach(spot -> spot.setInCourse(true));
 
-        // 코스에 포함된 스팟을 담은 포스트 삭제
-        spotIdList.forEach(spotId -> postService.deleteOnlyPost(memberId, spotId));
-
-        return new CourseCreateResponse("경로 생성 성공");
+        return new CourseCreateResponse(course.getId(), "경로 생성 성공");
     }
 
     @Transactional(readOnly = true)
-    public CourseFindResponse findCourse(Long postId) {
-        Post post = postService.findPostById(postId);
-        Course course = castTravelToCourse(post.getTravel());
+    public CourseInfoResponse getCourseInfo(Long courseId) {
+        Course course = findCourseById(courseId);
         List<Spot> spots = course.getSpots();
 
         List<CommentResponse> comments = commentService.getCommentList(course.getId());
-        return CourseFindResponse.from(post, course, spots, comments);
+        return CourseInfoResponse.from(course, spots, comments);
+    }
+
+    private Course findCourseById(Long courseId) {
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
     }
 
     @Transactional
-    public CourseUpdateResponse updateCourse(Long postId, Long memberId, CourseUpdateRequest courseUpdateRequest) {
-        Post post = postService.findPostById(postId);
-        postService.validatePostWriter(memberId, postId);
-
+    public CourseUpdateResponse updateCourse(Long courseId, Long memberId, CourseUpdateRequest courseUpdateRequest) {
         Member member = memberService.findMemberById(memberId);
         List<Long> spotIdList = courseUpdateRequest.getSpotIds();
-        List<Spot> spots = travelRepository.findAllById(spotIdList).stream().map(Spot.class::cast).toList();
+        List<Spot> spots = spotRepository.findAllById(spotIdList);
 
-        // 코스에 스팟을 넣을 때 Post는 삭제하고 spot 정보는 업데이트.
         for(Long id: courseUpdateRequest.getAddedSpotIds()){
-            postService.deleteOnlyPost(memberId, id);
             Spot spot = spotService.findSpotById(id);
             spot.setInCourse(true);
         }
 
-        // 코스에 있던 spot을 뺄때 다시 post에 등록, post 필드의 deleted 가 true인 것을 false로 변경
         for(Long id: courseUpdateRequest.getRemovedSpotIds()){
-            // spotId와 member Id로 post를 찾아서 해당 포스트의 deleted 필드를 false로 변경
-            postService.recreatePost(memberId, id);
             Spot spot = spotService.findSpotById(id);
             spot.setInCourse(false);
         }
 
-        // 코스 정보 업데이트
-        Course course = castTravelToCourse(post.getTravel());
-        Long courseId = course.getId();
-
-        Course newCourse = CourseUpdateRequest.toEntity(courseId, courseUpdateRequest, spots);
-        Course updatedCourse = courseRepository.save(newCourse);
-
-        postService.updatePost(postId, newCourse, member);
-
-        return CourseUpdateResponse.from(member, updatedCourse, spots);
+        Course newCourse = CourseUpdateRequest.toEntity(member, courseId, courseUpdateRequest, spots);
+        courseRepository.save(newCourse);
+        return new CourseUpdateResponse("경로 수정 성공");
     }
 
-    private Course castTravelToCourse(Travel travel) {
-        if(travel instanceof Course course) {
-            return course;
-        }else {
-            throw new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID);
-        }
+    @Transactional
+    public CourseDeleteResponse deleteCourse(Long courseId, Long memberId) {
+        Course course = courseRepository.findByIdAndMemberId(courseId, memberId)
+                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
+        courseRepository.delete(course);
+        return new CourseDeleteResponse("경로 삭제 성공");
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CommentCountRepository extends CrudRepository<CommentCount, Long> {
 
-    Optional<CommentCount> findByPostId(Long postId);
+    Optional<CommentCount> findByTravelId(Long travelId);
 }
