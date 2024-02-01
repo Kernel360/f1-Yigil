@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import React, { ComponentType, Dispatch, SetStateAction } from 'react';
+import React, { ComponentType } from 'react';
 
 interface TPopOverIcon {
   href: string;
   onClick?: () => void;
   label: string;
-  setIsModalOpened: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
   Icon: ComponentType<{ className?: string }>;
 }
 
@@ -13,7 +13,7 @@ export default function PopOverIcon({
   href,
   onClick,
   label,
-  setIsModalOpened,
+  closeModal,
   Icon,
 }: TPopOverIcon) {
   return (
@@ -22,7 +22,7 @@ export default function PopOverIcon({
       href={href}
       onClick={() => {
         onClick && onClick();
-        setIsModalOpened(false);
+        closeModal();
       }}
       className="flex items-center"
     >
