@@ -1,6 +1,6 @@
 'use client';
 import { EventFor } from '@/types/type';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 interface TPostReviewProps {
   viewTitle?: boolean;
@@ -16,8 +16,16 @@ export default function PostReview({
   reviewState,
   setReviewState,
 }: TPostReviewProps) {
+  const maxLength = 30;
+
   const onChangeReview = (e: EventFor<'input' | 'textarea', 'onChange'>) => {
     const { name, value } = e.currentTarget;
+    if (name === 'review' && e.target.value.length > maxLength) {
+      e.target.blur();
+      e.target.focus();
+
+      return;
+    }
     setReviewState({ ...reviewState, [name]: value });
   };
 
@@ -40,7 +48,7 @@ export default function PostReview({
           className="w-full p-4 bg-gray-100 resize-none rounded-xl"
           name="review"
           rows={5}
-          maxLength={29}
+          maxLength={maxLength}
           required
           onChange={onChangeReview}
           placeholder="간단한 리뷰를 작성하세요.(최대 30자)"
