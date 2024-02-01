@@ -9,7 +9,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 
-
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -68,7 +67,7 @@ public class KakaoLoginStrategyTest {
 
         HttpSession mockSession = mock(HttpSession.class);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "kakao");
 
         LoginResponse response = kakaoLoginStrategy.login(loginRequest, "mockAccessToken", mockSession);
 
@@ -81,7 +80,7 @@ public class KakaoLoginStrategyTest {
         when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(KakaoTokenInfoResponse.class)))
                 .thenThrow(new InvalidTokenException(ExceptionCode.INVALID_ACCESS_TOKEN));
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "kakao");
         HttpSession mockSession = mock(HttpSession.class);
 
         Throwable thrown = catchThrowable(() -> kakaoLoginStrategy.login(loginRequest, "invalidAccessToken", mockSession));
@@ -102,7 +101,7 @@ public class KakaoLoginStrategyTest {
 
         HttpSession mockSession = mock(HttpSession.class);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com", "kakao");
         LoginResponse response = kakaoLoginStrategy.login(loginRequest, "mockAccessToken", mockSession);
 
         assertThat(response.getMessage()).isEqualTo("로그인 성공");

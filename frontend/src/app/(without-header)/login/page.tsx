@@ -2,19 +2,30 @@ import React from 'react';
 
 import KakaoBtn from '@/app/_components/ui/button/Kakao';
 import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
-
-import LoginLogo from './_components/ui/LoginLogo';
+import LoginLogo from '/public/logo/yigil_logo.svg';
+import CloseButton from '@/app/_components/ui/button/CloseButton';
 
 export default function LoginPage() {
   return (
-    <div className="w-full h-screen bg-main flex flex-col justify-center items-center">
-      <LoginLogo />
-      <div className="text-xl text-[white]">
-        서비스를 사용하시려면 로그인 해주세요
+    <div className="w-full h-full bg-main flex flex-col items-center">
+      <CloseButton
+        containerStyle="w-full flex justify-end h-1/6 mr-6 mt-5"
+        style="cursor-pointer w-12 h-12 stroke-2 stroke-black hover:stroke-gray-700 active:stroke-gray-500"
+      />
+      <div className="h-2/6">
+        <LoginLogo className="w-[290px] h-[96px]" />
       </div>
-      <div className="mt-8 flex flex-col items-center justify-center gap-4">
-        <KakaoBtn />
-        <GoogleLoginButton />
+      <div className="w-full mx-7 h-2/6">
+        <div className="w-full flex gap-x-4 px-8  relative ">
+          <div className="border-t-[1px] border-white w-full h-1"></div>
+          <div className="absolute top-[-12px] left-1/2 -translate-x-1/2 px-2 text-xl text-white bg-main">
+            SNS로 간편로그인
+          </div>
+        </div>
+        <div className="w-full mt-10 px-7 flex flex-col items-center justify-center gap-4">
+          <KakaoBtn />
+          <GoogleLoginButton />
+        </div>
       </div>
     </div>
   );

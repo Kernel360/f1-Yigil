@@ -61,7 +61,7 @@ public class GoogleLoginStrategy implements LoginStrategy{
 
     private GoogleTokenInfoResponse requestGoogleTokenInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Basic " + accessToken);
+        headers.set("Authorization", "Bearer " + accessToken);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
         try {

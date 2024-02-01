@@ -91,7 +91,7 @@ public class GoogleLoginStrategyTest {
                 eq(accessToken)
         )).thenThrow(new InvalidTokenException(ExceptionCode.INVALID_ACCESS_TOKEN));
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "google");
         HttpSession mockSession = mock(HttpSession.class);
 
         Throwable thrown = catchThrowable(() -> googleLoginStrategy.login(loginRequest, accessToken, mockSession));
@@ -119,7 +119,7 @@ public class GoogleLoginStrategyTest {
 
         HttpSession mockSession = mock(HttpSession.class);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com", "google");
         LoginResponse response = googleLoginStrategy.login(loginRequest, accessToken, mockSession);
 
         assertThat(response.getMessage()).isEqualTo("로그인 성공");

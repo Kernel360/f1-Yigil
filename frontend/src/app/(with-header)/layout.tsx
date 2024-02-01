@@ -11,7 +11,7 @@ export default async function WithHeaderLayout({
 }) {
   const session = await getServerSession();
   return (
-    <section className="w-full flex flex-col">
+    <section className="w-full h-full flex flex-col">
       <Header session={session} />
       {children}
     </section>
