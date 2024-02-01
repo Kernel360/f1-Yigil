@@ -145,8 +145,10 @@ public class SpotServiceTest {
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
         Place mockPlace = new Place("mockPlaceName", "mockImageUrl", mockPoint, "mockDescription");
 
+
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
-//        when(spotService.getAttachFiles(spotCreateRequest.getFiles())).thenReturn(mockAttachFiles);
+
+
 
         when(placeService.getOrCreatePlace(
                 anyString(),

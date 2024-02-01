@@ -87,6 +87,7 @@ public class SpotService {
     public SpotUpdateResponse updateSpot(Long memberId, Long spotId,
             SpotUpdateRequest spotUpdateRequest) {
         Member member = memberService.findMemberById(memberId);
+
         AttachFiles attachFiles = getAttachFiles(spotUpdateRequest.getFiles());
         AttachFile mapStaticImageFile = getAttachFile(spotUpdateRequest.getMapStaticImageFile());
 
@@ -95,6 +96,7 @@ public class SpotService {
                 spotUpdateRequest.getPlaceAddress(),
                 spotUpdateRequest.getPlacePointJson()
         );
+
         spotRepository.save(
                 SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, place, attachFiles, mapStaticImageFile));
 

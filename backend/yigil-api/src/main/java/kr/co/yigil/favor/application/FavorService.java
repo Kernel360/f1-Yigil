@@ -65,11 +65,9 @@ public class FavorService {
         favorCountRepository.save(favorCount);
     }
 
-    private void decrementFavorCount(Long travelId) {
-        favorCountRepository.findById(travelId)
-                .ifPresent(favorCount -> {
-                    favorCount.decrementFavorCount();
-                    favorCountRepository.save(favorCount);
-                });
+    private void decrementFavorCount(Travel travel) {
+        FavorCount favorCount = favorRedisIntegrityService.ensureFavorCounts(travel);
+        favorCount.decrementFavorCount();
+        favorCountRepository.save(favorCount);
     }
 }
