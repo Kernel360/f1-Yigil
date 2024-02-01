@@ -15,7 +15,7 @@ public class CommentCount {
 
     private int commentCount;
 
-    public void incrementCommentCount() { commentCount++; }
+    public void incremenCommentCount() { commentCount++; }
 
     public void decrementCommentCount() { commentCount--;}
 }
