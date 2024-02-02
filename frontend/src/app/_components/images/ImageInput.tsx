@@ -65,11 +65,12 @@ export default function ImageInput({
       <input
         className="hidden"
         ref={fileInputRef}
+        key={availableSpace}
         id="add-image"
         type="file"
         accept="image/*"
         multiple
-        onChange={(event) => {
+        onInput={(event) => {
           if (!event.currentTarget.files) {
             return;
           }
