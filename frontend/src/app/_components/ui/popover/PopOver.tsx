@@ -9,7 +9,7 @@ interface TPopOver {
     onClick?: () => void;
   }[];
   closeModal: () => void;
-  position: string;
+  position?: string;
   style?: string;
   backDropStyle?: string;
 }
@@ -42,10 +42,6 @@ export default function PopOver({
   }, []);
   return (
     <>
-      <div
-        className={`fixed inset-0 max-w-[430px] mx-auto z-20 ${backDropStyle}`}
-        onClick={closeModal}
-      ></div>
       <nav
         className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${
           style ? style : 'z-0'
@@ -55,14 +51,15 @@ export default function PopOver({
         }
       >
         <ul className="flex flex-col gap-5 justify-center items-center p-4">
-          {popOverData.map(({ href, ...data }) => (
-            <PopOverIcon
-              key={href}
-              href={href}
-              {...data}
-              closeModal={closeModal}
-            />
-          ))}
+          {popOverData &&
+            popOverData.map(({ href, ...data }) => (
+              <PopOverIcon
+                key={href}
+                href={href}
+                {...data}
+                closeModal={closeModal}
+              />
+            ))}
         </ul>
       </nav>
     </>
