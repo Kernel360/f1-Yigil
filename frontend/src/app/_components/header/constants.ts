@@ -4,7 +4,7 @@ import { signOut } from 'next-auth/react';
 
 export const headerPopOverData = [
   {
-    href: '/mypage',
+    href: '/mypage/my',
     label: '마이페이지',
     Icon: MapPin,
   },

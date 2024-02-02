@@ -5,12 +5,5 @@ import React from 'react';
  * TODO: FAB 버튼 추가
  */
 export default function MyPage() {
-  return (
-    <div>
-      <MyPageInfo />
-      <div className="">
-        <MyPageContent />
-      </div>
-    </div>
-  );
+  return <div></div>;
 }

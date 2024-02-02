@@ -2,9 +2,7 @@
 import { useSession } from 'next-auth/react';
 import React from 'react';
 import RoundProfile from '../ui/profile/RoundProfile';
-/**
- * TODO: getServerSession promise 에러 해결하기
- */
+
 export default function MyPageInfo() {
   const { data } = useSession();
   return (
