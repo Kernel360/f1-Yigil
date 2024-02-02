@@ -3,8 +3,8 @@ package kr.co.yigil.follow.domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.SocialLoginType;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

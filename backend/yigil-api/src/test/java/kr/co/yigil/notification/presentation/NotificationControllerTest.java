@@ -1,7 +1,7 @@
 package kr.co.yigil.notification.presentation;
 
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.SocialLoginType;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
 import org.junit.jupiter.api.BeforeEach;

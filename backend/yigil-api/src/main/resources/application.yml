@@ -28,7 +28,7 @@ spring:
     redis:
       host: @REDIS_HOST@
       port: @REDIS_PORT@
-	jackson:
+  jackson:
     property-naming-strategy: SNAKE_CASE
 
 
@@ -46,12 +46,12 @@ cloud:
       auto: false
 
 server:
-	port: @YIGIL_API_PORT@
+  port: @YIGIL_API_PORT@
   servlet:
-    session:
-      cookie:
-        http-only: true
-        secure: false
+      session:
+        cookie:
+          http-only: true
+          secure: false
 
 jasypt:
   encryptor:
@@ -62,7 +62,6 @@ logging:
     root: DEBUG
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
-
 
 decorator:
   datasource:
