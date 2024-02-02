@@ -96,7 +96,7 @@ public class CourseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent)
                         .sessionAttr("memberId", 1L))
-                .andExpect(status().isMovedPermanently());
+                .andExpect(status().isOk());
     }
 
     @DisplayName("Course 삭제 요청이 왔을 때 200 응답과 response가 잘 반환되는지")

@@ -37,8 +37,8 @@ public class CommentController {
         CommentCreateResponse commentCreateResponse = commentService.createComment(accessor.getMemberId(), travelId, commentCreateRequest);
         return ResponseEntity.ok().body(commentCreateResponse);
     }
-    @GetMapping("/{travel_id}")
-    public ResponseEntity<List<CommentResponse>> getTopCommentList(
+    @GetMapping("/travels/{travel_id}")
+    public ResponseEntity<List<CommentResponse>> getParentCommentList(
         @PathVariable("travel_id") Long travelId,
         @PageableDefault(page = 0, size = 5)
         Pageable pageable
@@ -48,16 +48,16 @@ public class CommentController {
         return ResponseEntity.ok().body(commentListResponse);
     }
 
-    @GetMapping("/{travel_id}/{comment_id}")
-    public ResponseEntity<List<CommentResponse>> getReplyCommentList(
-        @PathVariable("travel_id") Long travelId,
+    @GetMapping("/parents/{comment_id}")
+    public ResponseEntity<List<CommentResponse>> getChildCommentList(
+        @PathVariable("travel_id") Long travelId, // todo : travelId가 필요한가?
         @PathVariable("comment_id") Long commentId
     ){
         List<CommentResponse> commentListResponse = commentService.getChildCommentList(travelId, commentId);
         return ResponseEntity.ok().body(commentListResponse);
     }
 
-    @DeleteMapping("/{travel_id}/{comment_id}")
+    @DeleteMapping("/{comment_id}")
     @MemberOnly
     public ResponseEntity<CommentDeleteResponse> deleteComment(
             @PathVariable("comment_id") Long commentId,
