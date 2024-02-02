@@ -1,32 +1,29 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import InfoTitle from './InfoTitle';
 
 export default function AddConfirmContent() {
   const url = usePathname();
-  const [isAddSpotPage, setIsAddSpotPage] = useState(false);
-  useEffect(() => {
-    if (url.includes('course')) setIsAddSpotPage(false);
-    else setIsAddSpotPage(true);
-  }, []);
+
+  const text = url.includes('spot')
+    ? '장소를 추가했어요!'
+    : '일정을 추가했어요!';
+
   return (
     <>
       <InfoTitle
-        label={`${isAddSpotPage ? '장소' : '일정'}`}
-        additionalLabel={`${
-          isAddSpotPage ? '를 추가했어요!' : '을 추가했어요!'
-        }`}
+        label={text.slice(0, 2)}
+        additionalLabel={text.slice(2)}
         textSizeAndLineHeight="text-[48px] leading-[60px]"
         fontBold="font-bold"
       />
-
       <div className="text-2xl ml-10 p-2 leading-9 h-1/3">
         <div>
           <span className="font-bold">마이페이지</span>에서
         </div>
-        <div>{isAddSpotPage ? '장소를' : '일정을'} 확인하세요.</div>
+        <div>{text.slice(0, 3)} 확인하세요.</div>
       </div>
       <ul className="mx-10 flex flex-col items-center gap-y-4">
         <Link

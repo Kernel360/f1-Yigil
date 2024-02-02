@@ -25,9 +25,7 @@ export default function InfoTitle({
         {label}
         <span className="text-black">{additionalLabel.slice(0, 1)}</span>
       </span>
-      <span className="text-black">
-        {additionalLabel.slice(1, additionalLabel.length)}
-      </span>
+      <span className="text-black">{additionalLabel.slice(1)}</span>
     </div>
   );
 }
