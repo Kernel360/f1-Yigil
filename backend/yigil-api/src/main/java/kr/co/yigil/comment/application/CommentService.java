@@ -20,6 +20,9 @@ import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.travel.Travel;
 import kr.co.yigil.travel.application.TravelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,13 +95,11 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getChildCommentList(Long travelId, Long parentId) {
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        List<Comment> comments = commentRepository.findChildCommentsByTravelIdAndParentId(travelId, parentId);
-        comments.stream()
-            .map(CommentResponse::from)
-            .forEach(commentResponses::add);
-        return commentResponses;
+    public Slice<CommentResponse> getChildCommentList(Long parentId, Pageable pageable) {
+        Slice<Comment> comments = commentRepository.findChildCommentsByParentId(parentId, pageable);
+        List<CommentResponse> commentResponses = comments.stream().map(CommentResponse::from)
+                .collect(Collectors.toList());
+        return new SliceImpl<>(commentResponses, pageable, comments.hasNext());
     }
 
     @Transactional
