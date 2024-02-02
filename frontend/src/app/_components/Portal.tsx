@@ -4,7 +4,14 @@ import { createPortal } from 'react-dom';
 import PopOver from './ui/popover/PopOver';
 
 interface TPortalType {
-  popOverData: any[];
+  popOverData: {
+    href: string;
+    label: string;
+    Icon: React.ComponentType<{
+      className?: string | undefined;
+    }>;
+    onClick?: (() => void) | undefined;
+  }[];
   style?: string;
   closeModal: any;
   position?: string;
