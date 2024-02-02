@@ -1,6 +1,6 @@
-import MyPageContent from '@/app/_components/mypage/MyPageContent';
+import MyPageContent from '@/app/_components/mypage/routeTabs/MyPageTabs';
 import MyPageInfo from '@/app/_components/mypage/MyPageInfo';
-import MyPageRoutes from '@/app/_components/mypage/MyPageRoutes';
+import MyPageRoutes from '@/app/_components/mypage/routeTabs/MyPageRoutes';
 
 export default function MyPageLayout({
   children,

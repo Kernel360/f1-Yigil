@@ -1,4 +1,4 @@
-import MyPageMyPlace from '@/app/_components/mypage/MyPlace';
+import MyPagePlace from '@/app/_components/mypage/routeTabs/MyPagePlace';
 import type { ReactNode } from 'react';
 
 export default async function MyPageInformation({
@@ -8,7 +8,7 @@ export default async function MyPageInformation({
 }) {
   return (
     <>
-      <MyPageMyPlace />
+      <MyPagePlace />
       {children}
     </>
   );

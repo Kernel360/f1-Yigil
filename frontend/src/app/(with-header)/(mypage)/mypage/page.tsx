@@ -1,4 +1,4 @@
-import MyPageContent from '@/app/_components/mypage/MyPageContent';
+import MyPageContent from '@/app/_components/mypage/routeTabs/MyPageTabs';
 import MyPageInfo from '@/app/_components/mypage/MyPageInfo';
 import React from 'react';
 /**

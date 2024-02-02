@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import React from 'react';
-import { myPageRoutes } from './constants';
+import { myPageRoutes } from '../constants';
 
 function checkPath(path: string, href: string) {
   const pathRoot = path.slice(1).split('/')[0];

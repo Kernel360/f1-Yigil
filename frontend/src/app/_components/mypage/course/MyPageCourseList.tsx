@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MyPagePlaceItem, { TMyPagePlaceItem } from './MyPagePlaceItem';
+import MyPagePlaceItem, { TMyPagePlaceItem } from './MyPageCourseItem';
 
 export default function MyPagePlaceList({
   placeList,

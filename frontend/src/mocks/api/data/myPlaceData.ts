@@ -1,11 +1,13 @@
-export const myPlaceData = [
+import { TMyPageSpotType } from '@/app/_components/mypage/spot/MyPageSpotList';
+
+export const myPlaceData: TMyPageSpotType[] = [
   {
     post_id: 1,
     travel_id: 1,
     title: '재밌는 여행',
-    imageUrl: 'https://picsum.photos/seed/picsum/400/174',
+    image_url: 'https://picsum.photos/seed/picsum/104/104',
     description: '설명',
-    isSecret: false,
+    isSecret: true,
     post_date: new Date(Date.now()).toLocaleString(),
     rating: 5,
   },
@@ -13,7 +15,7 @@ export const myPlaceData = [
     post_id: 2,
     travel_id: 2,
     title: '잼있는 여행',
-    imageUrl: 'https://picsum.photos/seed/picsum/400/174',
+    image_url: 'https://picsum.photos/seed/picsum/400/174',
     description: '설영우',
     isSecret: false,
     post_date: new Date(Date.now()).toLocaleString(),
