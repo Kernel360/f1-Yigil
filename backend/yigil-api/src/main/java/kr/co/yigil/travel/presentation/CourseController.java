@@ -13,7 +13,6 @@ import kr.co.yigil.travel.dto.response.CourseInfoResponse;
 import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,7 +68,7 @@ public class CourseController {
         CourseUpdateResponse courseUpdateResponse = courseService.updateCourse(courseId,
                 accessor.getMemberId(), courseUpdateRequest);
         URI uri = URI.create("/api/v1/courses/" + courseId);
-        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+        return ResponseEntity.ok()
                 .location(uri)
                 .body(courseUpdateResponse);
     }
