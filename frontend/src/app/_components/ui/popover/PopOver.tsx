@@ -46,13 +46,15 @@ export default function PopOver({
         className={`fixed inset-0 max-w-[430px] mx-auto z-20 ${backDropStyle}`}
         onClick={closeModal}
       ></div>
-      <div
-        className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${style}`}
+      <nav
+        className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${
+          style ? style : 'z-0'
+        } `}
         onKeyDown={(e) =>
           (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') && closeModal()
         }
       >
-        <div className="flex flex-col gap-5 justify-center items-center p-4">
+        <ul className="flex flex-col gap-5 justify-center items-center p-4">
           {popOverData.map(({ href, ...data }) => (
             <PopOverIcon
               key={href}
@@ -61,8 +63,8 @@ export default function PopOver({
               closeModal={closeModal}
             />
           ))}
-        </div>
-      </div>
+        </ul>
+      </nav>
     </>
   );
 }

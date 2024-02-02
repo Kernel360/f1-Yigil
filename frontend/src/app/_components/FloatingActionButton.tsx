@@ -29,8 +29,8 @@ export default function FloatingActionButton() {
         <PlusIcon
           className={`${
             modalOpened
-              ? 'rotate-45 duration-1000 z-30'
-              : 'rotate-0 duration-1000'
+              ? 'rotate-45 duration-200 z-30'
+              : 'rotate-0 duration-200'
           } `}
         />
         {modalOpened && (

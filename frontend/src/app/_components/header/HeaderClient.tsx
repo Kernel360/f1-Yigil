@@ -48,6 +48,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
               popOverData={headerPopOverData}
               closeModal={closeModal}
               position="bottom-[-90px] right-4"
+              style="z-30"
             />
           )}
         </>
