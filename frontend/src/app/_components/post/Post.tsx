@@ -4,7 +4,7 @@ import CommentIcon from '/public/icons/comment.svg';
 import HeartIcon from '/public/icons/heart.svg';
 import StarIcon from '/public/icons/star.svg';
 
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactElement } from 'react';
 
 type TRegion =
   | '강원'
@@ -29,11 +29,11 @@ export interface TPost {
 }
 
 function IconWithCounts({
-  Icon,
+  icon,
   count,
   rating,
 }: {
-  Icon: ComponentType<{ className?: string }>;
+  icon: ReactElement;
   count: number;
   rating?: boolean;
 }) {
@@ -41,7 +41,7 @@ function IconWithCounts({
 
   return (
     <div className="flex items-center">
-      <Icon className="w-4 h-4" />
+      {icon}
       <p className="pl-1 flex justify-center">{label}</p>
     </div>
   );
@@ -72,9 +72,21 @@ export default function Post({
       <section className="flex justify-between items-center gap-2 px-4">
         <p className="text-xl truncate">{title}</p>
         <div className="flex gap-2">
-          <IconWithCounts Icon={CommentIcon} count={commentCount} />
-          <IconWithCounts Icon={HeartIcon} count={likeCount} />
-          <IconWithCounts Icon={StarIcon} count={rating} rating />
+          <IconWithCounts
+            icon={<CommentIcon className="w-4 h-4" />}
+            count={commentCount}
+          />
+          <IconWithCounts
+            icon={<HeartIcon className="w-4 h-4" />}
+            count={likeCount}
+          />
+          <IconWithCounts
+            icon={
+              <StarIcon className="w-4 h-4 fill-[#FACC15] stroke-[#FACC15]" />
+            }
+            count={rating}
+            rating
+          />
         </div>
       </section>
     </article>

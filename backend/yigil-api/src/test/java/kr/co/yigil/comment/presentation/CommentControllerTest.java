@@ -3,7 +3,9 @@ package kr.co.yigil.comment.presentation;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,32 +16,27 @@ import kr.co.yigil.comment.dto.request.CommentCreateRequest;
 import kr.co.yigil.comment.dto.response.CommentCreateResponse;
 import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
 import kr.co.yigil.comment.dto.response.CommentResponse;
-import kr.co.yigil.travel.application.SpotService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(CommentController.class)
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
 class CommentControllerTest {
 
     private MockMvc mockMvc;
 
     @MockBean
     private CommentService commentService;
-
-    @InjectMocks
-    private CommentController commentController;
 
     @BeforeEach
     public void setup(WebApplicationContext webApplicationContext){
@@ -68,7 +65,7 @@ class CommentControllerTest {
         CommentResponse mockCommentResponse1 = new CommentResponse();
         CommentResponse mockCommentResponse2 = new CommentResponse();
 
-        given(commentService.getTopLevelCommentList(anyLong())).willReturn(
+        given(commentService.getParentCommentList(anyLong())).willReturn(
             List.of(mockCommentResponse1, mockCommentResponse2));
 
         mockMvc.perform(get("/api/v1/comments/1")
@@ -82,7 +79,7 @@ class CommentControllerTest {
         CommentResponse mockCommentResponse1 = new CommentResponse();
         CommentResponse mockCommentResponse2 = new CommentResponse();
 
-        given(commentService.getReplyCommentList(anyLong(), anyLong())).willReturn(List.of(mockCommentResponse1, mockCommentResponse2));
+        given(commentService.getChildCommentList(anyLong(), anyLong())).willReturn(List.of(mockCommentResponse1, mockCommentResponse2));
 
         mockMvc.perform(get("/api/v1/comments/1/1")
                 .contentType(MediaType.APPLICATION_JSON))

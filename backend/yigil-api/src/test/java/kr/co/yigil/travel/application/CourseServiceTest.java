@@ -1,30 +1,37 @@
 package kr.co.yigil.travel.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
+import kr.co.yigil.comment.domain.CommentCount;
+import kr.co.yigil.comment.dto.response.CommentResponse;
+import kr.co.yigil.favor.application.FavorRedisIntegrityService;
+import kr.co.yigil.favor.domain.FavorCount;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.AttachFiles;
+import kr.co.yigil.file.FileType;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.post.application.PostService;
-import kr.co.yigil.post.domain.Post;
+import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.Course;
 import kr.co.yigil.travel.Spot;
-import kr.co.yigil.travel.Travel;
-import kr.co.yigil.travel.repository.CourseRepository;
-import kr.co.yigil.travel.repository.TravelRepository;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseCreateResponse;
-import kr.co.yigil.travel.dto.response.CourseFindResponse;
+import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
+import kr.co.yigil.travel.dto.response.CourseInfoResponse;
+import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
+import kr.co.yigil.travel.repository.CourseRepository;
+import kr.co.yigil.travel.repository.SpotRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,169 +41,208 @@ import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CourseServiceTest {
+public class CourseServiceTest {
 
     @InjectMocks
     private CourseService courseService;
 
     @Mock
-    private  MemberService memberService;
+    private CourseRepository courseRepository;
 
     @Mock
-    private PostService postService;
+    private MemberService memberService;
 
     @Mock
     private SpotService spotService;
 
     @Mock
-    private CourseRepository courseRepository;
-
+    private FavorRedisIntegrityService favorRedisIntegrityService;
     @Mock
-    private TravelRepository travelRepository;
-
+    private CommentRedisIntegrityService commentRedisIntegrityService;
     @Mock
     private CommentService commentService;
+    @Mock
+    private SpotRepository spotRepository;
 
-    @DisplayName("createCourse 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지.")
+    @DisplayName("getCourseList 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
     @Test
-    void GivenValidInput_WhenCreateCourse_ThenReturnValidPostCreateReponse(){
+    void GivenValidInput_WhenGetCourseListTest_ThenReturnCourseFindListResponse() {
+        // Arrange
+        Long placeId = 1L;
 
-        // Given
-        Long memberId = 1L;
-        String lineStringJson ="{ \"type\": \"LineString\", \"coordinates\": [[0, 0], [1, 1], [2, 2]] }";
-        CourseCreateRequest courseCreateRequest = new CourseCreateRequest(
-            "title1", 1, List.of(11L, 12L, 13L), lineStringJson
-        );
+        List<Course> mockCourses = new ArrayList<>();
+        Long courseId = 1L;
+        mockCourses.add(
+                new Course(new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao"),
+                        courseId, new GeometryFactory().createLineString(
+                        new Coordinate[]{new Coordinate(127.123456, 37.123456),
+                                new Coordinate(127.123456, 37.123456)}), new ArrayList<>(), 0,
+                        "mockTitle"));
+        when(courseRepository.findBySpotPlaceId(placeId)).thenReturn(mockCourses);
 
-        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
+        when(favorRedisIntegrityService.ensureFavorCounts(any(Course.class))).thenReturn(
+                new FavorCount(courseId, 1));
+        when(commentRedisIntegrityService.ensureCommentCount(any(Course.class))).thenReturn(
+                new CommentCount(courseId, 1));
+        // Act
+        CourseListResponse courseListResponse = courseService.getCourseList(placeId);
 
-        Mockito.when(memberService.findMemberById(memberId)).thenReturn(mockMember);
+        // Assert
+        assertThat(courseListResponse).isNotNull();
+        assertThat(courseListResponse.getCourseFindDtos()).hasSize(1);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
-        Point mockPoint1 = geometryFactory.createPoint(new Coordinate(0,0));
-        Spot mockSpot1 = new Spot(11L, mockPoint1, false, "anyTitle1", "아무말1","anyImageUrl1");
-
-        Point mockPoint2 = geometryFactory.createPoint(new Coordinate(1,1));
-        Spot mockSpot2 = new Spot(12L, mockPoint2, false, "anyTitle2", "아무말2","anyImageUrl2");
-
-        Point mockPoint3 = geometryFactory.createPoint(new Coordinate(2,2));
-        Spot mockSpot3 = new Spot(13L, mockPoint3, false, "anyTitle3", "아무말","anyImageUrl3");
-
-        List<Spot> mockSpotList = List.of(mockSpot1, mockSpot2, mockSpot3);
-
-        List<Coordinate> coordinates = List.of(
-            new Coordinate(1, 1),
-            new Coordinate(2, 2),
-            new Coordinate(3, 3)
-        );
-
-        LineString mockPath = geometryFactory.createLineString(coordinates.toArray(new Coordinate[0]));
-        Course mockCourse = new Course(mockPath, mockSpotList, 1, mockSpot1.getTitle());
-
-        when(courseRepository.save(any())).thenReturn(mockCourse);
-
-        doNothing().when(postService).deleteOnlyPost(Mockito.anyLong(), Mockito.anyLong());
-        when(spotService .getSpotListFromSpotIds(anyList())).thenReturn(mockSpotList);
-
-        CourseCreateResponse response = courseService.createCourse(memberId, courseCreateRequest);
-        assertEquals("경로 생성 성공", response.getMessage());
     }
 
-    @DisplayName("findCourse 메서드가 올바른 응답을 내리는지")
+    @DisplayName("createCourse 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
     @Test
-    void Given_WhenfindCourse_Then(){
-
-        Long postId = 1L;
+    void GivenValidInput_WhenCreateCourseTest_ThenReturnCourseCreateResponse() {
+        // Arrange
+        Long memberId = 1L;
+        Long spotId = 1L;
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
+                1L);
+        Spot mockSpot = new Spot(spotId, mockMember,
+                new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false,
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),mockAttachFile,
+                new Place("mockPlaceName", "mockImageUrl",
+                        new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
+                        "mockDescription"), 5.0);
+        List<Spot> mockSpots = new ArrayList<>();
+        mockSpots.add(mockSpot);
+        List<Long> spotIds = new ArrayList<>();
+        spotIds.add(spotId);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
-        List<Coordinate> coordinates = List.of(
-            new Coordinate(1, 1),
-            new Coordinate(2, 2),
-            new Coordinate(3, 3)
-        );
-        LineString mockPath = geometryFactory.createLineString(coordinates.toArray(new Coordinate[0]));
+        String lineStringJson = "{\"type\":\"LineString\",\"coordinates\":[[127.123456,37.123456],[127.123456,37.123456]]}";
+        CourseCreateRequest courseCreateRequest = new CourseCreateRequest("mockTitle", 0, spotIds,
+                lineStringJson);
 
-        Point mockPoint1 = geometryFactory.createPoint(new Coordinate(0,0));
-        Spot mockSpot1 = new Spot(11L, mockPoint1, false, "anyTitle1", "아무말1","anyImageUrl1");
+        when(memberService.findMemberById(memberId)).thenReturn(mockMember);
+        when(spotService.getSpotListFromSpotIds(spotIds)).thenReturn(mockSpots);
 
-        Point mockPoint2 = geometryFactory.createPoint(new Coordinate(1,1));
-        Spot mockSpot2 = new Spot(12L, mockPoint2, false, "anyTitle2", "아무말2","anyImageUrl2");
+        LineString mockPath = new GeometryFactory().createLineString(
+                new Coordinate[]{new Coordinate(127.123456, 37.123456),
+                        new Coordinate(127.123456, 37.123456)});
+        Course mockCourse = new Course(mockMember, mockPath, mockSpots, 0, "mockTitle");
+        when(courseRepository.save(any(Course.class))).thenReturn(mockCourse);
 
-        Point mockPoint3 = geometryFactory.createPoint(new Coordinate(2,2));
-        Spot mockSpot3 = new Spot(13L, mockPoint3, false, "anyTitle3", "아무말","anyImageUrl3");
+        // Act
+        CourseCreateResponse courseCreateResponse = courseService.createCourse(memberId,
+                courseCreateRequest);
 
-        List<Spot> mockSpotList = List.of(mockSpot1, mockSpot2, mockSpot3);
+        // Assert
+        assertThat(courseCreateResponse).isNotNull();
+        assertThat(courseCreateResponse).isInstanceOf(CourseCreateResponse.class);
+        assertThat(courseCreateResponse.getMessage()).isEqualTo("경로 생성 성공");
+    }
 
-        Course mockCourse = new Course(mockPath, mockSpotList, 1, mockSpot1.getTitle());
 
-        Post mockPost = new Post(postId, mockCourse, mockMember);
+    @DisplayName("getCourseInfo 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
+    @Test
+    void GivenValidInput_WhenGetCourseInfoTest_ThenReturnCourseFindResponse() {
+        // Arrange
+        Long courseId = 1L;
 
-        when(postService.findPostById(anyLong())).thenReturn(mockPost);
+        Course mockCourse = new Course(
+                new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao"),
+                courseId,
+                new GeometryFactory().createLineString(
+                        new Coordinate[]{new Coordinate(127.123456, 37.123456),
+                                new Coordinate(127.123456, 37.123456)}), new ArrayList<>(), 0,
+                "mockTitle");
+        when(courseRepository.findById(anyLong())).thenReturn(Optional.of(mockCourse));
 
-        when(commentService.getCommentList(mockCourse.getId())).thenReturn(List.of());
+        when(commentService.getCommentList(anyLong())).thenReturn(List.of(new CommentResponse()));
+        // Act
+        CourseInfoResponse courseInfoResponse = courseService.getCourseInfo(courseId);
 
-        CourseFindResponse response =  courseService.findCourse(postId);
-        assertThat(response).isInstanceOf(CourseFindResponse.class);
+        // Assert
+        assertThat(courseInfoResponse).isNotNull();
+        assertThat(courseInfoResponse).isInstanceOf(CourseInfoResponse.class);
+        assertThat(courseInfoResponse.getCourseId()).isEqualTo(courseId);
     }
 
     @DisplayName("updateCourse 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
     @Test
-    void GivenValidParameter_WhenUpdateCourse_ThenReturnValidResponse(){
-        Long postId = 1L;
+    void GivenValidInput_WhenUpdateCourseTest_ThenReturnCourseUpdateResponse() {
+        // Arrange
         Long memberId = 1L;
-        List<Long> spotIdList = Arrays.asList(11L, 12L, 13L);
-        List<Long> addedSpotIdList = Arrays.asList(14L, 15L);
-        List<Long> removedSpotIdList = Arrays.asList(11L);
+        Long courseId = 3L;
+        Long spotId1 = 1L;
+        Long spotId2 = 2L;
+        List<Long> spotIds = List.of(spotId2);
+        List<Long> removedSpotIds = List.of(spotId1);
+        List<Long> addedSpotIds = List.of(spotId2);
 
-        GeometryFactory geometryFactory = new GeometryFactory();
-        CourseUpdateRequest request = new CourseUpdateRequest(
-            "title",
-            "{ \"type\": \"LineString\", \"coordinates\": [[0, 0], [1, 1], [2, 2]] }",
-            1,
-            spotIdList,
-            removedSpotIdList,
-            addedSpotIdList
+        CourseUpdateRequest courseUpdateRequest = new CourseUpdateRequest(
+                "mockTitle",
+                "{\"type\":\"LineString\",\"coordinates\":[[127.123456,37.123456],[127.123456,37.123456]]}",
+                0,
+                spotIds,
+                removedSpotIds,
+                addedSpotIds
         );
 
-        List<Coordinate> coordinates = List.of(
-            new Coordinate(0, 0),
-            new Coordinate(1, 1),
-            new Coordinate(2, 2)
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
+        when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
-        );
+        Coordinate mockCoordinate1 = new Coordinate(127.123456, 37.123456);
+        Coordinate mockCoordinate2 = new Coordinate(238.234567, 38.234567);
+        Point mockPoint1 = new GeometryFactory().createPoint(mockCoordinate1);
+        Point mockPoint2 = new GeometryFactory().createPoint(mockCoordinate2);
+        Place mockPlace1 = new Place("mockPlaceName", "mockImageUrl", mockPoint1,
+                "mockDescription");
+        Place mockPlace2 = new Place("mockPlaceName", "mockImageUrl", mockPoint2,
+                "mockDescription");
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
+                1L);
+        Spot mockSpot1 = new Spot(spotId1, mockMember, mockPoint1, false,
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),mockAttachFile,
+                mockPlace1, 4.0);
 
-        LineString lineString = geometryFactory.createLineString(coordinates.toArray(new Coordinate[0]));
+        Spot mockSpot2 = new Spot(spotId2, mockMember, mockPoint2, false,
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),mockAttachFile,
+                mockPlace2, 4.5);
 
-        // spotRepository mocking
-        Point mockPoint1 = geometryFactory.createPoint(new Coordinate(0,0));
-        Spot mockSpot1 = new Spot(11L, mockPoint1, false, "anyTitle1", "아무말1","anyImageUrl1");
+        when(spotRepository.findAllById(anyList())).thenReturn(List.of(mockSpot2));
+        when(spotService.findSpotById(spotId1)).thenReturn(mockSpot1);
+        when(spotService.findSpotById(spotId2)).thenReturn(mockSpot2);
 
-        Point mockPoint2 = geometryFactory.createPoint(new Coordinate(1,1));
-        Spot mockSpot2 = new Spot(12L, mockPoint2, false, "anyTitle2", "아무말2","anyImageUrl2");
+        LineString mockLineString = new GeometryFactory().createLineString(
+                new Coordinate[]{mockCoordinate1, mockCoordinate2});
+        Course mockCourse = new Course(mockMember, mockLineString, new ArrayList<>(), 0,
+                "mockTitle");
+        when(courseRepository.save(any(Course.class))).thenReturn(mockCourse);
 
-        Point mockPoint3 = geometryFactory.createPoint(new Coordinate(2,2));
-        Spot mockSpot3 = new Spot(13L, mockPoint3, false, "anyTitle3", "아무말","anyImageUrl3");
+        // Act
+        CourseUpdateResponse courseUpdateResponse = courseService.updateCourse(courseId, memberId,
+                courseUpdateRequest);
 
-        List<Spot> mockSpotList = List.of(mockSpot1, mockSpot2, mockSpot3);
-        List<Travel> mockTravelList = mockSpotList.stream().map(Travel.class::cast).toList();
-        LineString mockPath = geometryFactory.createLineString(coordinates.toArray(new Coordinate[0]));
+        // Assert
+        assertThat(courseUpdateResponse).isNotNull();
+        assertThat(courseUpdateResponse.getMessage()).isEqualTo("경로 수정 성공");
 
-        //  postService.findPostById 모킹
-        Travel mockTravel = new Course(lineString, mockSpotList, 1, "");
-        Member mockMember = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
-        when(postService.findPostById(postId)).thenReturn(new Post(postId, mockTravel, mockMember));
-        when(memberService.findMemberById(anyLong())).thenReturn(mockMember);
-        when(travelRepository.findAllById(spotIdList)).thenReturn(mockTravelList);
-        when(spotService.findSpotById(anyLong())).thenReturn(mockSpotList.get(0));
-        doNothing().when(postService).deleteOnlyPost(Mockito.anyLong(), Mockito.anyLong());  // deleteOnlyPost 메서드가 호출되면 아무런 동작도 하지 않음
-        when(courseRepository.save(Mockito.any())).thenReturn(new Course(mockPath, mockSpotList, 1, mockSpot1.getTitle()));  // save 메서드가 호출되면 가상의 Course 객체 반환
-        doNothing().when(postService).updatePost(Mockito.anyLong(), Mockito.any(), Mockito.any());  // updatePost 메서드가 호출되면 아무런 동작도 하지 않음
-
-        assertThat(courseService.updateCourse(postId, memberId, request)).isInstanceOf(CourseUpdateResponse.class);
     }
+
+    @DisplayName("deleteCourse 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
+    @Test
+    void GivenValidInput_WhenDeleteCourseTest_ThenReturnCourseDeleteResponse() {
+        // Arrange
+        Long memberId = 1L;
+        Long courseId = 1L;
+
+        Course mockCourse = new Course(new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao"), courseId, new GeometryFactory().createLineString(new Coordinate[] {new Coordinate(127.123456, 37.123456), new Coordinate(127.123456, 37.123456)}), new ArrayList<>(), 0, "mockTitle");
+        when(courseRepository.findByIdAndMemberId(courseId, memberId)).thenReturn(Optional.of(mockCourse));
+
+        // Act
+        CourseDeleteResponse courseDeleteResponse = courseService.deleteCourse(courseId, memberId);
+
+        // Assert
+        assertThat(courseDeleteResponse).isNotNull();
+        assertThat(courseDeleteResponse.getMessage()).isEqualTo("경로 삭제 성공");
+    }
+
 }

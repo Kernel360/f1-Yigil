@@ -6,8 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.post.domain.Post;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.travel.Travel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,10 +26,10 @@ public class Favor {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Travel travel;
 
-    public Favor(final Member member, final Post post) {
+    public Favor(final Member member, final Travel travel) {
         this.member = member;
-        this.post = post;
+        this.travel = travel;
     }
 }

@@ -2,98 +2,113 @@ package kr.co.yigil.travel.presentation;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.travel.application.SpotService;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
 import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
-import kr.co.yigil.travel.dto.response.SpotFindResponse;
+import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
+import kr.co.yigil.travel.dto.response.SpotInfoResponse;
+import kr.co.yigil.travel.dto.response.SpotListResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
 @WebMvcTest(SpotController.class)
-class SpotControllerTest {
-
+public class SpotControllerTest {
     private MockMvc mockMvc;
-
-    @MockBean
-    private SpotService spotService;
 
     @InjectMocks
     private SpotController spotController;
 
+    @MockBean
+    private SpotService spotService;
+
     @BeforeEach
-    public void setup(WebApplicationContext webApplicationContext){
+    public void setup(WebApplicationContext webApplicationContext) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @DisplayName("spot 게시글 생성 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
+    @DisplayName("Spot 리스트 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
     @Test
-    void whenCreateSpotPost_thenReturns200AndSpotCreateResponse() throws Exception {
-        SpotCreateResponse mockResponse = new SpotCreateResponse();
-        Accessor accessor = Accessor.member(1L);
+    public void getSpotListTest() throws Exception {
+        when(spotService.getSpotList(anyLong())).thenReturn(new SpotListResponse());
 
-        given(spotService.createSpot(anyLong(), any(SpotCreateRequest.class))).willReturn(mockResponse);
-        MockMultipartFile imageFile = new MockMultipartFile("file", "filename.jpg", "image/jpeg", new byte[10]);
-        MockMultipartFile videoFile = new MockMultipartFile("file2", "filename2.mp4", "video/mp4", new byte[10]);
-
-        mockMvc.perform(multipart("/api/v1/spots")
-                .file(imageFile)
-                .file(videoFile)
-                .param("pointJson","pointJson")
-                .param("title","title")
-                .param("description", "description")
-                .sessionAttr("memberId", accessor.getMemberId()))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/spots/places/1"))
+                .andExpect(status().isOk());
     }
 
-
-
-    @DisplayName("spot 게시글이 조회될 때 200 응답과 response가 잘 반환되는지")
+    @DisplayName("Spot 생성 요청이 왔을 때 201 응답과 response가 잘 반환되는지")
     @Test
-    void whenGetSpotPost_thenReturns200AndSpotFindResponse() throws Exception {
-        SpotFindResponse mockResponse = new SpotFindResponse();
-        given(spotService.findSpotByPostId(anyLong())).willReturn(mockResponse);
-        mockMvc.perform(get("/api/v1/spots/1")
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+    public void createSpotTest() throws Exception {
+        when(spotService.createSpot(anyLong(), any(SpotCreateRequest.class)))
+                .thenReturn(new SpotCreateResponse());
+
+        String jsonContent = "{"
+                + "\"title\":\"Test Spot\","
+                + "\"description\":\"This is a test spot\","
+                + "\"location\":\"{\\\"type\\\": \\\"Point\\\", \\\"coordinates\\\": [1, 2]}\""
+                + "}";
+
+        mockMvc.perform(post("/api/v1/spots")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent)
+                        .sessionAttr("memberId", 1L))
+                .andExpect(status().isCreated());
     }
 
-    @DisplayName("spot 게시글이 업데이트 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
+    @DisplayName("Spot 정보 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
     @Test
-    void whenUpdateSpotPost_thenReturns200AndSpotUpdateResponse() throws Exception {
-        SpotUpdateResponse mockResponse = new SpotUpdateResponse();
-        SpotUpdateRequest mockRequest = new SpotUpdateRequest();
-        Accessor accessor = Accessor.member(1L);
-        Long postId = 1L;
-        given(spotService.updateSpot(accessor.getMemberId(), postId, mockRequest)).willReturn(mockResponse);
-        MockMultipartFile imageFile = new MockMultipartFile("file", "filename.jpg", "image/jpeg", new byte[10]);
-        MockMultipartFile videoFile = new MockMultipartFile("file2", "filename2.mp4", "video/mp4", new byte[10]);
-        mockMvc.perform(multipart("/api/v1/spots/"+ postId)
-                .file(imageFile)
-                .file(videoFile)
-                .param("pointJson","pointJson").param("title","title")
-                .param("description", "description")
-                .sessionAttr("memberId", accessor.getMemberId()))
-            .andExpect(status().isOk());
+    public void getSpotInfoTest() throws Exception {
+        when(spotService.getSpotInfo(anyLong())).thenReturn(new SpotInfoResponse());
+
+        mockMvc.perform(get("/api/v1/spots/1"))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("Spot 업데이트 요청이 왔을 때 301 응답과 response가 잘 반환되는지")
+    @Test
+    public void updateSpotTest() throws Exception {
+        when(spotService.updateSpot(anyLong(), anyLong(), any(SpotUpdateRequest.class)))
+                .thenReturn(new SpotUpdateResponse());
+
+        String jsonContent = "{"
+                + "\"title\":\"Updated Spot\","
+                + "\"description\":\"This is an updated test spot\","
+                + "\"location\":\"{\\\"type\\\": \\\"Point\\\", \\\"coordinates\\\": [3, 4]}\""
+                + "}";
+
+        mockMvc.perform(post("/api/v1/spots/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent)
+                        .sessionAttr("memberId", 1L))
+                .andExpect(status().isMovedPermanently());
+    }
+
+    @DisplayName("Spot 삭제 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
+    @Test
+    public void deleteSpotTest() throws Exception {
+        when(spotService.deleteSpot(anyLong(), anyLong())).thenReturn(new SpotDeleteResponse());
+
+        mockMvc.perform(delete("/api/v1/spots/1")
+                        .sessionAttr("memberId", 1L))
+                .andExpect(status().isOk());
     }
 }

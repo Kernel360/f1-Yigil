@@ -18,7 +18,6 @@ export default function PostList({
     loop: false,
     dragFree: true,
   });
-
   return (
     <section className="flex flex-col" aria-label="posts">
       <div className="flex justify-between px-8">
