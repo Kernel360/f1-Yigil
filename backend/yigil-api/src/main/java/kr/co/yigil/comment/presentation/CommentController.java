@@ -46,9 +46,10 @@ public class CommentController {
             @PageableDefault(size = 5)
             Pageable pageable
 
-    ){
-        List<CommentResponse> commentListResponse = commentService.getParentCommentList(travelId);
-        return ResponseEntity.ok().body(commentListResponse);
+    ) {
+        Slice<CommentResponse> parentCommentList = commentService.getParentCommentList(travelId,
+                pageable);
+        return ResponseEntity.ok().body(parentCommentList);
     }
 
     @GetMapping("/parents/{comment_id}")

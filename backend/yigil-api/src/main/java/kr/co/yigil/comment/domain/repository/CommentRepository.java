@@ -22,7 +22,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>  {
     )
     Slice<Comment> findParentCommentsByTravelId(@Param("travelId") Long travelId, Pageable pageable);
 
-    @Query("SELECT c FROM Comment c WHERE c.travel.id = :travelId AND c.isDeleted = false AND c.parent.id = :parentId "
+    @Query("SELECT c FROM Comment c WHERE c.isDeleted = false AND c.parent.id = :parentId "
         + "ORDER BY c.createdAt ASC "
     )
     Slice<Comment> findChildCommentsByParentId(@Param("parentId") Long parentId, Pageable pageable);

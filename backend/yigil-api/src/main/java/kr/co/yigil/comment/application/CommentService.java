@@ -4,6 +4,7 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_COMMENT_ID;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import kr.co.yigil.comment.domain.Comment;
 import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.comment.domain.repository.CommentRepository;
@@ -68,11 +69,11 @@ public class CommentService {
     public List<CommentResponse> getCommentList(Long travelId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
 
-        commentRepository.findParentCommentsByTravelId(travelId)
+        commentRepository.findParentCommentsByTravelId(travelId, Pageable.unpaged())
             .forEach(comment -> {
                 CommentResponse commentResponse = CommentResponse.from(comment);
                 commentResponses.add(commentResponse);
-                commentRepository.findChildCommentsByTravelIdAndParentId(travelId, comment.getId())
+                commentRepository.findChildCommentsByParentId(comment.getId(), Pageable.unpaged())
                     .forEach(reply -> {
                         CommentResponse replyResponse = CommentResponse.from(reply);
                         commentResponse.addChild(replyResponse);
@@ -83,15 +84,12 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentResponse> getParentCommentList(Long travelId) {
+    public Slice<CommentResponse> getParentCommentList(Long travelId, Pageable pageable) {
+        Slice<Comment> comments = commentRepository.findParentCommentsByTravelId(travelId, pageable);
+        List<CommentResponse> commentResponses = comments.stream().map(CommentResponse::from)
+                .collect(Collectors.toList());
 
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        List<Comment> comments = commentRepository.findParentCommentsByTravelId(travelId);
-        comments.stream()
-            .map(CommentResponse::from)
-            .forEach(commentResponses::add);
-
-        return commentResponses;
+        return new SliceImpl<>(commentResponses, pageable, comments.hasNext());
     }
 
     @Transactional(readOnly = true)
