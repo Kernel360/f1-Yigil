@@ -1,218 +1,265 @@
 package kr.co.yigil.travel.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
-import kr.co.yigil.comment.dto.response.CommentResponse;
+import kr.co.yigil.comment.domain.CommentCount;
+import kr.co.yigil.favor.application.FavorRedisIntegrityService;
+import kr.co.yigil.favor.domain.FavorCount;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.AttachFiles;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploadEvent;
-import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.global.exception.ExceptionCode;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.SocialLoginType;
-import kr.co.yigil.post.application.PostService;
-import kr.co.yigil.post.domain.Post;
-import kr.co.yigil.travel.Course;
+import kr.co.yigil.place.Place;
+import kr.co.yigil.place.application.PlaceService;
 import kr.co.yigil.travel.Spot;
-import kr.co.yigil.travel.repository.SpotRepository;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
 import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
-import kr.co.yigil.travel.dto.response.SpotFindResponse;
+import kr.co.yigil.travel.dto.response.SpotInfoResponse;
+import kr.co.yigil.travel.dto.response.SpotListResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
-
+import kr.co.yigil.travel.repository.SpotRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-class SpotServiceTest {
+public class SpotServiceTest {
 
     @InjectMocks
     private SpotService spotService;
     @Mock
-    private PostService postService;
+    private SpotRepository spotRepository;
     @Mock
     private MemberService memberService;
     @Mock
-    private ApplicationEventPublisher applicationEventPublisher;
-    @Mock
-    private SpotRepository spotRepository;
-    @Mock
     private CommentService commentService;
+    @Mock
+    private PlaceService placeService;
+    @Mock
+    private CommentRedisIntegrityService commentRedisIntegrityService;
+    @Mock
+    private FavorRedisIntegrityService favorRedisIntegrityService;
 
-    @DisplayName("createSpot 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지.")
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
+
+
+    @DisplayName("getSpotList 메서드가 올바른 응답을 내리는지")
     @Test
-    void GivenValidInput_WhenCreateSpotTest_thenReturnValidPostId() throws Exception {
+    void GivenValidPlaceId_WhenGetSpotListTest_ThenReturnSpotFindListResponse() {
+        Member mockMember = new Member("hoyoon@gmail.com", "123456", "회고부장", "profile.jpg",
+                "kakao");
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
+        AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
+                1L);
+        AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
+                2L);
+        AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        //         mock request 설정
-        String geoJson = "{ \"type\": \"Point\", \"coordinates\": [0, 0] }";
-//        MultipartFile multipartFile = new MultipartFile( );
-        MockMultipartFile imageFile = new MockMultipartFile("file", "filename.jpg", "image/jpeg", new byte[10]);
-        SpotCreateRequest mockRequest = new SpotCreateRequest(geoJson, "title1", "description", imageFile);
+        Spot spot1 = new Spot(1L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
+                mockPlace, 5.0);
+        Spot spot2 = new Spot(2L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
+                mockPlace, 5.0);
 
-        // mock member 설정
+        List<Spot> spotList = Arrays.asList(spot1, spot2);
+
+        Long placeId = 1L;
+
+        when(spotRepository.findAllByPlaceIdAndIsInCourseFalse(anyLong())).thenReturn(spotList);
+
+        when(favorRedisIntegrityService.ensureFavorCounts(spot1)).thenReturn(
+                new FavorCount(spot1.getId(), 4));
+        when(favorRedisIntegrityService.ensureFavorCounts(spot2)).thenReturn(
+                new FavorCount(spot2.getId(), 3));
+
+        when(commentRedisIntegrityService.ensureCommentCount(spot1)).thenReturn(
+                new CommentCount(spot1.getId(), 2));
+        when(commentRedisIntegrityService.ensureCommentCount(spot2)).thenReturn(
+                new CommentCount(spot2.getId(), 1));
+
+        // Act
+        SpotListResponse spotListResponse = spotService.getSpotList(placeId);
+
+        // Assert
+        assertThat(spotListResponse).isInstanceOf(SpotListResponse.class);
+        assertThat(spotListResponse.getSpotFindDtos()).hasSize(2);
+        assertThat(spotListResponse.getSpotFindDtos()).extracting("spotId")
+                .containsExactlyInAnyOrder(spot1.getId(), spot2.getId());
+    }
+
+    @DisplayName("createSpot 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
+    @Test
+    void GivenValidInput_WhenCreateSpotTest_ThenReturnSpotCreateResponse() {
+        // Arrange
         Long memberId = 1L;
-        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
-        when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
-        // MockMvc를 사용하여 파일 업로드 시뮬레이션
-        doNothing().when(applicationEventPublisher).publishEvent(any());  // publishEvent 메서드가 호출되면 아무런 동작도 하지 않음
+        String mockPointJson = "{\"type\":\"Point\",\"coordinates\":[127.123456,37.123456]}";
+        String mockTitle = "mockTitle";
+        String mockDescription = "mockDescription";
+        MultipartFile mockFile = new MockMultipartFile("mockFile", "mockFile.jpg", "image/jpeg",
+                "mockFile".getBytes());
+        List<MultipartFile> mockFiles = List.of(mockFile);
+        String mockPlaceName = "mockPlaceName";
+        String mockPlaceAddress = "mockPlaceAddress";
+        String mockPlacePointJson = "{\"type\":\"Point\",\"coordinates\":[127.123456,37.123456]}";
+        double mockRate = 5.0;
 
-        // when
-        SpotCreateResponse response = spotService.createSpot(memberId, mockRequest);
+        SpotCreateRequest spotCreateRequest = new SpotCreateRequest(
+                mockPointJson,
+                mockTitle,
+                mockDescription,
+                mockFiles,
+                mockFile,
+                mockPlaceName,
+                mockPlaceAddress,
+                mockPlacePointJson,
+                mockRate
+        );
 
-        // 예상 결과 확인
-        assertEquals("스팟 정보 생성 성공", response.getMessage());
-    }
-
-    @DisplayName("findSpot 메서드가 올바른 응답을 내리는지")
-    @Test
-    void GivenValidPostId_WhenFindSpot_ThenReturnSpotFindResponse() {
-
-        Long postId = 123L;
-        GeometryFactory geometryFactory = new GeometryFactory();
+        Point mockPoint = new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456));
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
-        Point mockPoint = geometryFactory.createPoint(new Coordinate(0,0));
-        Spot mockSpot = new Spot(mockPoint, false, "anyTitle", "아무말","anyImageUrl");
-        Post mockPost = new Post(postId, mockSpot, mockMember);
-        when(postService.findPostById(anyLong())).thenReturn(mockPost);
+        Place mockPlace = new Place("mockPlaceName", "mockImageUrl", mockPoint, "mockDescription");
 
-        CommentResponse mockCommentResponse1 = new CommentResponse();
-        CommentResponse mockCommentResponse2 = new CommentResponse();
-        List<CommentResponse> mockCommentResponseList = List.of(mockCommentResponse1, mockCommentResponse2);
-        when(commentService.getCommentList(mockSpot.getId())).thenReturn(mockCommentResponseList);
-//        when(commentService.getCommentList(anyLong())).thenReturn(mockCommentResponseList);  //todo 이건 왜 안되나요 ㅜㅜㅜㅜ
 
-        SpotFindResponse spotFindResponse = SpotFindResponse.from(mockMember, mockSpot, mockCommentResponseList);
-
-        assertThat(spotService.findSpotByPostId(postId)).isEqualTo(spotFindResponse);
-    }
-
-    @DisplayName("findSpot 메서드에서 Travel을 course로 가지고 있는 Post Id로 Spot을 찾을때 예외가 제대로 나오는지 확인")
-    @Test
-    void GivenInValidPostId_WhenFindSpot_ThenThrowBadRequestException() {
-        Long postId = 123L;
-        Member mockMember = new Member("shin@gmail.com", "123456", "God", "profile.jpg", "kakao");
-
-        GeometryFactory geometryFactory = new GeometryFactory();
-        List<Coordinate> coordinates = List.of(
-            new Coordinate(1.0, 1.0),
-            new Coordinate(2.0, 2.0),
-            new Coordinate(3.0, 3.0)
-        );
-        LineString mockLineString = geometryFactory.createLineString(coordinates.toArray(new Coordinate[0]));
-
-        Point mockPoint = geometryFactory.createPoint(new Coordinate(0,0));
-        mockPoint.setSRID(4326);
-
-        Spot mockSpot = new Spot(mockPoint, false, "title", "www.image.com", "hello, im description");
-        List<Spot> mockSpotList = List.of(mockSpot);
-        Course mockCourse = new Course(mockLineString, mockSpotList, 2, "mock title");
-        Post mockPost = new Post(postId, mockCourse, mockMember);
-        when(postService.findPostById(anyLong())).thenReturn(mockPost);
-
-        assertThrows(BadRequestException.class, ()-> spotService.findSpotByPostId(postId));
-    }
-
-    @DisplayName("updateSpot 메서드가 유효한 인자를 받았을 때 올바른 응답을 반환하는지")
-    @Test
-    void givenValidParameter_whenUpdateSpot_thenReturnSpotUpdateResponse() {
-        Long memberId = 2L;
-        Long postId = 2L;
-        MockMultipartFile multipartFile = new MockMultipartFile(
-            "file", "test.jpg", "image/jpeg", "Test".getBytes()
-        );
-
-        SpotUpdateRequest spotUpdateRequest = new SpotUpdateRequest(
-            "{ \"type\": \"Point\", \"coordinates\": [0.0, 0.1] }", false, "title", "desc", multipartFile
-        );
-
-        GeometryFactory geometryFactory = new GeometryFactory();
-        Point location = geometryFactory.createPoint(new Coordinate(0,0));
-        location.setSRID(4326);
-
-        Spot mockSpot = new Spot(1L, location, false, "title",  "desc", "mockUrl");
-        Member mockMember = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
-
-        when(postService.findPostById(postId)).thenReturn(new Post(postId, mockSpot, mockMember));
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
-        when(spotRepository.save(any(Spot.class))).thenReturn(mockSpot);
+
+
+
+        when(placeService.getOrCreatePlace(
+                anyString(),
+                anyString(),
+                anyString()
+        )).thenReturn(mockPlace);
+
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
+        AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
 
         doAnswer(invocation -> {
             FileUploadEvent event = invocation.getArgument(0);
-            event.getCallback().accept("mockUrl");
+            event.getCallback().accept(mockAttachFile);
             return null;
         }).when(applicationEventPublisher).publishEvent(any(FileUploadEvent.class));
 
-        SpotUpdateResponse response = spotService.updateSpot(memberId, postId, spotUpdateRequest);
+        Spot mockSpot = new Spot(mockMember, mockPoint, false, mockTitle, mockDescription,
+                mockAttachFiles, mockAttachFile,  mockPlace, mockRate);
+        when(spotRepository.save(any(Spot.class))).thenReturn(mockSpot);
 
-        assertThat(response).isNotNull();
-        assertThat(response.getPointJson()).isNotNull();
+
+        // Act
+        SpotCreateResponse spotCreateResponse = spotService.createSpot(memberId, spotCreateRequest);
+        // Assert
+        assertThat(spotCreateResponse.getMessage()).isEqualTo("스팟 정보 생성 성공");
     }
 
-
-    @DisplayName("유효한 spotId가 주어졌을 때 유효한 spot이 반환되는지")
+    @DisplayName("updateSpot 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
     @Test
-    void GivenValidSpotId_WhenFindSpotById_ThenReturnTavel() {
+    void GivenValidInput_WhenUpdateSpotTest_ThenReturnSpotUpdateResponse() {
+        Long memberId = 1L;
+        Long spotId = 1L;
+        String mockPointJson = "{\"type\":\"Point\",\"coordinates\":[127.123456,37.123456]}";
+        String mockTitle = "mockTitle";
+        String mockDescription = "mockDescription";
+        MultipartFile mockFile = new MockMultipartFile("mockFile", "mockFile.jpg", "image/jpeg",
+                "mockFile".getBytes());
+        MultipartFile mockFil2 = new MockMultipartFile("mockFile", "mockFile.jpg", "image/jpeg",
+                "mockFile".getBytes());
+        List<MultipartFile> mockFiles = List.of(mockFile, mockFil2);
+        String mockPlaceName = "mockPlaceName";
+        String mockPlaceAddress = "mockPlaceAddress";
+        String mockPlacePointJson = "{\"type\":\"Point\",\"coordinates\":[127.123456,37.123456]}";
+        double mockRate = 5.0;
 
-        Spot spot = new Spot(1L);
-        when(spotRepository.findById(anyLong())).thenReturn(Optional.of(spot));
-        assertThat(spotService.findSpotById(anyLong())).isInstanceOf(Spot.class);
-    }
-
-    @DisplayName("유효하지 않은 spotId가 주어졌을 때 예외가 발생하는지")
-    @Test
-    void GivenINValidSpotId_WhenFindSpotById_ThenThrowBadRequestException() {
-        when(spotRepository.findById(anyLong())).thenThrow(new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID));
-        assertThrows(BadRequestException.class, () -> spotService.findSpotById(anyLong()));
-    }
-
-    @Test
-    @DisplayName("getSpotListFromSpotIds 메서드 테스트")
-    void testGetSpotListFromSpotIds() {
-        // Given
-        List<Long> spotIdList = Arrays.asList(1L, 2L, 3L);
-        List<Spot> mockedSpotList = Arrays.asList(
-            new Spot(1L),
-            new Spot(2L),
-            new Spot(3L)
+        SpotUpdateRequest spotUpdateRequest = new SpotUpdateRequest(
+                mockPointJson,
+                mockTitle,
+                mockDescription,
+                mockFiles,
+                mockFile,
+                mockPlaceName,
+                mockPlaceAddress,
+                mockPlacePointJson,
+                mockRate
         );
 
-        // Mocking spotRepository.findById
-        when(spotRepository.findById(anyLong()))
-            .thenAnswer(invocation -> {
-                Long spotId = invocation.getArgument(0);
-                return Optional.ofNullable(mockedSpotList.stream()
-                    .filter(spot -> spot.getId().equals(spotId))
-                    .findFirst()
-                    .orElse(null));
-            });
+        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
+        when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
-        // Mocking castTravelToSpot
-        List<Spot> resultSpotList = spotService.getSpotListFromSpotIds(spotIdList);
+        Place mockPlace = new Place("mockPlaceName", "mockImageUrl",
+                new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
+                "mockDescription");
+        when(placeService.getOrCreatePlace(anyString(), anyString(), anyString())).thenReturn(
+                mockPlace);
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
 
-        // Then
-        assertThat(resultSpotList).hasSize(3);
-        // Add more assertions based on your logic and expected behavior
+        doAnswer(invocation -> {
+            FileUploadEvent event = invocation.getArgument(0);
+            event.getCallback().accept(mockAttachFile);
+            return null;
+        }).when(applicationEventPublisher).publishEvent(any(FileUploadEvent.class));
+
+        Spot mockSpot = new Spot(spotId, mockMember,
+                new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false,
+                mockTitle, mockDescription, new AttachFiles(new ArrayList<>()), mockAttachFile, mockPlace,
+                mockRate);
+        when(spotRepository.save(any(Spot.class))).thenReturn(mockSpot);
+
+        // Act
+        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(memberId, spotId,
+                spotUpdateRequest);
+
+        // Assert
+        assertThat(spotUpdateResponse).isNotNull();
+        assertThat(spotUpdateResponse.getMessage()).isEqualTo("스팟 정보 수정 성공");
     }
+
+    @DisplayName("getSpotInfo 메서드가 유효한 인자를 넘겨받았을 때 올바른 응답을 내리는지")
+    @Test
+    void GivenValidInput_WhenGetSpotInfoTest_ThenReturnSpotFindResponse() {
+        // Arrange
+        Long spotId = 1L;
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
+
+        Spot mockSpot = new Spot(
+                new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao"),
+                new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)), false,
+                "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()), mockAttachFile,
+                new Place("mockPlaceName", "mockImageUrl",
+                        new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
+                        "mockDescription"), 5.0);
+        when(spotRepository.findById(spotId)).thenReturn(Optional.of(mockSpot));
+
+        // Act
+        SpotInfoResponse spotInfoResponse = spotService.getSpotInfo(spotId);
+
+        // Assert
+        assertThat(spotInfoResponse).isNotNull();
+    }
+//    @DisplayName("getSpot 메서드가 없는 spotId를 넘겨받았을 대 예외를 발생시키는지")
+//
 
 }

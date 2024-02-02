@@ -15,11 +15,10 @@ import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.InvalidTokenException;
 import kr.co.yigil.login.dto.request.LoginRequest;
 import kr.co.yigil.login.dto.response.GoogleTokenInfoResponse;
-import kr.co.yigil.login.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.login.dto.response.LoginResponse;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.member.domain.SocialLoginType;
-import kr.co.yigil.member.domain.repository.MemberRepository;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,7 +71,7 @@ public class GoogleLoginStrategyTest {
 
         HttpSession mockSession = mock(HttpSession.class);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "google");
 
         LoginResponse response = googleLoginStrategy.login(loginRequest, accessToken, mockSession);
 
@@ -92,7 +91,7 @@ public class GoogleLoginStrategyTest {
                 eq(accessToken)
         )).thenThrow(new InvalidTokenException(ExceptionCode.INVALID_ACCESS_TOKEN));
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "google");
         HttpSession mockSession = mock(HttpSession.class);
 
         Throwable thrown = catchThrowable(() -> googleLoginStrategy.login(loginRequest, accessToken, mockSession));
@@ -120,7 +119,7 @@ public class GoogleLoginStrategyTest {
 
         HttpSession mockSession = mock(HttpSession.class);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com");
+        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com", "google");
         LoginResponse response = googleLoginStrategy.login(loginRequest, accessToken, mockSession);
 
         assertThat(response.getMessage()).isEqualTo("로그인 성공");

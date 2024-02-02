@@ -15,17 +15,24 @@ const handler = NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({ user }) {
-      console.log(user);
-
-      /**
-       * 백엔드와 api 통신
-       * 회원가입 해야 하는
-       * if(user.email)
-       */
-      // 로그인 된 다면 true 안되면 redirect end
-      return true;
+    async signIn({ user, account }) {
+      const postUser = JSON.stringify({
+        ...user,
+        nickname: user.name,
+        provider: account?.provider,
+      });
+      const res = await fetch(`${process.env.BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${account?.access_token}`,
+        },
+        body: postUser,
+      });
+      if (res.ok) return true;
+      else return '/';
     },
+
     // async jwt({ token, user }) {
     //   return { ...token, ...user }
     // },
