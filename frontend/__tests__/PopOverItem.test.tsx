@@ -1,30 +1,27 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { headerPopOverData } from '@/app/_components/header/constants';
+import { render, screen } from '@testing-library/react';
 
 import PopOverIcon from '@/app/_components/ui/popover/PopOverItem';
+import { headerPopOverData } from '@/app/_components/ui/popover/constants';
+
+vi.mock('next/navigation', () => {
+  return {
+    useRouter: () => {
+      return { back: vi.fn() };
+    },
+  };
+});
 
 describe('PopOver', () => {
-  const datas = headerPopOverData.map((data) => [data]);
-
   const closeModal = () => {
     false;
   };
 
-  it.each(datas)('render popover links', (data) => {
-    const { href, label, onClick, Icon } = data;
-    render(
-      <PopOverIcon
-        href={href}
-        label={label}
-        onClick={onClick}
-        Icon={Icon}
-        closeModal={closeModal}
-      />,
-    );
+  it.each(headerPopOverData)('render popover label', (data) => {
+    render(<PopOverIcon data={data} closeModal={closeModal} />);
 
-    const link = screen.getByRole('link');
+    const text = screen.queryByText(data.label);
 
-    expect(link).toBeInTheDocument();
+    expect(text).toBeInTheDocument();
   });
 });
