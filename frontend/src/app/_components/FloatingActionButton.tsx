@@ -1,17 +1,8 @@
 'use client';
-
 import PlusIcon from '@/../public/icons/plus.svg';
 import { useState } from 'react';
-
-import LocationIcon from '/public/icons/location.svg';
-import CalendarIcon from '/public/icons/calendar.svg';
-import ViewPortal from './Portal';
+import { fabpopOverData } from './ui/popover/constants';
 import PopOver from './ui/popover/PopOver';
-
-const popOverData = [
-  { href: '/add/spot', label: '장소 추가하기', Icon: LocationIcon },
-  { href: '/add/course', label: '일정 추가하기', Icon: CalendarIcon },
-];
 
 export default function FloatingActionButton() {
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -36,17 +27,12 @@ export default function FloatingActionButton() {
           } `}
         />
         {isModalOpened && (
-          <ViewPortal
-            backdropStyle="bg-black bg-opacity-10"
+          <PopOver
+            popOverData={fabpopOverData}
             closeModal={closeModal}
-          >
-            <PopOver
-              popOverData={popOverData}
-              closeModal={closeModal}
-              position="bottom-[160px] right-10"
-              style=""
-            />
-          </ViewPortal>
+            position="bottom-[160px] right-10"
+            backdropStyle="bg-black bg-opacity-10"
+          />
         )}
       </button>
     </div>

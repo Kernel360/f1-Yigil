@@ -1,16 +1,14 @@
-import React, { ComponentType, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import ViewPortal from '../../Portal';
 import PopOverIcon from './PopOverItem';
+import { TPopOverData } from './types';
 
 interface TPopOver {
-  popOverData: {
-    href: string;
-    label: string;
-    Icon: ComponentType<{ className?: string }>;
-    onClick?: () => void;
-  }[];
+  popOverData: TPopOverData[];
   closeModal: () => void;
   position?: string;
   style?: string;
+  backdropStyle?: string;
 }
 
 export default function PopOver({
@@ -18,6 +16,7 @@ export default function PopOver({
   closeModal,
   position,
   style,
+  backdropStyle,
 }: TPopOver) {
   const mouseEventPrevent = (e: Event) => {
     e.preventDefault();
@@ -39,7 +38,7 @@ export default function PopOver({
     };
   }, []);
   return (
-    <>
+    <ViewPortal closeModal={closeModal} backdropStyle={backdropStyle}>
       <nav
         className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${
           style ? style : 'z-0'
@@ -50,16 +49,11 @@ export default function PopOver({
       >
         <ul className="flex flex-col gap-5 justify-center items-center p-4">
           {popOverData &&
-            popOverData.map(({ href, ...data }) => (
-              <PopOverIcon
-                key={href}
-                href={href}
-                {...data}
-                closeModal={closeModal}
-              />
+            popOverData.map((data, idx) => (
+              <PopOverIcon key={idx} data={data} closeModal={closeModal} />
             ))}
         </ul>
       </nav>
-    </>
+    </ViewPortal>
   );
 }

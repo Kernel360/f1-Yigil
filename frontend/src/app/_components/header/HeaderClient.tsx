@@ -5,9 +5,9 @@ import RoundProfile from '../ui/profile/RoundProfile';
 import HeaderLogo from '/public/logo/yigil_logo.svg';
 import Link from 'next/link';
 import { Session } from 'next-auth';
-import { headerPopOverData } from './constants';
 import { EventFor } from '@/types/type';
-import ViewPortal from '../Portal';
+import PopOver from '../ui/popover/PopOver';
+import { headerPopOverData } from '../ui/popover/constants';
 
 export default function HeaderClient({ session }: { session: Session | null }) {
   const router = useRouter();
@@ -44,7 +44,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
             />
           </span>
           {isModalOpened && (
-            <ViewPortal
+            <PopOver
               popOverData={headerPopOverData}
               closeModal={closeModal}
               position="top-16 right-4"
