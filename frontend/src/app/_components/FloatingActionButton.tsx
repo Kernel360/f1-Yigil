@@ -6,6 +6,7 @@ import { useState } from 'react';
 import LocationIcon from '/public/icons/location.svg';
 import CalendarIcon from '/public/icons/calendar.svg';
 import ViewPortal from './Portal';
+import PopOver from './ui/popover/PopOver';
 
 const popOverData = [
   { href: '/add/spot', label: '장소 추가하기', Icon: LocationIcon },
@@ -36,11 +37,16 @@ export default function FloatingActionButton() {
         />
         {isModalOpened && (
           <ViewPortal
-            popOverData={popOverData}
-            closeModal={closeModal}
-            position="bottom-[160px] right-10"
             backdropStyle="bg-black bg-opacity-10"
-          />
+            closeModal={closeModal}
+          >
+            <PopOver
+              popOverData={popOverData}
+              closeModal={closeModal}
+              position="bottom-[160px] right-10"
+              style=""
+            />
+          </ViewPortal>
         )}
       </button>
     </div>

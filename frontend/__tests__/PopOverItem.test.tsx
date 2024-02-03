@@ -7,11 +7,11 @@ import PopOverIcon from '@/app/_components/ui/popover/PopOverItem';
 describe('PopOver', () => {
   const datas = headerPopOverData.map((data) => [data]);
 
-  const setIsModalOpened = () => {
+  const closeModal = () => {
     false;
   };
 
-  it.each(datas)('render popover components', (data) => {
+  it.each(datas)('render popover links', (data) => {
     const { href, label, onClick, Icon } = data;
     render(
       <PopOverIcon
@@ -19,7 +19,7 @@ describe('PopOver', () => {
         label={label}
         onClick={onClick}
         Icon={Icon}
-        setIsModalOpened={setIsModalOpened}
+        closeModal={closeModal}
       />,
     );
 

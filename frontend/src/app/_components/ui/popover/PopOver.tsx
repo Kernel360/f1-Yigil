@@ -11,7 +11,6 @@ interface TPopOver {
   closeModal: () => void;
   position?: string;
   style?: string;
-  backDropStyle?: string;
 }
 
 export default function PopOver({
@@ -19,7 +18,6 @@ export default function PopOver({
   closeModal,
   position,
   style,
-  backDropStyle,
 }: TPopOver) {
   const mouseEventPrevent = (e: Event) => {
     e.preventDefault();
