@@ -8,7 +8,10 @@ export default async function HomePage() {
     <main className="max-w-full flex flex-col gap-8 relative">
       <PostList title="인기 장소" data={postData} />
       <PostList title="관심 지역 장소" data={postData} />
-      <FloatingActionButton popOverData={homePopOverData} />
+      <FloatingActionButton
+        popOverData={homePopOverData}
+        backdropStyle="bg-black bg-opacity-10"
+      />
     </main>
   );
 }

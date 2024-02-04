@@ -6,10 +6,12 @@ import { TPopOverData } from './ui/popover/types';
 
 interface TFloatingActionButton {
   popOverData: TPopOverData[];
+  backdropStyle?: string;
 }
 
 export default function FloatingActionButton({
   popOverData,
+  backdropStyle,
 }: TFloatingActionButton) {
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -37,7 +39,7 @@ export default function FloatingActionButton({
             popOverData={popOverData}
             closeModal={closeModal}
             position="bottom-[160px] right-10"
-            backdropStyle="bg-black bg-opacity-10"
+            backdropStyle={backdropStyle}
           />
         )}
       </button>
