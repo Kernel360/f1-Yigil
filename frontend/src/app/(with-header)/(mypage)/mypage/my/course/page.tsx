@@ -1,3 +1,4 @@
+import MyPageCourseList from '@/app/_components/mypage/course/MyPageCourseList';
 import React from 'react';
 //
 const url =
@@ -5,12 +6,18 @@ const url =
     ? process.env.BASE_URL
     : 'http://localhost:8080/api/v1';
 export default async function MyPageMyCourse() {
-  const res = await fetch(`${url}/member/spot`, {
+  const res = await fetch(`${url}/member/course`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
-  console.log(res);
-  return <div>MyPageMyCourse</div>;
+
+  const result = await res.json();
+
+  return (
+    <>
+      <MyPageCourseList placeList={result.data} />
+    </>
+  );
 }

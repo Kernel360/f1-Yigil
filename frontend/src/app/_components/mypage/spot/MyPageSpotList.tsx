@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FloatingActionButton from '../../FloatingActionButton';
+import { myPageSpotPopOverData } from '../../ui/popover/constants';
 import MyPageSpotItem from './MyPageSpotItem';
 
 export interface TMyPageSpotType {
@@ -31,6 +32,9 @@ export default function MyPageSpotList({
     }
   };
 
+  // filter option이 변경될 때마다 새로운 호출 혹은
+  // useEffect(() => {}, []);
+
   return (
     <>
       <div className="flex justify-end">
@@ -39,6 +43,9 @@ export default function MyPageSpotList({
           <option value="">오래된순</option>
           <option value="">평점순</option>
         </select>
+      </div>
+      <div className="relative">
+        <FloatingActionButton popOverData={myPageSpotPopOverData} />
       </div>
       {placeList.map(({ post_id, ...data }, idx) => (
         <MyPageSpotItem

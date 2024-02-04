@@ -14,7 +14,7 @@ export interface TMyPagePlaceItem {
   rating: number;
 }
 
-export default function MyPagePlaceItem({
+export default function MyPageCourseItem({
   imageUrl,
   post_id,
   travel_id,

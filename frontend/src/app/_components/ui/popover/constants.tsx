@@ -4,22 +4,42 @@ import { signOut } from 'next-auth/react';
 import { TPopOverData } from './types';
 import LocationIcon from '/public/icons/location.svg';
 import CalendarIcon from '/public/icons/calendar.svg';
+import UnLockIcon from '/public/icons/unlock.svg';
+import TrashIcon from '/public/icons/trash.svg';
 
 export const headerPopOverData: TPopOverData[] = [
   {
-    href: '/mypage',
+    href: '/mypage/my/spot',
     label: '마이페이지',
-    Icon: MapPin,
+    icon: <MapPin className="w-6 h-6" />,
   },
   {
     href: '/',
     label: '로그아웃',
-    Icon: Bell,
+    icon: <Bell className="w-6 h-6" />,
     onClick: () => signOut(),
   },
 ];
 
-export const fabpopOverData: TPopOverData[] = [
-  { href: '/add/spot', label: '장소 추가하기', Icon: LocationIcon },
-  { href: '/add/course', label: '일정 추가하기', Icon: CalendarIcon },
+export const homePopOverData: TPopOverData[] = [
+  {
+    href: '/add/spot',
+    label: '장소 추가하기',
+    icon: <LocationIcon className="w-6 h-6" />,
+  },
+  {
+    href: '/add/course',
+    label: '일정 추가하기',
+    icon: <CalendarIcon className="w-6 h-6" />,
+  },
+];
+
+export const myPageSpotPopOverData: TPopOverData[] = [
+  { label: '나만보기 풀기', icon: <UnLockIcon className="w-6 h-6" /> },
+  { label: '기록 삭제하기', icon: <TrashIcon classname="w-6 h-6" /> },
+  {
+    href: '/add/course',
+    label: '일정 기록하기',
+    icon: <CalendarIcon className="w-6 h-6" />,
+  },
 ];

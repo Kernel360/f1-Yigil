@@ -1,8 +1,8 @@
-import { ComponentType } from 'react';
+import { ReactElement } from 'react';
 
 export interface TPopOverData {
   href?: string;
   label: string;
-  Icon: ComponentType<{ className?: string }>;
+  icon: ReactElement;
   onClick?: () => void;
 }

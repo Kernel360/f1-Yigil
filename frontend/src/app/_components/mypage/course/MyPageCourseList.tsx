@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import MyPageCourseItem from './MyPageCourseItem';
 import MyPagePlaceItem, { TMyPagePlaceItem } from './MyPageCourseItem';
 
-export default function MyPagePlaceList({
+export default function MyPageCourseList({
   placeList,
 }: {
   placeList: TMyPagePlaceItem[];
@@ -26,7 +27,7 @@ export default function MyPagePlaceList({
         </select>
       </div>
       {placeList.map(({ travel_id, ...data }) => (
-        <MyPagePlaceItem key={travel_id} travel_id={travel_id} {...data} />
+        <MyPageCourseItem key={travel_id} travel_id={travel_id} {...data} />
       ))}
     </>
   );

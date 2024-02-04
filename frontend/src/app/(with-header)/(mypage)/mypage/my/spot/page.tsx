@@ -15,8 +15,8 @@ export default async function MyPageMySpot() {
   const result = await res.json();
 
   return (
-    <div>
+    <>
       <MyPageSpotList placeList={result.data} />
-    </div>
+    </>
   );
 }
