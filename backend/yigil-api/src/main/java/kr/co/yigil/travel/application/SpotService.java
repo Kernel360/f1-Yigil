@@ -23,11 +23,14 @@ import kr.co.yigil.travel.dto.response.SpotCreateResponse;
 import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
 import kr.co.yigil.travel.dto.response.SpotFindDto;
 import kr.co.yigil.travel.dto.response.SpotInfoResponse;
-import kr.co.yigil.travel.dto.response.SpotListResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,16 +48,12 @@ public class SpotService {
     private final FavorRedisIntegrityService favorRedisIntegrityService;
 
     @Transactional
-    public SpotListResponse getSpotList(Long placeId) {
-        List<Spot> spots = spotRepository.findAllByPlaceIdAndIsInCourseFalse(placeId);
+    public Slice<SpotFindDto> getSpotList(Long placeId, Pageable pageable) {
+        Slice<Spot> spots = spotRepository.findAllByPlaceIdAndIsInCourseFalse(placeId, pageable);
         List<SpotFindDto> spotFindDtoList = spots.stream()
-                .map(spot -> SpotFindDto.from(
-                        spot,
-                        favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
-                        commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount())
-                )
-                .toList();
-        return SpotListResponse.from(spotFindDtoList); // todo 페이징 적용
+            .map(this::getSpotFindDto)
+            .toList();
+        return new SliceImpl<>(spotFindDtoList, pageable, spots.hasNext());
     }
 
     @Transactional
@@ -66,12 +65,14 @@ public class SpotService {
         AttachFile mapStaticImageFile = getAttachFile(spotCreateRequest.getMapStaticImageFile());
 
         Place place = placeService.getOrCreatePlace(
-                spotCreateRequest.getPlaceName(),
-                spotCreateRequest.getPlaceAddress(),
-                spotCreateRequest.getPlacePointJson()
+            spotCreateRequest.getPlaceName(),
+            spotCreateRequest.getPlaceAddress(),
+            spotCreateRequest.getPlacePointJson()
         );
+        
         Spot spot = spotRepository.save(
-                SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles, mapStaticImageFile));
+            SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles,
+                mapStaticImageFile));
 
         return new SpotCreateResponse(spot.getId(), "스팟 정보 생성 성공");
     }
@@ -85,20 +86,21 @@ public class SpotService {
 
     @Transactional
     public SpotUpdateResponse updateSpot(Long memberId, Long spotId,
-            SpotUpdateRequest spotUpdateRequest) {
+        SpotUpdateRequest spotUpdateRequest) {
         Member member = memberService.findMemberById(memberId);
 
         AttachFiles attachFiles = getAttachFiles(spotUpdateRequest.getFiles());
         AttachFile mapStaticImageFile = getAttachFile(spotUpdateRequest.getMapStaticImageFile());
 
         Place place = placeService.getOrCreatePlace(
-                spotUpdateRequest.getPlaceName(),
-                spotUpdateRequest.getPlaceAddress(),
-                spotUpdateRequest.getPlacePointJson()
+            spotUpdateRequest.getPlaceName(),
+            spotUpdateRequest.getPlaceAddress(),
+            spotUpdateRequest.getPlacePointJson()
         );
 
         spotRepository.save(
-                SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, place, attachFiles, mapStaticImageFile));
+            SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, place, attachFiles,
+                mapStaticImageFile));
 
         return new SpotUpdateResponse("스팟 정보 수정 성공");
     }
@@ -111,28 +113,17 @@ public class SpotService {
         return new SpotDeleteResponse("스팟 정보 삭제 성공");
     }
 
-//    private AttachFiles getAttachFiles(List<MultipartFile> files) {
-//        AttachFiles attachFiles = new AttachFiles(new ArrayList<>());
-//        files.forEach(file -> {
-//                    FileUploadEvent event = new FileUploadEvent(this, file, attachFiles::addFile);
-//                    applicationEventPublisher.publishEvent(event);
-//                }
-//        );
-//        return attachFiles;
-//    }
-
     private AttachFiles getAttachFiles(List<MultipartFile> files) {
         List<CompletableFuture<AttachFile>> futures = new ArrayList<>();
         AttachFiles attachFiles = new AttachFiles(new ArrayList<>());
 
-
         files.forEach(
-                file ->{
-                    CompletableFuture<AttachFile> future = new CompletableFuture<>();
-                    FileUploadEvent event = new FileUploadEvent(this, file, future::complete);
-                    applicationEventPublisher.publishEvent(event);
-                    futures.add(future);
-                }
+            file -> {
+                CompletableFuture<AttachFile> future = new CompletableFuture<>();
+                FileUploadEvent event = new FileUploadEvent(this, file, future::complete);
+                applicationEventPublisher.publishEvent(event);
+                futures.add(future);
+            }
         );
 
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
@@ -144,35 +135,41 @@ public class SpotService {
         return attachFiles;
     }
 
+    @NotNull
+    private SpotFindDto getSpotFindDto(Spot spot) {
+        return SpotFindDto.from(
+            spot,
+            favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
+            commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount());
+    }
+
 
     private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
         CompletableFuture<AttachFile> fileCompletableFuture = new CompletableFuture<>();
-        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile, fileCompletableFuture::complete);
+        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile,
+            fileCompletableFuture::complete);
         applicationEventPublisher.publishEvent(event);
         return fileCompletableFuture.join();
     }
 
     public Spot findSpotByIdAndMemberId(Long spotId, Long memberId) {
         return spotRepository.findByIdAndMemberId(spotId, memberId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
+            () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
     }
 
-
     public Spot findSpotById(Long spotId) {
         return spotRepository.findById(spotId).orElseThrow(
-                () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
+            () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
     }
 
     @Transactional(readOnly = true)
     public List<Spot> getSpotListFromSpotIds(List<Long> spotIdList) {
         return spotIdList.stream()
-                .map(this::findSpotById)
-                .toList();
+            .map(this::findSpotById)
+            .toList();
     }
-
-
 }
 
 

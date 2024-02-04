@@ -17,12 +17,14 @@ import kr.co.yigil.travel.dto.response.CourseCreateResponse;
 import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
 import kr.co.yigil.travel.dto.response.CourseFindDto;
 import kr.co.yigil.travel.dto.response.CourseInfoResponse;
-import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
 import kr.co.yigil.travel.repository.CourseRepository;
 import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +40,12 @@ public class CourseService {
     private final CommentRedisIntegrityService commentRedisIntegrityService;
 
     @Transactional
-    public CourseListResponse getCourseList(Long placeId) {
-        List<Course> courses = courseRepository.findBySpotPlaceId(placeId);
+    public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
+        Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
         List<CourseFindDto> courseFindDtoList = courses.stream()
                 .map(this::getCourseFindDto)
                 .toList();
-        return CourseListResponse.from(courseFindDtoList);
+        return new SliceImpl<>(courseFindDtoList, pageable, courses.hasNext());
     }
 
     @NotNull
