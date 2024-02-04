@@ -1,10 +1,16 @@
 'use client';
 import PlusIcon from '@/../public/icons/plus.svg';
 import { useState } from 'react';
-import { fabpopOverData } from './ui/popover/constants';
 import PopOver from './ui/popover/PopOver';
+import { TPopOverData } from './ui/popover/types';
 
-export default function FloatingActionButton() {
+interface TFloatingActionButton {
+  popOverData: TPopOverData[];
+}
+
+export default function FloatingActionButton({
+  popOverData,
+}: TFloatingActionButton) {
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const closeModal = () => {
@@ -28,7 +34,7 @@ export default function FloatingActionButton() {
         />
         {isModalOpened && (
           <PopOver
-            popOverData={fabpopOverData}
+            popOverData={popOverData}
             closeModal={closeModal}
             position="bottom-[160px] right-10"
             backdropStyle="bg-black bg-opacity-10"
