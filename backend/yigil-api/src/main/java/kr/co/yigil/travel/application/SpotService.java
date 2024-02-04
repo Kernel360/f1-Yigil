@@ -69,7 +69,7 @@ public class SpotService {
             spotCreateRequest.getPlaceAddress(),
             spotCreateRequest.getPlacePointJson()
         );
-        
+
         Spot spot = spotRepository.save(
             SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles,
                 mapStaticImageFile));

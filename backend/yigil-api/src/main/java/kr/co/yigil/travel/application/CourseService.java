@@ -40,22 +40,6 @@ public class CourseService {
     private final CommentRedisIntegrityService commentRedisIntegrityService;
 
     @Transactional
-    public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
-        Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
-        List<CourseFindDto> courseFindDtoList = courses.stream()
-                .map(this::getCourseFindDto)
-                .toList();
-        return new SliceImpl<>(courseFindDtoList, pageable, courses.hasNext());
-    }
-
-    @NotNull
-    private CourseFindDto getCourseFindDto(Course course) {
-        Integer favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
-        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
-        return CourseFindDto.from(course, favorCount, commentCount);
-    }
-
-    @Transactional
     public CourseCreateResponse createCourse(Long memberId, CourseCreateRequest courseCreateRequest) {
         Member member = memberService.findMemberById(memberId);
         List<Long> spotIdList = courseCreateRequest.getSpotIds();
@@ -78,9 +62,13 @@ public class CourseService {
         return CourseInfoResponse.from(course, spots, comments);
     }
 
-    private Course findCourseById(Long courseId) {
-        return courseRepository.findById(courseId)
-                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
+    @Transactional
+    public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
+        Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
+        List<CourseFindDto> courseFindDtoList = courses.stream()
+                .map(this::getCourseFindDto)
+                .toList();
+        return new SliceImpl<>(courseFindDtoList, pageable, courses.hasNext());
     }
 
     @Transactional
@@ -110,5 +98,17 @@ public class CourseService {
                 .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
         courseRepository.delete(course);
         return new CourseDeleteResponse("경로 삭제 성공");
+    }
+
+    @NotNull
+    private CourseFindDto getCourseFindDto(Course course) {
+        Integer favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
+        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
+        return CourseFindDto.from(course, favorCount, commentCount);
+    }
+
+    private Course findCourseById(Long courseId) {
+        return courseRepository.findById(courseId)
+            .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
     }
 }

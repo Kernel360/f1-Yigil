@@ -55,16 +55,6 @@ public class CommentService {
         return new CommentCreateResponse("댓글 생성 성공");
     }
 
-    private Comment findCommentById(Long parentId) {
-        return commentRepository.findById(parentId)
-            .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COMMENT_ID));
-    }
-
-    private void incrementCommentCount(Travel travel) {
-        CommentCount commentCount = commentRedisIntegrityService.ensureCommentCount(travel);
-        commentCount.incremenCommentCount();
-    }
-
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentList(Long travelId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
@@ -87,7 +77,7 @@ public class CommentService {
     public Slice<CommentResponse> getParentCommentList(Long travelId, Pageable pageable) {
         Slice<Comment> comments = commentRepository.findParentCommentsByTravelId(travelId, pageable);
         List<CommentResponse> commentResponses = comments.stream().map(CommentResponse::from)
-                .collect(Collectors.toList());
+                .toList();
 
         return new SliceImpl<>(commentResponses, pageable, comments.hasNext());
     }
@@ -96,7 +86,7 @@ public class CommentService {
     public Slice<CommentResponse> getChildCommentList(Long parentId, Pageable pageable) {
         Slice<Comment> comments = commentRepository.findChildCommentsByParentId(parentId, pageable);
         List<CommentResponse> commentResponses = comments.stream().map(CommentResponse::from)
-                .collect(Collectors.toList());
+                .toList();
         return new SliceImpl<>(commentResponses, pageable, comments.hasNext());
     }
 
@@ -108,6 +98,16 @@ public class CommentService {
         Comment comment = findCommentByIdAndMemberId(commentId, memberId);
         commentRepository.delete(comment);
         return new CommentDeleteResponse("댓글 삭제 성공");
+    }
+
+    private Comment findCommentById(Long parentId) {
+        return commentRepository.findById(parentId)
+            .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COMMENT_ID));
+    }
+
+    private void incrementCommentCount(Travel travel) {
+        CommentCount commentCount = commentRedisIntegrityService.ensureCommentCount(travel);
+        commentCount.incremenCommentCount();
     }
 
     private void decrementCommentCount(Travel travel) {

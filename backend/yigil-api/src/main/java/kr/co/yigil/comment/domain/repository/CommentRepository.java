@@ -15,7 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>  {
             "LEFT JOIN FETCH c.parent " +
             "WHERE c.travel.id = :travelId " +
             "ORDER BY c.parent.id ASC NULLS FIRST, c.createdAt ASC")
-    List<Comment> findCommentListByTravelId(@Param("travelId") Long travelId);
+    Slice<Comment> findCommentListByTravelId(@Param("travelId") Long travelId, Pageable pageable);
 
     @Query("SELECT c FROM Comment c WHERE c.travel.id = :travelId AND c.parent IS NULL "
         + "ORDER BY c.createdAt ASC "
