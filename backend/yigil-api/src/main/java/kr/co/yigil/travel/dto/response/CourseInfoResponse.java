@@ -4,7 +4,6 @@ import java.util.List;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.travel.Course;
 import kr.co.yigil.travel.Spot;
-import kr.co.yigil.travel.dto.SpotInCourseDto;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +22,8 @@ public class CourseInfoResponse {
 
     private List<SpotInCourseDto> spotInfos;
     private String lineStringJson;
-
+    //    private Integer favorCount;
+//    private Integer commentCount;
     private List<CommentResponse> comments;
 
     public static CourseInfoResponse from(Course course, List<Spot> spots,

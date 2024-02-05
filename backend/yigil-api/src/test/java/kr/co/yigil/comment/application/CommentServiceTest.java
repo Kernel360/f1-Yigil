@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.jayway.jsonpath.internal.path.ArraySliceToken;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.comment.domain.Comment;
@@ -28,6 +29,7 @@ import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.Spot;
+import kr.co.yigil.travel.Travel;
 import kr.co.yigil.travel.application.TravelService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,9 @@ import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.SliceImpl;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -101,7 +106,7 @@ class CommentServiceTest {
 
     }
 
-    @DisplayName("createComment CommentRequest에 parentId가 있을 때 올바른 응답을 내리는지.")
+    @DisplayName("createComment CommentRequest에 parentId가 있을 때 대댓글이 잘 생성되는지")
     @Test
     void givenParentId_whenCreateComment_returnValidResponse() {
         Long memberId = 1L;
@@ -159,9 +164,9 @@ class CommentServiceTest {
                 CommentCreateResponse.class);
     }
 
-    @DisplayName("getcommentList 메서드 실행 시 comment list 가 잘 반환되는지")
+    @DisplayName("getParentCommentList 메서드 실행 시 comment list 가 잘 반환되는지")
     @Test
-    void whenGetCommentList_thenReturnCommentResponse() {
+    void whenGetParentCommentList_thenReturnCommentResponse() {
         Long travelId = 1L;
         Long parentCommentId = 1L;
 
@@ -182,19 +187,19 @@ class CommentServiceTest {
                 mockAttachFiles,mockAttachFile1,
                 mockPlace, 5.0);
 
-        Comment mockParentComment = new Comment(parentCommentId, "content", mockMember, mockSpot);
-        Comment mockComment1 = new Comment(2L, "content", mockMember, mockSpot, mockParentComment);
-        Comment mockComment2 = new Comment(3L, "content", mockMember, mockSpot, mockParentComment);
+        Comment mockParentComment1 = new Comment(parentCommentId, "content1", mockMember, mockSpot);
+        Comment mockParentComment2 = new Comment(parentCommentId, "content1", mockMember, mockSpot);
+        Comment mockParentComment3 = new Comment(parentCommentId, "content1", mockMember, mockSpot);
 
-        when(commentRepository.findParentCommentsByTravelId(anyLong())).thenReturn(
-                List.of(mockParentComment));
-        when(commentRepository.findChildCommentsByTravelIdAndParentId(anyLong(), anyLong())).thenReturn(
-                List.of(mockComment1, mockComment2));
+        Pageable pageable = PageRequest.of(0, 10);
+        when(commentRepository.findParentCommentsByTravelId(anyLong(), any(Pageable.class))).thenReturn(
+                new SliceImpl<>(List.of(mockParentComment1, mockParentComment2, mockParentComment3)));
 
-        assertThat(commentService.getCommentList(travelId)).isInstanceOf(List.class);
-        assertThat(commentService.getCommentList(travelId).get(0)).isInstanceOf(
+
+        assertThat(commentService.getParentCommentList(travelId, pageable)).isInstanceOf(SliceImpl.class);
+        assertThat(commentService.getParentCommentList(travelId, pageable).getContent().getFirst()).isInstanceOf(
                 CommentResponse.class);
-        assert (commentService.getCommentList(travelId).size() == 1);
+        assertThat(commentService.getParentCommentList(travelId, pageable).getContent()).hasSize(3);
     }
 
     @DisplayName("deleteComment 메서드가 유효한 인자를 받았을 때 comment 가 잘 삭제되는지")
@@ -238,8 +243,6 @@ class CommentServiceTest {
         assertEquals("댓글 삭제 성공", commentDeleteResponse.getMessage());
     }
 
-
-
     @DisplayName("getTopLevelCommentList 메서드가 유효한 인자를 받았을 때 comment list 가 잘 반환되는지")
     @Test
     void givenValidParameter_whenGetTopLevelCommentList_thenReturnCommentResponse() {
@@ -265,13 +268,16 @@ class CommentServiceTest {
 
         Comment mockParentComment = new Comment(parentCommentId, "content", mockMember, mockSpot);
 
-        when(commentRepository.findParentCommentsByTravelId(anyLong())).thenReturn(
-            List.of(mockParentComment));
+        when(commentRepository.findParentCommentsByTravelId(anyLong(), any(Pageable.class))).thenReturn(
+            new SliceImpl<>(List.of(mockParentComment)));
 
-        assertThat(commentService.getParentCommentList(travelId)).isInstanceOf(List.class);
-        assertThat(commentService.getParentCommentList(travelId).get(0)).isInstanceOf(
+        Pageable pageable = PageRequest.of(0, 10);
+        assertThat(commentService.getParentCommentList(travelId, pageable)).isInstanceOf(SliceImpl.class);
+        assertThat(commentService.getParentCommentList(travelId, pageable).getContent()).isInstanceOf(
+            List.class);
+        assertThat(commentService.getParentCommentList(travelId, pageable).getContent()).hasSize(1);
+        assertThat(commentService.getParentCommentList(travelId, pageable).getContent().getFirst()).isInstanceOf(
             CommentResponse.class);
-        assert (commentService.getParentCommentList(travelId).size() == 1);
     }
 
     @DisplayName("getReplyCommentList 메서드가 유효한 인자를 받았을 때 comment list 가 잘 반환되는지")
@@ -302,14 +308,15 @@ class CommentServiceTest {
         Comment mockComment2 = new Comment(3L, "content", mockMember, mockSpot, mockParentComment);
         Comment mockComment3 = new Comment(4L, "content", mockMember, mockSpot, mockParentComment);
 
-        when(commentRepository.findChildCommentsByTravelIdAndParentId(anyLong(), anyLong())).thenReturn(
-                List.of(mockComment1, mockComment2, mockComment3));
+        when(commentRepository.findChildCommentsByParentId(anyLong(), any(Pageable.class))).thenReturn(
+                new SliceImpl<>(List.of(mockComment1, mockComment2, mockComment3)));
 
-        assertThat(commentService.getChildCommentList(travelId, parentCommentId)).isInstanceOf(
-                List.class);
+        assertThat(commentService.getChildCommentList(travelId, Pageable.unpaged())).isInstanceOf(SliceImpl.class);
         assertThat(
-                commentService.getChildCommentList(travelId, parentCommentId).get(0)).isInstanceOf(
-                CommentResponse.class);
-        assert (commentService.getChildCommentList(travelId, parentCommentId).size() == 3);
+                commentService.getChildCommentList(travelId, Pageable.unpaged()).getContent().size()).isEqualTo(3);
+        assertThat(commentService.getChildCommentList(travelId, Pageable.unpaged()).getContent()).isInstanceOf(
+            List.class);
+        assertThat(commentService.getChildCommentList(travelId, Pageable.unpaged()).getContent().getFirst()).isInstanceOf(
+            CommentResponse.class);
     }
 }
