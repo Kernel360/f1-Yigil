@@ -6,8 +6,10 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderColumn;
 import java.util.List;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,15 +31,17 @@ public class Course extends Travel{
 
     private int representativeSpotOrder;
 
-    @Column(nullable = false, length = 20)
-    private String title;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "attach_file_id")
+    private AttachFile mapStaticImageFile;
 
-    public Course(final Member member, final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
-        super(member);
+
+    public Course(final Member member , final String title, final String description, final double rate, final LineString path, final boolean isPrivate, final List<Spot> spots, final int representativeSpotOrder, final AttachFile mapStaticImageFile ) {
+        super(member, title, description, rate, isPrivate);
         this.path = path;
         this.spots = spots;
         this.representativeSpotOrder = representativeSpotOrder;
-        this.title = title;
+        this.mapStaticImageFile = mapStaticImageFile;
     }
 
     public Course(final Member member, final Long id, final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {

@@ -38,6 +38,12 @@ public class Travel {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(nullable = false, length = 20)
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -45,22 +51,28 @@ public class Travel {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
+    private double rate;
+
     boolean isDeleted;
 
-    protected Travel(Member member) {
+    protected Travel(Member member, String title, String description, double rate, boolean isPrivate) {
         this.member = member;
+        this.title = title;
+        this.description = description;
+        this.rate = rate;
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
+        this.isPrivate = isPrivate;
     }
 
-    public Travel(final Long id, Member member) {
+    public Travel(final Long id,Member member, String title, String description, double rate, boolean isPrivate) {
         this.id = id;
         this.member = member;
+        this.title = title;
+        this.description = description;
+        this.rate = rate;
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
-    }
-
-    protected void setId(Long id) {
-        this.id = id;
+        this.isPrivate = isPrivate;
     }
 }

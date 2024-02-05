@@ -8,16 +8,20 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlaceFindResponse {
-
+public class PlaceInfoResponse {
+    private String uniquePlaceId;
     private String name;
     private String address;
     private String imageUrl;
+    private String mapStaticImageUrl;
 
-    public static PlaceFindResponse from(Place place) {
-        return new PlaceFindResponse(
+    public static PlaceInfoResponse from(Place place) {
+        return new PlaceInfoResponse(
+                place.getUniquePlaceId(),
                 place.getName(),
                 place.getAddress(),
-                place.getImageUrl());
+                place.getImageUrl(),
+                place.getMapStaticImageFile().getFileUrl()
+        );
     }
 }

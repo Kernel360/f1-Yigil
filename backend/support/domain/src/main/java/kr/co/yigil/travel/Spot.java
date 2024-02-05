@@ -1,13 +1,11 @@
 package kr.co.yigil.travel;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
@@ -30,25 +28,14 @@ public class Spot extends Travel{
     @Setter
     private boolean isInCourse;
 
-    @Column(nullable = false, length = 20)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
     @Embedded
     private AttachFiles attachFiles;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name="attach_file_id")
-    private AttachFile mapStaticImageFile;
 
     @NotFound(action = NotFoundAction.IGNORE)
     @ManyToOne
     @JoinColumn(name = "place_id")
     private Place place;
 
-    private double rate;
 
     public Spot(final Long id, Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final AttachFile mapStaticImageFile,  final Place place, final double rate) {
         super(id, member);

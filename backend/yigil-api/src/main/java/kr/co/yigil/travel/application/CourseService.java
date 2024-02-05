@@ -1,10 +1,13 @@
 package kr.co.yigil.travel.application;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
@@ -22,11 +25,13 @@ import kr.co.yigil.travel.repository.CourseRepository;
 import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +43,8 @@ public class CourseService {
     private final CommentService commentService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
 
     @Transactional
     public CourseCreateResponse createCourse(Long memberId, CourseCreateRequest courseCreateRequest) {
@@ -45,7 +52,9 @@ public class CourseService {
         List<Long> spotIdList = courseCreateRequest.getSpotIds();
         List<Spot> spots = spotService.getSpotListFromSpotIds(spotIdList);
 
-        Course course = CourseCreateRequest.toEntity(member, courseCreateRequest, spots);
+        AttachFile attachFile = getAttachFile(courseCreateRequest.getMapStaticImageFile());
+
+        Course course = CourseCreateRequest.toEntity(member, courseCreateRequest, spots, attachFile);
         courseRepository.save(course);
 
         course.getSpots().forEach(spot -> spot.setInCourse(true));
@@ -87,7 +96,8 @@ public class CourseService {
             spot.setInCourse(false);
         }
 
-        Course newCourse = CourseUpdateRequest.toEntity(member, courseId, courseUpdateRequest, spots);
+        AttachFile attachFile = getAttachFile(courseUpdateRequest.getMapStaticImageFile());
+        Course newCourse = CourseUpdateRequest.toEntity(member, courseId, courseUpdateRequest, spots, attachFile);
         courseRepository.save(newCourse);
         return new CourseUpdateResponse("경로 수정 성공");
     }
@@ -110,5 +120,13 @@ public class CourseService {
     private Course findCourseById(Long courseId) {
         return courseRepository.findById(courseId)
             .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
+    }
+
+    private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
+        CompletableFuture<AttachFile> fileCompletableFuture = new CompletableFuture<>();
+        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile,
+                fileCompletableFuture::complete);
+        applicationEventPublisher.publishEvent(event);
+        return fileCompletableFuture.join();
     }
 }

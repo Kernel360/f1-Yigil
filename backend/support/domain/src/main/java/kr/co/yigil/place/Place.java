@@ -1,13 +1,20 @@
 package kr.co.yigil.place;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import kr.co.yigil.file.AttachFile;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 import org.locationtech.jts.geom.Point;
 
 @Entity
@@ -26,6 +33,10 @@ public class Place {
 
     @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name="attach_file_id")
+    private AttachFile mapStaticImageFile;
 
     private String imageUrl;
 

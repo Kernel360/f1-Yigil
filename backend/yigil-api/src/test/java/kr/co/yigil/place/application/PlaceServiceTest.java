@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import kr.co.yigil.place.Place;
-import kr.co.yigil.place.dto.response.PlaceFindResponse;
+import kr.co.yigil.place.dto.response.PlaceInfoResponse;
 import kr.co.yigil.place.repository.PlaceRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,10 +35,10 @@ public class PlaceServiceTest {
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
         Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, "FastFive01.jpg" );
         when(placeRepository.findById(placeId)).thenReturn(Optional.of(mockPlace));
-        PlaceFindResponse response = placeService.getPlace(placeId);
+        PlaceInfoResponse response = placeService.getPlaceInfo(placeId);
 
         assertThat(response).isNotNull();
-        assertThat(response).isInstanceOf(PlaceFindResponse.class);
+        assertThat(response).isInstanceOf(PlaceInfoResponse.class);
     }
 
     @DisplayName("getOrCreatePlace 메서드가 존재하는 placeName 인자를 받았을 때 ")

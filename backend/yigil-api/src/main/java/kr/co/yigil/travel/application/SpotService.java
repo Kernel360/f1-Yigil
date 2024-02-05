@@ -51,8 +51,8 @@ public class SpotService {
     public Slice<SpotFindDto> getSpotList(Long placeId, Pageable pageable) {
         Slice<Spot> spots = spotRepository.findAllByPlaceIdAndIsInCourseFalse(placeId, pageable);
         List<SpotFindDto> spotFindDtoList = spots.stream()
-            .map(this::getSpotFindDto)
-            .toList();
+                .map(this::getSpotFindDto)
+                .toList();
         return new SliceImpl<>(spotFindDtoList, pageable, spots.hasNext());
     }
 
@@ -64,17 +64,31 @@ public class SpotService {
         AttachFiles attachFiles = getAttachFiles(spotCreateRequest.getFiles());
         AttachFile mapStaticImageFile = getAttachFile(spotCreateRequest.getMapStaticImageFile());
 
-        Place place = placeService.getOrCreatePlace(
-            spotCreateRequest.getPlaceName(),
-            spotCreateRequest.getPlaceAddress(),
-            spotCreateRequest.getPlacePointJson()
+        Place place = getOrCreatePlace(
+                spotCreateRequest.getUniquePlaceId(),
+                spotCreateRequest.getPlaceName(),
+                spotCreateRequest.getPlaceAddress(),
+                spotCreateRequest.getPlacePointJson(),
+                spotCreateRequest.getPlaceImageUrl(),
+                mapStaticImageFile
         );
 
         Spot spot = spotRepository.save(
-            SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles,
-                mapStaticImageFile));
+                SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles));
 
         return new SpotCreateResponse(spot.getId(), "스팟 정보 생성 성공");
+    }
+
+    private Place getOrCreatePlace(String uniquePlaceId, String placeName, String placeAddress,
+            String placePointJson, String placeImageUrl, AttachFile mapStaticImageFile) {
+        return placeService.getOrCreatePlace(
+                uniquePlaceId,
+                placeName,
+                placeAddress,
+                placePointJson,
+                placeImageUrl,
+                mapStaticImageFile
+        );
     }
 
     @Transactional(readOnly = true)
@@ -86,21 +100,15 @@ public class SpotService {
 
     @Transactional
     public SpotUpdateResponse updateSpot(Long memberId, Long spotId,
-        SpotUpdateRequest spotUpdateRequest) {
+            SpotUpdateRequest spotUpdateRequest) {
         Member member = memberService.findMemberById(memberId);
 
         AttachFiles attachFiles = getAttachFiles(spotUpdateRequest.getFiles());
-        AttachFile mapStaticImageFile = getAttachFile(spotUpdateRequest.getMapStaticImageFile());
 
-        Place place = placeService.getOrCreatePlace(
-            spotUpdateRequest.getPlaceName(),
-            spotUpdateRequest.getPlaceAddress(),
-            spotUpdateRequest.getPlacePointJson()
-        );
+        Place place = placeService.getPlaceById(spotUpdateRequest.getPlaceId());
 
         spotRepository.save(
-            SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, place, attachFiles,
-                mapStaticImageFile));
+                SpotUpdateRequest.toEntity(member, spotId, spotUpdateRequest, place, attachFiles));
 
         return new SpotUpdateResponse("스팟 정보 수정 성공");
     }
@@ -118,12 +126,12 @@ public class SpotService {
         AttachFiles attachFiles = new AttachFiles(new ArrayList<>());
 
         files.forEach(
-            file -> {
-                CompletableFuture<AttachFile> future = new CompletableFuture<>();
-                FileUploadEvent event = new FileUploadEvent(this, file, future::complete);
-                applicationEventPublisher.publishEvent(event);
-                futures.add(future);
-            }
+                file -> {
+                    CompletableFuture<AttachFile> future = new CompletableFuture<>();
+                    FileUploadEvent event = new FileUploadEvent(this, file, future::complete);
+                    applicationEventPublisher.publishEvent(event);
+                    futures.add(future);
+                }
         );
 
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
@@ -138,37 +146,37 @@ public class SpotService {
     @NotNull
     private SpotFindDto getSpotFindDto(Spot spot) {
         return SpotFindDto.from(
-            spot,
-            favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
-            commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount());
+                spot,
+                favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
+                commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount());
     }
 
 
     private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
         CompletableFuture<AttachFile> fileCompletableFuture = new CompletableFuture<>();
         FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile,
-            fileCompletableFuture::complete);
+                fileCompletableFuture::complete);
         applicationEventPublisher.publishEvent(event);
         return fileCompletableFuture.join();
     }
 
     public Spot findSpotByIdAndMemberId(Long spotId, Long memberId) {
         return spotRepository.findByIdAndMemberId(spotId, memberId).orElseThrow(
-            () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
     }
 
     public Spot findSpotById(Long spotId) {
         return spotRepository.findById(spotId).orElseThrow(
-            () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
+                () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
     }
 
     @Transactional(readOnly = true)
     public List<Spot> getSpotListFromSpotIds(List<Long> spotIdList) {
         return spotIdList.stream()
-            .map(this::findSpotById)
-            .toList();
+                .map(this::findSpotById)
+                .toList();
     }
 }
 

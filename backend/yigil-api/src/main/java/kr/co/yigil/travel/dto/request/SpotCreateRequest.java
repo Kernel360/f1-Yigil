@@ -22,15 +22,16 @@ public class SpotCreateRequest {
     private String title;
     private String description;
     private List<MultipartFile> files;
+    private double rate;
+
     private MultipartFile mapStaticImageFile;
+    private String placeImageUrl;
+    private String uniquePlaceId;
     private String placeName;
     private String placeAddress;
     private String placePointJson;
 
-    private double rate;
-
-
-    public static Spot toEntity(Member member, Place place, SpotCreateRequest spotCreateRequest, AttachFiles attachFiles, AttachFile mapStaticImageFile) {
+    public static Spot toEntity(Member member, Place place, SpotCreateRequest spotCreateRequest, AttachFiles attachFiles) {
         return new Spot(
                 member,
                 GeojsonConverter.convertToPoint(spotCreateRequest.getPointJson()),
@@ -38,7 +39,6 @@ public class SpotCreateRequest {
                 spotCreateRequest.getTitle(),
                 spotCreateRequest.getDescription(),
                 attachFiles,
-                mapStaticImageFile,
                 place,
                 spotCreateRequest.getRate()
         );
