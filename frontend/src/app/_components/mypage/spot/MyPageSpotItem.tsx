@@ -1,23 +1,17 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock.svg';
-interface TMyPageSpotItem {
-  post_id: number;
-  travel_id: number;
-  image_url: string;
-  rating: number;
-  post_date: string;
-  title: string;
-  description: string;
-  isSecret: boolean;
-  checkedList: number[];
-  filterCheckedList: (id: number) => void;
+import { TMyPageSpot } from './MyPageSpotList';
+
+interface TMyPageSpotItem extends TMyPageSpot {
+  checkedList: { postId: TMyPageSpot['postId']; isSecret: boolean }[];
+  filterCheckedList: (id: number, isSecret: boolean) => void;
   idx: number;
 }
 
 export default function MyPageSpotItem({
-  post_id,
+  postId,
   travel_id,
   image_url,
   rating,
@@ -29,7 +23,19 @@ export default function MyPageSpotItem({
   filterCheckedList,
   idx,
 }: TMyPageSpotItem) {
-  const onChangeCheckList = () => {};
+  const [isCheckDisabled, setIsCheckDisabled] = useState(false);
+
+  // checkList의 첫 번째 체크 아이템이 잠금 아이템이라면 잠그지 않은 아이템 disabled 처리
+  useEffect(() => {
+    const firstItem = checkedList[0];
+    if (firstItem?.isSecret === true && isSecret === false)
+      setIsCheckDisabled(true);
+    else if (firstItem?.isSecret === false && isSecret === true)
+      setIsCheckDisabled(true);
+    else if (!checkedList.length) {
+      setIsCheckDisabled(false);
+    }
+  }, [checkedList.length]);
 
   return (
     <div
@@ -39,8 +45,9 @@ export default function MyPageSpotItem({
     >
       <input
         type="checkbox"
+        disabled={isCheckDisabled}
         className="w-[32px] h-[32px]"
-        onChange={() => filterCheckedList(post_id)}
+        onChange={() => filterCheckedList(postId, isSecret)}
       />
       <div className="relative">
         <Image

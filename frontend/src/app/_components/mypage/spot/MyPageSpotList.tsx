@@ -1,11 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import FloatingActionButton from '../../FloatingActionButton';
-import { myPageSpotPopOverData } from '../../ui/popover/constants';
 import MyPageSpotItem from './MyPageSpotItem';
+import CalendarIcon from '/public/icons/calendar.svg';
+import UnLockIcon from '/public/icons/unlock.svg';
+import TrashIcon from '/public/icons/trash.svg';
+import LockIcon from '/public/icons/lock.svg';
+import { TPopOverData } from '../../ui/popover/types';
 
-export interface TMyPageSpotType {
-  post_id: number;
+export interface TMyPageSpot {
+  postId: number;
   travel_id: number;
   image_url: string;
   rating: number;
@@ -18,45 +22,105 @@ export interface TMyPageSpotType {
 export default function MyPageSpotList({
   placeList,
 }: {
-  placeList: TMyPageSpotType[];
+  placeList: TMyPageSpot[];
 }) {
-  const [checkedList, setCheckedList] = useState<TMyPageSpotType['post_id'][]>(
-    [],
-  );
+  const [checkedList, setCheckedList] = useState<
+    { postId: TMyPageSpot['postId']; isSecret: boolean }[]
+  >([]);
+  // 잠금 된 아이템들을 선택 시 true로 변경
+  const [popOverDataIsSecretState, setPopOverDataIsSecretState] =
+    useState(true);
 
-  const filterCheckedList = (id: number) => {
-    if (!checkedList.includes(id)) setCheckedList([...checkedList, id]);
-    else {
-      const filteredList = checkedList.filter((checkedId) => checkedId !== id);
-      setCheckedList(filteredList);
-    }
+  const [popOverData, setPopOverData] = useState<TPopOverData[]>([
+    {
+      label: '나만보기 풀기',
+      icon: <UnLockIcon className="w-6 h-6" />,
+      onClick: () => onClickUnLock(),
+    },
+
+    {
+      href: '/add/course',
+      label: '일정 기록하기',
+      icon: <CalendarIcon className="w-6 h-6" />,
+    },
+  ]);
+  useEffect(() => {
+    if (!!checkedList.length && checkedList[0].isSecret)
+      setPopOverDataIsSecretState(true);
+    else setPopOverDataIsSecretState(false);
+  }, [checkedList[0]]);
+
+  useEffect(() => {
+    setPopOverData(
+      popOverData.map((item, idx) => {
+        return {
+          label: popOverDataIsSecretState ? '나만보기 풀기' : '나만보기 설정',
+          icon: popOverDataIsSecretState ? (
+            <UnLockIcon className="w-6 h-6" />
+          ) : (
+            <LockIcon className="w-6 h-6" />
+          ),
+          onClick: popOverDataIsSecretState
+            ? () => onClickUnLock()
+            : () => onClickLock(), // unlock or lock
+        };
+      }),
+    );
+  }, [popOverDataIsSecretState]);
+
+  const onClickDelete = () => {
+    // delete 로직
+    // delete(checkedList)
   };
 
-  // filter option이 변경될 때마다 새로운 호출 혹은
-  // useEffect(() => {}, []);
+  const onClickUnLock = () => {
+    // unLock or lock
+  };
+
+  const onClickLock = () => {};
+  const filterCheckedList = (
+    postId: TMyPageSpot['postId'],
+    isSecret: boolean,
+  ) => {
+    if (!checkedList.length) setCheckedList([{ postId, isSecret }]);
+    else {
+      // checkList 배열의 각 값을 확인 후 값이 없으면 체크 리스트 추가 값이 있으면 filter로 제거
+      checkedList.forEach((checked) => {
+        if (checked.postId !== postId) {
+          setCheckedList([...checkedList, { postId, isSecret }]);
+        } else {
+          const filteredList = checkedList.filter(
+            (checkedId) => checkedId.postId !== postId,
+          );
+          setCheckedList(filteredList);
+        }
+      });
+    }
+  };
 
   return (
     <>
       <div className="flex justify-end">
-        <select name="" id="" className="p-2 ">
+        <select name="" id="" className="p-2 mx-4">
           <option value="">최신순</option>
           <option value="">오래된순</option>
           <option value="">평점순</option>
         </select>
       </div>
       <div className="relative">
-        <FloatingActionButton popOverData={myPageSpotPopOverData} />
+        <FloatingActionButton popOverData={popOverData} />
       </div>
-      {placeList.map(({ post_id, ...data }, idx) => (
-        <MyPageSpotItem
-          idx={idx}
-          key={post_id}
-          post_id={post_id}
-          {...data}
-          checkedList={checkedList}
-          filterCheckedList={filterCheckedList}
-        />
-      ))}
+      {!!placeList.length &&
+        placeList.map(({ postId, ...data }, idx) => (
+          <MyPageSpotItem
+            idx={idx}
+            key={postId}
+            postId={postId}
+            {...data}
+            checkedList={checkedList}
+            filterCheckedList={filterCheckedList}
+          />
+        ))}
     </>
   );
 }
