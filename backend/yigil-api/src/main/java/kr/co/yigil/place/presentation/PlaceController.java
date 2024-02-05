@@ -21,8 +21,8 @@ public class PlaceController {
     public ResponseEntity<PlaceInfoResponse> getPlaceInfo(
             @PathVariable("place_id") Long placeId
     ) {
-        PlaceFindResponse placeFindResponse = placeService.getPlace(placeId);
-        return ResponseEntity.ok().body(placeFindResponse);
+        PlaceInfoResponse placeInfoResponse = placeService.getPlaceInfo(placeId);
+        return ResponseEntity.ok().body(placeInfoResponse);
     }
 
     @GetMapping("/map-static-image/{unique_place_id}")

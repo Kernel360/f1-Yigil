@@ -19,7 +19,7 @@ public class PlaceDto {
     private String pointJson;
     private AttachFile mapStaticImageFile;
 
-    public static Place toEntity(String name, String address, String pointJson) {
+    public static Place toEntity(String uniquePlaceId, String name, String address, String pointJson, String imageUrl, AttachFile mapStaticImageFile){
         return new Place(
                 uniquePlaceId,
                 name,

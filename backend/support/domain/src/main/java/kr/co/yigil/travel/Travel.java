@@ -55,6 +55,9 @@ public class Travel {
 
     boolean isDeleted;
 
+    boolean isPrivate;
+
+
     protected Travel(Member member, String title, String description, double rate, boolean isPrivate) {
         this.member = member;
         this.title = title;
@@ -63,6 +66,9 @@ public class Travel {
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
         this.isPrivate = isPrivate;
+    }
+    protected Travel(Member member, String title, String description, double rate) {
+        this(member, title, description, rate, false);
     }
 
     public Travel(final Long id,Member member, String title, String description, double rate, boolean isPrivate) {
@@ -74,5 +80,8 @@ public class Travel {
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
         this.isPrivate = isPrivate;
+    }
+    protected Travel(Long id, Member member, String title, String description, double rate) {
+        this(id, member, title, description, rate, false);
     }
 }

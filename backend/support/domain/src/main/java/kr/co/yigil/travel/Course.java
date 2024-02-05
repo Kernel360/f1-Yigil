@@ -44,11 +44,10 @@ public class Course extends Travel{
         this.mapStaticImageFile = mapStaticImageFile;
     }
 
-    public Course(final Member member, final Long id, final LineString path, final List<Spot> spots, final int representativeSpotOrder, final String title) {
-        super(id, member);
+    public Course(final Long id, final Member member , final String title, final String description, final double rate, final LineString path, final boolean isPrivate, final List<Spot> spots, final int representativeSpotOrder, final AttachFile mapStaticImageFile) {
+        super(id, member, title, description, rate, isPrivate);
         this.path = path;
         this.spots = spots;
         this.representativeSpotOrder = representativeSpotOrder;
-        this.title = title;
-    }
-}
+        this.mapStaticImageFile = mapStaticImageFile;
+    }}

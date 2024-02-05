@@ -17,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PlaceService {
     private final PlaceRepository placeRepository;
+    private final SpotRepository spotRepository;
 
     @Transactional(readOnly = true)
-    public PlaceFindResponse getPlace(Long placeId) {
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_PLACE_ID));
-        return PlaceFindResponse.from(place);
+    public PlaceInfoResponse getPlaceInfo(Long placeId) {
+        Place place = getPlaceById(placeId);
+        return PlaceInfoResponse.from(place);
     }
 
     @Transactional(readOnly = true)
@@ -37,8 +37,8 @@ public class PlaceService {
                 .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_PLACE_ID));
     }
 
-    public Place getOrCreatePlace(String placeName, String placeAddress, String placePointJson) {
-        return placeRepository. findByName(placeName)
+    public Place getOrCreatePlace(String uniquePlaceId, String placeName, String placeAddress, String placePointJson, String placeImageUrl, AttachFile mapStaticImageFile) {
+        return placeRepository. findByUniquePlaceId(uniquePlaceId)
                 .orElseGet(
                         () -> placeRepository.save(PlaceDto.toEntity(
                                 uniquePlaceId,

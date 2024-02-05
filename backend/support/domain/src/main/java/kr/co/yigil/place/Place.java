@@ -20,13 +20,16 @@ import org.locationtech.jts.geom.Point;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "uniquePlaceId"))
 public class Place {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //private String uniquePlaceId;
+    @NaturalId
+    private String uniquePlaceId;
+
     private String name;
 
     private String address;
@@ -40,17 +43,22 @@ public class Place {
 
     private String imageUrl;
 
-    public Place(final String name, final String address, final Point location, final String imageUrl) {
+    public Place(final String uniquePlaceId, final String name, final String address, final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
+        this.uniquePlaceId = uniquePlaceId;
         this.name = name;
         this.address = address;
         this.location = location;
         this.imageUrl = imageUrl;
+        this.mapStaticImageFile = mapStaticImageFile;
     }
-    public Place(Long id, final String name, final String address, final Point location, final String imageUrl) {
+
+    public Place(Long id, final String uniquePlaceId, final String name, final String address, final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
         this.id = id;
+        this.uniquePlaceId = uniquePlaceId;
         this.name = name;
         this.address = address;
         this.location = location;
         this.imageUrl = imageUrl;
+        this.mapStaticImageFile = mapStaticImageFile;
     }
 }

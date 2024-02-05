@@ -37,27 +37,19 @@ public class Spot extends Travel{
     private Place place;
 
 
-    public Spot(final Long id, Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final AttachFile mapStaticImageFile,  final Place place, final double rate) {
-        super(id, member);
+    public Spot(final Long id, Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final Place place, final double rate) {
+        super(id, member, title, description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;
-        this.title = title;
-        this.description = description;
         this.attachFiles = attachFiles;
-        this.mapStaticImageFile = mapStaticImageFile;
         this.place = place;
-        this.rate = rate;
     }
-    public Spot(Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final AttachFile mapStaticImageFile, final Place place, final double rate) {
-        super(member);
+    public Spot(Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final Place place, final double rate) {
+        super(member, title, description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;
-        this.title = title;
-        this.description = description;
         this.attachFiles = attachFiles;
-        this.mapStaticImageFile = mapStaticImageFile;
         this.place = place;
-        this.rate = rate;
     }
 
 
