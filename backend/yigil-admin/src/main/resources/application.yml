@@ -7,37 +7,38 @@ spring:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     defer-datasource-initialization: true
   datasource:
     master:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildb
+        jdbc-url: @MASTER_DB_URL@
         read-only: false
-        username: postgres
-        password: 12345678
+        username: @MASTER_DB_USERNAME@
+        password: @MASTER_DB_PASSWORD@
     slave:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: jdbc:postgresql://database-1-read.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildb
+        jdbc-url: @SLAVE_DB_URL@
         read-only: true
-        username: postgres
-        password: 12345678
+        username: @SLAVE_DB_USERNAME@
+        password: @SLAVE_DB_PASSWORD@
   data:
     redis:
-      host: redis
-      port: 6379
+      host: @REDIS_HOST@
+      port: @REDIS_PORT@
   jackson:
     property-naming-strategy: SNAKE_CASE
+
 
 cloud:
   aws:
     s3:
-    bucket: cdn.yigil.co.kr
+    bucket: @S3_BUCKET@
     credentials:
-      access-key: AKIA57RFG4SU5VO6U3PQ
-      secret-key: 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
+      access-key: @AWS_ACCESS_KEY@
+      secret-key: @AWS_SECRET_KEY@
     region:
       static: ap-northeast-2
       auto: false
@@ -45,7 +46,7 @@ cloud:
       auto: false
 
 server:
-  port: 8081
+  port: @YIGIL_ADMIN_PORT@
   servlet:
     session:
       cookie:
@@ -60,7 +61,8 @@ logging:
   level:
     root: DEBUG
   slack:
-    webhook-uri: https://hooks.slack.com/services/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
+    webhook-uri: @SLACK_WEBHOOK_URI@
+
 
 decorator:
   datasource:
