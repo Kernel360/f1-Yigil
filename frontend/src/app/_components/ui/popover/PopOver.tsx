@@ -47,7 +47,7 @@ export default function PopOver({
           (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') && closeModal()
         }
       >
-        <ul className="flex flex-col gap-5 justify-center items-center p-4">
+        <ul className="flex flex-col gap-6 justify-center items-center p-4">
           {popOverData &&
             popOverData.map((data, idx) => (
               <PopOverIcon key={idx} data={data} closeModal={closeModal} />

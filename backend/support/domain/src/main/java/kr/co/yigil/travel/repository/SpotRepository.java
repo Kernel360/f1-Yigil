@@ -2,6 +2,7 @@ package kr.co.yigil.travel.repository;
 
 import java.util.List;
 import java.util.Optional;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.Spot;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -17,3 +18,6 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     @Query("SELECT s FROM Spot s WHERE s.place.id = :placeId AND s.isInCourse = false")
     Slice<Spot> findAllByPlaceIdAndIsInCourseFalse(@Param("placeId") Long placeId, Pageable pageable);}
+
+    List<Spot> findAllByMember(Member member);
+}

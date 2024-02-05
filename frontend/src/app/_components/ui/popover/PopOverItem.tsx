@@ -9,7 +9,7 @@ interface TPopOverIcon {
 
 export default function PopOverIcon({ data, closeModal }: TPopOverIcon) {
   const { push } = useRouter();
-  const { href, onClick, label, Icon } = data;
+  const { href, onClick, label, icon } = data;
   return (
     <div
       onClick={() => {
@@ -20,7 +20,7 @@ export default function PopOverIcon({ data, closeModal }: TPopOverIcon) {
       className="flex items-center gap-x-2 cursor-pointer"
     >
       <div>{label}</div>
-      <Icon className="w-6 h-6" />
+      {icon}
     </div>
   );
 }

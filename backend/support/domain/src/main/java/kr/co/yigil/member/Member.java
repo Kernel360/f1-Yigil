@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,10 +53,10 @@ public class Member {
     private SocialLoginType socialLoginType;
 
     @Enumerated(value = EnumType.STRING)
-    private Gender gender;
+    private Gender gender = Gender.NONE;
 
     @Enumerated(value = EnumType.STRING)
-    private Ages ages;
+    private Ages ages = Ages.NONE;
 
     @CreatedDate
     @Column(updatable = false)
@@ -97,4 +99,17 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
+    public Member(Long id, String email, String socialLoginId, String nickname, String profileImageUrl, SocialLoginType socialLoginType, Ages ages, Gender gender) {
+        this.id = id;
+        this.email = email;
+        this.socialLoginId = socialLoginId;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+        this.status = MemberStatus.ACTIVE;
+        this.socialLoginType = socialLoginType;
+        this.joinedAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+        this.ages = ages;
+        this.gender = gender;
+    }
 }
