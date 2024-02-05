@@ -3,7 +3,7 @@ const BASE_URL =
     ? process.env.NEXT_PUBLIC_BASE_URL
     : process.env.BASE_URL;
 
-const headerInitOption = { 'content-type': 'application/json' };
+const headerInitOption = { 'Content-Type': 'application/json' };
 export const httpRequest =
   (url: string) =>
   (params: string = '') =>
