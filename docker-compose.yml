@@ -1,0 +1,21 @@
+version: '3'
+services:
+  yigil-api:
+    image: minson9608/backend-yigil-api
+    #platform: linux/amd64
+    build:
+      context: backend/yigil-api
+    ports:
+      - "8080:8080"
+  yigil-api-front:
+    image: minson9608/frontend-yigil-api
+    #platform: linux/amd64
+    build:
+      context: frontend
+    ports:
+      - "3000:3000"
+  support:
+    image: minson9608/backend-support
+    #platform: linux/amd64
+    build:
+      context: backend/support
