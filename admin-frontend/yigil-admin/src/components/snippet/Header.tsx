@@ -12,11 +12,19 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { ModeToggle } from "@/components/snippet/mode-toggle";
+import UserInfo from "@/components/snippet/UserInfo";
+
+import ReactComponent from "@/assets/logo.svg?react";
 
 export function Header() {
   return (
     <NavigationMenu>
-      <NavigationMenuList className="justify-between">
+      <NavigationMenuList className=" flex justify-between">
+        <NavigationMenuItem>
+          <Link to="/">
+            <ReactComponent className="w-[100px] h-[58px] h-4 stroke-black stroke-[2px] fill-slate-100" />
+          </Link>
+        </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>서비스 관리</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -36,14 +44,30 @@ export function Header() {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/member" title="사용자 관리">
-                서비스 사용자 계정을 관리하세요.
+              <ListItem href="/service" title="서비스 관리">
+                서비스를 관리하세요.
               </ListItem>
               <ListItem href="/report" title="서비스 통계">
                 서비스 이용 통계를 확인하세요.
               </ListItem>
             </ul>
           </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>계정 관리</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[400px] lg:grid-cols-[.75fr_1fr]">
+              <ListItem href="/member" title="사용자 관리">
+                서비스를 사용하는 사용자를 관리하세요.
+              </ListItem>
+              <ListItem href="/admin" title="어드민 가입 요청 관리">
+                관리자 사용자의 가입 요청을 관리하세요.
+              </ListItem>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <UserInfo />
         </NavigationMenuItem>
         <NavigationMenuItem>
           <ModeToggle />

@@ -1,31 +1,22 @@
-import Link from 'next/link';
-import React, {
-  ComponentType,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from 'react';
+import React, { useEffect } from 'react';
+import ViewPortal from '../../Portal';
 import PopOverIcon from './PopOverItem';
+import { TPopOverData } from './types';
 
 interface TPopOver {
-  popOverData: {
-    href: string;
-    label: string;
-    Icon: ComponentType<{ className?: string }>;
-    onClick?: () => void;
-  }[];
-  setIsModalOpened: Dispatch<SetStateAction<boolean>>;
-  position: string;
+  popOverData: TPopOverData[];
+  closeModal: () => void;
+  position?: string;
   style?: string;
-  backDropStyle?: string;
+  backdropStyle?: string;
 }
 
 export default function PopOver({
   popOverData,
-  setIsModalOpened,
+  closeModal,
   position,
   style,
-  backDropStyle,
+  backdropStyle,
 }: TPopOver) {
   const mouseEventPrevent = (e: Event) => {
     e.preventDefault();
@@ -47,29 +38,22 @@ export default function PopOver({
     };
   }, []);
   return (
-    <>
-      <div
-        className={`fixed inset-0 max-w-[430px] mx-auto ${backDropStyle}`}
-        onClick={() => setIsModalOpened(false)}
-      ></div>
-      <div
-        className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${style}`}
+    <ViewPortal closeModal={closeModal} backdropStyle={backdropStyle}>
+      <nav
+        className={`absolute bg-[#F3F4F6] rounded-md flex flex-col items-center justify-center ${position} ${
+          style ? style : 'z-0'
+        } `}
         onKeyDown={(e) =>
-          (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') &&
-          setIsModalOpened(false)
+          (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') && closeModal()
         }
       >
-        <div className="flex flex-col gap-5 justify-center items-center p-4">
-          {popOverData.map(({ href, ...data }) => (
-            <PopOverIcon
-              key={href}
-              href={href}
-              {...data}
-              setIsModalOpened={setIsModalOpened}
-            />
-          ))}
-        </div>
-      </div>
-    </>
+        <ul className="flex flex-col gap-6 justify-center items-center p-4">
+          {popOverData &&
+            popOverData.map((data, idx) => (
+              <PopOverIcon key={idx} data={data} closeModal={closeModal} />
+            ))}
+        </ul>
+      </nav>
+    </ViewPortal>
   );
 }

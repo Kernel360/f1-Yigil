@@ -17,12 +17,14 @@ import kr.co.yigil.travel.dto.response.CourseCreateResponse;
 import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
 import kr.co.yigil.travel.dto.response.CourseFindDto;
 import kr.co.yigil.travel.dto.response.CourseInfoResponse;
-import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
 import kr.co.yigil.travel.repository.CourseRepository;
 import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,22 +38,6 @@ public class CourseService {
     private final CommentService commentService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
-
-    @Transactional
-    public CourseListResponse getCourseList(Long placeId) {
-        List<Course> courses = courseRepository.findBySpotPlaceId(placeId);
-        List<CourseFindDto> courseFindDtoList = courses.stream()
-                .map(this::getCourseFindDto)
-                .toList();
-        return CourseListResponse.from(courseFindDtoList);
-    }
-
-    @NotNull
-    private CourseFindDto getCourseFindDto(Course course) {
-        Integer favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
-        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
-        return CourseFindDto.from(course, favorCount, commentCount);
-    }
 
     @Transactional
     public CourseCreateResponse createCourse(Long memberId, CourseCreateRequest courseCreateRequest) {
@@ -76,9 +62,13 @@ public class CourseService {
         return CourseInfoResponse.from(course, spots, comments);
     }
 
-    private Course findCourseById(Long courseId) {
-        return courseRepository.findById(courseId)
-                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
+    @Transactional
+    public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
+        Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
+        List<CourseFindDto> courseFindDtoList = courses.stream()
+                .map(this::getCourseFindDto)
+                .toList();
+        return new SliceImpl<>(courseFindDtoList, pageable, courses.hasNext());
     }
 
     @Transactional
@@ -108,5 +98,17 @@ public class CourseService {
                 .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
         courseRepository.delete(course);
         return new CourseDeleteResponse("경로 삭제 성공");
+    }
+
+    @NotNull
+    private CourseFindDto getCourseFindDto(Course course) {
+        Integer favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
+        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
+        return CourseFindDto.from(course, favorCount, commentCount);
+    }
+
+    private Course findCourseById(Long courseId) {
+        return courseRepository.findById(courseId)
+            .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
     }
 }

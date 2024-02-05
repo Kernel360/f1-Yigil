@@ -1,6 +1,5 @@
 package kr.co.yigil.comment.presentation;
 
-import java.util.List;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
@@ -11,6 +10,7 @@ import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,46 +25,53 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/comments")
 @RequiredArgsConstructor
 public class CommentController {
+
     private final CommentService commentService;
 
-    @PostMapping("/{travel_id}")
+    @PostMapping("/travels/{travel_id}")
     @MemberOnly
     public ResponseEntity<CommentCreateResponse> createComment(
             @RequestBody CommentCreateRequest commentCreateRequest,
             @Auth final Accessor accessor,
             @PathVariable("travel_id") Long travelId
-    ){
-        CommentCreateResponse commentCreateResponse = commentService.createComment(accessor.getMemberId(), travelId, commentCreateRequest);
+    ) {
+        CommentCreateResponse commentCreateResponse = commentService.createComment(
+                accessor.getMemberId(), travelId, commentCreateRequest);
         return ResponseEntity.ok().body(commentCreateResponse);
     }
-    @GetMapping("/{travel_id}")
-    public ResponseEntity<List<CommentResponse>> getTopCommentList(
-        @PathVariable("travel_id") Long travelId,
-        @PageableDefault(page = 0, size = 5)
-        Pageable pageable
 
-    ){
-        List<CommentResponse> commentListResponse = commentService.getParentCommentList(travelId);
-        return ResponseEntity.ok().body(commentListResponse);
+    @GetMapping("/travels/{travel_id}")
+    public ResponseEntity<Slice<CommentResponse>> getParentCommentList(
+            @PathVariable("travel_id") Long travelId,
+            @PageableDefault(size = 5)
+            Pageable pageable
+
+    ) {
+        Slice<CommentResponse> parentCommentList = commentService.getParentCommentList(travelId,
+                pageable);
+        return ResponseEntity.ok().body(parentCommentList);
     }
 
-    @GetMapping("/{travel_id}/{comment_id}")
-    public ResponseEntity<List<CommentResponse>> getReplyCommentList(
-        @PathVariable("travel_id") Long travelId,
-        @PathVariable("comment_id") Long commentId
-    ){
-        List<CommentResponse> commentListResponse = commentService.getChildCommentList(travelId, commentId);
-        return ResponseEntity.ok().body(commentListResponse);
+    @GetMapping("/parents/{comment_id}")
+    public ResponseEntity<Slice<CommentResponse>> getChildCommentList(
+            @PathVariable("comment_id") Long commentId,
+            @PageableDefault( size = 5)
+            Pageable pageable
+    ) {
+        Slice<CommentResponse> childCommentList = commentService.getChildCommentList(commentId,
+                pageable);
+        return ResponseEntity.ok().body(childCommentList);
     }
 
-    @DeleteMapping("/{travel_id}/{comment_id}")
+    @DeleteMapping("/travels/{travel_id}/{comment_id}")
     @MemberOnly
     public ResponseEntity<CommentDeleteResponse> deleteComment(
             @PathVariable("comment_id") Long commentId,
             @PathVariable("travel_id") Long travelId,
             @Auth final Accessor accessor
-    ){
-        CommentDeleteResponse commentDeleteResponse = commentService.deleteComment(accessor.getMemberId(), travelId, commentId);
+    ) {
+        CommentDeleteResponse commentDeleteResponse = commentService.deleteComment(
+                accessor.getMemberId(), travelId, commentId);
         return ResponseEntity.ok().body(commentDeleteResponse);
     }
 }
