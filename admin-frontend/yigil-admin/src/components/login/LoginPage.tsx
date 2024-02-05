@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Layout from "./Layout";
+import Layout from "../Layout";
 import { useNavigate } from "react-router-dom";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,13 +14,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Alert } from "../snippet/Alert";
+import { SignUpDrawer } from "./SignUpDrawer";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [new_email, setNewEmail] = useState("");
   const [new_name, setNewName] = useState("");
+
+  const [errorName, setErrorName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -39,6 +48,19 @@ const LoginPage: React.FC = () => {
   };
 
   const handleLogin = async () => {
+    if (!email.trim()) {
+      setErrorName("로그인 실패");
+      setErrorMessage("이메일을 입력해주세요");
+      setIsOpen(true);
+      return; // 함수 종료
+    }
+
+    if (!password.trim()) {
+      setErrorName("로그인 실패");
+      setErrorMessage("비밀번호를 입력해주세요");
+      setIsOpen(true);
+      return; // 함수 종료
+    }
     try {
       const response = await fetch(
         "http://localhost:8081/admin/api/v1/admins/login",
@@ -52,7 +74,14 @@ const LoginPage: React.FC = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorData = await response.json();
+        setErrorName("로그인 실패");
+        setErrorMessage(
+          errorData.message || "로그인 중 오류가 발생하였습니다."
+        );
+        setIsOpen(true);
+        setPassword("");
+        return;
       }
 
       const { accessToken, refreshToken } = await response.json();
@@ -61,11 +90,27 @@ const LoginPage: React.FC = () => {
 
       navigate("/");
     } catch (error) {
-      console.error("Login error:", error);
+      setErrorName("로그인 오류");
+      setErrorMessage("로그인 처리 중 오류가 발생했습니다.");
+      setIsOpen(true);
+      setPassword("");
     }
   };
 
   const handleSignUp = async () => {
+    if (!new_email.trim()) {
+      setErrorName("회원가입 요청 실패");
+      setErrorMessage("이메일을 입력해주세요");
+      setIsOpen(true);
+      return; // 함수 종료
+    }
+
+    if (!new_name.trim()) {
+      setErrorName("회원가입 요청 실패");
+      setErrorMessage("사용자 이름을 입력해주세요");
+      setIsOpen(true);
+      return; // 함수 종료
+    }
     try {
       const response = await fetch(
         "http://localhost:8081/admin/api/v1/admins/signup",
@@ -78,14 +123,27 @@ const LoginPage: React.FC = () => {
         }
       );
 
-      if (!response) {
-        throw new Error("SignUp Request failed");
+      if (!response.ok) {
+        const errorData = await response.json();
+        setErrorName("회원가입 요청 실패");
+        setErrorMessage(
+          errorData.message || "회원가입 요청 중 오류가 발생하였습니다."
+        );
+        setIsOpen(true);
+        setNewEmail("");
+        setNewName("");
+        return;
       }
 
-      const { message } = await response.json();
-      console.log(message);
+      setIsSignUpSuccess(true);
+      setNewEmail("");
+      setNewName("");
     } catch (error) {
-      console.error("Login error:", error);
+      setErrorName("회원가입 요청 실패");
+      setErrorMessage("회원가입 요청 중 오류가 발생하였습니다.");
+      setIsOpen(true);
+      setNewEmail("");
+      setNewName("");
     }
   };
 
@@ -164,6 +222,17 @@ const LoginPage: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      <Alert
+        isOpen={isOpen}
+        close={() => setIsOpen(false)}
+        errorMessage={errorMessage}
+        errorName={errorName}
+      />
+      <SignUpDrawer
+        isSignUpSuccess={isSignUpSuccess}
+        email={new_email}
+        close={() => setIsSignUpSuccess(false)}
+      />
     </Layout>
   );
 };
