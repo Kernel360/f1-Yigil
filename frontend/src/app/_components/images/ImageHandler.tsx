@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+
 import ImageInput from './ImageInput';
-import Image from 'next/image';
+import ImagesContainer from './ImagesContainer';
 
 export interface TImageData {
   filename: string;
@@ -31,34 +32,19 @@ export default function ImageHandler({ size }: { size: number }) {
     setImages(nextImages);
   }
 
-  function removeImage(filename: string) {
-    const nextImages = images.filter((image) => image.filename !== filename);
-
-    setImages(nextImages);
-  }
-
   const availableSpace = size - images.length;
+
+  const blankSpaces = [...Array(availableSpace)];
 
   return (
     <section className="grid grid-rows-2 grid-cols-3 gap-2">
       <ImageInput availableSpace={availableSpace} addImages={addImages} />
-      {[...Array(size)].map((_, i) => (
-        <button
-          className="overflow-hidden aspect-square border-2 rounded-2xl border-gray-200 relative shrink-0"
+      <ImagesContainer images={images} setImages={setImages} />
+      {blankSpaces.map((_, i) => (
+        <div
           key={i}
-          onClick={() => {
-            if (images[i]) {
-              removeImage(images[i].filename);
-            }
-          }}
-        >
-          {images[i] && <Image src={images[i].uri} alt={`image-${i}`} fill />}
-          {images[i] && i === 0 && (
-            <span className="absolute top-2 right-2 px-[8px] py-[2px] rounded-2xl border-2 border-main bg-white text-sm text-main">
-              대표
-            </span>
-          )}
-        </button>
+          className="aspect-square border-2 rounded-2xl border-gray-200 shrink-0"
+        />
       ))}
     </section>
   );
