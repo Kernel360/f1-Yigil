@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/support/domain/yigil.support.domain.main.iml" filepath="$PROJECT_DIR$/.idea/modules/support/domain/yigil.support.domain.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/support/log/yigil.support.log.main.iml" filepath="$PROJECT_DIR$/.idea/modules/support/log/yigil.support.log.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/yigil-admin/yigil.yigil-admin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/yigil-admin/yigil.yigil-admin.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/yigil-api/yigil.yigil-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/yigil-api/yigil.yigil-api.main.iml" />
     </modules>
   </component>

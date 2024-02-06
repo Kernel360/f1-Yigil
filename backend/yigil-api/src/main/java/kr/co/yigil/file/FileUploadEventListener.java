@@ -22,13 +22,13 @@ public class FileUploadEventListener {
 
     @Async
     @EventListener
-    public Future<AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
+    public Future<kr.co.yigil.file.AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
         MultipartFile file = event.getFile();
-        FileType fileType = event.getFileType();
+        kr.co.yigil.file.FileType fileType = event.getFileType();
         String fileName = generateUniqueFileName(file.getOriginalFilename());
         String s3Path = getS3Path(fileType, fileName);
 
-        AttachFile attachFile = new AttachFile(fileType, s3Path, file.getOriginalFilename(),
+        kr.co.yigil.file.AttachFile attachFile = new kr.co.yigil.file.AttachFile(fileType, s3Path, file.getOriginalFilename(),
                 file.getSize());
 
         ObjectMetadata metadata = new ObjectMetadata();
@@ -39,8 +39,8 @@ public class FileUploadEventListener {
         return CompletableFuture.completedFuture(attachFile);
     }
 
-    private String getS3Path(FileType fileType, String fileName) {
-        String url = fileType == FileType.IMAGE ? "images/" : "videos/";
+    private String getS3Path(kr.co.yigil.file.FileType fileType, String fileName) {
+        String url = fileType == kr.co.yigil.file.FileType.IMAGE ? "images/" : "videos/";
         return url + fileName;
     }
 

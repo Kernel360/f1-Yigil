@@ -84,9 +84,9 @@ const LoginPage: React.FC = () => {
         return;
       }
 
-      const { accessToken, refreshToken } = await response.json();
-      document.cookie = `accessToken=Bearer ${accessToken}; path=/;`;
-      document.cookie = `refreshToken=${refreshToken}; path=/;`;
+      const { access_token, refresh_token } = await response.json();
+      document.cookie = `accessToken=Bearer ${access_token}; path=/;`;
+      document.cookie = `refreshToken=${refresh_token}; path=/;`;
 
       navigate("/");
     } catch (error) {
@@ -136,8 +136,6 @@ const LoginPage: React.FC = () => {
       }
 
       setIsSignUpSuccess(true);
-      setNewEmail("");
-      setNewName("");
     } catch (error) {
       setErrorName("회원가입 요청 실패");
       setErrorMessage("회원가입 요청 중 오류가 발생하였습니다.");
