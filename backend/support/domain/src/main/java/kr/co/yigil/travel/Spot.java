@@ -6,6 +6,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
@@ -21,6 +23,7 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @DiscriminatorValue("SPOT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"place_id", "member_id"}))
 public class Spot extends Travel{
     @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;

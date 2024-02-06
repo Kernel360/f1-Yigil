@@ -5,6 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.place.dto.response.PlaceInfoResponse;
 import kr.co.yigil.place.repository.PlaceRepository;
@@ -33,7 +35,8 @@ public class PlaceServiceTest {
         Long placeId = 1L;
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, "FastFive01.jpg" );
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
+        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, "FastFive01.jpg", mockAttachFile);
         when(placeRepository.findById(placeId)).thenReturn(Optional.of(mockPlace));
         PlaceInfoResponse response = placeService.getPlaceInfo(placeId);
 
@@ -50,10 +53,11 @@ public class PlaceServiceTest {
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        Place mockPlace = new Place(placeName, placeAddress, mockPoint,  "FastFive01.jpg");
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
+        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, "FastFive01.jpg", mockAttachFile);
         when(placeRepository.findByName(placeName)).thenReturn(Optional.of(mockPlace));
 
-        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson);
+        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson, "placeImgUrl", mockAttachFile);
 
         assertThat(resultPlace).isEqualTo(mockPlace);
     }
@@ -68,13 +72,14 @@ public class PlaceServiceTest {
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        Place savedPlace = new Place(1L, placeName, placeAddress, mockPoint,  "FastFive01.jpg");
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
+        Place savedPlace = new Place(1L, placeName, placeAddress, mockPoint,  "FastFive01.jpg", mockAttachFile);
 
         when(placeRepository.findByName(placeName)).thenReturn(Optional.empty());
 
         when(placeRepository.save(ArgumentMatchers.any(Place.class))).thenReturn(savedPlace);
 
-        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson);
+        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson, "placeImgUrl", mockAttachFile);
 
         assertThat(resultPlace).isEqualTo(savedPlace);
     }

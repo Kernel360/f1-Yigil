@@ -9,19 +9,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlaceInfoResponse {
-    private String uniquePlaceId;
     private String name;
     private String address;
     private String imageUrl;
     private String mapStaticImageUrl;
+    private int spotCount;
 
-    public static PlaceInfoResponse from(Place place) {
+
+    public static PlaceInfoResponse from(Place place, int spotCount) {
         return new PlaceInfoResponse(
-                place.getUniquePlaceId(),
                 place.getName(),
                 place.getAddress(),
                 place.getImageUrl(),
-                place.getMapStaticImageFile().getFileUrl()
+                place.getMapStaticImageFile().getFileUrl(),
+                spotCount
         );
     }
 }

@@ -106,7 +106,7 @@ public class CommentService {
 
     private void incrementCommentCount(Travel travel) {
         CommentCount commentCount = commentRedisIntegrityService.ensureCommentCount(travel);
-        commentCount.incremenCommentCount();
+        commentCount.incrementCommentCount();
     }
 
     private void decrementCommentCount(Travel travel) {

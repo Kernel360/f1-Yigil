@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlaceMapStaticImageResponse {
-    private String uniquePlaceId;
     private String mapStaticImageUrl;
 
     public static PlaceMapStaticImageResponse from(Place place) {
         return new PlaceMapStaticImageResponse(
-                place.getUniquePlaceId(),
                 place.getMapStaticImageFile().getFileUrl()
         );
     }
