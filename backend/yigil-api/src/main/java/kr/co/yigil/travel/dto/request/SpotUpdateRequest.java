@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class  SpotUpdateRequest {
     private String pointJson;
-
     private String title;
     private String description;
     private List<MultipartFile> files;

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseCreateResponse;
 import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
+import kr.co.yigil.travel.dto.response.CourseFindDto;
 import kr.co.yigil.travel.dto.response.CourseInfoResponse;
 import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
@@ -42,6 +44,9 @@ import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseServiceTest {
@@ -81,18 +86,19 @@ public class CourseServiceTest {
                         new Coordinate[]{new Coordinate(127.123456, 37.123456),
                                 new Coordinate(127.123456, 37.123456)}), new ArrayList<>(), 0,
                         "mockTitle"));
-        when(courseRepository.findBySpotPlaceId(placeId)).thenReturn(mockCourses);
+        when(courseRepository.findBySpotPlaceId(placeId, Pageable.unpaged())).thenReturn(new SliceImpl<>(mockCourses));
 
         when(favorRedisIntegrityService.ensureFavorCounts(any(Course.class))).thenReturn(
                 new FavorCount(courseId, 1));
         when(commentRedisIntegrityService.ensureCommentCount(any(Course.class))).thenReturn(
                 new CommentCount(courseId, 1));
         // Act
-        CourseListResponse courseListResponse = courseService.getCourseList(placeId);
+        Slice<CourseFindDto> courseListResponse = courseService.getCourseList(placeId, Pageable.unpaged());
 
         // Assert
-        assertThat(courseListResponse).isNotNull();
-        assertThat(courseListResponse.getCourseFindDtos()).hasSize(1);
+        assertThat(courseListResponse).isInstanceOf(Slice.class);
+        assertThat(courseListResponse.getContent()).hasSize(1);
+        assertThat(courseListResponse.getContent().getFirst()).isInstanceOf(CourseFindDto.class);
 
     }
 
@@ -160,7 +166,6 @@ public class CourseServiceTest {
         CourseInfoResponse courseInfoResponse = courseService.getCourseInfo(courseId);
 
         // Assert
-        assertThat(courseInfoResponse).isNotNull();
         assertThat(courseInfoResponse).isInstanceOf(CourseInfoResponse.class);
         assertThat(courseInfoResponse.getCourseId()).isEqualTo(courseId);
     }
