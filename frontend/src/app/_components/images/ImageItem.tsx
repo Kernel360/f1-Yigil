@@ -7,6 +7,7 @@ import type { TImageData } from './ImageHandler';
 type ItemProps = HTMLAttributes<HTMLDivElement> & {
   image: TImageData;
   order?: number;
+  removeImage?: (filename: string) => void;
   animationStyle?: string;
   withOpacity?: boolean;
   isDragging?: boolean;
@@ -14,13 +15,22 @@ type ItemProps = HTMLAttributes<HTMLDivElement> & {
 
 const ImageItem = forwardRef<HTMLDivElement, ItemProps>(
   (
-    { image, order, animationStyle, withOpacity, isDragging, ...props },
+    {
+      image,
+      order,
+      removeImage,
+      animationStyle,
+      withOpacity,
+      isDragging,
+      ...props
+    },
     ref,
   ) => {
-    console.log(order);
-
     return (
       <div
+        onClick={() => {
+          removeImage && removeImage(image.filename);
+        }}
         ref={ref}
         className={`relative aspect-square border-2 rounded-2xl origin-center overflow-hidden ${
           withOpacity ? 'opacity-50' : 'opacity-100'

@@ -40,12 +40,10 @@ export default function ImagesContainer({
   );
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
-    console.log('start');
     setActiveId(event.active.id as string);
   }, []);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
-    console.log('end');
     const { active, over } = event;
 
     if (active.id !== over?.id) {
@@ -67,6 +65,12 @@ export default function ImagesContainer({
     }
   }, []);
 
+  function removeImage(filename: string) {
+    const nextImages = images.filter((image) => image.filename !== filename);
+
+    setImages(nextImages);
+  }
+
   const handleDragCancel = useCallback(() => {
     setActiveId(null);
   }, []);
@@ -84,7 +88,12 @@ export default function ImagesContainer({
     >
       <SortableContext items={imageUIDs} strategy={rectSortingStrategy}>
         {images.map((image, index) => (
-          <SortableItem order={index} key={image.filename} image={image} />
+          <SortableItem
+            key={image.filename}
+            image={image}
+            order={index}
+            removeImage={removeImage}
+          />
         ))}
       </SortableContext>
       <DragOverlay className="origin-top-left" adjustScale>

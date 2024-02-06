@@ -7,9 +7,11 @@ import type { TImageData } from './ImageHandler';
 export default function SortableItem({
   image,
   order,
+  removeImage,
 }: {
   image: TImageData;
   order: number;
+  removeImage?: (filename: string) => void;
 }) {
   const {
     isDragging,
@@ -29,6 +31,7 @@ export default function SortableItem({
     <ImageItem
       image={image}
       order={order}
+      removeImage={removeImage}
       ref={setNodeRef}
       animationStyle={tailWindAnimationStyle}
       withOpacity={isDragging}
