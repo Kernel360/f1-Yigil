@@ -42,7 +42,7 @@ function IconWithCounts({
   return (
     <div className="flex items-center">
       {icon}
-      <p className="pl-1 flex justify-center">{label}</p>
+      <p className="pl-2 flex justify-center">{label}</p>
     </div>
   );
 }
@@ -50,28 +50,39 @@ function IconWithCounts({
 // 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
 // 차후 next/image 사용하게 변경 예정
 export default function Post({
-  region,
-  liked,
-  imageUrl,
-  title,
-  likeCount,
-  commentCount,
-  rating,
-}: TPost) {
+  data,
+  order,
+  variant,
+}: {
+  data: TPost;
+  order: number;
+  variant: 'primary' | 'secondary';
+}) {
+  const { region, liked, imageUrl, title, likeCount, commentCount, rating } =
+    data;
+
+  const postSize = variant === 'primary' ? 350 : 300;
+
   return (
-    <article className="w-[300px] h-[350px] p-2 relative flex shrink-0 flex-col gap-2">
-      <span className="absolute top-5 left-4 bg-white px-4 py-1 rounded-full">
-        {region}
-      </span>
-      <LikeButton liked={liked} />
-      <img
-        className="rounded-lg shadow-lg max-w-full"
-        src={imageUrl}
-        alt={`${title} 대표 이미지`}
-      />
-      <section className="flex justify-between items-center gap-2 px-4">
-        <p className="text-xl truncate">{title}</p>
-        <div className="flex gap-2">
+    <article
+      className={`w-[${postSize}px] grow px-2 py-4 relative flex shrink-0 flex-col gap-2`}
+    >
+      <div className="relative">
+        <LikeButton liked={liked} />
+        <img
+          className="aspect-square rounded-lg w-full"
+          src={imageUrl}
+          alt={`${title} 대표 이미지`}
+        />
+        {variant === 'primary' && (
+          <span className="absolute left-6 bottom-2 text-white text-8xl font-semibold">
+            {order + 1}
+          </span>
+        )}
+      </div>
+      <section className="flex flex-col gap-2 px-4">
+        <p className="text-gray-500 text-xl font-medium truncate">{title}</p>
+        <div className="flex gap-3">
           <IconWithCounts
             icon={<CommentIcon className="w-4 h-4" />}
             count={commentCount}
