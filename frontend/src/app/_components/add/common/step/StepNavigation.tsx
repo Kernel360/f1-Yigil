@@ -17,10 +17,19 @@ export default function StepNavigation({
   previous: () => void;
 }) {
   const { makingStep } = currentStep;
+  const { label, value } = makingStep.data;
+
+  if (label === '완료') {
+    return (
+      <nav className="mx-2 py-4 flex justify-center items-center relative">
+        <span className="text-xl text-semibold text-gray-900">{label}</span>
+      </nav>
+    );
+  }
 
   return (
     <nav className="mx-2 py-4 flex justify-between items-center relative">
-      {makingStep.data.value === 1 ? (
+      {value === 1 ? (
         <button className="w-12 p-2">
           <XMarkIcon className="w-6 h-6 stroke-gray-500" />
         </button>
@@ -30,10 +39,8 @@ export default function StepNavigation({
         </button>
       )}
 
-      <span className="text-xl text-semibold text-gray-900">
-        {makingStep.data.label}
-      </span>
-      {makingStep.data.label === '완료' ? (
+      <span className="text-xl text-semibold text-gray-900">{label}</span>
+      {label.includes('확정') ? (
         <button className="w-12 p-2 text-main">확정</button>
       ) : (
         <button className="w-12 p-2 text-gray-500" onClick={next}>
