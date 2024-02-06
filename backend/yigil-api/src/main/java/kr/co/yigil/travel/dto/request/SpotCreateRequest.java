@@ -25,7 +25,6 @@ public class SpotCreateRequest {
 
     private MultipartFile mapStaticImageFile;
     private String placeImageUrl;
-    private String uniquePlaceId;
     private String placeName;
     private String placeAddress;
     private String placePointJson;

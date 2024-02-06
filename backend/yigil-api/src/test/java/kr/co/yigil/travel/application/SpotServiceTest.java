@@ -30,7 +30,6 @@ import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
 import kr.co.yigil.travel.dto.response.SpotFindDto;
 import kr.co.yigil.travel.dto.response.SpotInfoResponse;
-import kr.co.yigil.travel.dto.response.SpotListResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import kr.co.yigil.travel.repository.SpotRepository;
 import org.junit.jupiter.api.DisplayName;

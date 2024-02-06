@@ -1,5 +1,7 @@
 package kr.co.yigil.travel.dto.response;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import kr.co.yigil.travel.Spot;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +16,9 @@ public class SpotFindDto {
     private String description;
     private String memberNickname;
     private String memberImageUrl;
+    private double rate;
+    private List<String> imageUrls;
+    private LocalDateTime createdAt;
     private Integer favorCount;
     private Integer commentCount;
 
@@ -24,6 +29,9 @@ public class SpotFindDto {
                 spot.getDescription(),
                 spot.getMember().getNickname(),
                 spot.getMember().getProfileImageUrl(),
+                spot.getRate(),
+                spot.getAttachFiles().getUrls(),
+                spot.getCreatedAt(),
                 favorCount,
                 commentCount
         );

@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.presentation;
 
-import io.micrometer.common.util.StringUtils;
 import java.net.URI;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
@@ -33,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/spots")
-public class SpotController {
+public class    SpotController {
 
     private final SpotService spotService;
 

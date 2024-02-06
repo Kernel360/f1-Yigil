@@ -71,7 +71,6 @@ public class CourseService {
         return CourseInfoResponse.from(course, spots, comments);
     }
 
-    @Transactional
     public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
         Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
         List<CourseFindDto> courseFindDtoList = courses.stream()

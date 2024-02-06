@@ -12,16 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlaceDto {
 
-    private String uniquePlaceId;
     private String name;
     private String address;
     private String imageUrl;
     private String pointJson;
     private AttachFile mapStaticImageFile;
 
-    public static Place toEntity(String uniquePlaceId, String name, String address, String pointJson, String imageUrl, AttachFile mapStaticImageFile){
+    public static Place toEntity(String name, String address, String pointJson, String imageUrl, AttachFile mapStaticImageFile){
         return new Place(
-                uniquePlaceId,
                 name,
                 address,
                 GeojsonConverter.convertToPoint(pointJson),

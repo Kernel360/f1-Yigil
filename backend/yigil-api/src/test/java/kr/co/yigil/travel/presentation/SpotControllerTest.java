@@ -15,7 +15,6 @@ import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
 import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
 import kr.co.yigil.travel.dto.response.SpotInfoResponse;
-import kr.co.yigil.travel.dto.response.SpotListResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

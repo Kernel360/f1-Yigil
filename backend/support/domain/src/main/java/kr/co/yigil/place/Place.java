@@ -14,21 +14,18 @@ import kr.co.yigil.file.AttachFile;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "uniquePlaceId"))
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "address"})})
 public class Place {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NaturalId
-    private String uniquePlaceId;
 
     private String name;
 
@@ -38,13 +35,13 @@ public class Place {
     private Point location;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name="attach_file_id")
+    @JoinColumn(name = "attach_file_id")
     private AttachFile mapStaticImageFile;
 
     private String imageUrl;
 
-    public Place(final String uniquePlaceId, final String name, final String address, final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
-        this.uniquePlaceId = uniquePlaceId;
+    public Place(final String name, final String address,
+            final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
         this.name = name;
         this.address = address;
         this.location = location;
@@ -52,9 +49,9 @@ public class Place {
         this.mapStaticImageFile = mapStaticImageFile;
     }
 
-    public Place(Long id, final String uniquePlaceId, final String name, final String address, final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
+    public Place(Long id, final String name, final String address,
+            final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
         this.id = id;
-        this.uniquePlaceId = uniquePlaceId;
         this.name = name;
         this.address = address;
         this.location = location;

@@ -17,6 +17,7 @@ import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.place.application.PlaceService;
 import kr.co.yigil.travel.Spot;
+import kr.co.yigil.travel.domain.SpotCount;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
 import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
@@ -26,7 +27,6 @@ import kr.co.yigil.travel.dto.response.SpotInfoResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -46,6 +46,7 @@ public class SpotService {
     private final PlaceService placeService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
+    private final SpotRedisIntegrityService spotRedisIntegrityService;
 
     @Transactional
     public Slice<SpotFindDto> getSpotList(Long placeId, Pageable pageable) {
@@ -54,6 +55,13 @@ public class SpotService {
                 .map(this::getSpotFindDto)
                 .toList();
         return new SliceImpl<>(spotFindDtoList, pageable, spots.hasNext());
+    }
+
+    private SpotFindDto getSpotFindDto(Spot spot) {
+        return SpotFindDto.from(
+                spot,
+                favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
+                commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount());
     }
 
     @Transactional
@@ -65,7 +73,6 @@ public class SpotService {
         AttachFile mapStaticImageFile = getAttachFile(spotCreateRequest.getMapStaticImageFile());
 
         Place place = getOrCreatePlace(
-                spotCreateRequest.getUniquePlaceId(),
                 spotCreateRequest.getPlaceName(),
                 spotCreateRequest.getPlaceAddress(),
                 spotCreateRequest.getPlacePointJson(),
@@ -73,16 +80,32 @@ public class SpotService {
                 mapStaticImageFile
         );
 
+        checkAlreadyExist(memberId, place);
+
+        incrementSpotCount(place);
+
         Spot spot = spotRepository.save(
                 SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles));
 
         return new SpotCreateResponse(spot.getId(), "스팟 정보 생성 성공");
     }
 
-    private Place getOrCreatePlace(String uniquePlaceId, String placeName, String placeAddress,
+    private void incrementSpotCount(Place place) {
+        SpotCount spotCount = spotRedisIntegrityService.ensureSpotCounts(place.getId());
+        spotCount.incrementSpotCount();
+    }
+
+    private void checkAlreadyExist(Long memberId, Place place) {
+        spotRepository.findByPlaceIdAndMemberId(place.getId(), memberId)
+                .ifPresent(s -> {
+                    throw new BadRequestException(ExceptionCode.ALREADY_EXIST_SPOT);
+                });
+    }
+
+
+    private Place getOrCreatePlace(String placeName, String placeAddress,
             String placePointJson, String placeImageUrl, AttachFile mapStaticImageFile) {
         return placeService.getOrCreatePlace(
-                uniquePlaceId,
                 placeName,
                 placeAddress,
                 placePointJson,
@@ -117,8 +140,13 @@ public class SpotService {
     public SpotDeleteResponse deleteSpot(Long memberId, Long spotId) {
         Spot spot = findSpotByIdAndMemberId(spotId, memberId);
         spotRepository.delete(spot);
-        // todo 댓글, 좋아요 삭제
+        decrementSpotCount(spot.getPlace());
         return new SpotDeleteResponse("스팟 정보 삭제 성공");
+    }
+
+    private void decrementSpotCount(Place place) {
+        SpotCount spotCount = spotRedisIntegrityService.ensureSpotCounts(place.getId());
+        spotCount.decrementSpotCount();
     }
 
     private AttachFiles getAttachFiles(List<MultipartFile> files) {
@@ -143,13 +171,7 @@ public class SpotService {
         return attachFiles;
     }
 
-    @NotNull
-    private SpotFindDto getSpotFindDto(Spot spot) {
-        return SpotFindDto.from(
-                spot,
-                favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
-                commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount());
-    }
+
 
 
     private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
