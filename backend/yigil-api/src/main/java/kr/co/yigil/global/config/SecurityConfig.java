@@ -18,19 +18,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:3000", "https://yigil.co.kr"));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-                    config.setAllowedHeaders(List.of("*"));
-                    config.setAllowCredentials(true);
-                    config.setMaxAge(3600L);
-                    return config;
-                }))
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.anyRequest().permitAll())
-                .securityContext(AbstractHttpConfigurer::disable)
-                .sessionManagement((sessionManagement) -> sessionManagement.maximumSessions(1));
+            .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(List.of("http://localhost:3000", "https://yigil.co.kr"));
+                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                config.setAllowedHeaders(List.of("*"));
+                config.setAllowCredentials(true);
+                config.setMaxAge(3600L);
+                return config;
+            }))
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.anyRequest().permitAll())
+            .securityContext(AbstractHttpConfigurer::disable)
+            .sessionManagement((sessionManagement) -> sessionManagement.maximumSessions(1));
         return http.build();
     }
 
