@@ -63,6 +63,7 @@ logging:
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
 
+
 decorator:
   datasource:
     p6spy:

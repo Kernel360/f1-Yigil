@@ -20,7 +20,7 @@ public class SpotInfoResponse {
     private String memberNickname;
     private String memberImageUrl;
 
-//    private Integer likeCount;
+//    private Integer favorCount;
 //    private Integer commentCount;
 
     private String pointJson;

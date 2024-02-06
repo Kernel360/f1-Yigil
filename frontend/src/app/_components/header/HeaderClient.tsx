@@ -5,9 +5,9 @@ import RoundProfile from '../ui/profile/RoundProfile';
 import HeaderLogo from '/public/logo/yigil_logo.svg';
 import Link from 'next/link';
 import { Session } from 'next-auth';
-import PopOver from '../ui/popover/PopOver';
-import { headerPopOverData } from './constants';
 import { EventFor } from '@/types/type';
+import PopOver from '../ui/popover/PopOver';
+import { headerPopOverData } from '../ui/popover/constants';
 
 export default function HeaderClient({ session }: { session: Session | null }) {
   const router = useRouter();
@@ -19,6 +19,9 @@ export default function HeaderClient({ session }: { session: Session | null }) {
     else if (e.key === 'Escape') setIsModalOpened(false);
   };
 
+  const closeModal = () => {
+    setIsModalOpened(false);
+  };
   return (
     <>
       <div className="ml-4 cursor-pointer" onClick={() => router.push('/')}>
@@ -43,8 +46,9 @@ export default function HeaderClient({ session }: { session: Session | null }) {
           {isModalOpened && (
             <PopOver
               popOverData={headerPopOverData}
-              setIsModalOpened={setIsModalOpened}
-              position="bottom-[-90px] right-4"
+              closeModal={closeModal}
+              position="top-16 right-4"
+              style="z-30"
             />
           )}
         </>
