@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import type { EventFor } from '@/types/type';
-
 import HeartIcon from '/public/icons/heart.svg';
 
 export default function LikeButton({ liked }: { liked: boolean }) {

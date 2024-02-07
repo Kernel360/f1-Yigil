@@ -1,4 +1,4 @@
-import type { TPost } from './Post';
+import type { TPost } from './Spot';
 
 export const postData: TPost[] = [
   {

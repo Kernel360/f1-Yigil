@@ -4,7 +4,7 @@ import CommentIcon from '/public/icons/comment.svg';
 import HeartIcon from '/public/icons/heart.svg';
 import StarIcon from '/public/icons/star.svg';
 
-import type { ComponentType, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 type TRegion =
   | '강원'
@@ -17,7 +17,7 @@ type TRegion =
   | '충남'
   | '충북';
 
-export interface TPost {
+export interface TSpot {
   id: string;
   region: TRegion;
   liked: boolean;
@@ -49,23 +49,23 @@ function IconWithCounts({
 
 // 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
 // 차후 next/image 사용하게 변경 예정
-export default function Post({
+export default function Spot({
   data,
   order,
   variant,
 }: {
-  data: TPost;
+  data: TSpot;
   order: number;
   variant: 'primary' | 'secondary';
 }) {
   const { region, liked, imageUrl, title, likeCount, commentCount, rating } =
     data;
 
-  const postSize = variant === 'primary' ? 350 : 300;
+  const postSize = variant === 'primary' ? 'w-[350px]' : 'w-[300px]';
 
   return (
     <article
-      className={`w-[${postSize}px] grow px-2 py-4 relative flex shrink-0 flex-col gap-2`}
+      className={`${postSize} px-2 py-4 relative flex shrink-0 flex-col gap-2`}
     >
       <div className="relative">
         <LikeButton liked={liked} />

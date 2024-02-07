@@ -1,19 +1,19 @@
 'use client';
 
+import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 
-import { Post } from '@/app/_components/post';
+import { Spot } from '@/app/_components/spot';
 
-import type { TPost } from './Post';
-import Link from 'next/link';
+import type { TSpot } from './Spot';
 
-export default function PostList({
+export default function SpotList({
   title,
   data,
   variant,
 }: {
   title: string;
-  data: TPost[];
+  data: TSpot[];
   variant: 'primary' | 'secondary';
 }) {
   const [emblaRef] = useEmblaCarousel({
@@ -30,7 +30,7 @@ export default function PostList({
         <div className="flex">
           {data.map((post, index) => (
             <Link href={`#`} key={post.id}>
-              <Post data={post} order={index} variant={variant} />
+              <Spot data={post} order={index} variant={variant} />
             </Link>
           ))}
         </div>
