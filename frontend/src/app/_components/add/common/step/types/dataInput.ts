@@ -11,7 +11,7 @@ type TDataFromExistingStep =
   | { label: '별점'; value: 2 }
   | { label: '리뷰'; value: 3 };
 
-type TDataFromNew = {
+export type TDataFromNew = {
   kind: 'from-new';
   data: TDataFromNewStep;
 };

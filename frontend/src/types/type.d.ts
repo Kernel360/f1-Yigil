@@ -15,6 +15,11 @@ declare global {
 
       BASE_URL: string;
       NEXT_PUBLIC_BASE_URL: string;
+
+      NEXT_PUBLIC_NAVER_MAPS_CLIENT_ID: string;
+      NAVER_SEARCH_ID: string;
+      NAVER_SEARCH_SECRET: string;
+      MAP_SECRET: string;
     }
   }
 }

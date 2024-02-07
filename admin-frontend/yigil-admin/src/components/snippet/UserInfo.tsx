@@ -13,7 +13,7 @@ import {
 
 interface UserInfoProps {
   username: string;
-  profileUrl: string;
+  profile_url: string;
 }
 
 const UserInfo: React.FC = () => {
@@ -35,7 +35,7 @@ const UserInfo: React.FC = () => {
     }
   }, []);
 
-  const deleteCookie = (name: String) => {
+  const deleteCookie = (name: string) => {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
@@ -52,7 +52,7 @@ const UserInfo: React.FC = () => {
         <Popover>
           <PopoverTrigger asChild>
             <Avatar>
-              <AvatarImage src={user.profileUrl} alt={`@${user.username}`} />
+              <AvatarImage src={user.profile_url} alt={`@${user.username}`} />
               <AvatarFallback>{user.username[0]}</AvatarFallback>
             </Avatar>
           </PopoverTrigger>
@@ -71,7 +71,7 @@ const UserInfo: React.FC = () => {
           </PopoverContent>
         </Popover>
       ) : (
-        <Link to="/login">
+        <Link to="/admin/login">
           <Button>
             <EnvelopeOpenIcon className="mr-2 h-4 w-4" /> Login with Email
           </Button>

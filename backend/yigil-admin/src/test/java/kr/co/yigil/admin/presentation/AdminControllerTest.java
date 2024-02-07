@@ -95,6 +95,6 @@ public class AdminControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value(response.getUsername()))
-                .andExpect(jsonPath("$.profileUrl").value(response.getProfileUrl()));
+                .andExpect(jsonPath("$.profile_url").value(response.getProfileUrl()));
     }
 }

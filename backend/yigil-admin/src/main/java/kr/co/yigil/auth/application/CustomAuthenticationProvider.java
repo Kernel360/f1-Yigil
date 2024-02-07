@@ -1,6 +1,7 @@
 package kr.co.yigil.auth.application;
 
 import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_NOT_FOUND;
+import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_PASSWORD_DOES_NOT_MATCH;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                .orElseThrow(() -> new AuthException(ADMIN_NOT_FOUND));
 
        if (!passwordService.matches(password, admin.getPassword())) {
-           throw new BadCredentialsException("Password does not match");
+           throw new AuthException(ADMIN_PASSWORD_DOES_NOT_MATCH);
        }
 
         List<GrantedAuthority> authorities = admin.getRoles().stream()
