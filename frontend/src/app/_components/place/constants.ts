@@ -1,6 +1,6 @@
-import type { TPost } from './Post';
+import type { TPlace } from './types';
 
-export const postData: TPost[] = [
+export const placeData: TPlace[] = [
   {
     id: '1',
     region: '강원',
