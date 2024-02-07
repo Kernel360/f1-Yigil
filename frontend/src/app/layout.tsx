@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import './globals.css';
+import NaverContext from '@/context/NaverContext';
 
 const Pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="max-w-[430px] mx-auto">
         <div id="modal"></div>
         <MSWComponent />
-        <AuthContext>{children}</AuthContext>
+        <AuthContext>
+          <NaverContext>{children}</NaverContext>
+        </AuthContext>
       </body>
     </html>
   );
