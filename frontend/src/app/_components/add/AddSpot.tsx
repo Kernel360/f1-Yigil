@@ -1,6 +1,6 @@
 'use client';
 
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
 import { makeInitialStep, reducer, StepNavigation } from './common/step';
 import ProgressIndicator from './common/ProgressIndicator';
@@ -8,7 +8,6 @@ import {
   AddSpotContext,
   addSpotReducer,
   initialAddSpotState,
-  TAddSpotProps,
 } from './spot/SpotContext';
 
 import type { DataInput, Making } from './common/step/types';
@@ -20,6 +19,10 @@ import AddPlaceInfo from './common/AddPlaceInto';
 import { ImageHandler } from '../images';
 import PostRating from './common/PostRating';
 import PostReview from './common/PostReview';
+import { getArea } from '../naver-map/hooks/getArea';
+import AddSpotMap from './common/AddSpotMap';
+import MapComponent from '../naver-map/MapComponent';
+import { httpRequest } from '../api/httpRequest';
 
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
@@ -32,6 +35,10 @@ export default function AddSpot() {
     initialAddSpotState,
   );
 
+  const [searchResults, setSearchResults] = useState<
+    { name: string; roadAddress: string }[]
+  >([]);
+
   const { makingStep, inputStep } = step;
 
   const makingSpotStep = makingStep as Making.TSpot;
@@ -39,6 +46,30 @@ export default function AddSpot() {
 
   const stepLabel = makingSpotStep.data.label;
   const inputLabel = dataFromNewStep.data.label;
+
+  async function search(keyword: string) {
+    if (keyword === '') {
+      setSearchResults([]);
+      return;
+    }
+
+    const res = await fetch('http://localhost:3000/endpoints/api/search', {
+      method: 'POST',
+      body: JSON.stringify({ keyword }),
+    });
+
+    const areas = (await res.json()) as any[];
+
+    const results = areas.map((area) => {
+      const title = area.title as string;
+      const escaped = title.replace(/<b>|<\/b>/g, '');
+      const roadAddress = area.roadAdress as string;
+
+      return { name: escaped, roadAddress };
+    });
+
+    setSearchResults(results);
+  }
 
   return (
     <section className="flex flex-col grow">
@@ -50,7 +81,22 @@ export default function AddSpot() {
         />
         <ProgressIndicator step={step} />
 
-        {stepLabel === '장소 입력' && <SearchBox />}
+        {stepLabel === '장소 입력' && (
+          <section className=" flex flex-col justify-between grow">
+            <SearchBox
+              dispatch={dispatchSpot}
+              searchResults={searchResults}
+              search={search}
+            />
+            <hr className="my-2 pb-1 align-bottom" />
+            <MapComponent width="100%" height="100%">
+              <AddSpotMap
+                title={addSpotState.name}
+                coords={addSpotState.coords}
+              />
+            </MapComponent>
+          </section>
+        )}
         {stepLabel === '정보 입력' && (
           <>
             {inputLabel === '시작' && <></>}

@@ -1,4 +1,4 @@
-export const getArea = async (title: string) => {
+export const getArea = async (title: string): Promise<any[]> => {
   const mapResult = await fetch(
     `https://openapi.naver.com/v1/search/local.json?query=${title}&display=10&sort=random`,
     {

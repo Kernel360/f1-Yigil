@@ -8,10 +8,12 @@ import XMarkIcon from '/public/icons/x-mark.svg';
 
 export default function SearchBar({
   cancellable,
-  addResult,
+  addHistory,
+  search,
 }: {
   cancellable?: boolean;
-  addResult: (result: string) => void;
+  addHistory: (result: string) => void;
+  search: (keyword: string) => Promise<void>;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -37,15 +39,22 @@ export default function SearchBar({
     replace(`${pathname}?${params.toString()}`);
   }
 
-  function handleSearch() {
-    addResult(searchValue);
+  // 리팩토링 필요
+  async function handleSearch() {
+    addHistory(searchValue);
     const params = new URLSearchParams(searchParams);
 
-    push(`${pathname}/result?${params.toString()}`);
+    if (pathname === '/search') {
+      push(`${pathname}/result?${params.toString()}`);
+    } else {
+      console.log('yay');
+      search(searchValue);
+    }
   }
 
   function handleErase() {
     setSearchValue('');
+    search('');
     inputRef.current?.focus();
     replace(`${pathname}`);
   }

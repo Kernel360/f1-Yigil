@@ -9,7 +9,7 @@ export interface TAddSpotProps {
   address: string;
   spotMapImageUrl: string;
   images: TImageData[];
-  coords: [number, number];
+  coords: { lat: number; lng: number };
   rating: TRating;
   review: { title?: string; review: string };
 }
@@ -38,7 +38,7 @@ export const initialAddSpotState: TAddSpotProps = {
   address: exampleAddressName,
   spotMapImageUrl: placeholderImageUrl,
   images: [],
-  coords: [0, 0],
+  coords: { lat: 0, lng: 0 },
   rating: 1,
   review: { review: '' },
 };
@@ -68,7 +68,7 @@ export function addSpotReducer(
       return { ...state, images };
     }
     case 'SET_COORDS': {
-      const coords = action.payload as [number, number];
+      const coords = action.payload as { lat: number; lng: number };
       return { ...state, coords };
     }
     case 'SET_RATING': {
