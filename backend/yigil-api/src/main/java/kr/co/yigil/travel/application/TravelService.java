@@ -3,6 +3,7 @@ package kr.co.yigil.travel.application;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.dto.response.PrivateUpdateResponse;
 import kr.co.yigil.travel.repository.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
