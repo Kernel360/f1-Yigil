@@ -15,7 +15,9 @@ export default function MyPagePlace() {
           key={idx}
           tabIndex={0}
           className={`py-[14px] flex justify-center text-xl leading-6 cursor-pointer ${
-            !path.includes(href) && 'text-gray-300 bg-gray-200'
+            path === href
+              ? 'text-gray-700 font-semibold'
+              : 'text-gray-300 font-normal'
           } `}
         >
           {label}

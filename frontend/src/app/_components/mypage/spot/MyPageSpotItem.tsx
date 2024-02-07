@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock.svg';
 import { TMyPageSpot } from './MyPageSpotList';
+import { getMyPageSpot } from '../hooks/useMyPage';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { postId: TMyPageSpot['postId']; isSecret: boolean }[];
-  filterCheckedList: (id: number, isSecret: boolean) => void;
+  onChangeCheckedList: (id: number, isSecret: boolean) => void;
   idx: number;
+  selectOption: string;
 }
 
 export default function MyPageSpotItem({
@@ -20,34 +22,44 @@ export default function MyPageSpotItem({
   description,
   isSecret,
   checkedList,
-  filterCheckedList,
+  onChangeCheckedList,
   idx,
+  selectOption,
 }: TMyPageSpotItem) {
   const [isCheckDisabled, setIsCheckDisabled] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
-  // checkList의 첫 번째 체크 아이템이 잠금 아이템이라면 잠그지 않은 아이템 disabled 처리
+  // TODO: 전체 선택 했을 때 isChecked가 true 로 바뀌어야 한다.
   useEffect(() => {
-    const firstItem = checkedList[0];
-    if (firstItem?.isSecret === true && isSecret === false)
-      setIsCheckDisabled(true);
-    else if (firstItem?.isSecret === false && isSecret === true)
-      setIsCheckDisabled(true);
-    else if (!checkedList.length) {
-      setIsCheckDisabled(false);
-    }
+    const found = checkedList.find((checked) => checked.postId === postId);
+
+    if (found) setIsChecked(true);
+    else setIsChecked(false);
   }, [checkedList.length]);
+
+  useEffect(() => {
+    if (selectOption === '전체' && isSecret) {
+      setIsCheckDisabled(true);
+      setIsChecked(false);
+    }
+  }, [selectOption, checkedList.length]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
 
   return (
     <div
       className={`flex items-center px-5 py-4 border-b-2 gap-x-4 ${
         idx === 0 && 'border-t-2'
       }`}
+      aria-label="spot-item"
     >
       <input
         type="checkbox"
         disabled={isCheckDisabled}
         className="w-[32px] h-[32px]"
-        onChange={() => filterCheckedList(postId, isSecret)}
+        checked={isChecked}
+        onChange={() => {
+          getMyPageSpot();
+          onChangeCheckedList(postId, isSecret);
+        }}
       />
       <div className="relative">
         <Image

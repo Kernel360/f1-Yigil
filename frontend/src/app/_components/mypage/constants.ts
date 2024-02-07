@@ -1,6 +1,6 @@
 export const myPageRoutes = [
   {
-    href: '/mypage/my',
+    href: '/mypage/my/spot',
     label: '마이페이지',
   },
   {
@@ -11,7 +11,7 @@ export const myPageRoutes = [
 
 export const myPageTabs = [
   {
-    href: '/mypage/my',
+    href: '/mypage/my/spot',
     label: 'MY',
   },
   {
@@ -28,5 +28,13 @@ export const myPageMyPlaceTab = [
   {
     href: '/mypage/my/course',
     label: '코스',
+  },
+  {
+    href: '/mypage/my/follower',
+    label: '팔로워',
+  },
+  {
+    href: '/mypage/my/follow',
+    label: '팔로우',
   },
 ];
