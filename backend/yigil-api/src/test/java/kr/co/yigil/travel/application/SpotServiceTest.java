@@ -23,7 +23,9 @@ import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.place.Place;
+import kr.co.yigil.place.application.PlaceRateRedisIntegrityService;
 import kr.co.yigil.place.application.PlaceService;
+import kr.co.yigil.place.domain.PlaceRate;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.domain.SpotCount;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
@@ -72,6 +74,8 @@ class SpotServiceTest {
 
     @Mock
     private SpotRedisIntegrityService spotRedisIntegrityService;
+    @Mock
+    private PlaceRateRedisIntegrityService placeRateRedisIntegrityService;
 
 
     @DisplayName("getSpotList 메서드가 올바른 응답을 내리는지")
@@ -153,7 +157,8 @@ class SpotServiceTest {
 
         Point mockPoint = new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456));
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
-        Place mockPlace = new Place(1L, "mockPlaceName", "mock place address", mockPoint,
+        long placeId = 1L;
+        Place mockPlace = new Place(placeId, "mockPlaceName", "mock place address", mockPoint,
             "mockImageUrl", null);
 
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
@@ -161,7 +166,7 @@ class SpotServiceTest {
             anyString(), anyString(), anyString(), anyString(), any(AttachFile.class)
         )).thenReturn(mockPlace);
         when(spotRedisIntegrityService.ensureSpotCounts(anyLong())).thenReturn(
-            new SpotCount(1L, 1));
+            new SpotCount(placeId, 1));
 
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
@@ -174,6 +179,8 @@ class SpotServiceTest {
 
         Spot mockSpot = new Spot(mockMember, mockPoint, false, mockTitle, mockDescription,
             mockAttachFiles, mockPlace, mockRate);
+        when(placeRateRedisIntegrityService.ensurePlaceRate(mockPlace.getId())).thenReturn(
+            new PlaceRate(placeId, 3.0));
         when(spotRepository.save(any(Spot.class))).thenReturn(mockSpot);
 
         // Act
@@ -253,6 +260,10 @@ class SpotServiceTest {
                 new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
                 "mock image url", null), 5.0);
         when(spotRepository.findById(spotId)).thenReturn(Optional.of(mockSpot));
+        when(favorRedisIntegrityService.ensureFavorCounts(mockSpot)).thenReturn(
+            new FavorCount(mockSpot.getId(), 4));
+        when(commentRedisIntegrityService.ensureCommentCount(mockSpot)).thenReturn(
+            new CommentCount(mockSpot.getId(), 2));
 
         // Act
         SpotInfoResponse spotInfoResponse = spotService.getSpotInfo(spotId);

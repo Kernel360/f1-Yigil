@@ -13,7 +13,7 @@ import kr.co.yigil.place.repository.PlaceRepository;
 import kr.co.yigil.travel.application.SpotRedisIntegrityService;
 import kr.co.yigil.travel.repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,8 +71,8 @@ public class PlaceService {
                 );
     }
 
-    public Slice<PlaceFindDto> getPlaceList(PageRequest pageRequest) {
-        return placeRepository.findAll(pageRequest)
+    public Slice<PlaceFindDto> getPlaceList(Pageable pageable) {
+        return placeRepository.findAllPlaces(pageable)
                 .map(this::getPlaceFindDto);
     }
 
