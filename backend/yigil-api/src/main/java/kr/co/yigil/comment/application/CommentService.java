@@ -4,7 +4,6 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_COMMENT_ID;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import kr.co.yigil.comment.domain.Comment;
 import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.comment.domain.repository.CommentRepository;
@@ -107,7 +106,7 @@ public class CommentService {
 
     private void incrementCommentCount(Travel travel) {
         CommentCount commentCount = commentRedisIntegrityService.ensureCommentCount(travel);
-        commentCount.incremenCommentCount();
+        commentCount.incrementCommentCount();
     }
 
     private void decrementCommentCount(Travel travel) {

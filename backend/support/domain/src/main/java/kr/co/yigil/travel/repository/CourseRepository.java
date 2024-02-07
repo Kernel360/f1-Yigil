@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.repository;
 
-import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.Course;
@@ -19,5 +18,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c FROM Course c JOIN c.spots s WHERE s.place.id = :placeId")
     Slice<Course> findBySpotPlaceId(@Param("placeId") Long placeId, Pageable pageable);
 
-    List<Course> findAllByMember(Member member);
+    Slice<Course> findAllByMember(Member member);
 }
