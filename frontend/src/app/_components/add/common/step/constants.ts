@@ -6,7 +6,7 @@ export const COURSE_FROM_EXISTING_STEP_COUNT = 6;
 
 export const initialSpotStep: TStep = {
   makingStep: { kind: 'spot', data: { label: '장소 입력', value: 1 } },
-  inputStep: { kind: 'from-new', data: { label: '주소', value: 1 } },
+  inputStep: { kind: 'from-new', data: { label: '시작', value: 0 } },
 };
 
 export const initialCourseFromExistingStep: TStep = {
@@ -16,7 +16,7 @@ export const initialCourseFromExistingStep: TStep = {
   },
   inputStep: {
     kind: 'from-existing',
-    data: { label: '순서', value: 1 },
+    data: { label: '시작', value: 0 },
   },
 };
 
@@ -27,7 +27,7 @@ export const initialCourseFromNewStep: TStep = {
   },
   inputStep: {
     kind: 'from-new',
-    data: { label: '주소', value: 1 },
+    data: { label: '시작', value: 0 },
   },
 };
 
