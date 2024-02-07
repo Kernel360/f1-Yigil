@@ -1,11 +1,24 @@
 'use client';
-import React from 'react';
-import { NaverMap } from 'react-naver-maps';
+import React, { ReactNode } from 'react';
+import { Container as MapDiv } from 'react-naver-maps';
 
-export default function MapComponent() {
+export default function MapComponent({
+  width,
+  height,
+  children,
+}: {
+  width: string;
+  height: string;
+  children: ReactNode;
+}) {
   return (
-    <>
-      <NaverMap></NaverMap>
-    </>
+    <MapDiv
+      style={{
+        width: '100%',
+        height: '600px',
+      }}
+    >
+      {children}
+    </MapDiv>
   );
 }
