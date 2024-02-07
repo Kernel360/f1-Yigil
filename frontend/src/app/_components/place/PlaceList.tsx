@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 
-import { Spot } from '@/app/_components/spot';
+import { Place } from '@/app/_components/place';
 
-import type { TSpot } from './Spot';
+import type { TPlace } from './types';
 
 export default function SpotList({
   title,
@@ -13,7 +13,7 @@ export default function SpotList({
   variant,
 }: {
   title: string;
-  data: TSpot[];
+  data: TPlace[];
   variant: 'primary' | 'secondary';
 }) {
   const [emblaRef] = useEmblaCarousel({
@@ -30,7 +30,7 @@ export default function SpotList({
         <div className="flex">
           {data.map((post, index) => (
             <Link href={`#`} key={post.id}>
-              <Spot data={post} order={index} variant={variant} />
+              <Place data={post} order={index} variant={variant} />
             </Link>
           ))}
         </div>

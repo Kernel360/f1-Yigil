@@ -5,28 +5,7 @@ import HeartIcon from '/public/icons/heart.svg';
 import StarIcon from '/public/icons/star.svg';
 
 import type { ReactElement } from 'react';
-
-type TRegion =
-  | '강원'
-  | '경기'
-  | '경남'
-  | '경북'
-  | '전남'
-  | '전북'
-  | '제주'
-  | '충남'
-  | '충북';
-
-export interface TSpot {
-  id: string;
-  region: TRegion;
-  liked: boolean;
-  imageUrl: string;
-  title: string;
-  likeCount: number;
-  commentCount: number;
-  rating: number;
-}
+import type { TPlace } from './types';
 
 function IconWithCounts({
   icon,
@@ -49,12 +28,12 @@ function IconWithCounts({
 
 // 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
 // 차후 next/image 사용하게 변경 예정
-export default function Spot({
+export default function Place({
   data,
   order,
   variant,
 }: {
-  data: TSpot;
+  data: TPlace;
   order: number;
   variant: 'primary' | 'secondary';
 }) {
