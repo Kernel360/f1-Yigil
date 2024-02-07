@@ -17,7 +17,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class TravelServiceTest {
+class TravelServiceTest {
+
     @InjectMocks
     private TravelService travelService;
     @Mock
@@ -26,7 +27,8 @@ public class TravelServiceTest {
     @Test
     void GivenValidTravelId_WhenFindTravelById_ThenReturnTravel() {
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
-        Travel travel = new Travel(1L, mockMember);
+        Travel travel = new Travel(1L, mockMember, "travel title", "travel description", 3.5,
+            false);
         when(travelRepository.findById(anyLong())).thenReturn(Optional.of(travel));
         assertThat(travelService.findTravelById(anyLong())).isInstanceOf(Travel.class);
     }
