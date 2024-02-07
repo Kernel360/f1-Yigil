@@ -30,9 +30,11 @@ public class PlaceService {
     @Transactional(readOnly = true)
     public PlaceInfoResponse getPlaceInfo(Long placeId) {
         Place place = getPlaceById(placeId);
+        double totalRate = placeRateRedisIntegrityService.ensurePlaceRate(placeId)
+                .getTotalRate();
         int spotCount = spotRedisIntegrityService.ensureSpotCounts(placeId).getSpotCount();
-
-        return PlaceInfoResponse.from(place, spotCount);
+        double averageRate = totalRate / spotCount;
+        return PlaceInfoResponse.from(place, spotCount, averageRate);
     }
 
     @Transactional(readOnly = true)
@@ -72,5 +74,13 @@ public class PlaceService {
     public Slice<PlaceFindDto> getPlaceList(PageRequest pageRequest) {
         return placeRepository.findAll(pageRequest)
                 .map(this::getPlaceFindDto);
+    }
+
+    private PlaceFindDto getPlaceFindDto(Place place) {
+        double totalRate = placeRateRedisIntegrityService.ensurePlaceRate(place.getId())
+                .getTotalRate();
+        int spotCount = spotRedisIntegrityService.ensureSpotCounts(place.getId()).getSpotCount();
+        double averageRate = totalRate / spotCount;
+        return PlaceFindDto.from(place, spotCount, averageRate);
     }
 }

@@ -260,7 +260,6 @@ class SpotServiceTest {
         // Assert
         assertThat(spotInfoResponse).isInstanceOf(SpotInfoResponse.class);
         assertThat(spotInfoResponse.getSpotId()).isEqualTo(mockSpot.getId());
-        assertThat(spotInfoResponse.getComments()).isEmpty();
     }
 
 

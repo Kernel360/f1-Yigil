@@ -40,7 +40,6 @@ public class Spot extends Travel {
     @JoinColumn(name = "place_id")
     private Place place;
 
-
     public Spot(final Long id, Member member, final Point location, final boolean isInCourse,
         final String title, final String description, final AttachFiles attachFiles,
         final Place place, final double rate) {
