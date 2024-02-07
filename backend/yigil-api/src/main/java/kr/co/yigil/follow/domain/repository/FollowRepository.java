@@ -1,6 +1,5 @@
 package kr.co.yigil.follow.domain.repository;
 
-import java.util.List;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.dto.FollowCountDto;
 import kr.co.yigil.member.Member;

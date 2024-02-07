@@ -5,19 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlaceFindResponse {
-
+@Data
+public class PlaceFindDto {
+    private Long id;
     private String name;
     private String address;
     private String imageUrl;
+    private int spotCount;
 
-    public static PlaceFindResponse from(Place place) {
-        return new PlaceFindResponse(
+
+    public static PlaceFindDto from(Place place, int spotCount) {
+        return new PlaceFindDto(
+                place.getId(),
                 place.getName(),
                 place.getAddress(),
-                place.getImageUrl());
+                place.getImageUrl(),
+                spotCount
+        );
     }
+
 }

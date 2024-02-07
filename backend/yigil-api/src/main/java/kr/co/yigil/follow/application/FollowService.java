@@ -8,7 +8,6 @@ import kr.co.yigil.follow.dto.response.FollowResponse;
 import kr.co.yigil.follow.dto.response.UnfollowResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.global.exception.ExceptionResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.repository.MemberRepository;
 import kr.co.yigil.notification.application.NotificationService;

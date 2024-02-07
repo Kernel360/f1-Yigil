@@ -1,7 +1,5 @@
 package kr.co.yigil.travel.dto.response;
 
-import java.util.List;
-import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
 import lombok.AllArgsConstructor;
@@ -20,22 +18,21 @@ public class SpotInfoResponse {
     private String memberNickname;
     private String memberImageUrl;
 
-//    private Integer favorCount;
-//    private Integer commentCount;
+    private Integer favorCount;
+    private Integer commentCount;
 
     private String pointJson;
 
-    private List<CommentResponse> comments;
-
-    public static SpotInfoResponse from(Spot spot, List<CommentResponse> comments) {
+    public static SpotInfoResponse from(Spot spot, int favorCount, int commentCount) {
         return new SpotInfoResponse(
                 spot.getId(),
                 spot.getTitle(),
                 spot.getDescription(),
                 spot.getMember().getNickname(),
                 spot.getMember().getProfileImageUrl(),
-                GeojsonConverter.convertToJson(spot.getLocation()),
-                comments
+                favorCount,
+                commentCount,
+                GeojsonConverter.convertToJson(spot.getLocation())
         );
     }
 }
