@@ -2,7 +2,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 50MB
-      max-request-size: 100MB
+      max-request-size: 250MB
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
@@ -31,7 +31,19 @@ spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
 
+  mail:
+    host: @MAIL_HOST@
+    port: @MAIL_PORT@
+    username: @MAIL_USERNAME@
+    password: @MAIL_PASSWORD@
 
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 cloud:
   aws:
     s3:
@@ -63,6 +75,8 @@ logging:
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
 
+jwt:
+  secret: @JWT_SECRET@
 
 decorator:
   datasource:
