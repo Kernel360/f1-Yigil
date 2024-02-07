@@ -24,7 +24,8 @@ import org.locationtech.jts.geom.Point;
 @DiscriminatorValue("SPOT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"place_id", "member_id"}))
-public class Spot extends Travel{
+public class Spot extends Travel {
+
     @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
 
@@ -40,14 +41,19 @@ public class Spot extends Travel{
     private Place place;
 
 
-    public Spot(final Long id, Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final Place place, final double rate) {
+    public Spot(final Long id, Member member, final Point location, final boolean isInCourse,
+        final String title, final String description, final AttachFiles attachFiles,
+        final Place place, final double rate) {
         super(id, member, title, description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
         this.place = place;
     }
-    public Spot(Member member, final Point location, final boolean isInCourse, final String title, final String description, final AttachFiles attachFiles, final Place place, final double rate) {
+
+    public Spot(Member member, final Point location, final boolean isInCourse, final String title,
+        final String description, final AttachFiles attachFiles, final Place place,
+        final double rate) {
         super(member, title, description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;

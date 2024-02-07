@@ -28,7 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class FavorRedisIntegrityServiceTest {
+class FavorRedisIntegrityServiceTest {
 
     @Mock
     private FavorRepository favorRepository;
@@ -49,24 +49,27 @@ public class FavorRedisIntegrityServiceTest {
     void testEnsureLikeCountsWhenAlreadyExists() {
         Long memberId = 1L;
         Long travelId = 1L;
-        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg",
+            SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription", null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-                1L);
+            1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-                2L);
+            2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
-                mockPlace, 5.0);
+        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말",
+            mockAttachFiles,
+            mockPlace, 5.0);
 
         FavorCount existingFavorCount = new FavorCount(travelId, 10);
 
-        when(favorCountRepository.findByTravelId(spot1.getId())).thenReturn(Optional.of(existingFavorCount));
+        when(favorCountRepository.findByTravelId(spot1.getId())).thenReturn(
+            Optional.of(existingFavorCount));
 
         FavorCount result = favorRedisIntegrityService.ensureFavorCounts(spot1);
 
@@ -80,20 +83,22 @@ public class FavorRedisIntegrityServiceTest {
     void testEnsureLikeCountsWhenNotExists() {
         Long memberId = 1L;
         Long travelId = 1L;
-        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg",
+            SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription", null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-                1L);
+            1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-                2L);
+            2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
-                mockPlace, 5.0);
+        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말",
+            mockAttachFiles,
+            mockPlace, 5.0);
 
         FavorCount newFavorCount = new FavorCount(travelId, 10);
 
