@@ -6,10 +6,12 @@ import kr.co.yigil.admin.dto.request.AdminSignUpListRequest;
 import kr.co.yigil.admin.dto.request.AdminSingupRequest;
 import kr.co.yigil.admin.dto.request.LoginRequest;
 import kr.co.yigil.admin.dto.request.SignUpAcceptRequest;
+import kr.co.yigil.admin.dto.request.SignUpRejectRequest;
 import kr.co.yigil.admin.dto.response.AdminInfoResponse;
 import kr.co.yigil.admin.dto.response.AdminSignUpListResponse;
 import kr.co.yigil.admin.dto.response.AdminSignupResponse;
 import kr.co.yigil.admin.dto.response.SignUpAcceptResponse;
+import kr.co.yigil.admin.dto.response.SignUpRejectResponse;
 import kr.co.yigil.auth.dto.JwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,6 +54,12 @@ public class AdminController {
     @PostMapping("/signup/accept")
     public ResponseEntity<SignUpAcceptResponse> acceptSignUp(@RequestBody SignUpAcceptRequest request) {
         SignUpAcceptResponse response = adminService.acceptAdminSignUp(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/signup/reject")
+    public ResponseEntity<SignUpRejectResponse> rejectSignUp(@RequestBody SignUpRejectRequest request) {
+        SignUpRejectResponse response = adminService.rejectAdminSignUp(request);
         return ResponseEntity.ok(response);
     }
 

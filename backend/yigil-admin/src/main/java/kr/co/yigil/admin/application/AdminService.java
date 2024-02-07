@@ -14,15 +14,21 @@ import kr.co.yigil.admin.dto.request.AdminSignUpListRequest;
 import kr.co.yigil.admin.dto.request.AdminSingupRequest;
 import kr.co.yigil.admin.dto.request.LoginRequest;
 import kr.co.yigil.admin.dto.request.SignUpAcceptRequest;
+import kr.co.yigil.admin.dto.request.SignUpRejectRequest;
 import kr.co.yigil.admin.dto.response.AdminInfoResponse;
 import kr.co.yigil.admin.dto.response.AdminSignUpListResponse;
 import kr.co.yigil.admin.dto.response.AdminSignupResponse;
 import kr.co.yigil.admin.dto.response.SignUpAcceptResponse;
+import kr.co.yigil.admin.dto.response.SignUpRejectResponse;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
+import kr.co.yigil.email.EmailEventType;
+import kr.co.yigil.email.EmailSendEvent;
+import kr.co.yigil.email.EmailSendEventListener;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,6 +50,7 @@ public class AdminService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AdminPasswordGenerator adminPasswordGenerator;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional(readOnly = true)
     public JwtToken signIn(LoginRequest request) {
@@ -94,6 +101,7 @@ public class AdminService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Page<AdminSignUpListResponse> getSignUpRequestList(AdminSignUpListRequest request) {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getDataCount());
         Page<AdminSignUp> adminSignUps = adminSignUpRepository.findAll(pageable);
@@ -110,16 +118,18 @@ public class AdminService {
         ));
     }
 
+    @Transactional
     public SignUpAcceptResponse acceptAdminSignUp(SignUpAcceptRequest request) {
         List<String> acceptedAdminIds = request.getIds();
         signUpNewAdmins(acceptedAdminIds);
+        return new SignUpAcceptResponse("가입 승인 완료");
     }
 
     private void signUpNewAdmins(List<String> ids) {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
         for (String id: ids) {
-            signUpNewAdmin(Long.getLong(id), roles);
+            signUpNewAdmin(Long.parseLong(id), roles);
         }
     }
 
@@ -133,11 +143,42 @@ public class AdminService {
                 passwordEncoder.encode(temporaryPassword),
                 signUp.getNickname(),
                 roles,
-                "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fko%2Fimages%2Fsearch%2F%25ED%2594%2584%25EB%25A1%259C%25ED%2595%2584%2F&psig=AOvVaw0bBAscVMby6pWvg2XGqdjW&ust=1706775743831000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKCe6KCZh4QDFQAAAAAdAAAAABAE");
+                "http://cdn.yigil.co.kr/images/0a1d6eaf-24ad-4c2a-b383-15eac96daec0_%E1%84%90%E1%85%A9%E1%84%81%E1%85%B5.jpeg");
 
         adminRepository.save(admin);
-
-
+        sendAcceptEmail(signUp, temporaryPassword);
+        adminSignUpRepository.delete(signUp);
     }
 
+    private void sendAcceptEmail(AdminSignUp signUp, String password) {
+        EmailSendEvent event = new EmailSendEvent(this, signUp.getEmail(), "[이길로그] 관리자 서비스 가입이 완료되었습니다.", "", password,
+                EmailEventType.ADMIN_SIGN_UP_ACCEPT);
+        eventPublisher.publishEvent(event);
+    }
+
+    @Transactional
+    public SignUpRejectResponse rejectAdminSignUp(SignUpRejectRequest request) {
+        List<String> rejectedAdminIds = request.getIds();
+        deleteAdminSignUpRequests(rejectedAdminIds);
+        return new SignUpRejectResponse("가입 거절 완료");
+    }
+
+    private void deleteAdminSignUpRequests(List<String> ids) {
+        for(String id: ids) {
+            deleteAdminSignUpRequest(Long.parseLong(id));
+        }
+    }
+
+    private void deleteAdminSignUpRequest(Long id) {
+        AdminSignUp signUp = adminSignUpRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException(ADMIN_SIGNUP_REQUEST_NOT_FOUND));
+
+        sendRejectEmail(signUp);
+        adminSignUpRepository.delete(signUp);
+    }
+
+    private void sendRejectEmail(AdminSignUp signUp) {
+        EmailSendEvent event = new EmailSendEvent(this, signUp.getEmail(), "[이길로그] 관리자 서비스 가입이 거절되었습니다.", "", "", EmailEventType.ADMIN_SIGN_UP_REJECT);
+        eventPublisher.publishEvent(event);
+    }
 }

@@ -8,7 +8,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-export function Alert({
+export function AlertBox({
   errorMessage,
   errorName,
   isOpen,

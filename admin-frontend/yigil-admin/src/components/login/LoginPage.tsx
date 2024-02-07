@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Alert } from "../snippet/Alert";
+import { AlertBox } from "../snippet/AlertBox";
 import { SignUpDrawer } from "./SignUpDrawer";
 
 const LoginPage: React.FC = () => {
@@ -220,7 +220,7 @@ const LoginPage: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
-      <Alert
+      <AlertBox
         isOpen={isOpen}
         close={() => setIsOpen(false)}
         errorMessage={errorMessage}

@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,25 +23,27 @@ public class FileUploadEventListener {
 
     @Async
     @EventListener
-    public Future<kr.co.yigil.file.AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
+    public Future<AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
         MultipartFile file = event.getFile();
-        kr.co.yigil.file.FileType fileType = event.getFileType();
+        FileType fileType = event.getFileType();
         String fileName = generateUniqueFileName(file.getOriginalFilename());
         String s3Path = getS3Path(fileType, fileName);
 
-        kr.co.yigil.file.AttachFile attachFile = new kr.co.yigil.file.AttachFile(fileType, s3Path, file.getOriginalFilename(),
+        AttachFile attachFile = new AttachFile(fileType, s3Path, file.getOriginalFilename(),
                 file.getSize());
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        metadata.setContentDisposition("inline");
         amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
         event.getCallback().accept(attachFile);
 
         return CompletableFuture.completedFuture(attachFile);
     }
 
-    private String getS3Path(kr.co.yigil.file.FileType fileType, String fileName) {
-        String url = fileType == kr.co.yigil.file.FileType.IMAGE ? "images/" : "videos/";
+    private String getS3Path(FileType fileType, String fileName) {
+        String url = fileType == FileType.IMAGE ? "images/" : "videos/";
         return url + fileName;
     }
 

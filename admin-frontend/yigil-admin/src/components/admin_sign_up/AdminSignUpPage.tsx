@@ -19,7 +19,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { AlertBox } from "../snippet/AlertBox";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -56,71 +56,75 @@ export type AdminSignUp = {
   request_datetime: string;
 };
 
-export const columns: ColumnDef<AdminSignUp>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "email",
-    header: "이메일",
-    cell: ({ row }) => <div>{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "nickname",
-    header: "닉네임",
-    cell: ({ row }) => <div>{row.getValue("nickname")}</div>,
-  },
-  {
-    accessorKey: "request_datetime",
-    header: "요청 시간",
-    cell: ({ row }) => <div>{row.getValue("request_datetime")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const adminSignUp = row.original;
+// export const columns: ColumnDef<AdminSignUp>[] = [
+//   {
+//     id: "select",
+//     header: ({ table }) => (
+//       <Checkbox
+//         checked={table.getIsAllPageRowsSelected()}
+//         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+//         aria-label="Select all"
+//       />
+//     ),
+//     cell: ({ row }) => (
+//       <Checkbox
+//         checked={row.getIsSelected()}
+//         onCheckedChange={(value) => row.toggleSelected(!!value)}
+//         aria-label="Select row"
+//       />
+//     ),
+//     enableSorting: false,
+//     enableHiding: false,
+//   },
+//   {
+//     accessorKey: "email",
+//     header: "이메일",
+//     cell: ({ row }) => <div>{row.getValue("email")}</div>,
+//   },
+//   {
+//     accessorKey: "nickname",
+//     header: "닉네임",
+//     cell: ({ row }) => <div>{row.getValue("nickname")}</div>,
+//   },
+//   {
+//     accessorKey: "request_datetime",
+//     header: "요청 시간",
+//     cell: ({ row }) => <div>{row.getValue("request_datetime")}</div>,
+//   },
+//   {
+//     id: "actions",
+//     enableHiding: false,
+//     cell: ({ row }) => {
+//       const adminSignUp = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(adminSignUp.email)}
-            >
-              이메일 복사하기
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>가입 승인</DropdownMenuItem>
-            <DropdownMenuItem>가입 거절</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+//       return (
+//         <DropdownMenu>
+//           <DropdownMenuTrigger asChild>
+//             <Button variant="ghost" className="h-8 w-8 p-0">
+//               <span className="sr-only">Open menu</span>
+//               <DotsHorizontalIcon className="h-4 w-4" />
+//             </Button>
+//           </DropdownMenuTrigger>
+//           <DropdownMenuContent align="end">
+//             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+//             <DropdownMenuItem
+//               onClick={() => navigator.clipboard.writeText(adminSignUp.email)}
+//             >
+//               이메일 복사하기
+//             </DropdownMenuItem>
+//             <DropdownMenuSeparator />
+//             <DropdownMenuItem
+//               onClick={() => handleAcceptSignUp(adminSignUp.id)}
+//             >
+//               가입 승인
+//             </DropdownMenuItem>
+//             <DropdownMenuItem>가입 거절</DropdownMenuItem>
+//           </DropdownMenuContent>
+//         </DropdownMenu>
+//       );
+//     },
+//   },
+// ];
 
 const AdminSignUpPage: React.FC = () => {
   const [adminSignUps, setAdminSignUps] = useState<AdminSignUp[]>([]);
@@ -136,6 +140,80 @@ const AdminSignUpPage: React.FC = () => {
   }>({});
 
   const [adminSignUpIds, setAdminSignUpIds] = useState([]);
+
+  const [alertName, setAlertName] = useState("");
+  const [message, setMessage] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const columns: ColumnDef<AdminSignUp>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "email",
+      header: "이메일",
+      cell: ({ row }) => <div>{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "nickname",
+      header: "닉네임",
+      cell: ({ row }) => <div>{row.getValue("nickname")}</div>,
+    },
+    {
+      accessorKey: "request_datetime",
+      header: "요청 시간",
+      cell: ({ row }) => <div>{row.getValue("request_datetime")}</div>,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const adminSignUp = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(adminSignUp.email)}
+              >
+                이메일 복사하기
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => handleAcceptSignUp(adminSignUp.id)}
+              >
+                가입 승인
+              </DropdownMenuItem>
+              <DropdownMenuItem>가입 거절</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const handlePageClick = (newPage: number) => {
     setPage(newPage);
@@ -167,11 +245,143 @@ const AdminSignUpPage: React.FC = () => {
       );
 
       if (!response.ok) {
-        const data = await response.json();
-        console.log(data);
+        const errorData = await response.json();
+        setAlertName("가입 승인 실패");
+        setMessage(
+          errorData.message || "가입 승인 중 알 수 없는 오류가 발생하였습니다."
+        );
+        setIsOpen(true);
+        return;
       }
+
+      fetchAdminSignUps();
+      setRowSelection({});
+
+      setAlertName("승인 완료");
+      setMessage("가입한 사용자의 메일로 알림을 보냈습니다.");
+      setIsOpen(true);
     } catch (error) {
-      console.error(error);
+      setAlertName("가입 승인 실패");
+      setMessage("가입 승인 중 알 수 없는 오류가 발생하였습니다.");
+      setIsOpen(true);
+    }
+  };
+
+  const handleAcceptSignUp = async (id: string) => {
+    const accessToken = getCookie("accessToken");
+
+    try {
+      const response = await fetch(
+        "http://localhost:8081/admin/api/v1/admins/signup/accept",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: [id] }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setAlertName("가입 승인 실패");
+        setMessage(
+          errorData.message || "가입 승인 중 알 수 없는 오류가 발생하였습니다."
+        );
+        setIsOpen(true);
+        return;
+      }
+
+      fetchAdminSignUps();
+      setAlertName("승인 완료");
+      setMessage("가입한 사용자의 메일로 알림을 보냈습니다.");
+      setIsOpen(true);
+    } catch (error) {
+      setAlertName("가입 승인 실패");
+      setMessage("가입 승인 중 알 수 없는 오류가 발생하였습니다.");
+      setIsOpen(true);
+    }
+  };
+
+  const handleRejectSelectedSignUps = async () => {
+    const selectedRowIds = getSelectedRowIds();
+    const accessToken = getCookie("accessToken");
+
+    const selectedIds = selectedRowIds.map(
+      (index) => adminSignUpIds[parseInt(index)]
+    );
+
+    try {
+      const response = await fetch(
+        "http://localhost:8081/admin/api/v1/admins/signup/reject",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: selectedIds }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setAlertName("가입 거절 실패");
+        setMessage(
+          errorData.message || "가입 거절 중 알 수 없는 오류가 발생하였습니다."
+        );
+        setIsOpen(true);
+        return;
+      }
+
+      fetchAdminSignUps();
+      setRowSelection({});
+
+      setAlertName("거절 완료");
+      setMessage("거절된 사용자의 메일로 알림을 보냈습니다.");
+      setIsOpen(true);
+    } catch (error) {
+      setAlertName("가입 거절 실패");
+      setMessage("가입 거절 중 알 수 없는 오류가 발생하였습니다.");
+      setIsOpen(true);
+    }
+  };
+
+  const handleRejectSignUp = async (id: string) => {
+    const accessToken = getCookie("accessToken");
+
+    try {
+      const response = await fetch(
+        "http://localhost:8081/admin/api/v1/admins/signup/reject",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ids: [id] }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setAlertName("가입 거절 실패");
+        setMessage(
+          errorData.message || "가입 거절 중 알 수 없는 오류가 발생하였습니다."
+        );
+        setIsOpen(true);
+        return;
+      }
+
+      fetchAdminSignUps();
+      setAlertName("거절 완료");
+      setMessage("가입한 사용자의 메일로 알림을 보냈습니다.");
+      setIsOpen(true);
+    } catch (error) {
+      setAlertName("가입 거절 실패");
+      setMessage("가입 거절 중 알 수 없는 오류가 발생하였습니다.");
+      setIsOpen(true);
     }
   };
 
@@ -192,37 +402,42 @@ const AdminSignUpPage: React.FC = () => {
     );
   };
 
-  useEffect(() => {
-    const accessToken = getCookie("accessToken");
-
-    const fetchAdminSignUps = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8081/admin/api/v1/admins/signup/list?page=${encodeURIComponent(
-            page
-          )}&dataCount=10`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error("서버로부터 데이터를 가져오는데 실패했습니다.");
+  const fetchAdminSignUps = async () => {
+    try {
+      const accessToken = getCookie("accessToken");
+      const response = await fetch(
+        `http://localhost:8081/admin/api/v1/admins/signup/list?page=${encodeURIComponent(
+          page
+        )}&dataCount=10`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `${accessToken}`,
+            "Content-Type": "application/json",
+          },
         }
-        const { content, total_pages: newTotalPages } = await response.json();
-        setAdminSignUps(content);
-        setTotalPages(newTotalPages);
-
-        const ids = content.map((signUp: AdminSignUp) => signUp.id);
-        setAdminSignUpIds(ids);
-      } catch (error) {
-        console.error(error);
+      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        setAlertName("가입 요청 목록을 불러올 수 없습니다");
+        setMessage(
+          errorData.message ||
+            "가입 요청 목록을 불러오던 중 오류가 발생하였습니다."
+        );
+        setIsOpen(true);
       }
-    };
+      const { content, total_pages: newTotalPages } = await response.json();
+      setAdminSignUps(content);
+      setTotalPages(newTotalPages);
 
+      const ids = content.map((signUp: AdminSignUp) => signUp.id);
+      setAdminSignUpIds(ids);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
     fetchAdminSignUps();
   }, [page]);
 
@@ -348,10 +563,10 @@ const AdminSignUpPage: React.FC = () => {
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => table.nextPage()}
+              onClick={handleRejectSelectedSignUps}
               disabled={table.getFilteredSelectedRowModel().rows.length < 1}
             >
-              삭제
+              거절
             </Button>
           </div>
         </div>
@@ -382,6 +597,12 @@ const AdminSignUpPage: React.FC = () => {
           </Pagination>
         )}
       </div>
+      <AlertBox
+        isOpen={isOpen}
+        close={() => setIsOpen(false)}
+        errorMessage={message}
+        errorName={alertName}
+      />
     </Layout>
   );
 };

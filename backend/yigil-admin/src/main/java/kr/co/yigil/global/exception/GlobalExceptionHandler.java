@@ -56,6 +56,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
     }
 
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<ExceptionResponse> handleMailException(final MailException e) {
+        log.error(e.getMessage(), e);
+
+        return ResponseEntity.internalServerError()
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(final Exception e) {
         log.error(e.getMessage(), e);

@@ -21,7 +21,7 @@ export function Header() {
     <NavigationMenu>
       <NavigationMenuList className=" flex justify-between">
         <NavigationMenuItem>
-          <Link to="/">
+          <Link to="/admin">
             <ReactComponent className="w-[100px] h-[58px] h-4 stroke-black stroke-[2px] fill-slate-100" />
           </Link>
         </NavigationMenuItem>
@@ -44,13 +44,13 @@ export function Header() {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/notice" title="공지사항 관리">
+              <ListItem href="/admin/notice" title="공지사항 관리">
                 사용자를 위한 공지사항을 작성하세요.
               </ListItem>
-              <ListItem href="/event" title="이벤트 관리">
+              <ListItem href="/admin/event" title="이벤트 관리">
                 이벤트를 생성하고 관리하세요.
               </ListItem>
-              <ListItem href="/coupon" title="쿠폰 관리">
+              <ListItem href="/admin/coupon" title="쿠폰 관리">
                 쿠폰을 생성하고 지급하세요.
               </ListItem>
             </ul>
@@ -60,10 +60,10 @@ export function Header() {
           <NavigationMenuTrigger>사용자 관리</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[800px] lg:grid-cols-[.75fr_1fr]">
-              <ListItem href="/member" title="사용자 관리">
+              <ListItem href="/admin/member" title="사용자 관리">
                 서비스를 사용하는 사용자를 관리하세요.
               </ListItem>
-              <ListItem href="/admin" title="어드민 가입 요청 관리">
+              <ListItem href="/admin/admin" title="어드민 가입 요청 관리">
                 관리자 사용자의 가입 요청을 관리하세요.
               </ListItem>
             </ul>
@@ -73,10 +73,10 @@ export function Header() {
           <NavigationMenuTrigger>통계 관리</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[800px] lg:grid-cols-[.75fr_1fr]">
-              <ListItem href="/place" title="지역/장소 통계">
+              <ListItem href="/admin/place" title="지역/장소 통계">
                 서비스에 지역과 장소에 대한 통계를 확인해보세요.
               </ListItem>
-              <ListItem href="/like" title="좋아요 통계">
+              <ListItem href="/admin/like" title="좋아요 통계">
                 사용자 좋아요에 따른 통계를 확인해보세요.
               </ListItem>
             </ul>
@@ -86,7 +86,7 @@ export function Header() {
           <NavigationMenuTrigger>게시글 관리</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[800px] lg:grid-cols-[.75fr_1fr]">
-              <ListItem href="/post" title="게시글 관리">
+              <ListItem href="/admin/post" title="게시글 관리">
                 서비스에 작성된 게시글들을 확인하세요.
               </ListItem>
             </ul>
@@ -96,7 +96,7 @@ export function Header() {
           <NavigationMenuTrigger>신고 관리</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[200px] lg:w-[800px] lg:grid-cols-[.75fr_1fr]">
-              <ListItem href="/report" title="신고 관리">
+              <ListItem href="/admin/report" title="신고 관리">
                 사용자의 불편사항을 확인하고 개선해보세요.
               </ListItem>
             </ul>
