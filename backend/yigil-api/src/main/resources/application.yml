@@ -2,12 +2,12 @@ spring:
   servlet:
     multipart:
       max-file-size: 50MB
-      max-request-size: 100MB
+      max-request-size: 250MB
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     defer-datasource-initialization: true
   datasource:
     master:
@@ -30,7 +30,6 @@ spring:
       port: @REDIS_PORT@
   jackson:
     property-naming-strategy: SNAKE_CASE
-
 
 cloud:
   aws:
@@ -62,7 +61,6 @@ logging:
     root: DEBUG
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
-
 
 decorator:
   datasource:
