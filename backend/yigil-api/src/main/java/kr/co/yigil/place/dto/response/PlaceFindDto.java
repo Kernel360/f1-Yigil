@@ -20,7 +20,7 @@ public class PlaceFindDto {
         return new PlaceFindDto(
                 place.getId(),
                 place.getName(),
-                place.getImageUrl(),
+                place.getImageFile().getFileUrl(),
                 reviewCount,
                 averageRate
         );

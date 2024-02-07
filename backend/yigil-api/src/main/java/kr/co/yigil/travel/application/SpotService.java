@@ -73,12 +73,13 @@ public class SpotService {
         // spot 생성
         AttachFiles attachFiles = getAttachFiles(spotCreateRequest.getFiles());
         AttachFile mapStaticImageFile = getAttachFile(spotCreateRequest.getMapStaticImageFile());
+        AttachFile placeImageFile = getAttachFile(spotCreateRequest.getPlaceImageFile());
 
         Place place = getOrCreatePlace(
                 spotCreateRequest.getPlaceName(),
                 spotCreateRequest.getPlaceAddress(),
                 spotCreateRequest.getPlacePointJson(),
-                spotCreateRequest.getPlaceImageUrl(),
+                placeImageFile,
                 mapStaticImageFile
         );
 
@@ -112,12 +113,12 @@ public class SpotService {
 
 
     private Place getOrCreatePlace(String placeName, String placeAddress,
-            String placePointJson, String placeImageUrl, AttachFile mapStaticImageFile) {
+            String placePointJson, AttachFile placeImageFile, AttachFile mapStaticImageFile) {
         return placeService.getOrCreatePlace(
                 placeName,
                 placeAddress,
                 placePointJson,
-                placeImageUrl,
+                placeImageFile,
                 mapStaticImageFile
         );
     }

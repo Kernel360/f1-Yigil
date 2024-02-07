@@ -22,7 +22,7 @@ public class PlaceInfoResponse {
         return new PlaceInfoResponse(
                 place.getName(),
                 place.getAddress(),
-                place.getImageUrl(),
+                place.getImageFile().getFileUrl(),
                 place.getMapStaticImageFile().getFileUrl(),
                 reviewCount,
                 averageRate

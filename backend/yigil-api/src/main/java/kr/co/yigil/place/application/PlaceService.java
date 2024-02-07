@@ -57,14 +57,14 @@ public class PlaceService {
     }
 
     public Place getOrCreatePlace(String placeName, String placeAddress, String placePointJson,
-            String placeImageUrl, AttachFile mapStaticImageFile) {
+            AttachFile placeImageFile, AttachFile mapStaticImageFile) {
         return placeRepository.findByNameAndAddress(placeName, placeAddress)
                 .orElseGet(
                         () -> placeRepository.save(PlaceDto.toEntity(
                                         placeName,
                                         placeAddress,
                                         placePointJson,
-                                        placeImageUrl,
+                                        placeImageFile,
                                         mapStaticImageFile
                                 )
                         )
