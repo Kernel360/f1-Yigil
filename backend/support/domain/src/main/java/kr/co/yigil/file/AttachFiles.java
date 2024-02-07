@@ -43,4 +43,12 @@ public class AttachFiles {
             throw new IllegalArgumentException("files length must not over 5");
         }
     }
+
+    public List<String> getUrls() {
+        List<String> urls = new ArrayList<>();
+        for (AttachFile file : files) {
+            urls.add(file.getFileUrl());
+        }
+        return urls;
+    }
 }

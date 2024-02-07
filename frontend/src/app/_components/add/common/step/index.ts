@@ -46,7 +46,7 @@ export function makeInitialStep(
 function makeNextStep(step: TStep): TStep {
   const { makingStep, inputStep } = step;
 
-  if (makingStep.data.label === '정보 입력') {
+  if (makingStep.data.label === '장소 선택') {
     return {
       makingStep: nextMakingStep(makingStep, inputStep),
       inputStep: nextInputStep(makingStep, inputStep),
@@ -54,6 +54,20 @@ function makeNextStep(step: TStep): TStep {
   }
 
   if (makingStep.data.label === '순서 결정') {
+    return {
+      makingStep: nextMakingStep(makingStep, inputStep),
+      inputStep: nextInputStep(makingStep, inputStep),
+    };
+  }
+
+  if (makingStep.data.label === '장소 입력') {
+    return {
+      makingStep: nextMakingStep(makingStep, inputStep),
+      inputStep: nextInputStep(makingStep, inputStep),
+    };
+  }
+
+  if (makingStep.data.label === '정보 입력') {
     return {
       makingStep: nextMakingStep(makingStep, inputStep),
       inputStep: nextInputStep(makingStep, inputStep),
@@ -70,6 +84,13 @@ function makePreviousStep(step: TStep): TStep {
   const { makingStep, inputStep } = step;
 
   if (makingStep.data.label === '정보 입력') {
+    return {
+      makingStep: previousMakingStep(makingStep, inputStep),
+      inputStep: previousInputStep(makingStep, inputStep),
+    };
+  }
+
+  if (makingStep.data.label === '순서 결정') {
     return {
       makingStep: previousMakingStep(makingStep, inputStep),
       inputStep: previousInputStep(makingStep, inputStep),
@@ -148,6 +169,9 @@ function nextInputStep(
 
   switch (kind) {
     case 'from-new': {
+      if (data.label === '시작') {
+        return { kind, data: { label: '주소', value: 1 } };
+      }
       if (data.label === '주소') {
         return { kind, data: { label: '사진', value: 2 } };
       }
@@ -160,12 +184,14 @@ function nextInputStep(
       return { kind, data };
     }
     case 'from-existing': {
-      if (data.label === '순서') {
-        if (step.data.label === '순서 결정') {
-          return { kind, data: { label: '별점', value: 2 } };
+      if (data.label === '시작') {
+        if (step.data.label === '장소 선택') {
+          return { kind, data: { label: '순서', value: 1 } };
         }
-
         return { kind, data };
+      }
+      if (data.label === '순서') {
+        return { kind, data: { label: '별점', value: 2 } };
       }
       if (data.label === '별점') {
         return { kind, data: { label: '리뷰', value: 3 } };
@@ -249,6 +275,9 @@ function previousInputStep(
       if (data.label === '사진') {
         return { kind, data: { label: '주소', value: 1 } };
       }
+      if (data.label === '주소') {
+        return { kind, data: { label: '시작', value: 0 } };
+      }
       return { kind, data };
     }
     case 'from-existing': {
@@ -257,6 +286,9 @@ function previousInputStep(
       }
       if (data.label === '별점') {
         return { kind, data: { label: '순서', value: 1 } };
+      }
+      if (data.label === '순서') {
+        return { kind, data: { label: '시작', value: 0 } };
       }
       return { kind, data };
     }

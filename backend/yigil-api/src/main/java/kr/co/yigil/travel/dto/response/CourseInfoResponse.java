@@ -1,7 +1,6 @@
 package kr.co.yigil.travel.dto.response;
 
 import java.util.List;
-import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.travel.Course;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.dto.util.GeojsonConverter;
@@ -22,12 +21,11 @@ public class CourseInfoResponse {
 
     private List<SpotInCourseDto> spotInfos;
     private String lineStringJson;
-    //    private Integer favorCount;
-//    private Integer commentCount;
-    private List<CommentResponse> comments;
 
-    public static CourseInfoResponse from(Course course, List<Spot> spots,
-            List<CommentResponse> comments) {
+    private int favorCount;
+    private int commentCount;
+
+    public static CourseInfoResponse from(Course course, List<Spot> spots, int favorCount, int commentCount) {
         return new CourseInfoResponse(
                 course.getId(),
                 course.getTitle(),
@@ -35,7 +33,8 @@ public class CourseInfoResponse {
                 course.getMember().getProfileImageUrl(),
                 spots.stream().map(SpotInCourseDto::from).toList(),
                 GeojsonConverter.convertToJson(course.getPath()),
-                comments
+                favorCount,
+                commentCount
         );
     }
 }

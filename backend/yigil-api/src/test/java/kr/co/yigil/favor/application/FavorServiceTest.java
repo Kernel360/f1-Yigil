@@ -35,7 +35,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class FavorServiceTest {
+class FavorServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -68,20 +68,22 @@ public class FavorServiceTest {
 
         Long memberId = 1L;
         Long travelId = 1L;
-        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg",
+            SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription", null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-                1L);
+            1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-                2L);
+            2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
-                mockPlace, 5.0);
+        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말",
+            mockAttachFiles,
+            mockPlace, 5.0);
 
         FavorCount favorCount = new FavorCount(travelId, 1);
 
@@ -109,20 +111,22 @@ public class FavorServiceTest {
     void whenDeleteFavor_ShouldDeleteFavor() {
         Long memberId = 1L;
         Long travelId = 1L;
-        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg",
+            SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription", null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-                1L);
+            1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-                2L);
+            2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
-                mockPlace, 5.0);
+        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말",
+            mockAttachFiles,
+            mockPlace, 5.0);
         FavorCount favorCount = new FavorCount(travelId, 1);
 
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
@@ -132,6 +136,7 @@ public class FavorServiceTest {
 
         favorService.deleteFavor(memberId, travelId);
 
-        verify(favorRepository, times(1)).deleteByMemberAndTravel(any(Member.class), any(Travel.class));
+        verify(favorRepository, times(1)).deleteByMemberAndTravel(any(Member.class),
+            any(Travel.class));
     }
 }

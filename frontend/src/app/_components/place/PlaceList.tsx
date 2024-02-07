@@ -1,18 +1,20 @@
 'use client';
 
+import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 
-import { Post } from '@/app/_components/post';
+import { Place } from '@/app/_components/place';
 
-import type { TPost } from './Post';
-import Link from 'next/link';
+import type { TPlace } from './types';
 
-export default function PostList({
+export default function SpotList({
   title,
   data,
+  variant,
 }: {
   title: string;
-  data: TPost[];
+  data: TPlace[];
+  variant: 'primary' | 'secondary';
 }) {
   const [emblaRef] = useEmblaCarousel({
     loop: false,
@@ -20,15 +22,15 @@ export default function PostList({
   });
   return (
     <section className="flex flex-col" aria-label="posts">
-      <div className="flex justify-between px-8">
-        <span className="text-2xl">{title}</span>
-        <span className="self-center">더보기</span>
+      <div className="flex justify-between items-center px-4 pt-2">
+        <span className="pl-4 text-3xl font-medium">{title}</span>
+        <span>더보기</span>
       </div>
       <div className="overflow-hidden px-4" ref={emblaRef}>
         <div className="flex">
-          {data.map((post) => (
+          {data.map((post, index) => (
             <Link href={`#`} key={post.id}>
-              <Post {...post} />
+              <Place data={post} order={index} variant={variant} />
             </Link>
           ))}
         </div>

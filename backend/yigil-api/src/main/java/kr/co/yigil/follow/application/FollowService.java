@@ -27,6 +27,11 @@ public class FollowService {
 
     @Transactional
     public FollowResponse follow(final Long followerId, final Long followingId) {
+        if (followerId.equals(followingId)) {
+            return new FollowResponse("나 자신을 follow할 수 없습니다.");
+        } else if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
+            return new FollowResponse("이미 follow 처리 되어 있습니다.");
+        }
         Member follower = getMemberById(followerId);
         Member following = getMemberById(followingId);
 

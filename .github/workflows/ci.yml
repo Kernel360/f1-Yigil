@@ -72,8 +72,8 @@ jobs:
         sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-admin/src/main/resources/application.yml
-        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
-        cat ./yigil-api/src/main/resources/*
+        sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        cat ./yigil-admin/src/main/resources/*
 
 
     # Gradle Build를 위한 권한 부여
