@@ -8,6 +8,7 @@ import kr.co.yigil.follow.dto.response.FollowResponse;
 import kr.co.yigil.follow.dto.response.UnfollowResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
+import kr.co.yigil.global.exception.ExceptionResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.repository.MemberRepository;
 import kr.co.yigil.notification.application.NotificationService;
@@ -27,6 +28,11 @@ public class FollowService {
 
     @Transactional
     public FollowResponse follow(final Long followerId, final Long followingId) {
+        if (followerId.equals(followingId)) {
+            return new FollowResponse("나 자신을 follow할 수 없습니다.");
+        } else if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
+            return new FollowResponse("이미 follow 처리 되어 있습니다.");
+        }
         Member follower = getMemberById(followerId);
         Member following = getMemberById(followingId);
 

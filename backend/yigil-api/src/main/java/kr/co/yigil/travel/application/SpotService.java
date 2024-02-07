@@ -136,7 +136,7 @@ public class SpotService {
     }
 
     @NotNull
-    private SpotFindDto getSpotFindDto(Spot spot) {
+    public SpotFindDto getSpotFindDto(Spot spot) {
         return SpotFindDto.from(
             spot,
             favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
