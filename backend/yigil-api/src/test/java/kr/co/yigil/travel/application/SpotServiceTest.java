@@ -101,7 +101,7 @@ class SpotServiceTest {
 
         Long placeId = 1L;
 
-        when(spotRepository.findAllByPlaceIdAndIsInCourseFalse(anyLong(),
+        when(spotRepository.findAllByPlaceId(anyLong(),
             any(Pageable.class))).thenReturn(new SliceImpl<>(spotList));
 
         when(favorRedisIntegrityService.ensureFavorCounts(spot1)).thenReturn(

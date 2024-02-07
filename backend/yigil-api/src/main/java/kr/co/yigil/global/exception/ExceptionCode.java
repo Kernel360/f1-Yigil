@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ExceptionCode {
-
     INVALID_REQUEST(1000, "올바르지 않은 요청입니다."),
     NOT_FOUND_MEMBER_ID(1001, "사용자를 찾을 수 없습니다."),
     NOT_FOUND_POST_ID(1011, "해당하는 post가 없습니다"),

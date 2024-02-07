@@ -52,7 +52,7 @@ public class SpotService {
 
     @Transactional
     public Slice<SpotFindDto> getSpotList(Long placeId, Pageable pageable) {
-        Slice<Spot> spots = spotRepository.findAllByPlaceIdAndIsInCourseFalse(placeId, pageable);
+        Slice<Spot> spots = spotRepository.findAllByPlaceId(placeId, pageable);
         List<SpotFindDto> spotFindDtoList = spots.stream()
                 .map(this::getSpotFindDto)
                 .toList();

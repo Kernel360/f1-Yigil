@@ -64,13 +64,12 @@ public class CourseService {
     @Transactional(readOnly = true)
     public CourseInfoResponse getCourseInfo(Long courseId) {
         Course course = findCourseById(courseId);
-        List<Spot> spots = course.getSpots();
+        List<Spot> spots = course.getSpots().stream().filter(spot -> !spot.isPrivate()).toList();
+
         int favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
         int commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
-
         return CourseInfoResponse.from(course, spots, favorCount, commentCount);
-    }
-
+    } 
     public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
         Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
         List<CourseFindDto> courseFindDtoList = courses.stream()
