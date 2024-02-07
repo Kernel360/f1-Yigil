@@ -73,6 +73,11 @@ jobs:
         sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@JWT_SECRET@|${{ secrets.JWT_SECRET }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_HOST@|${{ secrets.MAIL_HOST }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_PORT@|${{ secrets.MAIL_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
         cat ./yigil-admin/src/main/resources/*
 
 
