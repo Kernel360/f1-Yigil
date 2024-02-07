@@ -1,27 +1,33 @@
 'use client';
 
-import { useReducer } from 'react';
+import { useReducer, useState } from 'react';
 
 import { makeInitialStep, reducer, StepNavigation } from './common/step';
 import ProgressIndicator from './common/ProgressIndicator';
+import { switchAddSpot } from './spot';
+
+import type { DataInput, Making } from './common/step/types';
 
 export default function AddSpot() {
   const [step, dispatch] = useReducer(reducer, makeInitialStep(true, false));
+  const { makingStep, inputStep } = step;
 
-  let AddComponent;
+  const makingSpotStep = makingStep as Making.TSpot;
+  const dataFromNewStep = inputStep as DataInput.TDataFromNew;
 
-  switch (step.makingStep.data.label) {
-    case '장소 입력': {
-      AddComponent = <></>;
-    }
-    case '정보 입력': {
-      switch (step.inputStep.data.label) {
-        case '주소': {
-          // AddComponent
-        }
-      }
-    }
-  }
+  const placeName = '이구성수';
+  const placeAddress = '서울 성동구 모시깽이';
+
+  const [reviewState, setReviewState] = useState({ review: '' });
+
+  const AddComponent = switchAddSpot(
+    placeName,
+    placeAddress,
+    makingSpotStep,
+    dataFromNewStep,
+    reviewState,
+    setReviewState,
+  );
 
   return (
     <section>
