@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
-import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploadEvent;
@@ -66,9 +65,10 @@ public class CourseService {
     public CourseInfoResponse getCourseInfo(Long courseId) {
         Course course = findCourseById(courseId);
         List<Spot> spots = course.getSpots();
+        int favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
+        int commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
 
-        List<CommentResponse> comments = commentService.getCommentList(course.getId());
-        return CourseInfoResponse.from(course, spots, comments);
+        return CourseInfoResponse.from(course, spots, favorCount, commentCount);
     }
 
     public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {

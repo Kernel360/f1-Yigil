@@ -12,11 +12,12 @@ public class CourseFindDto {
     private String title;
     private String memberNickname;
     private String memberImageUrl;
-    private Integer favorCount;
-    private Integer commentCount;
+    private int favorCount;
+    private int commentCount;
 
     public static CourseFindDto from(Course course, Integer favorCount, Integer commentCount) {
         return new CourseFindDto(
+                course.getId(),
                 course.getTitle(),
                 course.getMember().getNickname(),
                 course.getMember().getProfileImageUrl(),

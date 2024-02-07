@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class PlaceFindDto {
+    private Long id;
     private String name;
     private String address;
     private String imageUrl;
@@ -17,6 +18,7 @@ public class PlaceFindDto {
 
     public static PlaceFindDto from(Place place, int spotCount) {
         return new PlaceFindDto(
+                place.getId(),
                 place.getName(),
                 place.getAddress(),
                 place.getImageUrl(),
