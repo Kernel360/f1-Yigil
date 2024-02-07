@@ -56,76 +56,6 @@ export type AdminSignUp = {
   request_datetime: string;
 };
 
-// export const columns: ColumnDef<AdminSignUp>[] = [
-//   {
-//     id: "select",
-//     header: ({ table }) => (
-//       <Checkbox
-//         checked={table.getIsAllPageRowsSelected()}
-//         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-//         aria-label="Select all"
-//       />
-//     ),
-//     cell: ({ row }) => (
-//       <Checkbox
-//         checked={row.getIsSelected()}
-//         onCheckedChange={(value) => row.toggleSelected(!!value)}
-//         aria-label="Select row"
-//       />
-//     ),
-//     enableSorting: false,
-//     enableHiding: false,
-//   },
-//   {
-//     accessorKey: "email",
-//     header: "이메일",
-//     cell: ({ row }) => <div>{row.getValue("email")}</div>,
-//   },
-//   {
-//     accessorKey: "nickname",
-//     header: "닉네임",
-//     cell: ({ row }) => <div>{row.getValue("nickname")}</div>,
-//   },
-//   {
-//     accessorKey: "request_datetime",
-//     header: "요청 시간",
-//     cell: ({ row }) => <div>{row.getValue("request_datetime")}</div>,
-//   },
-//   {
-//     id: "actions",
-//     enableHiding: false,
-//     cell: ({ row }) => {
-//       const adminSignUp = row.original;
-
-//       return (
-//         <DropdownMenu>
-//           <DropdownMenuTrigger asChild>
-//             <Button variant="ghost" className="h-8 w-8 p-0">
-//               <span className="sr-only">Open menu</span>
-//               <DotsHorizontalIcon className="h-4 w-4" />
-//             </Button>
-//           </DropdownMenuTrigger>
-//           <DropdownMenuContent align="end">
-//             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-//             <DropdownMenuItem
-//               onClick={() => navigator.clipboard.writeText(adminSignUp.email)}
-//             >
-//               이메일 복사하기
-//             </DropdownMenuItem>
-//             <DropdownMenuSeparator />
-//             <DropdownMenuItem
-//               onClick={() => handleAcceptSignUp(adminSignUp.id)}
-//             >
-//               가입 승인
-//             </DropdownMenuItem>
-//             <DropdownMenuItem>가입 거절</DropdownMenuItem>
-//           </DropdownMenuContent>
-//         </DropdownMenu>
-//       );
-//     },
-//   },
-// ];
-
 const AdminSignUpPage: React.FC = () => {
   const [adminSignUps, setAdminSignUps] = useState<AdminSignUp[]>([]);
   const [page, setPage] = useState(1);
@@ -207,7 +137,11 @@ const AdminSignUpPage: React.FC = () => {
               >
                 가입 승인
               </DropdownMenuItem>
-              <DropdownMenuItem>가입 거절</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleRejectSignUp(adminSignUp.id)}
+              >
+                가입 거절
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -233,7 +167,7 @@ const AdminSignUpPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8081/admin/api/v1/admins/signup/accept",
+        "https://yigil.co.kr/admin/api/v1/admins/signup/accept",
         {
           method: "POST",
           headers: {
@@ -272,7 +206,7 @@ const AdminSignUpPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8081/admin/api/v1/admins/signup/accept",
+        "https://yigil.co.kr/admin/api/v1/admins/signup/accept",
         {
           method: "POST",
           headers: {
@@ -314,7 +248,7 @@ const AdminSignUpPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8081/admin/api/v1/admins/signup/reject",
+        "https://yigil.co.kr/admin/api/v1/admins/signup/reject",
         {
           method: "POST",
           headers: {
@@ -353,7 +287,7 @@ const AdminSignUpPage: React.FC = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8081/admin/api/v1/admins/signup/reject",
+        "https://yigil.co.kr/admin/api/v1/admins/signup/reject",
         {
           method: "POST",
           headers: {
@@ -406,7 +340,7 @@ const AdminSignUpPage: React.FC = () => {
     try {
       const accessToken = getCookie("accessToken");
       const response = await fetch(
-        `http://localhost:8081/admin/api/v1/admins/signup/list?page=${encodeURIComponent(
+        `https://yigil.co.kr/admin/api/v1/admins/signup/list?page=${encodeURIComponent(
           page
         )}&dataCount=10`,
         {

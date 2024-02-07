@@ -63,7 +63,7 @@ const LoginPage: React.FC = () => {
     }
     try {
       const response = await fetch(
-        "http://localhost:8081/admin/api/v1/admins/login",
+        "https://yigil.co.kr/admin/api/v1/admins/login",
         {
           method: "POST",
           headers: {
@@ -88,7 +88,7 @@ const LoginPage: React.FC = () => {
       document.cookie = `accessToken=Bearer ${access_token}; path=/;`;
       document.cookie = `refreshToken=${refresh_token}; path=/;`;
 
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       setErrorName("로그인 오류");
       setErrorMessage("로그인 처리 중 오류가 발생했습니다.");
@@ -113,7 +113,7 @@ const LoginPage: React.FC = () => {
     }
     try {
       const response = await fetch(
-        "http://localhost:8081/admin/api/v1/admins/signup",
+        "http://yigil.co.kr/admin/api/v1/admins/signup",
         {
           method: "POST",
           headers: {
