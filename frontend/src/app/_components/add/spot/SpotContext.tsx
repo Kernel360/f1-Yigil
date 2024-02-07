@@ -4,7 +4,7 @@ import type { TImageData } from '../../images/ImageHandler';
 
 type TRating = 1 | 2 | 3 | 4 | 5;
 
-interface TAddSpotProps {
+export interface TAddSpotProps {
   name: string;
   address: string;
   spotMapImageUrl: string;
@@ -49,8 +49,6 @@ export function addSpotReducer(
   state: TAddSpotProps,
   action: TAddSpotAction,
 ): TAddSpotProps {
-  console.log(`Dispatch from ${action.type}`);
-
   switch (action.type) {
     case 'SET_NAME': {
       const name = action.payload as string;

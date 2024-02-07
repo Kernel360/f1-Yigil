@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useReducer } from 'react';
+import { useReducer } from 'react';
 
 import { makeInitialStep, reducer, StepNavigation } from './common/step';
 import ProgressIndicator from './common/ProgressIndicator';
@@ -8,6 +8,7 @@ import {
   AddSpotContext,
   addSpotReducer,
   initialAddSpotState,
+  TAddSpotProps,
 } from './spot/SpotContext';
 
 import type { DataInput, Making } from './common/step/types';
@@ -41,13 +42,14 @@ export default function AddSpot() {
 
   return (
     <section className="flex flex-col grow">
-      <StepNavigation
-        currentStep={step}
-        next={() => dispatchStep({ type: 'next' })}
-        previous={() => dispatchStep({ type: 'previous' })}
-      />
-      <ProgressIndicator step={step} />
       <AddSpotContext.Provider value={addSpotState}>
+        <StepNavigation
+          currentStep={step}
+          next={() => dispatchStep({ type: 'next' })}
+          previous={() => dispatchStep({ type: 'previous' })}
+        />
+        <ProgressIndicator step={step} />
+
         {stepLabel === '장소 입력' && <SearchBox />}
         {stepLabel === '정보 입력' && (
           <>

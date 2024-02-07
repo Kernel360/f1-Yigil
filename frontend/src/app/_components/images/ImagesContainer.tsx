@@ -53,8 +53,6 @@ export default function ImagesContainer({
     previousId: UniqueIdentifier,
     currentId?: UniqueIdentifier,
   ) {
-    console.log({ images, previousId, currentId });
-
     const oldItem = images.find((image) => image.filename === previousId);
     const newItem = images.find((image) => image.filename === currentId);
 
