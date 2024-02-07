@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import kr.co.yigil.place.application.PlaceService;
-import kr.co.yigil.place.dto.response.PlaceFindResponse;
+import kr.co.yigil.place.dto.response.PlaceInfoResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ public class PlaceControllerTest {
     @DisplayName("Place 정보 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
     @Test
     public void getPlaceTest() throws Exception {
-        when(placeService.getPlace(anyLong())).thenReturn(new PlaceFindResponse());
+        when(placeService.getPlaceInfo(anyLong())).thenReturn(new PlaceInfoResponse());
 
         mockMvc.perform(get("/api/v1/places/1"))
                 .andExpect(status().isOk());

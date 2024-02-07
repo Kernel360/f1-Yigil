@@ -28,7 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class CommentRedisIntegrityServiceTest {
+class CommentRedisIntegrityServiceTest {
 
     @Mock
     private CommentRepository commentRepository;
@@ -50,23 +50,28 @@ public class CommentRedisIntegrityServiceTest {
 
         Long memberId = 1L;
         Long travelId = 1L;
-        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg",
+            SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
+        AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName",
+            1L);
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "imgUrl",
+            mockStaticImgFile);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-                1L);
+            1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-                2L);
+            2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
-                mockPlace, 5.0);
+        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말",
+            mockAttachFiles, mockPlace, 5.0);
         CommentCount existingCommentCount = new CommentCount(travelId, 5);
 
-        when(commentCountRepository.findByTravelId(travelId)).thenReturn(Optional.of(existingCommentCount));
+        when(commentCountRepository.findByTravelId(travelId)).thenReturn(
+            Optional.of(existingCommentCount));
 
         CommentCount result = commentRedisIntegrityService.ensureCommentCount(spot1);
 
@@ -80,20 +85,23 @@ public class CommentRedisIntegrityServiceTest {
     void testEnsureCommentCountWhenNotExists() {
         Long memberId = 1L;
         Long travelId = 1L;
-        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg", SocialLoginType.KAKAO);
+        Member mockMember = new Member(memberId, "shin@gmail.com", "123456", "똷", "profile.jpg",
+            SocialLoginType.KAKAO);
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription");
+        AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName",
+            1L);
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "imgUrl",
+            mockStaticImgFile);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-                1L);
+            1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-                2L);
+            2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
-        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles, mockAttachFile1,
-                mockPlace, 5.0);
+        Spot spot1 = new Spot(travelId, mockMember, mockPoint, false, "anyTitle", "아무말",
+            mockAttachFiles, mockPlace, 5.0);
 
         CommentCount newCommentCount = new CommentCount(travelId, 10);
 

@@ -12,7 +12,6 @@ import kr.co.yigil.travel.dto.response.CourseCreateResponse;
 import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
 import kr.co.yigil.travel.dto.response.CourseFindDto;
 import kr.co.yigil.travel.dto.response.CourseInfoResponse;
-import kr.co.yigil.travel.dto.response.CourseListResponse;
 import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +22,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +50,7 @@ public class CourseController {
     @PostMapping
     @MemberOnly
     public ResponseEntity<CourseCreateResponse> createCourse(
-        @RequestBody CourseCreateRequest courseCreateRequest,
+        @ModelAttribute CourseCreateRequest courseCreateRequest,
         @Auth final Accessor accessor
     ) {
         CourseCreateResponse courseCreateResponse = courseService.createCourse(
@@ -69,11 +67,11 @@ public class CourseController {
         return ResponseEntity.ok().body(courseInfoResponse);
     }
 
-    @PutMapping("/{course_id}")
+    @PostMapping("/{course_id}")
     @MemberOnly
     public ResponseEntity<CourseUpdateResponse> updateCourse(
         @PathVariable("course_id") Long courseId,
-        @RequestBody CourseUpdateRequest courseUpdateRequest,
+        @ModelAttribute CourseUpdateRequest courseUpdateRequest,
         @Auth final Accessor accessor
     ) {
         CourseUpdateResponse courseUpdateResponse = courseService.updateCourse(courseId,

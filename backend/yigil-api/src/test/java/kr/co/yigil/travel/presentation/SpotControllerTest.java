@@ -15,7 +15,6 @@ import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.dto.response.SpotCreateResponse;
 import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
 import kr.co.yigil.travel.dto.response.SpotInfoResponse;
-import kr.co.yigil.travel.dto.response.SpotListResponse;
 import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -105,7 +104,7 @@ public class SpotControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonContent)
                 .sessionAttr("memberId", 1L))
-            .andExpect(status().isMovedPermanently());
+            .andExpect(status().isOk());
     }
 
     @DisplayName("Spot 삭제 요청이 왔을 때 200 응답과 response가 잘 반환되는지")

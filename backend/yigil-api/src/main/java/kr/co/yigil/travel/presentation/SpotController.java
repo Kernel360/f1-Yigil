@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.presentation;
 
-import io.micrometer.common.util.StringUtils;
 import java.net.URI;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/spots")
-public class SpotController {
+public class    SpotController {
 
     private final SpotService spotService;
 
@@ -81,7 +79,7 @@ public class SpotController {
         SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(),
             spotId, spotUpdateRequest);
         URI uri = URI.create("/api/v1/spots/" + spotId);
-        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+        return ResponseEntity.ok()
             .location(uri)
             .body(spotUpdateResponse);
     }
