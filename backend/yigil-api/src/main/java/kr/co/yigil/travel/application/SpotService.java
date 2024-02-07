@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
-import kr.co.yigil.comment.dto.response.CommentResponse;
+import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
+import kr.co.yigil.favor.domain.FavorCount;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploadEvent;
@@ -117,8 +118,9 @@ public class SpotService {
     @Transactional(readOnly = true)
     public SpotInfoResponse getSpotInfo(Long spotId) {
         Spot spot = findSpotById(spotId);
-        List<CommentResponse> comments = commentService.getCommentList(spotId);
-        return SpotInfoResponse.from(spot, comments);
+        FavorCount favorCount = favorRedisIntegrityService.ensureFavorCounts(spot);
+        CommentCount commentCount = commentRedisIntegrityService.ensureCommentCount(spot);
+        return SpotInfoResponse.from(spot, favorCount.getFavorCount(), commentCount.getCommentCount());
     }
 
     @Transactional

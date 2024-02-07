@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseFindDto {
+    private Long courseId;
     private String title;
     private String memberNickname;
     private String memberImageUrl;
