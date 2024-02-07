@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
-import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.favor.domain.FavorCount;
@@ -16,7 +15,9 @@ import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.place.Place;
+import kr.co.yigil.place.application.PlaceRateRedisIntegrityService;
 import kr.co.yigil.place.application.PlaceService;
+import kr.co.yigil.place.domain.PlaceRate;
 import kr.co.yigil.travel.Spot;
 import kr.co.yigil.travel.domain.SpotCount;
 import kr.co.yigil.travel.dto.request.SpotCreateRequest;
@@ -43,11 +44,11 @@ public class SpotService {
     private final SpotRepository spotRepository;
     private final MemberService memberService;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final CommentService commentService;
     private final PlaceService placeService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
     private final SpotRedisIntegrityService spotRedisIntegrityService;
+    private final PlaceRateRedisIntegrityService placeRateRedisIntegrityService;
 
     @Transactional
     public Slice<SpotFindDto> getSpotList(Long placeId, Pageable pageable) {
@@ -84,11 +85,17 @@ public class SpotService {
         checkAlreadyExist(memberId, place);
 
         incrementSpotCount(place);
+        addRateToPlace(place, spotCreateRequest.getRate());
 
         Spot spot = spotRepository.save(
                 SpotCreateRequest.toEntity(member, place, spotCreateRequest, attachFiles));
 
         return new SpotCreateResponse(spot.getId(), "스팟 정보 생성 성공");
+    }
+
+    private void addRateToPlace(Place place, double rate) {
+        PlaceRate placeRate = placeRateRedisIntegrityService.ensurePlaceRate(place.getId());
+        placeRate.addRate(rate);
     }
 
     private void incrementSpotCount(Place place) {
@@ -143,7 +150,13 @@ public class SpotService {
         Spot spot = findSpotByIdAndMemberId(spotId, memberId);
         spotRepository.delete(spot);
         decrementSpotCount(spot.getPlace());
+        removeRateFromPlace(spot.getPlace(), spot.getRate());
         return new SpotDeleteResponse("스팟 정보 삭제 성공");
+    }
+
+    private void removeRateFromPlace(Place place, double rate) {
+        PlaceRate placeRate = placeRateRedisIntegrityService.ensurePlaceRate(place.getId());
+        placeRate.removeRate(rate);
     }
 
     private void decrementSpotCount(Place place) {

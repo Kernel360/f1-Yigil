@@ -17,7 +17,8 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     Optional<Spot> findByIdAndMemberId(Long spotId, Long memberId);
 
     @Query("SELECT s FROM Spot s WHERE s.place.id = :placeId AND s.isInCourse = false")
-    Slice<Spot> findAllByPlaceIdAndIsInCourseFalse(@Param("placeId") Long placeId, Pageable pageable);
+    Slice<Spot> findAllByPlaceIdAndIsInCourseFalse(@Param("placeId") Long placeId,
+            Pageable pageable);
 
     List<Spot> findAllByMember(Member member);
 
@@ -28,4 +29,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     @Query("SELECT s FROM Spot s WHERE s.member.id = :memberId AND s.isInCourse = false")
     Slice<Spot> findAllByMemberAndIsInCourseFalse(Long memberId, Pageable pageable);
+
+    @Query("SELECT SUM(s.rate) FROM Spot s WHERE s.place.id = :placeId")
+    Double findTotalRateByPlaceId(@Param("placeId") Long placeId);
 }

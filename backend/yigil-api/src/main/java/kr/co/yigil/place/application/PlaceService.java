@@ -21,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PlaceService {
+
     private final PlaceRepository placeRepository;
     private final SpotRepository spotRepository;
     private final SpotRedisIntegrityService spotRedisIntegrityService;
+    private final PlaceRateRedisIntegrityService placeRateRedisIntegrityService;
 
     @Transactional(readOnly = true)
     public PlaceInfoResponse getPlaceInfo(Long placeId) {
@@ -32,6 +34,7 @@ public class PlaceService {
 
         return PlaceInfoResponse.from(place, spotCount);
     }
+
     @Transactional(readOnly = true)
     public RateResponse getMemberRate(Long placeId, Long memberId) {
         return spotRepository.findByPlaceIdAndMemberId(placeId, memberId)
@@ -42,7 +45,7 @@ public class PlaceService {
     @Transactional(readOnly = true)
     public PlaceMapStaticImageResponse getPlaceStaticImage(String name, String address) {
         Place place = placeRepository.findByNameAndAddress(name, address)
-                .orElseThrow( () -> new BadRequestException(ExceptionCode.NOT_FOUND_PLACE_ID));
+                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_PLACE_ID));
         return PlaceMapStaticImageResponse.from(place);
     }
 
@@ -51,24 +54,23 @@ public class PlaceService {
                 .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_PLACE_ID));
     }
 
-    public Place getOrCreatePlace(String placeName, String placeAddress, String placePointJson, String placeImageUrl, AttachFile mapStaticImageFile) {
+    public Place getOrCreatePlace(String placeName, String placeAddress, String placePointJson,
+            String placeImageUrl, AttachFile mapStaticImageFile) {
         return placeRepository.findByNameAndAddress(placeName, placeAddress)
                 .orElseGet(
                         () -> placeRepository.save(PlaceDto.toEntity(
-                                placeName,
-                                placeAddress,
-                                placePointJson,
-                                placeImageUrl,
-                                mapStaticImageFile
+                                        placeName,
+                                        placeAddress,
+                                        placePointJson,
+                                        placeImageUrl,
+                                        mapStaticImageFile
                                 )
                         )
                 );
     }
 
-    public Slice<PlaceFindDto> getPlaceList(PageRequest pageRequest, String keyword) {
-        return placeRepository.findPlacesByNameOrAddressContainingKeyword(
-                        pageRequest, keyword)
-                .map(place -> PlaceFindDto.from(place,
-                        spotRedisIntegrityService.ensureSpotCounts(place.getId()).getSpotCount()));
+    public Slice<PlaceFindDto> getPlaceList(PageRequest pageRequest) {
+        return placeRepository.findAll(pageRequest)
+                .map(this::getPlaceFindDto);
     }
 }
