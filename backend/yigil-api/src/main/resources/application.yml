@@ -30,7 +30,11 @@ spring:
       port: @REDIS_PORT@
   jackson:
     property-naming-strategy: SNAKE_CASE
-
+  mail:
+    host: @MAIL_HOST@
+    port: @MAIL_PORT@
+    username: @MAIL_USERNAME@
+    password: @MAIL_PASSWORD@
 
 cloud:
   aws:
@@ -62,7 +66,8 @@ logging:
     root: DEBUG
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
-
+jwt:
+  secret: @JWT_SECRET@
 
 decorator:
   datasource:
