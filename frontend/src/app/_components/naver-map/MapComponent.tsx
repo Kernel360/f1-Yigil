@@ -14,8 +14,8 @@ export default function MapComponent({
   return (
     <MapDiv
       style={{
-        width: '100%',
-        height: '600px',
+        width,
+        height,
       }}
     >
       {children}
