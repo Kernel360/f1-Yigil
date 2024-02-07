@@ -85,9 +85,7 @@ export default function MyPageSpotItem({
           <div className="grow text-xl leading-6 text-gray-500 font-semibold">
             {rating.toFixed(1)}
           </div>
-          <div className="text-gray-300 font-bold">
-            {post_date.slice(0, 10)}
-          </div>
+          <div className="text-gray-300 font-bold">{post_date}</div>
         </div>
       </div>
     </div>
