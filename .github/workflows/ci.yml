@@ -56,7 +56,7 @@ jobs:
         sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
-        cat ./yigil-api/src/main/resources/*
+    # cat ./yigil-api/src/main/resources/*
     
     - name: Set admin application.yml
       run: |
@@ -78,7 +78,7 @@ jobs:
         sed -i "s|@MAIL_PORT@|${{ secrets.MAIL_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
-        cat ./yigil-admin/src/main/resources/*
+    # cat ./yigil-admin/src/main/resources/*
 
 
     # Gradle Build를 위한 권한 부여
