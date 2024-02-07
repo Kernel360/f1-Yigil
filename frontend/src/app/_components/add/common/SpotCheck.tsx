@@ -1,50 +1,27 @@
 'use client';
 
+import { useContext } from 'react';
+import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
 
 import IconWithCounts from '../../IconWithCounts';
+import { AddSpotContext } from '../spot/SpotContext';
 
 import StarIcon from '/public/icons/star.svg';
-import Image from 'next/image';
 
-type TRating = 1 | 2 | 3 | 4 | 5;
-
-interface TSpotData {
-  name: string;
-  roadAddress: string;
-  spotMapImageUrl: string;
-  spotImages: string[] | File[];
-  coords: [number, number];
-  rating: TRating;
-  review: string;
-}
-
-export default function SpotCheck({
-  name,
-  roadAddress,
-  spotMapImageUrl,
-  spotImages,
-  coords,
-  rating,
-  review,
-}: TSpotData) {
+export default function SpotCheck() {
   const [emblaRef] = useEmblaCarousel({
     loop: false,
     dragFree: true,
   });
 
-  const images = spotImages.map((image) => {
-    if (typeof image === 'string') {
-      return image;
-    }
-
-    return image.name;
-  });
+  const { name, address, spotMapImageUrl, images, coords, rating, review } =
+    useContext(AddSpotContext);
 
   return (
-    <section className="p-4 flex flex-col gap-2">
-      <div className="flex justify-between">
-        <span>{name}</span>
+    <section className="p-8 flex flex-col gap-6 grow">
+      <div className="flex justify-between items-center">
+        <span className="text-2xl font-semibold">{name}</span>
         <span>
           <IconWithCounts
             icon={
@@ -55,20 +32,25 @@ export default function SpotCheck({
           />
         </span>
       </div>
-      <p>{roadAddress}</p>
-      {/* Static Image */}
+      <p className="text-gray-500">{address}</p>
+      <div className="relative w-full h-1/3">
+        <Image unoptimized src={spotMapImageUrl} alt="Spot map image" fill />
+      </div>
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex">
+        <div className="flex gap-2">
           {images.map((image) => (
-            <div className="relative aspect-square rounded-2xl border-2 border-gray-500">
-              <Image src={image} alt="Uploaded image" fill />
+            <div
+              key={image.filename}
+              className="p-2 relative w-1/2 overflow-hidden aspect-square rounded-2xl border-2 border-gray-300 shrink-0"
+            >
+              <Image unoptimized src={image.uri} alt="Uploaded image" fill />
             </div>
           ))}
         </div>
       </div>
-      <div className="p-2 h-1/4 flex flex-col gap-2">
+      <div className="p-4 h-1/5 flex flex-col gap-2 bg-gray-100 rounded-xl text-lg">
         <span>리뷰 내용</span>
-        {review}
+        {review.review}
       </div>
     </section>
   );

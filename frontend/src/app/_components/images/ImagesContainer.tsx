@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -20,17 +20,22 @@ import {
 import ImageItem from './ImageItem';
 import SortableItem from './SortableItem';
 
-import type { Dispatch, SetStateAction } from 'react';
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
+import type { Dispatch } from 'react';
+import type {
+  DragEndEvent,
+  DragStartEvent,
+  UniqueIdentifier,
+} from '@dnd-kit/core';
 import type { TImageData } from './ImageHandler';
+import { AddSpotContext, type TAddSpotAction } from '../add/spot/SpotContext';
 
 export default function ImagesContainer({
-  images,
-  setImages,
+  dispatch,
 }: {
-  images: TImageData[];
-  setImages: Dispatch<SetStateAction<TImageData[]>>;
+  dispatch: Dispatch<TAddSpotAction>;
 }) {
+  const { images } = useContext(AddSpotContext);
+
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 0.01 } }),
@@ -43,32 +48,45 @@ export default function ImagesContainer({
     setActiveId(event.active.id as string);
   }, []);
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
+  function imageMove(
+    images: TImageData[],
+    previousId: UniqueIdentifier,
+    currentId?: UniqueIdentifier,
+  ) {
+    console.log({ images, previousId, currentId });
 
-    if (active.id !== over?.id) {
-      setImages((images) => {
-        const oldItem = images.find((image) => image.filename === active.id);
-        const newItem = images.find((image) => image.filename === over?.id);
+    const oldItem = images.find((image) => image.filename === previousId);
+    const newItem = images.find((image) => image.filename === currentId);
 
-        if (oldItem && newItem) {
-          const oldIndex = images.indexOf(oldItem);
-          const newIndex = images.indexOf(newItem);
+    if (oldItem && newItem) {
+      const oldIndex = images.indexOf(oldItem);
+      const newIndex = images.indexOf(newItem);
 
-          return arrayMove(images, oldIndex, newIndex);
-        }
-
-        return images;
-      });
-
-      setActiveId(null);
+      return arrayMove(images, oldIndex, newIndex);
     }
-  }, []);
+
+    return images;
+  }
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      if (active.id !== over?.id) {
+        const nextImage = imageMove(images, active.id, over?.id);
+
+        dispatch({ type: 'SET_IMAGES', payload: nextImage });
+
+        setActiveId(null);
+      }
+    },
+    [images],
+  );
 
   function removeImage(filename: string) {
     const nextImages = images.filter((image) => image.filename !== filename);
 
-    setImages(nextImages);
+    dispatch({ type: 'SET_IMAGES', payload: nextImages });
   }
 
   const handleDragCancel = useCallback(() => {
