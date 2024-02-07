@@ -69,7 +69,7 @@ public class CourseService {
         int favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
         int commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
         return CourseInfoResponse.from(course, spots, favorCount, commentCount);
-    }
+    } 
     public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
         Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
         List<CourseFindDto> courseFindDtoList = courses.stream()
