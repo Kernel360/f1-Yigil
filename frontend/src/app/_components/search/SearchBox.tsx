@@ -20,12 +20,14 @@ function parseSearchHistory(historyStr: string | null) {
 
 export default function SearchBox({
   showHistory,
-  dispatch,
+  dispatchSpot,
+  dispatchStep,
   searchResults,
   search,
 }: {
   showHistory?: boolean;
-  dispatch: Dispatch<TAddSpotAction>;
+  dispatchSpot: Dispatch<TAddSpotAction>;
+  dispatchStep: Dispatch<{ type: 'next' } | { type: 'previous' }>;
   searchResults: { name: string; roadAddress: string }[];
   search: (keyword: string) => Promise<void>;
 }) {
@@ -71,7 +73,11 @@ export default function SearchBox({
       <div className="grow" aria-label="Result/History container">
         {showHistory && <SearchHistory {...searchHistoryProps} />}
         {searchResults.length !== 0 && (
-          <SearchResult dispatch={dispatch} searchResults={searchResults} />
+          <SearchResult
+            dispatchSpot={dispatchSpot}
+            dispatchStep={dispatchStep}
+            searchResults={searchResults}
+          />
         )}
       </div>
     </section>

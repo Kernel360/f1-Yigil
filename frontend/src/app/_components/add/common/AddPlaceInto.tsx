@@ -2,6 +2,7 @@
 
 import { useContext } from 'react';
 import { AddSpotContext } from '../spot/SpotContext';
+import { httpRequest } from '../../api/httpRequest';
 
 // 이름과 주소를 입력으로 하여 static map 저장 여부를 반환하는 API가 필요함
 

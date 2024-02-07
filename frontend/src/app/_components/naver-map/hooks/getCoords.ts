@@ -9,6 +9,7 @@ export const getCoords = async (address: string) => {
       } as Record<string, string>,
     },
   );
+
   const result = await res.json();
   return { lat: result.addresses[0].y, lng: result.addresses[0].x };
 };

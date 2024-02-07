@@ -1,20 +1,42 @@
 import { Dispatch } from 'react';
 import { TAddSpotAction } from '../add/spot/SpotContext';
-import { getCoords } from '../naver-map/hooks/getCoords';
+import { httpRequest } from '../api/httpRequest';
 
 export default function SearchResult({
-  dispatch,
+  dispatchSpot,
+  dispatchStep,
   searchResults,
 }: {
-  dispatch: Dispatch<TAddSpotAction>;
+  dispatchSpot: Dispatch<TAddSpotAction>;
+  dispatchStep: Dispatch<{ type: 'next' } | { type: 'previous' }>;
   searchResults: { name: string; roadAddress: string }[];
 }) {
   async function handleClick(name: string, roadAddress: string) {
-    const coords = await getCoords(roadAddress);
+    console.log(JSON.stringify({ address: roadAddress }));
 
-    dispatch({ type: 'SET_NAME', payload: name });
-    dispatch({ type: 'SET_ADDRESS', payload: roadAddress });
-    dispatch({ type: 'SET_COORDS', payload: coords });
+    const res = await fetch('http://localhost:3000/endpoints/api/coords', {
+      method: 'POST',
+      body: JSON.stringify({ address: roadAddress }),
+    });
+
+    const coords = (await res.json()) as { lat: number; lng: number };
+
+    const mapUrl = await httpRequest('places/static-image')(
+      `name=${name}&address=${roadAddress}`,
+    )()()();
+
+    const mapUrlFromBackend = mapUrl.code ? mapUrl.map_static_image_url : '';
+    const mapUrlFromNaver = '';
+
+    dispatchSpot({ type: 'SET_NAME', payload: name });
+    dispatchSpot({ type: 'SET_ADDRESS', payload: roadAddress });
+    dispatchSpot({ type: 'SET_COORDS', payload: coords });
+
+    if (mapUrlFromBackend) {
+      dispatchSpot({ type: 'SET_SPOT_MAP_URL', payload: mapUrl });
+    }
+
+    dispatchStep({ type: 'next' });
   }
 
   return (

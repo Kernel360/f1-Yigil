@@ -19,10 +19,8 @@ import AddPlaceInfo from './common/AddPlaceInto';
 import { ImageHandler } from '../images';
 import PostRating from './common/PostRating';
 import PostReview from './common/PostReview';
-import { getArea } from '../naver-map/hooks/getArea';
 import AddSpotMap from './common/AddSpotMap';
 import MapComponent from '../naver-map/MapComponent';
-import { httpRequest } from '../api/httpRequest';
 
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
@@ -63,7 +61,7 @@ export default function AddSpot() {
     const results = areas.map((area) => {
       const title = area.title as string;
       const escaped = title.replace(/<b>|<\/b>/g, '');
-      const roadAddress = area.roadAdress as string;
+      const roadAddress = area.roadAddress as string;
 
       return { name: escaped, roadAddress };
     });
@@ -84,7 +82,8 @@ export default function AddSpot() {
         {stepLabel === '장소 입력' && (
           <section className=" flex flex-col justify-between grow">
             <SearchBox
-              dispatch={dispatchSpot}
+              dispatchSpot={dispatchSpot}
+              dispatchStep={dispatchStep}
               searchResults={searchResults}
               search={search}
             />

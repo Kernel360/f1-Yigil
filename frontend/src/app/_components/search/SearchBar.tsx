@@ -47,7 +47,6 @@ export default function SearchBar({
     if (pathname === '/search') {
       push(`${pathname}/result?${params.toString()}`);
     } else {
-      console.log('yay');
       search(searchValue);
     }
   }
