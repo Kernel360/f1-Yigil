@@ -23,6 +23,12 @@ import AddSpotMap from './common/AddSpotMap';
 import MapComponent from '../naver-map/MapComponent';
 import AddConfirmContent from './common/AddConfirmContent';
 
+/** 배포용 추가 */
+const url =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:3000/endpoints/api/search'
+    : 'https://yigil.co.kr/endpoints/api/search';
+
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
     reducer,
@@ -52,7 +58,7 @@ export default function AddSpot() {
       return;
     }
 
-    const res = await fetch('http://localhost:3000/endpoints/api/search', {
+    const res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify({ keyword }),
     });

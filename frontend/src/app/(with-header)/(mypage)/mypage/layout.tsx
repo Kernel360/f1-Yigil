@@ -4,12 +4,17 @@ import { getServerSession } from 'next-auth';
 import type { ReactNode } from 'react';
 import { httpRequest } from '@/app/_components/api/httpRequest';
 
+const url =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:3000/endpoints/api/member'
+    : 'https://yigil.co.kr/endpoints/api/member';
+
 export default async function MyPageInformation({
   children,
 }: {
   children: ReactNode;
 }) {
-  const getMemberInfo = await httpRequest('members')()()()();
+  const getMemberInfo = await fetch(url);
   console.log(getMemberInfo);
   const session = await getServerSession();
 

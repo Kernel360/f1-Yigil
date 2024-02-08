@@ -2,6 +2,18 @@ import { Dispatch } from 'react';
 import { TAddSpotAction } from '../add/spot/SpotContext';
 import { httpRequest } from '../api/httpRequest';
 import SearchIcon from '/public/icons/search.svg';
+
+/** 배포용 추가 */
+const coordsUrl =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:3000/endpoints/api/coords'
+    : 'https://yigil.co.kr/endpoints/api/coords';
+
+const placeIdUrl =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:3000/endpoints/api/placeId'
+    : 'https://yigil.co.kr/endpoints/api/placeId';
+
 export default function SearchResult({
   dispatchSpot,
   dispatchStep,
@@ -12,7 +24,7 @@ export default function SearchResult({
   searchResults: { name: string; roadAddress: string }[];
 }) {
   async function handleClick(name: string, roadAddress: string) {
-    const res = await fetch('http://localhost:3000/endpoints/api/coords', {
+    const res = await fetch(coordsUrl, {
       method: 'POST',
       body: JSON.stringify({ address: roadAddress }),
     });
@@ -23,13 +35,10 @@ export default function SearchResult({
       `?name=${name}&address=${roadAddress}`,
     )()()();
 
-    const naverMapUrl = await fetch(
-      'http://localhost:3000/endpoints/api/placeId',
-      {
-        method: 'POST',
-        body: JSON.stringify({ coords }),
-      },
-    );
+    const naverMapUrl = await fetch(placeIdUrl, {
+      method: 'POST',
+      body: JSON.stringify({ coords }),
+    });
     console.log(naverMapUrl);
 
     const mapUrlFromBackend = mapUrl?.code ? mapUrl.map_static_image_url : '';
