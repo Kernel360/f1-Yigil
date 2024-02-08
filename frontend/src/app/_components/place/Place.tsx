@@ -1,30 +1,11 @@
 import LikeButton from './LikeButton';
+import IconWithCounts from '../IconWithCounts';
 
 import CommentIcon from '/public/icons/comment.svg';
 import HeartIcon from '/public/icons/heart.svg';
 import StarIcon from '/public/icons/star.svg';
 
-import type { ReactElement } from 'react';
 import type { TPlace } from './types';
-
-function IconWithCounts({
-  icon,
-  count,
-  rating,
-}: {
-  icon: ReactElement;
-  count: number;
-  rating?: boolean;
-}) {
-  const label = rating ? count.toFixed(1) : count >= 100 ? '99+' : count;
-
-  return (
-    <div className="flex items-center">
-      {icon}
-      <p className="pl-2 flex justify-center">{label}</p>
-    </div>
-  );
-}
 
 // 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
 // 차후 next/image 사용하게 변경 예정

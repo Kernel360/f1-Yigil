@@ -14,16 +14,16 @@ public class PlaceDto {
 
     private String name;
     private String address;
-    private String imageUrl;
     private String pointJson;
+    private AttachFile imageFile;
     private AttachFile mapStaticImageFile;
 
-    public static Place toEntity(String name, String address, String pointJson, String imageUrl, AttachFile mapStaticImageFile){
+    public static Place toEntity(String name, String address, String pointJson, AttachFile imageFile, AttachFile mapStaticImageFile){
         return new Place(
                 name,
                 address,
                 GeojsonConverter.convertToPoint(pointJson),
-                imageUrl,
+                imageFile,
                 mapStaticImageFile
         );
     }

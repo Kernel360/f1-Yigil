@@ -15,7 +15,7 @@ type TCourseFromExistingStep =
   | { label: '일정 확정'; value: 4 }
   | { label: '완료'; value: 5 };
 
-type TSpot = {
+export type TSpot = {
   kind: 'spot';
   data: TSpotStep;
 };

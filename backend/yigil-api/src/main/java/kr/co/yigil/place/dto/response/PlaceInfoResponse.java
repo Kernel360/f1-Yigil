@@ -13,16 +13,19 @@ public class PlaceInfoResponse {
     private String address;
     private String imageUrl;
     private String mapStaticImageUrl;
-    private int spotCount;
+    private int reviewCount;
+    private double averageRate;
 
 
-    public static PlaceInfoResponse from(Place place, int spotCount) {
+
+    public static PlaceInfoResponse from(Place place, int reviewCount, double averageRate){
         return new PlaceInfoResponse(
                 place.getName(),
                 place.getAddress(),
-                place.getImageUrl(),
+                place.getImageFile().getFileUrl(),
                 place.getMapStaticImageFile().getFileUrl(),
-                spotCount
+                reviewCount,
+                averageRate
         );
     }
 }

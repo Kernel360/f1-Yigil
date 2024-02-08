@@ -10,12 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
-
-    void deleteByIdAndMemberId(Long courseId, Long memberId);
-
     Optional<Course> findByIdAndMemberId(Long courseId, Long memberId);
 
-    @Query("SELECT c FROM Course c JOIN c.spots s WHERE s.place.id = :placeId")
+    @Query("SELECT c FROM Course c JOIN c.spots s WHERE s.place.id = :placeId AND c.isPrivate = false")
     Slice<Course> findBySpotPlaceId(@Param("placeId") Long placeId, Pageable pageable);
 
     Slice<Course> findAllByMember(Member member);

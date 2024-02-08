@@ -11,18 +11,18 @@ import lombok.NoArgsConstructor;
 public class PlaceFindDto {
     private Long id;
     private String name;
-    private String address;
     private String imageUrl;
-    private int spotCount;
+    private int reviewCount;
+    private double averageRate;
 
 
-    public static PlaceFindDto from(Place place, int spotCount) {
+    public static PlaceFindDto from(Place place, int reviewCount, double averageRate) {
         return new PlaceFindDto(
                 place.getId(),
                 place.getName(),
-                place.getAddress(),
-                place.getImageUrl(),
-                spotCount
+                place.getImageFile().getFileUrl(),
+                reviewCount,
+                averageRate
         );
     }
 

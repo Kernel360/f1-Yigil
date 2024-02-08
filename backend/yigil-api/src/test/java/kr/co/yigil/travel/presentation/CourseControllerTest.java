@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -98,19 +97,24 @@ public class CourseControllerTest {
             .thenReturn(new CourseUpdateResponse());
 
         String jsonContent = "{"
-            + "\"title\":\"Updated Title\","
-            + "\"representativeSpotOrder\":2,"
-            + "\"spotIds\":[4,5,6],"
-            + "\"removedSpotIds\":[7,8,9],"
-            + "\"addedSpotIds\":[10,11,12],"
-            + "\"lineStringJson\":\"{\\\"type\\\": \\\"LineString\\\", \\\"coordinates\\\": [[5, 6], [7, 8]]}\""
-            + "}";
+                + "\"title\":\"Updated Title\","
+                + "\"description\":\"updated Description\","
+                + "\"rate\":4.5,"
+                + "\"isPrivate\":false,"
+                + "\"representativeSpotOrder\":2,"
+                + "\"spotIds\":[4,5,6],"
+                + "\"removedSpotIds\":[7,8,9],"
+                + "\"addedSpotIds\":[10,11,12],"
+                + "\"lineStringJson\":\"{\\\"type\\\": \\\"LineString\\\", \\\"coordinates\\\": [[5, 6], [7, 8]]}\""
+                + "}";
 
-        mockMvc.perform(put("/api/v1/courses/1")
+
+        mockMvc.perform(
+                post("/api/v1/courses/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonContent)
-                .sessionAttr("memberId", 1L))
-            .andExpect(status().isOk());
+                .sessionAttr("memberId", 1L)
+                ).andExpect(status().isOk());
     }
 
     @DisplayName("Course 삭제 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
