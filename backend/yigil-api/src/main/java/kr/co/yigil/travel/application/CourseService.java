@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class CourseService {
+
     private final CourseRepository courseRepository;
     private final SpotRepository spotRepository;
     private final MemberService memberService;
@@ -46,14 +47,16 @@ public class CourseService {
 
 
     @Transactional
-    public CourseCreateResponse createCourse(Long memberId, CourseCreateRequest courseCreateRequest) {
+    public CourseCreateResponse createCourse(Long memberId,
+            CourseCreateRequest courseCreateRequest) {
         Member member = memberService.findMemberById(memberId);
         List<Long> spotIdList = courseCreateRequest.getSpotIds();
         List<Spot> spots = spotService.getSpotListFromSpotIds(spotIdList);
 
         AttachFile attachFile = getAttachFile(courseCreateRequest.getMapStaticImageFile());
 
-        Course course = CourseCreateRequest.toEntity(member, courseCreateRequest, spots, attachFile);
+        Course course = CourseCreateRequest.toEntity(member, courseCreateRequest, spots,
+                attachFile);
         courseRepository.save(course);
 
         course.getSpots().forEach(spot -> spot.setInCourse(true));
@@ -64,13 +67,13 @@ public class CourseService {
     @Transactional(readOnly = true)
     public CourseInfoResponse getCourseInfo(Long courseId) {
         Course course = findCourseById(courseId);
-        List<Spot> spots = course.getSpots();
-        int favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
-        int commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
+        List<Spot> spots = course.getSpots().stream().filter(spot -> !spot.isPrivate()).toList();
 
+        int favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
+        int commentCount = commentRedisIntegrityService.ensureCommentCount(course)
+                .getCommentCount();
         return CourseInfoResponse.from(course, spots, favorCount, commentCount);
     }
-
     public Slice<CourseFindDto> getCourseList(Long placeId, Pageable pageable) {
         Slice<Course> courses = courseRepository.findBySpotPlaceId(placeId, pageable);
         List<CourseFindDto> courseFindDtoList = courses.stream()
@@ -80,23 +83,25 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseUpdateResponse updateCourse(Long courseId, Long memberId, CourseUpdateRequest courseUpdateRequest) {
+    public CourseUpdateResponse updateCourse(Long courseId, Long memberId,
+            CourseUpdateRequest courseUpdateRequest) {
         Member member = memberService.findMemberById(memberId);
         List<Long> spotIdList = courseUpdateRequest.getSpotIds();
         List<Spot> spots = spotRepository.findAllById(spotIdList);
 
-        for(Long id: courseUpdateRequest.getAddedSpotIds()){
+        for (Long id : courseUpdateRequest.getAddedSpotIds()) {
             Spot spot = spotService.findSpotById(id);
             spot.setInCourse(true);
         }
 
-        for(Long id: courseUpdateRequest.getRemovedSpotIds()){
+        for (Long id : courseUpdateRequest.getRemovedSpotIds()) {
             Spot spot = spotService.findSpotById(id);
             spot.setInCourse(false);
         }
 
         AttachFile attachFile = getAttachFile(courseUpdateRequest.getMapStaticImageFile());
-        Course newCourse = CourseUpdateRequest.toEntity(member, courseId, courseUpdateRequest, spots, attachFile);
+        Course newCourse = CourseUpdateRequest.toEntity(member, courseId, courseUpdateRequest,
+                spots, attachFile);
         courseRepository.save(newCourse);
         return new CourseUpdateResponse("경로 수정 성공");
     }
@@ -112,13 +117,14 @@ public class CourseService {
     @NotNull
     private CourseFindDto getCourseFindDto(Course course) {
         Integer favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
-        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course).getCommentCount();
+        Integer commentCount = commentRedisIntegrityService.ensureCommentCount(course)
+                .getCommentCount();
         return CourseFindDto.from(course, favorCount, commentCount);
     }
 
     private Course findCourseById(Long courseId) {
         return courseRepository.findById(courseId)
-            .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
+                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
     }
 
     private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {

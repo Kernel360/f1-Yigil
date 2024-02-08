@@ -13,7 +13,6 @@ import java.util.Optional;
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.comment.application.CommentService;
 import kr.co.yigil.comment.domain.CommentCount;
-import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.favor.domain.FavorCount;
 import kr.co.yigil.file.AttachFile;
@@ -25,6 +24,7 @@ import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.Course;
 import kr.co.yigil.travel.Spot;
+import kr.co.yigil.travel.Travel;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.dto.response.CourseCreateResponse;
@@ -198,9 +198,11 @@ class CourseServiceTest {
             new ArrayList<>(),
             0,
             new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1", 1L));
-        when(courseRepository.findById(anyLong())).thenReturn(Optional.of(mockCourse));
 
-        when(commentService.getCommentList(anyLong())).thenReturn(List.of(new CommentResponse()));
+        when(courseRepository.findById(anyLong())).thenReturn(Optional.of(mockCourse));
+        when(favorRedisIntegrityService.ensureFavorCounts(any(Travel.class))).thenReturn(new FavorCount(courseId, 0));
+        when(commentRedisIntegrityService.ensureCommentCount(any(Travel.class))).thenReturn(new CommentCount(courseId, 1));
+
         // Act
         CourseInfoResponse courseInfoResponse = courseService.getCourseInfo(courseId);
 

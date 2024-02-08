@@ -84,4 +84,8 @@ public class Travel {
     protected Travel(Long id, Member member, String title, String description, double rate) {
         this(id, member, title, description, rate, false);
     }
+
+    public void togglePrivate(){
+        this.isPrivate = !isPrivate;
+    }
 }

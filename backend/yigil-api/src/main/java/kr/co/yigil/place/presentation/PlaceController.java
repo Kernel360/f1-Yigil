@@ -39,11 +39,10 @@ public class PlaceController {
     public ResponseEntity<Slice<PlaceFindDto>> getPlaceList(
             @PageableDefault(size = 5) Pageable pageable,
             @RequestParam(name = "sortBy", defaultValue = "name", required = false) String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder,
-            @RequestParam(name = "keyword", required = false) String keyword // todo : querydsl 적용
+            @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Slice<PlaceFindDto> placeListResponse = placeService.getPlaceList(pageRequest, keyword);
+        Slice<PlaceFindDto> placeListResponse = placeService.getPlaceList(pageRequest);
         return ResponseEntity.ok().body(placeListResponse);
     }
 
