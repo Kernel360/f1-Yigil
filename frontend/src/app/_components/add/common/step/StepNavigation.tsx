@@ -56,8 +56,19 @@ export default function StepNavigation({
   function handleConfirm() {
     console.log(state);
     console.log('Confirm!');
-
+    /**경택 추가 */
+    addSpot();
     setIsOpen(false);
+    next();
+  }
+
+  /** 경택 추가:spot 추가하는 함수 */
+  async function addSpot() {
+    const res = await fetch('http://localhost:3000/endpoints/api/spot', {
+      method: 'POST',
+      body: JSON.stringify(state),
+    });
+    console.log(res);
   }
 
   if (label === '완료') {
@@ -97,7 +108,7 @@ export default function StepNavigation({
           )}
         </button>
       ) : (
-        <button className="w-12 p-2 text-gray-500" onClick={next}>
+        <button className="w-12 p-2 text-gray-500" onClick={() => next()}>
           다음
         </button>
       )}

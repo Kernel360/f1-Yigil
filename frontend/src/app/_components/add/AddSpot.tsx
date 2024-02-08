@@ -21,6 +21,7 @@ import PostRating from './common/PostRating';
 import PostReview from './common/PostReview';
 import AddSpotMap from './common/AddSpotMap';
 import MapComponent from '../naver-map/MapComponent';
+import AddConfirmContent from './common/AddConfirmContent';
 
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
@@ -129,6 +130,7 @@ export default function AddSpot() {
           </>
         )}
         {stepLabel === '장소 확정' && <SpotCheck />}
+        {stepLabel === '완료' && <AddConfirmContent />}
       </AddSpotContext.Provider>
     </section>
   );
