@@ -21,12 +21,16 @@ public class LoginController {
 
     private final LoginStrategyManager loginStrategyManager;
 
+    //
     @PostMapping("/api/v1/login")
     public ResponseEntity<LoginResponse> login(
+
+       //
             @RequestHeader(value = "Authorization") String authorizationHeader,
             @RequestBody LoginRequest loginRequest,
             HttpSession session
     ) {
+        //
         String accessToken = extractToken(authorizationHeader);
         LoginStrategy strategy = loginStrategyManager.getLoginStrategy(loginRequest.getProvider());
         LoginResponse response = strategy.login(loginRequest, accessToken, session);
@@ -38,6 +42,8 @@ public class LoginController {
             HttpSession session
     ) {
         session.invalidate();
+
+        //
         return ResponseEntity.ok(new LoginResponse("로그아웃 성공"));
     }
 }

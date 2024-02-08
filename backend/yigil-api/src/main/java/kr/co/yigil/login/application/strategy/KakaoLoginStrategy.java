@@ -40,6 +40,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
     @Setter
     private RestTemplate restTemplate = new RestTemplate();
 
+//
     @Override
     public LoginResponse login(LoginRequest request, String accessToken, HttpSession session) {
 
@@ -55,6 +56,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
         return new LoginResponse("로그인 성공");
     }
 
+      //
     @Override
     public String getProviderName() {
         return PROVIDER_NAME;

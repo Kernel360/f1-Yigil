@@ -46,6 +46,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warn(e.getMessage(), e);
 
         HttpSession session = request.getSession(false);
+
+        //
         if (session != null) {
             session.invalidate();
         }
