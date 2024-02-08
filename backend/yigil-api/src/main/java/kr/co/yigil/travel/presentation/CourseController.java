@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.presentation;
 
-import io.micrometer.common.util.StringUtils;
 import java.net.URI;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
@@ -38,12 +37,15 @@ public class CourseController {
 
     @GetMapping("/places/{place_id}")
     public ResponseEntity<Slice<CourseFindDto>> getCourseList(
-        @PathVariable("place_id") Long placeId,
-        @PageableDefault(size = 5) Pageable pageable,
-        @RequestParam(name = "sort", required = false) String sort
+            @PathVariable("place_id") Long placeId,
+            @PageableDefault(size = 5) Pageable pageable,
+            @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
     ) {
-        PageRequest pageableRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), StringUtils.isNotBlank(sort) ? Sort.by(sort) : Sort.unsorted());
-        Slice<CourseFindDto> courseListResponse = courseService.getCourseList(placeId, pageableRequest);
+        PageRequest pageRequest = PageRequest.of(
+                pageable.getPageNumber(), pageable.getPageSize(),
+                Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        Slice<CourseFindDto> courseListResponse = courseService.getCourseList(placeId, pageRequest);
         return ResponseEntity.ok().body(courseListResponse);
     }
 

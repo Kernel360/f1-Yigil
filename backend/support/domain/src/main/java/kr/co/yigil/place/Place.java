@@ -35,27 +35,29 @@ public class Place {
     private Point location;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "attach_file_id")
+    @JoinColumn(name = "map_static_image_file_id")
     private AttachFile mapStaticImageFile;
 
-    private String imageUrl;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "image_file_id")
+    private AttachFile imageFile;
 
     public Place(final String name, final String address,
-        final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
+        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
         this.name = name;
         this.address = address;
         this.location = location;
-        this.imageUrl = imageUrl;
+        this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
     }
 
     public Place(Long id, final String name, final String address,
-        final Point location, final String imageUrl, final AttachFile mapStaticImageFile) {
+        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.location = location;
-        this.imageUrl = imageUrl;
+        this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
     }
 }

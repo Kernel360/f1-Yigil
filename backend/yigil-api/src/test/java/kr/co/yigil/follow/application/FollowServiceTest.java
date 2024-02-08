@@ -53,7 +53,7 @@ public class FollowServiceTest {
     @Test
     void whenFollow_ShouldSaveFollowAndSendNotification() {
         Long followerId = 1L;
-        Long followingId = 1L;
+        Long followingId = 2L;
         Member follower = new Member(followerId, "email", "12345678", "follower", "image.jpg", SocialLoginType.KAKAO);
         Member following = new Member(followingId, "email2", "87654321", "following", "profile.png", SocialLoginType.KAKAO);
         FollowCount followerCount = new FollowCount(followerId, 1, 0);
