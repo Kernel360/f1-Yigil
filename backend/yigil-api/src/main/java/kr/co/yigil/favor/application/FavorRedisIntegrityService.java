@@ -22,6 +22,7 @@ public class FavorRedisIntegrityService {
         if (existingFavorCount.isPresent()) {
             return existingFavorCount.get();
         } else {
+            // else가 필요없지 않을까요??
             FavorCount favorCount = getFavorCount(travel);
             favorCountRepository.save(favorCount);
             return favorCount;

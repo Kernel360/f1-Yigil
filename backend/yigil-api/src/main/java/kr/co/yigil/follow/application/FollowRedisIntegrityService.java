@@ -23,6 +23,8 @@ public class FollowRedisIntegrityService {
         if (existingFollowCount.isPresent()) {
             return existingFollowCount.get();
         } else {
+
+            // else는 없어도 될것 같습니다!
             FollowCount followCount = getFollowCount(member);
             followCountRepository.save(followCount);
             return followCount;

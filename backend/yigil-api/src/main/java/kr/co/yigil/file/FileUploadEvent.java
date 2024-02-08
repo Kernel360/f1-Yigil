@@ -1,5 +1,6 @@
 package kr.co.yigil.file;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.FileException;
@@ -33,10 +34,17 @@ public class FileUploadEvent extends ApplicationEvent {
     }
 
     private FileType determineFileType(MultipartFile file) {
+        /**
+         * == null 도 좋지만 Objects.isNull(file.getContentType()) 처럼도 사용 가능하니 참고 하시면 좋을듯 합니다!
+         */
+
         if (file.getContentType() == null) {
             throw new FileException(ExceptionCode.EMPTY_FILE);
         }
 
+        /**
+         * Enum에서 해당 경로들을 관리한다면 좀더 간결하지 않을까요?
+         * */
         if (file.getContentType().startsWith("image/")) {
             return FileType.IMAGE;
         }

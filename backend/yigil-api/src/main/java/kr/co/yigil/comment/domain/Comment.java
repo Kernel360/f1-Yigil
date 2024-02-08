@@ -52,6 +52,12 @@ public class Comment {
 
     boolean isDeleted;
 
+    /**
+     * 생성자가 의미하는 내용을 한번에 보기 어렵습니다.
+     * this를 통해 1차적으로 깔끔하게 할 수 있을것 같습니다.
+     *
+     * 정적 펙토리 메서드도 한번 확인해보시면 좋을것 같습니다.
+     */
     public Comment(String content, Member member, Travel travel) {
         this.content = content;
         this.member = member;
@@ -86,6 +92,7 @@ public class Comment {
         this.modifiedAt = LocalDateTime.now();
     }
 
+    // ❌ 사용하지 않는 코드는 제거하면 좋을것 같습니다!
     public void updateComment(String content) {
         this.content = content;
         this.modifiedAt = LocalDateTime.now();

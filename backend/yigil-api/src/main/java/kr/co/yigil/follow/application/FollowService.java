@@ -27,11 +27,21 @@ public class FollowService {
 
     @Transactional
     public FollowResponse follow(final Long followerId, final Long followingId) {
+
+        /**
+         * 유효성 검사 역할을 하는 클래스를 추가하여 Exception으로 처리하면 어떨까요?
+         * 아래는 예시입니다.
+         *
+         *  // 내부에서 Exception 발생
+         *  FollowValidation.selfFollowValidate(followerId, followingId);
+         *  FollowValidation.alreadyFollowValidate(followerId, follwingId);
+         * */
         if (followerId.equals(followingId)) {
             return new FollowResponse("나 자신을 follow할 수 없습니다.");
         } else if (followRepository.existsByFollowerIdAndFollowingId(followerId, followingId)) {
             return new FollowResponse("이미 follow 처리 되어 있습니다.");
         }
+
         Member follower = getMemberById(followerId);
         Member following = getMemberById(followingId);
 
@@ -42,8 +52,13 @@ public class FollowService {
         incrementFollowersCount(followingId);
         incrementFollowingsCount(followerId);
 
+        /**
+         * sendFollowNotification 이 대부분 이벤트 호출용으로 발송된다면
+         * TransactionalEventListener을 사용하여 비동기로 처리하는것도 좋아보입니다.
+         * */
         sendFollowNotification(follower, following);
 
+        /** 이전 코멘트와 동일합니다. 분리! */
         return new FollowResponse("팔로우가 완료되었습니다.");
     }
 
@@ -52,8 +67,15 @@ public class FollowService {
         Member unfollower = getMemberById(followerId);
         Member unfollowing = getMemberById(followingId);
 
+        /**
+         * 현재 follwerId와 followingId가 팔로우 하고있는 상태인지 확인이 필요해 보입니다!
+         *
+         * 눈으로 밖에 확인하지 못했지만 서로 팔로우중이지 않은 값을 넣어준다면 해당 로직이 동작할것 같습니다.
+         * */
+
         followRedisIntegrityService.ensureFollowCounts(unfollower);
         followRedisIntegrityService.ensureFollowCounts(unfollowing);
+
 
         followRepository.deleteByFollowerAndFollowing(unfollower, unfollowing);
         decrementFollowersCount(followingId);

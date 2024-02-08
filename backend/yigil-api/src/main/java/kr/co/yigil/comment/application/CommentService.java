@@ -30,6 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+
+    /**
+     * Service끼리 참조하게 되는경우 순환참조가 발생할듯 합니다 Service에서 같은 Layer의 Service를 참조하는것은 지양하는편이 좋습니다.
+     * Data를 전달하는 Dataprovider와 같은 중간 Layer를 추가해보시는건 어떠세요 ?
+     */
     private final MemberService memberService;
     private final NotificationService notificationService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
@@ -41,6 +46,12 @@ public class CommentService {
         Travel travel = travelService.findTravelById(travelId);
 
         Comment parentComment = null;
+
+        /**
+         * 유효성 체크의 역할을 하는 클래스를 만들어 관리하면 어떨까요 ??
+         * ex) CommentValidate.createValidate(commentCreateRequest) 내부에 검증 구현  or
+         * CommentValidate.createValidate(commentCreateRequest.getParentId(), commentCreateRequest.getNotifiedMemberId()) 와 같은식입니다.
+         */
         if (commentCreateRequest.getParentId() != null && commentCreateRequest.getNotifiedMemberId() != null) {
             parentComment = findCommentById(commentCreateRequest.getParentId());
             Member notifiedMember = memberService.findMemberById(commentCreateRequest.getNotifiedMemberId());
@@ -51,9 +62,15 @@ public class CommentService {
         incrementCommentCount(travel);
         commentRepository.save(newComment);
 
+        /**
+         *  성공해 대한 내용을 String을 통해 반환해야할 필요가 있을까요??
+         *  응답 코드를 통해 전달해주시는것은 어떠실까요??
+         *  ex) {status:200 , message:"comment create"} 반환하더라도 Front에서 200에 대한 메시지를 정리하는것은 어떨까요?
+         */
         return new CommentCreateResponse("댓글 생성 성공");
     }
 
+    // ❌ 사용하지 않는 코드는 삭제!
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentList(Long travelId) {
         List<CommentResponse> commentResponses = new ArrayList<>();
@@ -99,6 +116,11 @@ public class CommentService {
         return new CommentDeleteResponse("댓글 삭제 성공");
     }
 
+
+    /**
+     * private 으로 구현된 메서드에 대해서 Service <==> Repository간 데이터만 전달하는 class를 만들어서 처리하면 어떨까요?
+     * private 메서드가 Service 코드에 있다면 테스트 코드 작성시 해당 메서드만 따로 테스트하기위해서는 복잡하지 않을까 의견드립니다.
+     */
     private Comment findCommentById(Long parentId) {
         return commentRepository.findById(parentId)
             .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COMMENT_ID));

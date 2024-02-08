@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * /api/v1 공통 분리 고려
+ */
 @RestController
 @RequiredArgsConstructor
 public class FollowController {

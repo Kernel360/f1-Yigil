@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Resource 를 전달하는 API 주소들이 /api/v1으로 시작한다면 abstractController를 하나 만들어서 상속받아 사용하는 구조도 보시면 좋을듯합니다.
 @RestController
 @RequestMapping("/api/v1/comments")
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    // 언더스코어보다는 카멜케이스로 통일하는것이 어떨까요?
     @PostMapping("/travels/{travel_id}")
     @MemberOnly
     public ResponseEntity<CommentCreateResponse> createComment(

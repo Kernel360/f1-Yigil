@@ -3,6 +3,7 @@ package kr.co.yigil.follow.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// ValueObject용과 Request, Response는  따로 분리되어야 할듯합니다.
 @Data
 @NoArgsConstructor
 public class FollowCountDto {

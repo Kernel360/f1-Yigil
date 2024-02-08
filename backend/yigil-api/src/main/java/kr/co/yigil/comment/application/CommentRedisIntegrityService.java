@@ -22,6 +22,8 @@ public class CommentRedisIntegrityService {
         if (existingCommentCount.isPresent()) {
             return existingCommentCount.get();
         } else {
+
+            // else 문이 필요하지 않아도 될것같습니다 ㅎ
             CommentCount commentCount = new CommentCount(
                 travelId,
                 commentRepository.countNonDeletedCommentsByTravelId(travelId)

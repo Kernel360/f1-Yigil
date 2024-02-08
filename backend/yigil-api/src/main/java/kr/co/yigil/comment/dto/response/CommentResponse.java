@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentResponse {
+
+    /**
+     * 아래와 같이 Constants로 관리해보는것도 좋을것 같습니다.
+     * private static final String DELETED_COMMENT = "삭제된 댓글입니다.";
+     * */
     private Long id;
     private String content;
 
@@ -38,6 +43,7 @@ public class CommentResponse {
     public static CommentResponse from(Comment comment) {
         String content;
 
+        // 메세지는 Constants로 관리하면 어떨까요?
         if(comment.isDeleted()){
             content = "삭제된 댓글입니다.";
         }else{

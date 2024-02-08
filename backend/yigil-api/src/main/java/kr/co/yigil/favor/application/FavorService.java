@@ -22,6 +22,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FavorService {
 
+    /**
+     * Service와 Repository 사이에 중간역할을 하는 클래스가 있으면 어떨까요?
+     * 많은 사례는 아니지만 JPA를 사용하다 중간에   myBatis와 같은것으로 변경될때 Service코드를 건드리지 않고 할 수 있는 방법이
+     * 없는지 보면 좋을듯합니다.
+     */
+
     private final MemberRepository memberRepository;
     private final FavorRepository favorRepository;
     private final FavorCountRepository favorCountRepository;
@@ -29,6 +35,11 @@ public class FavorService {
     private final FavorRedisIntegrityService favorRedisIntegrityService;
     private final TravelService travelService;
 
+    /**
+     *  getMemberById를 내부 private 메서드가 아닌 Dataprovider 데이터 제공자와 같이 중간에 넘겨준다면, 어떨까요??
+     *
+     *  파라미터명을 보면 postId와 travleId가 같다면 하나로 통일하는것이 좋을것 같습니다.
+     */
     @Transactional
     public AddFavorResponse addFavor(final Long memberId, final Long travelId) {
         Member member = getMemberById(memberId);
@@ -36,6 +47,10 @@ public class FavorService {
         favorRepository.save(new Favor(member, travel));
         incrementFavorCount(travel);
         sendFavorNotification(travel, member);
+
+        /**
+         * 메세지를 관리하는 클래스가 있으면 어떨까요?
+         * */
         return new AddFavorResponse("좋아요가 완료되었습니다.");
     }
 

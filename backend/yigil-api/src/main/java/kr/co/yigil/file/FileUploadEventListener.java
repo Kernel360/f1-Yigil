@@ -29,9 +29,11 @@ public class FileUploadEventListener {
         String fileName = generateUniqueFileName(file.getOriginalFilename());
         String s3Path = getS3Path(fileType, fileName);
 
+        // 각자가 하는 역할을 메서드로 구분하면 좋을것 같습니다.
         AttachFile attachFile = new AttachFile(fileType, s3Path, file.getOriginalFilename(),
                 file.getSize());
 
+        // 각자가 하는 역할을 메서드로 구분하면 좋을것 같습니다.
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
         metadata.setContentType(file.getContentType());
@@ -43,6 +45,10 @@ public class FileUploadEventListener {
     }
 
     private String getS3Path(FileType fileType, String fileName) {
+        /**
+         * 해당 경로들은 FileType.IMAGE, FileType.VIDEO 의 변수로 넣어주는것은 어떨까요??
+         */
+
         String url = fileType == FileType.IMAGE ? "images/" : "videos/";
         return url + fileName;
     }

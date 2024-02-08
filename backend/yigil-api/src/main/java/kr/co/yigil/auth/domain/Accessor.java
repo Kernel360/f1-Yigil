@@ -25,6 +25,13 @@ public class Accessor {
     }
 
     public boolean isMember() {
+        /**
+         * Authority가 MEMBER인지 확인하는 로직을 Accessor만 가지고 있다면 괜찮은것일까요??
+         * Authority가 isMember메서드를 가지고 있다면 어떨까요 ??
+         * 해당 Enum 값만 알고 있다면 다른곳에서도 호출이 가능해보입니다.
+         *
+         * ex) 코드상 authority가 필수값이 확실하다면 - return this.authority.isMember();
+         */
         return MEMBER.equals(authority);
     }
 
