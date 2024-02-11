@@ -128,6 +128,7 @@ public class CourseService {
     }
 
     private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
+        //
         CompletableFuture<AttachFile> fileCompletableFuture = new CompletableFuture<>();
         FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile,
                 fileCompletableFuture::complete);
