@@ -27,11 +27,14 @@ public class PlaceService {
     private final SpotRedisIntegrityService spotRedisIntegrityService;
     private final PlaceRateRedisIntegrityService placeRateRedisIntegrityService;
 
+
     @Transactional(readOnly = true)
     public PlaceInfoResponse getPlaceInfo(Long placeId) {
         Place place = getPlaceById(placeId);
         double totalRate = placeRateRedisIntegrityService.ensurePlaceRate(placeId)
                 .getTotalRate();
+
+        //
         int spotCount = spotRedisIntegrityService.ensureSpotCounts(placeId).getSpotCount();
         //
         double averageRate = totalRate / spotCount;
