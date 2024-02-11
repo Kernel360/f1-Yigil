@@ -38,6 +38,8 @@ public class EmailSendEventListener {
 
     private String setContext(EmailSendEvent event) {
         Context context = new Context();
+
+        //
         if(event.getType() == EmailEventType.ADMIN_SIGN_UP_ACCEPT)
             context.setVariable("password", event.getKey());
 
