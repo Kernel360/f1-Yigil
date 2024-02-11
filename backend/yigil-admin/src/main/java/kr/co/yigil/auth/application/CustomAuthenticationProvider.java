@@ -30,6 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
        String username = authentication.getName();
        String password = authentication.getCredentials().toString();
 
+       //
        Admin admin = adminRepository.findByEmail(username)
                .orElseThrow(() -> new AuthException(ADMIN_NOT_FOUND));
 
