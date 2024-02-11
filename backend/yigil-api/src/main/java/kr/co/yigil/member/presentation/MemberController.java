@@ -34,6 +34,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    //
     @GetMapping("/api/v1/members")
     @MemberOnly
     public ResponseEntity<MemberInfoResponse> getMyInfo(@Auth final Accessor accessor) {
