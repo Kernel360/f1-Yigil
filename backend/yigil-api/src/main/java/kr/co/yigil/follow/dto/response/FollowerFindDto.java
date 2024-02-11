@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//
 public class FollowerFindDto {
     private String memberImageUrl;
     private String memberNickName;
