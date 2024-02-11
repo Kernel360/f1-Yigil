@@ -82,6 +82,7 @@ public class CourseService {
         return new SliceImpl<>(courseFindDtoList, pageable, courses.hasNext());
     }
 
+    //
     @Transactional
     public CourseUpdateResponse updateCourse(Long courseId, Long memberId,
             CourseUpdateRequest courseUpdateRequest) {
