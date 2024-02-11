@@ -29,6 +29,7 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
+    //
     @GetMapping("/{place_id}")
     public ResponseEntity<PlaceInfoResponse> getPlaceInfo(
             @PathVariable("place_id") Long placeId
