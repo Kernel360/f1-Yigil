@@ -114,6 +114,7 @@ public class SpotService {
 
     private Place getOrCreatePlace(String placeName, String placeAddress,
             String placePointJson, AttachFile placeImageFile, AttachFile mapStaticImageFile) {
+        //
         return placeService.getOrCreatePlace(
                 placeName,
                 placeAddress,

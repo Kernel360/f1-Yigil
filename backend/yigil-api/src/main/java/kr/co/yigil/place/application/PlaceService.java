@@ -45,6 +45,8 @@ public class PlaceService {
     public RateResponse getMemberRate(Long placeId, Long memberId) {
         return spotRepository.findByPlaceIdAndMemberId(placeId, memberId)
                 .map(spot -> new RateResponse(spot.getRate()))
+
+           //
                 .orElse(new RateResponse(null));
     }
 
