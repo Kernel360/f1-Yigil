@@ -67,6 +67,7 @@ public class GoogleLoginStrategy implements LoginStrategy{
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
         try {
+            //
             ResponseEntity<GoogleTokenInfoResponse> response = restTemplate.exchange(
                     "https://oauth2.googleapis.com/tokeninfo?access_token={accessToken}",
                     HttpMethod.GET,
