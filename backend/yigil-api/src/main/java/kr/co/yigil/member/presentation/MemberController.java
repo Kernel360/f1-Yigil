@@ -80,6 +80,8 @@ public class MemberController {
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ){
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+
+        //
         final Slice<FollowingFindDto> follwerListResponse = memberService.getFollowingList(accessor.getMemberId(), pageRequest);
         return ResponseEntity.ok().body(follwerListResponse);
     }
