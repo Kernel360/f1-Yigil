@@ -34,7 +34,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    //
     @GetMapping("/api/v1/members")
     @MemberOnly
     public ResponseEntity<MemberInfoResponse> getMyInfo(@Auth final Accessor accessor) {
@@ -67,6 +66,7 @@ public class MemberController {
         return ResponseEntity.ok().body(spotListResponse);
     }
 
+    //
     @DeleteMapping("/api/v1/members/")
 
     @GetMapping("/api/v1/members/followers")
