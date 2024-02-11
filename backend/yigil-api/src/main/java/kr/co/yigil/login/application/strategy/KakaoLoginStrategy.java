@@ -74,6 +74,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
+            //
             ResponseEntity<KakaoTokenInfoResponse> response = restTemplate.exchange(
                     KAKAO_TOKEN_INFO_URL, HttpMethod.GET, entity, KakaoTokenInfoResponse.class
             );
