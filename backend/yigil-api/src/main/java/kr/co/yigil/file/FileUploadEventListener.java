@@ -22,6 +22,7 @@ public class FileUploadEventListener {
     private final String bucketName = "cdn.yigil.co.kr";
 
     @Async
+    //
     @EventListener
     public Future<AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
         MultipartFile file = event.getFile();
