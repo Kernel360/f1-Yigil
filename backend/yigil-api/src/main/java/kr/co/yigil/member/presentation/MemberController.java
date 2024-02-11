@@ -73,6 +73,8 @@ public class MemberController {
     @MemberOnly
     public ResponseEntity<Slice<FollowingFindDto>> getMyFollowerInfo(
         @Auth final Accessor accessor,
+
+        //
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
