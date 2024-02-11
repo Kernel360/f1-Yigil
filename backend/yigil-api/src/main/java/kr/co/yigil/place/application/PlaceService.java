@@ -33,6 +33,7 @@ public class PlaceService {
         double totalRate = placeRateRedisIntegrityService.ensurePlaceRate(placeId)
                 .getTotalRate();
         int spotCount = spotRedisIntegrityService.ensureSpotCounts(placeId).getSpotCount();
+        //
         double averageRate = totalRate / spotCount;
         return PlaceInfoResponse.from(place, spotCount, averageRate);
     }
