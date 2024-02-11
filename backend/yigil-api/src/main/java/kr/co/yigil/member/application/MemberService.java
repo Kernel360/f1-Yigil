@@ -48,6 +48,7 @@ public class MemberService {
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
 
+    //
     public MemberInfoResponse getMemberInfo(final Long memberId) {
         Member member = findMemberById(memberId);
         FollowCount followCount = getMemberFollowCount(member);
