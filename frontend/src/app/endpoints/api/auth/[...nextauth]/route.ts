@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import KaKaoProvider from 'next-auth/providers/kakao';
+import { cookies } from 'next/headers';
 
 const handler = NextAuth({
   providers: [
@@ -29,8 +30,14 @@ const handler = NextAuth({
         },
         body: postUser,
       });
-      if (res.ok) return true;
-      else return '/';
+      if (res.ok) {
+        const [key, value] = res.headers
+          .getSetCookie()[0]
+          .split('; ')[0]
+          .split('=');
+        cookies().set(key, value);
+        return true;
+      } else return '/';
     },
 
     // async jwt({ token, user }) {
