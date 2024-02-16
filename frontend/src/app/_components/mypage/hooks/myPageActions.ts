@@ -10,13 +10,11 @@ export const myPageFollowingRequest = httpRequest('member/followings');
 
 const cookie = cookies().get('SESSION')?.value;
 export const authenticateUser = async () => {
-  const res = await fetch('https://yigil.co.kr/api/v1/members', {
-    headers: {
-      'Content-Type': 'application/json',
-      Cookie: `SESSION=${cookie}`,
-    },
-  });
-  return res.json();
+  const res = await httpRequest('members')()()({
+    'Content-Type': 'application/json',
+    Cookie: `SESSION=${cookie}`,
+  })();
+  return res;
 };
 
 export const getMyPageSpots = async (
