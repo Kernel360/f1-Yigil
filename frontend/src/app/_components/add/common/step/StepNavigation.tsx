@@ -23,12 +23,6 @@ function dataUrlToBlob(dataURI: string) {
   return new Blob([ab], { type: mimeString });
 }
 
-/** 배포용 추가 */
-const url =
-  process.env.NODE_ENV !== 'production'
-    ? 'http://localhost:3000/endpoints/api/spot'
-    : 'https://yigil.co.kr/endpoints/api/spot';
-
 /**
  * `next` - 상위 컴포넌트에서 `dispatch({ type: 'next' })`를 감싼 이벤트 핸들러
  *
@@ -59,22 +53,18 @@ export default function StepNavigation({
     setIsOpen(false);
   }
 
+  /**
+   * @todo dataUrlToBlob를 이용해 Image를 File로 변환하여 전달
+   * @todo Spot 추가하는 server action 필요
+   */
   function handleConfirm() {
     console.log(state);
     console.log('Confirm!');
-    /**경택 추가 */
-    addSpot();
+
+    // server action 위치
+
     setIsOpen(false);
     next();
-  }
-
-  /** 경택 추가:spot 추가하는 함수 */
-  async function addSpot() {
-    const res = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(state),
-    });
-    console.log(res);
   }
 
   if (label === '완료') {

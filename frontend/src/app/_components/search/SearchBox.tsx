@@ -1,12 +1,13 @@
 'use client';
 
-import { Dispatch, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import SearchBar from './SearchBar';
 import SearchHistory from './SearchHistory';
-
-import type { TAddSpotAction } from '../add/spot/SpotContext';
 import SearchResult from './SearchResult';
+
+import type { Dispatch } from 'react';
+import type { TAddSpotAction } from '../add/spot/SpotContext';
 
 const SEARCH_HISTORY_KEY = 'search-history';
 

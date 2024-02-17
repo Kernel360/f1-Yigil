@@ -52,6 +52,9 @@ export default function AddSpot() {
   const stepLabel = makingSpotStep.data.label;
   const inputLabel = dataFromNewStep.data.label;
 
+  /**
+   * @todo 장소 검색 server action 추가
+   */
   async function search(keyword: string) {
     if (keyword === '') {
       setSearchResults([]);

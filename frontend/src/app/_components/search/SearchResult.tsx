@@ -23,6 +23,10 @@ export default function SearchResult({
   dispatchStep: Dispatch<{ type: 'next' } | { type: 'previous' }>;
   searchResults: { name: string; roadAddress: string }[];
 }) {
+  /**
+   * @todo 좌표 얻어오는 server action 추가
+   * @todo static map url 얻어오는 server action 추가
+   */
   async function handleClick(name: string, roadAddress: string) {
     const res = await fetch(coordsUrl, {
       method: 'POST',
