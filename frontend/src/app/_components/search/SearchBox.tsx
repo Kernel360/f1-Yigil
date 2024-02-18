@@ -6,8 +6,7 @@ import SearchBar from './SearchBar';
 import SearchHistory from './SearchHistory';
 import SearchResult from './SearchResult';
 
-import type { Dispatch } from 'react';
-import type { TAddSpotAction } from '../add/spot/SpotContext';
+import type { Dispatch, SetStateAction } from 'react';
 
 const SEARCH_HISTORY_KEY = 'search-history';
 
@@ -21,17 +20,25 @@ function parseSearchHistory(historyStr: string | null) {
 
 export default function SearchBox({
   showHistory,
-  dispatchSpot,
-  dispatchStep,
   searchResults,
   search,
+  setCurrentFoundPlace,
 }: {
   showHistory?: boolean;
-  dispatchSpot: Dispatch<TAddSpotAction>;
-  dispatchStep: Dispatch<{ type: 'next' } | { type: 'previous' }>;
   searchResults: { name: string; roadAddress: string }[];
   search: (keyword: string) => Promise<void>;
+  setCurrentFoundPlace: Dispatch<
+    SetStateAction<
+      | {
+          name: string;
+          roadAddress: string;
+          coords: { lat: number; lng: number };
+        }
+      | undefined
+    >
+  >;
 }) {
+  const [showResult, setShowResult] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       return parseSearchHistory(localStorage.getItem(SEARCH_HISTORY_KEY));
@@ -61,6 +68,14 @@ export default function SearchBox({
     }
   }
 
+  function openResults() {
+    setShowResult(true);
+  }
+
+  function closeResults() {
+    setShowResult(false);
+  }
+
   const searchHistoryProps = {
     deleteHistory,
     deleteHistoryAll,
@@ -70,14 +85,20 @@ export default function SearchBox({
   // 검색어 자동완성 기능 구현될 시 conditional rendering
   return (
     <section className="flex flex-col">
-      <SearchBar search={search} addHistory={addHistory} cancellable />
+      <SearchBar
+        search={search}
+        addHistory={addHistory}
+        openResults={openResults}
+        closeResults={closeResults}
+        cancellable
+      />
       <div className="grow" aria-label="Result/History container">
         {showHistory && <SearchHistory {...searchHistoryProps} />}
-        {searchResults.length !== 0 && (
+        {showResult && (
           <SearchResult
-            dispatchSpot={dispatchSpot}
-            dispatchStep={dispatchStep}
             searchResults={searchResults}
+            closeResults={closeResults}
+            setCurrentFoundPlace={setCurrentFoundPlace}
           />
         )}
       </div>

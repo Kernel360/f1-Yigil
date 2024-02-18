@@ -1,4 +1,6 @@
 import { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { AddSpotContext } from '../../spot/SpotContext';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
@@ -37,6 +39,8 @@ export default function StepNavigation({
   next: () => void;
   previous: () => void;
 }) {
+  const { back } = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const { makingStep } = currentStep;
@@ -78,7 +82,7 @@ export default function StepNavigation({
   return (
     <nav className="mx-2 py-4 flex justify-between items-center relative">
       {value === 1 ? (
-        <button className="w-12 p-2">
+        <button className="w-12 p-2" onClick={() => back()}>
           <XMarkIcon className="w-6 h-6 stroke-gray-500" />
         </button>
       ) : (
