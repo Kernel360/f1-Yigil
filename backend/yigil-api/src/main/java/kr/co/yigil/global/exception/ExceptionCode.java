@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ExceptionCode {
-
     INVALID_REQUEST(1000, "올바르지 않은 요청입니다."),
     NOT_FOUND_MEMBER_ID(1001, "사용자를 찾을 수 없습니다."),
     NOT_FOUND_POST_ID(1011, "해당하는 post가 없습니다"),
@@ -17,12 +16,11 @@ public enum ExceptionCode {
     NOT_FOUND_PLACE_ID(1061, "해당하는 place가 없습니다"),
     NOT_FOUND_FAVOR_COUNT(1071, "해당하는 favor count가 없습니다"),
 
-    //post 2000
 
     // travel 3000
-    TRAVEL_CASTING_ERROR(3001, "Travel Casting 오류가 발생했습니다."),
 
     // spot 3100
+    ALREADY_EXIST_SPOT(3001, "이미 등록된 spot입니다."),
 
     // course 3200
 

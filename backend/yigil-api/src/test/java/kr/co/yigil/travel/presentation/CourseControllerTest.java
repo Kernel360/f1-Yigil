@@ -6,9 +6,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import kr.co.yigil.travel.application.CourseService;
 import kr.co.yigil.travel.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
@@ -24,6 +24,9 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,6 +36,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 @WebMvcTest(CourseController.class)
 public class CourseControllerTest {
+
     private MockMvc mockMvc;
 
     @InjectMocks
@@ -46,25 +50,34 @@ public class CourseControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
+    @DisplayName("Course 목록 조회 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
+    @Test
+    void GivenValidParameter_WhenGetCourseList_ThenReturnResponse200Ok() throws Exception {
+        when(courseService.getCourseList(anyLong(), any(Pageable.class))).thenReturn(
+            new SliceImpl<>(new ArrayList<>(), PageRequest.of(5, 5), true));
+
+        mockMvc.perform(get("/api/v1/courses/places/1"))
+            .andExpect(status().isOk());
+    }
 
     @DisplayName("Course 생성 요청이 왔을 때 201 응답과 response가 잘 반환되는지")
     @Test
     public void createCourseTest() throws Exception {
         when(courseService.createCourse(anyLong(), any(CourseCreateRequest.class)))
-                .thenReturn(new CourseCreateResponse());
+            .thenReturn(new CourseCreateResponse());
 
         String jsonContent = "{"
-                + "\"title\":\"Test Course\","
-                + "\"representativeSpotOrder\":1,"
-                + "\"spotIds\":[1,2,3],"
-                + "\"lineStringJson\":\"{\\\"type\\\": \\\"LineString\\\", \\\"coordinates\\\": [[1, 2], [3, 4]]}\""
-                + "}";
+            + "\"title\":\"Test Course\","
+            + "\"representativeSpotOrder\":1,"
+            + "\"spotIds\":[1,2,3],"
+            + "\"lineStringJson\":\"{\\\"type\\\": \\\"LineString\\\", \\\"coordinates\\\": [[1, 2], [3, 4]]}\""
+            + "}";
 
         mockMvc.perform(post("/api/v1/courses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonContent)
-                        .sessionAttr("memberId", 1L))
-                .andExpect(status().isCreated());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonContent)
+                .sessionAttr("memberId", 1L))
+            .andExpect(status().isCreated());
     }
 
     @DisplayName("Course 정보 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
@@ -73,18 +86,21 @@ public class CourseControllerTest {
         when(courseService.getCourseInfo(anyLong())).thenReturn(new CourseInfoResponse());
 
         mockMvc.perform(get("/api/v1/courses/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
     }
 
     @DisplayName("Course 업데이트 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
     @Test
     public void updateCourseTest() throws Exception {
         when(courseService.updateCourse(anyLong(), anyLong(), any(CourseUpdateRequest.class)))
-                .thenReturn(new CourseUpdateResponse());
+            .thenReturn(new CourseUpdateResponse());
 
         String jsonContent = "{"
                 + "\"title\":\"Updated Title\","
+                + "\"description\":\"updated Description\","
+                + "\"rate\":4.5,"
+                + "\"isPrivate\":false,"
                 + "\"representativeSpotOrder\":2,"
                 + "\"spotIds\":[4,5,6],"
                 + "\"removedSpotIds\":[7,8,9],"
@@ -92,21 +108,24 @@ public class CourseControllerTest {
                 + "\"lineStringJson\":\"{\\\"type\\\": \\\"LineString\\\", \\\"coordinates\\\": [[5, 6], [7, 8]]}\""
                 + "}";
 
-        mockMvc.perform(put("/api/v1/courses/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonContent)
-                        .sessionAttr("memberId", 1L))
-                .andExpect(status().isMovedPermanently());
+
+        mockMvc.perform(
+                post("/api/v1/courses/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonContent)
+                .sessionAttr("memberId", 1L)
+                ).andExpect(status().isOk());
     }
 
     @DisplayName("Course 삭제 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
     @Test
     public void deleteCourseTest() throws Exception {
-        when(courseService.deleteCourse(anyLong(), anyLong())).thenReturn(new CourseDeleteResponse());
+        when(courseService.deleteCourse(anyLong(), anyLong())).thenReturn(
+            new CourseDeleteResponse());
 
         mockMvc.perform(delete("/api/v1/courses/1")
-                        .sessionAttr("memberId", 1L))
-                .andExpect(status().isOk());
+                .sessionAttr("memberId", 1L))
+            .andExpect(status().isOk());
     }
 
 }

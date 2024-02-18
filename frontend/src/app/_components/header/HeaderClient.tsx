@@ -8,6 +8,7 @@ import { Session } from 'next-auth';
 import { EventFor } from '@/types/type';
 import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
+import AddIcon from '/public/icons/add.svg'; // 지울것
 
 export default function HeaderClient({ session }: { session: Session | null }) {
   const router = useRouter();
@@ -27,6 +28,10 @@ export default function HeaderClient({ session }: { session: Session | null }) {
       <div className="ml-4 cursor-pointer" onClick={() => router.push('/')}>
         <HeaderLogo className="w-[145px] h-[48px]" />
       </div>
+      {/** 지울것 */}
+      <Link href="https://docs.google.com/forms/d/e/1FAIpQLSfsbhvjAjiY_KSTTUrWNcGB8A7gXshwRW0Or7e_vvAbpGBVgg/viewform">
+        <AddIcon className="w-6 stroke-white fill-white ml-40" />
+      </Link>
 
       {session ? (
         <>

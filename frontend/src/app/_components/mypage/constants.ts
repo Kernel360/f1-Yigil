@@ -1,6 +1,6 @@
 export const myPageRoutes = [
   {
-    href: '/mypage',
+    href: '/mypage/my/spot',
     label: '마이페이지',
   },
   {
@@ -9,6 +9,32 @@ export const myPageRoutes = [
   },
 ];
 
-export const myPageTabs = ['MY', '저장'];
+export const myPageTabs = [
+  {
+    href: '/mypage/my/spot',
+    label: 'MY',
+  },
+  {
+    href: '/mypage/favorite',
+    label: '좋아요',
+  },
+];
 
-export const myPageMyPlaceTab = ['장소','일정']
+export const myPageMyPlaceTab = [
+  {
+    href: '/mypage/my/spot',
+    label: '장소',
+  },
+  {
+    href: '/mypage/my/course',
+    label: '코스',
+  },
+  {
+    href: '/mypage/my/follower',
+    label: '팔로워',
+  },
+  {
+    href: '/mypage/my/follow',
+    label: '팔로우',
+  },
+];

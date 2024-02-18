@@ -1,19 +1,27 @@
 'use client';
 import { EventFor } from '@/types/type';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 
+import type { Dispatch } from 'react';
+import { AddSpotContext, type TAddSpotAction } from '../spot/SpotContext';
+
 /** setRating 함수를 props로 받아야 함 */
-export default function PostRating() {
-  const [ratingValue, setRating] = useState(1);
+export default function PostRating({
+  dispatch,
+}: {
+  dispatch: Dispatch<TAddSpotAction>;
+}) {
+  const addSpotState = useContext(AddSpotContext);
+
   const [hoverValue, setHoverValue] = useState(1);
 
   const onMouseEnter = (e: EventFor<'div', 'onKeyDown'>, value: number) => {
-    e.key === 'Enter' && setRating(value);
+    e.key === 'Enter' && dispatch({ type: 'SET_RATING', payload: value });
   };
 
   const onClickStar = (value: number) => {
-    setRating(value);
+    dispatch({ type: 'SET_RATING', payload: value });
   };
 
   const onHoverStar = (value: number) => {
@@ -36,7 +44,7 @@ export default function PostRating() {
               className={`cursor-pointer w-12 h-12 transition-all delay-80 ${
                 i + 1 <= hoverValue
                   ? ' fill-[#FAbb15]'
-                  : i + 1 <= ratingValue
+                  : i + 1 <= addSpotState.rating
                   ? 'fill-[#FACC15]'
                   : 'fill-gray-200'
               } `}
