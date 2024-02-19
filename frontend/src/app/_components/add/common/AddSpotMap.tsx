@@ -1,6 +1,13 @@
 'use client';
-import React, { Dispatch, useRef } from 'react';
-import { Listener, NaverMap, Overlay, useNavermaps } from 'react-naver-maps';
+import React, { Dispatch, useEffect, useRef, useState } from 'react';
+import {
+  Listener,
+  Marker,
+  NaverMap,
+  Overlay,
+  useNavermaps,
+} from 'react-naver-maps';
+import { plusMarker } from '../../naver-map/plusMarker';
 
 import type { TAddSpotAction } from '../spot/SpotContext';
 
@@ -18,31 +25,65 @@ export default function AddSpotMap({
   dispatchSpot: Dispatch<TAddSpotAction>;
 }) {
   const navermaps = useNavermaps();
-  const info = useRef<any>(null);
+  const markerRef = useRef<naver.maps.Marker | null>(null);
+  const mapRef = useRef<naver.maps.Map>(null);
+  const [center, setCenter] = useState<{ lat: number; lng: number }>({
+    lat: 37.5135869,
+    lng: 127.0621708,
+  });
 
-  // 이렇게 해도 장소 선택이 바뀔 때마다 마커가 갱신되나요?
-  if (!info.current && place) {
-    info.current = new navermaps.Marker({
-      position: place.coords,
-      icon: {
-        content: `<div style=" border: 1px #60a5fa solid; border-radius: 5px; background-color: #fff;">
-        <div style="display: flex; padding: 8px 10px">
-        <div style="padding:0px 8px 0px 0px; color:#374151; font-size: 18px; font-weight: 600; text-align: center;">${place.name}</div>
-        <div style="display:flex; justify-content: center; align-items: center;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="24" height="24" rx="12" fill="#60A5FA"/>
-        <path d="M12 6.16663V17.8333" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M6.16797 12H17.8346" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        </div>
-        </div>
-        <div style="position:absolute; bottom:-5px; left:50px; width: 12px; height:12px;background-color:#fff; border-bottom: 1px #60a5fa solid; border-right:1px #60a5fa solid; transform: rotate(45deg);"></div>
-        </div>`,
-        anchor: new navermaps.Point(50, 50),
-      },
+  function onSuccessGeolocation(position: {
+    coords: { latitude: number; longitude: number };
+  }) {
+    if (!mapRef.current) return;
+
+    const location = new navermaps.LatLng(
+      position.coords.latitude,
+      position.coords.longitude,
+    );
+    mapRef.current.setCenter(location);
+    mapRef.current.setZoom(15);
+
+    setCenter({
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
     });
   }
-  const infoWindow = info.current;
+
+  function onErrorGeolocation() {
+    if (!mapRef.current) return;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        onSuccessGeolocation,
+        onErrorGeolocation,
+      );
+    } else {
+      setCenter({ lat: 37.5452605, lng: 127.0526252 });
+    }
+  }
+
+  useEffect(() => {
+    if (!mapRef.current) {
+      return;
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        onSuccessGeolocation,
+        onErrorGeolocation,
+      );
+    } else {
+      setCenter({ lat: 37.5452605, lng: 127.0526252 });
+    }
+  }, [mapRef]);
+
+  useEffect(() => {
+    if (mapRef.current && place) {
+      const coord = { ...place.coords };
+      mapRef.current.panTo(coord);
+    }
+  }, []);
 
   /**
    * @todo static map url 얻어오는 server action 추가
@@ -55,8 +96,7 @@ export default function AddSpotMap({
     roadAddress: string;
     coords: { lat: number; lng: number };
   }) {
-    const { name, roadAddress, coords } = place;
-
+    const { name: title, roadAddress, coords } = place;
     // Server Action 위치
 
     dispatchSpot({ type: 'SET_NAME', payload: name });
@@ -67,13 +107,22 @@ export default function AddSpotMap({
 
   return (
     <NaverMap
-      defaultCenter={new naver.maps.LatLng(37.5452605, 127.0526252)}
+      center={
+        place
+          ? new naver.maps.LatLng({ ...place?.coords })
+          : new naver.maps.LatLng({ ...center })
+      }
       zoom={15}
+      ref={mapRef}
     >
       {place && (
-        <Overlay element={infoWindow}>
-          <Listener type="click" listener={() => handleClick(place)} />
-        </Overlay>
+        <Marker
+          ref={markerRef}
+          title={place.name}
+          position={place.coords}
+          icon={plusMarker(place)}
+          onClick={() => console.log('clicked')}
+        ></Marker>
       )}
     </NaverMap>
   );
