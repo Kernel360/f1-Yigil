@@ -1,3 +1,4 @@
+import { httpRequest } from '@/app/_components/api/httpRequest';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import KaKaoProvider from 'next-auth/providers/kakao';
@@ -30,12 +31,19 @@ const handler = NextAuth({
         },
         body: postUser,
       });
+      console.log(res);
       if (res.ok) {
         const [key, value] = res.headers
           .getSetCookie()[0]
           .split('; ')[0]
           .split('=');
-        cookies().set(key, value);
+        cookies().set({
+          name: key,
+          value,
+          httpOnly: true,
+          sameSite: 'strict',
+          secure: true,
+        });
         return true;
       } else return '/';
     },
@@ -49,7 +57,12 @@ const handler = NextAuth({
     //   return session
     // },
   },
-
+  events: {
+    signOut: async () => {
+      const res = await httpRequest('logout')()()()();
+      if (res) cookies().set('SESSION', '');
+    },
+  },
   pages: {
     signIn: '/login',
     error: '/login_error',
