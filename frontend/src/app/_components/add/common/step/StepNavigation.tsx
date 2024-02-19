@@ -82,7 +82,7 @@ export default function StepNavigation({
   return (
     <nav className="mx-2 py-4 flex justify-between items-center relative">
       {value === 1 ? (
-        <button className="w-12 p-2" onClick={() => back()}>
+        <button className="w-12 p-2" onClick={back}>
           <XMarkIcon className="w-6 h-6 stroke-gray-500" />
         </button>
       ) : (
@@ -108,7 +108,7 @@ export default function StepNavigation({
           )}
         </button>
       ) : (
-        <button className="w-12 p-2 text-gray-500" onClick={() => next()}>
+        <button className="w-12 p-2 text-gray-500" onClick={next}>
           다음
         </button>
       )}
