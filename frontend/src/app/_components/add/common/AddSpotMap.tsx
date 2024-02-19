@@ -96,7 +96,7 @@ export default function AddSpotMap({
     roadAddress: string;
     coords: { lat: number; lng: number };
   }) {
-    const { name: title, roadAddress, coords } = place;
+    const { name, roadAddress, coords } = place;
     // Server Action 위치
 
     dispatchSpot({ type: 'SET_NAME', payload: name });
@@ -121,7 +121,7 @@ export default function AddSpotMap({
           title={place.name}
           position={place.coords}
           icon={plusMarker(place)}
-          onClick={() => console.log('clicked')}
+          onClick={() => handleClick(place)}
         ></Marker>
       )}
     </NaverMap>
