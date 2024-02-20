@@ -25,7 +25,7 @@ public class Course extends Travel {
     @Column(columnDefinition = "geometry(LineString,4326)")
     private LineString path;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.PERSIST) // todo 종민님 이거 원레 all 이었는데 제가 그냥  실험삼아 바꿔봣어요
     @JoinColumn(name = "course_id")
     @OrderColumn(name = "spot_order")
     private List<Spot> spots;

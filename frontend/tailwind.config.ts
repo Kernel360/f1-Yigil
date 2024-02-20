@@ -10,6 +10,15 @@ module.exports = {
       colors: {
         main: '#60A5FA',
       },
+      keyframes: {
+        appear: {
+          '0%': { opacity: '30', scale: '0.8' },
+          '100%': { opacity: '100', scale: '1' },
+        },
+      },
+      animation: {
+        appear: 'appear .5s ease-in-out',
+      },
     },
   },
 

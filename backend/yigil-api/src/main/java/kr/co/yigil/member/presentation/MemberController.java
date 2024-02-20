@@ -66,6 +66,8 @@ public class MemberController {
         return ResponseEntity.ok().body(spotListResponse);
     }
 
+    @DeleteMapping("/api/v1/members/")
+
     @GetMapping("/api/v1/members/followers")
     @MemberOnly
     public ResponseEntity<Slice<FollowingFindDto>> getMyFollowerInfo(

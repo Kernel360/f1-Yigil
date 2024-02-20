@@ -1,5 +1,6 @@
 package kr.co.yigil.travel;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
@@ -36,10 +37,9 @@ public class Spot extends Travel {
     private AttachFiles attachFiles;
 
     @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "place_id")
     private Place place;
-
 
     public Spot(final Long id, Member member, final Point location, final boolean isInCourse,
         final String title, final String description, final AttachFiles attachFiles,

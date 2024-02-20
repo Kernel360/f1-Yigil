@@ -1,21 +1,16 @@
 'use client';
 import { EventFor } from '@/types/type';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { AddSpotContext, TAddSpotAction } from '../spot/SpotContext';
 
 interface TPostReviewProps {
   viewTitle?: boolean;
-  reviewState: {
-    title?: string;
-    review: string;
-  };
-  setReviewState: Dispatch<SetStateAction<{ title?: string; review: string }>>;
+  dispatch: Dispatch<TAddSpotAction>;
 }
 
-export default function PostReview({
-  viewTitle,
-  reviewState,
-  setReviewState,
-}: TPostReviewProps) {
+export default function PostReview({ viewTitle, dispatch }: TPostReviewProps) {
+  const { review } = useContext(AddSpotContext);
+
   const maxLength = 30;
 
   const onChangeReview = (e: EventFor<'input' | 'textarea', 'onChange'>) => {
@@ -26,7 +21,8 @@ export default function PostReview({
 
       return;
     }
-    setReviewState({ ...reviewState, [name]: value });
+
+    dispatch({ type: 'SET_REVIEW', payload: { ...review, [name]: value } });
   };
 
   return (
@@ -35,7 +31,7 @@ export default function PostReview({
         <input
           className="w-full py-3 px-4 bg-gray-100 rounded-xl text-xl leading-0"
           type="text"
-          value={reviewState.title}
+          value={review.title}
           name="title"
           required
           onChange={onChangeReview}
@@ -51,9 +47,10 @@ export default function PostReview({
           maxLength={maxLength}
           required
           onChange={onChangeReview}
+          value={review.review}
           placeholder="간단한 리뷰를 작성하세요.(최대 30자)"
         />
-        <p className="flex justify-end text-gray-400 mr-4">{`${reviewState.review.length} / 30`}</p>
+        <p className="flex justify-end text-gray-400 mr-4">{`${review.review.length} / 30`}</p>
       </div>
     </form>
   );
