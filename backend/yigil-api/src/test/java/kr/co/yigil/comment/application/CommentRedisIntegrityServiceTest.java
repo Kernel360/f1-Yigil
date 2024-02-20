@@ -58,7 +58,7 @@ class CommentRedisIntegrityServiceTest {
 
         AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName",
             1L);
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "imgUrl",
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, null,
             mockStaticImgFile);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
@@ -92,7 +92,7 @@ class CommentRedisIntegrityServiceTest {
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
         AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName",
             1L);
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "imgUrl",
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, null,
             mockStaticImgFile);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
