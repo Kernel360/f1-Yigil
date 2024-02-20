@@ -1,0 +1,3 @@
+[submodule "admin-frontend"]
+	path = admin-frontend
+	url = https://github.com/Kernel360/f1-yigil-admin-frontend.git
