@@ -3,6 +3,7 @@ package kr.co.yigil.travel.application;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
+import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +23,9 @@ public class SpotFacade {
     public void registerSpot(RegisterSpotRequest request, Long memberId) {
         spotService.registerSpot(request, memberId);
         request.getFiles().forEach(fileUploader::upload);
+    }
+
+    public Main retrieveSpotInfo(Long spotId) {
+        return spotService.retrieveSpotInfo(spotId);
     }
 }

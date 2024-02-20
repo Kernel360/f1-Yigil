@@ -1,0 +1,89 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+name: Java CD with Gradle
+on:
+  push:
+    branches: [ "main" ]
+permissions:
+  contents: read
+defaults:
+  run:
+    working-directory: ./backend
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+    ## jdk setting
+    - uses: actions/checkout@v3
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    ## docker-compose 설치
+    - name: Set up Docker-Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+    ## docker-compose.yml 생성 후 secret 값 복붙
+    - uses: actions/checkout@v3
+    - run: touch docker-compose.yml
+    - run: echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
+    ## application secrets 값 주입
+    - name: Set application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_PORT@|${{ secrets.REDIS_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@S3_BUCKET@|${{ secrets.S3_BUCKET }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+    ## Dockerfile secrets 값 주입
+    - name: Set Dockerfile
+      run: |
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/Dockerfile
+        sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/Dockerfile
+    # Gradle Build를 위한 권한 부여
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    # Gradle Build (test 제외)
+    - name: Build with Gradle
+      run: ./gradlew clean build -x test
+    # DockerHub 로그인
+    - name: DockerHub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    # Docker 이미지 빌드
+    - name: Docker-Compose Image Build
+      run: docker-compose build
+    # DockerHub Push
+    - name: DockerHub Push
+      run: docker-compose push
+    
+    # EC2 인스턴스 접속 및 애플리케이션 실행
+    - name: Application Run
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        
+        script: |
+          sudo docker-compose down
+          sudo docker image prune -af
+          sudo docker-compose pull
+          sudo docker-compose up -d

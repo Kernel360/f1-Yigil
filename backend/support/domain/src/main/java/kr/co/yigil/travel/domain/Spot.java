@@ -48,6 +48,7 @@ public class Spot extends Travel {
         this.place = place;
     }
 
+
     public Spot(Member member, final Point location, final boolean isInCourse, final String title,
             final String description, final AttachFiles attachFiles, final Place place,
             final double rate) {
@@ -55,6 +56,7 @@ public class Spot extends Travel {
         this.location = location;
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
+        this.place = place;
     }
 
 }

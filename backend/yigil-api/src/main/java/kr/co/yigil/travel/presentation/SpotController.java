@@ -49,13 +49,13 @@ public class    SpotController {
 //            .body(spotCreateResponse);
 //    }
 
-    @GetMapping("/{spot_id}")
-    public ResponseEntity<SpotInfoResponse> getSpotInfo(
-        @PathVariable("spot_id") Long spotId
-    ) {
-        SpotInfoResponse spotInfoResponse = spotService.getSpotInfo(spotId);
-        return ResponseEntity.ok().body(spotInfoResponse);
-    }
+//    @GetMapping("/{spot_id}")
+//    public ResponseEntity<SpotInfoResponse> getSpotInfo(
+//        @PathVariable("spot_id") Long spotId
+//    ) {
+//        SpotInfoResponse spotInfoResponse = spotService.getSpotInfo(spotId);
+//        return ResponseEntity.ok().body(spotInfoResponse);
+//    }
 
 
     @PostMapping("/{spot_id}")

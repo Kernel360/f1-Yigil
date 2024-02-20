@@ -4,6 +4,8 @@ import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.travel.application.SpotFacade;
+import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotRegisterMapper;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,9 +34,9 @@ public class SpotApiController {
 
     private final SpotMapper spotMapper;
     private final SpotRegisterMapper spotRegisterMapper;
-    @GetMapping("/place/{place_id}")
+    @GetMapping("/place/{placeId}")
     public ResponseEntity<SpotsInPlaceResponse> getSpotsInPlace(
-            @PathVariable("place_id") Long placeId,
+            @PathVariable("placeId") Long placeId,
             @PageableDefault(size = 5)Pageable pageable,
             @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
@@ -56,5 +57,12 @@ public class SpotApiController {
         var spotCommand = spotRegisterMapper.toRegisterSpotRequest(request);
         spotFacade.registerSpot(spotCommand, memberId);
         return ResponseEntity.ok().body(new SpotRegisterResponse("Spot 생성 완료"));
+    }
+
+    @GetMapping("/{spotId}")
+    public ResponseEntity<SpotInfoDto> retrieveSpot(@PathVariable("spotId") Long spotId) {
+        var spotInfo = spotFacade.retrieveSpotInfo(spotId);
+        var response = new SpotInfoDto(spotInfo);
+        return ResponseEntity.ok().body(response);
     }
 }

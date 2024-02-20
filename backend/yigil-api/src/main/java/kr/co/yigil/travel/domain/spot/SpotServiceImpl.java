@@ -5,11 +5,13 @@ import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
+import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -25,6 +27,7 @@ public class SpotServiceImpl implements SpotService {
 
     private final SpotStore spotStore;
     private final PlaceStore placeStore;
+    private final PlaceCacheStore placeCacheStore;
 
     private final FileUploader fileUploader;
     @Override
@@ -35,12 +38,19 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional
-    public Long registerSpot(RegisterSpotRequest command, Long memberId) {
+    public void registerSpot(RegisterSpotRequest command, Long memberId) {
         Member member = memberReader.getMember(memberId);
         Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(command.getRegisterPlaceRequest().getPlaceName(), command.getRegisterPlaceRequest().getPlaceAddress());
         Place place = optionalPlace.orElseGet(()-> registerNewPlace(command.getRegisterPlaceRequest()));
         var spot = spotStore.store(command.toEntity(member, place));
-        return spot.getId();
+        var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Main retrieveSpotInfo(Long spotId) {
+        var spot = spotReader.getSpot(spotId);
+        return new Main(spot);
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {
