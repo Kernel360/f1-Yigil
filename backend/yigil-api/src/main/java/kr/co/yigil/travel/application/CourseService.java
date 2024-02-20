@@ -11,17 +11,17 @@ import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.travel.Course;
-import kr.co.yigil.travel.Spot;
-import kr.co.yigil.travel.dto.request.CourseCreateRequest;
-import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
-import kr.co.yigil.travel.dto.response.CourseCreateResponse;
-import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
-import kr.co.yigil.travel.dto.response.CourseFindDto;
-import kr.co.yigil.travel.dto.response.CourseInfoResponse;
-import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
-import kr.co.yigil.travel.repository.CourseRepository;
-import kr.co.yigil.travel.repository.SpotRepository;
+import kr.co.yigil.travel.domain.Course;
+import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.interfaces.dto.request.CourseCreateRequest;
+import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.CourseCreateResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CourseDeleteResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CourseFindDto;
+import kr.co.yigil.travel.interfaces.dto.response.CourseInfoResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CourseUpdateResponse;
+import kr.co.yigil.travel.infrastructure.CourseRepository;
+import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -129,8 +129,7 @@ public class CourseService {
 
     private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
         CompletableFuture<AttachFile> fileCompletableFuture = new CompletableFuture<>();
-        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile,
-                fileCompletableFuture::complete);
+        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile);
         applicationEventPublisher.publishEvent(event);
         return fileCompletableFuture.join();
     }

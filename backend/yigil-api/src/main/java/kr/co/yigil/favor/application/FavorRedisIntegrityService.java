@@ -5,7 +5,7 @@ import java.util.Optional;
 import kr.co.yigil.favor.domain.FavorCount;
 import kr.co.yigil.favor.domain.repository.FavorCountRepository;
 import kr.co.yigil.favor.domain.repository.FavorRepository;
-import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.domain.Travel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

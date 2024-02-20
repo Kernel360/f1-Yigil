@@ -17,7 +17,7 @@ import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
-import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.application.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

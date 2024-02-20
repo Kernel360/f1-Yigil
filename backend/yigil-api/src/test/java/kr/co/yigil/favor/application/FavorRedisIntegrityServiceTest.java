@@ -17,7 +17,7 @@ import kr.co.yigil.file.FileType;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.place.Place;
-import kr.co.yigil.travel.Spot;
+import kr.co.yigil.travel.domain.Spot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

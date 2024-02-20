@@ -1,5 +1,7 @@
 package kr.co.yigil.file;
 
+import static kr.co.yigil.file.FileUploadUtil.determineFileType;
+
 import java.util.function.Consumer;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.FileException;
@@ -15,37 +17,21 @@ public class FileUploadEvent extends ApplicationEvent {
 
     private final MultipartFile file;
     private final FileType fileType;
-    private final Consumer<AttachFile> callback;
 
-    public FileUploadEvent(Object source, MultipartFile file, Consumer<AttachFile> callback) {
+    public FileUploadEvent(Object source, MultipartFile file) {
         super(source);
         this.file = file;
-        this.callback = callback;
         this.fileType = determineFileType(file);
         validateFileSize(fileType, file.getSize());
     }
+
+
 
     private void validateFileSize(FileType fileType, long size) {
         long maxSize = fileType == FileType.IMAGE ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE;
         if (size > maxSize) {
             throw new FileException(ExceptionCode.EXCEED_FILE_CAPACITY);
         }
-    }
-
-    private FileType determineFileType(MultipartFile file) {
-        if (file.getContentType() == null) {
-            throw new FileException(ExceptionCode.EMPTY_FILE);
-        }
-
-        if (file.getContentType().startsWith("image/")) {
-            return FileType.IMAGE;
-        }
-
-        if (file.getContentType().startsWith("video/")) {
-            return FileType.VIDEO;
-        }
-
-        throw new FileException(ExceptionCode.INVALID_FILE_TYPE);
     }
 
 }

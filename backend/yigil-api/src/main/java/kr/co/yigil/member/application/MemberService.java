@@ -21,12 +21,12 @@ import kr.co.yigil.member.dto.response.MemberDeleteResponse;
 import kr.co.yigil.member.dto.response.MemberInfoResponse;
 import kr.co.yigil.member.dto.response.MemberUpdateResponse;
 import kr.co.yigil.member.repository.MemberRepository;
-import kr.co.yigil.travel.Course;
-import kr.co.yigil.travel.Spot;
-import kr.co.yigil.travel.dto.response.CourseFindDto;
-import kr.co.yigil.travel.dto.response.SpotFindDto;
-import kr.co.yigil.travel.repository.CourseRepository;
-import kr.co.yigil.travel.repository.SpotRepository;
+import kr.co.yigil.travel.domain.Course;
+import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.interfaces.dto.response.CourseFindDto;
+import kr.co.yigil.travel.interfaces.dto.response.SpotFindDto;
+import kr.co.yigil.travel.infrastructure.CourseRepository;
+import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -77,12 +77,7 @@ public class MemberService {
 
     public MemberUpdateResponse updateMemberInfo(final Long memberId, MemberUpdateRequest request) {
         Member member = findMemberById(memberId);
-        FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile(), fileUrl -> {
-            Member updateMember = setMemberInfoUpdated(member, String.valueOf(fileUrl), request.getNickname()
-                ,Ages.from(request.getAges())
-                ,Gender.from(request.getGender()));
-            memberRepository.save(updateMember);
-        });
+        FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile());
         applicationEventPublisher.publishEvent(event);
 
         return new MemberUpdateResponse("회원 정보 업데이트 성공");
