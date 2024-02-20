@@ -11,7 +11,7 @@ function withAuthProtection<T extends React.ComponentPropsWithoutRef<any>>(
     useEffect(() => {
       const accessToken = getCookie("accessToken");
       if (!accessToken) {
-        navigate("/login");
+        navigate("/admin/login");
       }
     }, [navigate]);
 

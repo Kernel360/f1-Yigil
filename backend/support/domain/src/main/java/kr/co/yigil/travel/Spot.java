@@ -23,7 +23,7 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @DiscriminatorValue("SPOT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"place_id", "member_id"}))
+//@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"place_id", "member_id"}))
 public class Spot extends Travel {
 
     @Column(columnDefinition = "geometry(Point,4326)")
