@@ -29,7 +29,7 @@ export default function SpotList({
       <div className="overflow-hidden px-4" ref={emblaRef}>
         <div className="flex">
           {data.map((post, index) => (
-            <Link href={`#`} key={post.id}>
+            <Link href={`/place/${post.id}`} key={post.id}>
               <Place data={post} order={index} variant={variant} />
             </Link>
           ))}
