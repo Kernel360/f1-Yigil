@@ -2,6 +2,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 import ImageItem from './ImageItem';
+
 import type { TImageData } from './ImageHandler';
 
 export default function SortableItem({

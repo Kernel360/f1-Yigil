@@ -1,12 +1,14 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 import ImageInput from './ImageInput';
 import ImagesContainer from './ImagesContainer';
+import { AddSpotContext } from '../add/spot/SpotContext';
 
-import type { Dispatch, SetStateAction } from 'react';
-import { AddSpotContext, TAddSpotAction } from '../add/spot/SpotContext';
+import type { Dispatch } from 'react';
+
+import type { TAddSpotAction } from '../add/spot/SpotContext';
 
 export interface TImageData {
   filename: string;

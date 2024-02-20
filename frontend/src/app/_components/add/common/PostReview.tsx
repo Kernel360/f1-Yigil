@@ -1,7 +1,13 @@
 'use client';
-import { EventFor } from '@/types/type';
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import { AddSpotContext, TAddSpotAction } from '../spot/SpotContext';
+
+import { useContext } from 'react';
+
+import { AddSpotContext } from '../spot/SpotContext';
+
+import type { Dispatch } from 'react';
+import type { EventFor } from '@/types/type';
+
+import type { TAddSpotAction } from '../spot/SpotContext';
 
 interface TPostReviewProps {
   viewTitle?: boolean;
