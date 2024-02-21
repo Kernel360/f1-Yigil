@@ -1,5 +1,6 @@
 package kr.co.yigil.follow.domain;
 
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -9,7 +10,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @AllArgsConstructor
 @RedisHash("followCount")
-public class FollowCount {
+public class FollowCount implements Serializable {
 
     @Id
     private Long memberId;

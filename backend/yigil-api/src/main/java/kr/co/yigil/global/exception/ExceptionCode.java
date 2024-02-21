@@ -24,6 +24,11 @@ public enum ExceptionCode {
 
     // course 3200
 
+    FOLLOW_MYSELF(4001, "자신을 follow 할 수 없습니다."),
+    ALREADY_FOLLOWING(4002, "이미 follow 중인 사용자입니다."),
+    UNFOLLOW_MYSELF(4003, "자신을 unfollow 할 수 없습니다."),
+    NOT_FOLLOWING(4004, "팔로우 중이 아닌 사용자입니다."),
+
     EMPTY_FILE(5001, "업로드한 파일이 비어있습니다."), // todo 현재  모듈 구조상 AttachFiles에서  사용 불가
     INVALID_FILE_TYPE(5002, "지원하지 않는 형식의 파일입니다."),
     EXCEED_FILE_CAPACITY(5003, "업로드 가능한 파일 용량을 초과했습니다."),
