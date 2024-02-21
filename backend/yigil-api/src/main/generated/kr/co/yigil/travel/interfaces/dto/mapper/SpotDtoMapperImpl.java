@@ -10,11 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-20T17:28:23+0900",
+    date = "2024-02-21T10:58:38+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
-public class SpotRegisterMapperImpl implements SpotRegisterMapper {
+public class SpotDtoMapperImpl implements SpotDtoMapper {
 
     @Override
     public SpotCommand.RegisterSpotRequest toRegisterSpotRequest(SpotRegisterRequest request) {

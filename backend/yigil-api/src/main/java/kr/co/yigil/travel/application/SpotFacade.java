@@ -28,4 +28,8 @@ public class SpotFacade {
     public Main retrieveSpotInfo(Long spotId) {
         return spotService.retrieveSpotInfo(spotId);
     }
+
+    public void deleteSpot(Long spotId, Long memberId) {
+        spotService.deleteSpot(spotId, memberId);
+    }
 }

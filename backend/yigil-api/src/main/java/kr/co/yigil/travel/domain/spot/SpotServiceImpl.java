@@ -1,7 +1,10 @@
 package kr.co.yigil.travel.domain.spot;
 
+import java.util.Objects;
 import java.util.Optional;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.exception.AuthException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.place.Place;
@@ -51,6 +54,15 @@ public class SpotServiceImpl implements SpotService {
     public Main retrieveSpotInfo(Long spotId) {
         var spot = spotReader.getSpot(spotId);
         return new Main(spot);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSpot(Long spotId, Long memberId) {
+        var spot = spotReader.getSpot(spotId);
+        if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(
+                ExceptionCode.INVALID_AUTHORITY);
+        spotStore.remove(spot);
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {

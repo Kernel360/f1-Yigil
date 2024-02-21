@@ -8,9 +8,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface SpotRegisterMapper {
+public interface SpotDtoMapper {
 
-    SpotRegisterMapper INSTANCE = Mappers.getMapper(SpotRegisterMapper.class);
+    SpotDtoMapper INSTANCE = Mappers.getMapper(SpotDtoMapper.class);
 
     @Mappings({
             @Mapping(target = "registerPlaceRequest.mapStaticImageFile", source = "mapStaticImageFile"),

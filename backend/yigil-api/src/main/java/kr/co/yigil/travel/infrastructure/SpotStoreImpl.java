@@ -14,4 +14,9 @@ public class SpotStoreImpl implements SpotStore {
     public Spot store(Spot spot) {
         return spotRepository.save(spot);
     }
+
+    @Override
+    public void remove(Spot spot) {
+        spotRepository.delete(spot);
+    }
 }

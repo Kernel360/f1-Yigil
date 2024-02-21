@@ -66,4 +66,5 @@ public class SpotCommand {
                     GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage);
         }
     }
+
 }

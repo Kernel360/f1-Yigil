@@ -36,43 +36,6 @@ public class    SpotController {
     private final SpotService spotService;
 
 
-//    @PostMapping
-//    @MemberOnly
-//    public ResponseEntity<SpotCreateResponse> createSpot(
-//        @ModelAttribute SpotCreateRequest spotCreateRequest,
-//        @Auth final Accessor accessor
-//    ) {
-//        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(),
-//            spotCreateRequest);
-//        URI uri = URI.create("/api/v1/spots/" + spotCreateResponse.getSpotId());
-//        return ResponseEntity.created(uri)
-//            .body(spotCreateResponse);
-//    }
-
-//    @GetMapping("/{spot_id}")
-//    public ResponseEntity<SpotInfoResponse> getSpotInfo(
-//        @PathVariable("spot_id") Long spotId
-//    ) {
-//        SpotInfoResponse spotInfoResponse = spotService.getSpotInfo(spotId);
-//        return ResponseEntity.ok().body(spotInfoResponse);
-//    }
-
-
-    @PostMapping("/{spot_id}")
-    @MemberOnly
-    public ResponseEntity<SpotUpdateResponse> updateSpot(
-        @PathVariable("spot_id") Long spotId,
-        @Auth final Accessor accessor,
-        @ModelAttribute SpotUpdateRequest spotUpdateRequest
-    ) {
-        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(),
-            spotId, spotUpdateRequest);
-        URI uri = URI.create("/api/v1/spots/" + spotId);
-        return ResponseEntity.ok()
-            .location(uri)
-            .body(spotUpdateResponse);
-    }
-
     @DeleteMapping("/{spot_id}")
     @MemberOnly
     public ResponseEntity<SpotDeleteResponse> deleteSpot(

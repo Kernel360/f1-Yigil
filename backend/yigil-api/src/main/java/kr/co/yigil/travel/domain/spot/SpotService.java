@@ -11,4 +11,6 @@ public interface SpotService {
     void registerSpot(RegisterSpotRequest request, Long memberId);
 
     public SpotInfo.Main retrieveSpotInfo(Long spotId);
+
+    void deleteSpot(Long spotId, Long memberId);
 }
