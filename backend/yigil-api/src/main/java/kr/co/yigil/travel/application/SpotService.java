@@ -18,21 +18,18 @@ import kr.co.yigil.place.Place;
 import kr.co.yigil.place.application.PlaceRateRedisIntegrityService;
 import kr.co.yigil.place.application.PlaceService;
 import kr.co.yigil.place.domain.PlaceRate;
-import kr.co.yigil.travel.Spot;
-import kr.co.yigil.travel.domain.SpotCount;
-import kr.co.yigil.travel.dto.request.SpotCreateRequest;
-import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
-import kr.co.yigil.travel.dto.response.SpotCreateResponse;
-import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
-import kr.co.yigil.travel.dto.response.SpotFindDto;
-import kr.co.yigil.travel.dto.response.SpotInfoResponse;
-import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
-import kr.co.yigil.travel.repository.SpotRepository;
+import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.spot.SpotCount;
+import kr.co.yigil.travel.interfaces.dto.request.SpotCreateRequest;
+import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.SpotCreateResponse;
+import kr.co.yigil.travel.interfaces.dto.response.SpotDeleteResponse;
+import kr.co.yigil.travel.interfaces.dto.response.SpotFindDto;
+import kr.co.yigil.travel.interfaces.dto.response.SpotInfoResponse;
+import kr.co.yigil.travel.interfaces.dto.response.SpotUpdateResponse;
+import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,15 +46,6 @@ public class SpotService {
     private final FavorRedisIntegrityService favorRedisIntegrityService;
     private final SpotRedisIntegrityService spotRedisIntegrityService;
     private final PlaceRateRedisIntegrityService placeRateRedisIntegrityService;
-
-    @Transactional
-    public Slice<SpotFindDto> getSpotList(Long placeId, Pageable pageable) {
-        Slice<Spot> spots = spotRepository.findAllByPlaceId(placeId, pageable);
-        List<SpotFindDto> spotFindDtoList = spots.stream()
-                .map(this::getSpotFindDto)
-                .toList();
-        return new SliceImpl<>(spotFindDtoList, pageable, spots.hasNext());
-    }
 
     private SpotFindDto getSpotFindDto(Spot spot) {
         return SpotFindDto.from(
@@ -172,7 +160,7 @@ public class SpotService {
         files.forEach(
                 file -> {
                     CompletableFuture<AttachFile> future = new CompletableFuture<>();
-                    FileUploadEvent event = new FileUploadEvent(this, file, future::complete);
+                    FileUploadEvent event = new FileUploadEvent(this, file);
                     applicationEventPublisher.publishEvent(event);
                     futures.add(future);
                 }
@@ -192,8 +180,7 @@ public class SpotService {
 
     private AttachFile getAttachFile(MultipartFile mapStaticImageFile) {
         CompletableFuture<AttachFile> fileCompletableFuture = new CompletableFuture<>();
-        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile,
-                fileCompletableFuture::complete);
+        FileUploadEvent event = new FileUploadEvent(this, mapStaticImageFile);
         applicationEventPublisher.publishEvent(event);
         return fileCompletableFuture.join();
     }

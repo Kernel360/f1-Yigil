@@ -42,7 +42,7 @@ public class FileUploadEventListenerTest {
     @Test
     void shouldUploadFileToS3() throws IOException {
         MultipartFile mockFile = new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[10]);
-        FileUploadEvent event = new FileUploadEvent(new Object(), mockFile, mock(Consumer.class));
+        FileUploadEvent event = new FileUploadEvent(new Object(), mockFile);
         fileUploadEventListener.handleFileUpload(event);
 
         verify(mockAmazonS3Client).putObject(eq("cdn.yigil.co.kr"), anyString(), any(), any(

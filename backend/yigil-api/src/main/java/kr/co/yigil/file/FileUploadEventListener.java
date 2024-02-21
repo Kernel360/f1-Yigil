@@ -1,5 +1,8 @@
 package kr.co.yigil.file;
 
+import static kr.co.yigil.file.FileUploadUtil.generateUniqueFileName;
+import static kr.co.yigil.file.FileUploadUtil.getPath;
+
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import java.io.IOException;
@@ -23,11 +26,11 @@ public class FileUploadEventListener {
 
     @Async
     @EventListener
-    public Future<AttachFile> handleFileUpload(FileUploadEvent event) throws IOException {
+    public void handleFileUpload(FileUploadEvent event) throws IOException {
         MultipartFile file = event.getFile();
         FileType fileType = event.getFileType();
         String fileName = generateUniqueFileName(file.getOriginalFilename());
-        String s3Path = getS3Path(fileType, fileName);
+        String s3Path = getPath(fileType, fileName);
 
         AttachFile attachFile = new AttachFile(fileType, s3Path, file.getOriginalFilename(),
                 file.getSize());
@@ -37,17 +40,6 @@ public class FileUploadEventListener {
         metadata.setContentType(file.getContentType());
         metadata.setContentDisposition("inline");
         amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
-        event.getCallback().accept(attachFile);
-
-        return CompletableFuture.completedFuture(attachFile);
     }
 
-    private String getS3Path(FileType fileType, String fileName) {
-        String url = fileType == FileType.IMAGE ? "images/" : "videos/";
-        return url + fileName;
-    }
-
-    private String generateUniqueFileName(String originalFilename) {
-        return UUID.randomUUID() + "_" + originalFilename;
-    }
 }

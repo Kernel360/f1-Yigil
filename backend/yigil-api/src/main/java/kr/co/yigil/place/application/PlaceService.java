@@ -11,7 +11,7 @@ import kr.co.yigil.place.dto.response.PlaceMapStaticImageResponse;
 import kr.co.yigil.place.dto.response.RateResponse;
 import kr.co.yigil.place.repository.PlaceRepository;
 import kr.co.yigil.travel.application.SpotRedisIntegrityService;
-import kr.co.yigil.travel.repository.SpotRepository;
+import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

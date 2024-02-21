@@ -18,7 +18,7 @@ import kr.co.yigil.place.dto.response.PlaceFindDto;
 import kr.co.yigil.place.dto.response.PlaceInfoResponse;
 import kr.co.yigil.place.repository.PlaceRepository;
 import kr.co.yigil.travel.application.SpotRedisIntegrityService;
-import kr.co.yigil.travel.domain.SpotCount;
+import kr.co.yigil.travel.domain.spot.SpotCount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

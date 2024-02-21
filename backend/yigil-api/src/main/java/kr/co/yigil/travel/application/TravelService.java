@@ -2,9 +2,8 @@ package kr.co.yigil.travel.application;
 
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.travel.Travel;
-import kr.co.yigil.travel.dto.response.PrivateUpdateResponse;
-import kr.co.yigil.travel.repository.TravelRepository;
+import kr.co.yigil.travel.domain.Travel;
+import kr.co.yigil.travel.infrastructure.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +19,4 @@ public class TravelService {
                 .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_TRAVEL_ID));
     }
 
-    @Transactional
-    public PrivateUpdateResponse togglePrivate(Long travelId, Long memberId) {
-        Travel travel = travelRepository.findByIdAndMemberId(travelId, memberId)
-                .orElseThrow(
-                        () -> new BadRequestException(ExceptionCode.NOT_FOUND_TRAVEL_ID)
-                );
-        travel.togglePrivate();
-        return new PrivateUpdateResponse("리뷰 공개 상태 변경 완료");
-    }
 }

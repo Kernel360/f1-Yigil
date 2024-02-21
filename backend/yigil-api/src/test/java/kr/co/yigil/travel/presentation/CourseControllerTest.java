@@ -10,12 +10,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import kr.co.yigil.travel.application.CourseService;
-import kr.co.yigil.travel.dto.request.CourseCreateRequest;
-import kr.co.yigil.travel.dto.request.CourseUpdateRequest;
-import kr.co.yigil.travel.dto.response.CourseCreateResponse;
-import kr.co.yigil.travel.dto.response.CourseDeleteResponse;
-import kr.co.yigil.travel.dto.response.CourseInfoResponse;
-import kr.co.yigil.travel.dto.response.CourseUpdateResponse;
+import kr.co.yigil.travel.interfaces.dto.request.CourseCreateRequest;
+import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.CourseCreateResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CourseDeleteResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CourseInfoResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CourseUpdateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

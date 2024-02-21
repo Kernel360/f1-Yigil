@@ -1,8 +1,8 @@
 package kr.co.yigil.travel.application;
 
-import kr.co.yigil.travel.domain.SpotCount;
+import kr.co.yigil.travel.domain.spot.SpotCount;
 import kr.co.yigil.travel.domain.repository.SpotCountRepository;
-import kr.co.yigil.travel.repository.SpotRepository;
+import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

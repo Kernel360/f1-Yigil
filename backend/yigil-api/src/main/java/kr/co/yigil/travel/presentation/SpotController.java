@@ -5,13 +5,13 @@ import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.travel.application.SpotService;
-import kr.co.yigil.travel.dto.request.SpotCreateRequest;
-import kr.co.yigil.travel.dto.request.SpotUpdateRequest;
-import kr.co.yigil.travel.dto.response.SpotCreateResponse;
-import kr.co.yigil.travel.dto.response.SpotDeleteResponse;
-import kr.co.yigil.travel.dto.response.SpotFindDto;
-import kr.co.yigil.travel.dto.response.SpotInfoResponse;
-import kr.co.yigil.travel.dto.response.SpotUpdateResponse;
+import kr.co.yigil.travel.interfaces.dto.request.SpotCreateRequest;
+import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.SpotCreateResponse;
+import kr.co.yigil.travel.interfaces.dto.response.SpotDeleteResponse;
+import kr.co.yigil.travel.interfaces.dto.response.SpotFindDto;
+import kr.co.yigil.travel.interfaces.dto.response.SpotInfoResponse;
+import kr.co.yigil.travel.interfaces.dto.response.SpotUpdateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,54 +35,6 @@ public class    SpotController {
 
     private final SpotService spotService;
 
-    @GetMapping("/places/{place_id}")
-    public ResponseEntity<Slice<SpotFindDto>> getSpotList(
-        @PathVariable("place_id") Long placeId,
-        @PageableDefault(size = 5) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
-    ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Slice<SpotFindDto> spotListResponse = spotService.getSpotList(placeId, pageRequest);
-        return ResponseEntity.ok().body(spotListResponse);
-    }
-
-    @PostMapping
-    @MemberOnly
-    public ResponseEntity<SpotCreateResponse> createSpot(
-        @ModelAttribute SpotCreateRequest spotCreateRequest,
-        @Auth final Accessor accessor
-    ) {
-        SpotCreateResponse spotCreateResponse = spotService.createSpot(accessor.getMemberId(),
-            spotCreateRequest);
-        URI uri = URI.create("/api/v1/spots/" + spotCreateResponse.getSpotId());
-        return ResponseEntity.created(uri)
-            .body(spotCreateResponse);
-    }
-
-    @GetMapping("/{spot_id}")
-    public ResponseEntity<SpotInfoResponse> getSpotInfo(
-        @PathVariable("spot_id") Long spotId
-    ) {
-        SpotInfoResponse spotInfoResponse = spotService.getSpotInfo(spotId);
-        return ResponseEntity.ok().body(spotInfoResponse);
-    }
-
-
-    @PostMapping("/{spot_id}")
-    @MemberOnly
-    public ResponseEntity<SpotUpdateResponse> updateSpot(
-        @PathVariable("spot_id") Long spotId,
-        @Auth final Accessor accessor,
-        @ModelAttribute SpotUpdateRequest spotUpdateRequest
-    ) {
-        SpotUpdateResponse spotUpdateResponse = spotService.updateSpot(accessor.getMemberId(),
-            spotId, spotUpdateRequest);
-        URI uri = URI.create("/api/v1/spots/" + spotId);
-        return ResponseEntity.ok()
-            .location(uri)
-            .body(spotUpdateResponse);
-    }
 
     @DeleteMapping("/{spot_id}")
     @MemberOnly
