@@ -1,14 +1,15 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
 import LikeButton from './LikeButton';
 import IconWithCounts from '../IconWithCounts';
 
-import CommentIcon from '/public/icons/comment.svg';
+import ReviewIcon from '/public/icons/review.svg';
 import HeartIcon from '/public/icons/heart.svg';
 import StarIcon from '/public/icons/star.svg';
 
-import type { TPlace } from './types';
+import type { TPlace } from '@/types/response';
 
-// 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
-// 차후 next/image 사용하게 변경 예정
 export default function Place({
   data,
   order,
@@ -18,7 +19,7 @@ export default function Place({
   order: number;
   variant: 'primary' | 'secondary';
 }) {
-  const { region, liked, imageUrl, title, likeCount, commentCount, rating } =
+  const { id, liked, image_url, name, liked_count, review_count, rating } =
     data;
 
   const postSize = variant === 'primary' ? 'w-[350px]' : 'w-[300px]';
@@ -27,29 +28,42 @@ export default function Place({
     <article
       className={`${postSize} px-2 py-4 relative flex shrink-0 flex-col gap-2`}
     >
-      <div className="relative">
-        <LikeButton liked={liked} />
-        <img
-          className="aspect-square rounded-lg w-full"
-          src={imageUrl}
-          alt={`${title} 대표 이미지`}
-        />
+      <div className="relative aspect-square">
+        <Link href={`/places/${id}`}>
+          <Image
+            className="rounded-lg w-full select-none"
+            src={image_url}
+            alt={`${name} 대표 이미지`}
+            unoptimized
+            fill
+          />
+        </Link>
+        {liked && (
+          <LikeButton className="absolute top-4 right-4" liked={liked} />
+        )}
         {variant === 'primary' && (
-          <span className="absolute left-6 bottom-2 text-white text-8xl font-semibold">
-            {order + 1}
-          </span>
+          <Link href={`places/${id}`}>
+            <span className="absolute left-6 bottom-2 select-none text-white text-8xl font-semibold">
+              {order + 1}
+            </span>
+          </Link>
         )}
       </div>
       <section className="flex flex-col gap-2 px-4">
-        <p className="text-gray-500 text-xl font-medium truncate">{title}</p>
+        <Link
+          className="w-fit text-gray-500 text-xl font-medium truncate select-none hover:underline"
+          href={`places/${id}`}
+        >
+          {name}
+        </Link>
         <div className="flex gap-3">
           <IconWithCounts
-            icon={<CommentIcon className="w-4 h-4" />}
-            count={commentCount}
+            icon={<ReviewIcon className="w-4 h-4" />}
+            count={review_count}
           />
           <IconWithCounts
             icon={<HeartIcon className="w-4 h-4" />}
-            count={likeCount}
+            count={liked_count}
           />
           <IconWithCounts
             icon={

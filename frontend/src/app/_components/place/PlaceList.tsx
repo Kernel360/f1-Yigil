@@ -1,11 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 
-import { Place } from '@/app/_components/place';
+import { Place } from '.';
 
-import type { TPlace } from './types';
+import type { TPlace } from '@/types/response';
 
 export default function SpotList({
   title,
@@ -29,9 +28,7 @@ export default function SpotList({
       <div className="overflow-hidden px-4" ref={emblaRef}>
         <div className="flex">
           {data.map((post, index) => (
-            <Link href={`/place/${post.id}`} key={post.id}>
-              <Place data={post} order={index} variant={variant} />
-            </Link>
+            <Place key={post.id} data={post} order={index} variant={variant} />
           ))}
         </div>
       </div>
