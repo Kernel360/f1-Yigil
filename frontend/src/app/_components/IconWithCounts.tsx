@@ -14,7 +14,7 @@ export default function IconWithCounts({
   return (
     <div className="flex items-center">
       {icon}
-      <p className="pl-2 flex justify-center">{label}</p>
+      <p className="pl-2 select-none flex justify-center">{label}</p>
     </div>
   );
 }
