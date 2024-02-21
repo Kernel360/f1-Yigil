@@ -1,16 +1,16 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { httpRequest } from '../../api/httpRequest';
+import { requestWithCookie } from '../../api/httpRequest';
 
-export const myPageSpotRequest = httpRequest('members/spots');
-export const myPageCourseRequest = httpRequest('member/courses');
-export const myPageFollowerRequest = httpRequest('member/followers');
-export const myPageFollowingRequest = httpRequest('member/followings');
+export const myPageSpotRequest = requestWithCookie('members/spots');
+export const myPageCourseRequest = requestWithCookie('member/courses');
+export const myPageFollowerRequest = requestWithCookie('member/followers');
+export const myPageFollowingRequest = requestWithCookie('member/followings');
 
 const cookie = cookies().get('SESSION')?.value;
 export const authenticateUser = async () => {
-  const res = await httpRequest('members')()()({
+  const res = await requestWithCookie('members')()()({
     'Content-Type': 'application/json',
     Cookie: `SESSION=${cookie}`,
   })();
@@ -67,7 +67,7 @@ export const getMyPageFollwings = async (
 };
 
 export const getSpotList = async () => {
-  const res = await httpRequest('spots/places')(
+  const res = await requestWithCookie('spots/places')(
     `/1?page=1&size=5&sortBy=rate&sortOrder=desc`,
   )()()();
   return res;

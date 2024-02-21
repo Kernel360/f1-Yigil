@@ -9,7 +9,7 @@ import LockIcon from '/public/icons/lock.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import MyPageSelectBtns from '../MyPageSelectBtns';
-import { httpRequest } from '../../api/httpRequest';
+
 import { getMyPageSpot } from '../hooks/useMyPage';
 
 export interface TMyPageSpot {

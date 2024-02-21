@@ -2,7 +2,6 @@ import MyPageContent from '@/app/_components/mypage/routeTabs/MyPageTabs';
 import MyPageInfo from '@/app/_components/mypage/MyPageInfo';
 import { getServerSession } from 'next-auth';
 import type { ReactNode } from 'react';
-import { httpRequest } from '@/app/_components/api/httpRequest';
 
 const url =
   process.env.NODE_ENV !== 'production'
