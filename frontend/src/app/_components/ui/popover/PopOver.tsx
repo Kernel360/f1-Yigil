@@ -46,8 +46,11 @@ export default function PopOver({
         onKeyDown={(e) =>
           (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') && closeModal()
         }
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
-        <ul className="flex flex-col gap-6 justify-center items-center p-4">
+        <ul className="flex flex-col gap-2 justify-center items-center p-2">
           {popOverData &&
             popOverData.map((data, idx) => (
               <PopOverIcon key={idx} data={data} closeModal={closeModal} />

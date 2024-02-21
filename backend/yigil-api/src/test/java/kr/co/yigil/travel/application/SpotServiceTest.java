@@ -85,13 +85,13 @@ class SpotServiceTest {
             "kakao");
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        Place mockPlace = new Place("anyName", "", mockPoint, "imgUrl1", null);
+
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
             2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
-
+        Place mockPlace = new Place("anyName", "", mockPoint, mockAttachFile1, null);
         Spot spot1 = new Spot(1L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles,
             mockPlace, 5.0);
         Spot spot2 = new Spot(2L, mockMember, mockPoint, false, "anyTitle", "아무말", mockAttachFiles,
@@ -149,7 +149,7 @@ class SpotServiceTest {
             mockFiles,
             mockRate,
             mockFile,
-            "mockPlaceImgUrl",
+            mockFile,
             mockPlaceName,
             mockPlaceAddress,
             mockPlacePointJson
@@ -159,11 +159,11 @@ class SpotServiceTest {
         Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg", "kakao");
         long placeId = 1L;
         Place mockPlace = new Place(placeId, "mockPlaceName", "mock place address", mockPoint,
-            "mockImageUrl", null);
+            null, null);
 
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
         when(placeService.getOrCreatePlace(
-            anyString(), anyString(), anyString(), anyString(), any(AttachFile.class)
+            anyString(), anyString(), anyString(), any(AttachFile.class), any(AttachFile.class)
         )).thenReturn(mockPlace);
         when(spotRedisIntegrityService.ensureSpotCounts(anyLong())).thenReturn(
             new SpotCount(placeId, 1));
@@ -221,7 +221,7 @@ class SpotServiceTest {
         when(memberService.findMemberById(memberId)).thenReturn(mockMember);
 
         Point mockPoint = new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456));
-        Place mockPlace = new Place("mockPlaceName", "mockLocation", mockPoint, "mockImageUrl",
+        Place mockPlace = new Place("mockPlaceName", "mockLocation", mockPoint, null,
             null);
 
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "mockUrl", "mockFileName", 1L);
@@ -258,7 +258,7 @@ class SpotServiceTest {
             "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()),
             new Place("mockPlaceName", "mock address",
                 new GeometryFactory().createPoint(new Coordinate(127.123456, 37.123456)),
-                "mock image url", null), 5.0);
+                null, null), 5.0);
         when(spotRepository.findById(spotId)).thenReturn(Optional.of(mockSpot));
         when(favorRedisIntegrityService.ensureFavorCounts(mockSpot)).thenReturn(
             new FavorCount(mockSpot.getId(), 4));

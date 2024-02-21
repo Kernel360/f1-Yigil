@@ -17,7 +17,7 @@ export default function PopOverIcon({ data, closeModal }: TPopOverIcon) {
         closeModal();
         href && push(href);
       }}
-      className="flex items-center gap-x-2 cursor-pointer"
+      className="p-2 flex items-center gap-x-2 cursor-pointer"
     >
       <div>{label}</div>
       {icon}

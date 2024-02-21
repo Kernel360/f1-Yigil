@@ -6,14 +6,21 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import SearchIcon from '/public/icons/search.svg';
 import XMarkIcon from '/public/icons/x-mark.svg';
 
+import type { EventFor } from '@/types/type';
+
+// 컴포넌트의 동작이 URL 상태에 따라 바뀌는 구현을 리팩토링할 필요가 있을지도?
 export default function SearchBar({
   cancellable,
   addHistory,
   search,
+  openResults,
+  closeResults,
 }: {
   cancellable?: boolean;
   addHistory: (result: string) => void;
   search: (keyword: string) => Promise<void>;
+  openResults: () => void;
+  closeResults: () => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -51,11 +58,29 @@ export default function SearchBar({
     }
   }
 
+  // 리팩토링 필요
+  function handleCancel() {
+    if (pathname === '/search') {
+      back();
+    } else {
+      handleErase();
+      closeResults();
+    }
+  }
+
   function handleErase() {
     setSearchValue('');
     search('');
     inputRef.current?.focus();
     replace(`${pathname}`);
+  }
+
+  async function handleEnter(event: EventFor<'input', 'onKeyDown'>) {
+    if (event.key !== 'Enter') {
+      return;
+    }
+
+    await handleSearch();
   }
 
   return (
@@ -68,6 +93,8 @@ export default function SearchBar({
           placeholder="검색어를 입력하세요."
           value={searchValue}
           onChange={(event) => handleChange(event.target.value)}
+          onKeyDown={handleEnter}
+          onFocus={() => openResults()}
         />
         {searchParams.size !== 0 && (
           <button
@@ -83,7 +110,7 @@ export default function SearchBar({
         </button>
       </div>
       {cancellable && (
-        <button className="shrink-0" onClick={() => back()}>
+        <button className="shrink-0" onClick={handleCancel}>
           취소
         </button>
       )}
