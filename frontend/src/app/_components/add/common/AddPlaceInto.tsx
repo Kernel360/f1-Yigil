@@ -2,9 +2,6 @@
 
 import { useContext } from 'react';
 import { AddSpotContext } from '../spot/SpotContext';
-import { httpRequest } from '../../api/httpRequest';
-
-// 이름과 주소를 입력으로 하여 static map 저장 여부를 반환하는 API가 필요함
 
 // 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
 // 차후 next/image 사용하게 변경 예정

@@ -1,12 +1,14 @@
 'use client';
-import { EventFor } from '@/types/type';
-import React, { useContext, useState } from 'react';
+
+import { useContext, useState } from 'react';
+import { AddSpotContext } from '../spot/SpotContext';
+
 import StarIcon from '/public/icons/star.svg';
 
 import type { Dispatch } from 'react';
-import { AddSpotContext, type TAddSpotAction } from '../spot/SpotContext';
+import type { EventFor } from '@/types/type';
+import type { TAddSpotAction } from '../spot/SpotContext';
 
-/** setRating 함수를 props로 받아야 함 */
 export default function PostRating({
   dispatch,
 }: {

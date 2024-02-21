@@ -1,3 +1,3 @@
 import ImageHandler from './ImageHandler';
 
-export { ImageHandler };
+export default ImageHandler;
