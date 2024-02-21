@@ -26,12 +26,15 @@ export default function Place({
 
   return (
     <article
-      className={`${postSize} px-2 py-4 relative flex shrink-0 flex-col gap-2`}
+      className={`${postSize} px-2 py-4 relative flex shrink-0 flex-col`}
     >
-      <div className="relative aspect-square">
-        <Link href={`/places/${id}`}>
+      <div className="relative w-full">
+        <Link
+          className="w-full relative aspect-square inline-block w-fit h-fit"
+          href={`/place/${id}`}
+        >
           <Image
-            className="rounded-lg w-full select-none"
+            className="rounded-lg select-none"
             src={image_url}
             alt={`${name} 대표 이미지`}
             unoptimized
@@ -42,7 +45,7 @@ export default function Place({
           <LikeButton className="absolute top-4 right-4" liked={liked} />
         )}
         {variant === 'primary' && (
-          <Link href={`places/${id}`}>
+          <Link tabIndex={-1} href={`place/${id}`}>
             <span className="absolute left-6 bottom-2 select-none text-white text-8xl font-semibold">
               {order + 1}
             </span>
@@ -52,7 +55,7 @@ export default function Place({
       <section className="flex flex-col gap-2 px-4">
         <Link
           className="w-fit text-gray-500 text-xl font-medium truncate select-none hover:underline"
-          href={`places/${id}`}
+          href={`place/${id}`}
         >
           {name}
         </Link>

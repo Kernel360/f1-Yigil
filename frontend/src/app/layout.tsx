@@ -28,7 +28,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div id="modal"></div>
         <MSWComponent />
         <AuthContext>
-          <NaverContext>{children}</NaverContext>
+          <NaverContext ncpClientId={process.env.NAVER_MAPS_CLIENT_ID}>
+            {children}
+          </NaverContext>
         </AuthContext>
       </body>
     </html>

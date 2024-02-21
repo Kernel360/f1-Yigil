@@ -9,6 +9,7 @@ import StarIcon from '/public/icons/star.svg';
 import LocationIcon from '/public/icons/map-pin.svg';
 
 import type { TPlaceDetail } from '@/types/response';
+import Link from 'next/link';
 
 export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
   const {
@@ -21,6 +22,8 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
     liked_count,
     rating,
   } = detail;
+
+  const hasReview = false;
 
   return (
     <section className="flex flex-col">
@@ -36,8 +39,8 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
           <LikeButton className="absolute top-4 right-4" liked={liked} />
         )}
       </div>
-      <div className="p-2 flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold">{name}</h1>
+      <div className="px-4 py-2 flex flex-col gap-2">
+        <h1 className="text-2xl font-semibold select-all">{name}</h1>
         <div className="flex gap-3 items-center">
           <IconWithCounts
             icon={<ReviewIcon className="w-4 h-4" />}
@@ -57,11 +60,11 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
         </div>
       </div>
       <hr className="border-8" />
-      <div className="p-4 flex flex-col">
+      <div className="h-80 p-4 flex flex-col gap-4">
         <h2 className="text-xl font-medium">지도</h2>
-        <div className="h-80 relative">
+        <div className="relative grow">
           <Image
-            className="aspect-video"
+            className="object-cover"
             src={map_image_url}
             alt={`${name} 위치 이미지`}
             fill
@@ -70,9 +73,25 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
         </div>
         <span className="flex items-center gap-2">
           <LocationIcon className="w-6 h-6 stroke-gray-500" />
-          <p className="text-gray-500">{address}</p>
+          <p className="text-gray-500 select-all">{address}</p>
         </span>
       </div>
+      <hr className="border-8" />
+      {hasReview ? (
+        <></>
+      ) : (
+        <section className="px-4 py-2 flex flex-col gap-4 justify-center">
+          <p className="px-2 text-xl text-medium text-gray-500">
+            나의 기록이 아직 없습니다.
+          </p>
+          <Link
+            className="py-2 w-full bg-[#3B82F6] rounded-md text-xl text-white flex justify-center items-center "
+            href={`/add/spot?keyword=${name}`}
+          >
+            장소 기록하기
+          </Link>
+        </section>
+      )}
     </section>
   );
 }
