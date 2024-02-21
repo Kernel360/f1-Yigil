@@ -18,7 +18,7 @@ export default function MyPageInfo({
 
   return (
     <section
-      className="py-3 pl-4 flex items-center border-b-[1px] gap-x-4"
+      className="py-3 pl-4 flex items-center gap-x-4"
       aria-label="profile"
     >
       <RoundProfile
@@ -32,7 +32,7 @@ export default function MyPageInfo({
           <div className="text-gray-500 mr-2">팔로워</div>
           <div className="mr-4">{follower_count}</div>
           <div className="text-gray-500 mr-2">팔로잉</div>
-          <div>100</div>
+          <div>{following_count}</div>
         </div>
         {/* <div className="text-gray-500">{data?.user?.email}</div> */}
       </div>
