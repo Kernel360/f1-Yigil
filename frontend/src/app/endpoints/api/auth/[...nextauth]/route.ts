@@ -21,7 +21,7 @@ const handler = NextAuth({
         nickname: user.name,
         provider: account?.provider,
       });
-      const res = await fetch(`${process.env.BASE_URL}/v1/login`, {
+      const res = await fetch(`https://yigil.co.kr/api/v1/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,11 +1,16 @@
 import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
-const selectBtns = ['전체', '공개', '비공개'];
+const selectBtns = [
+  { label: '전체', value: 'all' },
+  { label: '공개', value: 'public' },
+  { label: '비공개', value: 'private' },
+];
 
 interface TMyPageSelectBtn {
   selectOption: string;
   onClickSelectOption: (option: string) => void;
+  onChangeSortOption: (option: string) => void;
   onChangeAllList: (
     e: EventFor<'input', 'onChange'>,
     setIsChecked: Dispatch<SetStateAction<boolean>>,
@@ -16,27 +21,27 @@ interface TMyPageSelectBtn {
 export default function MyPageSelectBtns({
   selectOption,
   onClickSelectOption,
+  onChangeSortOption,
   onChangeAllList,
 }: TMyPageSelectBtn) {
   const [isChecked, setIsChecked] = useState(false);
   return (
     <>
       <ul className="flex items-center gap-x-2">
-        {selectBtns.map((btn, idx) => (
+        {selectBtns.map(({ label, value }, idx) => (
           <button
-            aria-label=""
             key={idx}
             className={`py-2 px-4 rounded-full ${
-              selectOption === btn
+              selectOption === value
                 ? 'bg-gray-500 text-white'
                 : 'bg-gray-200 text-gray-500'
             }`}
             onClick={() => {
-              onClickSelectOption(btn);
+              onClickSelectOption(value);
               setIsChecked(false);
             }}
           >
-            {btn}
+            {label}
           </button>
         ))}
       </ul>
@@ -50,10 +55,15 @@ export default function MyPageSelectBtns({
           />
           <div>전체 선택</div>
         </div>
-        <select name="" id="" className="p-2">
-          <option value="">최신순</option>
-          <option value="">오래된순</option>
-          <option value="">평점순</option>
+        <select
+          name=""
+          id=""
+          className="p-2"
+          onChange={(e) => onChangeSortOption(e.currentTarget.value)}
+        >
+          <option value="desc">최신순</option>
+          <option value="asc">오래된순</option>
+          <option value="rate">평점순</option>
         </select>
       </div>
     </>

@@ -1,9 +1,8 @@
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock.svg';
 import { TMyPageSpot } from './MyPageSpotList';
-import { getMyPageSpot } from '../hooks/useMyPage';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { postId: TMyPageSpot['postId']; isSecret: boolean }[];
@@ -12,7 +11,7 @@ interface TMyPageSpotItem extends TMyPageSpot {
   selectOption: string;
 }
 
-export default function MyPageSpotItem({
+const MyPageSpotItem = ({
   postId,
   travel_id,
   image_url,
@@ -25,7 +24,7 @@ export default function MyPageSpotItem({
   onChangeCheckedList,
   idx,
   selectOption,
-}: TMyPageSpotItem) {
+}: TMyPageSpotItem) => {
   const [isCheckDisabled, setIsCheckDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -57,7 +56,6 @@ export default function MyPageSpotItem({
         className="w-[32px] h-[32px]"
         checked={isChecked}
         onChange={() => {
-          getMyPageSpot();
           onChangeCheckedList(postId, isSecret);
         }}
       />
@@ -90,4 +88,6 @@ export default function MyPageSpotItem({
       </div>
     </div>
   );
-}
+};
+
+export default MyPageSpotItem;
