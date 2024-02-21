@@ -54,7 +54,7 @@ public class PlaceServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
-        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, "FastFive01.jpg", mockAttachFile);
+        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, mockAttachFile, mockAttachFile);
         when(placeRepository.findById(placeId)).thenReturn(Optional.of(mockPlace));
         when(placeRateRedisIntegrityService.ensurePlaceRate(placeId)).thenReturn(new PlaceRate(placeId, 4.0));
         when(spotRedisIntegrityService.ensureSpotCounts(placeId)).thenReturn(new SpotCount(placeId, 10));
@@ -75,10 +75,10 @@ public class PlaceServiceTest {
         AttachFile mapStaticImageFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        Place mockPlace = new Place(placeName, placeAddress, mockPoint, placeImgUrl, mapStaticImageFile);
+        Place mockPlace = new Place(placeName, placeAddress, mockPoint, mapStaticImageFile, mapStaticImageFile);
         when(placeRepository.findByNameAndAddress(placeName, placeAddress)).thenReturn(Optional.of(mockPlace));
 
-        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson, placeImgUrl, mapStaticImageFile);
+        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson, mapStaticImageFile, mapStaticImageFile);
 
         assertThat(resultPlace).isEqualTo(mockPlace);
         verify(placeRepository, never()).save(any(Place.class));
@@ -96,13 +96,13 @@ public class PlaceServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
-        Place savedPlace = new Place(1L, placeName, placeAddress, mockPoint,  "FastFive01.jpg", mockAttachFile);
+        Place savedPlace = new Place(1L, placeName, placeAddress, mockPoint,  mockAttachFile, mockAttachFile);
 
         when(placeRepository.findByNameAndAddress(placeName, placeAddress)).thenReturn(Optional.empty());
 
         when(placeRepository.save(any(Place.class))).thenReturn(savedPlace);
 
-        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson, "placeImgUrl", mockAttachFile);
+        Place resultPlace = placeService.getOrCreatePlace(placeName, placeAddress, placePointJson, mockAttachFile, mockAttachFile);
 
         assertThat(resultPlace).isEqualTo(savedPlace);
     }
@@ -113,7 +113,8 @@ public class PlaceServiceTest {
         long placeId = 1L;
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        Place mockPlace = new Place(placeId, "패스트캠퍼스", "봉은사역 근처", mockPoint, "FastFive01.jpg", new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L ));
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
+        Place mockPlace = new Place(placeId, "패스트캠퍼스", "봉은사역 근처", mockPoint, mockAttachFile, mockAttachFile);
         when(placeRepository.findAllPlaces(any(Pageable.class))).thenReturn(
                 new SliceImpl<>(List.of(mockPlace)));
         when(placeRateRedisIntegrityService.ensurePlaceRate(anyLong())).thenReturn(new PlaceRate(placeId, 4.0));

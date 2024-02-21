@@ -19,6 +19,7 @@ import {
 
 import ImageItem from './ImageItem';
 import SortableItem from './SortableItem';
+import { AddSpotContext } from '../add/spot/SpotContext';
 
 import type { Dispatch } from 'react';
 import type {
@@ -26,8 +27,9 @@ import type {
   DragStartEvent,
   UniqueIdentifier,
 } from '@dnd-kit/core';
+
 import type { TImageData } from './ImageHandler';
-import { AddSpotContext, type TAddSpotAction } from '../add/spot/SpotContext';
+import type { TAddSpotAction } from '../add/spot/SpotContext';
 
 export default function ImagesContainer({
   dispatch,

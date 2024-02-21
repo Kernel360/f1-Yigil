@@ -10,17 +10,13 @@ import {
   initialAddSpotState,
 } from './spot/SpotContext';
 
-import type { DataInput, Making } from './common/step/types';
+import * as Common from './common';
 
 import SearchBox from '../search';
-import SpotCheck from './common/SpotCheck';
-import InfoTitle from './common/InfoTitle';
-import AddPlaceInfo from './common/AddPlaceInto';
-import { ImageHandler } from '../images';
-import PostRating from './common/PostRating';
-import PostReview from './common/PostReview';
-import AddSpotMap from './common/AddSpotMap';
+import ImageHandler from '../images';
 import MapComponent from '../naver-map/MapComponent';
+
+import type { DataInput, Making } from './common/step/types';
 
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
@@ -45,13 +41,21 @@ export default function AddSpot() {
   const stepLabel = makingSpotStep.data.label;
   const inputLabel = dataFromNewStep.data.label;
 
+  /**
+   * @todo 장소 검색 server action 추가
+   */
   async function search(keyword: string) {
     if (keyword === '') {
       setSearchResults([]);
       return;
     }
 
-    const res = await fetch('http://localhost:3000/endpoints/api/search', {
+    const url =
+      process.env.NODE_ENV !== 'production'
+        ? 'http://localhost:3000/endpoints/api/search'
+        : 'https://yigil.co.kr/endpoints/api/search';
+
+    const res = await fetch(url, {
       method: 'POST',
       body: JSON.stringify({ keyword }),
     });
@@ -69,6 +73,14 @@ export default function AddSpot() {
     setSearchResults(results);
   }
 
+  // 검색을 통해 선택한 장소
+  // Drilling이 심하게 일어나는 것같기도?
+  const [currentFoundPlace, setCurrentFoundPlace] = useState<{
+    name: string;
+    roadAddress: string;
+    coords: { lat: number; lng: number };
+  }>();
+
   return (
     <section className="flex flex-col grow">
       <AddSpotContext.Provider value={addSpotState}>
@@ -82,16 +94,16 @@ export default function AddSpot() {
         {stepLabel === '장소 입력' && (
           <section className=" flex flex-col justify-between grow">
             <SearchBox
-              dispatchSpot={dispatchSpot}
-              dispatchStep={dispatchStep}
               searchResults={searchResults}
               search={search}
+              setCurrentFoundPlace={setCurrentFoundPlace}
             />
             <hr className="my-2 pb-1 align-bottom" />
             <MapComponent width="100%" height="100%">
-              <AddSpotMap
-                title={addSpotState.name}
-                coords={addSpotState.coords}
+              <Common.AddSpotMap
+                place={currentFoundPlace}
+                dispatchStep={dispatchStep}
+                dispatchSpot={dispatchSpot}
               />
             </MapComponent>
           </section>
@@ -101,13 +113,16 @@ export default function AddSpot() {
             {inputLabel === '시작' && <></>}
             {inputLabel === '주소' && (
               <>
-                <InfoTitle label={inputLabel} additionalLabel="를 확인하세요" />
-                <AddPlaceInfo />
+                <Common.InfoTitle
+                  label={inputLabel}
+                  additionalLabel="를 확인하세요"
+                />
+                <Common.AddPlaceInfo />
               </>
             )}
             {inputLabel === '사진' && (
               <>
-                <InfoTitle
+                <Common.InfoTitle
                   label={inputLabel}
                   additionalLabel="을 업로드하세요"
                 />
@@ -116,19 +131,26 @@ export default function AddSpot() {
             )}
             {inputLabel === '별점' && (
               <>
-                <InfoTitle label={inputLabel} additionalLabel="을 매기세요" />
-                <PostRating dispatch={dispatchSpot} />
+                <Common.InfoTitle
+                  label={inputLabel}
+                  additionalLabel="을 매기세요"
+                />
+                <Common.PostRating dispatch={dispatchSpot} />
               </>
             )}
             {inputLabel === '리뷰' && (
               <>
-                <InfoTitle label={inputLabel} additionalLabel="를 남기세요" />
-                <PostReview dispatch={dispatchSpot} />
+                <Common.InfoTitle
+                  label={inputLabel}
+                  additionalLabel="를 남기세요"
+                />
+                <Common.PostReview dispatch={dispatchSpot} />
               </>
             )}
           </>
         )}
-        {stepLabel === '장소 확정' && <SpotCheck />}
+        {stepLabel === '장소 확정' && <Common.SpotCheck />}
+        {stepLabel === '완료' && <Common.AddConfirmContent />}
       </AddSpotContext.Provider>
     </section>
   );

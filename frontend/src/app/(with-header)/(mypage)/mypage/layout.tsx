@@ -3,6 +3,11 @@ import MyPageInfo from '@/app/_components/mypage/MyPageInfo';
 import type { ReactNode } from 'react';
 import { requestWithCookie } from '@/app/_components/api/httpRequest';
 
+const url =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:3000/endpoints/api/member'
+    : 'https://yigil.co.kr/endpoints/api/member';
+
 export default async function MyPageInformation({
   children,
 }: {
