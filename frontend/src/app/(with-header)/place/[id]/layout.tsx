@@ -1,4 +1,4 @@
-import BackButton from './BackButton';
+import BackButton from '@/app/_components/place/BackButton';
 
 import type { ReactElement } from 'react';
 

@@ -1,6 +1,6 @@
 import { placeDetailSchema } from '@/types/response';
 
-import PlaceDetail from './PlaceDetail';
+import PlaceDetail from '@/app/_components/place/PlaceDetail';
 
 const url =
   process.env.NODE_ENV === 'production'
