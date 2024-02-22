@@ -40,8 +40,8 @@ function Pagination({
   };
 
   return (
-    <div className={`my-[50px] flex grow justify-center items-center`}>
-      <span className="hover:cursor-pointer mx-4" onClick={minusPage}>
+    <div className={`my-5 pb-10 flex justify-center items-center`}>
+      <span className="hover:cursor-pointer px-4" onClick={minusPage}>
         <svg
           width="5"
           height="15"
@@ -63,9 +63,9 @@ function Pagination({
             key={page}
             className={`${
               currentPage === page
-                ? 'font-bold'
-                : 'font-normal text-lenssisGray'
-            } text-[11px] cursor-pointer hover:font-bold mx-2`}
+                ? 'font-bold text-main'
+                : 'font-normal text-gray-500'
+            }  cursor-pointer hover:font-bold hover:text-main mx-2`}
             onClick={() => clickPage(page)}
           >
             {page}

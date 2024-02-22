@@ -56,10 +56,12 @@ export default function MyPageSelectBtns({
           <div>전체 선택</div>
         </div>
         <select
-          name=""
-          id=""
+          name="sort-option"
           className="p-2"
-          onChange={(e) => onChangeSortOption(e.currentTarget.value)}
+          onChange={(e) => {
+            setIsChecked(false);
+            onChangeSortOption(e.currentTarget.value);
+          }}
         >
           <option value="desc">최신순</option>
           <option value="asc">오래된순</option>

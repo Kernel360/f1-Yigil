@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
-import LockIcon from '/public/icons/lock.svg';
+import LockIcon from '/public/icons/lock-white.svg';
 import { TMyPageSpot } from './MyPageSpotList';
 
 interface TMyPageSpotItem extends TMyPageSpot {
@@ -37,7 +37,7 @@ const MyPageSpotItem = ({
   }, [checkedList.length]);
 
   useEffect(() => {
-    if (selectOption === '전체' && isSecret) {
+    if (selectOption === 'all' && isSecret) {
       setIsCheckDisabled(true);
       setIsChecked(false);
     }
@@ -69,7 +69,7 @@ const MyPageSpotItem = ({
         />
         {isSecret && (
           <div className="absolute top-2 right-2 p-2 bg-black rounded-full">
-            <LockIcon className="w-[16px] h-[16px] stroke-white" />
+            <LockIcon className="w-4 h-4" />
           </div>
         )}
       </div>

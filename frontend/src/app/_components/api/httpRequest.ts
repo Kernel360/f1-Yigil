@@ -3,9 +3,11 @@
 import { cookies } from 'next/headers';
 
 const BASE_URL =
-  typeof window !== 'undefined'
-    ? process.env.NEXT_PUBLIC_BASE_URL
-    : process.env.BASE_URL;
+  process.env.NEXT_PUBLIC_API_MOKING !== 'enabled'
+    ? process.env.BASE_URL
+    : typeof window === 'undefined'
+    ? 'http://localhost:8080/api'
+    : 'http://localhost:3000/api';
 
 const headerInitOption = {
   'Content-Type': 'application/json',
@@ -27,13 +29,7 @@ export const requestWithoutCookie =
 
         ...(body && { body: JSON.stringify(body) }),
       });
-
       return res.json();
-
-      // if (res.ok) {
-      //   const result = await res.json();
-      //   return result;
-      // }
     } catch (error) {
       // error 컴포넌트나 토스트 정의 시 사용할 부분
       console.log(error); // 디버그 용
@@ -61,20 +57,9 @@ export const requestWithCookie =
       });
 
       return res.json();
-
-      // if (res.ok) {
-      //   const result = await res.json();
-      //   return result;
-      // }
     } catch (error) {
       // error 컴포넌트나 토스트 정의 시 사용할 부분
       console.log(error); // 디버그 용
       console.error(errorMsg);
     }
   };
-
-/**
- *  const spotsRequest = httpRequest('spots');
- *  const getSpot = spotsRequest('/1');
- *  const res = await getSpot()()('요청이 실패했습니다.');
- */

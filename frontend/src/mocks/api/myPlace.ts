@@ -1,125 +1,162 @@
 import { http, HttpResponse } from 'msw';
-import { myPlaceCourseData, myPlaceSpotData } from './data/myPlaceData';
+import { myPlaceSpotData } from './data/myPlaceData';
 
 const handlers = [
   http.get(`/api/v1/members/spot`, ({ request }) => {
-    const [page, size, sortOrder, selected] = request.url
+    const [page, size, sortOrder, sortBy, selected] = request.url
       .split('?')[1]
       .split('&');
+
+    console.log(request.url);
 
     const pageNum = Number(page.split('=')[1]);
     const sortOrdered = sortOrder.split('=')[1];
     const select = selected.split('=')[1];
+    const sortedBy = sortBy.split('=')[1];
+
+    const descPlaceData = myPlaceSpotData.sort((a, b) => a.postId - b.postId);
+    const ascPlaceData = myPlaceSpotData.sort((a, b) => b.postId - a.postId);
+    const ratePlaceData = myPlaceSpotData.sort((a, b) => b.rating - a.rating);
 
     if (select === 'all') {
       if (sortOrdered === 'desc') {
-        const sortedPlaceData = myPlaceSpotData.sort(
-          (a, b) => a.postId - b.postId,
-        );
         if (pageNum === 1)
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData.filter((item, idx) => idx < 5),
-            pageSize: 10,
+            data: descPlaceData.filter((item, idx) => idx < 5),
+            totalCount: 12,
           });
         else if (pageNum === 2) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
-            pageSize: 10,
+            data: descPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
+            totalCount: 12,
           });
         } else if (pageNum === 3) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData.filter((item, idx) => idx > 10),
-            pageSize: 10,
-            last: true,
+            data: descPlaceData.filter((item, idx) => idx > 10),
+            totalCount: 12,
           });
         }
-      } else {
-        const sortedPlaceData = myPlaceSpotData.sort(
-          (a, b) => b.postId - a.postId,
-        );
+      } else if (sortOrdered === 'asc') {
         if (pageNum === 1)
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData.filter((item, idx) => idx < 5),
-            pageSize: 10,
+            data: ascPlaceData.filter((item, idx) => idx < 5),
+            totalCount: 12,
           });
         else if (pageNum === 2) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
-            pageSize: 10,
+            data: ascPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
+            totalCount: 12,
           });
         } else if (pageNum === 3) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData.filter((item, idx) => idx > 10),
-            pageSize: 10,
-            last: true,
+            data: ascPlaceData.filter((item, idx) => idx > 10),
+            totalCount: 12,
+          });
+        }
+      } else if (sortedBy === 'rate') {
+        if (pageNum === 1)
+          return HttpResponse.json({
+            status: 200,
+            data: ratePlaceData.filter((item, idx) => idx < 5),
+            totalCount: 12,
+          });
+        else if (pageNum === 2) {
+          return HttpResponse.json({
+            status: 200,
+            data: ratePlaceData.filter((item, idx) => idx > 5 && idx <= 10),
+            totalCount: 12,
+          });
+        } else if (pageNum === 3) {
+          return HttpResponse.json({
+            status: 200,
+            data: ratePlaceData.filter((item, idx) => idx > 10),
+            totalCount: 12,
           });
         }
       }
     } else if (select === 'public') {
       if (sortOrdered === 'desc') {
-        const sortedPlaceData = myPlaceSpotData.sort(
-          (a, b) => a.postId - b.postId,
-        );
         if (pageNum === 1)
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData
+            data: descPlaceData
               .filter((item) => !item.isSecret)
               .filter((item, idx) => idx < 5),
-            pageSize: 10,
+            totalCount: 12,
           });
         else if (pageNum === 2) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData
+            data: descPlaceData
               .filter((item, idx) => idx > 5 && idx <= 10)
               .filter((item) => !item.isSecret),
-            pageSize: 10,
+            totalCount: 12,
           });
         } else if (pageNum === 3) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData
+            data: descPlaceData
               .filter((item, idx) => idx > 10)
               .filter((item) => !item.isSecret),
-            pageSize: 10,
-            last: true,
+            totalCount: 12,
           });
         }
-      } else {
-        const sortedPlaceData = myPlaceSpotData.sort(
-          (a, b) => b.postId - a.postId,
-        );
+      } else if (sortOrder === 'asc') {
         if (pageNum === 1)
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData
+            data: ascPlaceData
               .filter((item, idx) => idx < 5)
               .filter((item) => !item.isSecret),
-            pageSize: 10,
+            totalCount: 12,
           });
         else if (pageNum === 2) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData
+            data: ascPlaceData
               .filter((item, idx) => idx > 5 && idx <= 10)
               .filter((item) => !item.isSecret),
-            pageSize: 10,
+            totalCount: 12,
           });
         } else if (pageNum === 3) {
           return HttpResponse.json({
             status: 200,
-            data: sortedPlaceData
+            data: ascPlaceData
               .filter((item, idx) => idx > 10)
               .filter((item) => !item.isSecret),
-            pageSize: 10,
-            last: true,
+            totalCount: 12,
+          });
+        }
+      } else if (sortedBy === 'rate') {
+        if (pageNum === 1)
+          return HttpResponse.json({
+            status: 200,
+            data: ratePlaceData
+              .filter((item, idx) => idx < 5)
+              .filter((item) => !item.isSecret),
+            totalCount: 12,
+          });
+        else if (pageNum === 2) {
+          return HttpResponse.json({
+            status: 200,
+            data: ratePlaceData
+              .filter((item, idx) => idx > 5 && idx <= 10)
+              .filter((item) => !item.isSecret),
+            totalCount: 12,
+          });
+        } else if (pageNum === 3) {
+          return HttpResponse.json({
+            status: 200,
+            data: ratePlaceData
+              .filter((item, idx) => idx > 10)
+              .filter((item) => !item.isSecret),
+            totalCount: 12,
           });
         }
       }
@@ -130,7 +167,7 @@ const handlers = [
     return HttpResponse.json({
       status: 200,
       data: { id: 1 },
-      pageSize: 10,
+      totalCount: 12,
     });
   }),
 ];
