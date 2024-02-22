@@ -9,22 +9,6 @@ import Dialog from '@/app/_components/ui/dialog/Dialog';
 import type { EventFor } from '@/types/type';
 import type { TStep } from './types';
 
-function dataUrlToBlob(dataURI: string) {
-  const byteString = atob(dataURI.split(',')[1]);
-
-  // separate out the mime component
-  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-  // write the bytes of the string to an ArrayBuffer
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-
-  return new Blob([ab], { type: mimeString });
-}
-
 /**
  * `next` - 상위 컴포넌트에서 `dispatch({ type: 'next' })`를 감싼 이벤트 핸들러
  *
