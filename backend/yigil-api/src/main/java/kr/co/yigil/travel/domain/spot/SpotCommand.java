@@ -4,14 +4,13 @@ import static kr.co.yigil.file.FileUploadUtil.predictAttachFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.lang.model.util.Elements.Origin;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploadUtil;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.interfaces.dto.util.GeojsonConverter;
+import kr.co.yigil.travel.util.GeojsonConverter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

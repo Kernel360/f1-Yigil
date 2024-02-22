@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.infrastructure;
+package kr.co.yigil.travel.infrastructure.spot;
 
 import java.util.Comparator;
 import java.util.LinkedList;

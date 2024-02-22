@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.infrastructure;
+package kr.co.yigil.travel.infrastructure.course;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

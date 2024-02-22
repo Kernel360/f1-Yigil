@@ -1,7 +1,8 @@
-package kr.co.yigil.travel.infrastructure;
+package kr.co.yigil.travel.infrastructure.course;
 
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseStore;
+import kr.co.yigil.travel.infrastructure.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,5 +14,10 @@ public class CourseStoreImpl implements CourseStore {
     @Override
     public Course store(Course initCourse) {
         return courseRepository.save(initCourse);
+    }
+
+    @Override
+    public void remove(Course course) {
+        courseRepository.delete(course);
     }
 }

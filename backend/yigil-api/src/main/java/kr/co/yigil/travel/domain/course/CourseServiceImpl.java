@@ -7,8 +7,10 @@ import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.travel.domain.Course;
+import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
+import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
 import kr.co.yigil.travel.domain.course.CourseInfo.Main;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +44,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
+    public void registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command,
+            Long memberId) {
+        Member member = memberReader.getMember(memberId);
+        var spots = courseSpotSeriesFactory.store(command, memberId);
+        var initCourse = command.toEntity(spots, member);
+        var course = courseStore.store(initCourse);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Main retrieveCourseInfo(Long courseId) {
         var course = courseReader.getCourse(courseId);
@@ -54,6 +66,15 @@ public class CourseServiceImpl implements CourseService {
         var course = courseReader.getCourse(courseId);
         if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
         var modifedCourse = courseSeriesFactory.modify(command, course);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCourse(Long courseId, Long memberId) {
+        var course = courseReader.getCourse(courseId);
+        if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
+        courseStore.remove(course);
+        course.getSpots().forEach(Spot::changeOutOfCourse);
     }
 
 }

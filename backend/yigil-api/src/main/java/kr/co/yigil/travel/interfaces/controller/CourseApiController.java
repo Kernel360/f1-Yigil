@@ -7,7 +7,9 @@ import kr.co.yigil.travel.application.CourseFacade;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.CourseMapper;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
+import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.CourseDeleteResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CourseRegisterResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CourseUpdateResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,15 +61,17 @@ public class CourseApiController {
         return ResponseEntity.ok().body(new CourseRegisterResponse("Course 생성 완료"));
     }
 
-//    @PostMapping
-//    @MemberOnly
-//    public ResponseEntity<CourseRegisterResponse> registerCourseWithoutSeries(
-//            @ModelAttribute CourseRegisterWithoutSeriesRequest request,
-//            @Auth final Accessor accessor
-//    ) {
-//        Long memberId = accessor.getMemberId();
-//        var courseCommand = courseRegisterm
-//    }
+    @PostMapping("/only")
+    @MemberOnly
+    public ResponseEntity<CourseRegisterResponse> registerCourseWithoutSeries(
+            @ModelAttribute CourseRegisterWithoutSeriesRequest request,
+            @Auth final Accessor accessor
+    ) {
+        Long memberId = accessor.getMemberId();
+        var courseCommand = courseMapper.toRegisterCourseRequest(request);
+        courseFacade.registerCourseWithoutSeries(courseCommand, memberId);
+        return ResponseEntity.ok().body(new CourseRegisterResponse("Course 생성 완료"));
+    }
 
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDetailInfoDto> retrieveCourse(@PathVariable("courseId") Long courseId) {
@@ -87,4 +92,16 @@ public class CourseApiController {
         courseFacade.modifyCourse(courseCommand, courseId, memberId);
         return ResponseEntity.ok().body(new CourseUpdateResponse("Course 수정 완료"));
     }
+
+    @DeleteMapping("/{courseId}")
+    @MemberOnly
+    public ResponseEntity<CourseDeleteResponse> deleteSpot(
+            @PathVariable("courseId") Long courseId,
+            @Auth final Accessor accessor
+    ) {
+        Long memberId = accessor.getMemberId();
+        courseFacade.deleteCourse(courseId, memberId);
+        return ResponseEntity.ok().body(new CourseDeleteResponse("Course 삭제 완료"));
+    }
+
 }

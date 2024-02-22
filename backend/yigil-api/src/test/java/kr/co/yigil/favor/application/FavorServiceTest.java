@@ -24,7 +24,6 @@ import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.Travel;
-import kr.co.yigil.travel.application.TravelService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

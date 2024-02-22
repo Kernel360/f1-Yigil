@@ -11,7 +11,7 @@ bootJar {
 }
 
 group = 'kr.co.yigil'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -25,7 +25,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.528'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 

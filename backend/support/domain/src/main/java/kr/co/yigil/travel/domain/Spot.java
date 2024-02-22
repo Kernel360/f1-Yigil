@@ -66,4 +66,8 @@ public class Spot extends Travel {
         this.attachFiles.updateFiles(attachFiles);
     }
 
+    public void changeInCourse() {
+        this.isInCourse = true;
+    }
+    public void changeOutOfCourse() { this.isInCourse = false; }
 }

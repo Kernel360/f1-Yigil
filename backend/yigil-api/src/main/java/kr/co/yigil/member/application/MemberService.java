@@ -23,8 +23,6 @@ import kr.co.yigil.member.dto.response.MemberUpdateResponse;
 import kr.co.yigil.member.repository.MemberRepository;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.interfaces.dto.response.CourseFindDto;
-import kr.co.yigil.travel.interfaces.dto.response.SpotFindDto;
 import kr.co.yigil.travel.infrastructure.CourseRepository;
 import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;

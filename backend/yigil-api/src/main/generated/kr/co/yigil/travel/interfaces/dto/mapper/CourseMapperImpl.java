@@ -10,6 +10,7 @@ import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
+import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-22T17:26:14+0900",
+    date = "2024-02-22T18:27:47+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -64,6 +65,29 @@ public class CourseMapperImpl implements CourseMapper {
         registerCourseRequest.registerSpotRequests( spotRegisterRequestListToRegisterSpotRequestList( request.getSpotRegisterRequests() ) );
 
         return registerCourseRequest.build();
+    }
+
+    @Override
+    public CourseCommand.RegisterCourseRequestWithSpotInfo toRegisterCourseRequest(CourseRegisterWithoutSeriesRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        CourseCommand.RegisterCourseRequestWithSpotInfo.RegisterCourseRequestWithSpotInfoBuilder registerCourseRequestWithSpotInfo = CourseCommand.RegisterCourseRequestWithSpotInfo.builder();
+
+        registerCourseRequestWithSpotInfo.title( request.getTitle() );
+        registerCourseRequestWithSpotInfo.description( request.getDescription() );
+        registerCourseRequestWithSpotInfo.rate( request.getRate() );
+        registerCourseRequestWithSpotInfo.isPrivate( request.isPrivate() );
+        registerCourseRequestWithSpotInfo.representativeSpotOrder( request.getRepresentativeSpotOrder() );
+        registerCourseRequestWithSpotInfo.lineStringJson( request.getLineStringJson() );
+        registerCourseRequestWithSpotInfo.mapStaticImageFile( request.getMapStaticImageFile() );
+        List<Long> list = request.getSpotIds();
+        if ( list != null ) {
+            registerCourseRequestWithSpotInfo.spotIds( new ArrayList<Long>( list ) );
+        }
+
+        return registerCourseRequestWithSpotInfo.build();
     }
 
     @Override

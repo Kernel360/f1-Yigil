@@ -7,7 +7,7 @@ import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
-import kr.co.yigil.travel.interfaces.dto.util.GeojsonConverter;
+import kr.co.yigil.travel.util.GeojsonConverter;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -56,6 +56,21 @@ public class CourseCommand {
         private String lineStringJson;
         private MultipartFile mapStaticImageFile;
         private List<Long> spotIds;
+
+        public Course toEntity(List<Spot> spots, Member member) {
+            var attachFile = FileUploadUtil.predictAttachFile(mapStaticImageFile);
+            return new Course(
+                    member,
+                    title,
+                    description,
+                    rate,
+                    GeojsonConverter.convertToLineString(lineStringJson),
+                    isPrivate,
+                    spots,
+                    representativeSpotOrder,
+                    attachFile
+            );
+        }
     }
 
     @Getter

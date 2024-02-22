@@ -14,7 +14,6 @@ import kr.co.yigil.member.repository.MemberRepository;
 import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.travel.domain.Travel;
-import kr.co.yigil.travel.application.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

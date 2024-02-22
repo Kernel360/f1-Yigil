@@ -11,8 +11,6 @@ import kr.co.yigil.member.dto.request.MemberUpdateRequest;
 import kr.co.yigil.member.dto.response.MemberDeleteResponse;
 import kr.co.yigil.member.dto.response.MemberInfoResponse;
 import kr.co.yigil.member.dto.response.MemberUpdateResponse;
-import kr.co.yigil.travel.interfaces.dto.response.CourseFindDto;
-import kr.co.yigil.travel.interfaces.dto.response.SpotFindDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

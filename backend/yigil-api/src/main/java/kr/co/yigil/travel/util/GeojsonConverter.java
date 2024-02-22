@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.interfaces.dto.util;
+package kr.co.yigil.travel.util;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;

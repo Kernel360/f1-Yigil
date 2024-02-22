@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.infrastructure;
+package kr.co.yigil.travel.infrastructure.course;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,8 +13,10 @@ import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
+import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
 import kr.co.yigil.travel.domain.course.CourseSpotSeriesFactory;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
+import kr.co.yigil.travel.domain.spot.SpotReader;
 import kr.co.yigil.travel.domain.spot.SpotStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
     private final MemberReader memberReader;
     private final PlaceReader placeReader;
+    private final SpotReader spotReader;
 
     private final PlaceStore placeStore;
     private final SpotStore spotStore;
@@ -50,6 +53,13 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                     return spot;
                 }).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<Spot> store(RegisterCourseRequestWithSpotInfo request, Long memberId) {
+        List<Spot> spots = spotReader.getSpots(request.getSpotIds());
+        spots.forEach(Spot::changeInCourse);
+        return spots;
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {

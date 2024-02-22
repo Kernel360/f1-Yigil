@@ -10,6 +10,7 @@ import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
+import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
 import org.mapstruct.Mapper;
@@ -56,6 +57,19 @@ public interface CourseMapper {
             @Mapping(target = "registerSpotRequests", source = "spotRegisterRequests")
     })
     CourseCommand.RegisterCourseRequest toRegisterCourseRequest(CourseRegisterRequest request);
+
+    @Mappings({
+            @Mapping(target = "title", source = "title"),
+            @Mapping(target = "description", source = "description"),
+            @Mapping(target = "rate", source = "rate"),
+            @Mapping(target = "isPrivate", source = "private"),
+            @Mapping(target = "representativeSpotOrder", source = "representativeSpotOrder"),
+            @Mapping(target = "lineStringJson", source = "lineStringJson"),
+            @Mapping(target = "mapStaticImageFile", source = "mapStaticImageFile"),
+            @Mapping(target = "spotIds", source = "spotIds")
+    })
+    CourseCommand.RegisterCourseRequestWithSpotInfo toRegisterCourseRequest(
+            CourseRegisterWithoutSeriesRequest request);
 
     @Mappings({
             @Mapping(source = "description", target = "description"),

@@ -1,7 +1,8 @@
-package kr.co.yigil.travel.infrastructure;
+package kr.co.yigil.travel.infrastructure.spot;
 
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotStore;
+import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
