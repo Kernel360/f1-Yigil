@@ -9,7 +9,7 @@ import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCacheReader;
 import kr.co.yigil.follow.domain.FollowCount;
-import kr.co.yigil.follow.infrastructure.FollowRepository;
+import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.follow.dto.response.FollowerFindDto;
 import kr.co.yigil.follow.dto.response.FollowingFindDto;
 import kr.co.yigil.global.exception.BadRequestException;
@@ -40,11 +40,11 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final FollowRepository followRepository;
     private final CourseRepository courseRepository;
     private final SpotRepository spotRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final FollowCacheReader followCacheReader;
+    private final FollowReader followReader;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
 
@@ -96,7 +96,7 @@ public class MemberService {
 
     public Slice<FollowerFindDto> getFollowerList(final Long memberId, Pageable pageable) {
         Member member = findMemberById(memberId);
-        Slice<Follow> followerList = followRepository.findAllByFollower(member);
+        Slice<Follow> followerList = followReader.getFollowerSlice(memberId);
         List<FollowerFindDto> followers = followerList.stream()
             .map(this::getFollowerFindDto)
             .toList();
@@ -105,7 +105,7 @@ public class MemberService {
 
     public Slice<FollowingFindDto> getFollowingList(final Long memberId, Pageable pageable) {
         Member member = findMemberById(memberId);
-        Slice<Follow> followingList = followRepository.findAllByFollowing(member);
+        Slice<Follow> followingList = followReader.getFollowingSlice(memberId);
         List<FollowingFindDto> followings = followingList.stream()
             .map(this::getFollowingFindDto)
             .toList();
