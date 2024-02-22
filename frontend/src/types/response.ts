@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+export const backendErrorSchema = z.object({
+  code: z.number(),
+  message: z.string(),
+});
+
 const REGION_VALUES = [
   '서울',
   '경기',
@@ -70,5 +75,10 @@ export const staticMapUrlSchema = z.object({
 
 export const naverStaticMapUrlErrorSchema = z.object({
   errorCode: z.string(),
+  message: z.string(),
+});
+
+export const postSpotResponseSchema = z.object({
+  spot_id: z.number(),
   message: z.string(),
 });

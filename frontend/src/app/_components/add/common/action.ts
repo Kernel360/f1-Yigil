@@ -3,11 +3,16 @@
 import { cookies } from 'next/headers';
 
 import {
+  requestWithoutCookie,
+  requestWithCookie,
+} from '@/app/_components/api/httpRequest';
+import { blobTodataUrl } from '@/utils';
+import {
+  backendErrorSchema,
   naverStaticMapUrlErrorSchema,
+  postSpotResponseSchema,
   staticMapUrlSchema,
 } from '@/types/response';
-import { requestWithoutCookie } from '@/app/_components/api/httpRequest';
-import { blobTodataUrl } from '@/utils';
 
 function staticMapUrl(
   width: number,
@@ -27,6 +32,7 @@ function staticMapUrl(
 
 const cookie = cookies().get('SESSION')?.value;
 const backendStaticMapRequest = requestWithoutCookie('places/static-image');
+const postSpotRequest = requestWithCookie('spots');
 
 const getStaticMapUrlFromBackend = (name: string, address: string) => {
   return backendStaticMapRequest(`name=${name}&address=${address}`)()({
@@ -76,4 +82,26 @@ export async function getMap(
   const dataUrl = await blobTodataUrl(image);
 
   return { status: 'naver', data: dataUrl };
+}
+
+export async function postSpotData(formData: FormData) {
+  const json = await postSpotRequest()('POST', formData)({})();
+
+  const result = postSpotResponseSchema.safeParse(json);
+
+  if (result.success) {
+    console.log(result.data);
+    return;
+  }
+
+  const parsedError = backendErrorSchema.safeParse(json);
+
+  if (parsedError.success) {
+    console.log(parsedError.data);
+    console.error(parsedError.data);
+    return;
+  }
+
+  console.log(parsedError.error);
+  console.error(parsedError.error);
 }
