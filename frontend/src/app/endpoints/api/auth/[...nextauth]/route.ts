@@ -31,7 +31,7 @@ const handler = NextAuth({
         },
         body: postUser,
       });
-      console.log(res);
+
       if (res.ok) {
         const [key, value] = res.headers
           .getSetCookie()[0]

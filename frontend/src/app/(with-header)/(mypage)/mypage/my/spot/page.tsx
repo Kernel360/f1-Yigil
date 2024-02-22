@@ -1,5 +1,3 @@
-import { myPageSpotRequest } from '@/app/_components/mypage/hooks/useMyPage';
-
 import MyPageSpotList, {
   TMyPageSpot,
 } from '@/app/_components/mypage/spot/MyPageSpotList';
