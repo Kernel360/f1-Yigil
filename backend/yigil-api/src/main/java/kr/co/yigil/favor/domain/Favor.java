@@ -25,7 +25,7 @@ public class Favor {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "travel_id")
+    @JoinColumn(name = "post_id")
     private Travel travel;
 
     public Favor(final Member member, final Travel travel) {
