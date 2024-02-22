@@ -5,10 +5,6 @@ import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.travel.application.SpotFacade;
 import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
-import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
-import kr.co.yigil.travel.interfaces.dto.mapper.SpotDetailMapper;
-import kr.co.yigil.travel.interfaces.dto.mapper.SpotModifyMapper;
-import kr.co.yigil.travel.interfaces.dto.mapper.SpotRegisterMapper;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
@@ -38,9 +34,6 @@ public class SpotApiController {
     private final SpotFacade spotFacade;
 
     private final SpotMapper spotMapper;
-    private final SpotDetailMapper spotDetailMapper;
-    private final SpotRegisterMapper spotRegisterMapper;
-    private final SpotModifyMapper spotModifyMapper;
 
     @GetMapping("/place/{placeId}")
     public ResponseEntity<SpotsInPlaceResponse> getSpotsInPlace(
@@ -62,7 +55,7 @@ public class SpotApiController {
             @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
-        var spotCommand = spotRegisterMapper.toRegisterSpotRequest(request);
+        var spotCommand = spotMapper.toRegisterSpotRequest(request);
         spotFacade.registerSpot(spotCommand, memberId);
         return ResponseEntity.ok().body(new SpotRegisterResponse("Spot 생성 완료"));
     }
@@ -70,7 +63,7 @@ public class SpotApiController {
     @GetMapping("/{spotId}")
     public ResponseEntity<SpotDetailInfoDto> retrieveSpot(@PathVariable("spotId") Long spotId) {
         var spotInfo = spotFacade.retrieveSpotInfo(spotId);
-        var response = spotDetailMapper.toSpotDetailInfoDto(spotInfo);
+        var response = spotMapper.toSpotDetailInfoDto(spotInfo);
         return ResponseEntity.ok().body(response);
     }
 
@@ -82,7 +75,7 @@ public class SpotApiController {
             @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
-        var spotCommand = spotModifyMapper.toModifySpotRequest(request);
+        var spotCommand = spotMapper.toModifySpotRequest(request);
         spotFacade.modifySpot(spotCommand, spotId, memberId);
         return ResponseEntity.ok().body(new SpotUpdateResponse("Spot 수정 완료"));
     }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-22T12:09:38+0900",
+    date = "2024-02-22T16:09:55+0900",
     comments = "version: 1.5.4.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -23,6 +23,7 @@ public class SpotModifyMapperImpl implements SpotModifyMapper {
 
         SpotCommand.ModifySpotRequest.ModifySpotRequestBuilder modifySpotRequest = SpotCommand.ModifySpotRequest.builder();
 
+        modifySpotRequest.id( request.getId() );
         modifySpotRequest.rate( request.getRate() );
         modifySpotRequest.description( request.getDescription() );
         modifySpotRequest.originalImages( originalSpotImageListToOriginalSpotImageList( request.getOriginalSpotImages() ) );

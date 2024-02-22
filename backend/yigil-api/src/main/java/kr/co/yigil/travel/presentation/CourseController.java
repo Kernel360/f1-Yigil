@@ -61,28 +61,14 @@ public class CourseController {
 //        return ResponseEntity.created(uri).body(courseCreateResponse);
 //    }
 
-    @GetMapping("/{course_id}")
-    public ResponseEntity<CourseInfoResponse> getCourseInfo(
-        @PathVariable("course_id") Long courseId
-    ) {
-        CourseInfoResponse courseInfoResponse = courseService.getCourseInfo(courseId);
-        return ResponseEntity.ok().body(courseInfoResponse);
-    }
+//    @GetMapping("/{course_id}")
+//    public ResponseEntity<CourseInfoResponse> getCourseInfo(
+//        @PathVariable("course_id") Long courseId
+//    ) {
+//        CourseInfoResponse courseInfoResponse = courseService.getCourseInfo(courseId);
+//        return ResponseEntity.ok().body(courseInfoResponse);
+//    }
 
-    @PostMapping("/{course_id}")
-    @MemberOnly
-    public ResponseEntity<CourseUpdateResponse> updateCourse(
-        @PathVariable("course_id") Long courseId,
-        @ModelAttribute CourseUpdateRequest courseUpdateRequest,
-        @Auth final Accessor accessor
-    ) {
-        CourseUpdateResponse courseUpdateResponse = courseService.updateCourse(courseId,
-            accessor.getMemberId(), courseUpdateRequest);
-        URI uri = URI.create("/api/v1/courses/" + courseId);
-        return ResponseEntity.ok()
-            .location(uri)
-            .body(courseUpdateResponse);
-    }
 
     @DeleteMapping("/{course_id}")
     @MemberOnly

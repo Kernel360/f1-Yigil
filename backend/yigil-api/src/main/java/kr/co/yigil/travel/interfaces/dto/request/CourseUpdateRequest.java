@@ -15,32 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseUpdateRequest {
-
-    private String title;
     private String description;
     private double rate;
-    private boolean isPrivate;
-    private int representativeSpotOrder;
-
-    private String lineStringJson;
-    private MultipartFile mapStaticImageFile;
-    private List<Long> spotIds;
-    private List<Long> removedSpotIds;
-    private List<Long> addedSpotIds;
-
-    public static Course toEntity(Member member, Long courseId,
-        CourseUpdateRequest courseUpdateRequest, List<Spot> spots, AttachFile attachFile) {
-        return new Course(
-            courseId,
-            member,
-            courseUpdateRequest.getTitle(),
-            courseUpdateRequest.getDescription(),
-            courseUpdateRequest.getRate(),
-            GeojsonConverter.convertToLineString(courseUpdateRequest.getLineStringJson()),
-            courseUpdateRequest.isPrivate(),
-            spots,
-            courseUpdateRequest.getRepresentativeSpotOrder(),
-            attachFile
-        );
-    }
+    private List<Long> spotIdOrder;
+    private List<SpotUpdateRequest> courseSpotUpdateRequests;
 }

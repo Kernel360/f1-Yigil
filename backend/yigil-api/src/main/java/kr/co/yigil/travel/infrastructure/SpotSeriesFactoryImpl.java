@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileReader;
 import kr.co.yigil.file.FileUploadUtil;
 import kr.co.yigil.travel.domain.Spot;
@@ -26,11 +25,13 @@ public class SpotSeriesFactoryImpl implements SpotSeriesFactory {
                 .map(image -> new CombinedImage(
                         fileReader.getFileByUrl(image.getImageUrl()), image.getIndex()))
                 .collect(Collectors.toCollection(LinkedList::new));
+        if(command.getUpdatedImages() != null) {
+            spotComibinedImageList.addAll(command.getUpdatedImages().stream()
+                    .map(image -> new CombinedImage(
+                            FileUploadUtil.predictAttachFile(image.getImageFile()), image.getIndex()))
+                    .toList());
+        }
 
-        spotComibinedImageList.addAll(command.getUpdatedImages().stream()
-                .map(image -> new CombinedImage(
-                        FileUploadUtil.predictAttachFile(image.getImageFile()), image.getIndex()))
-                .toList());
 
         spotComibinedImageList.sort(Comparator.comparingInt(CombinedImage::index));
 

@@ -1,9 +1,15 @@
 package kr.co.yigil.travel.domain.course;
 
+import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
+
+import java.util.Objects;
+import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.travel.domain.Course;
+import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
+import kr.co.yigil.travel.domain.course.CourseInfo.Main;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -18,6 +24,7 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseStore courseStore;
 
+    private final CourseSeriesFactory courseSeriesFactory;
     private final CourseSpotSeriesFactory courseSpotSeriesFactory;
 
     @Override
@@ -33,4 +40,20 @@ public class CourseServiceImpl implements CourseService {
         var initCourse = command.toEntity(spots, member);
         var course = courseStore.store(initCourse);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Main retrieveCourseInfo(Long courseId) {
+        var course = courseReader.getCourse(courseId);
+        return new Main(course);
+    }
+
+    @Override
+    @Transactional
+    public void modifyCourse(ModifyCourseRequest command, Long courseId, Long memberId) {
+        var course = courseReader.getCourse(courseId);
+        if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
+        var modifedCourse = courseSeriesFactory.modify(command, course);
+    }
+
 }

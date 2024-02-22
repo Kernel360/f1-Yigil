@@ -1,5 +1,7 @@
 package kr.co.yigil.travel.infrastructure;
 
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseReader;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,12 @@ import org.springframework.stereotype.Component;
 public class CourseReaderImpl implements CourseReader {
 
     private final CourseRepository courseRepository;
+
+    @Override
+    public Course getCourse(Long courseId) {
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new BadRequestException(ExceptionCode.NOT_FOUND_COURSE_ID));
+    }
 
     @Override
     public Slice<Course> getCoursesSliceInPlace(Long placeId, Pageable pageable) {

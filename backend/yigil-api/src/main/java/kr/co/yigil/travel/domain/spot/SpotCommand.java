@@ -73,12 +73,11 @@ public class SpotCommand {
     @Builder
     @ToString
     public static class ModifySpotRequest {
+        private final Long id;
         private final double rate;
         private final String description;
         private final List<OriginalSpotImage> originalImages;
         private final List<UpdateSpotImage> updatedImages;
-
-
     }
 
     @Getter

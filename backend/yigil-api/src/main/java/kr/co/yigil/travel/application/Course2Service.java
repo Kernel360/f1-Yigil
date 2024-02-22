@@ -82,29 +82,6 @@ public class Course2Service {
         return new SliceImpl<>(courseFindDtoList, pageable, courses.hasNext());
     }
 
-    @Transactional
-    public CourseUpdateResponse updateCourse(Long courseId, Long memberId,
-            CourseUpdateRequest courseUpdateRequest) {
-        Member member = memberService.findMemberById(memberId);
-        List<Long> spotIdList = courseUpdateRequest.getSpotIds();
-        List<Spot> spots = spotRepository.findAllById(spotIdList);
-
-        for (Long id : courseUpdateRequest.getAddedSpotIds()) {
-            Spot spot = spotService.findSpotById(id);
-            spot.setInCourse(true);
-        }
-
-        for (Long id : courseUpdateRequest.getRemovedSpotIds()) {
-            Spot spot = spotService.findSpotById(id);
-            spot.setInCourse(false);
-        }
-
-        AttachFile attachFile = getAttachFile(courseUpdateRequest.getMapStaticImageFile());
-        Course newCourse = CourseUpdateRequest.toEntity(member, courseId, courseUpdateRequest,
-                spots, attachFile);
-        courseRepository.save(newCourse);
-        return new CourseUpdateResponse("경로 수정 성공");
-    }
 
     @Transactional
     public CourseDeleteResponse deleteCourse(Long courseId, Long memberId) {
