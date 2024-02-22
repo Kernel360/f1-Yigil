@@ -13,16 +13,16 @@ export default async function MyPageInformation({
 }: {
   children: ReactNode;
 }) {
-  const res = await fetch('http://localhost:8080/api/v1/members', {
-    method: 'GET',
-    headers: {
-      Cookie: 'SESSION=id',
-    },
-  });
-  const { data: memberInfo } = await res.json();
+  // const res = await fetch('http://localhost:8080/api/v1/members', {
+  //   method: 'GET',
+  //   headers: {
+  //     Cookie: 'SESSION=id',
+  //   },
+  // });
+  // const { data: memberInfo } = await res.json();
 
-  // const memberInfo = await requestWithCookie('members')()()()();
-  // console.log(memberInfo);
+  const memberInfo = await requestWithCookie('members')()()()();
+  console.log(memberInfo);
 
   return (
     <section className="w-full h-full flex flex-col">
