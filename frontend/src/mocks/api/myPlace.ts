@@ -7,8 +7,6 @@ const handlers = [
       .split('?')[1]
       .split('&');
 
-    console.log(request.url);
-
     const pageNum = Number(page.split('=')[1]);
     const sortOrdered = sortOrder.split('=')[1];
     const select = selected.split('=')[1];

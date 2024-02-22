@@ -33,3 +33,9 @@ export default function MyPageInfo({
     </section>
   );
 }
+
+
+/**
+ * 
+ * TODO: 마이페이지 들어갔을 때 유저 검증 (memberInfo의 코드에 따라)
+ * */
