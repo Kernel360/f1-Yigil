@@ -21,7 +21,7 @@ export default function AddPlaceInfo() {
       <div className="w-full h-80 p-4 relative">
         <Image
           src={spotMapImageUrl}
-          alt="Example static map"
+          alt={`${name} 지도 이미지`}
           fill
           unoptimized
         />

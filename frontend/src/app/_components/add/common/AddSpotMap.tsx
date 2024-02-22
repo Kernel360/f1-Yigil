@@ -1,12 +1,6 @@
 'use client';
 import React, { Dispatch, useEffect, useRef, useState } from 'react';
-import {
-  Listener,
-  Marker,
-  NaverMap,
-  Overlay,
-  useNavermaps,
-} from 'react-naver-maps';
+import { Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import { plusMarker } from '../../naver-map/plusMarker';
 
 import type { TAddSpotAction } from '../spot/SpotContext';

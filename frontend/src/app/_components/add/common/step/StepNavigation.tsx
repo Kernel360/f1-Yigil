@@ -1,15 +1,15 @@
 import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { dataUrlToBlob } from '@/utils';
 import { AddSpotContext } from '../../spot/SpotContext';
+import { postSpotData } from '../action';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
 import Dialog from '@/app/_components/ui/dialog/Dialog';
 
 import type { EventFor } from '@/types/type';
 import type { TStep } from './types';
-import { dataUrlToBlob } from '@/utils';
-import { postSpotData } from '../action';
 
 /**
  * `next` - 상위 컴포넌트에서 `dispatch({ type: 'next' })`를 감싼 이벤트 핸들러
