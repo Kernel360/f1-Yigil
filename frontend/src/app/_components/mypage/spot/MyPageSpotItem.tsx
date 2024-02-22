@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock.svg';
 import { TMyPageSpot } from './MyPageSpotList';
-import { getMyPageSpot } from '../hooks/useMyPage';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { postId: TMyPageSpot['postId']; isSecret: boolean }[];
@@ -57,7 +56,6 @@ export default function MyPageSpotItem({
         className="w-[32px] h-[32px]"
         checked={isChecked}
         onChange={() => {
-          getMyPageSpot();
           onChangeCheckedList(postId, isSecret);
         }}
       />
