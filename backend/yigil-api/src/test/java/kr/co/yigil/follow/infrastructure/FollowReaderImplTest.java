@@ -10,6 +10,7 @@ import kr.co.yigil.follow.dto.FollowCountDto;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,7 +31,7 @@ public class FollowReaderImplTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+    @DisplayName("getFollowCount 메서드가 올바른 FollowCount를 반환하는지")
     @Test
     void whenGetFollowCount_thenReturnsCorrectFollowCount() {
         Long memberId = 1L;
@@ -46,6 +47,7 @@ public class FollowReaderImplTest {
         assertEquals(expectedFollowCount, actualFollowCount);
     }
 
+    @DisplayName("isFollowing 메서드가 올바른 결과를 반환하는지")
     @Test
     void whenIsFollowing_thenReturnsCorrectResult() {
         Long followerId = 1L;

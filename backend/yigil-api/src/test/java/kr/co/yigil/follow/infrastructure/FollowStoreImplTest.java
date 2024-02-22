@@ -7,6 +7,7 @@ import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.member.Member;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,7 +25,7 @@ public class FollowStoreImplTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+    @DisplayName("팔로우가 요청되었을 때 FollowRepository의 save 메서드가 호출되는지")
     @Test
     void whenFollow_thenSaveIsCalled() {
         Member follower = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
@@ -34,7 +35,7 @@ public class FollowStoreImplTest {
 
         verify(followRepository, times(1)).save(new Follow(follower, following));
     }
-
+    @DisplayName("언팔로우가 요청되었을 때 FollowRepository의 deleteByFollowerAndFollowing 메서드가 호출되는지")
     @Test
     void whenUnfollow_thenDeleteByFollowerAndFollowingIsCalled() {
         Member unfollower =  new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
