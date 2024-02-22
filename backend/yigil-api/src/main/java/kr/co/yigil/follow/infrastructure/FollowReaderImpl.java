@@ -17,7 +17,6 @@ public class FollowReaderImpl implements FollowReader {
     private final MemberReader memberReader;
 
     @Override
-    @Transactional(readOnly = true)
     public FollowCount getFollowCount(Long memberId) {
         Member member = memberReader.getMember(memberId);
         FollowCountDto followCountDto = followRepository.getFollowCounts(member);
@@ -25,7 +24,6 @@ public class FollowReaderImpl implements FollowReader {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean isFollowing(Long followerId, Long followingId) {
         return followRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }

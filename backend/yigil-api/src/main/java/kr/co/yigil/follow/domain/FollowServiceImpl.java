@@ -29,7 +29,7 @@ public class FollowServiceImpl implements FollowService {
         Member follower = memberReader.getMember(followerId);
         Member following = memberReader.getMember(followingId);
 
-        followStore.follow(follower, following);
+        followStore.store(follower, following);
         followCacheStore.incrementFollowersCount(followingId);
         followCacheStore.incrementFollowingsCount(followerId);
 
@@ -46,7 +46,7 @@ public class FollowServiceImpl implements FollowService {
         Member unfollower = memberReader.getMember(unfollowerId);
         Member unfollowing = memberReader.getMember(unfollowingId);
 
-        followStore.unfollow(unfollower, unfollowing);
+        followStore.remove(unfollower, unfollowing);
         followCacheStore.decrementFollowersCount(unfollowingId);
         followCacheStore.decrementFollowingsCount(unfollowerId);
     }

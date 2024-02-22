@@ -53,7 +53,7 @@ public class FollowServiceImplTest {
 
         followServiceImpl.follow(followerId, followingId);
 
-        verify(followStore, times(1)).follow(any(Member.class), any(Member.class));
+        verify(followStore, times(1)).store(any(Member.class), any(Member.class));
         verify(followCacheStore, times(1)).incrementFollowersCount(followingId);
         verify(followCacheStore, times(1)).incrementFollowingsCount(followerId);
     }
@@ -93,7 +93,7 @@ public class FollowServiceImplTest {
 
         followServiceImpl.unfollow(unfollowerId, unfollowingId);
 
-        verify(followStore, times(1)).unfollow(any(Member.class), any(Member.class));
+        verify(followStore, times(1)).remove(any(Member.class), any(Member.class));
         verify(followCacheStore, times(1)).decrementFollowersCount(unfollowingId);
         verify(followCacheStore, times(1)).decrementFollowingsCount(unfollowerId);
     }

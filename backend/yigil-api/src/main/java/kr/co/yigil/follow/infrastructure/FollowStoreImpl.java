@@ -14,15 +14,13 @@ public class FollowStoreImpl implements FollowStore {
     private final FollowRepository followRepository;
 
     @Override
-    @Transactional
-    public void follow(Member follower, Member following) {
+    public void store(Member follower, Member following) {
         followRepository.save(new Follow(follower, following));
 
     }
 
     @Override
-    @Transactional
-    public void unfollow(Member unfollower, Member unfollowing) {
+    public void remove(Member unfollower, Member unfollowing) {
         followRepository.deleteByFollowerAndFollowing(unfollower, unfollowing);
 
     }

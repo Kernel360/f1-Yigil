@@ -31,7 +31,7 @@ public class FollowStoreImplTest {
         Member follower = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         Member following = new Member("kiit09sdf01@gmail.com", "123456", "stone", "profile.jpg", "kakao");
 
-        followStore.follow(follower, following);
+        followStore.store(follower, following);
 
         verify(followRepository, times(1)).save(new Follow(follower, following));
     }
@@ -41,7 +41,7 @@ public class FollowStoreImplTest {
         Member unfollower =  new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         Member unfollowing = new Member("kiit09sdf01@gmail.com", "123456", "stone", "profile.jpg", "kakao");
 
-        followStore.unfollow(unfollower, unfollowing);
+        followStore.remove(unfollower, unfollowing);
 
         verify(followRepository, times(1)).deleteByFollowerAndFollowing(unfollower, unfollowing);
     }
