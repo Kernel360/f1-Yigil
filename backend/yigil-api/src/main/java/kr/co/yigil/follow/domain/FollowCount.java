@@ -1,5 +1,7 @@
 package kr.co.yigil.follow.domain;
 
+import java.io.Serializable;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -9,7 +11,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @AllArgsConstructor
 @RedisHash("followCount")
-public class FollowCount {
+public class FollowCount implements Serializable {
 
     @Id
     private Long memberId;
@@ -34,4 +36,19 @@ public class FollowCount {
         followingCount--;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FollowCount that = (FollowCount) o;
+        return followerCount == that.followerCount &&
+                followingCount == that.followingCount &&
+                Objects.equals(memberId, that.memberId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memberId, followerCount, followingCount);
+    }
 }

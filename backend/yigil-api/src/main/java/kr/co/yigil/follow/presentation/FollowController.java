@@ -3,7 +3,7 @@ package kr.co.yigil.follow.presentation;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.follow.application.FollowService;
+import kr.co.yigil.follow.application.FollowFacade;
 import kr.co.yigil.follow.dto.response.FollowResponse;
 import kr.co.yigil.follow.dto.response.UnfollowResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,22 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class FollowController {
-
-    private final FollowService followService;
-
+    private final FollowFacade followFacade;
     @PostMapping("/api/v1/follow/{memberId}")
     @MemberOnly
     public ResponseEntity<FollowResponse> follow(@Auth final Accessor accessor,
             @PathVariable("memberId") final Long memberId) {
-        FollowResponse response = followService.follow(accessor.getMemberId(), memberId);
-        return ResponseEntity.ok().body(response);
+        followFacade.follow(accessor.getMemberId(), memberId);
+        return ResponseEntity.ok().body(new FollowResponse("팔로우 성공"));
     }
 
     @PostMapping("/api/v1/unfollow/{memberId}")
     @MemberOnly
     public ResponseEntity<UnfollowResponse> unfollow(@Auth final Accessor accessor,
             @PathVariable("memberId") final Long memberId) {
-        UnfollowResponse response = followService.unfollow(accessor.getMemberId(), memberId);
-        return ResponseEntity.ok().body(response);
+
+        followFacade.unfollow(accessor.getMemberId(), memberId);
+        return ResponseEntity.ok().body(new UnfollowResponse("언팔로우 성공"));
     }
 }

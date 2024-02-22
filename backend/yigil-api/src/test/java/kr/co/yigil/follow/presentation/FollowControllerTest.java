@@ -1,12 +1,10 @@
 package kr.co.yigil.follow.presentation;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import kr.co.yigil.follow.application.FollowService;
-import kr.co.yigil.follow.dto.response.FollowResponse;
-import kr.co.yigil.follow.dto.response.UnfollowResponse;
+import kr.co.yigil.follow.application.FollowFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +25,7 @@ public class FollowControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private FollowService followService;
+    private FollowFacade followFacade;
 
     @InjectMocks
     private FollowController followController;
@@ -40,28 +38,25 @@ public class FollowControllerTest {
     @DisplayName("팔로우가 요청되었을 때 200 응답과 response가 잘 반환되는지")
     @Test
     void whenFollow_thenReturns200AndFollowResponse() throws Exception {
-        Long accessorId = 1L;
         Long memberId = 2L;
-        FollowResponse mockResponse = new FollowResponse();
-
-        given(followService.follow(accessorId, memberId)).willReturn(mockResponse);
 
         mockMvc.perform(post("/api/v1/follow/" + memberId)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"message\":\"팔로우 성공\"}"));
+
     }
 
     @DisplayName("언팔로우가 요청되었을 때 200 응답과 Response가 잘 반환되는지")
     @Test
     void whenUnfollow_thenReturns200AndUnfollowResponse() throws Exception {
-        Long accessorId = 1L;
         Long memberId = 2L;
-        UnfollowResponse mockResponse = new UnfollowResponse();
 
-        given(followService.unfollow(accessorId, memberId)).willReturn(mockResponse);
 
         mockMvc.perform(post("/api/v1/unfollow/" + memberId)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"message\":\"언팔로우 성공\"}"));
+
     }
 }
