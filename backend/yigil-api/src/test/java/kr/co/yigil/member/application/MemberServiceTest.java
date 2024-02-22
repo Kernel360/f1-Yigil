@@ -15,7 +15,7 @@
 //import kr.co.yigil.file.FileUploadEvent;
 //import kr.co.yigil.follow.domain.Follow;
 //import kr.co.yigil.follow.domain.FollowCount;
-//import kr.co.yigil.follow.domain.repository.FollowRepository;
+//import kr.co.yigil.follow.infrastructure.FollowRepository;
 //import kr.co.yigil.global.exception.BadRequestException;
 //import kr.co.yigil.member.Member;
 //import kr.co.yigil.member.SocialLoginType;

@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import kr.co.yigil.follow.domain.FollowCount;
-import kr.co.yigil.follow.domain.repository.FollowRepository;
-import kr.co.yigil.follow.dto.FollowCountDto;
+import kr.co.yigil.follow.FollowCountDto;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import org.junit.jupiter.api.BeforeEach;

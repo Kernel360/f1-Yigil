@@ -1,4 +1,4 @@
-package kr.co.yigil.follow.dto;
+package kr.co.yigil.follow;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

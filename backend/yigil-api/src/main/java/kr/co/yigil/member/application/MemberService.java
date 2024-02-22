@@ -9,7 +9,7 @@ import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCacheReader;
 import kr.co.yigil.follow.domain.FollowCount;
-import kr.co.yigil.follow.domain.repository.FollowRepository;
+import kr.co.yigil.follow.infrastructure.FollowRepository;
 import kr.co.yigil.follow.dto.response.FollowerFindDto;
 import kr.co.yigil.follow.dto.response.FollowingFindDto;
 import kr.co.yigil.global.exception.BadRequestException;

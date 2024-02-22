@@ -2,13 +2,11 @@ package kr.co.yigil.follow.infrastructure;
 
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;
-import kr.co.yigil.follow.domain.repository.FollowRepository;
-import kr.co.yigil.follow.dto.FollowCountDto;
+import kr.co.yigil.follow.FollowCountDto;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor

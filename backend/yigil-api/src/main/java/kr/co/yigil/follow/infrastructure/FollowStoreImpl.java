@@ -1,9 +1,7 @@
 package kr.co.yigil.follow.infrastructure;
 
-import jakarta.transaction.Transactional;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowStore;
-import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

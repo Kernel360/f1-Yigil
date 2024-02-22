@@ -4,7 +4,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import kr.co.yigil.follow.domain.Follow;
-import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.member.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
