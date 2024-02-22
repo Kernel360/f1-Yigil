@@ -1,4 +1,4 @@
-package kr.co.yigil.follow.presentation;
+package kr.co.yigil.follow.interfaces;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

@@ -1,4 +1,4 @@
-package kr.co.yigil.follow.presentation;
+package kr.co.yigil.follow.interfaces;
 
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
