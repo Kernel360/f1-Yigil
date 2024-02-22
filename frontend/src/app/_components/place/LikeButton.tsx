@@ -4,17 +4,26 @@ import { useState } from 'react';
 
 import HeartIcon from '/public/icons/heart.svg';
 
-export default function LikeButton({ liked }: { liked: boolean }) {
+import type { EventFor } from '@/types/type';
+
+export default function LikeButton({
+  className,
+  liked,
+}: {
+  className?: string;
+  liked: boolean;
+}) {
   const [postLiked, setPostLiked] = useState(liked);
 
-  function handleClick() {
+  function handleClick(event: EventFor<'button', 'onClick'>) {
+    event.stopPropagation();
     console.log('onClick');
     setPostLiked(!postLiked);
   }
 
   return (
     <button
-      className="p-1 absolute top-4 right-4 border-0 bg-transparent"
+      className={`${className} p-1 border-0 bg-transparent`}
       onClick={handleClick}
     >
       <HeartIcon

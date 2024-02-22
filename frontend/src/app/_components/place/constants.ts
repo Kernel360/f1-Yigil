@@ -2,7 +2,7 @@ import type { TPlace } from './types';
 
 export const placeData: TPlace[] = [
   {
-    id: '1',
+    id: 1,
     region: '강원',
     liked: true,
     imageUrl: 'https://placehold.co/300x300',
@@ -12,7 +12,7 @@ export const placeData: TPlace[] = [
     rating: 5.0,
   },
   {
-    id: '2',
+    id: 2,
     region: '경기',
     liked: false,
     imageUrl: 'https://placehold.co/300x300',
@@ -22,7 +22,7 @@ export const placeData: TPlace[] = [
     rating: 4.3,
   },
   {
-    id: '3',
+    id: 3,
     region: '전남',
     liked: false,
     imageUrl: 'https://placehold.co/300x300',
