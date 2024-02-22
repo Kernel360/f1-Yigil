@@ -10,8 +10,6 @@ import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 
-import { getMyPageSpot } from '../hooks/useMyPage';
-
 export interface TMyPageSpot {
   postId: number;
   travel_id: number;
@@ -230,7 +228,7 @@ export default function MyPageSpotList({
 
       {!!checkedList.length && (
         <div className="relative">
-          <FloatingActionButton popOverData={popOverData} />
+          {/* <FloatingActionButton popOverData={popOverData} /> */}
         </div>
       )}
 
