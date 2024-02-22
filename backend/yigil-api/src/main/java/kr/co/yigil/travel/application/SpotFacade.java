@@ -2,9 +2,11 @@ package kr.co.yigil.travel.application;
 
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotService;
+import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -20,13 +22,18 @@ public class SpotFacade {
         return spotService.getSpotSliceInPlace(placeId, pageable);
     }
 
-    public void registerSpot(RegisterSpotRequest request, Long memberId) {
-        spotService.registerSpot(request, memberId);
-        request.getFiles().forEach(fileUploader::upload);
+    public void registerSpot(RegisterSpotRequest command, Long memberId) {
+        spotService.registerSpot(command, memberId);
+        command.getFiles().forEach(fileUploader::upload);
     }
 
     public Main retrieveSpotInfo(Long spotId) {
         return spotService.retrieveSpotInfo(spotId);
+    }
+
+    public void modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
+        spotService.modifySpot(command, spotId, memberId);
+        command.getUpdatedImages().forEach(image -> fileUploader.upload(image.getImageFile()));
     }
 
     public void deleteSpot(Long spotId, Long memberId) {

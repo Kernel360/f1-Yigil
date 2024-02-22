@@ -14,7 +14,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     Optional<Spot> findByIdAndMemberId(Long spotId, Long memberId);
 
-    Slice<Spot> findAllByPlaceIdAndIsInCourseIsFalse(Long placeId, Pageable pageable);
+    Slice<Spot> findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(Long placeId, Pageable pageable);
 
     Optional<Spot> findByPlaceIdAndMemberId(Long placeId, Long memberId);
 

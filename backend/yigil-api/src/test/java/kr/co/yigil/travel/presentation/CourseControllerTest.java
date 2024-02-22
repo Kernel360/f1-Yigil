@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import kr.co.yigil.travel.application.CourseService;
+import kr.co.yigil.travel.application.Course2Service;
 import kr.co.yigil.travel.interfaces.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CourseCreateResponse;
@@ -43,7 +43,7 @@ public class CourseControllerTest {
     private CourseController courseController;
 
     @MockBean
-    private CourseService courseService;
+    private Course2Service courseService;
 
     @BeforeEach
     public void setup(WebApplicationContext webApplicationContext) {

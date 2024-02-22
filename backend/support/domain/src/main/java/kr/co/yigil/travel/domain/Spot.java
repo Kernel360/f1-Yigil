@@ -7,6 +7,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.List;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
@@ -57,6 +59,11 @@ public class Spot extends Travel {
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
         this.place = place;
+    }
+
+    public void updateSpot(double rate, String description, List<AttachFile> attachFiles) {
+        updateTravel(description, rate);
+        this.attachFiles.updateFiles(attachFiles);
     }
 
 }

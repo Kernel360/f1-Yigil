@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class CourseService {
+public class Course2Service {
 
     private final CourseRepository courseRepository;
     private final SpotRepository spotRepository;

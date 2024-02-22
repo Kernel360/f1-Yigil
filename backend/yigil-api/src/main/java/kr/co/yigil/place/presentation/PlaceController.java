@@ -27,24 +27,24 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
-    @GetMapping("/{place_id}")
-    public ResponseEntity<PlaceInfoResponse> getPlaceInfo(
-            @PathVariable("place_id") Long placeId
-    ) {
-        PlaceInfoResponse placeInfoResponse = placeService.getPlaceInfo(placeId);
-        return ResponseEntity.ok().body(placeInfoResponse);
-    }
+//    @GetMapping("/{place_id}")
+//    public ResponseEntity<PlaceInfoResponse> getPlaceInfo(
+//            @PathVariable("place_id") Long placeId
+//    ) {
+//        PlaceInfoResponse placeInfoResponse = placeService.getPlaceInfo(placeId);
+//        return ResponseEntity.ok().body(placeInfoResponse);
+//    }
 
-    @GetMapping
-    public ResponseEntity<Slice<PlaceFindDto>> getPlaceList(
-            @PageableDefault(size = 5) Pageable pageable,
-            @RequestParam(name = "sortBy", defaultValue = "name", required = false) String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
-    ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Slice<PlaceFindDto> placeListResponse = placeService.getPlaceList(pageRequest);
-        return ResponseEntity.ok().body(placeListResponse);
-    }
+//    @GetMapping
+//    public ResponseEntity<Slice<PlaceFindDto>> getPlaceList(
+//            @PageableDefault(size = 5) Pageable pageable,
+//            @RequestParam(name = "sortBy", defaultValue = "name", required = false) String sortBy,
+//            @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
+//    ) {
+//        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+//        Slice<PlaceFindDto> placeListResponse = placeService.getPlaceList(pageRequest);
+//        return ResponseEntity.ok().body(placeListResponse);
+//    }
 
     @GetMapping("/rates")
     public ResponseEntity<RateResponse> getMemberRate(

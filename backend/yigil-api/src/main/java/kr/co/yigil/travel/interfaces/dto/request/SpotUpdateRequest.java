@@ -14,28 +14,27 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class  SpotUpdateRequest {
-    private String pointJson;
-    private String title;
+public class SpotUpdateRequest {
+
     private String description;
-    private List<MultipartFile> files;
     private double rate;
+    List<OriginalSpotImage> originalSpotImages;
+    List<UpdateSpotImage> updateSpotImages;
 
-    private Long placeId;
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OriginalSpotImage {
+        private String imageUrl;
+        private int index;
+    }
 
-
-    public static Spot toEntity(Member member, Long spotId, SpotUpdateRequest spotUpdateRequest, Place place, AttachFiles attachFiles) {
-        return new Spot(
-                spotId,
-                member,
-                GeojsonConverter.convertToPoint(spotUpdateRequest.getPointJson()),
-                false,
-                spotUpdateRequest.getTitle(),
-                spotUpdateRequest.getDescription(),
-                attachFiles,
-                place,
-                spotUpdateRequest.getRate()
-        );
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateSpotImage {
+        private MultipartFile imageFile;
+        private int index;
     }
 
 }

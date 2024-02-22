@@ -88,4 +88,9 @@ public class Travel {
     public void changeOnPublic() { this.isPrivate = false; }
 
     public void changeOnPrivate() { this.isPrivate = true; }
+
+    public void updateTravel(String description, double rate) {
+        this.description = description;
+        this.rate = rate;
+    }
 }

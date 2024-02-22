@@ -4,7 +4,7 @@ import java.net.URI;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.travel.application.CourseService;
+import kr.co.yigil.travel.application.Course2Service;
 import kr.co.yigil.travel.interfaces.dto.request.CourseCreateRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CourseCreateResponse;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CourseController {
 
-    private final CourseService courseService;
+    private final Course2Service courseService;
 
     @GetMapping("/places/{place_id}")
     public ResponseEntity<Slice<CourseFindDto>> getCourseList(
@@ -49,17 +49,17 @@ public class CourseController {
         return ResponseEntity.ok().body(courseListResponse);
     }
 
-    @PostMapping
-    @MemberOnly
-    public ResponseEntity<CourseCreateResponse> createCourse(
-        @ModelAttribute CourseCreateRequest courseCreateRequest,
-        @Auth final Accessor accessor
-    ) {
-        CourseCreateResponse courseCreateResponse = courseService.createCourse(
-            accessor.getMemberId(), courseCreateRequest);
-        URI uri = URI.create("/api/v1/courses/" + courseCreateResponse.getCourseId());
-        return ResponseEntity.created(uri).body(courseCreateResponse);
-    }
+//    @PostMapping
+//    @MemberOnly
+//    public ResponseEntity<CourseCreateResponse> createCourse(
+//        @ModelAttribute CourseCreateRequest courseCreateRequest,
+//        @Auth final Accessor accessor
+//    ) {
+//        CourseCreateResponse courseCreateResponse = courseService.createCourse(
+//            accessor.getMemberId(), courseCreateRequest);
+//        URI uri = URI.create("/api/v1/courses/" + courseCreateResponse.getCourseId());
+//        return ResponseEntity.created(uri).body(courseCreateResponse);
+//    }
 
     @GetMapping("/{course_id}")
     public ResponseEntity<CourseInfoResponse> getCourseInfo(
@@ -94,5 +94,4 @@ public class CourseController {
             accessor.getMemberId());
         return ResponseEntity.ok().body(courseDeleteResponse);
     }
-
 }

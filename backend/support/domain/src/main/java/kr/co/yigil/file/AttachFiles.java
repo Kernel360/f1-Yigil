@@ -6,7 +6,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +18,7 @@ public class AttachFiles {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "travel_id")
-    private List<AttachFile> files = new ArrayList<>();
+    private List<AttachFile> files = new LinkedList<>();
 
     public AttachFiles(final List<AttachFile> files) {
         this.files = files;
@@ -24,6 +26,11 @@ public class AttachFiles {
 
     public List<AttachFile> getFiles() {
         return Collections.unmodifiableList(files);
+    }
+
+    public void updateFiles(List<AttachFile> newAttachFiles) {
+        this.files.clear();
+        this.files.addAll(newAttachFiles);
     }
 
     public AttachFile getRepresentativeFile() {
@@ -50,5 +57,11 @@ public class AttachFiles {
             urls.add(file.getFileUrl());
         }
         return urls;
+    }
+
+    public Optional<AttachFile> findByUrl(String url) {
+        return files.stream()
+                .filter(file -> file.getFileUrl().equals(url))
+                .findFirst();
     }
 }

@@ -18,4 +18,11 @@ public class PlaceCacheStoreImpl implements PlaceCacheStore {
         int spotCount = placeCacheReader.getSpotCount(placeId);
         return ++spotCount;
     }
+
+    @Override
+    @CachePut(value = "spotCount")
+    public int decrementSpotCountInPlace(Long placeId) {
+        int spotCount = placeCacheReader.getSpotCount(placeId);
+        return --spotCount;
+    }
 }

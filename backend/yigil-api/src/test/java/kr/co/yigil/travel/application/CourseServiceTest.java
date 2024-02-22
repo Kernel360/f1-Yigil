@@ -55,7 +55,7 @@ import org.springframework.web.multipart.MultipartFile;
 class CourseServiceTest {
 
     @InjectMocks
-    private CourseService courseService;
+    private Course2Service courseService;
 
     @Mock
     private CourseRepository courseRepository;

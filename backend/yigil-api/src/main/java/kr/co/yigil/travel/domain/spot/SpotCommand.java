@@ -4,6 +4,8 @@ import static kr.co.yigil.file.FileUploadUtil.predictAttachFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.lang.model.util.Elements.Origin;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploadUtil;
 import kr.co.yigil.member.Member;
@@ -29,7 +31,7 @@ public class SpotCommand {
         private final List<MultipartFile> files;
         private final RegisterPlaceRequest registerPlaceRequest;
 
-        public Spot toEntity(Member member, Place place) {
+        public Spot toEntity(Member member, Place place, boolean isInCourse) {
 
             var attachFiles = new AttachFiles(files.stream()
                     .map(FileUploadUtil::predictAttachFile)
@@ -38,7 +40,7 @@ public class SpotCommand {
             return new Spot(
                     member,
                     GeojsonConverter.convertToPoint(pointJson),
-                    false,
+                    isInCourse,
                     title,
                     description,
                     attachFiles,
@@ -55,9 +57,9 @@ public class SpotCommand {
 
         private final MultipartFile mapStaticImageFile;
         private final MultipartFile placeImageFile;
-        private String placeName;
-        private String placeAddress;
-        private String placePointJson;
+        private final String placeName;
+        private final String placeAddress;
+        private final String placePointJson;
 
         public Place toEntity() {
             var mapStaticImage = predictAttachFile(mapStaticImageFile);
@@ -65,6 +67,42 @@ public class SpotCommand {
             return new Place(placeName, placeAddress,
                     GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage);
         }
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class ModifySpotRequest {
+        private final double rate;
+        private final String description;
+        private final List<OriginalSpotImage> originalImages;
+        private final List<UpdateSpotImage> updatedImages;
+
+
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class OriginalSpotImage {
+        private String imageUrl;
+        private int index;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class UpdateSpotImage {
+        private MultipartFile imageFile;
+        private int index;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class IndexedAttachFiles {
+        private AttachFile file;
+        private int index;
     }
 
 }

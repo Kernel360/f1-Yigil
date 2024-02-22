@@ -1,7 +1,5 @@
 package kr.co.yigil.travel.interfaces.dto;
 
-import java.util.List;
-import kr.co.yigil.travel.domain.spot.SpotInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,15 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SpotInfoDto {
-    private List<String> imageUrlList;
-
-    private String ownerProfileImageUrl;
-
-    private String ownerNickname;
-
+public class CourseInfoDto {
+    private String mapStaticImageFileUrl;
+    private String title;
     private String rate;
-
+    private String courseCount;
     private String createDate;
-
+    private String ownerProfileImageUrl;
+    private String ownerNickname;
 }
