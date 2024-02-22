@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.Objects;
 import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,5 +31,20 @@ public class Follow {
     public Follow(final Member follower, final Member following) {
         this.follower = follower;
         this.following = following;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Follow follow = (Follow) o;
+        return Objects.equals(follower, follow.follower) &&
+                Objects.equals(following, follow.following);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(follower, following);
     }
 }
