@@ -1,4 +1,4 @@
-package kr.co.yigil.member.dto.response;
+package kr.co.yigil.member.interfaces.dto.response;
 
 import java.util.List;
 import kr.co.yigil.member.Member;

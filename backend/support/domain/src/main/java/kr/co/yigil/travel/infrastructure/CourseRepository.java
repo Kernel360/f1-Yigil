@@ -15,5 +15,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c FROM Course c JOIN c.spots s WHERE s.place.id = :placeId AND c.isPrivate = false")
     Slice<Course> findBySpotPlaceId(@Param("placeId") Long placeId, Pageable pageable);
 
+    Slice<Course> findBySpots_PlaceIdAndIsPrivateFalse(Long placeId, Pageable pageable);
+
     Slice<Course> findAllByMember(Member member);
 }

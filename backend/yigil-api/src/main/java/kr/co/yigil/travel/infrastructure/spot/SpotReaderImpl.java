@@ -9,6 +9,7 @@ import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
@@ -40,5 +41,10 @@ public class SpotReaderImpl implements SpotReader {
     @Override
     public int getSpotCountInPlace(Long placeId) {
         return spotRepository.countByPlaceId(placeId);
+    }
+
+    @Override
+    public Page<Spot> getSpotSliceByMemberId(Long memberId, Pageable pageable) {
+        return spotRepository.findAllByMemberIdAndIsInCourseFalse(memberId, pageable);
     }
 }

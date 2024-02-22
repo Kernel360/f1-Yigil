@@ -35,7 +35,8 @@ public class SpotCommand {
 
             var attachFiles = new AttachFiles(files.stream()
                     .map(FileUploadUtil::predictAttachFile)
-                    .collect(Collectors.toList()));
+                    .toList()
+            );
 
             return new Spot(
                     member,
@@ -65,7 +66,7 @@ public class SpotCommand {
             var mapStaticImage = predictAttachFile(mapStaticImageFile);
             var placeImage = predictAttachFile(placeImageFile);
             return new Place(placeName, placeAddress,
-                    GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage);
+                GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage);
         }
     }
 

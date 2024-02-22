@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import kr.co.yigil.travel.domain.Spot;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 

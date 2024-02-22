@@ -1,7 +1,5 @@
-package kr.co.yigil.member.dto.request;
+package kr.co.yigil.member.interfaces.dto.request;
 
-import kr.co.yigil.member.Gender;
-import kr.co.yigil.member.Ages;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberUpdateRequest {
+
     private String nickname;
     private MultipartFile profileImageFile;
     private String ages;
