@@ -1,17 +1,23 @@
 'use client';
-import PlusIcon from '@/../public/icons/plus.svg';
+
 import { useState } from 'react';
 import PopOver from './ui/popover/PopOver';
-import { TPopOverData } from './ui/popover/types';
+
+import type { ReactElement } from 'react';
+import type { TPopOverData } from './ui/popover/types';
 
 interface TFloatingActionButton {
   popOverData: TPopOverData[];
   backdropStyle?: string;
+  openedIcon: ReactElement;
+  closedIcon: ReactElement;
 }
 
 export default function FloatingActionButton({
   popOverData,
   backdropStyle,
+  openedIcon,
+  closedIcon,
 }: TFloatingActionButton) {
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -27,13 +33,7 @@ export default function FloatingActionButton({
         }`}
         onClick={() => setIsModalOpened(!isModalOpened)}
       >
-        <PlusIcon
-          className={`${
-            isModalOpened
-              ? 'rotate-45 duration-200 z-30'
-              : 'rotate-0 duration-200'
-          } `}
-        />
+        {isModalOpened ? openedIcon : closedIcon}
         {isModalOpened && (
           <PopOver
             popOverData={popOverData}

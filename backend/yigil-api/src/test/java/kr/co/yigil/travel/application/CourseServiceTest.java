@@ -133,7 +133,7 @@ class CourseServiceTest {
         Point mockLocation = new GeometryFactory().createPoint(
             new Coordinate(127.123456, 37.123456));
         Place mockPlace = new Place("mockPlaceName", "mockImageUrl", mockLocation,
-            "mockImgUrl", mockAttachFile);
+            mockAttachFile, mockAttachFile);
         Spot mockSpot = new Spot(spotId, mockMember, mockLocation, false,
             "mockTitle", "mockDescription", new AttachFiles(new ArrayList<>()), mockPlace
             , 5.0);
@@ -241,9 +241,9 @@ class CourseServiceTest {
         Coordinate mockCoordinate2 = new Coordinate(238.234567, 38.234567);
         Point mockPoint1 = new GeometryFactory().createPoint(mockCoordinate1);
         Point mockPoint2 = new GeometryFactory().createPoint(mockCoordinate2);
-        Place mockPlace1 = new Place("mockPlaceName1", "mockAddress1", mockPoint1, "mockImageUrl1",
+        Place mockPlace1 = new Place("mockPlaceName1", "mockAddress1", mockPoint1, null,
             null);
-        Place mockPlace2 = new Place("mockPlaceName2", "mockAddress2", mockPoint2, "mockImageUrl2",
+        Place mockPlace2 = new Place("mockPlaceName2", "mockAddress2", mockPoint2, null,
             null);
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);

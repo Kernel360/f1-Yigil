@@ -55,7 +55,7 @@ class FavorRedisIntegrityServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription", null);
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, null, null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
@@ -89,7 +89,7 @@ class FavorRedisIntegrityServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, "anyDescription", null);
+        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, null, null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
