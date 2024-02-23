@@ -18,6 +18,8 @@ import MapComponent from '../naver-map/MapComponent';
 
 import type { DataInput, Making } from './common/step/types';
 
+import { searchAction } from '../search/action';
+
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
     reducer,
@@ -41,40 +43,20 @@ export default function AddSpot() {
   const stepLabel = makingSpotStep.data.label;
   const inputLabel = dataFromNewStep.data.label;
 
-  /**
-   * @todo 장소 검색 server action 추가
-   */
   async function search(keyword: string) {
     if (keyword === '') {
       setSearchResults([]);
       return;
     }
 
-    const url =
-      process.env.NODE_ENV !== 'production'
-        ? 'http://localhost:3000/endpoints/api/search'
-        : 'https://yigil.co.kr/endpoints/api/search';
+    const results = await searchAction(keyword);
 
-    const res = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ keyword }),
-    });
-
-    const areas = (await res.json()) as any[];
-
-    const results = areas.map((area) => {
-      const title = area.title as string;
-      const escaped = title.replace(/<b>|<\/b>/g, '');
-      const roadAddress = area.roadAddress as string;
-
-      return { name: escaped, roadAddress };
-    });
-
-    setSearchResults(results);
+    if (results.status === 'succeed') {
+      setSearchResults(results.data);
+    }
   }
 
   // 검색을 통해 선택한 장소
-  // Drilling이 심하게 일어나는 것같기도?
   const [currentFoundPlace, setCurrentFoundPlace] = useState<{
     name: string;
     roadAddress: string;

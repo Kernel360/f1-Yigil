@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+export const backendErrorSchema = z.object({
+  code: z.number(),
+  message: z.string(),
+});
+
 const REGION_VALUES = [
   '서울',
   '경기',
@@ -22,8 +27,6 @@ const REGION_VALUES = [
 
 export const regionSchema = z.enum(REGION_VALUES);
 
-export type TRegion = z.infer<typeof regionSchema>;
-
 export const placeSchema = z.object({
   id: z.number().int(),
   region: regionSchema,
@@ -34,8 +37,6 @@ export const placeSchema = z.object({
   liked_count: z.number().int(),
   rating: z.number(),
 });
-
-export type TPlace = z.infer<typeof placeSchema>;
 
 export const placesSchema = z.array(placeSchema);
 
@@ -51,4 +52,33 @@ export const placeDetailSchema = z.object({
   rating: z.number(),
 });
 
-export type TPlaceDetail = z.infer<typeof placeDetailSchema>;
+export const searchItemSchema = z.object({
+  title: z.string(),
+  roadAddress: z.string(),
+  mapx: z.string(),
+  mapy: z.string(),
+});
+
+export const searchItemsSchema = z.array(searchItemSchema);
+
+export const datumWithAddressSchema = z.object({
+  x: z.string(),
+  y: z.string(),
+});
+
+export const dataWithAddressSchema = z.array(datumWithAddressSchema);
+
+export const staticMapUrlSchema = z.object({
+  status: z.boolean(),
+  map_static_image_url: z.string().optional(),
+});
+
+export const naverStaticMapUrlErrorSchema = z.object({
+  errorCode: z.string(),
+  message: z.string(),
+});
+
+export const postSpotResponseSchema = z.object({
+  spot_id: z.number(),
+  message: z.string(),
+});
