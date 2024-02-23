@@ -17,7 +17,6 @@ import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -75,11 +74,6 @@ public class SpotServiceImpl implements SpotService {
                 ExceptionCode.INVALID_AUTHORITY);
         spotStore.remove(spot);
         if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
-    }
-
-    @Override
-    public Page<Spot> getSpotListByMemberId(Long memberId, Pageable pageable) {
-        return spotReader.getSpotSliceByMemberId(memberId, pageable);
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {

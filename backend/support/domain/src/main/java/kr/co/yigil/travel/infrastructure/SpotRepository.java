@@ -23,6 +23,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     int countByPlaceId(@Param("placeId") Long placeId);
 
     Page<Spot> findAllByMemberIdAndIsInCourseFalse(Long memberId, Pageable pageable);
+    Page<Spot> findAllByMemberIdAndIsPrivateAndIsInCourseFalse(Long memberId, boolean isPrivate, Pageable pageable);
 
     @Query("SELECT SUM(s.rate) FROM Spot s WHERE s.place.id = :placeId")
     Optional<Double> findTotalRateByPlaceId(@Param("placeId") Long placeId);

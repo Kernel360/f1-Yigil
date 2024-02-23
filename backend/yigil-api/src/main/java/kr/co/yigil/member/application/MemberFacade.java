@@ -11,6 +11,8 @@ import kr.co.yigil.follow.domain.repository.FollowRepository;
 import kr.co.yigil.follow.dto.response.FollowerFindDto;
 import kr.co.yigil.follow.dto.response.FollowingFindDto;
 import kr.co.yigil.member.Member;
+import kr.co.yigil.member.domain.MemberCommand;
+import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberService;
 import kr.co.yigil.member.interfaces.dto.request.MemberUpdateRequest;
 import kr.co.yigil.member.interfaces.dto.response.MemberDeleteResponse;
@@ -44,43 +46,34 @@ public class MemberFacade {
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
 
-    public MemberInfoResponse getMemberInfo(final Long memberId) {
+    public MemberInfo.Main getMemberInfo(final Long memberId) {
 
         Member member = memberService.retrieveMember(memberId);
         // todo 석희님 캐싱 처리 부분 참고 follow 도메인 변경 시 변경
         FollowCount followCount = getMemberFollowCount(member);
-        return MemberInfoResponse.from(member, followCount);
+        return new MemberInfo.Main(member, followCount.getFollowingCount(),
+            followCount.getFollowerCount());
     }
 
-    public Slice<CourseFindDto> getMemberCourseInfo(final Long memberId, Pageable pageable) {
-        Member member = memberService.retrieveMember(memberId);
-        // todo course도메인 리팩토링 후 service 참조
-        Slice<Course> courseList = courseRepository.findAllByMember(member);
-        List<CourseFindDto> courseFindDtoList = courseList.stream()
-            .map(this::getCourseFindDto)
-            .toList();
-        return new SliceImpl<>(courseFindDtoList, pageable, courseList.hasNext());
+    public MemberInfo.MemberCourseResponse getMemberCourseInfo(final Long memberId,
+        Pageable pageable, String selected) {
+        return memberService.retrieveCourseList(memberId, pageable, selected);
     }
 
-    public Slice<SpotFindDto> getMemberSpotInfo(final Long memberId, Pageable pageable) {
-
-        Page<Spot> spotList = spotService.getSpotListByMemberId(memberId, pageable);
-        List<SpotFindDto> spotFindDtoList = spotList.stream()
-            .map(this::getSpotFindDto)
-            .toList();
-        return new SliceImpl<>(spotFindDtoList, pageable, spotList.hasNext());
+    public MemberInfo.MemberSpotResponse getMemberSpotInfo(final Long memberId, Pageable pageable, String selected) {
+        return memberService.retrieveSpotList(memberId, pageable, selected);
     }
 
     private FollowCount getMemberFollowCount(Member member) {
         return followRedisIntegrityService.ensureFollowCounts(member);
     }
 
-    public MemberUpdateResponse updateMemberInfo(final Long memberId, MemberUpdateRequest request) {
+    public MemberInfo.MemberUpdateResponse updateMemberInfo(final Long memberId,
+        MemberCommand.MemberUpdateRequest request) {
         var updatedMember = memberService.updateMemberInfo(memberId, request);
         FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile());
         applicationEventPublisher.publishEvent(event);
-
-        return new MemberUpdateResponse("회원 정보 업데이트 성공");
+        return new MemberInfo.MemberUpdateResponse("회원 정보 업데이트 성공");
     }
 
     public MemberDeleteResponse withdraw(final Long memberId) {
@@ -121,6 +114,7 @@ public class MemberFacade {
             .getCommentCount();
         return CourseFindDto.from(course, favorCount, commentCount);
     }
+
     @NotNull
     public FollowerFindDto getFollowerFindDto(Follow follow) {
         return FollowerFindDto.from(follow);

@@ -3,6 +3,8 @@ package kr.co.yigil.travel.infrastructure;
 import java.util.Optional;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.domain.Course;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +19,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Slice<Course> findBySpots_PlaceIdAndIsPrivateFalse(Long placeId, Pageable pageable);
 
+    PageImpl<Course> findAllByMember(Member member, Pageable pageable);
+    Page<Course> findAllByMemberId(Long memberId, Pageable pageable);
+    Page<Course> findAllByMemberIdAndIsPrivate(Long memberId, boolean isPrivate, Pageable pageable);
     Slice<Course> findAllByMember(Member member);
 }

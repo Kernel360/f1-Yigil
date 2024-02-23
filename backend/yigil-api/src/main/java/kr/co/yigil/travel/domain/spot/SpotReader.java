@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.domain.spot;
 
+import kr.co.yigil.member.domain.MemberInfo;
 import java.util.List;
 import kr.co.yigil.travel.domain.Spot;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,7 @@ public interface SpotReader {
     int getSpotCountInPlace(Long placeId);
 
     Page<Spot> getSpotSliceByMemberId(Long memberId, Pageable pageable);
+
+    MemberInfo.MemberSpotResponse findAllByMemberId(Long memberId, Pageable pageable, String selected);
+
 }
