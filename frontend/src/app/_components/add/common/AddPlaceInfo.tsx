@@ -18,13 +18,8 @@ export default function AddPlaceInfo() {
         <span className="text-gray-500">주소</span>
         <span className="font-medium">{address}</span>
       </div>
-      <div className="w-full h-80 p-4 relative">
-        <Image
-          src={spotMapImageUrl}
-          alt={`${name} 지도 이미지`}
-          fill
-          unoptimized
-        />
+      <div className="h-3/5 p-4 relative aspect-video">
+        <Image src={spotMapImageUrl} alt={`${name} 지도 이미지`} fill />
       </div>
     </section>
   );
