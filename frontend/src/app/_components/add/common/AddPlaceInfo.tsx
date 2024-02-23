@@ -1,15 +1,15 @@
 'use client';
 
+import Image from 'next/image';
+
 import { useContext } from 'react';
 import { AddSpotContext } from '../spot/SpotContext';
 
-// 외부 placeholder 이미지 사용중, no-img-element 린트 에러 발생
-// 차후 next/image 사용하게 변경 예정
 export default function AddPlaceInfo() {
   const { name, address, spotMapImageUrl } = useContext(AddSpotContext);
 
   return (
-    <section className="p-4 flex flex-col gap-8">
+    <section className="p-4 flex flex-col gap-8 grow">
       <div className="px-4 flex justify-between items-center">
         <span className="text-gray-500">이름</span>
         <span className="font-medium text-2xl">{name}</span>
@@ -18,8 +18,8 @@ export default function AddPlaceInfo() {
         <span className="text-gray-500">주소</span>
         <span className="font-medium">{address}</span>
       </div>
-      <div className="w-full relative">
-        <img src={spotMapImageUrl} alt="Example static map" />
+      <div className="h-3/5 p-4 relative aspect-video">
+        <Image src={spotMapImageUrl} alt={`${name} 지도 이미지`} fill />
       </div>
     </section>
   );

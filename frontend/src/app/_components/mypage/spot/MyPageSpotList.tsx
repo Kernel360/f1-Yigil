@@ -13,6 +13,10 @@ import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
+<<<<<<< HEAD
+=======
+import MyPageSelectBtns from '../MyPageSelectBtns';
+>>>>>>> develop
 
 export interface TMyPageSpot {
   spot_id: number;

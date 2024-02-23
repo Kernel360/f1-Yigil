@@ -14,6 +14,32 @@ import {
   endCourseFromExistingStep,
 } from '@/app/_components/add/common/step/constants';
 
+vi.mock('next/headers', async () => {
+  return {
+    cookies: () => {
+      return {
+        get: () => {
+          return {
+            value: 'cookie',
+          };
+        },
+      };
+    },
+  };
+});
+
+describe('test', () => {
+  const initialStates = [
+    { makingSpot: true, fromExisting: false, label: '장소' },
+    { makingSpot: false, fromExisting: false, label: '일정만 기록하기' },
+    { makingSpot: false, fromExisting: true, label: '장소도 함께 기록하기' },
+  ];
+
+  test.each(initialStates)('$label', ({ makingSpot, fromExisting }) => {
+    const initialStep = makeInitialStep(makingSpot, fromExisting);
+  });
+});
+
 describe('초기 상태 생성', () => {
   const initialStates = [
     { makingSpot: true, fromExisting: false, label: '장소' },

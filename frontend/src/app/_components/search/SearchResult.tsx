@@ -1,3 +1,4 @@
+import { getCoords } from './action';
 import SearchIcon from '/public/icons/search.svg';
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -20,24 +21,16 @@ export default function SearchResult({
     >
   >;
 }) {
-  /**
-   * @todo 좌표 얻어오는 server action 추가
-   */
   async function handleClick(name: string, roadAddress: string) {
-    const coordsUrl =
-      process.env.NODE_ENV !== 'production'
-        ? 'http://localhost:3000/endpoints/api/coords'
-        : 'https://yigil.co.kr/endpoints/api/coords';
+    const coords = await getCoords(roadAddress);
 
-    const res = await fetch(coordsUrl, {
-      method: 'POST',
-      body: JSON.stringify({ address: roadAddress }),
-    });
-
-    const coords = (await res.json()) as { lat: number; lng: number };
+    if (!coords) {
+      alert('좌표값을 얻어올 수 없습니다!');
+      closeResults();
+      return;
+    }
 
     setCurrentFoundPlace({ name, roadAddress, coords });
-
     closeResults();
   }
 

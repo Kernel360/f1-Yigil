@@ -1,7 +1,9 @@
 import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { dataUrlToBlob } from '@/utils';
 import { AddSpotContext } from '../../spot/SpotContext';
+import { postSpotData } from '../action';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
 import Dialog from '@/app/_components/ui/dialog/Dialog';
@@ -9,26 +11,14 @@ import Dialog from '@/app/_components/ui/dialog/Dialog';
 import type { EventFor } from '@/types/type';
 import type { TStep } from './types';
 
-function dataUrlToBlob(dataURI: string) {
-  const byteString = atob(dataURI.split(',')[1]);
-
-  // separate out the mime component
-  const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-  // write the bytes of the string to an ArrayBuffer
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-
-  return new Blob([ab], { type: mimeString });
-}
-
 /**
  * `next` - 상위 컴포넌트에서 `dispatch({ type: 'next' })`를 감싼 이벤트 핸들러
  *
  * `previous` - 상위 컴포넌트에서 `dispatch({ type: 'previous' })`를 감싼 이벤트 핸들러
+ *
+ * @todo 입력이 없을 때 넘어가지 못하게 하는 코드 작성
+ *
+ * @todo 스팟 등록 명세서 최신화되면 맞춰서 요청 날리는 코드 작성
  */
 export default function StepNavigation({
   currentStep,
@@ -57,15 +47,29 @@ export default function StepNavigation({
     setIsOpen(false);
   }
 
-  /**
-   * @todo dataUrlToBlob를 이용해 Image를 File로 변환하여 전달
-   * @todo Spot 추가하는 server action 필요
-   */
-  function handleConfirm() {
-    console.log(state);
-    console.log('Confirm!');
+  async function handleConfirm() {
+    const { name, address, spotMapImageUrl, images, rating, review } = state;
 
-    // server action 위치
+    const parsedImages = images.map(
+      ({ filename, uri }) => new File([dataUrlToBlob(uri)], filename),
+    );
+
+    const data = new FormData();
+    data.append('place_name', name);
+    data.append('place_address', address);
+    data.append('rate', rating.toString());
+    data.append('description', review.review);
+
+    parsedImages.forEach((image) => data.append('files', image));
+
+    if (spotMapImageUrl.startsWith('data://')) {
+      data.append(
+        'map_static_image_file',
+        new File([dataUrlToBlob(spotMapImageUrl)], `${name} 지도 이미지`),
+      );
+    }
+
+    await postSpotData(data);
 
     setIsOpen(false);
     next();
