@@ -26,7 +26,7 @@ public class FollowStoreImplTest {
     }
     @DisplayName("팔로우가 요청되었을 때 FollowRepository의 save 메서드가 호출되는지")
     @Test
-    void whenFollow_thenSaveIsCalled() {
+    void whenStored_thenSaveIsCalled() {
         Member follower = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         Member following = new Member("kiit09sdf01@gmail.com", "123456", "stone", "profile.jpg", "kakao");
 
@@ -36,7 +36,7 @@ public class FollowStoreImplTest {
     }
     @DisplayName("언팔로우가 요청되었을 때 FollowRepository의 deleteByFollowerAndFollowing 메서드가 호출되는지")
     @Test
-    void whenUnfollow_thenDeleteByFollowerAndFollowingIsCalled() {
+    void whenRemoved_thenDeleteByFollowerAndFollowingIsCalled() {
         Member unfollower =  new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         Member unfollowing = new Member("kiit09sdf01@gmail.com", "123456", "stone", "profile.jpg", "kakao");
 
