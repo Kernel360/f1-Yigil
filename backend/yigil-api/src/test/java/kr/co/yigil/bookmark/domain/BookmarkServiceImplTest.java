@@ -79,6 +79,8 @@ public class BookmarkServiceImplTest {
         Long memberId = 1L;
         Long placeId = 2L;
 
+        when(bookmarkReader.isBookmarked(anyLong(), anyLong())).thenReturn(true);
+
         Member mockMember = mock(Member.class);
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
 

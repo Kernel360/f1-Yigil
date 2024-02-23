@@ -43,6 +43,7 @@ public enum ExceptionCode {
 
 
     ALREADY_BOOKMARKED(7001, "이미 북마크된 장소입니다."),
+    NOT_BOOKMARKED(7002, "북마크되지 않은 장소입니다."),
 
     // Authorization & Authentication
     INVALID_ACCESS_TOKEN(9101, "올바르지 않은 형식의 Access Token입니다."),
