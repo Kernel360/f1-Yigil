@@ -4,7 +4,16 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.jetbrains.kotlin.jvm'
     id 'jacoco'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+ configurations {
+     asciidoctorExt
+ }
 
 bootJar {
     mainClass = 'kr.co.yigil.BackendApplication'
@@ -45,6 +54,8 @@ dependencies {
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
     testImplementation 'io.projectreactor:reactor-test:3.4.10'
     testImplementation 'org.mockito:mockito-inline:3.6.0'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'com.github.maricn:logback-slack-appender:1.6.1'
@@ -66,10 +77,32 @@ test {
     useJUnitPlatform()
 }
 
+tasks.named('test') {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    dependsOn test
+    configurations 'asciidoctorExt'
+    baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+tasks.register('copyDocument', Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
 jar {
     enabled = false
 }
 
 bootJar {
     enabled = true
+    dependsOn copyDocument
 }

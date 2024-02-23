@@ -28,7 +28,7 @@ public interface CourseMapper {
     @Mapping(target = "mapStaticImageFileUrl", expression = "java(course.getMapStaticImageFile().getFileUrl())")
     @Mapping(target = "title", expression = "java(course.getTitle())")
     @Mapping(target = "rate", expression = "java(String.valueOf(course.getRate()))")
-    @Mapping(target = "courseCount", expression = "java(String.valueOf(course.getSpots().size()))")
+    @Mapping(target = "spotCount", expression = "java(String.valueOf(course.getSpots().size()))")
     @Mapping(target = "createDate", expression = "java(course.getCreatedAt().toString())")
     @Mapping(target = "ownerProfileImageUrl", expression = "java(course.getMember().getProfileImageUrl())")
     @Mapping(target = "ownerNickname", expression = "java(course.getMember().getNickname())")

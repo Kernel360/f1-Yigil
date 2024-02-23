@@ -11,7 +11,7 @@ public class CourseInfoDto {
     private String mapStaticImageFileUrl;
     private String title;
     private String rate;
-    private String courseCount;
+    private String spotCount;
     private String createDate;
     private String ownerProfileImageUrl;
     private String ownerNickname;
