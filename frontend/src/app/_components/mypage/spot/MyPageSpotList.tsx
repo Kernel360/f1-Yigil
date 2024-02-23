@@ -248,7 +248,6 @@ export default function MyPageSpotList({
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPage={totalPageCount}
-        divide={divideCount}
       />
     </>
   ) : (
