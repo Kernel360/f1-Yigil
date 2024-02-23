@@ -1,43 +1,43 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
-import LockIcon from '/public/icons/lock.svg';
+import LockIcon from '/public/icons/lock-white.svg';
 import { TMyPageSpot } from './MyPageSpotList';
 
 interface TMyPageSpotItem extends TMyPageSpot {
-  checkedList: { postId: TMyPageSpot['postId']; isSecret: boolean }[];
+  checkedList: { spot_id: TMyPageSpot['spot_id']; isSecret: boolean }[];
   onChangeCheckedList: (id: number, isSecret: boolean) => void;
   idx: number;
   selectOption: string;
 }
 
-export default function MyPageSpotItem({
-  postId,
-  travel_id,
+const MyPageSpotItem = ({
+  spot_id,
+
   image_url,
   rating,
   post_date,
   title,
-  description,
+
   isSecret,
   checkedList,
   onChangeCheckedList,
   idx,
   selectOption,
-}: TMyPageSpotItem) {
+}: TMyPageSpotItem) => {
   const [isCheckDisabled, setIsCheckDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
   // TODO: 전체 선택 했을 때 isChecked가 true 로 바뀌어야 한다.
   useEffect(() => {
-    const found = checkedList.find((checked) => checked.postId === postId);
+    const found = checkedList.find((checked) => checked.spot_id === spot_id);
 
     if (found) setIsChecked(true);
     else setIsChecked(false);
   }, [checkedList.length]);
 
   useEffect(() => {
-    if (selectOption === '전체' && isSecret) {
+    if (selectOption === 'all' && isSecret) {
       setIsCheckDisabled(true);
       setIsChecked(false);
     }
@@ -56,7 +56,7 @@ export default function MyPageSpotItem({
         className="w-[32px] h-[32px]"
         checked={isChecked}
         onChange={() => {
-          onChangeCheckedList(postId, isSecret);
+          onChangeCheckedList(spot_id, isSecret);
         }}
       />
       <div className="relative">
@@ -69,7 +69,7 @@ export default function MyPageSpotItem({
         />
         {isSecret && (
           <div className="absolute top-2 right-2 p-2 bg-black rounded-full">
-            <LockIcon className="w-[16px] h-[16px] stroke-white" />
+            <LockIcon className="w-4 h-4" />
           </div>
         )}
       </div>
@@ -88,4 +88,6 @@ export default function MyPageSpotItem({
       </div>
     </div>
   );
-}
+};
+
+export default MyPageSpotItem;

@@ -4,13 +4,17 @@ import React, { useState } from 'react';
 import RoundProfile from '../ui/profile/RoundProfile';
 import HeaderLogo from '/public/logo/yigil_logo.svg';
 import Link from 'next/link';
-import { Session } from 'next-auth';
 import { EventFor } from '@/types/type';
 import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
 import AddIcon from '/public/icons/add.svg'; // 지울것
+import { TUserInfo } from '../mypage/types';
 
-export default function HeaderClient({ session }: { session: Session | null }) {
+export default function HeaderClient({
+  memberInfo,
+}: {
+  memberInfo: TUserInfo | null;
+}) {
   const router = useRouter();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -33,7 +37,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
         <AddIcon className="w-6 stroke-white fill-white ml-40" />
       </Link>
 
-      {session ? (
+      {memberInfo ? (
         <>
           <span
             className="mr-4"
@@ -42,7 +46,7 @@ export default function HeaderClient({ session }: { session: Session | null }) {
             tabIndex={0}
           >
             <RoundProfile
-              img={session.user?.image as string}
+              img={memberInfo.profile_image_url as string}
               size={40}
               style="cursor-pointer"
               height="h-[40px]"
