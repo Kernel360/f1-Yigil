@@ -41,6 +41,9 @@ public enum ExceptionCode {
     INVALID_POINT_GEO_JSON(6011, "Point GeoJson 형식이 아닙니다"),
     INVALID_LINESTRING_GEO_JSON(6021, "Point GeoJson 형식이 아닙니다"),
 
+
+    ALREADY_BOOKMARKED(7001, "이미 북마크된 장소입니다."),
+
     // Authorization & Authentication
     INVALID_ACCESS_TOKEN(9101, "올바르지 않은 형식의 Access Token입니다."),
     INVALID_AUTHORITY(9201, "해당 요청에 대한 접근 권한이 없습니다."),

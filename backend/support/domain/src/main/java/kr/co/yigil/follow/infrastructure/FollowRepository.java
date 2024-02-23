@@ -1,7 +1,7 @@
-package kr.co.yigil.follow.domain.repository;
+package kr.co.yigil.follow.infrastructure;
 
 import kr.co.yigil.follow.domain.Follow;
-import kr.co.yigil.follow.dto.FollowCountDto;
+import kr.co.yigil.follow.FollowCountDto;
 import kr.co.yigil.member.Member;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +15,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     public Slice<Follow> findAllByFollower(Member member);
 
-    @Query("SELECT new kr.co.yigil.follow.dto.FollowCountDto(" +
+    @Query("SELECT new kr.co.yigil.follow.FollowCountDto(" +
         "   (SELECT COUNT(f1) FROM Follow f1 WHERE f1.following = :member), " +
         "   (SELECT COUNT(f2) FROM Follow f2 WHERE f2.follower = :member))")
     FollowCountDto getFollowCounts(@Param("member") Member member);
