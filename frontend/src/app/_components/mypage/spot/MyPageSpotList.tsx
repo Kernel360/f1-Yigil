@@ -15,32 +15,30 @@ import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 
 export interface TMyPageSpot {
-  postId: number;
-  travel_id: number;
+  spot_id: number;
   image_url: string;
   rating: number;
   post_date: string;
   title: string;
-  description: string;
   isSecret: boolean;
 }
 
 export default function MyPageSpotList({
   placeList,
-  totalCount,
+  totalPage,
 }: {
   placeList: TMyPageSpot[];
-  totalCount: number;
+  totalPage: number;
 }) {
   const [allSpotList, setAllSpotList] = useState<TMyPageSpot[]>(placeList);
   const [renderSpotList, setRenderSpotList] = useState<TMyPageSpot[]>([]);
   const [checkedList, setCheckedList] = useState<
-    { postId: TMyPageSpot['postId']; isSecret: boolean }[]
+    { spot_id: TMyPageSpot['spot_id']; isSecret: boolean }[]
   >([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const divideCount = 5;
-  const [itemTotalCount, setItemTotalCount] = useState(totalCount);
+  const [totalPageCount, setTotalPageCount] = useState(totalPage);
 
   const [selectOption, setSelectOption] = useState('all');
   const [sortOption, setSortOption] = useState<string>('desc');
@@ -74,14 +72,14 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { data, totalCount } = await getMyPageSpots(
+    const { content, totalPage } = await getMyPageSpots(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setItemTotalCount(totalCount);
-    setAllSpotList([...data]);
+    setTotalPageCount(totalPage);
+    setAllSpotList([...content]);
   };
 
   // TODO: checkPopOverState 함수를 생성 인수로 (selectOption, checkedList)
@@ -149,7 +147,7 @@ export default function MyPageSpotList({
   useEffect(() => {
     setCurrentPage(1);
     getUser(1, divideCount, 'desc', selectOption);
-  }, [selectOption]);
+  }, [selectOption, sortOption]);
 
   // 함수 분리 예정
   const onClickDelete = () => {
@@ -169,7 +167,7 @@ export default function MyPageSpotList({
   ) => {
     if (e.currentTarget.checked) {
       const allSpots = allSpotList.map((spot) => {
-        return { postId: spot.postId, isSecret: spot.isSecret };
+        return { spot_id: spot.spot_id, isSecret: spot.isSecret };
       });
       setCheckedList(allSpots);
       setIsChecked(true);
@@ -182,6 +180,7 @@ export default function MyPageSpotList({
   const onClickSelectOption = (option: string) => {
     setSelectOption(option);
     setCheckedList([]);
+    setSortOption('desc');
   };
 
   const onChangeSortOption = (option: string) => {
@@ -193,19 +192,19 @@ export default function MyPageSpotList({
   };
 
   const onChangeCheckedList = (
-    postId: TMyPageSpot['postId'],
+    spot_id: TMyPageSpot['spot_id'],
     isSecret: boolean,
   ) => {
-    if (!checkedList.length) setCheckedList([{ postId, isSecret }]);
+    if (!checkedList.length) setCheckedList([{ spot_id, isSecret }]);
     else {
       // checkList 배열의 각 값을 확인 후 값이 없으면 체크 리스트 추가 값이 있으면 filter로 제거
-      const found = checkedList.find((checked) => checked.postId === postId);
+      const found = checkedList.find((checked) => checked.spot_id === spot_id);
 
       if (!found) {
-        setCheckedList([...checkedList, { postId, isSecret }]);
+        setCheckedList([...checkedList, { spot_id, isSecret }]);
       } else {
         const filteredList = checkedList.filter(
-          (checkedId) => checkedId.postId !== postId,
+          (checkedId) => checkedId.spot_id !== spot_id,
         );
         setCheckedList(filteredList);
       }
@@ -217,6 +216,7 @@ export default function MyPageSpotList({
       <div className="my-4">
         <MyPageSelectBtns
           selectOption={selectOption}
+          sortOption={sortOption}
           onClickSelectOption={onClickSelectOption}
           onChangeSortOption={onChangeSortOption}
           onChangeAllList={onChangeAllSpots}
@@ -233,11 +233,11 @@ export default function MyPageSpotList({
         </div>
       )}
 
-      {renderSpotList.map(({ postId, ...data }, idx) => (
+      {renderSpotList.map(({ spot_id, ...data }, idx) => (
         <MyPageSpotItem
           idx={idx}
-          key={postId}
-          postId={postId}
+          key={spot_id}
+          spot_id={spot_id}
           {...data}
           checkedList={checkedList}
           onChangeCheckedList={onChangeCheckedList}
@@ -247,7 +247,7 @@ export default function MyPageSpotList({
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        allCount={itemTotalCount}
+        totalPage={totalPageCount}
         divide={divideCount}
       />
     </>

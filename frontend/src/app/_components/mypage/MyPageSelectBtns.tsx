@@ -9,6 +9,7 @@ const selectBtns = [
 
 interface TMyPageSelectBtn {
   selectOption: string;
+  sortOption: string;
   onClickSelectOption: (option: string) => void;
   onChangeSortOption: (option: string) => void;
   onChangeAllList: (
@@ -20,6 +21,7 @@ interface TMyPageSelectBtn {
 // 똑같이 쓰이는 부분이 있다면 컴포넌트 재사용성 고려해야 함.
 export default function MyPageSelectBtns({
   selectOption,
+  sortOption,
   onClickSelectOption,
   onChangeSortOption,
   onChangeAllList,
@@ -62,6 +64,7 @@ export default function MyPageSelectBtns({
             setIsChecked(false);
             onChangeSortOption(e.currentTarget.value);
           }}
+          value={sortOption}
         >
           <option value="desc">최신순</option>
           <option value="asc">오래된순</option>

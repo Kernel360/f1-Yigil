@@ -2,160 +2,553 @@ import { http, HttpResponse } from 'msw';
 import { myPlaceSpotData } from './data/myPlaceData';
 
 const handlers = [
-  http.get(`/api/v1/members/spot`, ({ request }) => {
-    const [page, size, sortOrder, sortBy, selected] = request.url
-      .split('?')[1]
-      .split('&');
+  http.get(`api/v1/members/spots`, ({ request }) => {
+    const [page, size, sortOrder] = request.url.split('?')[1].split('&');
+    const sortByIdx = request.url.indexOf('sortBy');
 
+    const selectedIdx = request.url.indexOf('selected');
+    const rate = sortByIdx > -1 && request.url.slice(sortByIdx, sortByIdx + 11);
+    const selected =
+      selectedIdx > -1 && request.url.slice(selectedIdx, selectedIdx + 16);
     const pageNum = Number(page.split('=')[1]);
     const sortOrdered = sortOrder.split('=')[1];
-    const select = selected.split('=')[1];
-    const sortedBy = sortBy.split('=')[1];
+    const sortBy = rate && rate.split('=')[1];
+    const select = selected && selected.split('=')[1];
 
-    const descPlaceData = myPlaceSpotData.sort((a, b) => a.postId - b.postId);
-    const ascPlaceData = myPlaceSpotData.sort((a, b) => b.postId - a.postId);
+    const descPlaceData = myPlaceSpotData.sort((a, b) => a.spot_id - b.spot_id);
+    const ascPlaceData = myPlaceSpotData.sort((a, b) => b.spot_id - a.spot_id);
     const ratePlaceData = myPlaceSpotData.sort((a, b) => b.rating - a.rating);
 
     if (select === 'all') {
       if (sortOrdered === 'desc') {
-        if (pageNum === 1)
-          return HttpResponse.json({
-            status: 200,
-            data: descPlaceData.filter((item, idx) => idx < 5),
-            totalCount: 12,
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: descPlaceData.filter((item, idx) => idx < 5),
+            totalPage: 13,
           });
-        else if (pageNum === 2) {
-          return HttpResponse.json({
-            status: 200,
-            data: descPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
-            totalCount: 12,
+          return HttpResponse.json(
+            {
+              content: descPlaceData.filter((item, idx) => idx < 5),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: descPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: descPlaceData.filter(
+                (item, idx) => idx > 5 && idx <= 10,
+              ),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         } else if (pageNum === 3) {
-          return HttpResponse.json({
-            status: 200,
-            data: descPlaceData.filter((item, idx) => idx > 10),
-            totalCount: 12,
+          const data = JSON.stringify({
+            content: descPlaceData.filter((item, idx) => idx > 10),
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: descPlaceData.filter((item, idx) => idx > 10),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         }
       } else if (sortOrdered === 'asc') {
-        if (pageNum === 1)
-          return HttpResponse.json({
-            status: 200,
-            data: ascPlaceData.filter((item, idx) => idx < 5),
-            totalCount: 12,
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: ascPlaceData.filter((item, idx) => idx < 5),
+            totalPage: 13,
           });
-        else if (pageNum === 2) {
-          return HttpResponse.json({
-            status: 200,
-            data: ascPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
-            totalCount: 12,
+          return HttpResponse.json(
+            {
+              content: ascPlaceData.filter((item, idx) => idx < 5),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: ascPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ascPlaceData.filter((item, idx) => idx > 5 && idx <= 10),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         } else if (pageNum === 3) {
-          return HttpResponse.json({
-            status: 200,
-            data: ascPlaceData.filter((item, idx) => idx > 10),
-            totalCount: 12,
+          const data = JSON.stringify({
+            content: ascPlaceData.filter((item, idx) => idx > 10),
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ascPlaceData.filter((item, idx) => idx > 10),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         }
-      } else if (sortedBy === 'rate') {
-        if (pageNum === 1)
-          return HttpResponse.json({
-            status: 200,
-            data: ratePlaceData.filter((item, idx) => idx < 5),
-            totalCount: 12,
+      } else if (sortBy === 'rate') {
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: ratePlaceData.filter((item, idx) => idx < 5),
+            totalPage: 13,
           });
-        else if (pageNum === 2) {
-          return HttpResponse.json({
-            status: 200,
-            data: ratePlaceData.filter((item, idx) => idx > 5 && idx <= 10),
-            totalCount: 12,
+          return HttpResponse.json(
+            {
+              content: ratePlaceData.filter((item, idx) => idx < 5),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: ratePlaceData.filter((item, idx) => idx > 5 && idx <= 10),
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ratePlaceData.filter(
+                (item, idx) => idx > 5 && idx <= 10,
+              ),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         } else if (pageNum === 3) {
-          return HttpResponse.json({
-            status: 200,
-            data: ratePlaceData.filter((item, idx) => idx > 10),
-            totalCount: 12,
+          const data = JSON.stringify({
+            content: ratePlaceData.filter((item, idx) => idx > 10),
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ratePlaceData.filter((item, idx) => idx > 10),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         }
       }
     } else if (select === 'public') {
       if (sortOrdered === 'desc') {
-        if (pageNum === 1)
-          return HttpResponse.json({
-            status: 200,
-            data: descPlaceData
-              .filter((item) => !item.isSecret)
-              .filter((item, idx) => idx < 5),
-            totalCount: 12,
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: descPlaceData
+              .filter((item, idx) => idx < 5)
+              .filter((item) => !item.isSecret),
+            totalPage: 13,
           });
-        else if (pageNum === 2) {
-          return HttpResponse.json({
-            status: 200,
-            data: descPlaceData
+          return HttpResponse.json(
+            {
+              content: descPlaceData
+                .filter((item, idx) => idx < 5)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: descPlaceData
               .filter((item, idx) => idx > 5 && idx <= 10)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: descPlaceData
+                .filter((item, idx) => idx > 5 && idx <= 10)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         } else if (pageNum === 3) {
-          return HttpResponse.json({
-            status: 200,
-            data: descPlaceData
+          const data = JSON.stringify({
+            content: descPlaceData
               .filter((item, idx) => idx > 10)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: descPlaceData
+                .filter((item, idx) => idx > 10)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         }
       } else if (sortOrder === 'asc') {
-        if (pageNum === 1)
-          return HttpResponse.json({
-            status: 200,
-            data: ascPlaceData
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: ascPlaceData
               .filter((item, idx) => idx < 5)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
-        else if (pageNum === 2) {
-          return HttpResponse.json({
-            status: 200,
-            data: ascPlaceData
+          return HttpResponse.json(
+            {
+              content: ascPlaceData
+                .filter((item, idx) => idx < 5)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: ascPlaceData
               .filter((item, idx) => idx > 5 && idx <= 10)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ascPlaceData
+                .filter((item, idx) => idx > 5 && idx <= 10)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         } else if (pageNum === 3) {
-          return HttpResponse.json({
-            status: 200,
-            data: ascPlaceData
+          const data = JSON.stringify({
+            content: ascPlaceData
               .filter((item, idx) => idx > 10)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ascPlaceData
+                .filter((item, idx) => idx > 10)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         }
-      } else if (sortedBy === 'rate') {
-        if (pageNum === 1)
-          return HttpResponse.json({
-            status: 200,
-            data: ratePlaceData
+      } else if (sortBy === 'rate') {
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: ratePlaceData
               .filter((item, idx) => idx < 5)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
-        else if (pageNum === 2) {
-          return HttpResponse.json({
-            status: 200,
-            data: ratePlaceData
+          return HttpResponse.json(
+            {
+              content: ratePlaceData
+                .filter((item, idx) => idx < 5)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: ratePlaceData
               .filter((item, idx) => idx > 5 && idx <= 10)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ratePlaceData
+                .filter((item, idx) => idx > 5 && idx <= 10)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         } else if (pageNum === 3) {
-          return HttpResponse.json({
-            status: 200,
-            data: ratePlaceData
+          const data = JSON.stringify({
+            content: ratePlaceData
               .filter((item, idx) => idx > 10)
               .filter((item) => !item.isSecret),
-            totalCount: 12,
+            totalPage: 13,
           });
+          return HttpResponse.json(
+            {
+              content: ratePlaceData
+                .filter((item, idx) => idx > 10)
+                .filter((item) => !item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        }
+      }
+    } else {
+      if (sortOrdered === 'desc') {
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: descPlaceData
+              .filter((item, idx) => idx < 5)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: descPlaceData
+                .filter((item, idx) => idx < 5)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: descPlaceData
+              .filter((item, idx) => idx > 5 && idx <= 10)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: descPlaceData
+                .filter((item, idx) => idx > 5 && idx <= 10)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 3) {
+          const data = JSON.stringify({
+            content: descPlaceData
+              .filter((item, idx) => idx > 10)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: descPlaceData
+                .filter((item, idx) => idx > 10)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        }
+      } else if (sortOrdered === 'asc') {
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: ascPlaceData
+              .filter((item, idx) => idx < 5)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: ascPlaceData
+                .filter((item, idx) => idx < 5)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: ascPlaceData
+              .filter((item, idx) => idx > 5 && idx <= 10)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: ascPlaceData
+                .filter((item, idx) => idx > 5 && idx <= 10)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 3) {
+          const data = JSON.stringify({
+            content: ascPlaceData
+              .filter((item, idx) => idx > 10)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: ascPlaceData
+                .filter((item, idx) => idx > 10)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        }
+      } else if (sortBy === 'rate') {
+        if (pageNum === 1) {
+          const data = JSON.stringify({
+            content: ratePlaceData
+              .filter((item, idx) => idx < 5)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: ratePlaceData
+                .filter((item, idx) => idx < 5)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 2) {
+          const data = JSON.stringify({
+            content: ratePlaceData
+              .filter((item, idx) => idx > 5 && idx <= 10)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: ratePlaceData
+                .filter((item, idx) => idx > 5 && idx <= 10)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
+        } else if (pageNum === 3) {
+          const data = JSON.stringify({
+            content: ratePlaceData
+              .filter((item, idx) => idx > 10)
+              .filter((item) => item.isSecret),
+            totalPage: 13,
+          });
+          return HttpResponse.json(
+            {
+              content: ratePlaceData
+                .filter((item, idx) => idx > 10)
+                .filter((item) => item.isSecret),
+              totalPage: 13,
+            },
+            {
+              headers: {
+                'Content-Length': Buffer.byteLength(data).toString(),
+              },
+            },
+          );
         }
       }
     }
@@ -165,7 +558,7 @@ const handlers = [
     return HttpResponse.json({
       status: 200,
       data: { id: 1 },
-      totalCount: 12,
+      totalPage: 13,
     });
   }),
 ];

@@ -5,20 +5,20 @@ import LockIcon from '/public/icons/lock-white.svg';
 import { TMyPageSpot } from './MyPageSpotList';
 
 interface TMyPageSpotItem extends TMyPageSpot {
-  checkedList: { postId: TMyPageSpot['postId']; isSecret: boolean }[];
+  checkedList: { spot_id: TMyPageSpot['spot_id']; isSecret: boolean }[];
   onChangeCheckedList: (id: number, isSecret: boolean) => void;
   idx: number;
   selectOption: string;
 }
 
 const MyPageSpotItem = ({
-  postId,
-  travel_id,
+  spot_id,
+
   image_url,
   rating,
   post_date,
   title,
-  description,
+
   isSecret,
   checkedList,
   onChangeCheckedList,
@@ -30,7 +30,7 @@ const MyPageSpotItem = ({
 
   // TODO: 전체 선택 했을 때 isChecked가 true 로 바뀌어야 한다.
   useEffect(() => {
-    const found = checkedList.find((checked) => checked.postId === postId);
+    const found = checkedList.find((checked) => checked.spot_id === spot_id);
 
     if (found) setIsChecked(true);
     else setIsChecked(false);
@@ -56,7 +56,7 @@ const MyPageSpotItem = ({
         className="w-[32px] h-[32px]"
         checked={isChecked}
         onChange={() => {
-          onChangeCheckedList(postId, isSecret);
+          onChangeCheckedList(spot_id, isSecret);
         }}
       />
       <div className="relative">

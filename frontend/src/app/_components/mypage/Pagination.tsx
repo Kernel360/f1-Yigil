@@ -3,31 +3,18 @@ import { useEffect, useState } from 'react';
 interface PropsType {
   currentPage: number;
   setCurrentPage: (currentPage: number) => void;
-  allCount: number;
+  totalPage: number;
   divide: number;
 }
 
 function Pagination({
   currentPage,
   setCurrentPage,
-  allCount,
+  totalPage,
   divide,
 }: PropsType) {
-  const [pagesCount, setPagesCount] = useState<number[] | []>([]);
-
-  const maxPage = Math.ceil(allCount / divide);
-  useEffect(() => {
-    if (maxPage) {
-      const arr = [];
-      for (let i = 1; i <= maxPage; i++) {
-        arr.push(i);
-      }
-      setPagesCount(arr);
-    }
-  }, []);
-
   const addPage = () => {
-    if (currentPage >= maxPage) return;
+    if (currentPage >= totalPage) return;
     setCurrentPage(currentPage + 1);
   };
 
@@ -56,19 +43,18 @@ function Pagination({
           />
         </svg>
       </span>
-      {pagesCount &&
-        allCount &&
-        pagesCount.map((page: number) => (
+      {totalPage &&
+        [...Array(totalPage)].map((v, idx) => (
           <span
-            key={page}
+            key={idx}
             className={`${
-              currentPage === page
+              currentPage === idx + 1
                 ? 'font-bold text-main'
                 : 'font-normal text-gray-500'
             }  cursor-pointer hover:font-bold hover:text-main mx-2`}
-            onClick={() => clickPage(page)}
+            onClick={() => clickPage(idx + 1)}
           >
-            {page}
+            {idx + 1}
           </span>
         ))}
       <span className="hover:cursor-pointer mx-4" onClick={addPage}>

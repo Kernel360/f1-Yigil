@@ -2,14 +2,13 @@
 
 import { requestWithCookie } from '../../api/httpRequest';
 
-export const myPageSpotRequest = requestWithCookie('members/spot');
+export const myPageSpotRequest = requestWithCookie('members/spots');
 export const myPageCourseRequest = requestWithCookie('member/courses');
 export const myPageFollowerRequest = requestWithCookie('member/followers');
 export const myPageFollowingRequest = requestWithCookie('member/followings');
 
 export const authenticateUser = async () => {
-  const res = await requestWithCookie('members')()()()();
-  return res;
+  return requestWithCookie('members')()()()();
 };
 
 export const getMyPageSpots = async (
@@ -18,14 +17,11 @@ export const getMyPageSpots = async (
   sortOrder: string = 'desc',
   selectOption: string = 'all',
 ) => {
-  const res = await myPageSpotRequest(
+  return myPageSpotRequest(
     `?page=${pageNo}&size=${size}&sortOrder=${
-      sortOrder !== 'rate'
-        ? `${sortOrder}&sortBy=''`
-        : `desc&sortBy=${sortOrder}`
+      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
     }&selected=${selectOption}`,
   )()()();
-  return res;
 };
 
 export const deleteMyPageSpot = (spotId: number) => {
