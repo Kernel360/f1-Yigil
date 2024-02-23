@@ -7,6 +7,7 @@ const handlers = [
       return HttpResponse.json({
         status: 200,
         data: myPageData,
+        code: 0,
       });
     } else {
       return HttpResponse.json({
