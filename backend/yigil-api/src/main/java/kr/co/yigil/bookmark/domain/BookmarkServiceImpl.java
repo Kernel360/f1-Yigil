@@ -31,6 +31,9 @@ public class BookmarkServiceImpl implements BookmarkService{
     @Transactional
     @Override
     public void deleteBookmark(Long memberId, Long placeId) {
+        if (!bookmarkReader.isBookmarked(memberId, placeId)) {
+            throw new BadRequestException(ExceptionCode.NOT_BOOKMARKED);
+        }
         Member member = memberReader.getMember(memberId);
         Place place = placeReader.getPlace(placeId);
         bookmarkStore.remove(member, place);
