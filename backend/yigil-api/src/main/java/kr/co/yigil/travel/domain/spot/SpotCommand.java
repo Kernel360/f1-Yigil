@@ -11,6 +11,7 @@ import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.util.GeojsonConverter;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -71,6 +72,7 @@ public class SpotCommand {
     @Getter
     @Builder
     @ToString
+    @AllArgsConstructor
     public static class ModifySpotRequest {
         private final Long id;
         private final double rate;
@@ -82,6 +84,7 @@ public class SpotCommand {
     @Getter
     @Builder
     @ToString
+    @AllArgsConstructor
     public static class OriginalSpotImage {
         private String imageUrl;
         private int index;
@@ -90,6 +93,7 @@ public class SpotCommand {
     @Getter
     @Builder
     @ToString
+    @AllArgsConstructor
     public static class UpdateSpotImage {
         private MultipartFile imageFile;
         private int index;

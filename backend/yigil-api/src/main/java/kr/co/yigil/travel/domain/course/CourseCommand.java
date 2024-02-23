@@ -8,6 +8,7 @@ import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.util.GeojsonConverter;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -76,6 +77,7 @@ public class CourseCommand {
     @Getter
     @Builder
     @ToString
+    @AllArgsConstructor
     public static class ModifyCourseRequest {
         private String description;
         private double rate;

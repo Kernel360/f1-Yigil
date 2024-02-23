@@ -32,26 +32,25 @@ public class CommentService {
     private final MemberService memberService;
     private final NotificationService notificationService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
-    private final TravelService travelService;
 
-    @Transactional
-    public CommentCreateResponse createComment(Long memberId, Long travelId, CommentCreateRequest commentCreateRequest) {
-        Member member = memberService.findMemberById(memberId);
-        Travel travel = travelService.findTravelById(travelId);
-
-        Comment parentComment = null;
-        if (commentCreateRequest.getParentId() != null && commentCreateRequest.getNotifiedMemberId() != null) {
-            parentComment = findCommentById(commentCreateRequest.getParentId());
-            Member notifiedMember = memberService.findMemberById(commentCreateRequest.getNotifiedMemberId());
-            sendCommentNotification(notifiedMember, commentCreateRequest.getContent());
-        }
-
-        Comment newComment = new Comment(commentCreateRequest.getContent(), member, travel, parentComment);
-        incrementCommentCount(travel);
-        commentRepository.save(newComment);
-
-        return new CommentCreateResponse("댓글 생성 성공");
-    }
+//    @Transactional
+//    public CommentCreateResponse createComment(Long memberId, Long travelId, CommentCreateRequest commentCreateRequest) {
+//        Member member = memberService.findMemberById(memberId);
+//        Travel travel = travelService.findTravelById(travelId);
+//
+//        Comment parentComment = null;
+//        if (commentCreateRequest.getParentId() != null && commentCreateRequest.getNotifiedMemberId() != null) {
+//            parentComment = findCommentById(commentCreateRequest.getParentId());
+//            Member notifiedMember = memberService.findMemberById(commentCreateRequest.getNotifiedMemberId());
+//            sendCommentNotification(notifiedMember, commentCreateRequest.getContent());
+//        }
+//
+//        Comment newComment = new Comment(commentCreateRequest.getContent(), member, travel, parentComment);
+//        incrementCommentCount(travel);
+//        commentRepository.save(newComment);
+//
+//        return new CommentCreateResponse("댓글 생성 성공");
+//    }
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getCommentList(Long travelId) {
@@ -88,15 +87,15 @@ public class CommentService {
         return new SliceImpl<>(commentResponses, pageable, comments.hasNext());
     }
 
-    @Transactional
-    public CommentDeleteResponse deleteComment(Long memberId, Long travelId, Long commentId) {
-        Travel travel = travelService.findTravelById(travelId);
-        decrementCommentCount(travel);
-
-        Comment comment = findCommentByIdAndMemberId(commentId, memberId);
-        commentRepository.delete(comment);
-        return new CommentDeleteResponse("댓글 삭제 성공");
-    }
+//    @Transactional
+//    public CommentDeleteResponse deleteComment(Long memberId, Long travelId, Long commentId) {
+//        Travel travel = travelService.findTravelById(travelId);
+//        decrementCommentCount(travel);
+//
+//        Comment comment = findCommentByIdAndMemberId(commentId, memberId);
+//        commentRepository.delete(comment);
+//        return new CommentDeleteResponse("댓글 삭제 성공");
+//    }
 
     private Comment findCommentById(Long parentId) {
         return commentRepository.findById(parentId)

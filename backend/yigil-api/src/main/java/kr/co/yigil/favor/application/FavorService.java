@@ -26,26 +26,25 @@ public class FavorService {
     private final FavorCountRepository favorCountRepository;
     private final NotificationService notificationService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
-    private final TravelService travelService;
 
-    @Transactional
-    public AddFavorResponse addFavor(final Long memberId, final Long travelId) {
-        Member member = getMemberById(memberId);
-        Travel travel = travelService.findTravelById(travelId);
-        favorRepository.save(new Favor(member, travel));
-        incrementFavorCount(travel);
-        sendFavorNotification(travel, member);
-        return new AddFavorResponse("좋아요가 완료되었습니다.");
-    }
+//    @Transactional
+//    public AddFavorResponse addFavor(final Long memberId, final Long travelId) {
+//        Member member = getMemberById(memberId);
+//        Travel travel = travelService.findTravelById(travelId);
+//        favorRepository.save(new Favor(member, travel));
+//        incrementFavorCount(travel);
+//        sendFavorNotification(travel, member);
+//        return new AddFavorResponse("좋아요가 완료되었습니다.");
+//    }
 
-    @Transactional
-    public DeleteFavorResponse deleteFavor(final Long memberId, final Long travelId) {
-        Member member = getMemberById(memberId);
-        Travel travel = travelService.findTravelById(travelId);
-        favorRepository.deleteByMemberAndTravel(member, travel);
-        decrementFavorCount(travel);
-        return new DeleteFavorResponse("좋아요가 취소되었습니다.");
-    }
+//    @Transactional
+//    public DeleteFavorResponse deleteFavor(final Long memberId, final Long travelId) {
+//        Member member = getMemberById(memberId);
+//        Travel travel = travelService.findTravelById(travelId);
+//        favorRepository.deleteByMemberAndTravel(member, travel);
+//        decrementFavorCount(travel);
+//        return new DeleteFavorResponse("좋아요가 취소되었습니다.");
+//    }
 
     private void sendFavorNotification(Travel travel, Member member) {
         String message = member.getNickname() + "님이 게시글에 좋아요를 눌렀습니다.";

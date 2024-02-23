@@ -28,17 +28,17 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/travels/{travel_id}")
-    @MemberOnly
-    public ResponseEntity<CommentCreateResponse> createComment(
-            @RequestBody CommentCreateRequest commentCreateRequest,
-            @Auth final Accessor accessor,
-            @PathVariable("travel_id") Long travelId
-    ) {
-        CommentCreateResponse commentCreateResponse = commentService.createComment(
-                accessor.getMemberId(), travelId, commentCreateRequest);
-        return ResponseEntity.ok().body(commentCreateResponse);
-    }
+//    @PostMapping("/travels/{travel_id}")
+//    @MemberOnly
+//    public ResponseEntity<CommentCreateResponse> createComment(
+//            @RequestBody CommentCreateRequest commentCreateRequest,
+//            @Auth final Accessor accessor,
+//            @PathVariable("travel_id") Long travelId
+//    ) {
+//        CommentCreateResponse commentCreateResponse = commentService.createComment(
+//                accessor.getMemberId(), travelId, commentCreateRequest);
+//        return ResponseEntity.ok().body(commentCreateResponse);
+//    }
 
     @GetMapping("/travels/{travel_id}")
     public ResponseEntity<Slice<CommentResponse>> getParentCommentList(
@@ -63,15 +63,15 @@ public class CommentController {
         return ResponseEntity.ok().body(childCommentList);
     }
 
-    @DeleteMapping("/travels/{travel_id}/{comment_id}")
-    @MemberOnly
-    public ResponseEntity<CommentDeleteResponse> deleteComment(
-            @PathVariable("comment_id") Long commentId,
-            @PathVariable("travel_id") Long travelId,
-            @Auth final Accessor accessor
-    ) {
-        CommentDeleteResponse commentDeleteResponse = commentService.deleteComment(
-                accessor.getMemberId(), travelId, commentId);
-        return ResponseEntity.ok().body(commentDeleteResponse);
-    }
+//    @DeleteMapping("/travels/{travel_id}/{comment_id}")
+//    @MemberOnly
+//    public ResponseEntity<CommentDeleteResponse> deleteComment(
+//            @PathVariable("comment_id") Long commentId,
+//            @PathVariable("travel_id") Long travelId,
+//            @Auth final Accessor accessor
+//    ) {
+//        CommentDeleteResponse commentDeleteResponse = commentService.deleteComment(
+//                accessor.getMemberId(), travelId, commentId);
+//        return ResponseEntity.ok().body(commentDeleteResponse);
+//    }
 }
