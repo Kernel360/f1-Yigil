@@ -1,5 +1,5 @@
-import { TMyPageCourse } from '@/app/_components/mypage/course/MyPageCourseList';
 import { TMyPageSpot } from '@/app/_components/mypage/spot/MyPageSpotList';
+import { TMyPageCourse } from '@/app/_components/mypage/types';
 
 export const myPlaceSpotData: TMyPageSpot[] = [
   {
@@ -107,25 +107,24 @@ export const myPlaceSpotData: TMyPageSpot[] = [
     rating: 3,
   },
 ];
-// export const myPlaceCourseData: TMyPageCourse[] = [
-//   {
-//     spot_id: 1,
 
-//     title: '재밌는 여행',
-//     image_url: 'https://picsum.photos/seed/picsum/320/160',
-//     isSecret: true,
-//     post_date: new Date(Date.now()).toLocaleDateString(),
-//     rating: 5,
-//     spots: 5,
-//   },
-//   {
-//     spot_id: 2,
-
-//     title: '코스 여행',
-//     image_url: 'https://picsum.photos/seed/picsum/320/160',
-//     isSecret: false,
-//     post_date: new Date(Date.now()).toLocaleDateString(),
-//     rating: 4,
-//     spots: 3,
-//   },
-// ];
+export const myPlaceCourseData: TMyPageCourse[] = [
+  {
+    course_id: 1,
+    title: '재밌는 여행',
+    static_image_url: 'https://picsum.photos/seed/picsum/320/160',
+    isSecret: true,
+    created_at: new Date(Date.now()).toLocaleDateString(),
+    rate: 5,
+    spot_count: 5,
+  },
+  {
+    course_id: 2,
+    title: '코스 여행',
+    static_image_url: 'https://picsum.photos/seed/picsum/320/160',
+    isSecret: false,
+    created_at: new Date(Date.now()).toLocaleDateString(),
+    rate: 4,
+    spot_count: 3,
+  },
+];

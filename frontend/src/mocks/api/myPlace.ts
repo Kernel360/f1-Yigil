@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { myPlaceSpotData } from './data/myPlaceData';
+import { myPlaceCourseData, myPlaceSpotData } from './data/myPlaceData';
 
 const handlers = [
   http.get(`api/v1/members/spots`, ({ request }) => {
@@ -554,12 +554,29 @@ const handlers = [
     }
   }),
 
-  http.get(`http://localhost:8080/api/v1/member/course`, () => {
-    return HttpResponse.json({
-      status: 200,
-      data: { id: 1 },
-      totalPage: 13,
-    });
+  http.get(`api/v1/members/courses`, ({ request }) => {
+    const [page, size, sortOrder] = request.url.split('?')[1].split('&');
+
+    const selectedIdx = request.url.indexOf('selected');
+
+    const selected =
+      selectedIdx > -1 && request.url.slice(selectedIdx, selectedIdx + 16);
+    const pageNum = Number(page.split('=')[1]);
+    const sortOrdered = sortOrder.split('=')[1];
+    const select = selected && selected.split('=')[1];
+
+    const descPlaceData = myPlaceSpotData.sort((a, b) => a.spot_id - b.spot_id);
+    const ascPlaceData = myPlaceSpotData.sort((a, b) => b.spot_id - a.spot_id);
+
+    const data = JSON.stringify({ content: myPlaceCourseData, totalPage: 13 });
+    return HttpResponse.json(
+      { content: myPlaceCourseData, totalPage: 13 },
+      {
+        headers: {
+          'Content-Length': Buffer.byteLength(data).toString(),
+        },
+      },
+    );
   }),
 ];
 export default handlers;

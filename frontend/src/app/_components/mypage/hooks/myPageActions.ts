@@ -3,9 +3,9 @@
 import { requestWithCookie } from '../../api/httpRequest';
 
 export const myPageSpotRequest = requestWithCookie('members/spots');
-export const myPageCourseRequest = requestWithCookie('member/courses');
-export const myPageFollowerRequest = requestWithCookie('member/followers');
-export const myPageFollowingRequest = requestWithCookie('member/followings');
+export const myPageCourseRequest = requestWithCookie('members/courses');
+export const myPageFollowerRequest = requestWithCookie('members/followers');
+export const myPageFollowingRequest = requestWithCookie('members/followings');
 
 export const authenticateUser = async () => {
   return requestWithCookie('members')()()()();
@@ -26,6 +26,17 @@ export const getMyPageSpots = async (
 
 export const deleteMyPageSpot = (spotId: number) => {
   return myPageSpotRequest(`${spotId}`)('DELETE')()();
+};
+
+export const getMyPageCourses = (
+  pageNo: number = 1,
+  size: number = 5,
+  sortOrder: string = 'desc',
+  selectOption: string = 'all',
+) => {
+  return myPageCourseRequest(
+    `?page=${pageNo}&size=${size}&sortOrder=${sortOrder}`,
+  )()()();
 };
 
 export const getMyPageFollwers = async (
