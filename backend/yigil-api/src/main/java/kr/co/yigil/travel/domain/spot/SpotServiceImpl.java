@@ -12,6 +12,7 @@ import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
@@ -32,6 +33,7 @@ public class SpotServiceImpl implements SpotService {
     private final PlaceStore placeStore;
     private final PlaceCacheStore placeCacheStore;
 
+    private final SpotSeriesFactory spotSeriesFactory;
     private final FileUploader fileUploader;
     @Override
     @Transactional(readOnly = true)
@@ -45,7 +47,7 @@ public class SpotServiceImpl implements SpotService {
         Member member = memberReader.getMember(memberId);
         Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(command.getRegisterPlaceRequest().getPlaceName(), command.getRegisterPlaceRequest().getPlaceAddress());
         Place place = optionalPlace.orElseGet(()-> registerNewPlace(command.getRegisterPlaceRequest()));
-        var spot = spotStore.store(command.toEntity(member, place));
+        var spot = spotStore.store(command.toEntity(member, place, false));
         var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
     }
 
@@ -58,11 +60,20 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional
+    public void modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
+        var spot = spotReader.getSpot(spotId);
+        if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(ExceptionCode.INVALID_AUTHORITY);
+        var modifiedSpot = spotSeriesFactory.modify(command, spot);
+    }
+
+    @Override
+    @Transactional
     public void deleteSpot(Long spotId, Long memberId) {
         var spot = spotReader.getSpot(spotId);
         if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(
                 ExceptionCode.INVALID_AUTHORITY);
         spotStore.remove(spot);
+        if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {

@@ -33,6 +33,7 @@ public enum ExceptionCode {
     INVALID_FILE_TYPE(5002, "지원하지 않는 형식의 파일입니다."),
     EXCEED_FILE_CAPACITY(5003, "업로드 가능한 파일 용량을 초과했습니다."),
     EXCEED_FILE_COUNT(5004, "업로드 가능한 파일 개수를 초과했습니다."), // todo 현재  모듈 구조상 AttachFiles에서  사용 불가
+    INVALID_FILE_URL(5005, "유효한 파일 URL이 아닙니다."),
 
     // GeoJson
     //    INVALID_GEOMETRY_TYPE(6001, "geometry 타입이 다릅니다"),

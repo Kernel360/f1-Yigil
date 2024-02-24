@@ -56,4 +56,10 @@ public class Course extends Travel {
         this.representativeSpotOrder = representativeSpotOrder;
         this.mapStaticImageFile = mapStaticImageFile;
     }
+
+    public void updateCourse(String description, double rate, List<Spot> spots) {
+        updateTravel(description, rate);
+        this.spots.clear();
+        this.spots.addAll(spots);
+    }
 }

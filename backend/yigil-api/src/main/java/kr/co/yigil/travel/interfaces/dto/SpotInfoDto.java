@@ -20,11 +20,4 @@ public class SpotInfoDto {
 
     private String createDate;
 
-    public SpotInfoDto(SpotInfo.Main main) {
-        this.imageUrlList = main.getImageUrlList();
-        this.ownerProfileImageUrl = main.getOwnerProfileImageUrl();
-        this.ownerNickname = main.getOwnerNickname();
-        this.rate = main.getRate();
-        this.createDate = main.getCreateDate();
-    }
 }
