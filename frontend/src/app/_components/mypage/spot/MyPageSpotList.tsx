@@ -147,7 +147,7 @@ export default function MyPageSpotList({
   useEffect(() => {
     setCurrentPage(1);
     getUser(1, divideCount, 'desc', selectOption);
-  }, [selectOption, sortOption]);
+  }, [selectOption]);
 
   // 함수 분리 예정
   const onClickDelete = () => {
@@ -183,7 +183,8 @@ export default function MyPageSpotList({
     setSortOption('desc');
   };
 
-  const onChangeSortOption = (option: string) => {
+  const onChangeSortOption = (option: string | number) => {
+    if (typeof option === 'number') return;
     setAllSpotList([]);
     setSortOption(option);
     setCheckedList([]);
@@ -213,7 +214,7 @@ export default function MyPageSpotList({
 
   return !!placeList.length ? (
     <>
-      <div className="my-4">
+      <div className="mt-4 mb-3">
         <MyPageSelectBtns
           selectOption={selectOption}
           sortOption={sortOption}

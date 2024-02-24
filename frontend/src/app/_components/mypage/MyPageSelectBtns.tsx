@@ -1,5 +1,6 @@
 import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import Select from '../ui/select/Select';
 
 const selectBtns = [
   { label: '전체', value: 'all' },
@@ -7,11 +8,17 @@ const selectBtns = [
   { label: '비공개', value: 'private' },
 ];
 
+const sortOptions = [
+  { label: '최신순', value: 'desc' },
+  { label: '오래된순', value: 'asc' },
+  { label: '별점순', value: 'rate' },
+];
+
 interface TMyPageSelectBtn {
   selectOption: string;
   sortOption: string;
   onClickSelectOption: (option: string) => void;
-  onChangeSortOption: (option: string) => void;
+  onChangeSortOption: (option: string | number) => void;
   onChangeAllList: (
     e: EventFor<'input', 'onChange'>,
     setIsChecked: Dispatch<SetStateAction<boolean>>,
@@ -27,6 +34,7 @@ export default function MyPageSelectBtns({
   onChangeAllList,
 }: TMyPageSelectBtn) {
   const [isChecked, setIsChecked] = useState(false);
+
   return (
     <>
       <ul className="flex items-center gap-x-2">
@@ -47,7 +55,7 @@ export default function MyPageSelectBtns({
           </button>
         ))}
       </ul>
-      <div className="flex justify-between mx-5 mb-2 mt-4">
+      <div className="flex justify-between mx-5 mt-4">
         <div className="flex items-center gap-x-4">
           <input
             type="checkbox"
@@ -57,19 +65,12 @@ export default function MyPageSelectBtns({
           />
           <div>전체 선택</div>
         </div>
-        <select
-          name="sort-option"
-          className="p-2"
-          onChange={(e) => {
-            setIsChecked(false);
-            onChangeSortOption(e.currentTarget.value);
-          }}
-          value={sortOption}
-        >
-          <option value="desc">최신순</option>
-          <option value="asc">오래된순</option>
-          <option value="rate">평점순</option>
-        </select>
+        <Select
+          list={sortOptions}
+          optionStyle={'top-10 left-0 bg-white'}
+          selectOption={sortOption}
+          onChangeSelectOption={onChangeSortOption}
+        />
       </div>
     </>
   );
