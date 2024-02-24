@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-23T18:23:34+0900",
+    date = "2024-02-24T16:00:27+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -31,6 +31,40 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         memberUpdateRequest.profileImageFile( request.getProfileImageFile() );
 
         return memberUpdateRequest.build();
+    }
+
+    @Override
+    public MemberCommand.CoursesVisibilityRequest of(MemberDto.CoursesVisibilityRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        MemberCommand.CoursesVisibilityRequest.CoursesVisibilityRequestBuilder coursesVisibilityRequest = MemberCommand.CoursesVisibilityRequest.builder();
+
+        List<Long> list = request.getCourseIds();
+        if ( list != null ) {
+            coursesVisibilityRequest.courseIds( new ArrayList<Long>( list ) );
+        }
+        coursesVisibilityRequest.isPrivate( request.getIsPrivate() );
+
+        return coursesVisibilityRequest.build();
+    }
+
+    @Override
+    public MemberCommand.SpotsVisibilityRequest of(MemberDto.SpotsVisibilityRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        MemberCommand.SpotsVisibilityRequest.SpotsVisibilityRequestBuilder spotsVisibilityRequest = MemberCommand.SpotsVisibilityRequest.builder();
+
+        List<Long> list = request.getSpotIds();
+        if ( list != null ) {
+            spotsVisibilityRequest.spotIds( new ArrayList<Long>( list ) );
+        }
+        spotsVisibilityRequest.isPrivate( request.getIsPrivate() );
+
+        return spotsVisibilityRequest.build();
     }
 
     @Override
@@ -194,6 +228,19 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         followInfo1.profileImageUrl( followInfo.getProfileImageUrl() );
 
         return followInfo1.build();
+    }
+
+    @Override
+    public MemberDto.CoursesVisibilityResponse of(MemberInfo.CoursesVisibilityResponse response) {
+        if ( response == null ) {
+            return null;
+        }
+
+        MemberDto.CoursesVisibilityResponse.CoursesVisibilityResponseBuilder coursesVisibilityResponse = MemberDto.CoursesVisibilityResponse.builder();
+
+        coursesVisibilityResponse.message( response.getMessage() );
+
+        return coursesVisibilityResponse.build();
     }
 
     protected List<MemberDto.CourseInfo> courseInfoListToCourseInfoList(List<MemberInfo.CourseInfo> list) {

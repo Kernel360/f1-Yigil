@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,6 +58,18 @@ public class MemberApiController {
             accessor.getMemberId(), pageRequest, selected);
         var memberCourseResponse = memberDtoMapper.of(memberCourseInfo);
         return ResponseEntity.ok().body(memberCourseResponse);
+    }
+
+    @PostMapping("/courses")
+    @MemberOnly
+    public ResponseEntity<MemberDto.CoursesVisibilityResponse> setCoursesVisibility(
+        @Auth final Accessor accessor,
+        @RequestBody MemberDto.CoursesVisibilityRequest request
+        ){
+        var memberCommand = memberDtoMapper.of(request);
+        var infoResponse = memberFacade.setCoursesVisibility(accessor.getMemberId(), memberCommand);
+        var response = memberDtoMapper.of(infoResponse);
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/spots")

@@ -1,10 +1,13 @@
 package kr.co.yigil.member.domain;
 
+import java.util.List;
 import kr.co.yigil.file.FileUploadUtil;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
+import kr.co.yigil.member.domain.MemberCommand.CoursesVisibilityRequest;
+import kr.co.yigil.member.domain.MemberInfo.CoursesVisibilityResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowerResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
 import kr.co.yigil.member.domain.MemberInfo.Main;
@@ -88,5 +91,14 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     public FollowingResponse getFollowingList(Long memberId, Pageable pageable) {
         return followReader.getFollowingSlice(memberId, pageable);
+    }
+
+    @Override
+    @Transactional
+    public CoursesVisibilityResponse setCoursesVisibility(Long memberId,
+        CoursesVisibilityRequest memberCommand) {
+        List<Long> courseIds = memberCommand.getCourseIds();
+        boolean isPrivate = memberCommand.getIsPrivate();
+        return courseReader.setCoursesVisibility(memberId, courseIds, isPrivate);
     }
 }

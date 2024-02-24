@@ -198,4 +198,25 @@ public class MemberInfo {
             this.message = message;
         }
     }
-  }
+
+    @Getter
+    @ToString
+    public static class CoursesVisibilityResponse {
+        private final String message;
+
+        public CoursesVisibilityResponse(String message) {
+            this.message = message;
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class SpotsVisibilityResponse {
+        private final String message;
+
+        public SpotsVisibilityResponse(String message) {
+            this.message = message;
+        }
+    }
+
+}

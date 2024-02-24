@@ -4,6 +4,7 @@ import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.member.domain.MemberCommand;
+import kr.co.yigil.member.domain.MemberCommand.CoursesVisibilityRequest;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
 import kr.co.yigil.member.domain.MemberService;
@@ -65,6 +66,11 @@ public class MemberFacade {
 
     public FollowingResponse getFollowingList(final Long memberId, Pageable pageable) {
         return memberService.getFollowingList(memberId, pageable);
+    }
+
+    public MemberInfo.CoursesVisibilityResponse setCoursesVisibility(Long memberId,
+        CoursesVisibilityRequest memberCommand) {
+        return memberService.setCoursesVisibility(memberId, memberCommand);
     }
 
     @NotNull

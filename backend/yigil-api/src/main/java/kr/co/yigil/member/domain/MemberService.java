@@ -1,6 +1,8 @@
 package kr.co.yigil.member.domain;
 
 import kr.co.yigil.member.Member;
+import kr.co.yigil.member.domain.MemberCommand.CoursesVisibilityRequest;
+import kr.co.yigil.member.domain.MemberInfo.CoursesVisibilityResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -19,4 +21,6 @@ public interface MemberService {
 
     MemberInfo.FollowerResponse getFollowerList(Long memberId, Pageable pageable);
     MemberInfo.FollowingResponse getFollowingList(Long memberId, Pageable pageable);
+
+    CoursesVisibilityResponse setCoursesVisibility(Long memberId, CoursesVisibilityRequest memberCommand);
 }

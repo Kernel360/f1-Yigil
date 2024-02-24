@@ -15,6 +15,8 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface MemberDtoMapper {
     MemberCommand.MemberUpdateRequest of(MemberDto.MemberUpdateRequest request);
+    MemberCommand.CoursesVisibilityRequest of(MemberDto.CoursesVisibilityRequest request);
+    MemberCommand.SpotsVisibilityRequest of(MemberDto.SpotsVisibilityRequest request);
 
 
     MemberDto.Main of(MemberInfo.Main main);
@@ -30,5 +32,7 @@ public interface MemberDtoMapper {
     MemberDto.FollowerResponse of(MemberInfo.FollowerResponse followerResponse);
     MemberDto.FollowingResponse of(MemberInfo.FollowingResponse followingResponse);
     MemberDto.FollowInfo of(MemberInfo.FollowInfo followInfo);
+
+    MemberDto.CoursesVisibilityResponse of(MemberInfo.CoursesVisibilityResponse response);
 
 }

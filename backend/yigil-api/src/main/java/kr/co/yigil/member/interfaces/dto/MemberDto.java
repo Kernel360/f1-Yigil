@@ -22,6 +22,25 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
+    public static class CoursesVisibilityRequest {
+
+        private List<Long> courseIds;
+        private Boolean isPrivate;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class SpotsVisibilityRequest {
+
+        private List<Long> spotIds;
+        private Boolean isPrivate;
+    }
+
+
+    @Getter
+    @Builder
+    @ToString
     public static class Main {
 
         private final Long memberId;
@@ -48,6 +67,22 @@ public class MemberDto {
 
         private List<SpotInfo> spotList;
         private int totalPages;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class CoursesVisibilityResponse {
+
+        private final String message;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class SpotsVisibilityResponse {
+
+        private final String message;
     }
 
 
@@ -128,4 +163,5 @@ public class MemberDto {
         private final String nickname;
         private final String profileImageUrl;
     }
+
 }
