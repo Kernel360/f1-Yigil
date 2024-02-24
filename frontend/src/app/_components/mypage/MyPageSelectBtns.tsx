@@ -8,7 +8,7 @@ const selectBtns = [
   { label: '비공개', value: 'private' },
 ];
 
-const sortOptions = [
+export const sortOptions = [
   { label: '최신순', value: 'desc' },
   { label: '오래된순', value: 'asc' },
   { label: '별점순', value: 'rate' },

@@ -34,6 +34,7 @@ export default function Select({
       } rounded-md cursor-pointer relative`}
       onClick={() => setIsSortOpened(!isSortOpened)}
       onKeyDown={(e) => e.key === 'Enter' && setIsSortOpened(!isSortOpened)}
+      aria-label="select"
     >
       <div className="flex items-center justify-between p-2 gap-x-4 text-main font-semibold">
         {viewSelectOption}
