@@ -18,4 +18,9 @@ public class MemberReaderImpl implements MemberReader {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
+    public void validateMember(Long memberId) {
+        if(!memberRepository.existsById(memberId)){
+            throw new BadRequestException(NOT_FOUND_MEMBER_ID);
+        }
+    }
 }

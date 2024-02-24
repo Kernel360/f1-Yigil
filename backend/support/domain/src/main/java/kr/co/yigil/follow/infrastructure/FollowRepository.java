@@ -12,7 +12,9 @@ import org.springframework.data.repository.query.Param;
 public interface FollowRepository extends JpaRepository<Follow, Long> {
     public boolean existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
 
-    public Slice<Follow> findAllByFollowing(Member member, Pageable pageable);
+    public Slice<Follow> findAllByFollowing(Member member);
+    public Slice<Follow> findAllByFollowingId(Long memberId, Pageable pageable);
+    public Slice<Follow> findAllByFollowerId(Long memberId, Pageable pageable);
 
     public Slice<Follow> findAllByFollower(Member member, Pageable pageable);
 

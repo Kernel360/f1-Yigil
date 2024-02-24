@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class MemberDto {
 
-
     @Getter
     @Builder
     @ToString
@@ -36,18 +35,10 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
-    public static class PageInfo {
-
-        private final int totalPages;
-    }
-
-    @Getter
-    @Builder
-    @ToString
     public static class MemberCourseResponse {
 
         private final List<CourseInfo> courseList;
-        private final PageInfo pageInfo;
+        private final int totalPages;
     }
 
     @Getter
@@ -56,7 +47,7 @@ public class MemberDto {
     public static class MemberSpotResponse {
 
         private List<SpotInfo> spotList;
-        private PageInfo pageInfo;
+        private int totalPages;
     }
 
 
@@ -68,10 +59,11 @@ public class MemberDto {
         private final Long courseId;
         private final String title;
         private final String description;
-        private final String lineStringJson;
-        private final double rate;
-        private final int spotCount;
+        private final Double rate;
+        private final Integer spotCount;
         private final String createdDate;
+        private final String mapStaticImageUrl;
+        private final Boolean isPrivate;
     }
 
     @Getter
@@ -84,9 +76,10 @@ public class MemberDto {
         private final String description;
         private final String pointJson;
         private final double rate;
-        private final List<String> imageUrlList;
+        private final String imageUrl;
         private final String createdDate;
         private final PlaceInfo placeInfo;
+        private final Boolean isPrivate;
     }
 
     @Getter
@@ -108,4 +101,31 @@ public class MemberDto {
         private final String message;
     }
 
+    @Getter
+    @Builder
+    @ToString
+    public static class FollowerResponse {
+
+        private final List<FollowInfo> followerList;
+        private final boolean hasNext;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class FollowingResponse {
+
+        private final List<FollowInfo> followingList;
+        private final boolean hasNext;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    public static class FollowInfo {
+
+        private final Long memberId;
+        private final String nickname;
+        private final String profileImageUrl;
+    }
 }

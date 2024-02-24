@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-23T10:24:52+0900",
+    date = "2024-02-23T18:23:34+0900",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -73,7 +73,7 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         MemberDto.MemberCourseResponse.MemberCourseResponseBuilder memberCourseResponse = MemberDto.MemberCourseResponse.builder();
 
         memberCourseResponse.courseList( courseInfoListToCourseInfoList( response.getCourseList() ) );
-        memberCourseResponse.pageInfo( pageInfoToPageInfo( response.getPageInfo() ) );
+        memberCourseResponse.totalPages( response.getTotalPages() );
 
         return memberCourseResponse.build();
     }
@@ -87,7 +87,7 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         MemberDto.MemberSpotResponse.MemberSpotResponseBuilder memberSpotResponse = MemberDto.MemberSpotResponse.builder();
 
         memberSpotResponse.spotList( spotInfoListToSpotInfoList( response.getSpotList() ) );
-        memberSpotResponse.pageInfo( pageInfoToPageInfo( response.getPageInfo() ) );
+        memberSpotResponse.totalPages( response.getTotalPages() );
 
         return memberSpotResponse.build();
     }
@@ -105,14 +105,12 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         spotInfo1.description( spotInfo.getDescription() );
         spotInfo1.pointJson( spotInfo.getPointJson() );
         spotInfo1.rate( spotInfo.getRate() );
-        List<String> list = spotInfo.getImageUrlList();
-        if ( list != null ) {
-            spotInfo1.imageUrlList( new ArrayList<String>( list ) );
-        }
+        spotInfo1.imageUrl( spotInfo.getImageUrl() );
         if ( spotInfo.getCreatedDate() != null ) {
             spotInfo1.createdDate( DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( spotInfo.getCreatedDate() ) );
         }
         spotInfo1.placeInfo( of( spotInfo.getPlaceInfo() ) );
+        spotInfo1.isPrivate( spotInfo.getIsPrivate() );
 
         return spotInfo1.build();
     }
@@ -128,12 +126,13 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         courseInfo1.courseId( courseInfo.getCourseId() );
         courseInfo1.title( courseInfo.getTitle() );
         courseInfo1.description( courseInfo.getDescription() );
-        courseInfo1.lineStringJson( courseInfo.getLineStringJson() );
         courseInfo1.rate( courseInfo.getRate() );
         courseInfo1.spotCount( courseInfo.getSpotCount() );
         if ( courseInfo.getCreatedDate() != null ) {
             courseInfo1.createdDate( DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( courseInfo.getCreatedDate() ) );
         }
+        courseInfo1.mapStaticImageUrl( courseInfo.getMapStaticImageUrl() );
+        courseInfo1.isPrivate( courseInfo.getIsPrivate() );
 
         return courseInfo1.build();
     }
@@ -154,6 +153,49 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         return placeInfo1.build();
     }
 
+    @Override
+    public MemberDto.FollowerResponse of(MemberInfo.FollowerResponse followerResponse) {
+        if ( followerResponse == null ) {
+            return null;
+        }
+
+        MemberDto.FollowerResponse.FollowerResponseBuilder followerResponse1 = MemberDto.FollowerResponse.builder();
+
+        followerResponse1.followerList( followInfoListToFollowInfoList( followerResponse.getFollowerList() ) );
+        followerResponse1.hasNext( followerResponse.isHasNext() );
+
+        return followerResponse1.build();
+    }
+
+    @Override
+    public MemberDto.FollowingResponse of(MemberInfo.FollowingResponse followingResponse) {
+        if ( followingResponse == null ) {
+            return null;
+        }
+
+        MemberDto.FollowingResponse.FollowingResponseBuilder followingResponse1 = MemberDto.FollowingResponse.builder();
+
+        followingResponse1.followingList( followInfoListToFollowInfoList( followingResponse.getFollowingList() ) );
+        followingResponse1.hasNext( followingResponse.isHasNext() );
+
+        return followingResponse1.build();
+    }
+
+    @Override
+    public MemberDto.FollowInfo of(MemberInfo.FollowInfo followInfo) {
+        if ( followInfo == null ) {
+            return null;
+        }
+
+        MemberDto.FollowInfo.FollowInfoBuilder followInfo1 = MemberDto.FollowInfo.builder();
+
+        followInfo1.memberId( followInfo.getMemberId() );
+        followInfo1.nickname( followInfo.getNickname() );
+        followInfo1.profileImageUrl( followInfo.getProfileImageUrl() );
+
+        return followInfo1.build();
+    }
+
     protected List<MemberDto.CourseInfo> courseInfoListToCourseInfoList(List<MemberInfo.CourseInfo> list) {
         if ( list == null ) {
             return null;
@@ -167,18 +209,6 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         return list1;
     }
 
-    protected MemberDto.PageInfo pageInfoToPageInfo(MemberInfo.PageInfo pageInfo) {
-        if ( pageInfo == null ) {
-            return null;
-        }
-
-        MemberDto.PageInfo.PageInfoBuilder pageInfo1 = MemberDto.PageInfo.builder();
-
-        pageInfo1.totalPages( pageInfo.getTotalPages() );
-
-        return pageInfo1.build();
-    }
-
     protected List<MemberDto.SpotInfo> spotInfoListToSpotInfoList(List<MemberInfo.SpotInfo> list) {
         if ( list == null ) {
             return null;
@@ -187,6 +217,19 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         List<MemberDto.SpotInfo> list1 = new ArrayList<MemberDto.SpotInfo>( list.size() );
         for ( MemberInfo.SpotInfo spotInfo : list ) {
             list1.add( of( spotInfo ) );
+        }
+
+        return list1;
+    }
+
+    protected List<MemberDto.FollowInfo> followInfoListToFollowInfoList(List<MemberInfo.FollowInfo> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<MemberDto.FollowInfo> list1 = new ArrayList<MemberDto.FollowInfo>( list.size() );
+        for ( MemberInfo.FollowInfo followInfo : list ) {
+            list1.add( of( followInfo ) );
         }
 
         return list1;

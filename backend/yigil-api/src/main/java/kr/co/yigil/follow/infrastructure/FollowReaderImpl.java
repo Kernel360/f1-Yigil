@@ -14,21 +14,22 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class FollowReaderImpl implements FollowReader {
+
     private final FollowRepository followRepository;
     private final MemberReader memberReader;
 
     @Override
     public FollowCount getFollowCount(Long memberId) {
-        Member member = memberReader.getMember(memberId);
-        FollowCountDto followCountDto = followRepository.getFollowCounts(member);
-        return new FollowCount(memberId, followCountDto.getFollowerCount(), followCountDto.getFollowingCount());
+        memberReader.validateMember(memberId);
+        FollowCountDto followCountDto = followRepository.getFollowCounts(memberId);
+        return new FollowCount(memberId, followCountDto.getFollowerCount(),
+            followCountDto.getFollowingCount());
     }
 
     @Override
     public boolean isFollowing(Long followerId, Long followingId) {
         return followRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }
-
 
     @Override
     public Slice<Follow> getFollowerSlice(Long memberId, Pageable pageable) {
@@ -41,6 +42,4 @@ public class FollowReaderImpl implements FollowReader {
         Member member = memberReader.getMember(memberId);
         return followRepository.findAllByFollowing(member, pageable);
     }
-
-
 }

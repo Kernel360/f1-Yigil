@@ -2,6 +2,7 @@ package kr.co.yigil.member.domain;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.domain.Course;
@@ -26,13 +27,13 @@ public class MemberInfo {
         private final int followingCount;
         private final int followerCount;
 
-        public Main(Member member, int followingCount, int followerCount) {
+        public Main(Member member, FollowCount followCount) {
             this.memberId = member.getId();
             this.email = member.getEmail();
             this.nickname = member.getNickname();
             this.profileImageUrl = member.getProfileImageUrl();
-            this.followingCount = followingCount;
-            this.followerCount = followerCount;
+            this.followingCount = followCount.getFollowingCount();
+            this.followerCount = followCount.getFollowerCount();
         }
     }
 
@@ -47,10 +48,10 @@ public class MemberInfo {
     public static class MemberCourseResponse {
 
         private final List<CourseInfo> courseList;
-        private final PageInfo pageInfo;
+        private final int totalPages;
         public MemberCourseResponse(List<CourseInfo> courseList, int totalPages) {
             this.courseList = courseList;
-            this.pageInfo = new PageInfo(totalPages);
+            this.totalPages = totalPages;
         }
     }
 
@@ -61,20 +62,21 @@ public class MemberInfo {
         private final Long courseId;
         private final String title;
         private final String description;
-        private final String lineStringJson;
-        private final double rate;
-        private final int spotCount;
+        private final Double rate;
+        private final Integer spotCount;
         private final LocalDateTime createdDate;
-
+        private final String mapStaticImageUrl;
+        private final Boolean isPrivate;
 
         public CourseInfo(Course course) {
             this.courseId = course.getId();
             this.title = course.getTitle();
             this.description = course.getDescription();
-            this.lineStringJson = GeojsonConverter.convertToJson(course.getPath());
             this.rate = course.getRate();
             this.spotCount = course.getSpots().size();
             this.createdDate = course.getCreatedAt();
+            this.isPrivate = course.isPrivate();
+            this.mapStaticImageUrl = course.getMapStaticImageFile().getFileUrl();
         }
     }
 
@@ -83,20 +85,10 @@ public class MemberInfo {
     public static class MemberSpotResponse {
 
         private final List<SpotInfo> spotList;
-        private final PageInfo pageInfo;
-
-        public MemberSpotResponse(List<SpotInfo> spotList, int pageInfo) {
-            this.spotList = spotList;
-            this.pageInfo = new PageInfo(pageInfo);
-        }
-    }
-
-    @Getter
-    @ToString
-    public static class PageInfo{
         private final int totalPages;
 
-        public PageInfo(int totalPages) {
+        public MemberSpotResponse(List<SpotInfo> spotList, int totalPages) {
+            this.spotList = spotList;
             this.totalPages = totalPages;
         }
     }
@@ -110,18 +102,22 @@ public class MemberInfo {
         private final String description;
         private final String pointJson;
         private final double rate;
-        private final List<String> imageUrlList;
+        private final String imageUrl;
         private final LocalDateTime createdDate;
         private final PlaceInfo placeInfo;
+        private final Boolean isPrivate;
+
         public SpotInfo(Spot spot) {
             this.spotId = spot.getId();
             this.title = spot.getTitle();
             this.description = spot.getDescription();
             this.pointJson = GeojsonConverter.convertToJson(spot.getLocation());
             this.rate = spot.getRate();
-            this.imageUrlList = spot.getAttachFiles().getUrls();
+            this.imageUrl = spot.getAttachFiles().getUrls().getFirst();
             this.createdDate = spot.getCreatedAt();
-            this.placeInfo = new PlaceInfo(spot.getPlace());        }
+            this.placeInfo = new PlaceInfo(spot.getPlace());
+            this.isPrivate = spot.isPrivate();
+        }
     }
 
     @Getter
@@ -143,35 +139,50 @@ public class MemberInfo {
 
     @Getter
     @ToString
-    public static class MemberDeleteResponse {
+    public static class DeleteResponse {
 
         private final String message;
 
-        public MemberDeleteResponse(String message) {
+        public DeleteResponse(String message) {
             this.message = message;
         }
     }
 
     @Getter
     @ToString
-    public static class MemberFollowResponse {
+    public static class FollowerResponse {
 
-        private final List<FollowerInfo> followerList;
+        private final List<FollowInfo> followerList;
+        private final boolean hasNext;
 
-        public MemberFollowResponse(List<FollowerInfo> followerList) {
+        public FollowerResponse(List<FollowInfo> followerList, boolean hasNext) {
             this.followerList = followerList;
+            this.hasNext = hasNext;
         }
     }
 
     @Getter
     @ToString
-    public static class FollowerInfo{
+    public static class FollowingResponse {
+
+        private final List<FollowInfo> followingList;
+        private final boolean hasNext;
+
+        public FollowingResponse(List<FollowInfo> followingList, boolean hasNext) {
+            this.followingList = followingList;
+            this.hasNext = hasNext;
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class FollowInfo {
 
             private final Long memberId;
             private final String nickname;
             private final String profileImageUrl;
 
-            public FollowerInfo(Member member) {
+            public FollowInfo(Member member) {
                 this.memberId = member.getId();
                 this.nickname = member.getNickname();
                 this.profileImageUrl = member.getProfileImageUrl();
@@ -187,5 +198,4 @@ public class MemberInfo {
             this.message = message;
         }
     }
-
-}
+  }

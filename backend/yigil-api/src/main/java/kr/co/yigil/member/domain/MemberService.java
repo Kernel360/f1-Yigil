@@ -6,14 +6,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface MemberService {
-    Member registerMember(MemberCommand.RegisterMemberRequest request);
 
     Member retrieveMember(Long memberId);
+    MemberInfo.Main retrieveMemberInfo(Long memberId);
 
     void withdrawal(Long memberId);
 
-    Member updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request);
+    void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request);
 
     MemberInfo.MemberCourseResponse retrieveCourseList(Long memberId, Pageable pageable, String selected);
     MemberInfo.MemberSpotResponse retrieveSpotList(Long memberId, Pageable pageable, String selected);
+
+    MemberInfo.FollowerResponse getFollowerList(Long memberId, Pageable pageable);
+    MemberInfo.FollowingResponse getFollowingList(Long memberId, Pageable pageable);
 }

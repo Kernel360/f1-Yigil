@@ -25,6 +25,10 @@ public interface MemberDtoMapper {
 
     MemberDto.SpotInfo of(MemberInfo.SpotInfo spotInfo);
     MemberDto.CourseInfo of(MemberInfo.CourseInfo courseInfo);
+
     MemberDto.PlaceInfo of(MemberInfo.PlaceInfo placeInfo);
+    MemberDto.FollowerResponse of(MemberInfo.FollowerResponse followerResponse);
+    MemberDto.FollowingResponse of(MemberInfo.FollowingResponse followingResponse);
+    MemberDto.FollowInfo of(MemberInfo.FollowInfo followInfo);
 
 }
