@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-24T16:00:27+0900",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2024-02-25T01:16:31+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class MemberDtoMapperImpl implements MemberDtoMapper {
@@ -34,37 +34,20 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
     }
 
     @Override
-    public MemberCommand.CoursesVisibilityRequest of(MemberDto.CoursesVisibilityRequest request) {
+    public MemberCommand.TravelsVisibilityRequest of(MemberDto.TravelsVisibilityRequest request) {
         if ( request == null ) {
             return null;
         }
 
-        MemberCommand.CoursesVisibilityRequest.CoursesVisibilityRequestBuilder coursesVisibilityRequest = MemberCommand.CoursesVisibilityRequest.builder();
+        MemberCommand.TravelsVisibilityRequest.TravelsVisibilityRequestBuilder travelsVisibilityRequest = MemberCommand.TravelsVisibilityRequest.builder();
 
-        List<Long> list = request.getCourseIds();
+        List<Long> list = request.getTravelIds();
         if ( list != null ) {
-            coursesVisibilityRequest.courseIds( new ArrayList<Long>( list ) );
+            travelsVisibilityRequest.travelIds( new ArrayList<Long>( list ) );
         }
-        coursesVisibilityRequest.isPrivate( request.getIsPrivate() );
+        travelsVisibilityRequest.isPrivate( request.getIsPrivate() );
 
-        return coursesVisibilityRequest.build();
-    }
-
-    @Override
-    public MemberCommand.SpotsVisibilityRequest of(MemberDto.SpotsVisibilityRequest request) {
-        if ( request == null ) {
-            return null;
-        }
-
-        MemberCommand.SpotsVisibilityRequest.SpotsVisibilityRequestBuilder spotsVisibilityRequest = MemberCommand.SpotsVisibilityRequest.builder();
-
-        List<Long> list = request.getSpotIds();
-        if ( list != null ) {
-            spotsVisibilityRequest.spotIds( new ArrayList<Long>( list ) );
-        }
-        spotsVisibilityRequest.isPrivate( request.getIsPrivate() );
-
-        return spotsVisibilityRequest.build();
+        return travelsVisibilityRequest.build();
     }
 
     @Override
@@ -231,16 +214,29 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
     }
 
     @Override
-    public MemberDto.CoursesVisibilityResponse of(MemberInfo.CoursesVisibilityResponse response) {
+    public MemberDto.MemberDeleteResponse of(MemberInfo.MemberDeleteResponse response) {
         if ( response == null ) {
             return null;
         }
 
-        MemberDto.CoursesVisibilityResponse.CoursesVisibilityResponseBuilder coursesVisibilityResponse = MemberDto.CoursesVisibilityResponse.builder();
+        MemberDto.MemberDeleteResponse.MemberDeleteResponseBuilder memberDeleteResponse = MemberDto.MemberDeleteResponse.builder();
 
-        coursesVisibilityResponse.message( response.getMessage() );
+        memberDeleteResponse.message( response.getMessage() );
 
-        return coursesVisibilityResponse.build();
+        return memberDeleteResponse.build();
+    }
+
+    @Override
+    public MemberDto.TravelsVisibilityResponse of(MemberInfo.TravelsVisibilityResponse response) {
+        if ( response == null ) {
+            return null;
+        }
+
+        MemberDto.TravelsVisibilityResponse.TravelsVisibilityResponseBuilder travelsVisibilityResponse = MemberDto.TravelsVisibilityResponse.builder();
+
+        travelsVisibilityResponse.message( response.getMessage() );
+
+        return travelsVisibilityResponse.build();
     }
 
     protected List<MemberDto.CourseInfo> courseInfoListToCourseInfoList(List<MemberInfo.CourseInfo> list) {

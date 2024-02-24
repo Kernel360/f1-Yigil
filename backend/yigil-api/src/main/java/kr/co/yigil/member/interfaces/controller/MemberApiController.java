@@ -8,7 +8,6 @@ import kr.co.yigil.member.application.MemberFacade;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.interfaces.dto.MemberDto;
 import kr.co.yigil.member.interfaces.dto.mapper.MemberDtoMapper;
-import kr.co.yigil.member.interfaces.dto.response.MemberDeleteResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,27 +48,15 @@ public class MemberApiController {
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "selected", defaultValue = "false", required = false) String selected
+        @RequestParam(name = "visibility", defaultValue = "false", required = false) String visibility
     ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
 
         final var memberCourseInfo = memberFacade.getMemberCourseInfo(
-            accessor.getMemberId(), pageRequest, selected);
+            accessor.getMemberId(), pageRequest, visibility);
         var memberCourseResponse = memberDtoMapper.of(memberCourseInfo);
         return ResponseEntity.ok().body(memberCourseResponse);
-    }
-
-    @PostMapping("/courses")
-    @MemberOnly
-    public ResponseEntity<MemberDto.CoursesVisibilityResponse> setCoursesVisibility(
-        @Auth final Accessor accessor,
-        @RequestBody MemberDto.CoursesVisibilityRequest request
-        ){
-        var memberCommand = memberDtoMapper.of(request);
-        var infoResponse = memberFacade.setCoursesVisibility(accessor.getMemberId(), memberCommand);
-        var response = memberDtoMapper.of(infoResponse);
-        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/spots")
@@ -79,13 +66,25 @@ public class MemberApiController {
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "selected", defaultValue = "false", required = false) String selected
+        @RequestParam(name = "visibility", defaultValue = "false", required = false) String visibility
     ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         final MemberInfo.MemberSpotResponse spotListResponse = memberFacade.getMemberSpotInfo(
-            accessor.getMemberId(), pageRequest, selected);
+            accessor.getMemberId(), pageRequest, visibility);
         var response = memberDtoMapper.of(spotListResponse);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/travels/visibility")
+    @MemberOnly
+    public ResponseEntity<MemberDto.TravelsVisibilityResponse> setCoursesVisibility(
+        @Auth final Accessor accessor,
+        @RequestBody MemberDto.TravelsVisibilityRequest request
+    ){
+        var memberCommand = memberDtoMapper.of(request);
+        var infoResponse = memberFacade.setTravelsVisibility(accessor.getMemberId(), memberCommand);
+        var response = memberDtoMapper.of(infoResponse);
         return ResponseEntity.ok().body(response);
     }
 
@@ -136,10 +135,11 @@ public class MemberApiController {
 
     @DeleteMapping
     @MemberOnly
-    public ResponseEntity<MemberDeleteResponse> withdraw(HttpServletRequest request,
+    public ResponseEntity<MemberDto.MemberDeleteResponse> withdraw(HttpServletRequest request,
         @Auth final Accessor accessor) {
-        final MemberDeleteResponse response = memberFacade.withdraw(accessor.getMemberId());
-        request.getSession().invalidate();
+        var responseInfo = memberFacade.withdraw(accessor.getMemberId());
+        var response = memberDtoMapper.of(responseInfo);
+//        request.getSession().invalidate();
         return ResponseEntity.ok().body(response);
     }
 
@@ -178,5 +178,4 @@ public class MemberApiController {
         var response = memberDtoMapper.of(followingList);
         return ResponseEntity.ok(response);
     }
-
 }

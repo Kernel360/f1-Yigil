@@ -6,13 +6,14 @@ import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.member.domain.MemberCommand.CoursesVisibilityRequest;
-import kr.co.yigil.member.domain.MemberInfo.CoursesVisibilityResponse;
+import kr.co.yigil.member.domain.MemberCommand.TravelsVisibilityRequest;
 import kr.co.yigil.member.domain.MemberInfo.FollowerResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
 import kr.co.yigil.member.domain.MemberInfo.Main;
 import kr.co.yigil.member.domain.MemberInfo.MemberCourseResponse;
 import kr.co.yigil.member.domain.MemberInfo.MemberSpotResponse;
+import kr.co.yigil.member.domain.MemberInfo.TravelsVisibilityResponse;
+import kr.co.yigil.travel.domain.TravelReader;
 import kr.co.yigil.travel.domain.course.CourseReader;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class MemberServiceImpl implements MemberService{
     private final MemberReader memberReader;
     private final MemberStore memberStore;
     private final CourseReader courseReader;
+    private final TravelReader travelReader;
     private final SpotReader spotReader;
     private final FollowReader followReader;
 
@@ -72,7 +74,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     @Transactional
     public MemberCourseResponse retrieveCourseList(Long memberId, Pageable pageable, String selectInfo) {
-        return courseReader.findAllByMemberId(memberId, pageable, selectInfo);
+        return courseReader.getMemberCourseList(memberId, pageable, selectInfo);
     }
 
 
@@ -95,10 +97,10 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     @Transactional
-    public CoursesVisibilityResponse setCoursesVisibility(Long memberId,
-        CoursesVisibilityRequest memberCommand) {
-        List<Long> courseIds = memberCommand.getCourseIds();
-        boolean isPrivate = memberCommand.getIsPrivate();
-        return courseReader.setCoursesVisibility(memberId, courseIds, isPrivate);
+    public TravelsVisibilityResponse setTravelsVisibility(Long memberId,
+        TravelsVisibilityRequest memberCommand) {
+        List<Long> travelIds = memberCommand.getTravelIds();
+        boolean visibility = memberCommand.getIsPrivate();
+        return travelReader.setTravelsVisibility(memberId, travelIds, visibility);
     }
 }

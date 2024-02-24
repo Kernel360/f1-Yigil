@@ -27,4 +27,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     @Query("SELECT SUM(s.rate) FROM Spot s WHERE s.place.id = :placeId")
     Optional<Double> findTotalRateByPlaceId(@Param("placeId") Long placeId);
+
+    Page<Spot> findAllByMemberId(Long memberId, Pageable pageable);
+    Page<Spot> findAllByMemberIdAndIsPrivate(Long memberId, boolean isPrivate, Pageable pageable);
 }

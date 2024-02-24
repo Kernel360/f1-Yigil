@@ -22,18 +22,9 @@ public class MemberCommand {
     @Getter
     @Builder
     @ToString
-    public static class CoursesVisibilityRequest {
+    public static class TravelsVisibilityRequest {
 
-        private List<Long> courseIds;
-        private Boolean isPrivate;
-    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class SpotsVisibilityRequest {
-
-        private List<Long> spotIds;
+        private List<Long> travelIds;
         private Boolean isPrivate;
     }
 }

@@ -10,8 +10,10 @@ import kr.co.yigil.comment.domain.repository.CommentRepository;
 import kr.co.yigil.comment.dto.response.CommentResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.notification.domain.NotificationService;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.domain.MemberReader;
+import kr.co.yigil.notification.application.NotificationService;
+import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.travel.domain.Travel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final MemberService memberService;
+    private final MemberReader memberReader;
     private final NotificationService notificationService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
 
 
 //    @Transactional
 //    public CommentCreateResponse createComment(Long memberId, Long travelId, CommentCreateRequest commentCreateRequest) {
-//        Member member = memberService.findMemberById(memberId);
+//        Member member = memberReader.getMember(memberId);
 //        Travel travel = travelService.findTravelById(travelId);
 //
 //        Comment parentComment = null;

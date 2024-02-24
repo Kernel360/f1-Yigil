@@ -201,22 +201,20 @@ public class MemberInfo {
 
     @Getter
     @ToString
-    public static class CoursesVisibilityResponse {
+    public static class TravelsVisibilityResponse {
         private final String message;
 
-        public CoursesVisibilityResponse(String message) {
+        public TravelsVisibilityResponse(String message) {
             this.message = message;
         }
     }
 
     @Getter
     @ToString
-    public static class SpotsVisibilityResponse {
+    public static class MemberDeleteResponse {
         private final String message;
-
-        public SpotsVisibilityResponse(String message) {
+        public MemberDeleteResponse(String message) {
             this.message = message;
         }
     }
-
 }

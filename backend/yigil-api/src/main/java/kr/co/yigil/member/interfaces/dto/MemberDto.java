@@ -1,8 +1,10 @@
 package kr.co.yigil.member.interfaces.dto;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +13,8 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class MemberUpdateRequest {
 
         private String nickname;
@@ -22,21 +26,13 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
-    public static class CoursesVisibilityRequest {
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TravelsVisibilityRequest {
 
-        private List<Long> courseIds;
+        private List<Long> travelIds;
         private Boolean isPrivate;
     }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class SpotsVisibilityRequest {
-
-        private List<Long> spotIds;
-        private Boolean isPrivate;
-    }
-
 
     @Getter
     @Builder
@@ -72,7 +68,7 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
-    public static class CoursesVisibilityResponse {
+    public static class TravelsVisibilityResponse {
 
         private final String message;
     }
@@ -164,4 +160,10 @@ public class MemberDto {
         private final String profileImageUrl;
     }
 
+    @Getter
+    @Builder
+    @ToString
+    public static class MemberDeleteResponse {
+        private final String message;
+    }
 }

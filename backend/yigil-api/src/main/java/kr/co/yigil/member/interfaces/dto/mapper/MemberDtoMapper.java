@@ -3,6 +3,7 @@ package kr.co.yigil.member.interfaces.dto.mapper;
 
 import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberInfo;
+import kr.co.yigil.member.domain.MemberInfo.TravelsVisibilityResponse;
 import kr.co.yigil.member.interfaces.dto.MemberDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -15,8 +16,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface MemberDtoMapper {
     MemberCommand.MemberUpdateRequest of(MemberDto.MemberUpdateRequest request);
-    MemberCommand.CoursesVisibilityRequest of(MemberDto.CoursesVisibilityRequest request);
-    MemberCommand.SpotsVisibilityRequest of(MemberDto.SpotsVisibilityRequest request);
+    MemberCommand.TravelsVisibilityRequest of(MemberDto.TravelsVisibilityRequest request);
 
 
     MemberDto.Main of(MemberInfo.Main main);
@@ -33,6 +33,8 @@ public interface MemberDtoMapper {
     MemberDto.FollowingResponse of(MemberInfo.FollowingResponse followingResponse);
     MemberDto.FollowInfo of(MemberInfo.FollowInfo followInfo);
 
-    MemberDto.CoursesVisibilityResponse of(MemberInfo.CoursesVisibilityResponse response);
+    MemberDto.MemberDeleteResponse of(MemberInfo.MemberDeleteResponse response);
+
+    MemberDto.TravelsVisibilityResponse of(TravelsVisibilityResponse response);
 
 }
