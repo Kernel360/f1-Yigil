@@ -1,0 +1,12 @@
+== SPOT API
+
+=== spot 조회
+
+===== HTTP Request
+include::{snippets}/spots/get-spots-in-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/get-spots-in-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/get-spots-in-place/http-response.adoc[]

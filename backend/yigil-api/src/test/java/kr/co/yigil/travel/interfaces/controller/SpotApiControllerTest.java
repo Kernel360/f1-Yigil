@@ -5,7 +5,9 @@ import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
@@ -20,8 +22,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.travel.application.SpotFacade;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
@@ -31,7 +31,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.locationtech.jts.geom.Point;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,7 +39,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -69,14 +67,42 @@ public class SpotApiControllerTest {
     @DisplayName("getSpotsInPlace가 잘 동작하는지")
     @Test
     void getSpotsInPlace_ShouldReturnOk() throws Exception {
-        Member member = new Member(1L, "test@test.com", "12345", "오너 닉네임", "image/ownerProfile.jpg", SocialLoginType.KAKAO);
+        Slice<Spot> mockSlice = mock(Slice.class);
+        SpotInfoDto spotInfo = new SpotInfoDto(List.of("images/image.png", "images/photo.jpeg"), "images/profile.jpg", "오너 닉네임", "4.5", "2024-02-01");
+        SpotsInPlaceResponse response = new SpotsInPlaceResponse(List.of(spotInfo), false);
+
+        when(spotFacade.getSpotSliceInPlace(anyLong(), any(Pageable.class))).thenReturn(mockSlice);
+        when(spotMapper.spotsSliceToSpotInPlaceResponse(mockSlice)).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/spots/place/{placeId}", 1L)
                         .param("page", "0")
                         .param("size", "5")
                         .param("sortBy", "createdAt")
                         .param("sortOrder", "desc"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                        .andDo(document(
+                                "spots/get-spots-in-place",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("placeId").description("장소 아이디")
+                                ),
+                                queryParameters(
+                                        parameterWithName("page").description("현재 페이지").optional(),
+                                        parameterWithName("size").description("페이지 크기").optional(),
+                                        parameterWithName("sortBy").description("정렬 옵션").optional(),
+                                        parameterWithName("sortOrder").description("정렬 순서").optional()
+                                ),
+                                responseFields(
+                                        fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 여부"),
+                                        subsectionWithPath("spots").description("spot의 정보"),
+                                        fieldWithPath("spots[].image_url_list").description("imageUrl의 List"),
+                                        fieldWithPath("spots[].owner_profile_image_url").type(JsonFieldType.STRING).description("Spot 등록 사용자의 프로필 이미지 Url"),
+                                        fieldWithPath("spots[].owner_nickname").type(JsonFieldType.STRING).description("Spot 등록 사용자의 닉네임"),
+                                        fieldWithPath("spots[].rate").type(JsonFieldType.STRING).description("Spot의 평점"),
+                                        fieldWithPath("spots[].create_date").type(JsonFieldType.STRING).description("Spot의 생성일시")
+                                )
+                        ));
 
         verify(spotFacade).getSpotSliceInPlace(anyLong(), any(Pageable.class));
     }
