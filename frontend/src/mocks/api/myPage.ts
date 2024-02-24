@@ -12,7 +12,7 @@ const handlers = [
     } else {
       return HttpResponse.json({
         status: 400,
-        code: 9999,
+        code: 9201,
       });
     }
   }),

@@ -8,11 +8,9 @@ export default async function WithHeaderLayout({
 }: {
   children: ReactNode;
 }) {
-  const memberInfo = await authenticateUser();
-
   return (
     <section className="w-full h-full flex flex-col">
-      <Header memberInfo={memberInfo?.code ? null : memberInfo} />
+      <Header />
       {children}
     </section>
   );
