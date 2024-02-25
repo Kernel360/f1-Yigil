@@ -15,8 +15,9 @@ import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.notification.application.NotificationService;
 import kr.co.yigil.notification.domain.Notification;
+import kr.co.yigil.notification.domain.NotificationService;
+import kr.co.yigil.notification.domain.util.FollowNotificationCreator;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.application.TravelService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class CommentService {
     private final NotificationService notificationService;
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final TravelService travelService;
+    private final FollowNotificationCreator followNotificationCreator; // todo 변경
 
     @Transactional
     public CommentCreateResponse createComment(Long memberId, Long travelId, CommentCreateRequest commentCreateRequest) {
@@ -43,8 +45,8 @@ public class CommentService {
         Comment parentComment = null;
         if (commentCreateRequest.getParentId() != null && commentCreateRequest.getNotifiedMemberId() != null) {
             parentComment = findCommentById(commentCreateRequest.getParentId());
-            Member notifiedMember = memberService.findMemberById(commentCreateRequest.getNotifiedMemberId());
-            sendCommentNotification(notifiedMember, commentCreateRequest.getContent());
+//            Member notifiedMember = memberService.findMemberById(commentCreateRequest.getNotifiedMemberId());
+            notificationService.sendNotification(followNotificationCreator, memberId, commentCreateRequest.getNotifiedMemberId());
         }
 
         Comment newComment = new Comment(commentCreateRequest.getContent(), member, travel, parentComment);
@@ -119,9 +121,5 @@ public class CommentService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_COMMENT_ID));
     }
 
-    private void sendCommentNotification(Member notifiedMember, String content) {
-        Notification notify = new Notification(notifiedMember, content);
-        notificationService.sendNotification(notify);
-    }
 }
 
