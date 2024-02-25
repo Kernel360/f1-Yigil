@@ -44,7 +44,7 @@ export default function SelectOption({
           <button
             key={value}
             value={value}
-            className="cursor-pointer text-gray-700 py-[5px]"
+            className="cursor-pointer text-gray-700 py-[5px] flex justify-center"
             onClick={(e) => onChangeSelectOption(e.currentTarget.value)}
             onKeyDown={(e) =>
               e.key === 'Enter' && onChangeSelectOption(e.currentTarget.value)

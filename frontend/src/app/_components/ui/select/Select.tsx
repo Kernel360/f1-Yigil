@@ -1,3 +1,4 @@
+import { EventFor } from '@/types/type';
 import React, { ReactElement, useEffect, useState } from 'react';
 import SelectOption from './SelectOption';
 import ChevronDownIcon from '/public/icons/chevron-down.svg';
@@ -8,17 +9,28 @@ export default function Select({
   optionStyle,
   selectOption,
   onChangeSelectOption,
+  defaultValue,
+  defaultValueColor,
 }: {
   list: { label: string | ReactElement; value: string | number }[];
   selectStyle?: string;
   optionStyle?: string;
   selectOption: string;
   onChangeSelectOption: (option: string | number) => void;
+  defaultValue: string | ReactElement;
+  defaultValueColor?: string;
 }) {
   const [isSortOpened, setIsSortOpened] = useState(false);
-  const [viewSelectOption, setViewSelectOption] = useState<string | ReactElement | undefined>('최신순');
+  const [viewSelectOption, setViewSelectOption] = useState<
+    string | ReactElement | undefined
+  >(defaultValue);
   const closeModal = () => {
     setIsSortOpened(false);
+  };
+
+  const keyDownHandler = (e: EventFor<'ul', 'onKeyDown'>) => {
+    e.key === 'Enter' && setIsSortOpened(!isSortOpened);
+    e.key === 'Escape' && setIsSortOpened(false);
   };
 
   useEffect(() => {
@@ -33,12 +45,18 @@ export default function Select({
         selectStyle && selectStyle
       } rounded-md cursor-pointer relative`}
       onClick={() => setIsSortOpened(!isSortOpened)}
-      onKeyDown={(e) => e.key === 'Enter' && setIsSortOpened(!isSortOpened)}
+      onKeyDown={(e) => keyDownHandler(e)}
       aria-label="select"
     >
-      <div className="flex items-center justify-between p-2 gap-x-4 text-main font-semibold">
+      <div
+        className={`flex items-center justify-between p-2 gap-x-4 ${
+          defaultValueColor ? defaultValueColor : 'text-gray-700'
+        }`}
+      >
         {viewSelectOption}
-        <ChevronDownIcon className="w-4 h-2 stroke-gray-500" />
+        <ChevronDownIcon
+          className={`w-4 h-2 stroke-gray-500 ${isSortOpened && 'rotate-180'} `}
+        />
       </div>
       {isSortOpened && (
         <SelectOption

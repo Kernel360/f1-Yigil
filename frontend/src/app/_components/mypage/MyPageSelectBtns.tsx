@@ -1,6 +1,8 @@
 import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import IconWithCounts from '../IconWithCounts';
 import Select from '../ui/select/Select';
+import StarIcon from '/public/icons/star.svg';
 
 const selectBtns = [
   { label: '전체', value: 'all' },
@@ -11,7 +13,10 @@ const selectBtns = [
 export const sortOptions = [
   { label: '최신순', value: 'desc' },
   { label: '오래된순', value: 'asc' },
-  { label: '별점순', value: 'rate' },
+  {
+    label: '별점순',
+    value: 'rate',
+  },
 ];
 
 interface TMyPageSelectBtn {
@@ -67,9 +72,10 @@ export default function MyPageSelectBtns({
         </div>
         <Select
           list={sortOptions}
-          optionStyle={'top-10 left-0 bg-white'}
+          optionStyle={'top-10 left-0 bg-white w-full mx-auto'}
           selectOption={sortOption}
           onChangeSelectOption={onChangeSortOption}
+          defaultValue="최신순"
         />
       </div>
     </>

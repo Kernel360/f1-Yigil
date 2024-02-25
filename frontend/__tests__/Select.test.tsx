@@ -12,6 +12,9 @@ describe('Select Component', () => {
       <Select
         list={sortOptions}
         selectOption="최신순"
+        selectStyle=""
+        optionStyle=""
+        defaultValue="최신순"
         onChangeSelectOption={onChangeSortOption}
       />,
     );
@@ -26,6 +29,9 @@ describe('Select Component', () => {
         <Select
           list={sortOptions}
           selectOption="최신순"
+          selectStyle=""
+          optionStyle=""
+          defaultValue="최신순"
           onChangeSelectOption={onChangeSortOption}
         />
         <SelectOption
