@@ -1,5 +1,6 @@
 package kr.co.yigil.follow.interfaces;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,16 +11,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(FollowController.class)
+@AutoConfigureRestDocs
 public class FollowControllerTest {
 
     private MockMvc mockMvc;
@@ -27,12 +32,10 @@ public class FollowControllerTest {
     @MockBean
     private FollowFacade followFacade;
 
-    @InjectMocks
-    private FollowController followController;
-
     @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext) {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentation)).build();
     }
 
     @DisplayName("팔로우가 요청되었을 때 200 응답과 response가 잘 반환되는지")

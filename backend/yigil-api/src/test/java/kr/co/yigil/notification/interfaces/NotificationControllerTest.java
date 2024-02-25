@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 import java.util.List;
 import kr.co.yigil.member.Member;
@@ -19,6 +20,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,7 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(NotificationController.class)
 public class NotificationControllerTest {
 
@@ -39,8 +42,9 @@ public class NotificationControllerTest {
     private NotificationMapper notificationMapper;
 
     @BeforeEach
-    void setUp(WebApplicationContext webApplicationContext) {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentation)).build();
     }
 
     @DisplayName("Notificationstream이 올바르게 동작하는지 테스트")
