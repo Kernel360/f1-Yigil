@@ -99,6 +99,11 @@ export default function MyPageCourseList({
   }, [selectOption, checkedList]);
 
   useEffect(() => {
+    setCurrentPage(1);
+    getCourse(1, divideCount, sortOption, selectOption);
+  }, [selectOption, sortOption]);
+
+  useEffect(() => {
     setRenderCourseList(allCourseList);
   }, [allCourseList]);
 

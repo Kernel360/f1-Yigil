@@ -35,7 +35,9 @@ export const getMyPageCourses = (
   selectOption: string = 'all',
 ) => {
   return myPageCourseRequest(
-    `?page=${pageNo}&size=${size}&sortOrder=${sortOrder}`,
+    `?page=${pageNo}&size=${size}&sortOrder=${
+      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
+    }&selected=${selectOption}`,
   )()()();
 };
 
