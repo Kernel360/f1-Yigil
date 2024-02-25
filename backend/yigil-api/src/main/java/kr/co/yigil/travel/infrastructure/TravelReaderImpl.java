@@ -26,19 +26,19 @@ public class TravelReaderImpl implements TravelReader {
     public TravelsVisibilityResponse setTravelsVisibility(Long memberId, List<Long> travelIds,
         boolean isPrivate) {
         travelRepository.findAllById(travelIds)
-            .forEach(course -> {
-                if (!Objects.equals(course.getMember().getId(), memberId)) {
+            .forEach(travel -> {
+                if (!Objects.equals(travel.getMember().getId(), memberId)) {
                     throw new AuthException(ExceptionCode.INVALID_AUTHORITY);
                 }
-                if (course.isPrivate() == isPrivate) {
+                if (travel.isPrivate() == isPrivate) {
                     throw new BadRequestException(ExceptionCode.INVALID_VISIBILITY_REQUEST);
                 }
-                if (course.isPrivate()) {
-                    course.changeOnPublic();
+                if (travel.isPrivate()) {
+                    travel.changeOnPublic();
                 } else {
-                    course.changeOnPrivate();
+                    travel.changeOnPrivate();
                 }
             });
-        return new TravelsVisibilityResponse("코스 공개범위가 변경되었습니다.");
+        return new TravelsVisibilityResponse("공개여부가 변경되었습니다.");
     }
 }

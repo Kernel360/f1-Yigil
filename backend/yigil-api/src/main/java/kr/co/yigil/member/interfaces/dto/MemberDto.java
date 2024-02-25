@@ -13,8 +13,6 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
-    @AllArgsConstructor
-    @NoArgsConstructor
     public static class MemberUpdateRequest {
 
         private String nickname;
