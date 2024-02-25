@@ -1,0 +1,136 @@
+package kr.co.yigil.travel.application;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.List;
+import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.spot.SpotCommand;
+import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
+import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
+import kr.co.yigil.travel.domain.spot.SpotCommand.UpdateSpotImage;
+import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
+import kr.co.yigil.travel.domain.spot.SpotService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.web.multipart.MultipartFile;
+
+@ExtendWith(MockitoExtension.class)
+public class SpotFacadeTest {
+
+    @Mock
+    private SpotService spotService;
+
+    @Mock
+    private FileUploader fileUploader;
+
+    @InjectMocks
+    private SpotFacade spotFacade;
+
+    @DisplayName("getSpotSliceInPlace 메서드가 Spot Slice를 잘 반환하는지")
+    @Test
+    void getSpotSliceInPlace_ShouldReturnSlice() {
+        Long id = 1L;
+        String email = "test@test.com";
+        String socialLoginId = "12345";
+        String nickname = "tester";
+        String profileImageUrl = "test.jpg";
+        Member member = new Member(id, email, socialLoginId, nickname, profileImageUrl,
+                SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
+
+        String title = "Test Spot Title";
+        String description = "Test Course Description";
+        double rate = 5.0;
+        Spot spot = new Spot(id, member, null, false, title, description, null, null, rate);
+
+        Long placeId = 1L;
+        Pageable pageable = PageRequest.of(0, 10);
+        Slice<Spot> expectedSlice = new PageImpl<>(Collections.singletonList(spot), pageable, 1);
+        when(spotService.getSpotSliceInPlace(eq(placeId), any(Pageable.class))).thenReturn(expectedSlice);
+
+        Slice<Spot> result = spotFacade.getSpotSliceInPlace(placeId, pageable);
+
+        assertEquals(expectedSlice, result);
+        verify(spotService).getSpotSliceInPlace(placeId, pageable);
+    }
+
+    @DisplayName("registerSpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
+    @Test
+    void registerSpot_ShouldCallServiceAndUploader() {
+        RegisterSpotRequest command = mock(RegisterSpotRequest.class);
+        Long memberId = 1L;
+        List<MultipartFile> files = List.of(mock(MultipartFile.class), mock(MultipartFile.class));
+
+        when(command.getFiles()).thenReturn(files);
+
+        spotFacade.registerSpot(command, memberId);
+
+        verify(spotService).registerSpot(command, memberId);
+        files.forEach(file -> verify(fileUploader).upload(file));
+    }
+
+    @DisplayName("retrieveSpotinfo 메서드가 SpotInfo를 잘 반환하는지")
+    @Test
+    void retrieveSpotInfo_ShouldReturnSpotInfo() {
+        Long spotId = 1L;
+        Main expectedSpotInfo = mock(Main.class);
+
+        when(spotService.retrieveSpotInfo(spotId)).thenReturn(expectedSpotInfo);
+
+        Main result = spotFacade.retrieveSpotInfo(spotId);
+
+        assertEquals(expectedSpotInfo, result);
+        verify(spotService).retrieveSpotInfo(spotId);
+    }
+
+    @DisplayName("modifySpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
+    @Test
+    void modifySpot_ShouldCallServiceAndUploader() {
+        ModifySpotRequest command = mock(ModifySpotRequest.class);
+        Long spotId = 1L;
+        Long memberId = 1L;
+        List<SpotCommand.UpdateSpotImage> updatedImages = List.of(
+                new UpdateSpotImage(mock(MultipartFile.class), 1),
+                new UpdateSpotImage(mock(MultipartFile.class), 2)
+        );
+
+        when(command.getUpdatedImages()).thenReturn(updatedImages);
+
+        spotFacade.modifySpot(command, spotId, memberId);
+
+        verify(spotService).modifySpot(command, spotId, memberId);
+        updatedImages.forEach(image -> verify(fileUploader).upload(image.getImageFile()));
+    }
+
+    @DisplayName("deleteSpot 메서드가 SpotService를 잘 호출하는지")
+    @Test
+    void deleteSpot_ShouldCallService() {
+        Long spotId = 1L;
+        Long memberId = 1L;
+
+        doNothing().when(spotService).deleteSpot(spotId, memberId);
+
+        spotFacade.deleteSpot(spotId, memberId);
+
+        verify(spotService).deleteSpot(spotId, memberId);
+    }
+}

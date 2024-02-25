@@ -11,8 +11,6 @@ import kr.co.yigil.member.dto.request.MemberUpdateRequest;
 import kr.co.yigil.member.dto.response.MemberDeleteResponse;
 import kr.co.yigil.member.dto.response.MemberInfoResponse;
 import kr.co.yigil.member.dto.response.MemberUpdateResponse;
-import kr.co.yigil.travel.interfaces.dto.response.CourseFindDto;
-import kr.co.yigil.travel.interfaces.dto.response.SpotFindDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,30 +39,30 @@ public class MemberController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/api/v1/members/courses")
-    @MemberOnly
-    public ResponseEntity<Slice<CourseFindDto>> getMyCourseInfo(
-        @Auth final Accessor accessor,
-        @PageableDefault(size = 5) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        final Slice<CourseFindDto> response = memberService.getMemberCourseInfo(accessor.getMemberId(), pageRequest);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @GetMapping("/api/v1/members/spots")
-    @MemberOnly
-    public ResponseEntity<Slice<SpotFindDto>> getMySpotInfo(
-        @Auth final Accessor accessor,
-        @PageableDefault(size = 5) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
-        ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        final Slice<SpotFindDto> spotListResponse = memberService.getMemberSpotInfo(accessor.getMemberId(), pageRequest);
-        return ResponseEntity.ok().body(spotListResponse);
-    }
+//    @GetMapping("/api/v1/members/courses")
+//    @MemberOnly
+//    public ResponseEntity<Slice<CourseFindDto>> getMyCourseInfo(
+//        @Auth final Accessor accessor,
+//        @PageableDefault(size = 5) Pageable pageable,
+//        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
+//        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder) {
+//        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+//        final Slice<CourseFindDto> response = memberService.getMemberCourseInfo(accessor.getMemberId(), pageRequest);
+//        return ResponseEntity.ok().body(response);
+//    }
+//
+//    @GetMapping("/api/v1/members/spots")
+//    @MemberOnly
+//    public ResponseEntity<Slice<SpotFindDto>> getMySpotInfo(
+//        @Auth final Accessor accessor,
+//        @PageableDefault(size = 5) Pageable pageable,
+//        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
+//        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
+//        ) {
+//        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+//        final Slice<SpotFindDto> spotListResponse = memberService.getMemberSpotInfo(accessor.getMemberId(), pageRequest);
+//        return ResponseEntity.ok().body(spotListResponse);
+//    }
 
     @DeleteMapping("/api/v1/members/")
 

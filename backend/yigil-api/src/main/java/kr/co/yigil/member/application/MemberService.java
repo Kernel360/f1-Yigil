@@ -25,8 +25,6 @@ import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.infrastructure.CourseRepository;
 import kr.co.yigil.travel.infrastructure.SpotRepository;
-import kr.co.yigil.travel.interfaces.dto.response.CourseFindDto;
-import kr.co.yigil.travel.interfaces.dto.response.SpotFindDto;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
@@ -54,22 +52,7 @@ public class MemberService {
         return MemberInfoResponse.from(member, followCount);
     }
 
-    public Slice<CourseFindDto> getMemberCourseInfo(final Long memberId, Pageable pageable) {
-        Member member = findMemberById(memberId);
-        Slice<Course> courseList = courseRepository.findAllByMember(member);
-        List<CourseFindDto> courseFindDtoList = courseList.stream()
-            .map(this::getCourseFindDto)
-            .toList();
-        return new SliceImpl<>(courseFindDtoList, pageable, courseList.hasNext());
-    }
 
-    public Slice<SpotFindDto> getMemberSpotInfo(final Long memberId, Pageable pageable) {
-        Slice<Spot> spotList = spotRepository.findAllByMemberAndIsInCourseFalse(memberId, pageable);
-        List<SpotFindDto> spotFindDtoList = spotList.stream()
-            .map(this::getSpotFindDto)
-            .toList();
-        return new SliceImpl<>(spotFindDtoList, pageable, spotList.hasNext());
-    }
 
     private FollowCount getMemberFollowCount(Member member) {
         return followCacheReader.getFollowCount(member.getId());
@@ -118,21 +101,21 @@ public class MemberService {
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 
-    @NotNull
-    public SpotFindDto getSpotFindDto(Spot spot) {
-        return SpotFindDto.from(
-            spot,
-            favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
-            commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount());
-    }
-
-    @NotNull
-    public CourseFindDto getCourseFindDto(Course course) {
-        return CourseFindDto.from(
-            course,
-            favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount(),
-            commentRedisIntegrityService.ensureCommentCount(course).getCommentCount());
-    }
+//    @NotNull
+//    public SpotFindDto getSpotFindDto(Spot spot) {
+//        return SpotFindDto.from(
+//            spot,
+//            favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount(),
+//            commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount());
+//    }
+//
+//    @NotNull
+//    public CourseFindDto getCourseFindDto(Course course) {
+//        return CourseFindDto.from(
+//            course,
+//            favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount(),
+//            commentRedisIntegrityService.ensureCommentCount(course).getCommentCount());
+//    }
     @NotNull
     public FollowerFindDto getFollowerFindDto(Follow follow) {
         return FollowerFindDto.from(
