@@ -14,7 +14,7 @@ public class FollowFacade {
     private final FollowService followService;
     private final NotificationService notificationService;
 
-    public void follow(Long followerId, Long followingId) {
+    public void  follow(Long followerId, Long followingId) {
         followService.follow(followerId, followingId);
         notificationService.sendNotification(NotificationType.FOLLOW, followerId, followingId);
     }

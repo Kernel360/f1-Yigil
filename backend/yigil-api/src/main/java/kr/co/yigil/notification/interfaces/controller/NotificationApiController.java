@@ -1,4 +1,4 @@
-package kr.co.yigil.notification.interfaces;
+package kr.co.yigil.notification.interfaces.controller;
 
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
@@ -23,7 +23,7 @@ import reactor.core.publisher.Flux;
 
 @RestController
 @RequiredArgsConstructor
-public class NotificationController {
+public class NotificationApiController {
 
     private final NotificationFacade notificationFacade;
     private final NotificationMapper notificationMapper;

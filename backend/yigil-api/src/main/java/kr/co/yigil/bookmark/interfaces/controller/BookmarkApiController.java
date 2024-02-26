@@ -1,4 +1,4 @@
-package kr.co.yigil.bookmark.interfaces;
+package kr.co.yigil.bookmark.interfaces.controller;
 
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class BookmarkController {
+public class BookmarkApiController {
     private final BookmarkFacade bookmarkFacade;
 
     @PostMapping("/api/v1/add-bookmark/{place_id}")
