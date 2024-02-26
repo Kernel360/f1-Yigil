@@ -7,9 +7,8 @@
 :sectlinks:
 
 include::spot-api.adoc[]
-
+include::course-api.adoc[]
+include::travel-api.adoc[]
 include::notification-api.adoc[]
-
 include::bookmark-api.adoc[]
-
 include::follow-api.adoc[]
