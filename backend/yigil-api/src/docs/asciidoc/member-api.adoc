@@ -1,0 +1,160 @@
+== MEMBER API
+[[get-my-info]]
+=== 내 정보 조회
+==== Request
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/members/get-my-info/http-request.adoc[]
+
+==== Response
+include::{snippets}/members/get-my-info/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-my-info/http-response.adoc[]
+'''
+
+[[update-my-info]]
+=== 내 정보 수정
+
+노션 링크:
+
+==== Request
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/members/update-my-info/http-request.adoc[]
+===== Request Parts
+include::{snippets}/members/update-my-info/request-parts.adoc[]
+
+==== Response
+include::{snippets}/members/update-my-info/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/update-my-info/http-response.adoc[]
+'''
+
+[[get-my-review-list]]
+=== 탈퇴
+==== Request
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/members/withdraw/http-request.adoc[]
+==== Response
+include::{snippets}/members/withdraw/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/withdraw/http-response.adoc[]
+
+'''
+[[get-my-review-list]]
+=== 내가 작성한 장소 리뷰 조회
+로그인 필수: Y
+
+==== Request
+===== path parameters
+===== Query Parameters
+include::{snippets}/members/get-my-spot-list/query-parameters.adoc[]
+===== HTTP Request 예시
+include::{snippets}/members/get-my-spot-list/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-my-spot-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-my-spot-list/http-response.adoc[]
+'''
+
+[[get-my-course-list]]
+=== 내가 작성한 일정 조회
+로그인 필수: Y
+
+==== Request
+===== Query Parameters
+include::{snippets}/members/get-my-course-list/query-parameters.adoc[]
+===== HTTP Request 예시
+include::{snippets}/members/get-my-course-list/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-my-course-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-my-course-list/http-response.adoc[]
+'''
+
+[[set-travels-visibility]]
+=== 장소 공개 여부 설정
+로그인 필수: Y
+
+==== Request
+===== Request Parts
+include::{snippets}/members/set-travels-visibility/request-body.adoc[]
+===== HTTP Request 예시
+include::{snippets}/members/set-travels-visibility/http-request.adoc[]
+==== Response
+include::{snippets}/members/set-travels-visibility/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/set-travels-visibility/http-response.adoc[]
+'''
+[[get-my-follower-list]]
+=== 팔로워 리스트 조회
+로그인 필수: Y
+
+==== Request
+===== HTTP Request 예시
+include::{snippets}/members/get-my-follower-list/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-my-follower-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-my-follower-list/http-response.adoc[]
+'''
+[[get-my-following-list]]
+=== 팔로잉 리스트 조회
+로그인 필수: Y
+
+==== Request
+===== HTTP Request 예시
+include::{snippets}/members/get-my-following-list/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-my-following-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-my-following-list/http-response.adoc[]
+'''
+
+[[get-member-info]]
+=== 회원 정보 조회
+로그인 필수: N
+
+==== Request
+===== HTTP Request 예시
+include::{snippets}/members/get-member-info/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-member-info/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-member-info/http-response.adoc[]
+'''
+
+[[get-member-follower-list]]
+=== 회원의 팔로워 리스트 조회
+로그인 필수: N
+
+==== Request
+===== HTTP Request 예시
+include::{snippets}/members/get-member-follower-list/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-member-follower-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-member-follower-list/http-response.adoc[]
+'''
+
+[[get-member-following-list]]
+=== 회원의 팔로잉 리스트 조회
+로그인 필수: N
+
+==== Request
+===== HTTP Request 예시
+include::{snippets}/members/get-member-following-list/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-member-following-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-member-following-list/http-response.adoc[]
+'''
+
+
+
+
+
