@@ -45,8 +45,6 @@ public class SpotServiceImpl implements SpotService {
     @Override
     @Transactional(readOnly = true)
     public MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId) {
-        Member member = memberReader.getMember(memberId);
-        Place place = placeReader.getPlace(placeId);
         var spotOptional = spotReader.findSpotByPlaceIdAndMemberId(placeId, memberId);
         return new MySpot(spotOptional);
     }
