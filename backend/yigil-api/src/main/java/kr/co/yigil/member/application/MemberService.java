@@ -79,7 +79,7 @@ public class MemberService {
 
     public Slice<FollowerFindDto> getFollowerList(final Long memberId, Pageable pageable) {
         Member member = findMemberById(memberId);
-        Slice<Follow> followerList = followReader.getFollowerSlice(memberId);
+        Slice<Follow> followerList = followReader.getFollowerSlice(memberId, pageable);
         List<FollowerFindDto> followers = followerList.stream()
             .map(this::getFollowerFindDto)
             .toList();
@@ -88,7 +88,7 @@ public class MemberService {
 
     public Slice<FollowingFindDto> getFollowingList(final Long memberId, Pageable pageable) {
         Member member = findMemberById(memberId);
-        Slice<Follow> followingList = followReader.getFollowingSlice(memberId);
+        Slice<Follow> followingList = followReader.getFollowingSlice(memberId, pageable);
         List<FollowingFindDto> followings = followingList.stream()
             .map(this::getFollowingFindDto)
             .toList();

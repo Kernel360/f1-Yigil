@@ -1,0 +1,35 @@
+== BOOKMARK API
+
+=== 북마크 추가
+
+==== Request
+로그인 필수 : Y
+
+===== Path Parameters
+include::{snippets}/bookmarks/add-bookmark/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/bookmarks/add-bookmark/http-request.adoc[]
+
+==== Response
+include::{snippets}/bookmarks/add-bookmark/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/bookmarks/add-bookmark/http-response.adoc[]
+
+=== 북마크 삭제
+
+==== Request
+로그인 필수 : Y
+
+===== Path Parameters
+include::{snippets}/bookmarks/delete-bookmark/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/bookmarks/delete-bookmark/http-request.adoc[]
+
+==== Response
+include::{snippets}/bookmarks/delete-bookmark/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/bookmarks/delete-bookmark/http-response.adoc[]

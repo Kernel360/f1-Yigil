@@ -7,6 +7,7 @@ import kr.co.yigil.follow.FollowCountDto;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
@@ -28,16 +29,17 @@ public class FollowReaderImpl implements FollowReader {
         return followRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }
 
+
     @Override
-    public Slice<Follow> getFollowerSlice(Long memberId) {
+    public Slice<Follow> getFollowerSlice(Long memberId, Pageable pageable) {
         Member member = memberReader.getMember(memberId);
-        return followRepository.findAllByFollower(member);
+        return followRepository.findAllByFollower(member, pageable);
     }
 
     @Override
-    public Slice<Follow> getFollowingSlice(Long memberId) {
+    public Slice<Follow> getFollowingSlice(Long memberId, Pageable pageable) {
         Member member = memberReader.getMember(memberId);
-        return followRepository.findAllByFollowing(member);
+        return followRepository.findAllByFollowing(member, pageable);
     }
 
 
