@@ -10,8 +10,7 @@ import kr.co.yigil.place.dto.response.PlaceInfoResponse;
 import kr.co.yigil.place.dto.response.PlaceMapStaticImageResponse;
 import kr.co.yigil.place.dto.response.RateResponse;
 import kr.co.yigil.place.repository.PlaceRepository;
-import kr.co.yigil.travel.application.SpotRedisIntegrityService;
-import kr.co.yigil.travel.repository.SpotRepository;
+import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -24,18 +23,7 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
     private final SpotRepository spotRepository;
-    private final SpotRedisIntegrityService spotRedisIntegrityService;
     private final PlaceRateRedisIntegrityService placeRateRedisIntegrityService;
-
-    @Transactional(readOnly = true)
-    public PlaceInfoResponse getPlaceInfo(Long placeId) {
-        Place place = getPlaceById(placeId);
-        double totalRate = placeRateRedisIntegrityService.ensurePlaceRate(placeId)
-                .getTotalRate();
-        int spotCount = spotRedisIntegrityService.ensureSpotCounts(placeId).getSpotCount();
-        double averageRate = totalRate / spotCount;
-        return PlaceInfoResponse.from(place, spotCount, averageRate);
-    }
 
     @Transactional(readOnly = true)
     public RateResponse getMemberRate(Long placeId, Long memberId) {
@@ -71,16 +59,4 @@ public class PlaceService {
                 );
     }
 
-    public Slice<PlaceFindDto> getPlaceList(Pageable pageable) {
-        return placeRepository.findAllPlaces(pageable)
-                .map(this::getPlaceFindDto);
-    }
-
-    private PlaceFindDto getPlaceFindDto(Place place) {
-        double totalRate = placeRateRedisIntegrityService.ensurePlaceRate(place.getId())
-                .getTotalRate();
-        int spotCount = spotRedisIntegrityService.ensureSpotCounts(place.getId()).getSpotCount();
-        double averageRate = totalRate / spotCount;
-        return PlaceFindDto.from(place, spotCount, averageRate);
-    }
 }

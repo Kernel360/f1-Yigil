@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
+import LeftIcon from '/public/icons/chevron-left.svg';
+import RightIcon from '/public/icons/chevron-right.svg';
 
 interface PropsType {
   currentPage: number;
   setCurrentPage: (currentPage: number) => void;
   totalPage: number;
-  divide: number;
 }
 
-function Pagination({
-  currentPage,
-  setCurrentPage,
-  totalPage,
-  divide,
-}: PropsType) {
+function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
+  const renderPage = useMemo(() => {
+    const start = Math.floor((currentPage - 1) / 5) * 5 + 1;
+    const end = Math.min(start + 5 - 1, totalPage);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }, [currentPage, totalPage, 5]);
+
   const addPage = () => {
     if (currentPage >= totalPage) return;
     setCurrentPage(currentPage + 1);
@@ -27,50 +29,31 @@ function Pagination({
   };
 
   return (
-    <div className={`my-5 pb-10 flex justify-center items-center`}>
-      <span className="hover:cursor-pointer px-4" onClick={minusPage}>
-        <svg
-          width="5"
-          height="15"
-          viewBox="0 0 7 17"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M5.99805 1L1.49919 8.5L5.99805 16"
-            stroke="#6D6D6D"
-            strokeWidth="0.975844"
-          />
-        </svg>
+    <div className={`my-4 pb-20 flex justify-center items-center gap-x-6`}>
+      <span className="w-[9px] h-[16px] cursor-pointer" onClick={minusPage}>
+        {currentPage !== 1 && (
+          <LeftIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
+        )}
       </span>
-      {totalPage &&
-        [...Array(totalPage)].map((v, idx) => (
+
+      {renderPage &&
+        renderPage.map((v, idx) => (
           <span
             key={idx}
             className={`${
-              currentPage === idx + 1
-                ? 'font-bold text-main'
-                : 'font-normal text-gray-500'
-            }  cursor-pointer hover:font-bold hover:text-main mx-2`}
-            onClick={() => clickPage(idx + 1)}
+              currentPage === v
+                ? 'font-semibold text-2xl'
+                : 'font-normal text-gray-300 text-2xl'
+            } cursor-pointer p-2`}
+            onClick={() => clickPage(v)}
           >
-            {idx + 1}
+            {v}
           </span>
         ))}
-      <span className="hover:cursor-pointer mx-4" onClick={addPage}>
-        <svg
-          width="5"
-          height="15"
-          viewBox="0 0 7 17"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0.998047 16L5.4969 8.5L0.998047 1"
-            stroke="#6D6D6D"
-            strokeWidth="0.975844"
-          />
-        </svg>
+      <span className="w-[9px] h-[16px] cursor-pointer px-1" onClick={addPage}>
+        {currentPage !== totalPage && (
+          <RightIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
+        )}
       </span>
     </div>
   );
