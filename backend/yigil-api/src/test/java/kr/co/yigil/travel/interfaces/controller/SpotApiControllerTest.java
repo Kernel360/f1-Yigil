@@ -4,7 +4,6 @@ import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
 import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,20 +11,28 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 import kr.co.yigil.travel.application.SpotFacade;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.spot.SpotInfo;
+import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
+import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.response.SpotsInPlaceResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +44,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -110,9 +118,38 @@ public class SpotApiControllerTest {
     @DisplayName("registerSpot 메서드가 잘 동작하는지")
     @Test
     void registerSpot_ShouldReturnOk() throws Exception {
-        mockMvc.perform(post("/api/v1/spots")
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
+        MockMultipartFile image1 = new MockMultipartFile("image", "image.jpg", "image/jpeg", "<<jpg data>>".getBytes());
+        MockMultipartFile image2 = new MockMultipartFile("pic", "pic.jpg", "image/jpeg", "<<jpg data>>".getBytes());
+        MockMultipartFile mapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png", "image/png", "<<png data>>".getBytes());
+        MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png", "image/png", "<<png data>>".getBytes());
+
+        mockMvc.perform(multipart("/api/v1/spots")
+                        .file("files", image1.getBytes())
+                        .file("files", image2.getBytes())
+                        .file("mapStaticImageFile", mapStaticImage.getBytes())
+                        .file("placeImageFile", placeImage.getBytes())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .param("pointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
+                        .param("title", "스팟 타이틀")
+                        .param("description", "스팟 본문")
+                        .param("rate", "5.0")
+                        .param("placeName", "장소 타이틀")
+                        .param("placeAddress", "장소구 장소면 장소리")
+                        .param("placePointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(document(
+                                "spots/regist-spot",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                requestParts(
+                                        partWithName("files").description("Spot의 이미지 파일 (다중파일)"),
+                                        partWithName("mapStaticImageFile").description("Spot의 장소를 나타내는 지도 이미지 파일(필수x)"),
+                                        partWithName("placeImageFile").description("Spot의 장소를 나타내는 썸네일 이미지 파일(필수x)")
+                                ),
+                                responseFields(
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
+                                )
+                        ));
 
         verify(spotFacade).registerSpot(any(), anyLong());
     }
@@ -120,8 +157,29 @@ public class SpotApiControllerTest {
     @DisplayName("retrieveSpot 메서드가 잘 동작하는지")
     @Test
     void retrieveSpot_ShouldReturnOk() throws Exception {
+        SpotInfo.Main mockInfo = mock(SpotInfo.Main.class);
+        SpotDetailInfoDto mockResponse = new SpotDetailInfoDto("장소명", "3.0", "장소시 장소구 장소동", "images/mapstatic.png", List.of("images/spot.png", "images/spot.jpeg"), "2024-02-01", "스팟 설명");
+        when(spotFacade.retrieveSpotInfo(anyLong())).thenReturn(mockInfo);
+        when(spotMapper.toSpotDetailInfoDto(mockInfo)).thenReturn(mockResponse);
         mockMvc.perform(get("/api/v1/spots/{spotId}", 1L))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                        .andDo(document(
+                                "spots/retrieve-spot",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("spotId").description("스팟 아이디")
+                                ),
+                                responseFields(
+                                    fieldWithPath("place_name").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
+                                    fieldWithPath("rate").type(JsonFieldType.STRING).description("스팟의 평점 정보"),
+                                    fieldWithPath("place_address").type(JsonFieldType.STRING).description("스팟 관련 장소의 주소"),
+                                    fieldWithPath("map_static_image_file_url").type(JsonFieldType.STRING).description("스팟의 위치를 나타내는 이미지 파일의 상대경로"),
+                                    fieldWithPath("image_urls").type(JsonFieldType.ARRAY).description("스팟 관련 이미지의 상대 경로 배열"),
+                                    fieldWithPath("create_date").type(JsonFieldType.STRING).description("스팟의 생성 일자"),
+                                    fieldWithPath("description").type(JsonFieldType.STRING).description("스팟의 본문 정보")
+                                )
+                        ));
 
         verify(spotFacade).retrieveSpotInfo(anyLong());
     }
@@ -129,9 +187,20 @@ public class SpotApiControllerTest {
     @DisplayName("updateSpot 메서드가 잘 동작하는지")
     @Test
     void updateSpot_ShouldReturnOk() throws Exception {
-        mockMvc.perform(post("/api/v1/spots/{spotId}", 1L)
+        mockMvc.perform(multipart("/api/v1/spots/{spotId}", 1L)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                        .andDo(document(
+                                "spots/update-spot",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("spotId").description("스팟 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
+                                )
+                        ));
 
         verify(spotFacade).modifySpot(any(), anyLong(), anyLong());
     }
@@ -140,7 +209,18 @@ public class SpotApiControllerTest {
     @Test
     void deleteSpot_ShouldReturnOk() throws Exception {
         mockMvc.perform(delete("/api/v1/spots/{spotId}", 1L))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                        .andDo(document(
+                                "spots/delete-spot",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("spotId").description("스팟 아이디")
+                                ),
+                                responseFields(
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
+                                )
+                        ));
 
         verify(spotFacade).deleteSpot(anyLong(), anyLong());
     }
