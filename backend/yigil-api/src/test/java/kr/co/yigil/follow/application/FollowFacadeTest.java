@@ -2,8 +2,7 @@ package kr.co.yigil.follow.application;
 
 import kr.co.yigil.follow.domain.FollowService;
 import kr.co.yigil.notification.domain.NotificationService;
-import kr.co.yigil.notification.domain.util.FollowNotificationCreator;
-import kr.co.yigil.notification.domain.util.UnFollowNotificationCreator;
+import kr.co.yigil.notification.domain.NotificationType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,14 +21,6 @@ public class FollowFacadeTest {
     @Mock
     private NotificationService notificationService;
 
-    @Mock
-    private FollowNotificationCreator followNotificationCreator;
-
-    @Mock
-    private UnFollowNotificationCreator unFollowNotificationCreator;
-
-
-
     @InjectMocks
     private FollowFacade followFacade;
 
@@ -47,7 +38,7 @@ public class FollowFacadeTest {
         followFacade.follow(followerId, followingId);
 
         verify(followService, times(1)).follow(followerId, followingId);
-        verify(notificationService, times(1)).sendNotification(followNotificationCreator, followerId, followingId);
+        verify(notificationService, times(1)).sendNotification(NotificationType.FOLLOW, followerId, followingId);
     }
 
 
@@ -60,6 +51,6 @@ public class FollowFacadeTest {
         followFacade.unfollow(unfollowerId, unfollowingId);
 
         verify(followService, times(1)).unfollow(unfollowerId, unfollowingId);
-        verify(notificationService, times(1)).sendNotification(unFollowNotificationCreator, unfollowerId, unfollowingId);
+        verify(notificationService, times(1)).sendNotification(NotificationType.UNFOLLOW, unfollowerId, unfollowingId);
     }
 }
