@@ -1,0 +1,93 @@
+== SPOT API
+
+=== 장소 내 Spot 조회
+
+==== Request
+include::{snippets}/spots/get-spots-in-place/response-fields.adoc[]
+로그인 필수 : N
+
+===== Path parameter
+include::{snippets}/spots/get-spots-in-place/path-parameters.adoc[]
+
+===== Query Parameter
+include::{snippets}/spots/get-spots-in-place/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/get-spots-in-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/get-spots-in-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/get-spots-in-place/http-response.adoc[]
+
+=== Spot 신규 등록
+노션 링크 :
+
+==== Request
+include::{snippets}/spots/regist-spot/request-parts.adoc[]
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/spots/regist-spot/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/regist-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/regist-spot/response-body.adoc[]
+
+=== Spot 상세 정보 조회
+
+==== Request
+include::{snippets}/spots/retrieve-spot/http-request.adoc[]
+로그인 필수 : N
+
+===== Path Parameter
+include::{snippets}/spots/retrieve-spot/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/retrieve-spot/request-body.adoc[]
+
+==== Response
+include::{snippets}/spots/retrieve-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/retrieve-spot/http-response.adoc[]
+
+=== Spot 수정
+링크 :
+
+==== Request
+include::{snippets}/spots/update-spot/http-request.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/spots/update-spot/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/update-spot/request-body.adoc[]
+
+==== Response
+include::{snippets}/spots/update-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/update-spot/http-response.adoc[]
+
+=== Spot 삭제
+
+==== Request
+include::{snippets}/spots/delete-spot/http-request.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/spots/delete-spot/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/delete-spot/request-body.adoc[]
+
+==== Response
+include::{snippets}/spots/delete-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/delete-spot/http-response.adoc[]

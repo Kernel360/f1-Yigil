@@ -59,7 +59,12 @@ const handler = NextAuth({
   },
   events: {
     signOut: async () => {
-      const res = await requestWithCookie('logout')()()()();
+      const res = await fetch('https://yigil.co.kr/api/v1/signout', {
+        method: 'GET',
+        headers: {
+          Cookie: `SESSION=${cookies().get('SESSION')?.value}`,
+        },
+      });
       if (res) cookies().set('SESSION', '');
     },
   },
