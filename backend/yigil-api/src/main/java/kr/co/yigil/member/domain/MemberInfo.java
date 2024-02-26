@@ -46,10 +46,10 @@ public class MemberInfo {
     @ToString
     public static class CourseListResponse {
 
-        private final List<CourseInfo> courseList;
+        private final List<CourseInfo> content;
         private final int totalPages;
         public CourseListResponse(List<CourseInfo> courseList, int totalPages) {
-            this.courseList = courseList;
+            this.content = courseList;
             this.totalPages = totalPages;
         }
     }
@@ -81,11 +81,11 @@ public class MemberInfo {
     @ToString
     public static class SpotListResponse {
 
-        private final List<SpotInfo> spotList;
+        private final List<SpotInfo> content;
         private final int totalPages;
 
         public SpotListResponse(List<SpotInfo> spotList, int totalPages) {
-            this.spotList = spotList;
+            this.content = spotList;
             this.totalPages = totalPages;
         }
     }
@@ -133,11 +133,11 @@ public class MemberInfo {
     @ToString
     public static class FollowerResponse {
 
-        private final List<FollowInfo> followerList;
+        private final List<FollowInfo> content;
         private final boolean hasNext;
 
-        public FollowerResponse(List<FollowInfo> followerList, boolean hasNext) {
-            this.followerList = followerList;
+        public FollowerResponse(List<FollowInfo> content, boolean hasNext) {
+            this.content = content;
             this.hasNext = hasNext;
         }
     }
@@ -146,11 +146,11 @@ public class MemberInfo {
     @ToString
     public static class FollowingResponse {
 
-        private final List<FollowInfo> followingList;
+        private final List<FollowInfo> content;
         private final boolean hasNext;
 
-        public FollowingResponse(List<FollowInfo> followingList, boolean hasNext) {
-            this.followingList = followingList;
+        public FollowingResponse(List<FollowInfo> content, boolean hasNext) {
+            this.content = content;
             this.hasNext = hasNext;
         }
     }

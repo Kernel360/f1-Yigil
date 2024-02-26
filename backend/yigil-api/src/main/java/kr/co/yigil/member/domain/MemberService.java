@@ -1,6 +1,6 @@
 package kr.co.yigil.member.domain;
 
-import kr.co.yigil.member.domain.MemberCommand.TravelsVisibilityRequest;
+import kr.co.yigil.member.domain.MemberCommand.VisibilityChangeRequest;
 import kr.co.yigil.member.domain.MemberInfo.CourseListResponse;
 import kr.co.yigil.member.domain.MemberInfo.SpotListResponse;
 import kr.co.yigil.member.domain.MemberInfo.VisibilityChangeResponse;
@@ -22,5 +22,5 @@ public interface MemberService {
     MemberInfo.FollowerResponse getFollowerList(Long memberId, Pageable pageable);
     MemberInfo.FollowingResponse getFollowingList(Long memberId, Pageable pageable);
 
-    VisibilityChangeResponse setTravelsVisibility(Long memberId, TravelsVisibilityRequest memberCommand);
+    VisibilityChangeResponse setTravelsVisibility(Long memberId, VisibilityChangeRequest memberCommand);
 }

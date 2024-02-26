@@ -13,7 +13,7 @@ public class MemberStoreImpl implements MemberStore {
     private final MemberRepository memberRepository;
 
     @Override
-    public void withdrawal(Long memberId) {
+    public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }
 

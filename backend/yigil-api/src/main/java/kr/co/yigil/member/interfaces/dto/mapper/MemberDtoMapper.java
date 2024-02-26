@@ -2,6 +2,7 @@ package kr.co.yigil.member.interfaces.dto.mapper;
 
 
 import kr.co.yigil.member.domain.MemberCommand;
+import kr.co.yigil.member.domain.MemberCommand.VisibilityChangeRequest;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberInfo.VisibilityChangeResponse;
 import kr.co.yigil.member.interfaces.dto.MemberDto;
@@ -16,7 +17,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface MemberDtoMapper {
     MemberCommand.MemberUpdateRequest of(MemberDto.MemberUpdateRequest request);
-    MemberCommand.TravelsVisibilityRequest of(MemberDto.TravelsVisibilityRequest request);
+    VisibilityChangeRequest of(MemberDto.TravelsVisibilityRequest request);
 
 
     MemberDto.Main of(MemberInfo.Main main);

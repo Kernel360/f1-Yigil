@@ -4,7 +4,7 @@ import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.domain.MemberCommand;
-import kr.co.yigil.member.domain.MemberCommand.TravelsVisibilityRequest;
+import kr.co.yigil.member.domain.MemberCommand.VisibilityChangeRequest;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberInfo.CourseListResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
@@ -61,7 +61,7 @@ public class MemberFacade {
     }
 
     public VisibilityChangeResponse setTravelsVisibility(Long memberId,
-        TravelsVisibilityRequest memberCommand) {
+        VisibilityChangeRequest memberCommand) {
         return memberService.setTravelsVisibility(memberId, memberCommand);
     }
 //

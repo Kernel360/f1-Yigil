@@ -56,7 +56,7 @@ public class MemberDto {
     @ToString
     public static class CourseListResponse {
 
-        private final List<CourseInfo> courseList;
+        private final List<CourseInfo> content;
         private final int totalPages;
     }
 
@@ -65,7 +65,7 @@ public class MemberDto {
     @ToString
     public static class SpotListResponse {
 
-        private List<SpotInfo> spotList;
+        private List<SpotInfo> content;
         private int totalPages;
     }
 
@@ -137,7 +137,7 @@ public class MemberDto {
     @ToString
     public static class FollowerResponse {
 
-        private final List<FollowInfo> followerList;
+        private final List<FollowInfo> content;
         private final boolean hasNext;
     }
 
@@ -146,7 +146,7 @@ public class MemberDto {
     @ToString
     public static class FollowingResponse {
 
-        private final List<FollowInfo> followingList;
+        private final List<FollowInfo> content;
         private final boolean hasNext;
     }
 

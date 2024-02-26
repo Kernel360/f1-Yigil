@@ -22,7 +22,7 @@ public class MemberCommand {
     @Getter
     @Builder
     @ToString
-    public static class TravelsVisibilityRequest {
+    public static class VisibilityChangeRequest {
 
         private List<Long> travelIds;
         private Boolean isPrivate;
