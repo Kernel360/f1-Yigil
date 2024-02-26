@@ -16,6 +16,7 @@ import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -39,6 +40,15 @@ public class SpotServiceImpl implements SpotService {
     @Transactional(readOnly = true)
     public Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable) {
         return spotReader.getSpotSliceInPlace(placeId, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId) {
+        Member member = memberReader.getMember(memberId);
+        Place place = placeReader.getPlace(placeId);
+        var spotOptional = spotReader.findSpotByPlaceIdAndMemberId(placeId, memberId);
+        return new MySpot(spotOptional);
     }
 
     @Override
