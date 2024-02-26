@@ -13,6 +13,7 @@ import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
+import Dialog from '../../ui/dialog/Dialog';
 
 export interface TMyPageSpot {
   spot_id: number;
@@ -43,6 +44,8 @@ export default function MyPageSpotList({
   const [selectOption, setSelectOption] = useState('all');
   const [sortOption, setSortOption] = useState<string>('desc');
 
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
+
   // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
     getUser(currentPage, divideCount, sortOption, selectOption);
@@ -57,7 +60,7 @@ export default function MyPageSpotList({
     {
       label: '기록 삭제하기',
       icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => onClickUnLock(),
+      onClick: () => setIsDialogOpened(true),
     },
     {
       href: '/add/course',
@@ -151,6 +154,7 @@ export default function MyPageSpotList({
 
   // 함수 분리 예정
   const onClickDelete = () => {
+    setIsDialogOpened(true);
     // delete 로직
     // delete(checkedList)
   };
@@ -160,6 +164,10 @@ export default function MyPageSpotList({
   };
 
   const onClickLock = () => {};
+
+  const closeDialog = () => {
+    setIsDialogOpened(false);
+  };
 
   const onChangeAllSpots = (
     e: EventFor<'input', 'onChange'>,
@@ -225,6 +233,13 @@ export default function MyPageSpotList({
 
       {!!checkedList.length && (
         <div className="relative">
+          {isDialogOpened && (
+            <Dialog
+              text="기록을 삭제하시겠나요?"
+              closeModal={closeDialog}
+              handleConfirm={onClickDelete}
+            />
+          )}
           <FloatingActionButton
             popOverData={popOverData}
             openedIcon={<PlusIcon className="rotate-45 duration-200 z-30" />}
