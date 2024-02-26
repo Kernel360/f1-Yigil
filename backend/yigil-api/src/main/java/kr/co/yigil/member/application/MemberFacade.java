@@ -64,17 +64,4 @@ public class MemberFacade {
         VisibilityChangeRequest memberCommand) {
         return memberService.setTravelsVisibility(memberId, memberCommand);
     }
-//
-//    public SpotFindDto getSpotFindDto(Spot spot) {
-//        int favorCount = favorRedisIntegrityService.ensureFavorCounts(spot).getFavorCount();
-//        int commentCount = commentRedisIntegrityService.ensureCommentCount(spot).getCommentCount();
-//        return SpotFindDto.from(spot, favorCount, commentCount);
-//    }
-//
-//    public CourseFindDto getCourseFindDto(Course course) {
-//        int favorCount = favorRedisIntegrityService.ensureFavorCounts(course).getFavorCount();
-//        int commentCount = commentRedisIntegrityService.ensureCommentCount(course)
-//            .getCommentCount();
-//        return CourseFindDto.from(course, favorCount, commentCount);
-//    }
 }

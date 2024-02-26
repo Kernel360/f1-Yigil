@@ -55,7 +55,7 @@ public class MemberServiceImpl implements MemberService {
         member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
             updatedProfile.getFileUrl());
 
-        return !currentProfileUrl.equals(updatedProfile.getFileUrl());
+        return currentProfileUrl == null || !currentProfileUrl.equals(updatedProfile.getFileUrl());
     }
 
 

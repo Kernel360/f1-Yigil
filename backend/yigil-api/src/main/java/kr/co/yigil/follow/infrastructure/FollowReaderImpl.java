@@ -1,5 +1,6 @@
 package kr.co.yigil.follow.infrastructure;
 
+import kr.co.yigil.follow.FollowCountDto;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;

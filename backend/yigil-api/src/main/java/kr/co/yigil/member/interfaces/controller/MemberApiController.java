@@ -45,12 +45,12 @@ public class MemberApiController {
 
     @GetMapping("/courses")
     @MemberOnly
-    public ResponseEntity<CourseListResponse> getMyCourseInfo(
+    public ResponseEntity<CourseListResponse> getMyCourseList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "visibility", defaultValue = "all", required = false) String visibility
+        @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
     ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
@@ -63,12 +63,12 @@ public class MemberApiController {
 
     @GetMapping("/spots")
     @MemberOnly
-    public ResponseEntity<MemberDto.SpotListResponse> getMySpotInfo(
+    public ResponseEntity<MemberDto.SpotListResponse> getMySpotList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "visibility", defaultValue = "all", required = false) String visibility
+        @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
     ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));

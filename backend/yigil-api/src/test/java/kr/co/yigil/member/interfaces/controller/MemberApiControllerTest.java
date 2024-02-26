@@ -12,7 +12,9 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -61,7 +63,12 @@ class MemberApiControllerTest {
     void setUp(WebApplicationContext webApplicationContext,
         RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-            .apply(documentationConfiguration(restDocumentation))
+            .apply(documentationConfiguration(restDocumentation)
+                .uris()
+                .withScheme("https")
+                .withHost("yigil.co.kr")
+                .withPort(80)
+                )
             .build();
     }
 
@@ -73,7 +80,7 @@ class MemberApiControllerTest {
             .memberId(1L)
             .email("test@yigil.co.kr")
             .nickname("test user")
-            .profileImageUrl("https://test.yigil.co.kr/profile.jpg")
+            .profileImageUrl("https://cdn.igil.co.kr/images/profile.jpg")
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -100,7 +107,6 @@ class MemberApiControllerTest {
         verify(memberFacade).getMemberInfo(anyLong());
     }
 
-
     @DisplayName("내가 작성한 코스 목록 조회가 잘 되는지")
     @Test
     void getMyCourseInfo_ShouldReturnOk() throws Exception {
@@ -112,6 +118,7 @@ class MemberApiControllerTest {
             .spotCount(10)
             .createdDate("2024-01-01")
             .mapStaticImageUrl("images/map.jpg")
+            .isPrivate(false)
             .build();
         MemberDto.CourseListResponse response = MemberDto.CourseListResponse.builder()
             .content(List.of(courseInfo))
@@ -127,13 +134,20 @@ class MemberApiControllerTest {
                 .param("size", "5")
                 .param("sortBy", "createdAt")
                 .param("sortOrder", "desc")
-                .param("visibility", "public")
+                .param("selected", "public")
             )
             .andExpect(status().isOk())
             .andDo(document(
                 "members/get-my-course-list",
                 getDocumentRequest(),
                 getDocumentResponse(),
+                queryParameters(
+                    parameterWithName("page").description("현재 페이지").optional(),
+                    parameterWithName("size").description("페이지 크기").optional(),
+                    parameterWithName("sortBy").description("정렬 옵션").optional(),
+                    parameterWithName("sortOrder").description("정렬 순서").optional(),
+                    parameterWithName("selected").description("필터 기능(전체 공개 비공개)").optional()
+                ),
                 responseFields(
                     fieldWithPath("content[].course_id").description("코스 ID"),
                     fieldWithPath("content[].title").description("코스 제목"),
@@ -145,8 +159,6 @@ class MemberApiControllerTest {
                     fieldWithPath("total_pages").description("총 페이지 수")
                 )
             ));
-
-        ;
         verify(memberFacade).getMemberCourseInfo(anyLong(), any(PageRequest.class), anyString());
     }
 
@@ -160,6 +172,7 @@ class MemberApiControllerTest {
             .rate(4.5)
             .imageUrl("images/map.jpg")
             .createdDate("2024-01-01")
+            .isPrivate(false)
             .build();
         MemberDto.SpotListResponse response = MemberDto.SpotListResponse.builder()
             .content(List.of(spotInfo))
@@ -175,13 +188,20 @@ class MemberApiControllerTest {
                 .param("size", "5")
                 .param("sortBy", "createdAt")
                 .param("sortOrder", "desc")
-                .param("visibility", "public")
+                .param("selected", "public")
             )
             .andExpect(status().isOk())
             .andDo(document(
                 "members/get-my-spot-list",
                 getDocumentRequest(),
                 getDocumentResponse(),
+                queryParameters(
+                    parameterWithName("page").description("현재 페이지").optional(),
+                    parameterWithName("size").description("페이지 크기").optional(),
+                    parameterWithName("sortBy").description("정렬 옵션").optional(),
+                    parameterWithName("sortOrder").description("정렬 순서").optional(),
+                    parameterWithName("selected").description("필터 기능(전체 공개 비공개)").optional()
+                ),
                 responseFields(
                     fieldWithPath("content[].spot_id").description("장소 ID"),
                     fieldWithPath("content[].title").description("장소 제목"),
@@ -194,7 +214,6 @@ class MemberApiControllerTest {
             );
         verify(memberFacade).getMemberSpotInfo(anyLong(), any(PageRequest.class), anyString());
     }
-
 
     @DisplayName("스팟 및 코스의 공개 여부 설정이 잘 되는지")
     @Test
@@ -255,6 +274,12 @@ class MemberApiControllerTest {
                 "members/get-my-follower-list",
                 getDocumentRequest(),
                 getDocumentResponse(),
+                queryParameters(
+                    parameterWithName("page").description("현재 페이지").optional(),
+                    parameterWithName("size").description("페이지 크기").optional(),
+                    parameterWithName("sortBy").description("정렬 옵션").optional(),
+                    parameterWithName("sortOrder").description("정렬 순서").optional()
+                ),
                 responseFields(
                     fieldWithPath("content[].member_id").description("회원 ID"),
                     fieldWithPath("content[].nickname").description("닉네임"),
@@ -266,6 +291,7 @@ class MemberApiControllerTest {
         verify(memberFacade).getFollowerList(anyLong(), any(PageRequest.class));
     }
 
+    @DisplayName("팔로잉 목록 조회가 잘 되는지")
     @Test
     void WhenGetMyFollowingList_ThenShouldReturnOk() throws Exception {
 
@@ -293,6 +319,12 @@ class MemberApiControllerTest {
                 "members/get-my-following-list",
                 getDocumentRequest(),
                 getDocumentResponse(),
+                queryParameters(
+                    parameterWithName("page").description("현재 페이지").optional(),
+                    parameterWithName("size").description("페이지 크기").optional(),
+                    parameterWithName("sortBy").description("정렬 옵션").optional(),
+                    parameterWithName("sortOrder").description("정렬 순서").optional()
+                ),
                 responseFields(
                     fieldWithPath("content[].member_id").description("회원 ID"),
                     fieldWithPath("content[].nickname").description("닉네임"),
@@ -323,11 +355,10 @@ class MemberApiControllerTest {
 
         mockMvc.perform(multipart("/api/v1/members")
                 .file("profileImageFile", multipartFile.getBytes())
-                .contentType(MediaType.MULTIPART_FORM_DATA)
                 .param("nickname", "nickname")
                 .param("age", "10대")
                 .param("gender", "남성")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andExpect(status().isOk())
             .andDo(document(
@@ -341,7 +372,6 @@ class MemberApiControllerTest {
                     fieldWithPath("message").description("메시지")
                 )
             ));
-        ;
     }
 
     @DisplayName("회원 탈퇴가 잘 되는지")
@@ -376,7 +406,7 @@ class MemberApiControllerTest {
             .memberId(1L)
             .email("test@yigil.co.kr")
             .nickname("test user")
-            .profileImageUrl("https://test.yigil.co.kr/images/profile.jpg")
+            .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -387,7 +417,7 @@ class MemberApiControllerTest {
         mockMvc.perform(get("/api/v1/members/{memberId}", 1L))
             .andExpect(status().isOk())
             .andDo(document(
-                "members/get-my-info",
+                "members/get-member-info",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 responseFields(
@@ -411,7 +441,7 @@ class MemberApiControllerTest {
             .content(List.of(MemberDto.FollowInfo.builder()
                 .memberId(1L)
                 .nickname("test user")
-                .profileImageUrl("https://test.yigil.co.kr/images/profile.jpg")
+                .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
                 .build())
             )
             .hasNext(false)
@@ -429,7 +459,7 @@ class MemberApiControllerTest {
             )
             .andExpect(status().isOk())
             .andDo(document(
-                "members/get-my-follower-list",
+                "members/get-member-follower-list",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 responseFields(
@@ -470,7 +500,7 @@ class MemberApiControllerTest {
             )
             .andExpect(status().isOk())
             .andDo(document(
-                "members/get-my-following-list",
+                "members/get-member-following-list",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 responseFields(
