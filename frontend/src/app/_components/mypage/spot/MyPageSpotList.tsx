@@ -214,7 +214,7 @@ export default function MyPageSpotList({
 
   return !!placeList.length ? (
     <>
-      <div className="mt-4 mb-3">
+      <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
           selectOption={selectOption}
           sortOption={sortOption}
