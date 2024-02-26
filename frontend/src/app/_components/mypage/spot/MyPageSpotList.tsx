@@ -149,8 +149,8 @@ export default function MyPageSpotList({
   // 공개 여부에 따라 렌더링 할 spot list 정렬
   useEffect(() => {
     setCurrentPage(1);
-    getUser(1, divideCount, 'desc', selectOption);
-  }, [selectOption]);
+    getUser(1, divideCount, sortOption, selectOption);
+  }, [selectOption, sortOption]);
 
   // 함수 분리 예정
   const onClickDelete = () => {
