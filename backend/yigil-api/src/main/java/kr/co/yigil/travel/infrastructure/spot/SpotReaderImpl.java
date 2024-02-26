@@ -5,7 +5,6 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_SPOT_ID;
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import kr.co.yigil.travel.infrastructure.SpotRepository;
@@ -51,17 +50,11 @@ public class SpotReaderImpl implements SpotReader {
     }
 
     @Override
-    public MemberInfo.MemberSpotResponse findAllByMemberId(Long memberId, Pageable pageable,
+    public Page<Spot> getMemberSpotList(Long memberId, Pageable pageable,
         String visibility) {
-        Page<Spot> pageSpot;
         if (visibility.equals("all")) {
-            pageSpot = spotRepository.findAllByMemberId(memberId, pageable);
-        } else {
-            pageSpot = spotRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
+            return spotRepository.findAllByMemberId(memberId, pageable);
         }
-        List<MemberInfo.SpotInfo> spotInfoList = pageSpot.getContent().stream()
-            .map(MemberInfo.SpotInfo::new)
-            .toList();
-        return new MemberInfo.MemberSpotResponse(spotInfoList, pageSpot.getTotalPages());
+        return spotRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
     }
 }

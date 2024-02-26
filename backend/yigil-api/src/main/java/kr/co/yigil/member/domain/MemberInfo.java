@@ -7,7 +7,6 @@ import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.util.GeojsonConverter;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -45,11 +44,11 @@ public class MemberInfo {
 
     @Getter
     @ToString
-    public static class MemberCourseResponse {
+    public static class CourseListResponse {
 
         private final List<CourseInfo> courseList;
         private final int totalPages;
-        public MemberCourseResponse(List<CourseInfo> courseList, int totalPages) {
+        public CourseListResponse(List<CourseInfo> courseList, int totalPages) {
             this.courseList = courseList;
             this.totalPages = totalPages;
         }
@@ -61,7 +60,6 @@ public class MemberInfo {
 
         private final Long courseId;
         private final String title;
-        private final String description;
         private final Double rate;
         private final Integer spotCount;
         private final LocalDateTime createdDate;
@@ -71,7 +69,6 @@ public class MemberInfo {
         public CourseInfo(Course course) {
             this.courseId = course.getId();
             this.title = course.getTitle();
-            this.description = course.getDescription();
             this.rate = course.getRate();
             this.spotCount = course.getSpots().size();
             this.createdDate = course.getCreatedAt();
@@ -82,12 +79,12 @@ public class MemberInfo {
 
     @Getter
     @ToString
-    public static class MemberSpotResponse {
+    public static class SpotListResponse {
 
         private final List<SpotInfo> spotList;
         private final int totalPages;
 
-        public MemberSpotResponse(List<SpotInfo> spotList, int totalPages) {
+        public SpotListResponse(List<SpotInfo> spotList, int totalPages) {
             this.spotList = spotList;
             this.totalPages = totalPages;
         }
@@ -99,23 +96,17 @@ public class MemberInfo {
 
         private final Long spotId;
         private final String title;
-        private final String description;
-        private final String pointJson;
         private final double rate;
         private final String imageUrl;
         private final LocalDateTime createdDate;
-        private final PlaceInfo placeInfo;
         private final Boolean isPrivate;
 
         public SpotInfo(Spot spot) {
             this.spotId = spot.getId();
             this.title = spot.getTitle();
-            this.description = spot.getDescription();
-            this.pointJson = GeojsonConverter.convertToJson(spot.getLocation());
             this.rate = spot.getRate();
             this.imageUrl = spot.getAttachFiles().getUrls().getFirst();
             this.createdDate = spot.getCreatedAt();
-            this.placeInfo = new PlaceInfo(spot.getPlace());
             this.isPrivate = spot.isPrivate();
         }
     }
@@ -137,16 +128,6 @@ public class MemberInfo {
         }
     }
 
-    @Getter
-    @ToString
-    public static class DeleteResponse {
-
-        private final String message;
-
-        public DeleteResponse(String message) {
-            this.message = message;
-        }
-    }
 
     @Getter
     @ToString
@@ -201,10 +182,10 @@ public class MemberInfo {
 
     @Getter
     @ToString
-    public static class TravelsVisibilityResponse {
+    public static class VisibilityChangeResponse {
         private final String message;
 
-        public TravelsVisibilityResponse(String message) {
+        public VisibilityChangeResponse(String message) {
             this.message = message;
         }
     }

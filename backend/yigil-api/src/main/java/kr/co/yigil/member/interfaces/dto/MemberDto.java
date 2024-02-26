@@ -5,19 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 public class MemberDto {
 
     @Getter
-    @Builder
+    @Setter
     @ToString
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class MemberUpdateRequest {
 
         private String nickname;
+
         private String ages;
+
         private String gender;
+
         private MultipartFile profileImageFile;
     }
 
@@ -25,7 +32,6 @@ public class MemberDto {
     @Builder
     @ToString
     @AllArgsConstructor
-    @NoArgsConstructor
     public static class TravelsVisibilityRequest {
 
         private List<Long> travelIds;
@@ -48,7 +54,7 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
-    public static class MemberCourseResponse {
+    public static class CourseListResponse {
 
         private final List<CourseInfo> courseList;
         private final int totalPages;
@@ -57,7 +63,7 @@ public class MemberDto {
     @Getter
     @Builder
     @ToString
-    public static class MemberSpotResponse {
+    public static class SpotListResponse {
 
         private List<SpotInfo> spotList;
         private int totalPages;
@@ -87,7 +93,6 @@ public class MemberDto {
 
         private final Long courseId;
         private final String title;
-        private final String description;
         private final Double rate;
         private final Integer spotCount;
         private final String createdDate;
@@ -102,12 +107,9 @@ public class MemberDto {
 
         private final Long spotId;
         private final String title;
-        private final String description;
-        private final String pointJson;
         private final double rate;
         private final String imageUrl;
         private final String createdDate;
-        private final PlaceInfo placeInfo;
         private final Boolean isPrivate;
     }
 

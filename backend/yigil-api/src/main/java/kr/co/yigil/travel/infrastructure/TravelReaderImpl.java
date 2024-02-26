@@ -5,7 +5,6 @@ import java.util.Objects;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.member.domain.MemberInfo.TravelsVisibilityResponse;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.domain.TravelReader;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class TravelReaderImpl implements TravelReader {
     }
 
     @Override
-    public TravelsVisibilityResponse setTravelsVisibility(Long memberId, List<Long> travelIds,
+    public void setTravelsVisibility(Long memberId, List<Long> travelIds,
         boolean isPrivate) {
         travelRepository.findAllById(travelIds)
             .forEach(travel -> {
@@ -39,6 +38,5 @@ public class TravelReaderImpl implements TravelReader {
                     travel.changeOnPrivate();
                 }
             });
-        return new TravelsVisibilityResponse("공개여부가 변경되었습니다.");
     }
 }

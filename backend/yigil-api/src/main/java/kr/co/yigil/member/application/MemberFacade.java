@@ -2,15 +2,16 @@ package kr.co.yigil.member.application;
 
 import kr.co.yigil.comment.application.CommentRedisIntegrityService;
 import kr.co.yigil.favor.application.FavorRedisIntegrityService;
-import kr.co.yigil.file.FileUploadEvent;
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberCommand.TravelsVisibilityRequest;
 import kr.co.yigil.member.domain.MemberInfo;
+import kr.co.yigil.member.domain.MemberInfo.CourseListResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
-import kr.co.yigil.member.domain.MemberInfo.TravelsVisibilityResponse;
+import kr.co.yigil.member.domain.MemberInfo.SpotListResponse;
+import kr.co.yigil.member.domain.MemberInfo.VisibilityChangeResponse;
 import kr.co.yigil.member.domain.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Service;
 public class MemberFacade {
 
     private final MemberService memberService;
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final FileUploader fileUploader;
+
     private final CommentRedisIntegrityService commentRedisIntegrityService;
     private final FavorRedisIntegrityService favorRedisIntegrityService;
 
@@ -27,12 +29,12 @@ public class MemberFacade {
         return memberService.retrieveMemberInfo(memberId);
     }
 
-    public MemberInfo.MemberCourseResponse getMemberCourseInfo(final Long memberId,
+    public CourseListResponse getMemberCourseInfo(final Long memberId,
         Pageable pageable, String selected) {
         return memberService.retrieveCourseList(memberId, pageable, selected);
     }
 
-    public MemberInfo.MemberSpotResponse getMemberSpotInfo(final Long memberId, Pageable pageable,
+    public SpotListResponse getMemberSpotInfo(final Long memberId, Pageable pageable,
         String selected) {
         return memberService.retrieveSpotList(memberId, pageable, selected);
     }
@@ -40,9 +42,8 @@ public class MemberFacade {
     public MemberInfo.MemberUpdateResponse updateMemberInfo(final Long memberId,
         MemberCommand.MemberUpdateRequest request) {
 
-        memberService.updateMemberInfo(memberId, request);
-        FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile());
-        applicationEventPublisher.publishEvent(event);
+        boolean fileChanged = memberService.updateMemberInfo(memberId, request);
+        if(fileChanged) fileUploader.upload(request.getProfileImageFile());
         return new MemberInfo.MemberUpdateResponse("회원 정보 업데이트 성공");
     }
 
@@ -59,7 +60,7 @@ public class MemberFacade {
         return memberService.getFollowingList(memberId, pageable);
     }
 
-    public TravelsVisibilityResponse setTravelsVisibility(Long memberId,
+    public VisibilityChangeResponse setTravelsVisibility(Long memberId,
         TravelsVisibilityRequest memberCommand) {
         return memberService.setTravelsVisibility(memberId, memberCommand);
     }

@@ -1,9 +1,7 @@
 package kr.co.yigil.travel.infrastructure.course;
 
-import java.util.List;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
-import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseReader;
 import kr.co.yigil.travel.infrastructure.CourseRepository;
@@ -31,17 +29,12 @@ public class CourseReaderImpl implements CourseReader {
     }
 
     @Override
-    public MemberInfo.MemberCourseResponse getMemberCourseList(Long memberId, Pageable pageable,
+    public Page<Course> getMemberCourseList(Long memberId, Pageable pageable,
         String visibility) {
-        Page<Course> pageCourse;
         if (visibility.equals("all")) {
-            pageCourse = courseRepository.findAllByMemberId(memberId, pageable);
-        } else {
-            pageCourse = courseRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
+            return courseRepository.findAllByMemberId(memberId, pageable);
         }
-        List<MemberInfo.CourseInfo> courseInfoList = pageCourse.getContent().stream()
-            .map(MemberInfo.CourseInfo::new)
-            .toList();
-        return new MemberInfo.MemberCourseResponse(courseInfoList, pageCourse.getTotalPages());
+        return courseRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
+
     }
 }

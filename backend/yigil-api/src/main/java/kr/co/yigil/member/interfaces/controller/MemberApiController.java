@@ -6,7 +6,9 @@ import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.member.application.MemberFacade;
 import kr.co.yigil.member.domain.MemberInfo;
+import kr.co.yigil.member.domain.MemberInfo.SpotListResponse;
 import kr.co.yigil.member.interfaces.dto.MemberDto;
+import kr.co.yigil.member.interfaces.dto.MemberDto.CourseListResponse;
 import kr.co.yigil.member.interfaces.dto.mapper.MemberDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -43,12 +45,12 @@ public class MemberApiController {
 
     @GetMapping("/courses")
     @MemberOnly
-    public ResponseEntity<MemberDto.MemberCourseResponse> getMyCourseInfo(
+    public ResponseEntity<CourseListResponse> getMyCourseInfo(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "visibility", defaultValue = "false", required = false) String visibility
+        @RequestParam(name = "visibility", defaultValue = "all", required = false) String visibility
     ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
@@ -61,16 +63,16 @@ public class MemberApiController {
 
     @GetMapping("/spots")
     @MemberOnly
-    public ResponseEntity<MemberDto.MemberSpotResponse> getMySpotInfo(
+    public ResponseEntity<MemberDto.SpotListResponse> getMySpotInfo(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "visibility", defaultValue = "false", required = false) String visibility
+        @RequestParam(name = "visibility", defaultValue = "all", required = false) String visibility
     ) {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        final MemberInfo.MemberSpotResponse spotListResponse = memberFacade.getMemberSpotInfo(
+        final SpotListResponse spotListResponse = memberFacade.getMemberSpotInfo(
             accessor.getMemberId(), pageRequest, visibility);
         var response = memberDtoMapper.of(spotListResponse);
         return ResponseEntity.ok().body(response);
@@ -78,7 +80,7 @@ public class MemberApiController {
 
     @PostMapping("/travels/visibility")
     @MemberOnly
-    public ResponseEntity<MemberDto.TravelsVisibilityResponse> setCoursesVisibility(
+    public ResponseEntity<MemberDto.TravelsVisibilityResponse> setTravelsVisibility(
         @Auth final Accessor accessor,
         @RequestBody MemberDto.TravelsVisibilityRequest request
     ){
@@ -139,7 +141,7 @@ public class MemberApiController {
         @Auth final Accessor accessor) {
         var responseInfo = memberFacade.withdraw(accessor.getMemberId());
         var response = memberDtoMapper.of(responseInfo);
-//        request.getSession().invalidate();
+        request.getSession().invalidate();
         return ResponseEntity.ok().body(response);
     }
 

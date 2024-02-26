@@ -3,8 +3,6 @@ package kr.co.yigil.follow.infrastructure;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;
-import kr.co.yigil.follow.FollowCountDto;
-import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -33,13 +31,14 @@ public class FollowReaderImpl implements FollowReader {
 
     @Override
     public Slice<Follow> getFollowerSlice(Long memberId, Pageable pageable) {
-        Member member = memberReader.getMember(memberId);
-        return followRepository.findAllByFollower(member, pageable);
+        memberReader.validateMember(memberId);
+        return followRepository.findAllByFollowingId(memberId, pageable);
     }
 
     @Override
     public Slice<Follow> getFollowingSlice(Long memberId, Pageable pageable) {
-        Member member = memberReader.getMember(memberId);
-        return followRepository.findAllByFollowing(member, pageable);
+        memberReader.validateMember(memberId);
+        return followRepository.findAllByFollowerId(memberId, pageable);
+
     }
 }

@@ -2,17 +2,16 @@ package kr.co.yigil.member.domain;
 
 import java.util.List;
 import kr.co.yigil.file.FileUploadUtil;
+import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowReader;
-import kr.co.yigil.member.Ages;
-import kr.co.yigil.member.Gender;
-import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberCommand.TravelsVisibilityRequest;
+import kr.co.yigil.member.domain.MemberInfo.CourseListResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowerResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
 import kr.co.yigil.member.domain.MemberInfo.Main;
-import kr.co.yigil.member.domain.MemberInfo.MemberCourseResponse;
-import kr.co.yigil.member.domain.MemberInfo.MemberSpotResponse;
-import kr.co.yigil.member.domain.MemberInfo.TravelsVisibilityResponse;
+import kr.co.yigil.member.domain.MemberInfo.SpotListResponse;
+import kr.co.yigil.member.domain.MemberInfo.VisibilityChangeResponse;
 import kr.co.yigil.travel.domain.TravelReader;
 import kr.co.yigil.travel.domain.course.CourseReader;
 import kr.co.yigil.travel.domain.spot.SpotReader;
@@ -23,19 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
+
     private final MemberReader memberReader;
     private final MemberStore memberStore;
     private final CourseReader courseReader;
     private final TravelReader travelReader;
     private final SpotReader spotReader;
     private final FollowReader followReader;
-
-    @Override
-    @Transactional(readOnly = true)
-    public Member retrieveMember(Long memberId) {
-        return memberReader.getMember(memberId);
-    }
+    private final FileUploader fileUploader;
 
     @Override
     @Transactional
@@ -53,54 +48,69 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     @Transactional
-    public void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request) {
+    public boolean updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request) {
+
         var member = memberReader.getMember(memberId);
+        var currentProfileUrl = member.getProfileImageUrl();
+        var updatedProfile = FileUploadUtil.predictAttachFile(request.getProfileImageFile());
 
-        var fileUrl = FileUploadUtil.predictAttachFile(request.getProfileImageFile());
+        member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
+            updatedProfile.getFileUrl());
 
-        Member updateMember = setMemberInfoUpdated(member, fileUrl.getFileUrl(), request.getNickname()
-            , Ages.from(request.getAges())
-            , Gender.from(request.getGender()));
-        memberStore.save(updateMember);
+        return !currentProfileUrl.equals(updatedProfile.getFileUrl());
     }
 
 
     @Override
     @Transactional
-    public MemberSpotResponse retrieveSpotList(Long memberId, Pageable pageable, String selectInfo) {
-        return spotReader.findAllByMemberId(memberId, pageable, selectInfo);
+    public SpotListResponse retrieveSpotList(Long memberId, Pageable pageable, String selectInfo) {
+        var pageSpot = spotReader.getMemberSpotList(memberId, pageable, selectInfo);
+        List<MemberInfo.SpotInfo> spotInfoList = pageSpot.getContent().stream()
+            .map(MemberInfo.SpotInfo::new)
+            .toList();
+        return new SpotListResponse(spotInfoList, pageSpot.getTotalPages());
     }
 
     @Override
     @Transactional
-    public MemberCourseResponse retrieveCourseList(Long memberId, Pageable pageable, String selectInfo) {
-        return courseReader.getMemberCourseList(memberId, pageable, selectInfo);
-    }
-
-
-    private Member setMemberInfoUpdated(Member member, String fileUrl, String nickname, Ages ages, Gender gender) {
-        return new Member(member.getId(), member.getEmail(), member.getSocialLoginId(),
-            nickname, fileUrl, member.getSocialLoginType(), ages, gender);
+    public CourseListResponse retrieveCourseList(Long memberId, Pageable pageable,
+        String selectInfo) {
+        var pageCourse = courseReader.getMemberCourseList(memberId, pageable, selectInfo);
+        List<MemberInfo.CourseInfo> courseInfoList = pageCourse.getContent().stream()
+            .map(MemberInfo.CourseInfo::new)
+            .toList();
+        return new CourseListResponse(courseInfoList, pageCourse.getTotalPages());
     }
 
     @Override
     @Transactional
     public FollowerResponse getFollowerList(Long memberId, Pageable pageable) {
-        return followReader.getFollowerSlice(memberId, pageable);
+        var followerSlice = followReader.getFollowerSlice(memberId, pageable);
+        var followerList = followerSlice.getContent().stream()
+            .map(Follow::getFollower)
+            .map(MemberInfo.FollowInfo::new)
+            .toList();
+        return new MemberInfo.FollowerResponse(followerList, followerSlice.hasNext());
     }
 
     @Override
     @Transactional
     public FollowingResponse getFollowingList(Long memberId, Pageable pageable) {
-        return followReader.getFollowingSlice(memberId, pageable);
+        var followingSlice = followReader.getFollowingSlice(memberId, pageable);
+        var followingList = followingSlice.getContent().stream()
+            .map(Follow::getFollowing)
+            .map(MemberInfo.FollowInfo::new)
+            .toList();
+        return new FollowingResponse(followingList, followingSlice.hasNext());
     }
 
     @Override
     @Transactional
-    public TravelsVisibilityResponse setTravelsVisibility(Long memberId,
+    public VisibilityChangeResponse setTravelsVisibility(Long memberId,
         TravelsVisibilityRequest memberCommand) {
         List<Long> travelIds = memberCommand.getTravelIds();
         boolean visibility = memberCommand.getIsPrivate();
-        return travelReader.setTravelsVisibility(memberId, travelIds, visibility);
+        travelReader.setTravelsVisibility(memberId, travelIds, visibility);
+        return new VisibilityChangeResponse("공개여부가 변경되었습니다.");
     }
 }
