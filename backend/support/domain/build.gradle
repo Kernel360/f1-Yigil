@@ -26,6 +26,8 @@ dependencies {
     implementation 'org.hibernate:hibernate-spatial:6.4.0.Final'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 test {
