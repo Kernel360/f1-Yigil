@@ -1,4 +1,4 @@
-package kr.co.yigil.bookmark.interfaces.dto;
+package kr.co.yigil.bookmark.interfaces.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

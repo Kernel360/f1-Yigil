@@ -33,3 +33,20 @@ include::{snippets}/bookmarks/delete-bookmark/response-fields.adoc[]
 
 ===== HTTP Response 예시
 include::{snippets}/bookmarks/delete-bookmark/http-response.adoc[]
+
+=== 북마크 조회
+
+==== Request
+로그인 필수 : Y
+
+===== Query Parameters
+include::{snippets}/bookmarks/get-bookmarks/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/bookmarks/get-bookmarks/http-request.adoc[]
+
+==== Response
+include::{snippets}/bookmarks/get-bookmarks/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/bookmarks/get-bookmarks/http-response.adoc[]
