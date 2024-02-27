@@ -41,6 +41,7 @@ export const getMyPageCourses = (
   )()()();
 };
 
+
 export const getMyPageFollwers = async (
   pageNo: number = 1,
   size: number = 5,

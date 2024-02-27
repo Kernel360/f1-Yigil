@@ -24,6 +24,14 @@ export interface TMyPageCourse {
   rate: number;
   spot_count: number;
 }
+
+export interface TMyPageBookmark {
+  place_id: number;
+  place_name: string;
+  place_image_url: string;
+  rate: number;
+  is_bookmarked: boolean;
+}
 /**
  * "course_id": 1,
             "title": "title",

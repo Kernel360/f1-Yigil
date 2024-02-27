@@ -20,3 +20,13 @@ export const myPageCourseListSchema = z.array(
     spot_count: z.number(),
   }),
 );
+
+export const myPageBookmarkListSchema = z.array(
+  z.object({
+    place_id: z.number().int(),
+    place_name: z.string(),
+    place_image_url: z.string(),
+    rate: z.number(),
+    is_bookmarked: z.boolean(),
+  }),
+);
