@@ -126,7 +126,7 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null);
         Spot spot = mock(Spot.class);
 
         when(command.getRegisterPlaceRequest()).thenReturn(placeCommand);
@@ -152,7 +152,7 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null);
         Spot spot = mock(Spot.class);
         RegisterPlaceRequest placeCommand = mock(RegisterPlaceRequest.class);
 
