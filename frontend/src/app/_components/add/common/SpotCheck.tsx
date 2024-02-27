@@ -35,25 +35,26 @@ export default function SpotCheck() {
         </span>
       </div>
       <p className="text-gray-500">{address}</p>
-      <div className="relative h-1/3">
+      <div className="h-1/3 relative aspect-video">
         <Image
           className="rounded-md"
-          unoptimized
           src={spotMapImageUrl}
           alt="Spot map image"
           fill
         />
       </div>
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-2">
-          {images.map((image) => (
-            <div
-              key={image.filename}
-              className="p-2 relative w-1/3 overflow-hidden aspect-square rounded-2xl border-2 border-gray-300 shrink-0"
-            >
-              <Image unoptimized src={image.uri} alt="Uploaded image" fill />
-            </div>
-          ))}
+      <div>
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-2">
+            {images.map((image) => (
+              <div
+                key={image.filename}
+                className="p-2 relative w-1/3 overflow-hidden aspect-square rounded-2xl border-2 border-gray-300 shrink-0"
+              >
+                <Image src={image.uri} alt="Uploaded image" fill />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <span className="self-end pr-4 text-gray-400">{currentDate}</span>

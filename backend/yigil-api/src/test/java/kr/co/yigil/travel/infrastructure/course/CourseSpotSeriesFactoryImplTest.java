@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -14,19 +12,16 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
-import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
-import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import kr.co.yigil.travel.domain.spot.SpotStore;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +31,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mock.web.MockMultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseSpotSeriesFactoryImplTest {

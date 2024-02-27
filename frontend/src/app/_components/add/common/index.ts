@@ -1,6 +1,6 @@
 import SpotCheck from './SpotCheck';
 import InfoTitle from './InfoTitle';
-import AddPlaceInfo from './AddPlaceInto';
+import AddPlaceInfo from './AddPlaceInfo';
 import PostRating from './PostRating';
 import PostReview from './PostReview';
 import AddSpotMap from './AddSpotMap';

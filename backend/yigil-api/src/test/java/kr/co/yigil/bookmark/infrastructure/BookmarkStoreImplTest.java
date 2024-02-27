@@ -4,7 +4,7 @@ import kr.co.yigil.bookmark.domain.Bookmark;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ public class BookmarkStoreImplTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
-        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, mockAttachFile, mockAttachFile);
+        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", 0.0, mockPoint, mockAttachFile, mockAttachFile);
 
         bookmarkStore.store(member, mockPlace);
 
@@ -54,7 +54,7 @@ public class BookmarkStoreImplTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
         AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
-        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", mockPoint, mockAttachFile, mockAttachFile);
+        Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처",0.0, mockPoint, mockAttachFile, mockAttachFile);
 
 
         bookmarkStore.remove(member, mockPlace);

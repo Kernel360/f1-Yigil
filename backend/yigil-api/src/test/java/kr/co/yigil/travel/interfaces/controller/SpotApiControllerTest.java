@@ -12,7 +12,10 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -26,9 +29,12 @@ import java.util.List;
 import kr.co.yigil.travel.application.SpotFacade;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
+import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.SpotsInPlaceResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -111,6 +117,36 @@ public class SpotApiControllerTest {
         verify(spotFacade).getSpotSliceInPlace(anyLong(), any(Pageable.class));
     }
 
+    @DisplayName("getMySpotInPlace 메서드가 잘 동작하는지")
+    @Test
+    void getMySpotInPlace_ShouldReturnOk() throws Exception {
+        MySpot mockInfo = mock(MySpot.class);
+        MySpotInPlaceResponse mockResponse = new MySpotInPlaceResponse(true, "4.5", List.of("images/image.jpg", "images/thumb.png"), "2024-02-05", "내가 쓴 리뷰리뷰리뷰");
+
+        when(spotFacade.retrieveMySpotInfoInPlace(anyLong(), anyLong())).thenReturn(mockInfo);
+        when(spotMapper.toMySpotInPlaceResponse(mockInfo)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/spots/place/{placeId}/me", 1L))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "spots/get-my-spot-in-place",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("placeId").description("장소 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("exists").type(JsonFieldType.BOOLEAN).description("스팟이 존재하는지 여부"),
+                                fieldWithPath("rate").type(JsonFieldType.STRING).description("스팟의 평점 정보"),
+                                fieldWithPath("image_urls").type(JsonFieldType.ARRAY).description("스팟 관련 이미지의 url 배열"),
+                                fieldWithPath("create_date").type(JsonFieldType.STRING).description("스팟의 생성 일자"),
+                                fieldWithPath("description").type(JsonFieldType.STRING).description("스팟의 본문")
+                        )
+                ));
+
+        verify(spotFacade).retrieveMySpotInfoInPlace(anyLong(), anyLong());
+    }
+
     @DisplayName("registerSpot 메서드가 잘 동작하는지")
     @Test
     void registerSpot_ShouldReturnOk() throws Exception {
@@ -134,7 +170,7 @@ public class SpotApiControllerTest {
                         .param("placePointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(document(
-                                "spots/register-spot",
+                                "spots/regist-spot",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestParts(

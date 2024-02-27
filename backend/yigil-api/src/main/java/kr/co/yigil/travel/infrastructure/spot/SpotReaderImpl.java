@@ -3,6 +3,7 @@ package kr.co.yigil.travel.infrastructure.spot;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_SPOT_ID;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.travel.domain.Spot;
@@ -23,6 +24,11 @@ public class SpotReaderImpl implements SpotReader {
     public Spot getSpot(Long spotId) {
         return spotRepository.findById(spotId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_SPOT_ID));
+    }
+
+    @Override
+    public Optional<Spot> findSpotByPlaceIdAndMemberId(Long placeId, Long memberId) {
+        return spotRepository.findByPlaceIdAndMemberId(placeId, memberId);
     }
 
     @Override

@@ -28,7 +28,7 @@ import kr.co.yigil.bookmark.interfaces.dto.BookmarkInfoDto;
 import kr.co.yigil.bookmark.interfaces.dto.mapper.BookmarkMapper;
 import kr.co.yigil.bookmark.interfaces.dto.response.BookmarksResponse;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

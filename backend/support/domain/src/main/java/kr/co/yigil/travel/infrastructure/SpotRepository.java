@@ -12,8 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SpotRepository extends JpaRepository<Spot, Long> {
 
-    Optional<Spot> findByIdAndMemberId(Long spotId, Long memberId);
-
     Slice<Spot> findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(Long placeId, Pageable pageable);
 
     Optional<Spot> findByPlaceIdAndMemberId(Long placeId, Long memberId);
@@ -21,9 +19,4 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     @Query("SELECT count(s) FROM Spot s WHERE s.place.id = :placeId AND s.isDeleted = false")
     int countByPlaceId(@Param("placeId") Long placeId);
 
-    @Query("SELECT s FROM Spot s WHERE s.member.id = :memberId AND s.isInCourse = false")
-    Slice<Spot> findAllByMemberAndIsInCourseFalse(Long memberId, Pageable pageable);
-
-    @Query("SELECT SUM(s.rate) FROM Spot s WHERE s.place.id = :placeId")
-    Optional<Double> findTotalRateByPlaceId(@Param("placeId") Long placeId);
 }

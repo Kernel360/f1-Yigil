@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
