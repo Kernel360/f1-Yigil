@@ -71,7 +71,7 @@ export const datumWithAddressSchema = z.object({
 export const dataWithAddressSchema = z.array(datumWithAddressSchema);
 
 export const staticMapUrlSchema = z.object({
-  status: z.boolean(),
+  exists: z.boolean(),
   map_static_image_url: z.string().optional(),
 });
 

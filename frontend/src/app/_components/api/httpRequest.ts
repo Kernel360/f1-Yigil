@@ -22,7 +22,7 @@ export const requestWithoutCookie =
   (headers: Record<string, string> = headerInitOption) =>
   async (errorMsg: string = '요청에 실패했습니다') => {
     try {
-      const res = await fetch(`${BASE_URL}/v1/${url}${params}`, {
+      const res = await fetch(`${BASE_URL}/v1/${url}?${params}`, {
         method,
         headers: {
           ...headerInitOption,
@@ -48,7 +48,7 @@ export const requestWithCookie =
     const cookie = cookies().get('SESSION')?.value;
 
     try {
-      const res = await fetch(`${BASE_URL}/v1/${url}${params}`, {
+      const res = await fetch(`${BASE_URL}/v1/${url}?${params}`, {
         method,
         headers: {
           ...headerInitOption,

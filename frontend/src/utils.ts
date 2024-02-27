@@ -26,3 +26,10 @@ export function getMIMETypeFromDataURI(dataURI: string) {
 
   return types.split(';')[0];
 }
+
+export function coordsToGeoJSONPoint(coords: { lat: number; lng: number }) {
+  return JSON.stringify({
+    type: 'Point',
+    coordinates: [coords.lat, coords.lng],
+  });
+}

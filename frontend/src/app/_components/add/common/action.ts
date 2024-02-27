@@ -2,21 +2,25 @@
 
 import { cookies } from 'next/headers';
 
+import { requestWithoutCookie } from '@/app/_components/api/httpRequest';
 import {
-  requestWithoutCookie,
-  requestWithCookie,
-} from '@/app/_components/api/httpRequest';
-import { blobTodataUrl, dataUrlToBlob, getMIMETypeFromDataURI } from '@/utils';
+  blobTodataUrl,
+  coordsToGeoJSONPoint,
+  dataUrlToBlob,
+  getMIMETypeFromDataURI,
+} from '@/utils';
 
 import {
-  TBackendError,
-  TPostSpotSuccess,
   backendErrorSchema,
   naverStaticMapUrlErrorSchema,
   postSpotResponseSchema,
   staticMapUrlSchema,
 } from '@/types/response';
+
 import type { TAddSpotProps } from '../spot/SpotContext';
+
+const cookie = cookies().get('SESSION')?.value;
+const backendStaticMapRequest = requestWithoutCookie('places/static-image');
 
 function staticMapUrl(
   width: number,
@@ -34,10 +38,6 @@ function staticMapUrl(
   return `${endpoint}?${queryString}`;
 }
 
-const cookie = cookies().get('SESSION')?.value;
-const backendStaticMapRequest = requestWithoutCookie('places/static-image');
-const postSpotRequest = requestWithCookie('spots');
-
 const getStaticMapUrlFromBackend = (name: string, address: string) => {
   return backendStaticMapRequest(`name=${name}&address=${address}`)()({
     Cookie: `SESSION=${cookie}`,
@@ -50,13 +50,15 @@ export async function getMap(
   coords: { lat: number; lng: number },
 ): Promise<{ status: 'backend' | 'naver' | 'failed'; data?: string }> {
   const backendResponse = await getStaticMapUrlFromBackend(name, address);
-
-  console.log(backendResponse);
-
   const backend = staticMapUrlSchema.safeParse(backendResponse);
 
-  if (backend.success) {
-    return { status: 'backend', data: backend.data.map_static_image_url };
+  if (backend.success && backend.data.exists) {
+    const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+    const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+
+    const imageUrl = `${baseUrl}/${backend.data.map_static_image_url}`;
+
+    return { status: 'backend', data: imageUrl };
   }
 
   const url = staticMapUrl(300, 200, coords);
@@ -96,20 +98,14 @@ async function parseAddSpotProps(state: TAddSpotProps) {
 
   const formData = new FormData();
 
-  formData.append('title', JSON.stringify('Spot Review'));
-  formData.append('isInCourse', JSON.stringify(false));
-  formData.append('placeName', JSON.stringify(name));
-  formData.append('placeAddress', JSON.stringify(address));
-  formData.append('rate', JSON.stringify(rating));
-  formData.append('description', JSON.stringify(review.review));
+  formData.append('title', 'Spot Review');
+  formData.append('isInCourse', 'false');
+  formData.append('placeName', name);
+  formData.append('placeAddress', address);
+  formData.append('rate', rating.toString());
+  formData.append('description', review.review);
 
-  /**
-   * @todo GeoJson 쓰기
-   */
-  const pointJson = JSON.stringify({
-    type: 'Point',
-    coordinates: [coords.lng, coords.lat],
-  });
+  const pointJson = coordsToGeoJSONPoint(coords);
 
   formData.append('placePointJson', pointJson);
   formData.append('pointJson', pointJson);
@@ -125,10 +121,11 @@ async function parseAddSpotProps(state: TAddSpotProps) {
 
   parsedImages.forEach((image) => formData.append('files', image));
 
+  // If map image from Naver
   if (spotMapImageUrl.startsWith('data:')) {
     formData.append(
       'mapStaticImageFile',
-      new File([dataUrlToBlob(spotMapImageUrl)], `${name} 지도 이미지`, {
+      new File([dataUrlToBlob(spotMapImageUrl)], `${name} 지도 이미지.png`, {
         type: 'image/png',
       }),
     );
@@ -144,22 +141,22 @@ export async function postSpotData(state: TAddSpotProps) {
 
   const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
 
-  const json = await postSpotRequest()('POST', formData)()();
+  // Next.js fetch form은 'Content-Type': 'multipart/form-data를
+  // 직접 명시하면 Boundary 설정이 어긋나 제대로 동작하지 않음
+  const response = await fetch(`${baseUrl}/v1/spots`, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+    },
+  });
 
-  // const response = await fetch(`${baseUrl}/v1/spots`, {
-  //   method: 'POST',
-  //   body: formData,
-  //   headers: {
-  //     Cookie: `SESSION=${cookie}`,
-  //   },
-  // });
+  if (!response.ok) {
+    console.log(response.status);
+    console.error('fetch failed');
+  }
 
-  // if (!response.ok) {
-  //   console.log(response.status);
-  //   console.error('fetch failed');
-  // }
-
-  // const json = await response.json();
+  const json = await response.json();
 
   const result = postSpotResponseSchema.safeParse(json);
 
