@@ -10,7 +10,7 @@ type TRegion =
   | '충북';
 
 export interface TPlace {
-  id: string;
+  id: number;
   region: TRegion;
   liked: boolean;
   imageUrl: string;

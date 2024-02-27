@@ -11,6 +11,8 @@ public interface SpotService {
 
     Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable);
 
+    public SpotInfo.MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId);
+
     void registerSpot(RegisterSpotRequest command, Long memberId);
 
     public SpotInfo.Main retrieveSpotInfo(Long spotId);

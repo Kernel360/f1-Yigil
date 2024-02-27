@@ -6,7 +6,7 @@ import LocationIcon from '/public/icons/location.svg';
 import CalendarIcon from '/public/icons/calendar.svg';
 export const headerPopOverData: TPopOverData[] = [
   {
-    href: '/mypage/my/spot',
+    href: '/mypage/my/travel/spot',
     label: '마이페이지',
     icon: <MapPin className="w-6 h-6 stroke-black" />,
   },
@@ -30,4 +30,3 @@ export const homePopOverData: TPopOverData[] = [
     icon: <CalendarIcon className="w-6 h-6" />,
   },
 ];
-

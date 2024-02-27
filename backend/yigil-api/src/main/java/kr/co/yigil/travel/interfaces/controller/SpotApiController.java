@@ -9,6 +9,7 @@ import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MySpotsResponseDto;
 import kr.co.yigil.travel.interfaces.dto.response.SpotDeleteResponse;
 import kr.co.yigil.travel.interfaces.dto.response.SpotRegisterResponse;
@@ -47,6 +48,18 @@ public class SpotApiController {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         var result = spotFacade.getSpotSliceInPlace(placeId, pageRequest);
         SpotsInPlaceResponse response = spotMapper.spotsSliceToSpotInPlaceResponse(result);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/place/{placeId}/me")
+    @MemberOnly
+    public ResponseEntity<MySpotInPlaceResponse> getMySpotInPlace(
+            @PathVariable("placeId") Long placeId,
+            @Auth Accessor accessor
+    ) {
+        Long memberId = accessor.getMemberId();
+        var spotInfo = spotFacade.retrieveMySpotInfoInPlace(placeId,memberId);
+        var response = spotMapper.toMySpotInPlaceResponse(spotInfo);
         return ResponseEntity.ok().body(response);
     }
 

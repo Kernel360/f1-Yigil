@@ -1,6 +1,6 @@
 export const myPageRoutes = [
   {
-    href: '/mypage/my/spot',
+    href: '/mypage/my/travel/spot',
     label: '마이페이지',
   },
   {
@@ -11,7 +11,7 @@ export const myPageRoutes = [
 
 export const myPageTabs = [
   {
-    href: '/mypage/my/spot',
+    href: '/mypage/my/travel/spot',
     label: 'MY',
   },
   {
@@ -20,14 +20,14 @@ export const myPageTabs = [
   },
 ];
 
-export const myPageMyPlaceTab = [
+export const myPageMyTab = [
   {
-    href: '/mypage/my/spot',
-    label: '장소',
+    href: '/mypage/my/travel/spot',
+    label: '기록',
   },
   {
-    href: '/mypage/my/course',
-    label: '코스',
+    href: '/mypage/my/bookmark',
+    label: '북마크',
   },
   {
     href: '/mypage/my/follower',
@@ -37,4 +37,8 @@ export const myPageMyPlaceTab = [
     href: '/mypage/my/follow',
     label: '팔로우',
   },
+];
+export const myPageTravelTabs = [
+  { href: '/mypage/my/travel/spot', label: '장소' },
+  { href: '/mypage/my/travel/course', label: '코스' },
 ];

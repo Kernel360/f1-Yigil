@@ -12,6 +12,7 @@ import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MySpotsResponseDto;
 import kr.co.yigil.travel.interfaces.dto.response.SpotsInPlaceResponse;
 import org.mapstruct.Mapper;
@@ -44,6 +45,15 @@ public interface SpotMapper {
         boolean hasNext = spotsSlice.hasNext();
         return new SpotsInPlaceResponse(spotInfoDtoList, hasNext);
     }
+
+    @Mappings({
+            @Mapping(target = "exists", source = "mySpot.exists"),
+            @Mapping(target = "rate", source = "mySpot.rate", qualifiedByName = "doubleToString"),
+            @Mapping(target = "imageUrls", source = "mySpot.imageUrls"),
+            @Mapping(target = "createDate", source = "mySpot.createDate", qualifiedByName = "localDateTimeToString"),
+            @Mapping(target = "description", source = "mySpot.description")
+    })
+    MySpotInPlaceResponse toMySpotInPlaceResponse(SpotInfo.MySpot mySpot);
 
     @Mappings({
         @Mapping(source = "placeName", target = "placeName"),

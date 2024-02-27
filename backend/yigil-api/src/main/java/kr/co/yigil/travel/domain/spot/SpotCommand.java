@@ -8,7 +8,7 @@ import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploadUtil;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.util.GeojsonConverter;
 import lombok.AllArgsConstructor;
@@ -65,8 +65,8 @@ public class SpotCommand {
         public Place toEntity() {
             var mapStaticImage = predictAttachFile(mapStaticImageFile);
             var placeImage = predictAttachFile(placeImageFile);
-            return new Place(placeName, placeAddress,
-                GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage);
+            return new Place(placeName, placeAddress, 0.0,
+                    GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage);
         }
     }
 

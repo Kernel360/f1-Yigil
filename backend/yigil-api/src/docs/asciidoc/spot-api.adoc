@@ -3,6 +3,7 @@
 === 장소 내 Spot 조회
 
 ==== Request
+include::{snippets}/spots/get-spots-in-place/request-body.adoc[]
 로그인 필수 : N
 
 ===== Path parameter
@@ -20,21 +21,39 @@ include::{snippets}/spots/get-spots-in-place/response-fields.adoc[]
 ===== HTTP Response 예시
 include::{snippets}/spots/get-spots-in-place/http-response.adoc[]
 
+=== 장소 내 내가 작성한 Spot 조회
+
+==== Request
+include::{snippets}/spots/get-my-spot-in-place/request-body.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/spots/get-my-spot-in-place/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/get-my-spot-in-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/get-my-spot-in-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/get-my-spot-in-place/http-response.adoc[]
+
 === Spot 신규 등록
 노션 링크 :
 
 ==== Request
-include::{snippets}/spots/register-spot/request-parts.adoc[]
+include::{snippets}/spots/regist-spot/request-parts.adoc[]
 로그인 필수 : Y
 
 ===== HTTP Request 예시
-include::{snippets}/spots/register-spot/http-request.adoc[]
+include::{snippets}/spots/regist-spot/http-request.adoc[]
 
 ==== Response
-include::{snippets}/spots/register-spot/response-fields.adoc[]
+include::{snippets}/spots/regist-spot/response-fields.adoc[]
 
 ===== HTTP Response 예시
-include::{snippets}/spots/register-spot/response-body.adoc[]
+include::{snippets}/spots/regist-spot/response-body.adoc[]
 
 === Spot 상세 정보 조회
 

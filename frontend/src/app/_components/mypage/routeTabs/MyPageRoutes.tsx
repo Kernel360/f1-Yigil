@@ -5,9 +5,9 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 import { myPageRoutes } from '../constants';
 
-function checkPath(path: string, href: string) {
-  const pathRoot = path.slice(1).split('/')[0];
-  const compareHref = href.slice(1).split('/')[0];
+export function checkPath(path: string, href: string, depth: number) {
+  const pathRoot = path.slice(1).split('/')[depth];
+  const compareHref = href.slice(1).split('/')[depth];
 
   return pathRoot === compareHref;
 }
@@ -22,7 +22,7 @@ export default function MyPageRoutes() {
           key={href}
           href={href}
           className={`text-[28px] font-semibold ${
-            checkPath(path, href)
+            checkPath(path, href, 0)
               ? 'border-b-4 border-black text-black'
               : 'border-b-4 border-white text-gray-300 '
           }`}

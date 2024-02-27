@@ -4,9 +4,11 @@ import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceReader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,11 @@ public class BookmarkServiceImpl implements BookmarkService{
         Member member = memberReader.getMember(memberId);
         Place place = placeReader.getPlace(placeId);
         bookmarkStore.remove(member, place);
+    }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Slice<Bookmark> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
+        return bookmarkReader.getBookmarkSlice(memberId, pageRequest);
     }
 }

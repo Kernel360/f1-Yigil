@@ -27,7 +27,7 @@ export default function MyPageCourseList({
     setSelected(e.target.value);
   };
 
-  const [checkedList, setCheckedList] = useState<TMyPageSpot['postId'][]>([]);
+  const [checkedList, setCheckedList] = useState<TMyPageSpot['spot_id'][]>([]);
 
   const filterCheckedList = (id: number) => {
     if (!checkedList.includes(id)) setCheckedList([...checkedList, id]);

@@ -1,15 +1,10 @@
 'use client';
 import React, { Dispatch, useEffect, useRef, useState } from 'react';
-import {
-  Listener,
-  Marker,
-  NaverMap,
-  Overlay,
-  useNavermaps,
-} from 'react-naver-maps';
+import { Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import { plusMarker } from '../../naver-map/plusMarker';
 
 import type { TAddSpotAction } from '../spot/SpotContext';
+import { getMap } from '../common/action';
 
 export default function AddSpotMap({
   place,
@@ -85,23 +80,26 @@ export default function AddSpotMap({
     }
   }, []);
 
-  /**
-   * @todo static map url 얻어오는 server action 추가
-   * 1. 백엔드 서버에 있는지 질의
-   * 2. 없으면 네이버에 질의
-   * 3. 얻어온 URL을 dispatchSpot에 제공
-   */
-  function handleClick(place: {
+  async function handleClick(place: {
     name: string;
     roadAddress: string;
     coords: { lat: number; lng: number };
   }) {
     const { name, roadAddress, coords } = place;
-    // Server Action 위치
 
     dispatchSpot({ type: 'SET_NAME', payload: name });
     dispatchSpot({ type: 'SET_ADDRESS', payload: roadAddress });
     dispatchSpot({ type: 'SET_COORDS', payload: coords });
+
+    // Image URL | Base64 DataURL
+    const image = await getMap(name, roadAddress, coords);
+
+    if (image.status === 'failed') {
+      console.log('지도 이미지를 얻지 못했습니다!');
+    } else {
+      dispatchSpot({ type: 'SET_SPOT_MAP_URL', payload: image.data });
+    }
+
     dispatchStep({ type: 'next' });
   }
 
