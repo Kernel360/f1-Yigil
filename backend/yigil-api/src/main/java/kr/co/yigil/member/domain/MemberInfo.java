@@ -1,6 +1,5 @@
 package kr.co.yigil.member.domain;
 
-import java.util.List;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.Place;
@@ -51,46 +50,7 @@ public class MemberInfo {
         }
     }
 
-    @Getter
-    @ToString
-    public static class FollowerResponse {
 
-        private final List<FollowInfo> content;
-        private final boolean hasNext;
-
-        public FollowerResponse(List<FollowInfo> content, boolean hasNext) {
-            this.content = content;
-            this.hasNext = hasNext;
-        }
-    }
-
-    @Getter
-    @ToString
-    public static class FollowingResponse {
-
-        private final List<FollowInfo> content;
-        private final boolean hasNext;
-
-        public FollowingResponse(List<FollowInfo> content, boolean hasNext) {
-            this.content = content;
-            this.hasNext = hasNext;
-        }
-    }
-
-    @Getter
-    @ToString
-    public static class FollowInfo {
-
-            private final Long memberId;
-            private final String nickname;
-            private final String profileImageUrl;
-
-            public FollowInfo(Member member) {
-                this.memberId = member.getId();
-                this.nickname = member.getNickname();
-                this.profileImageUrl = member.getProfileImageUrl();
-            }
-    }
 
     @Getter
     @ToString

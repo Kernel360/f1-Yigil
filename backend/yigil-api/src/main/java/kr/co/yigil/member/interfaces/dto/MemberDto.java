@@ -1,6 +1,5 @@
 package kr.co.yigil.member.interfaces.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,16 +27,6 @@ public class MemberDto {
         private MultipartFile profileImageFile;
     }
 
-//    @Getter
-//    @Builder
-//    @ToString
-//    @AllArgsConstructor
-//    public static class TravelsVisibilityRequest {
-//
-//        private List<Long> travelIds;
-//        private Boolean isPrivate;
-//    }
-
     @Getter
     @Builder
     @ToString
@@ -57,34 +46,6 @@ public class MemberDto {
     public static class MemberUpdateResponse {
 
         private final String message;
-    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class FollowerResponse {
-
-        private final List<FollowInfo> content;
-        private final boolean hasNext;
-    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class FollowingResponse {
-
-        private final List<FollowInfo> content;
-        private final boolean hasNext;
-    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class FollowInfo {
-
-        private final Long memberId;
-        private final String nickname;
-        private final String profileImageUrl;
     }
 
     @Getter

@@ -3,10 +3,8 @@ package kr.co.yigil.member.application;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberInfo;
-import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
 import kr.co.yigil.member.domain.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,13 +29,5 @@ public class MemberFacade {
     public MemberInfo.MemberDeleteResponse withdraw(final Long memberId) {
         memberService.withdrawal(memberId);
         return new MemberInfo.MemberDeleteResponse("회원 탈퇴 성공");
-    }
-
-    public MemberInfo.FollowerResponse getFollowerList(final Long memberId, Pageable pageable) {
-        return memberService.getFollowerList(memberId, pageable);
-    }
-
-    public FollowingResponse getFollowingList(final Long memberId, Pageable pageable) {
-        return memberService.getFollowingList(memberId, pageable);
     }
 }

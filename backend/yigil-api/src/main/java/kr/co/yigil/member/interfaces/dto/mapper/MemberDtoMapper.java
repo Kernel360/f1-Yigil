@@ -17,8 +17,5 @@ public interface MemberDtoMapper {
     MemberCommand.MemberUpdateRequest of(MemberDto.MemberUpdateRequest request);
     MemberDto.Main of(MemberInfo.Main main);
     MemberDto.MemberUpdateResponse of(MemberInfo.MemberUpdateResponse response);
-    MemberDto.FollowerResponse of(MemberInfo.FollowerResponse followerResponse);
-    MemberDto.FollowingResponse of(MemberInfo.FollowingResponse followingResponse);
-    MemberDto.FollowInfo of(MemberInfo.FollowInfo followInfo);
     MemberDto.MemberDeleteResponse of(MemberInfo.MemberDeleteResponse response);
 }

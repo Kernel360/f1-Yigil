@@ -1,14 +1,9 @@
 package kr.co.yigil.member.domain;
 
 import kr.co.yigil.file.FileUploadUtil;
-import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowReader;
-import kr.co.yigil.member.domain.MemberInfo.FollowerResponse;
-import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
 import kr.co.yigil.member.domain.MemberInfo.Main;
-import kr.co.yigil.travel.domain.TravelReader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +13,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberReader memberReader;
     private final MemberStore memberStore;
-    private final TravelReader travelReader;
     private final FollowReader followReader;
 
     @Override
@@ -47,29 +41,5 @@ public class MemberServiceImpl implements MemberService {
             updatedProfile.getFileUrl());
 
         return currentProfileUrl == null || !currentProfileUrl.equals(updatedProfile.getFileUrl());
-    }
-
-    @Override
-    @Transactional
-    public FollowerResponse getFollowerList(Long memberId, Pageable pageable) {
-        memberReader.validateMember(memberId);
-        var followerSlice = followReader.getFollowerSlice(memberId, pageable);
-        var followerList = followerSlice.getContent().stream()
-            .map(Follow::getFollower)
-            .map(MemberInfo.FollowInfo::new)
-            .toList();
-        return new MemberInfo.FollowerResponse(followerList, followerSlice.hasNext());
-    }
-
-    @Override
-    @Transactional
-    public FollowingResponse getFollowingList(Long memberId, Pageable pageable) {
-        memberReader.validateMember(memberId);
-        var followingSlice = followReader.getFollowingSlice(memberId, pageable);
-        var followingList = followingSlice.getContent().stream()
-            .map(Follow::getFollowing)
-            .map(MemberInfo.FollowInfo::new)
-            .toList();
-        return new FollowingResponse(followingList, followingSlice.hasNext());
     }
 }
