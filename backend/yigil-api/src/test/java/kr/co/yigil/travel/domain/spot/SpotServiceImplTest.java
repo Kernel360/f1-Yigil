@@ -1,8 +1,10 @@
 package kr.co.yigil.travel.domain.spot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -11,6 +13,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
@@ -19,7 +23,7 @@ import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
@@ -28,6 +32,7 @@ import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,6 +80,40 @@ public class SpotServiceImplTest {
 
         assertEquals(expectedSlice, result);
         verify(spotReader).getSpotSliceInPlace(placeId, pageable);
+    }
+
+    @DisplayName("retrieveMySpotInfoInPlace 메서드가 존재하는 Spot에 대한 응답을 잘 반환하는지")
+    @Test
+    void retrieveMySpotInfoInPlace_ShouldReturnResponse_WithExistingSpot() {
+        Spot mockSpot = mock(Spot.class);
+        Optional<Spot> optionalSpot = Optional.of(mockSpot);
+        AttachFiles attachFiles = mock(AttachFiles.class);
+
+        when(mockSpot.getAttachFiles()).thenReturn(attachFiles);
+        when(attachFiles.getUrls()).thenReturn(List.of("images/image.jpg", "images/thumb.jpg"));
+        when(mockSpot.getRate()).thenReturn(3.5);
+        when(mockSpot.getCreatedAt()).thenReturn(LocalDateTime.now());
+        when(mockSpot.getDescription()).thenReturn("description");
+
+        when(spotReader.findSpotByPlaceIdAndMemberId(anyLong(), anyLong())).thenReturn(optionalSpot);
+
+        MySpot result = spotService.retrieveMySpotInfoInPlace(1L, 1L);
+        assertNotNull(result);
+        assertTrue(result.isExists());
+    }
+
+    @DisplayName("retrieveMySpotInfoInPlace 메서드가 존재하지 않는 Spot에 대한 응답을 잘 반환하는지")
+    @Test
+    void retrieveMySpotInfoInPlace_ShouldReturnResponse_WithNonExistingSpot() {
+        Optional<Spot> optionalSpot = mock(Optional.class);
+        when(optionalSpot.isEmpty()).thenReturn(true);
+
+        when(spotReader.findSpotByPlaceIdAndMemberId(anyLong(), anyLong())).thenReturn(optionalSpot);
+
+        MySpot result = spotService.retrieveMySpotInfoInPlace(1L, 1L);
+
+        assertNotNull(result);
+        assertFalse(result.isExists());
     }
 
     @DisplayName("registerSpot 메서드가 이미 존재하는 Place에 대한 요청을 통해 Spot을 잘 저장하는지")

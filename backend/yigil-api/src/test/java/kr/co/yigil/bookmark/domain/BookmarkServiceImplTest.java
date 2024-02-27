@@ -3,7 +3,7 @@ package kr.co.yigil.bookmark.domain;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
