@@ -8,6 +8,7 @@ import React from 'react';
 
 export default async function MyPageMySpot() {
   const spotList = await getMyPageSpots();
+
   const parsedSpotList = myPageSpotListSchema.safeParse(spotList.content[0]);
 
   if (!parsedSpotList.success) return <div>failed</div>;

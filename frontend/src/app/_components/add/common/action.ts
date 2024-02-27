@@ -6,13 +6,17 @@ import {
   requestWithoutCookie,
   requestWithCookie,
 } from '@/app/_components/api/httpRequest';
-import { blobTodataUrl } from '@/utils';
+import { blobTodataUrl, dataUrlToBlob, getMIMETypeFromDataURI } from '@/utils';
+
 import {
+  TBackendError,
+  TPostSpotSuccess,
   backendErrorSchema,
   naverStaticMapUrlErrorSchema,
   postSpotResponseSchema,
   staticMapUrlSchema,
 } from '@/types/response';
+import type { TAddSpotProps } from '../spot/SpotContext';
 
 function staticMapUrl(
   width: number,
@@ -46,6 +50,8 @@ export async function getMap(
   coords: { lat: number; lng: number },
 ): Promise<{ status: 'backend' | 'naver' | 'failed'; data?: string }> {
   const backendResponse = await getStaticMapUrlFromBackend(name, address);
+
+  console.log(backendResponse);
 
   const backend = staticMapUrlSchema.safeParse(backendResponse);
 
@@ -84,24 +90,84 @@ export async function getMap(
   return { status: 'naver', data: dataUrl };
 }
 
-export async function postSpotData(formData: FormData) {
-  const json = await postSpotRequest()('POST', formData)({})();
+async function parseAddSpotProps(state: TAddSpotProps) {
+  const { name, address, spotMapImageUrl, images, coords, rating, review } =
+    state;
+
+  const formData = new FormData();
+
+  formData.append('title', JSON.stringify('Spot Review'));
+  formData.append('isInCourse', JSON.stringify(false));
+  formData.append('placeName', JSON.stringify(name));
+  formData.append('placeAddress', JSON.stringify(address));
+  formData.append('rate', JSON.stringify(rating));
+  formData.append('description', JSON.stringify(review.review));
+
+  /**
+   * @todo GeoJson 쓰기
+   */
+  const pointJson = JSON.stringify({
+    type: 'Point',
+    coordinates: [coords.lng, coords.lat],
+  });
+
+  formData.append('placePointJson', pointJson);
+  formData.append('pointJson', pointJson);
+
+  const parsedImages = images.map(
+    ({ filename, uri }) =>
+      new File([dataUrlToBlob(uri)], filename, {
+        type: getMIMETypeFromDataURI(uri),
+      }),
+  );
+
+  formData.append('placeImageFile', parsedImages[0]);
+
+  parsedImages.forEach((image) => formData.append('files', image));
+
+  if (spotMapImageUrl.startsWith('data:')) {
+    formData.append(
+      'mapStaticImageFile',
+      new File([dataUrlToBlob(spotMapImageUrl)], `${name} 지도 이미지`, {
+        type: 'image/png',
+      }),
+    );
+  }
+
+  return formData;
+}
+
+export async function postSpotData(state: TAddSpotProps) {
+  const formData = await parseAddSpotProps(state);
+
+  const { ENVIRONMENT, BASE_URL, DEV_BASE_URL } = process.env;
+
+  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+
+  const json = await postSpotRequest()('POST', formData)()();
+
+  // const response = await fetch(`${baseUrl}/v1/spots`, {
+  //   method: 'POST',
+  //   body: formData,
+  //   headers: {
+  //     Cookie: `SESSION=${cookie}`,
+  //   },
+  // });
+
+  // if (!response.ok) {
+  //   console.log(response.status);
+  //   console.error('fetch failed');
+  // }
+
+  // const json = await response.json();
 
   const result = postSpotResponseSchema.safeParse(json);
 
   if (result.success) {
-    console.log(result.data);
-    return;
+    return result;
   }
 
   const parsedError = backendErrorSchema.safeParse(json);
 
-  if (parsedError.success) {
-    console.log(parsedError.data);
-    console.error(parsedError.data);
-    return;
-  }
-
-  console.log(parsedError.error);
-  console.error(parsedError.error);
+  return parsedError;
 }

@@ -4,6 +4,11 @@ import GoogleProvider from 'next-auth/providers/google';
 import KaKaoProvider from 'next-auth/providers/kakao';
 import { cookies } from 'next/headers';
 
+const BASE_URL =
+  process.env.ENVIRONMENT === 'production'
+    ? process.env.BASE_URL
+    : process.env.DEV_BASE_URL;
+
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -23,7 +28,7 @@ const handler = NextAuth({
         nickname: user.name,
         provider: account?.provider,
       });
-      const res = await fetch(`https://yigil.co.kr/api/v1/login`, {
+      const res = await fetch(`${BASE_URL}/v1/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
