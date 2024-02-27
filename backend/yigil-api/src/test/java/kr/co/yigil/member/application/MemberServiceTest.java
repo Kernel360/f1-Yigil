@@ -13,22 +13,19 @@
 //import java.util.List;
 //import java.util.Optional;
 //import kr.co.yigil.file.FileUploadEvent;
-//import kr.co.yigil.follow.application.FollowRedisIntegrityService;
 //import kr.co.yigil.follow.domain.Follow;
 //import kr.co.yigil.follow.domain.FollowCount;
-//import kr.co.yigil.follow.domain.repository.FollowRepository;
+//import kr.co.yigil.follow.infrastructure.FollowRepository;
 //import kr.co.yigil.global.exception.BadRequestException;
 //import kr.co.yigil.member.Member;
 //import kr.co.yigil.member.SocialLoginType;
-//import kr.co.yigil.member.repository.MemberRepository;
 //import kr.co.yigil.member.dto.request.MemberUpdateRequest;
 //import kr.co.yigil.member.dto.response.MemberDeleteResponse;
 //import kr.co.yigil.member.dto.response.MemberFollowerListResponse;
 //import kr.co.yigil.member.dto.response.MemberFollowingListResponse;
 //import kr.co.yigil.member.dto.response.MemberInfoResponse;
 //import kr.co.yigil.member.dto.response.MemberUpdateResponse;
-//import kr.co.yigil.post.domain.Post;
-//import kr.co.yigil.post.domain.repository.PostRepository;
+//import kr.co.yigil.member.repository.MemberRepository;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
@@ -56,8 +53,6 @@
 //    @Mock
 //    private FollowRepository followRepository;
 //
-//    @Mock
-//    private FollowRedisIntegrityService followRedisIntegrityService;
 //
 //    @Mock
 //    private ApplicationEventPublisher applicationEventPublisher;
@@ -77,7 +72,6 @@
 //
 //        when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
 //        when(postRepository.findAllByMember(mockMember)).thenReturn(mockPostList);
-//        when(followRedisIntegrityService.ensureFollowCounts(mockMember)).thenReturn(mockFollowCount);
 //
 //        doAnswer(invocation -> {
 //            FileUploadEvent event = invocation.getArgument(0);

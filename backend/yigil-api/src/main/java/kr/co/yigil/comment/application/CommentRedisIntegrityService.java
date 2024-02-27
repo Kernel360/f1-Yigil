@@ -4,7 +4,7 @@ import java.util.Optional;
 import kr.co.yigil.comment.domain.CommentCount;
 import kr.co.yigil.comment.domain.repository.CommentCountRepository;
 import kr.co.yigil.comment.domain.repository.CommentRepository;
-import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.domain.Travel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

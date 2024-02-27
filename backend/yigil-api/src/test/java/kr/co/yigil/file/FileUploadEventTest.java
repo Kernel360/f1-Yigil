@@ -18,8 +18,7 @@ public class FileUploadEventTest {
     @Test
     void shouldDetermineFileTypeAsImage() {
         MultipartFile file = new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[10]);
-        FileUploadEvent event = new FileUploadEvent(new Object(), file,
-                (java.util.function.Consumer<AttachFile>) mock(Consumer.class));
+        FileUploadEvent event = new FileUploadEvent(new Object(), file);
         assertEquals(FileType.IMAGE, event.getFileType());
     }
 
@@ -29,22 +28,20 @@ public class FileUploadEventTest {
         byte[] largeFileContent = new byte[10485761];
         MultipartFile largeFile = new MockMultipartFile("image", "image.jpg", "image/jpeg", largeFileContent);
 
-        assertThrows(FileException.class, () -> new FileUploadEvent(new Object(), largeFile, mock(
-                Consumer.class)));
+        assertThrows(FileException.class, () -> new FileUploadEvent(new Object(), largeFile));
     }
 
     @DisplayName("validFile이 유효한 파일을 잘 구별하는지")
     @Test
     void shouldProcessValidFile() {
         MultipartFile file = new MockMultipartFile("video", "video.mp4", "video/mp4", new byte[10]);
-        assertDoesNotThrow(() -> new FileUploadEvent(new Object(), file, mock(Consumer.class)));
+        assertDoesNotThrow(() -> new FileUploadEvent(new Object(), file));
     }
 
     @DisplayName("빈 파일이 들어왔을 때 FileException이 잘 발생하는지")
     @Test
     void shouldThrowExceptionForEmptyFileType() {
         MultipartFile file = new MockMultipartFile("empty", "", "", new byte[0]);
-        assertThrows(FileException.class, () -> new FileUploadEvent(new Object(), file, mock(
-                Consumer.class)));
+        assertThrows(FileException.class, () -> new FileUploadEvent(new Object(), file));
     }
 }

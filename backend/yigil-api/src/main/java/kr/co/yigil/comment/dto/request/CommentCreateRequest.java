@@ -2,7 +2,7 @@ package kr.co.yigil.comment.dto.request;
 
 import kr.co.yigil.comment.domain.Comment;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.travel.Travel;
+import kr.co.yigil.travel.domain.Travel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

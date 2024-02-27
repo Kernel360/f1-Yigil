@@ -33,10 +33,11 @@ public class Notification {
     private boolean isRead;
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime modifiedAt;
 
     public Notification(final Member member, final String message) {
