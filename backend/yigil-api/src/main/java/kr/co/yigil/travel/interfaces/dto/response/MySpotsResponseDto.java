@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class MySpotsResponse {
+public class MySpotsResponseDto {
     private List<SpotInfo> content;
     private int totalPages;
 

@@ -12,6 +12,7 @@ import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotsResponseDto;
 import kr.co.yigil.travel.interfaces.dto.response.SpotsInPlaceResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -98,7 +99,7 @@ public interface SpotMapper {
             .build();
     }
 
-    kr.co.yigil.travel.interfaces.dto.response.MySpotsResponse of(MySpotsResponse mySpotsResponse);
-    kr.co.yigil.travel.interfaces.dto.response.MySpotsResponse.SpotInfo of(SpotInfo.SpotListInfo spotInfo);
+    MySpotsResponseDto of(MySpotsResponse mySpotsResponse);
+    MySpotsResponseDto.SpotInfo of(SpotInfo.SpotListInfo spotInfo);
 
 }

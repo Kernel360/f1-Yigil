@@ -9,6 +9,7 @@ import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotsResponseDto;
 import kr.co.yigil.travel.interfaces.dto.response.SpotDeleteResponse;
 import kr.co.yigil.travel.interfaces.dto.response.SpotRegisterResponse;
 import kr.co.yigil.travel.interfaces.dto.response.SpotUpdateResponse;
@@ -94,7 +95,7 @@ public class SpotApiController {
 
     @GetMapping("/my")
     @MemberOnly
-    public ResponseEntity<kr.co.yigil.travel.interfaces.dto.response.MySpotsResponse> getMySpotList(
+    public ResponseEntity<MySpotsResponseDto> getMySpotList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
