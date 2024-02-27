@@ -2,10 +2,8 @@ package kr.co.yigil.member.application;
 
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.domain.MemberCommand;
-import kr.co.yigil.member.domain.MemberCommand.VisibilityChangeRequest;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
-import kr.co.yigil.member.domain.MemberInfo.VisibilityChangeResponse;
 import kr.co.yigil.member.domain.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -41,10 +39,5 @@ public class MemberFacade {
 
     public FollowingResponse getFollowingList(final Long memberId, Pageable pageable) {
         return memberService.getFollowingList(memberId, pageable);
-    }
-
-    public VisibilityChangeResponse setTravelsVisibility(Long memberId,
-        VisibilityChangeRequest memberCommand) {
-        return memberService.setTravelsVisibility(memberId, memberCommand);
     }
 }

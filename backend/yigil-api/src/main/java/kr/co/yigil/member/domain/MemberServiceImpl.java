@@ -1,14 +1,11 @@
 package kr.co.yigil.member.domain;
 
-import java.util.List;
 import kr.co.yigil.file.FileUploadUtil;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowReader;
-import kr.co.yigil.member.domain.MemberCommand.VisibilityChangeRequest;
 import kr.co.yigil.member.domain.MemberInfo.FollowerResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
 import kr.co.yigil.member.domain.MemberInfo.Main;
-import kr.co.yigil.member.domain.MemberInfo.VisibilityChangeResponse;
 import kr.co.yigil.travel.domain.TravelReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -74,15 +71,5 @@ public class MemberServiceImpl implements MemberService {
             .map(MemberInfo.FollowInfo::new)
             .toList();
         return new FollowingResponse(followingList, followingSlice.hasNext());
-    }
-
-    @Override
-    @Transactional
-    public VisibilityChangeResponse setTravelsVisibility(Long memberId,
-        VisibilityChangeRequest memberCommand) {
-        List<Long> travelIds = memberCommand.getTravelIds();
-        boolean isPrivate = memberCommand.getIsPrivate();
-        travelReader.setTravelsVisibility(memberId, travelIds, isPrivate);
-        return new VisibilityChangeResponse("공개여부가 변경되었습니다.");
     }
 }

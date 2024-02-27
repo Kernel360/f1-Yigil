@@ -1,6 +1,5 @@
 package kr.co.yigil.member.domain;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,12 +18,12 @@ public class MemberCommand {
         private MultipartFile profileImageFile;
     }
 
-    @Getter
-    @Builder
-    @ToString
-    public static class VisibilityChangeRequest {
-
-        private List<Long> travelIds;
-        private Boolean isPrivate;
-    }
+//    @Getter
+//    @Builder
+//    @ToString
+//    public static class VisibilityChangeRequest {
+//
+//        private List<Long> travelIds;
+//        private Boolean isPrivate;
+//    }
 }

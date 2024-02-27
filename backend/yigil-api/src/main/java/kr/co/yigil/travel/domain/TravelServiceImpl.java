@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.domain;
 
+import java.util.List;
 import java.util.Objects;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -27,6 +28,16 @@ public class TravelServiceImpl implements TravelService {
         validateTravelOwner(travel, memberId);
         travel.changeOnPrivate();
     }
+
+    @Override
+    @Transactional
+    public void setTravelsVisibility(Long memberId,
+        TravelCommand.VisibilityChangeRequest travelCommand) {
+        List<Long> travelIds = travelCommand.getTravelIds();
+        boolean isPrivate = travelCommand.getIsPrivate();
+        travelReader.setTravelsVisibility(memberId, travelIds, isPrivate);
+    }
+
 
     private void validateTravelOwner(Travel travel, Long memberId) {
         if(!Objects.equals(travel.getMember().getId(), memberId)) throw new AuthException(ExceptionCode.INVALID_AUTHORITY);

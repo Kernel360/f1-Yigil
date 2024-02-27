@@ -28,15 +28,15 @@ public class MemberDto {
         private MultipartFile profileImageFile;
     }
 
-    @Getter
-    @Builder
-    @ToString
-    @AllArgsConstructor
-    public static class TravelsVisibilityRequest {
-
-        private List<Long> travelIds;
-        private Boolean isPrivate;
-    }
+//    @Getter
+//    @Builder
+//    @ToString
+//    @AllArgsConstructor
+//    public static class TravelsVisibilityRequest {
+//
+//        private List<Long> travelIds;
+//        private Boolean isPrivate;
+//    }
 
     @Getter
     @Builder
@@ -49,79 +49,6 @@ public class MemberDto {
         private final String profileImageUrl;
         private final int followingCount;
         private final int followerCount;
-    }
-
-//    @Getter
-//    @Builder
-//    @ToString
-//    public static class CourseListResponse {
-//
-//        private final List<CourseInfo> content;
-//        private final int totalPages;
-//    }
-
-//    @Getter
-//    @Builder
-//    @ToString
-//    public static class SpotListResponse {
-//
-//        private List<SpotInfo> content;
-//        private int totalPages;
-//    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class TravelsVisibilityResponse {
-
-        private final String message;
-    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class SpotsVisibilityResponse {
-
-        private final String message;
-    }
-
-
-//    @Getter
-//    @Builder
-//    @ToString
-//    public static class CourseInfo {
-//
-//        private final Long courseId;
-//        private final String title;
-//        private final Double rate;
-//        private final Integer spotCount;
-//        private final String createdDate;
-//        private final String mapStaticImageUrl;
-//        private final Boolean isPrivate;
-//    }
-
-//    @Getter
-//    @Builder
-//    @ToString
-//    public static class SpotInfo {
-//
-//        private final Long spotId;
-//        private final String title;
-//        private final double rate;
-//        private final String imageUrl;
-//        private final String createdDate;
-//        private final Boolean isPrivate;
-//    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class PlaceInfo {
-
-        private final String placeName;
-        private final String placeAddress;
-        private final String mapStaticImageUrl;
-        private final String placeImageUrl;
     }
 
     @Getter
