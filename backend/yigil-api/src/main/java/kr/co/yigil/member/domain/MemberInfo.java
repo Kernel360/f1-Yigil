@@ -2,7 +2,7 @@ package kr.co.yigil.member.domain;
 
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import lombok.Getter;
 import lombok.ToString;
 
