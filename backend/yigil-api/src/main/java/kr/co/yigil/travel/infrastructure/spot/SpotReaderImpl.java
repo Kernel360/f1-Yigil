@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import kr.co.yigil.travel.infrastructure.SpotRepository;

@@ -2,8 +2,6 @@ package kr.co.yigil.travel.domain.spot;
 
 import java.util.List;
 import java.util.Optional;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
 import kr.co.yigil.travel.domain.Spot;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

@@ -4,7 +4,7 @@ import kr.co.yigil.bookmark.domain.Bookmark;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

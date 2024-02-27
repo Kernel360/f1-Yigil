@@ -1,4 +1,4 @@
-package kr.co.yigil.place;
+package kr.co.yigil.place.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,6 +31,8 @@ public class Place {
 
     private String address;
 
+    private double rate;
+
     @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
 
@@ -42,20 +44,22 @@ public class Place {
     @JoinColumn(name = "image_file_id")
     private AttachFile imageFile;
 
-    public Place(final String name, final String address,
+    public Place(final String name, final String address, final double rate,
         final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
         this.name = name;
         this.address = address;
+        this.rate = rate;
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
     }
 
-    public Place(Long id, final String name, final String address,
+    public Place(Long id, final String name, final String address, final double rate,
         final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.rate = rate;
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
