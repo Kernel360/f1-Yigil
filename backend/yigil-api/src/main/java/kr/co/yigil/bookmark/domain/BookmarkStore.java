@@ -1,7 +1,7 @@
 package kr.co.yigil.bookmark.domain;
 
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 
 public interface BookmarkStore {
 

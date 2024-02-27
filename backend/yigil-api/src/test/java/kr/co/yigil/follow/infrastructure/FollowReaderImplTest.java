@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
@@ -74,9 +75,9 @@ public class FollowReaderImplTest {
         Slice<Follow> expectedSlice = new SliceImpl<>(follows);
 
         when(memberReader.getMember(memberId)).thenReturn(member);
-        when(followRepository.findAllByFollower(member)).thenReturn(expectedSlice);
+        when(followRepository.findAllByFollower(member, Pageable.unpaged())).thenReturn(expectedSlice);
 
-        Slice<Follow> actualSlice = followReader.getFollowerSlice(memberId);
+        Slice<Follow> actualSlice = followReader.getFollowerSlice(memberId, Pageable.unpaged());
 
         assertEquals(expectedSlice, actualSlice);
     }
@@ -90,9 +91,9 @@ public class FollowReaderImplTest {
         Slice<Follow> expectedSlice = new SliceImpl<>(follows);
 
         when(memberReader.getMember(memberId)).thenReturn(member);
-        when(followRepository.findAllByFollowing(member)).thenReturn(expectedSlice);
+        when(followRepository.findAllByFollowing(member, Pageable.unpaged())).thenReturn(expectedSlice);
 
-        Slice<Follow> actualSlice = followReader.getFollowingSlice(memberId);
+        Slice<Follow> actualSlice = followReader.getFollowingSlice(memberId, Pageable.unpaged());
 
         assertEquals(expectedSlice, actualSlice);
     }

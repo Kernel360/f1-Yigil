@@ -4,7 +4,9 @@ import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
+import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotService;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,10 @@ public class SpotFacade {
 
     public Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable) {
         return spotService.getSpotSliceInPlace(placeId, pageable);
+    }
+
+    public MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId) {
+        return spotService.retrieveMySpotInfoInPlace(placeId, memberId);
     }
 
     public void registerSpot(RegisterSpotRequest command, Long memberId) {

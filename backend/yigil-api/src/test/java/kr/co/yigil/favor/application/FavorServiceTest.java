@@ -21,7 +21,7 @@
 //import kr.co.yigil.member.repository.MemberRepository;
 //import kr.co.yigil.notification.application.NotificationService;
 //import kr.co.yigil.notification.domain.Notification;
-//import kr.co.yigil.place.Place;
+//import kr.co.yigil.place.domain.Place;
 //import kr.co.yigil.travel.domain.Spot;
 //import kr.co.yigil.travel.domain.Travel;
 //import org.junit.jupiter.api.BeforeEach;

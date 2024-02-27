@@ -16,7 +16,7 @@ import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.travel.domain.Spot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +55,7 @@ class FavorRedisIntegrityServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, null, null);
+        Place mockPlace = new Place("anyName", "anyImageUrl", 0.0, mockPoint, null, null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
@@ -89,7 +89,7 @@ class FavorRedisIntegrityServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, null, null);
+        Place mockPlace = new Place("anyName", "anyImageUrl", 0.0, mockPoint, null, null);
         AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
         AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
