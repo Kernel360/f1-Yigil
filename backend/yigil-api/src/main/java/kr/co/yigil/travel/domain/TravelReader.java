@@ -4,7 +4,5 @@ import java.util.List;
 
 public interface TravelReader {
     Travel getTravel(Long travelId);
-
-    void setTravelsVisibility(Long memberId, List<Long> courseIds,
-        boolean isPrivate);
+    public List<Travel> getTravels(List<Long> travelIds);
 }

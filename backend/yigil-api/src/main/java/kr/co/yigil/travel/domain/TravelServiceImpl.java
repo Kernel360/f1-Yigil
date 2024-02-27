@@ -3,6 +3,7 @@ package kr.co.yigil.travel.domain;
 import java.util.List;
 import java.util.Objects;
 import kr.co.yigil.global.exception.AuthException;
+import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,16 @@ public class TravelServiceImpl implements TravelService {
     public void setTravelsVisibility(Long memberId,
         TravelCommand.VisibilityChangeRequest travelCommand) {
         List<Long> travelIds = travelCommand.getTravelIds();
-        boolean isPrivate = travelCommand.getIsPrivate();
-        travelReader.setTravelsVisibility(memberId, travelIds, isPrivate);
+
+        travelReader.getTravels(travelIds)
+            .forEach(travel -> {
+                validateTravelOwner(travel, memberId);
+                if (travel.isPrivate() == travelCommand.getIsPrivate()) {
+                    throw new BadRequestException(ExceptionCode.INVALID_VISIBILITY_REQUEST);
+                }
+                if (travel.isPrivate()) travel.changeOnPublic();
+                else travel.changeOnPrivate();
+            });
     }
 
 
