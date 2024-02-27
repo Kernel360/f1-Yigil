@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 class MemberFacadeTest {
@@ -27,9 +26,6 @@ class MemberFacadeTest {
 
     @Mock
     private MemberService memberService;
-
-    @Mock
-    private ApplicationEventPublisher applicationEventPublisher;
 
     @DisplayName("getMemberInfo 메서드가 유효한 요청이 들어왔을 때 MemberInfo의 Main 객체를 잘 반환하는지")
     @Test
@@ -69,97 +65,6 @@ class MemberFacadeTest {
             .usingRecursiveComparison().isEqualTo(mockMemberInfoMain);
     }
 
-//    @DisplayName("getMemberCourseInfo 메서드가 유효한 요청이 들어왔을 때 MemberInfo의 MemberCourseResponse 객체를 잘 반환하는지")
-//    @Test
-//    void WhenGetMemberCourseInfo_ThenShouldReturnValidMemberCourseResponse() {
-//        // Given
-//        Long memberId = 1L;
-//        int totalPages = 1;
-//        PageRequest pageable = PageRequest.of(0, 5);
-//
-//        String email = "test@test.com";
-//        String socialLoginId = "12345";
-//        String nickname = "tester";
-//        String profileImageUrl = "test.jpg";
-//        Member member = new Member(memberId, email, socialLoginId, nickname, profileImageUrl,
-//            SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
-//
-//        Long courseId = 1L;
-//        String title = "Test Course Title";
-//        double rate = 5.0;
-//        LineString path = null;
-//        boolean isPrivate = false;
-//        List<Spot> spots = Collections.emptyList();
-//        int representativeSpotOrder = 0;
-//        AttachFile mapStaticImageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
-//
-//        Course mockCourse = new Course(courseId, member, title, null, rate, path, isPrivate,
-//            spots, representativeSpotOrder, mapStaticImageFile);
-//
-//        MemberInfo.CourseInfo courseInfo = new MemberInfo.CourseInfo(mockCourse);
-//        List<CourseInfo> courseList = Collections.singletonList(courseInfo);
-//
-//        MemberInfo.CourseListResponse mockCourseListResponse = new CourseListResponse(
-//            courseList,
-//            totalPages
-//        );
-//
-//        when(memberService.retrieveCourseList(anyLong(), any(Pageable.class), anyString())).thenReturn(
-//            mockCourseListResponse);
-//
-//        // When
-//        var result = memberFacade.getMemberCoursesInfo(memberId, pageable, "private");
-//
-//        // Then
-//        assertThat(result).isNotNull()
-//            .isInstanceOf(CourseListResponse.class)
-//            .usingRecursiveComparison().isEqualTo(mockCourseListResponse);
-//        assertThat(result.getContent().size()).isEqualTo(1);
-//    }
-
-//    @DisplayName("getMemberSpotInfo 메서드가 유효한 요청이 들어왔을 때 MemberInfo의 MemberSpotResponse 객체를 잘 반환하는지")
-//    @Test
-//    void WhenGetMemberSpotInfo_ThenShouldReturnValidMemberSpotResponse() {
-//        // Given
-//        Long memberId = 1L;
-//        int totalPages = 1;
-//        PageRequest pageable = PageRequest.of(0, 5);
-//
-//        String email = "test@test.com";
-//        String socialLoginId = "12345";
-//        String nickname = "tester";
-//        String profileImageUrl = "test.jpg";
-//        Member member = new Member(memberId, email, socialLoginId, nickname, profileImageUrl,
-//            SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
-//
-//        Long spotId = 1L;
-//        String title = "Test Spot Title";
-//        double rate = 5.0;
-//        AttachFile imageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
-//        AttachFiles imageFiles = new AttachFiles(Collections.singletonList(imageFile));
-//
-//        Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, null, rate);
-//
-//        MemberInfo.SpotInfo spotInfo = new MemberInfo.SpotInfo(spot);
-//        List<MemberInfo.SpotInfo> spotList = Collections.singletonList(spotInfo);
-//
-//        MemberInfo.SpotListResponse mockSpotListResponse = new MemberInfo.SpotListResponse(
-//            spotList,
-//            totalPages
-//        );
-//
-//        when(memberService.retrieveSpotList(anyLong(), any(Pageable.class), anyString())).thenReturn(
-//            mockSpotListResponse);
-//
-//        // When
-//        var result = memberFacade.getMemberSpotInfo(memberId, pageable, "private");
-//
-//        // Then
-//        assertThat(result).isNotNull()
-//            .isInstanceOf(MemberInfo.SpotListResponse.class)
-//            .usingRecursiveComparison().isEqualTo(mockSpotListResponse);
-//    }
-
     @DisplayName("updateMemberInfo 메서드가 유효한 요청이 들어왔을 때 MemberService의 updateMemberInfo 메서드를 잘 호출하는지")
     @Test
     void WhenUpdateMemberInfo_ThenShouldValidResponse() {
@@ -187,55 +92,4 @@ class MemberFacadeTest {
             .isInstanceOf(MemberInfo.MemberDeleteResponse.class)
             .usingRecursiveComparison().isEqualTo(new MemberInfo.MemberDeleteResponse("회원 탈퇴 성공"));
     }
-
-//    @DisplayName("getFollowerList 메서드가 유효한 요청이 들어왔을 때 MemberService의 getFollowerList 메서드를 잘 호출하는지")
-//    @Test
-//    void WhenGetFollowerList_ThenShouldReturnFollowerResponse() {
-//        Long memberId = 1L;
-//        PageRequest pageable = mock(PageRequest.class);
-//
-//        MemberInfo.FollowerResponse mockFollowerResponse = new MemberInfo.FollowerResponse(
-//            Collections.emptyList(), false);
-//        when(memberService.getFollowerList(memberId, pageable)).thenReturn(mockFollowerResponse);
-//
-//        var result = memberFacade.getFollowerList(memberId, pageable);
-//
-//        assertThat(result).isNotNull()
-//            .isInstanceOf(MemberInfo.FollowerResponse.class)
-//            .usingRecursiveComparison().isEqualTo(mockFollowerResponse);
-//    }
-
-//    @DisplayName("getFollowerList 메서드가 유효한 요청이 들어왔을 때 MemberService의 getFollowerList 메서드를 잘 호출하는지")
-//    @Test
-//    void WhenGetFollowingList_ThenShouldReturnFollowingResponse() {
-//        Long memberId = 1L;
-//        PageRequest pageable = mock(PageRequest.class);
-//
-//        MemberInfo.FollowingResponse mockFollowingResponse = new MemberInfo.FollowingResponse(
-//            Collections.emptyList(), false);
-//        when(memberService.getFollowingList(anyLong(), any(Pageable.class))).thenReturn(mockFollowingResponse);
-//
-//        var result = memberFacade.getFollowingList(memberId, pageable);
-//
-//        assertThat(result).isNotNull()
-//            .isInstanceOf(MemberInfo.FollowingResponse.class)
-//            .usingRecursiveComparison().isEqualTo(mockFollowingResponse);
-//    }
-
-//    @DisplayName("setTravelsVisibility 메서드가 유효한 요청이 들어왔을 때 MemberService의 setTravelsVisibility 메서드를 잘 호출하는지")
-//    @Test
-//    void WhenSetTravelsVisibility_ThenShouldReturnVisibilityChangeResponse() {
-//        Long memberId = 1L;
-//        VisibilityChangeRequest command = mock(VisibilityChangeRequest.class);
-//
-//        MemberInfo.VisibilityChangeResponse mockVisibilityChangeResponse = new MemberInfo.VisibilityChangeResponse(
-//            "공개여부가 변경되었습니다.");
-//        when(memberService.setTravelsVisibility(memberId, command)).thenReturn(mockVisibilityChangeResponse);
-//
-//        var result = memberFacade.setTravelsVisibility(memberId, command);
-//
-//        assertThat(result).isNotNull()
-//            .isInstanceOf(MemberInfo.VisibilityChangeResponse.class)
-//            .usingRecursiveComparison().isEqualTo(mockVisibilityChangeResponse);
-//    }
 }
