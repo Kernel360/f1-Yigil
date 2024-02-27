@@ -1,4 +1,4 @@
-package kr.co.yigil.login.application.strategy;
+package kr.co.yigil.login.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -9,15 +9,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.InvalidTokenException;
-import kr.co.yigil.login.dto.request.LoginRequest;
-import kr.co.yigil.login.dto.response.KakaoTokenInfoResponse;
-import kr.co.yigil.login.dto.response.LoginResponse;
+import kr.co.yigil.login.domain.LoginCommand;
+import kr.co.yigil.login.interfaces.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +36,12 @@ public class KakaoLoginStrategyTest {
 
     @MockBean
     private MemberRepository memberRepository;
+
+    @MockBean
+    private MemberReader memberReader;
+
+    @MockBean
+    private LoginCommand.LoginRequest loginCommand;
 
     @MockBean
     private RestTemplate restTemplate;
@@ -61,17 +66,17 @@ public class KakaoLoginStrategyTest {
                 eq(KakaoTokenInfoResponse.class))
         ).thenReturn(ResponseEntity.ok(mockResponse));
 
-        Member mockMember = new Member("email@example.com", "12345678", "user", "image_url", "kakao");
+        Long memberId = 1L;
+        Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.KAKAO);
 
-        when(memberRepository.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.of(mockMember));
+        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.of(mockMember));
 
-        HttpSession mockSession = mock(HttpSession.class);
+        LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
+        when(loginCommand.getId()).thenReturn(12345678L);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "kakao");
+        Long response = kakaoLoginStrategy.processLogin(loginCommand, "mockAccessToken");
 
-        LoginResponse response = kakaoLoginStrategy.login(loginRequest, "mockAccessToken", mockSession);
-
-        assertThat(response.getMessage()).isEqualTo("로그인 성공");
+        assertThat(response).isEqualTo(memberId);
     }
 
     @DisplayName("토큰이 유효하지 않은 경우 예외가 잘 발생하는지")
@@ -80,10 +85,9 @@ public class KakaoLoginStrategyTest {
         when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(KakaoTokenInfoResponse.class)))
                 .thenThrow(new InvalidTokenException(ExceptionCode.INVALID_ACCESS_TOKEN));
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "kakao");
-        HttpSession mockSession = mock(HttpSession.class);
+        LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
 
-        Throwable thrown = catchThrowable(() -> kakaoLoginStrategy.login(loginRequest, "invalidAccessToken", mockSession));
+        Throwable thrown = catchThrowable(() -> kakaoLoginStrategy.processLogin(loginCommand, "invalidAccessToken"));
 
         assertThat(thrown).isInstanceOf(InvalidTokenException.class);
     }
@@ -96,14 +100,17 @@ public class KakaoLoginStrategyTest {
         when(restTemplate.exchange(anyString(), eq(GET), any(HttpEntity.class), eq(KakaoTokenInfoResponse.class)))
                 .thenReturn(ResponseEntity.ok(mockResponse));
 
-        when(memberRepository.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.empty());
-        when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
+        when(loginCommand.getId()).thenReturn(12345678L);
 
-        HttpSession mockSession = mock(HttpSession.class);
+        Long memberId = 1L;
+        Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.KAKAO);
+        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.empty());
+        when(loginCommand.toEntity(anyString())).thenReturn(mockMember);
+        when(memberRepository.save(any(Member.class))).thenReturn(mockMember);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com", "kakao");
-        LoginResponse response = kakaoLoginStrategy.login(loginRequest, "mockAccessToken", mockSession);
+        Long response = kakaoLoginStrategy.processLogin(loginCommand, "mockAccessToken");
 
-        assertThat(response.getMessage()).isEqualTo("로그인 성공");
+        assertThat(response).isEqualTo(memberId);
     }
 }

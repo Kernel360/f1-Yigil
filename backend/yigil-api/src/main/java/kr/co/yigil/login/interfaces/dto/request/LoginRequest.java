@@ -1,4 +1,4 @@
-package kr.co.yigil.login.dto.request;
+package kr.co.yigil.login.interfaces.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class LoginRequest {
     private Long id;
     private String nickname;

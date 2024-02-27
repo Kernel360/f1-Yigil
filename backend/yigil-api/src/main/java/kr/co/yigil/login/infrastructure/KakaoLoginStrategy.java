@@ -1,15 +1,14 @@
-package kr.co.yigil.login.application.strategy;
+package kr.co.yigil.login.infrastructure;
 
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.Collections;
 import kr.co.yigil.global.exception.InvalidTokenException;
-import kr.co.yigil.login.dto.request.LoginRequest;
-import kr.co.yigil.login.dto.response.KakaoTokenInfoResponse;
-import kr.co.yigil.login.dto.response.LoginResponse;
+import kr.co.yigil.login.domain.LoginCommand;
+import kr.co.yigil.login.interfaces.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -29,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @PropertySource("classpath:url.properties")
 public class KakaoLoginStrategy implements LoginStrategy {
+    private final MemberReader memberReader;
 
     private final static String PROVIDER_NAME = "kakao";
 
@@ -41,18 +41,17 @@ public class KakaoLoginStrategy implements LoginStrategy {
     private RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public LoginResponse login(LoginRequest request, String accessToken, HttpSession session) {
+    public Long processLogin(LoginCommand.LoginRequest loginCommand, String accessToken) {
 
-        if(!isTokenValid(accessToken, request.getId())) {
+        if(!isTokenValid(accessToken, loginCommand.getId())) {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
 
-        Member member = memberRepository.findMemberBySocialLoginIdAndSocialLoginType(request.getId().toString(),
-                        SocialLoginType.valueOf(PROVIDER_NAME.toUpperCase()))
-                .orElseGet(() -> registerNewMember(request));
+        Member member = memberReader.findMemberBySocialLoginIdAndSocialLoginType(
+                        loginCommand.getId().toString(), SocialLoginType.KAKAO)
+                .orElseGet(() -> registerNewMember(loginCommand));
 
-        session.setAttribute("memberId", member.getId());
-        return new LoginResponse("로그인 성공");
+        return member.getId();
     }
 
     @Override
@@ -90,8 +89,8 @@ public class KakaoLoginStrategy implements LoginStrategy {
         return tokenInfo != null && tokenInfo.getId().equals(expectedUserId);
     }
 
-    private Member registerNewMember(LoginRequest request) {
-        Member newMember = new Member(request.getEmail(), request.getId().toString(), request.getNickname(), request.getProfileImageUrl(), PROVIDER_NAME);
+    private Member registerNewMember(LoginCommand.LoginRequest loginCommand) {
+        Member newMember = loginCommand.toEntity(PROVIDER_NAME);
         return memberRepository.save(newMember);
     }
 
