@@ -1,4 +1,3 @@
-import { requestWithCookie } from '@/app/_components/api/httpRequest';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import KaKaoProvider from 'next-auth/providers/kakao';
@@ -52,25 +51,21 @@ const handler = NextAuth({
         return true;
       } else return '/';
     },
-
-    // async jwt({ token, user }) {
-    //   return { ...token, ...user }
-    // },
-
-    // async session({ session, token }) {
-    //   session.user = token as any
-    //   return session
-    // },
   },
   events: {
     signOut: async () => {
-      const res = await fetch('https://yigil.co.kr/api/v1/signout', {
+      const res = await fetch(`${BASE_URL}/v1/signout`, {
         method: 'GET',
         headers: {
           Cookie: `SESSION=${cookies().get('SESSION')?.value}`,
         },
       });
-      if (res) cookies().set('SESSION', '');
+
+      if (res.ok) {
+        cookies().delete('SESSION');
+      } else {
+        console.log(`${res.status} ${res.statusText}`);
+      }
     },
   },
   pages: {
