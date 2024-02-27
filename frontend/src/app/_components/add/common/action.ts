@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-import { requestWithoutCookie } from '@/app/_components/api/httpRequest';
+import { requestWithCookie } from '@/app/_components/api/httpRequest';
 import {
   blobTodataUrl,
   coordsToGeoJSONPoint,
@@ -20,7 +20,7 @@ import {
 import type { TAddSpotProps } from '../spot/SpotContext';
 
 const cookie = cookies().get('SESSION')?.value;
-const backendStaticMapRequest = requestWithoutCookie('places/static-image');
+const backendStaticMapRequest = requestWithCookie('places/static-image');
 
 function staticMapUrl(
   width: number,
@@ -39,9 +39,9 @@ function staticMapUrl(
 }
 
 const getStaticMapUrlFromBackend = (name: string, address: string) => {
-  return backendStaticMapRequest(`name=${name}&address=${address}`)()({
-    Cookie: `SESSION=${cookie}`,
-  })('First time adding');
+  return backendStaticMapRequest(`name=${name}&address=${address}`)()()(
+    'First time adding',
+  );
 };
 
 export async function getMap(
