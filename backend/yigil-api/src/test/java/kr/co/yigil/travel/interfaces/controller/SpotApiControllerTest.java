@@ -34,7 +34,6 @@ import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
-import kr.co.yigil.travel.interfaces.dto.response.MySpotInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.SpotsInPlaceResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
