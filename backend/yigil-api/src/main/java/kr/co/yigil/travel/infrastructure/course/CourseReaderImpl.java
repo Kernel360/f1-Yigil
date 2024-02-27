@@ -35,6 +35,5 @@ public class CourseReaderImpl implements CourseReader {
             return courseRepository.findAllByMemberId(memberId, pageable);
         }
         return courseRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
-
     }
 }

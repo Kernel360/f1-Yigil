@@ -23,12 +23,6 @@ public interface MemberDtoMapper {
     MemberDto.Main of(MemberInfo.Main main);
     MemberDto.MemberUpdateResponse of(MemberInfo.MemberUpdateResponse response);
 
-    MemberDto.CourseListResponse of(MemberInfo.CourseListResponse response);
-    MemberDto.SpotListResponse of(MemberInfo.SpotListResponse response);
-
-    MemberDto.SpotInfo of(MemberInfo.SpotInfo spotInfo);
-    MemberDto.CourseInfo of(MemberInfo.CourseInfo courseInfo);
-
     MemberDto.PlaceInfo of(MemberInfo.PlaceInfo placeInfo);
     MemberDto.FollowerResponse of(MemberInfo.FollowerResponse followerResponse);
     MemberDto.FollowingResponse of(MemberInfo.FollowingResponse followingResponse);

@@ -1,14 +1,10 @@
 package kr.co.yigil.member.application;
 
-import kr.co.yigil.comment.application.CommentRedisIntegrityService;
-import kr.co.yigil.favor.application.FavorRedisIntegrityService;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberCommand.VisibilityChangeRequest;
 import kr.co.yigil.member.domain.MemberInfo;
-import kr.co.yigil.member.domain.MemberInfo.CourseListResponse;
 import kr.co.yigil.member.domain.MemberInfo.FollowingResponse;
-import kr.co.yigil.member.domain.MemberInfo.SpotListResponse;
 import kr.co.yigil.member.domain.MemberInfo.VisibilityChangeResponse;
 import kr.co.yigil.member.domain.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -22,21 +18,8 @@ public class MemberFacade {
     private final MemberService memberService;
     private final FileUploader fileUploader;
 
-    private final CommentRedisIntegrityService commentRedisIntegrityService;
-    private final FavorRedisIntegrityService favorRedisIntegrityService;
-
     public MemberInfo.Main getMemberInfo(final Long memberId) {
         return memberService.retrieveMemberInfo(memberId);
-    }
-
-    public CourseListResponse getMemberCourseInfo(final Long memberId,
-        Pageable pageable, String selected) {
-        return memberService.retrieveCourseList(memberId, pageable, selected);
-    }
-
-    public SpotListResponse getMemberSpotInfo(final Long memberId, Pageable pageable,
-        String selected) {
-        return memberService.retrieveSpotList(memberId, pageable, selected);
     }
 
     public MemberInfo.MemberUpdateResponse updateMemberInfo(final Long memberId,

@@ -51,23 +51,23 @@ public class MemberDto {
         private final int followerCount;
     }
 
-    @Getter
-    @Builder
-    @ToString
-    public static class CourseListResponse {
+//    @Getter
+//    @Builder
+//    @ToString
+//    public static class CourseListResponse {
+//
+//        private final List<CourseInfo> content;
+//        private final int totalPages;
+//    }
 
-        private final List<CourseInfo> content;
-        private final int totalPages;
-    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class SpotListResponse {
-
-        private List<SpotInfo> content;
-        private int totalPages;
-    }
+//    @Getter
+//    @Builder
+//    @ToString
+//    public static class SpotListResponse {
+//
+//        private List<SpotInfo> content;
+//        private int totalPages;
+//    }
 
     @Getter
     @Builder
@@ -86,32 +86,32 @@ public class MemberDto {
     }
 
 
-    @Getter
-    @Builder
-    @ToString
-    public static class CourseInfo {
+//    @Getter
+//    @Builder
+//    @ToString
+//    public static class CourseInfo {
+//
+//        private final Long courseId;
+//        private final String title;
+//        private final Double rate;
+//        private final Integer spotCount;
+//        private final String createdDate;
+//        private final String mapStaticImageUrl;
+//        private final Boolean isPrivate;
+//    }
 
-        private final Long courseId;
-        private final String title;
-        private final Double rate;
-        private final Integer spotCount;
-        private final String createdDate;
-        private final String mapStaticImageUrl;
-        private final Boolean isPrivate;
-    }
-
-    @Getter
-    @Builder
-    @ToString
-    public static class SpotInfo {
-
-        private final Long spotId;
-        private final String title;
-        private final double rate;
-        private final String imageUrl;
-        private final String createdDate;
-        private final Boolean isPrivate;
-    }
+//    @Getter
+//    @Builder
+//    @ToString
+//    public static class SpotInfo {
+//
+//        private final Long spotId;
+//        private final String title;
+//        private final double rate;
+//        private final String imageUrl;
+//        private final String createdDate;
+//        private final Boolean isPrivate;
+//    }
 
     @Getter
     @Builder
