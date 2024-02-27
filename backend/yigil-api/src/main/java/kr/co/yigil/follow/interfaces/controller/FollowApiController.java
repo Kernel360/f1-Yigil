@@ -1,4 +1,4 @@
-package kr.co.yigil.follow.interfaces;
+package kr.co.yigil.follow.interfaces.controller;
 
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class FollowController {
+public class FollowApiController {
     private final FollowFacade followFacade;
     @PostMapping("/api/v1/follow/{member_id}")
     @MemberOnly

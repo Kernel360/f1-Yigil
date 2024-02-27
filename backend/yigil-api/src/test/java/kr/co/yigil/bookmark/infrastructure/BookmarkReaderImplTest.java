@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
@@ -44,9 +45,9 @@ public class BookmarkReaderImplTest {
         Slice<Bookmark> expectedSlice = new SliceImpl<>(bookmarks);
 
         when(memberReader.getMember(memberId)).thenReturn(member);
-        when(bookmarkRepository.findAllByMember(member)).thenReturn(expectedSlice);
+        when(bookmarkRepository.findAllByMember(member, Pageable.unpaged())).thenReturn(expectedSlice);
 
-        Slice<Bookmark> actualSlice = bookmarkReader.getBookmarkSlice(memberId);
+        Slice<Bookmark> actualSlice = bookmarkReader.getBookmarkSlice(memberId, Pageable.unpaged());
 
         assertEquals(expectedSlice, actualSlice);
     }
