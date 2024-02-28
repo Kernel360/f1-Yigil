@@ -28,13 +28,11 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
     setCurrentPage(page);
   };
   return (
-    <nav
-      className={`my-4 pb-[50px] flex justify-center items-center gap-x-6`}
-      tabIndex={0}
-    >
+    <nav className={`my-4 pb-[50px] flex justify-center items-center gap-x-6`}>
       <button
         className="w-[9px] h-[16px] cursor-pointer px-1"
         onClick={minusPage}
+        tabIndex={currentPage !== 1 ? 0 : -1}
       >
         {currentPage !== 1 && (
           <LeftIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
@@ -58,6 +56,9 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
       <button
         className="w-[9px] h-[16px] cursor-pointer px-1"
         onClick={addPage}
+        tabIndex={
+          renderPage.includes(totalPage) && currentPage !== totalPage ? -1 : 0
+        }
       >
         {!renderPage.includes(totalPage) && currentPage !== totalPage && (
           <RightIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
