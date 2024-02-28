@@ -1,7 +1,5 @@
 package kr.co.yigil.travel.interfaces.dto.mapper;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.travel.domain.Course;
@@ -13,6 +11,7 @@ import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
+import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -102,4 +101,7 @@ public interface CourseMapper {
     default String intToString(int value) {
         return Integer.toString(value);
     }
+
+    MyCoursesResponse of (CourseInfo.MyCoursesResponse myCoursesResponse);
+    MyCoursesResponse.CourseInfo of (CourseInfo.CourseListInfo courseListInfo);
 }

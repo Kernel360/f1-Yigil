@@ -107,3 +107,21 @@ include::{snippets}/courses/delete-course/response-fields.adoc[]
 
 ===== HTTP Response 예시
 include::{snippets}/courses/delete-course/http-response.adoc[]
+
+=== My Course 목록 조회
+
+==== Request
+include::{snippets}/courses/get-my-course-list/request-body.adoc[]
+로그인 필수 : Y
+
+===== Query Parameter
+include::{snippets}/courses/get-my-course-list/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/get-my-course-list/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/get-my-course-list/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/get-my-course-list/http-response.adoc[]

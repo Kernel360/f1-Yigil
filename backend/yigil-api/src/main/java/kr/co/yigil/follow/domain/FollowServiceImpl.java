@@ -1,11 +1,14 @@
 package kr.co.yigil.follow.domain;
 
 import jakarta.transaction.Transactional;
+import kr.co.yigil.follow.domain.FollowInfo.FollowersResponse;
+import kr.co.yigil.follow.domain.FollowInfo.FollowingsResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +54,27 @@ public class FollowServiceImpl implements FollowService {
         followCacheStore.decrementFollowingsCount(unfollowerId);
     }
 
+    @Override
+    @Transactional
+    public FollowInfo.FollowersResponse getFollowerList(Long memberId, Pageable pageable) {
+        memberReader.validateMember(memberId);
+        var followerSlice = followReader.getFollowerSlice(memberId, pageable);
+        var followerList = followerSlice.getContent().stream()
+            .map(Follow::getFollower)
+            .map(FollowInfo.FollowBasicInfo::new)
+            .toList();
+        return new FollowersResponse(followerList, followerSlice.hasNext());
+    }
 
-
+    @Override
+    @Transactional
+    public FollowingsResponse getFollowingList(Long memberId, Pageable pageable) {
+        memberReader.validateMember(memberId);
+        var followingSlice = followReader.getFollowingSlice(memberId, pageable);
+        var followingList = followingSlice.getContent().stream()
+            .map(Follow::getFollowing)
+            .map(FollowInfo.FollowBasicInfo::new)
+            .toList();
+        return new FollowingsResponse(followingList, followingSlice.hasNext());
+    }
 }

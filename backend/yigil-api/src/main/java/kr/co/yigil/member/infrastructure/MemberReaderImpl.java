@@ -26,4 +26,10 @@ public class MemberReaderImpl implements MemberReader {
             SocialLoginType socialLoginType) {
         return memberRepository.findMemberBySocialLoginIdAndSocialLoginType(socialLoginId, socialLoginType);
     }
+
+    public void validateMember(Long memberId) {
+        if(!memberRepository.existsById(memberId)){
+            throw new BadRequestException(NOT_FOUND_MEMBER_ID);
+        }
+    }
 }

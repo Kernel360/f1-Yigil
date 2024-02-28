@@ -1,9 +1,11 @@
 package kr.co.yigil.travel.domain.course;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,9 +24,11 @@ import kr.co.yigil.travel.domain.course.CourseInfo.Main;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.LineString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -153,5 +157,28 @@ public class CourseServiceImplTest {
         when(courseReader.getCourse(courseId)).thenReturn(course);
 
         assertThrows(AuthException.class, () -> courseService.deleteCourse(courseId, memberId));
+    }
+
+    @DisplayName("retrieveCourseList 를 호출했을 때 코스 리스트 조회가 잘 되는지 확인")
+    @Test
+    void WhenRetrieveCourseList_ThenShouldReturnCourseListResponse() {
+        Long memberId = 1L;
+        Long courseId = 1L;
+        PageRequest pageable = PageRequest.of(0, 10);
+        String selected = "private";
+        // 필요 course 필드: id, title, rate, spotList, mapstaticImageUrl
+
+        Course mockCourse = new Course(
+            courseId, mock(Member.class), "title", null, 4.5, mock(LineString.class), false,
+            List.of(mock(Spot.class)), 1, mock(AttachFile.class));
+        PageImpl<Course> mockCourseList = new PageImpl<>(List.of(mockCourse));
+
+
+        when(courseReader.getMemberCourseList(anyLong(), any(), any())).thenReturn(mockCourseList);
+
+        var result = courseService.retrieveCourseList(memberId, pageable, selected);
+
+        assertThat(result).isNotNull().isInstanceOf(CourseInfo.MyCoursesResponse.class);
+        assertThat(result.getContent().getFirst()).isInstanceOf(CourseInfo.CourseListInfo.class);
     }
 }
