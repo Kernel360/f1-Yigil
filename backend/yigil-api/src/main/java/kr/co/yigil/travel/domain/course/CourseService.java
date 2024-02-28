@@ -16,4 +16,6 @@ public interface CourseService {
     Main retrieveCourseInfo(Long courseId);
     void modifyCourse(ModifyCourseRequest command, Long courseId, Long memberId);
     void deleteCourse(Long courseId, Long memberId);
+
+    CourseInfo.MyCoursesResponse retrieveCourseList(Long memberId, Pageable pageable, String selected);
 }
