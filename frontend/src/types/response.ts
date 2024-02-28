@@ -5,6 +5,8 @@ export const backendErrorSchema = z.object({
   message: z.string(),
 });
 
+export type TBackendError = z.infer<typeof backendErrorSchema>;
+
 const REGION_VALUES = [
   '서울',
   '경기',
@@ -69,7 +71,7 @@ export const datumWithAddressSchema = z.object({
 export const dataWithAddressSchema = z.array(datumWithAddressSchema);
 
 export const staticMapUrlSchema = z.object({
-  status: z.boolean(),
+  exists: z.boolean(),
   map_static_image_url: z.string().optional(),
 });
 
@@ -79,6 +81,7 @@ export const naverStaticMapUrlErrorSchema = z.object({
 });
 
 export const postSpotResponseSchema = z.object({
-  spot_id: z.number(),
   message: z.string(),
 });
+
+export type TPostSpotSuccess = z.infer<typeof postSpotResponseSchema>;

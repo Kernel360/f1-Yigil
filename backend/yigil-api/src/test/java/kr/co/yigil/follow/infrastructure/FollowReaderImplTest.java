@@ -2,6 +2,8 @@ package kr.co.yigil.follow.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
@@ -40,12 +44,10 @@ public class FollowReaderImplTest {
     @Test
     void whenGetFollowCount_thenReturnsCorrectFollowCount() {
         Long memberId = 1L;
-        Member member = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
         FollowCountDto followCountDto = new FollowCountDto(10L, 20L);
         FollowCount expectedFollowCount = new FollowCount(memberId, 10, 20);
 
-        when(memberReader.getMember(memberId)).thenReturn(member);
-        when(followRepository.getFollowCounts(member)).thenReturn(followCountDto);
+        when(followRepository.getFollowCounts(memberId)).thenReturn(followCountDto);
 
         FollowCount actualFollowCount = followReader.getFollowCount(memberId);
 
@@ -69,14 +71,19 @@ public class FollowReaderImplTest {
     @Test
     void whenGetFollowerSlice_thenReturnsCorrectSlice() {
         Long memberId = 1L;
-        Member member = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
-        List<Follow> follows = new ArrayList<>();
-        Slice<Follow> expectedSlice = new SliceImpl<>(follows);
+        Long anotherMemberId = 2L;
+        PageRequest pageRequest = PageRequest.of(0, 10);
 
-        when(memberReader.getMember(memberId)).thenReturn(member);
-        when(followRepository.findAllByFollower(member)).thenReturn(expectedSlice);
+        Member followerMember = new Member(anotherMemberId, null, null, null, null, null);
+        Member followingMember = new Member(memberId, null, null, null, null, null);
 
-        Slice<Follow> actualSlice = followReader.getFollowerSlice(memberId);
+        Follow mockFollow = new Follow(followerMember, followingMember);
+        List<Follow> follows = List.of(mockFollow);
+        Slice<Follow> expectedSlice = new SliceImpl<>(follows, pageRequest, true);
+
+        when(followRepository.findAllByFollowingId(anyLong(), any(Pageable.class))).thenReturn(expectedSlice);
+
+        Slice<Follow> actualSlice = followReader.getFollowerSlice(memberId, pageRequest);
 
         assertEquals(expectedSlice, actualSlice);
     }
@@ -90,9 +97,9 @@ public class FollowReaderImplTest {
         Slice<Follow> expectedSlice = new SliceImpl<>(follows);
 
         when(memberReader.getMember(memberId)).thenReturn(member);
-        when(followRepository.findAllByFollowing(member)).thenReturn(expectedSlice);
+        when(followRepository.findAllByFollowerId(anyLong(), any(Pageable.class))).thenReturn(expectedSlice);
 
-        Slice<Follow> actualSlice = followReader.getFollowingSlice(memberId);
+        Slice<Follow> actualSlice = followReader.getFollowingSlice(memberId, Pageable.unpaged());
 
         assertEquals(expectedSlice, actualSlice);
     }

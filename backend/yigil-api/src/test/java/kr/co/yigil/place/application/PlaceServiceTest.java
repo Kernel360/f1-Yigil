@@ -12,7 +12,7 @@
 //import java.util.Optional;
 //import kr.co.yigil.file.AttachFile;
 //import kr.co.yigil.file.FileType;
-//import kr.co.yigil.place.Place;
+//import kr.co.yigil.place.domain.Place;
 //import kr.co.yigil.place.domain.PlaceRate;
 //import kr.co.yigil.place.dto.response.PlaceFindDto;
 //import kr.co.yigil.place.dto.response.PlaceInfoResponse;

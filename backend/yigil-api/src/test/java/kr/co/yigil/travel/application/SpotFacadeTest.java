@@ -1,7 +1,10 @@
 package kr.co.yigil.travel.application;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -10,6 +13,9 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.AttachFiles;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
@@ -20,7 +26,9 @@ import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.UpdateSpotImage;
+import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,6 +79,18 @@ public class SpotFacadeTest {
 
         assertEquals(expectedSlice, result);
         verify(spotService).getSpotSliceInPlace(placeId, pageable);
+    }
+
+    @DisplayName("getMySpotInPlace 메서드가 응답을 잘 반환하는지")
+    @Test
+    void getMySpotInPlace_ShouldReturnResponse() {
+        SpotInfo.MySpot mySpot = mock(MySpot.class);
+
+        when(spotService.retrieveMySpotInfoInPlace(anyLong(), anyLong())).thenReturn(mySpot);
+
+        spotFacade.retrieveMySpotInfoInPlace(1L, 1L);
+
+        verify(spotService).retrieveMySpotInfoInPlace(1L, 1L);
     }
 
     @DisplayName("registerSpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
@@ -132,5 +152,48 @@ public class SpotFacadeTest {
         spotFacade.deleteSpot(spotId, memberId);
 
         verify(spotService).deleteSpot(spotId, memberId);
+    }
+
+    @DisplayName("getMemberSpotInfo 메서드가 유효한 요청이 들어왔을 때 MemberInfo의 MemberSpotResponse 객체를 잘 반환하는지")
+    @Test
+    void WhenGetMemberSpotsInfo_ThenShouldReturnValidMemberSpotResponse() {
+        // Given
+        Long memberId = 1L;
+        int totalPages = 1;
+        PageRequest pageable = PageRequest.of(0, 5);
+
+        String email = "test@test.com";
+        String socialLoginId = "12345";
+        String nickname = "tester";
+        String profileImageUrl = "test.jpg";
+        Member member = new Member(memberId, email, socialLoginId, nickname, profileImageUrl,
+            SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
+
+        Long spotId = 1L;
+        String title = "Test Spot Title";
+        double rate = 5.0;
+        AttachFile imageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
+        AttachFiles imageFiles = new AttachFiles(Collections.singletonList(imageFile));
+
+        Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, null, rate);
+
+        SpotInfo.SpotListInfo spotInfo = new SpotInfo.SpotListInfo(spot);
+        List<SpotInfo.SpotListInfo> spotList = Collections.singletonList(spotInfo);
+
+        SpotInfo.MySpotsResponse mockSpotListResponse = new SpotInfo.MySpotsResponse(
+            spotList,
+            totalPages
+        );
+
+        when(spotService.retrieveSpotList(anyLong(), any(Pageable.class), anyString())).thenReturn(
+            mockSpotListResponse);
+
+        // When
+        var result = spotFacade.getMemberSpotsInfo(memberId, pageable, "private");
+
+        // Then
+        assertThat(result).isNotNull()
+            .isInstanceOf(SpotInfo.MySpotsResponse.class)
+            .usingRecursiveComparison().isEqualTo(mockSpotListResponse);
     }
 }

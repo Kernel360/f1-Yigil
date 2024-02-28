@@ -1,95 +1,130 @@
-package kr.co.yigil.comment.application;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-import kr.co.yigil.comment.domain.Comment;
-import kr.co.yigil.comment.domain.CommentCount;
-import kr.co.yigil.comment.domain.repository.CommentCountRepository;
-import kr.co.yigil.comment.domain.repository.CommentRepository;
-import kr.co.yigil.comment.dto.request.CommentCreateRequest;
-import kr.co.yigil.comment.dto.response.CommentCreateResponse;
-import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
-import kr.co.yigil.comment.dto.response.CommentResponse;
-import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.AttachFiles;
-import kr.co.yigil.file.FileType;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.SocialLoginType;
-import kr.co.yigil.member.application.MemberService;
-import kr.co.yigil.notification.application.NotificationService;
-import kr.co.yigil.notification.domain.Notification;
-import kr.co.yigil.place.Place;
-import kr.co.yigil.travel.domain.Spot;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.SliceImpl;
-
-
-@ExtendWith(MockitoExtension.class)
-class CommentServiceTest {
-
-    @InjectMocks
-    private CommentService commentService;
-    @Mock
-    private CommentRepository commentRepository;
-    @Mock
-    private MemberService memberService;
-    @Mock
-    private NotificationService notificationService;
-    @Mock
-    private CommentRedisIntegrityService commentRedisIntegrityService;
-    @Mock
-    private CommentCountRepository commentCountRepository;
-
-
-
+//package kr.co.yigil.comment.application;
+//
+//import static org.assertj.core.api.Assertions.assertThat;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.mockito.ArgumentMatchers.any;
+//import static org.mockito.ArgumentMatchers.anyLong;
+//import static org.mockito.Mockito.times;
+//import static org.mockito.Mockito.verify;
+//import static org.mockito.Mockito.when;
+//
+//import java.util.List;
+//import java.util.Optional;
+//import kr.co.yigil.comment.domain.Comment;
+//import kr.co.yigil.comment.domain.CommentCount;
+//import kr.co.yigil.comment.domain.repository.CommentCountRepository;
+//import kr.co.yigil.comment.domain.repository.CommentRepository;
+//import kr.co.yigil.comment.dto.request.CommentCreateRequest;
+//import kr.co.yigil.comment.dto.response.CommentCreateResponse;
+//import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
+//import kr.co.yigil.comment.dto.response.CommentResponse;
+//import kr.co.yigil.file.AttachFile;
+//import kr.co.yigil.file.AttachFiles;
+//import kr.co.yigil.file.FileType;
+//import kr.co.yigil.member.Member;
+//import kr.co.yigil.member.SocialLoginType;
+//import kr.co.yigil.member.application.MemberService;
+//import kr.co.yigil.notification.domain.Notification;
+//import kr.co.yigil.notification.domain.NotificationService;
+//import kr.co.yigil.place.Place;
+//import kr.co.yigil.travel.domain.Spot;
+//import kr.co.yigil.travel.application.TravelService;
+//import org.junit.jupiter.api.DisplayName;
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.locationtech.jts.geom.Coordinate;
+//import org.locationtech.jts.geom.GeometryFactory;
+//import org.locationtech.jts.geom.Point;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.junit.jupiter.MockitoExtension;
+//import org.springframework.data.domain.PageRequest;
+//import org.springframework.data.domain.Pageable;
+//import org.springframework.data.domain.SliceImpl;
+//
+//
+//@ExtendWith(MockitoExtension.class)
+//class CommentServiceTest {
+//
+//    @InjectMocks
+//    private CommentService commentService;
+//    @Mock
+//    private CommentRepository commentRepository;
+//    @Mock
+//    private MemberService memberService;
+//    @Mock
+//    private NotificationService notificationService;
+//    @Mock
+//    private CommentRedisIntegrityService commentRedisIntegrityService;
+//    @Mock
+//    private CommentCountRepository commentCountRepository;
+//    @Mock
+//    private TravelService travelService;
+//
+//
 //    @DisplayName("createComment 메서드가 유효한 인자(부모 댓글이 없는 경우)를 넘겨받았을 때 올바른 응답을 내리는지.")
 //    @Test
 //    void whenCreateComment_thenReturnCommentCreateResponse() {
 //
-//        Long memberId = 1L;
-//        Member mockMember = new Member("shin@gmail.com", "123456", "똷", "profile.jpg",
-//            SocialLoginType.KAKAO);
+//import static org.assertj.core.api.Assertions.assertThat;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.mockito.ArgumentMatchers.any;
+//import static org.mockito.ArgumentMatchers.anyLong;
+//import static org.mockito.Mockito.times;
+//import static org.mockito.Mockito.verify;
+//import static org.mockito.Mockito.when;
 //
-//        GeometryFactory geometryFactory = new GeometryFactory();
-//        Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-//        Place mockPlace = new Place("anyName", "anyImageUrl", mockPoint, null, null);
-//        AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
-//            1L);
-//        AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
-//            2L);
-//        AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
+//import java.util.List;
+//import java.util.Optional;
+//import kr.co.yigil.comment.domain.Comment;
+//import kr.co.yigil.comment.domain.CommentCount;
+//import kr.co.yigil.comment.domain.repository.CommentCountRepository;
+//import kr.co.yigil.comment.domain.repository.CommentRepository;
+//import kr.co.yigil.comment.dto.request.CommentCreateRequest;
+//import kr.co.yigil.comment.dto.response.CommentCreateResponse;
+//import kr.co.yigil.comment.dto.response.CommentDeleteResponse;
+//import kr.co.yigil.comment.dto.response.CommentResponse;
+//import kr.co.yigil.file.AttachFile;
+//import kr.co.yigil.file.AttachFiles;
+//import kr.co.yigil.file.FileType;
+//import kr.co.yigil.member.Member;
+//import kr.co.yigil.member.SocialLoginType;
+//import kr.co.yigil.member.application.MemberService;
+//import kr.co.yigil.notification.application.NotificationService;
+//import kr.co.yigil.notification.domain.Notification;
+//import kr.co.yigil.place.Place;
+//import kr.co.yigil.travel.domain.Spot;
+//import org.junit.jupiter.api.DisplayName;
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.extension.ExtendWith;
+//import org.locationtech.jts.geom.Coordinate;
+//import org.locationtech.jts.geom.GeometryFactory;
+//import org.locationtech.jts.geom.Point;
+//import org.mockito.InjectMocks;
+//import org.mockito.Mock;
+//import org.mockito.junit.jupiter.MockitoExtension;
+//import org.springframework.data.domain.PageRequest;
+//import org.springframework.data.domain.Pageable;
+//import org.springframework.data.domain.SliceImpl;
 //
-//        Spot mockSpot = new Spot(1L, mockMember, mockPoint, false, "anyTitle", "아무말",
-//            mockAttachFiles, mockPlace, 5.0);
 //
-//        CommentCreateRequest commentCreateRequest = new CommentCreateRequest("댓글 내용", null, null);
+//@ExtendWith(MockitoExtension.class)
+//class CommentServiceTest {
 //
-//        when(memberService.findMemberById(memberId)).thenReturn(mockMember);
+//    @InjectMocks
+//    private CommentService commentService;
+//    @Mock
+//    private CommentRepository commentRepository;
+//    @Mock
+//    private MemberService memberService;
+//    @Mock
+//    private NotificationService notificationService;
+//    @Mock
+//    private CommentRedisIntegrityService commentRedisIntegrityService;
+//    @Mock
+//    private CommentCountRepository commentCountRepository;
 //
-//        Long travelId = 1L;
-//        when(travelService.findTravelById(travelId)).thenReturn(mockSpot);
 //
-//        CommentCount mockCommentCount = new CommentCount(travelId, 1);
-//        when(commentRedisIntegrityService.ensureCommentCount(any(Spot.class))).thenReturn(
-//            mockCommentCount);
 //
 //        commentService.createComment(memberId, travelId, commentCreateRequest);
 //
@@ -321,4 +356,4 @@ class CommentServiceTest {
 //            .getFirst()).isInstanceOf(
 //            CommentResponse.class);
 //    }
-}
+//}

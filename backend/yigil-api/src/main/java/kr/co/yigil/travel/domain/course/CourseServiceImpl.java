@@ -2,6 +2,7 @@ package kr.co.yigil.travel.domain.course;
 
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
 
+import java.util.List;
 import java.util.Objects;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
+
     private final MemberReader memberReader;
     private final CourseReader courseReader;
 
@@ -46,7 +48,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public void registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command,
-            Long memberId) {
+        Long memberId) {
         Member member = memberReader.getMember(memberId);
         var spots = courseSpotSeriesFactory.store(command, memberId);
         var initCourse = command.toEntity(spots, member);
@@ -64,7 +66,9 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public void modifyCourse(ModifyCourseRequest command, Long courseId, Long memberId) {
         var course = courseReader.getCourse(courseId);
-        if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
+        if (!Objects.equals(course.getMember().getId(), memberId)) {
+            throw new AuthException(INVALID_AUTHORITY);
+        }
         var modifedCourse = courseSeriesFactory.modify(command, course);
     }
 
@@ -72,9 +76,21 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public void deleteCourse(Long courseId, Long memberId) {
         var course = courseReader.getCourse(courseId);
-        if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
+        if (!Objects.equals(course.getMember().getId(), memberId)) {
+            throw new AuthException(INVALID_AUTHORITY);
+        }
         courseStore.remove(course);
         course.getSpots().forEach(Spot::changeOutOfCourse);
     }
 
+    @Override
+    @Transactional
+    public CourseInfo.MyCoursesResponse retrieveCourseList(Long memberId, Pageable pageable,
+        String visibility) {
+        var pageCourse = courseReader.getMemberCourseList(memberId, pageable, visibility);
+        List<CourseInfo.CourseListInfo> courseInfoList = pageCourse.getContent().stream()
+            .map(CourseInfo.CourseListInfo::new)
+            .toList();
+        return new CourseInfo.MyCoursesResponse(courseInfoList, pageCourse.getTotalPages());
+    }
 }

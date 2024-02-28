@@ -3,7 +3,7 @@ package kr.co.yigil.bookmark.domain;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -79,6 +79,8 @@ public class BookmarkServiceImplTest {
         Long memberId = 1L;
         Long placeId = 2L;
 
+        when(bookmarkReader.isBookmarked(anyLong(), anyLong())).thenReturn(true);
+
         Member mockMember = mock(Member.class);
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
 
@@ -88,5 +90,17 @@ public class BookmarkServiceImplTest {
         bookmarkServiceImpl.deleteBookmark(memberId, placeId);
 
         verify(bookmarkStore, times(1)).remove(any(Member.class), any(Place.class));
+    }
+
+    @DisplayName("북마크되지 않은 장소에 대해 deleteBookmark를 호출 시 예외가 잘 발생되는지")
+    @Test
+    void whenDeleteBookmark_notBookmarked_thenThrowsException() {
+        Long memberId = 1L;
+        Long placeId = 2L;
+
+        when(bookmarkReader.isBookmarked(anyLong(), anyLong())).thenReturn(false);
+
+        assertThrows(
+                BadRequestException.class, () -> bookmarkServiceImpl.deleteBookmark(memberId, placeId));
     }
 }

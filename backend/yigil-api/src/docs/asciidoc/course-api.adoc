@@ -1,0 +1,127 @@
+== COURSE API
+
+=== 장소 내 Course 조회
+
+==== Request
+include::{snippets}/courses/get-courses-in-place/request-body.adoc[]
+로그인 필수 : N
+
+===== Path parameter
+include::{snippets}/courses/get-courses-in-place/path-parameters.adoc[]
+
+===== Query Parameter
+include::{snippets}/courses/get-courses-in-place/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/get-courses-in-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/get-courses-in-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/get-courses-in-place/http-response.adoc[]
+
+=== Course 신규 등록
+링크 :
+
+==== Request
+include::{snippets}/courses/register-course/request-body.adoc[]
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/courses/register-course/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/register-course/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/register-course/http-response.adoc[]
+
+=== Course 신규 등록 (이미 등록된 Spot)
+링크 :
+
+==== Request
+include::{snippets}/courses/register-course-only/request-body.adoc[]
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/courses/register-course-only/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/register-course-only/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/register-course-only/http-response.adoc[]
+
+=== Course 상세 정보 조회
+
+==== Request
+include::{snippets}/courses/retrieve-course/request-body.adoc[]
+로그인 필수 : N
+
+===== Path Parameter
+include::{snippets}/courses/retrieve-course/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/retrieve-course/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/retrieve-course/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/retrieve-course/http-response.adoc[]
+
+=== Course 업데이트
+링크 :
+
+==== Request
+include::{snippets}/courses/update-course/request-body.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/courses/update-course/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/update-course/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/update-course/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/update-course/http-response.adoc[]
+
+=== Course 삭제
+
+==== Request
+include::{snippets}/courses/delete-course/request-body.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/courses/delete-course/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/delete-course/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/delete-course/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/delete-course/http-response.adoc[]
+
+=== My Course 목록 조회
+
+==== Request
+include::{snippets}/courses/get-my-course-list/request-body.adoc[]
+로그인 필수 : Y
+
+===== Query Parameter
+include::{snippets}/courses/get-my-course-list/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/get-my-course-list/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/get-my-course-list/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/get-my-course-list/http-response.adoc[]
