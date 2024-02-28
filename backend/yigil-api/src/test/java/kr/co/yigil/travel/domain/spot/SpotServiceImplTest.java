@@ -173,7 +173,7 @@ public class SpotServiceImplTest {
 
         spotService.registerSpot(command, memberId);
 
-        verify(fileUploader, times(2)).upload(any());
+        verify(fileUploader, times(2)).upload(any(), any());
         verify(placeStore).store(any());
         verify(spotStore).store(any(Spot.class));
     }

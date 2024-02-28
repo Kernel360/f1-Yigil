@@ -15,8 +15,8 @@ public class FileUploaderImpl implements FileUploader {
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public void upload(MultipartFile file) {
-        FileUploadEvent event = new FileUploadEvent(this, file);
+    public void upload(MultipartFile file, String fileName) {
+        FileUploadEvent event = new FileUploadEvent(this, file, fileName);
         eventPublisher.publishEvent(event);
     }
 
