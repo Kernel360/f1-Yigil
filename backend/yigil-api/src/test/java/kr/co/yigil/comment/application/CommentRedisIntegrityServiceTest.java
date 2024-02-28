@@ -56,13 +56,13 @@ class CommentRedisIntegrityServiceTest {
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
 
-        AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName", "",
+        AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName",
             1L);
         Place mockPlace = new Place("anyName", "anyImageUrl", 0.0, mockPoint, null,
             mockStaticImgFile);
-        AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1", "",
+        AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
-        AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2", "",
+        AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
             2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 
@@ -90,13 +90,13 @@ class CommentRedisIntegrityServiceTest {
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName", "",
+        AttachFile mockStaticImgFile = new AttachFile(FileType.IMAGE, "fileUrl", "originalFileName",
             1L);
         Place mockPlace = new Place("anyName", "anyImageUrl", 0.0, mockPoint, null,
             mockStaticImgFile);
-        AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1", "",
+        AttachFile mockAttachFile1 = new AttachFile(FileType.IMAGE, "fileUrl1", "originalFileName1",
             1L);
-        AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2", "",
+        AttachFile mockAttachFile2 = new AttachFile(FileType.IMAGE, "fileUrl2", "originalFileName2",
             2L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile1, mockAttachFile2));
 

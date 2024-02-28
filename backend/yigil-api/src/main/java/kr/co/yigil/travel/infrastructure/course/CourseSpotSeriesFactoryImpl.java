@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -46,16 +47,12 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                     Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(registerPlaceRequest.getPlaceName(), registerPlaceRequest.getPlaceAddress());
                     Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest));
 
-                    var spot = spotStore.store(registerSpotRequest.toEntity(member, place, true));
-                    var attachFiles = spot.getAttachFiles().getFiles();
-                    var requestFiles = registerSpotRequest.getFiles();
-                    for(var attachFile : attachFiles) {
-                        for(var file : requestFiles) {
-                            if(attachFile.getOriginalFileName().equals(file.getOriginalFilename())) {
-                                fileUploader.upload(file, attachFile.getFileName());
-                            }
-                        }
-                    }
+                    var attachFiles = new AttachFiles(registerSpotRequest.getFiles().stream()
+                            .map(fileUploader::upload)
+                            .collect(Collectors.toList()));
+
+                    var spot = spotStore.store(registerSpotRequest.toEntity(member, place, true, attachFiles));
+
                     var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
                     return spot;
                 }).collect(Collectors.toList());
@@ -69,9 +66,8 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {
-        var place = placeStore.store(command.toEntity());
-        fileUploader.upload(command.getPlaceImageFile(), place.getImageFile().getFileName());
-        fileUploader.upload(command.getMapStaticImageFile(), place.getMapStaticImageFile().getFileName());
-        return place;
+        var placeImage = fileUploader.upload(command.getPlaceImageFile());
+        var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
+        return placeStore.store(command.toEntity(placeImage, mapStaticImage));
     }
 }

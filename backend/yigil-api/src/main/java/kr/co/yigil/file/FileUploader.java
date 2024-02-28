@@ -4,6 +4,6 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileUploader {
-    void upload(MultipartFile file, String fileName);
+    AttachFile upload(MultipartFile file);
 
 }

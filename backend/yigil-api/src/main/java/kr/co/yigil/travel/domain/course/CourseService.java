@@ -11,8 +11,8 @@ import org.springframework.data.domain.Slice;
 public interface CourseService {
 
     Slice<Course> getCoursesSliceInPlace(Long placeId, Pageable pageable);
-    Course registerCourse(RegisterCourseRequest request, Long memberId);
-    Course registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo request, Long memberId);
+    void registerCourse(RegisterCourseRequest request, Long memberId);
+    void registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo request, Long memberId);
     Main retrieveCourseInfo(Long courseId);
     Course modifyCourse(ModifyCourseRequest command, Long courseId, Long memberId);
     void deleteCourse(Long courseId, Long memberId);

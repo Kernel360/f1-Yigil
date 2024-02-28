@@ -1,7 +1,7 @@
 package kr.co.yigil.travel.domain.course;
 
 import java.util.List;
-import kr.co.yigil.file.FileUploadUtil;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
@@ -29,8 +29,7 @@ public class CourseCommand {
         private MultipartFile mapStaticImageFile;
         private List<RegisterSpotRequest> registerSpotRequests;
 
-        public Course toEntity(List<Spot> spots, Member member) {
-            var attachFile = FileUploadUtil.predictAttachFile(mapStaticImageFile);
+        public Course toEntity(List<Spot> spots, Member member, AttachFile attachFile) {
             return new Course(
                     member,
                     title,
@@ -58,8 +57,7 @@ public class CourseCommand {
         private MultipartFile mapStaticImageFile;
         private List<Long> spotIds;
 
-        public Course toEntity(List<Spot> spots, Member member) {
-            var attachFile = FileUploadUtil.predictAttachFile(mapStaticImageFile);
+        public Course toEntity(List<Spot> spots, Member member, AttachFile attachFile) {
             return new Course(
                     member,
                     title,

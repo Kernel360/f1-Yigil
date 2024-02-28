@@ -28,16 +28,7 @@ public class SpotFacade {
     }
 
     public void registerSpot(RegisterSpotRequest command, Long memberId) {
-        Spot spot = spotService.registerSpot(command, memberId);
-        var attachFiles = spot.getAttachFiles();
-        var files = command.getFiles();
-        for(var attachFile : attachFiles.getFiles()) {
-            for(var file : files) {
-                if(attachFile.getOriginalFileName().equals(file.getOriginalFilename())) {
-                    fileUploader.upload(file, attachFile.getFileName());
-                }
-            }
-        }
+        spotService.registerSpot(command, memberId);
     }
 
     public Main retrieveSpotInfo(Long spotId) {
@@ -45,16 +36,7 @@ public class SpotFacade {
     }
 
     public void modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
-        var spot = spotService.modifySpot(command, spotId, memberId);
-        var attachFiles = spot.getAttachFiles();
-        var files = command.getUpdatedImages();
-        for(var attachFile : attachFiles.getFiles()) {
-            for(var file : files) {
-                if(attachFile.getOriginalFileName().equals(file.getImageFile().getOriginalFilename())) {
-                    fileUploader.upload(file.getImageFile(), attachFile.getFileName());
-                }
-            }
-        }
+        spotService.modifySpot(command, spotId, memberId);
     }
 
     public void deleteSpot(Long spotId, Long memberId) {
