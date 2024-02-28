@@ -60,7 +60,7 @@ export default function MyPageSelectBtns({
           </button>
         ))}
       </ul>
-      <div className="flex justify-between mx-5 mt-4">
+      <div className="flex justify-between ml-4 mt-4">
         <div className="flex items-center gap-x-4">
           <input
             type="checkbox"
@@ -68,7 +68,7 @@ export default function MyPageSelectBtns({
             onChange={(e) => onChangeAllList(e, setIsChecked)}
             checked={isChecked}
           />
-          <div>전체 선택</div>
+          <div className="text-gray-700">전체선택</div>
         </div>
         <Select
           list={sortOptions}
