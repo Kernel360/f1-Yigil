@@ -4,7 +4,6 @@ import FloatingActionButton from '../../FloatingActionButton';
 import MyPageSpotItem from './MyPageSpotItem';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
-import { getMyPageSpots } from './spotActions';
 import CalendarIcon from '/public/icons/calendar.svg';
 import UnLockIcon from '/public/icons/unlock.svg';
 import TrashIcon from '/public/icons/trash.svg';
@@ -15,6 +14,7 @@ import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import Dialog from '../../ui/dialog/Dialog';
 import { TMyPageSpot } from '../types';
+import { getMyPageSpots } from '../hooks/myPageActions';
 
 export default function MyPageSpotList({
   placeList,

@@ -12,7 +12,7 @@ import TrashIcon from '/public/icons/trash.svg';
 import LockIcon from '/public/icons/lock.svg';
 import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
-import { getMyPageCourses } from './courseActions';
+import { getMyPageCourses } from '../hooks/myPageActions';
 
 export default function MyPageCourseList({
   placeList,

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
-
 import Image from 'next/image';
 import MapPinIcon from '/public/icons/filled-map-pin.svg';
 import { TMyPageCourse } from '../types';

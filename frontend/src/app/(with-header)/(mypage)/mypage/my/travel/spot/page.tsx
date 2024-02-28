@@ -1,4 +1,4 @@
-import { getMyPageSpots } from '@/app/_components/mypage/spot/spotActions';
+import { getMyPageSpots } from '@/app/_components/mypage/hooks/myPageActions';
 import MyPageSpotList from '@/app/_components/mypage/spot/MyPageSpotList';
 import { myPageSpotListSchema } from '@/types/myPageResponse';
 import React from 'react';
