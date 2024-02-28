@@ -1,9 +1,7 @@
-package kr.co.yigil.admin.dto.response;
+package kr.co.yigil.admin.interfaces.dto.response;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import kr.co.yigil.admin.dto.request.AdminSignUpListRequest;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

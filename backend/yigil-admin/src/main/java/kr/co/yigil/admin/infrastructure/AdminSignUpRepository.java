@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.domain.repository;
+package kr.co.yigil.admin.infrastructure;
 
 import kr.co.yigil.admin.domain.AdminSignUp;
 import org.springframework.data.domain.Page;

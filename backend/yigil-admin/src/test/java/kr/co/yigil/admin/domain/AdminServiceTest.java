@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.application;
+package kr.co.yigil.admin.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -10,20 +10,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.admin.domain.Admin;
+import kr.co.yigil.admin.domain.AdminService;
 import kr.co.yigil.admin.domain.AdminSignUp;
-import kr.co.yigil.admin.domain.repository.AdminRepository;
-import kr.co.yigil.admin.domain.repository.AdminSignUpRepository;
-import kr.co.yigil.admin.dto.request.AdminSignUpListRequest;
-import kr.co.yigil.admin.dto.request.AdminSingupRequest;
-import kr.co.yigil.admin.dto.request.LoginRequest;
-import kr.co.yigil.admin.dto.response.AdminInfoResponse;
-import kr.co.yigil.admin.dto.response.AdminSignUpListResponse;
-import kr.co.yigil.admin.dto.response.AdminSignupResponse;
+import kr.co.yigil.admin.infrastructure.AdminRepository;
+import kr.co.yigil.admin.infrastructure.AdminSignUpRepository;
+import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
+import kr.co.yigil.admin.interfaces.dto.request.AdminSingupRequest;
+import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
+import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
+import kr.co.yigil.admin.interfaces.dto.response.AdminSignUpListResponse;
+import kr.co.yigil.admin.interfaces.dto.response.AdminSignupResponse;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
 import kr.co.yigil.global.exception.BadRequestException;

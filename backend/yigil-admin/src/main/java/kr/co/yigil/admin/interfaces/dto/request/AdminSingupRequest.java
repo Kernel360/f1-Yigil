@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.dto.request;
+package kr.co.yigil.admin.interfaces.dto.request;
 
 import kr.co.yigil.admin.domain.AdminSignUp;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,8 @@
-package kr.co.yigil.admin.application;
+package kr.co.yigil.admin.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import kr.co.yigil.admin.infrastructure.AdminPasswordGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

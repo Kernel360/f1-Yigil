@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.presentation;
+package kr.co.yigil.admin.interfaces;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -7,27 +7,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import kr.co.yigil.admin.application.AdminService;
-import kr.co.yigil.admin.dto.request.AdminSingupRequest;
-import kr.co.yigil.admin.dto.request.LoginRequest;
-import kr.co.yigil.admin.dto.response.AdminInfoResponse;
-import kr.co.yigil.admin.dto.response.AdminSignupResponse;
+import kr.co.yigil.admin.domain.AdminService;
+import kr.co.yigil.admin.interfaces.dto.request.AdminSingupRequest;
+import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
+import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
+import kr.co.yigil.admin.interfaces.dto.response.AdminSignupResponse;
+import kr.co.yigil.admin.interfaces.controller.AdminApiController;
 import kr.co.yigil.auth.dto.JwtToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,8 +30,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(AdminController.class)
-public class AdminControllerTest {
+@WebMvcTest(AdminApiController.class)
+public class AdminApiControllerTest {
 
     private MockMvc mockMvc;
 
@@ -45,7 +39,7 @@ public class AdminControllerTest {
     private AdminService adminService;
 
     @InjectMocks
-    private AdminController adminController;
+    private AdminApiController adminApiController;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {

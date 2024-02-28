@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.domain.repository;
+package kr.co.yigil.admin.infrastructure;
 
 import java.util.Optional;
 import kr.co.yigil.admin.domain.Admin;

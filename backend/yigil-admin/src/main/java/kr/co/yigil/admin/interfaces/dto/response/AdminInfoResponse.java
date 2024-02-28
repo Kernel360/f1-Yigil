@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.dto.response;
+package kr.co.yigil.admin.interfaces.dto.response;
 
 import kr.co.yigil.admin.domain.Admin;
 import lombok.AllArgsConstructor;
