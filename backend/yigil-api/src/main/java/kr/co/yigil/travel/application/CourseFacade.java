@@ -23,13 +23,11 @@ public class CourseFacade {
     }
 
     public void registerCourse(RegisterCourseRequest command, Long memberId) {
-        Course course = courseService.registerCourse(command, memberId);
-        fileUploader.upload(command.getMapStaticImageFile(), course.getMapStaticImageFile().getFileName());
+        courseService.registerCourse(command, memberId);
     }
 
     public void registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command, Long memberId) {
-        Course course = courseService.registerCourseWithoutSeries(command, memberId);
-        fileUploader.upload(command.getMapStaticImageFile(), course.getMapStaticImageFile().getFileName());
+        courseService.registerCourseWithoutSeries(command, memberId);
     }
 
     public CourseInfo.Main retrieveCourseInfo(Long courseId) { return courseService.retrieveCourseInfo(courseId); }

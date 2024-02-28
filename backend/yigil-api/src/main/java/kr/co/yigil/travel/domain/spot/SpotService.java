@@ -13,11 +13,11 @@ public interface SpotService {
 
     public SpotInfo.MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId);
 
-    Spot registerSpot(RegisterSpotRequest command, Long memberId);
+    void registerSpot(RegisterSpotRequest command, Long memberId);
 
     public SpotInfo.Main retrieveSpotInfo(Long spotId);
 
-    Spot modifySpot(ModifySpotRequest command, Long spotId, Long memberId);
+    void modifySpot(ModifySpotRequest command, Long spotId, Long memberId);
 
     void deleteSpot(Long spotId, Long memberId);
 

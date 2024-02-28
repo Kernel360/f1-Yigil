@@ -110,12 +110,12 @@ public class SpotApiController {
     @MemberOnly
     public ResponseEntity<MySpotsResponseDto> getMySpotList(
         @Auth final Accessor accessor,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
         @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         final MySpotsResponse mySpotsResponse = spotFacade.getMemberSpotsInfo(
             accessor.getMemberId(), pageRequest, visibility);
