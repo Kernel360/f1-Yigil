@@ -125,11 +125,8 @@ public class Member {
     }
 
     public String getProfileImageUrl() {
-        if(profileImageUrl == null)
-            return null;
-        if(profileImageUrl.startsWith("http://"))
-            return profileImageUrl;
-        else
-            return DEFAULT_PROFILE_CDN + profileImageUrl;
+        if(profileImageUrl == null) return null;
+        if(profileImageUrl.startsWith("http://")) return profileImageUrl;
+        else return DEFAULT_PROFILE_CDN + profileImageUrl;
     }
 }
