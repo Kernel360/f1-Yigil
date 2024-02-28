@@ -15,6 +15,7 @@ import { EventFor } from '@/types/type';
 import Dialog from '../../ui/dialog/Dialog';
 import { TMyPageSpot } from '../types';
 import { getMyPageSpots } from '../hooks/myPageActions';
+import { myPageSpotListSchema } from '@/types/myPageResponse';
 
 export default function MyPageSpotList({
   placeList,
@@ -72,8 +73,22 @@ export default function MyPageSpotList({
       sortOption,
       selectOption,
     );
+
+    const parsedSpotList = await myPageSpotListSchema.safeParse(content);
+    if (!parsedSpotList.success) {
+      setAllSpotList([]);
+      return;
+    }
+
+    const addCdnContent: TMyPageSpot[] = await new Promise((resolve) => {
+      return content.map((item) => ({
+        ...item,
+        image_url: `${process.env.CDN_URL}/${item.image_url}`,
+      }));
+    });
+
     setTotalPageCount(total_page);
-    setAllSpotList([...content]);
+    setAllSpotList([...addCdnContent]);
   };
 
   useEffect(() => {
@@ -203,7 +218,7 @@ export default function MyPageSpotList({
     }
   };
 
-  return (
+  return !!allSpotList.length ? (
     <>
       <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
@@ -232,11 +247,12 @@ export default function MyPageSpotList({
         </div>
       )}
 
-      {allSpotList.map(({ spot_id, ...data }, idx) => (
+      {allSpotList.map(({ spot_id, image_url, ...data }, idx) => (
         <MyPageSpotItem
           idx={idx}
           key={spot_id}
           spot_id={spot_id}
+          image_url={image_url}
           {...data}
           checkedList={checkedList}
           onChangeCheckedList={onChangeCheckedList}
@@ -249,5 +265,9 @@ export default function MyPageSpotList({
         totalPage={totalPageCount}
       />
     </>
+  ) : (
+    <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+      장소를 추가해주세요.
+    </div>
   );
 }

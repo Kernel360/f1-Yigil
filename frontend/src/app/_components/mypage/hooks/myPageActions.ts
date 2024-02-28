@@ -1,6 +1,7 @@
 'use server';
 
 import { requestWithCookie } from '../../api/httpRequest';
+import { TMyPageSpot } from '../types';
 
 export const myPageSpotRequest = requestWithCookie('spots/my');
 export const myPageCourseRequest = requestWithCookie('courses/my');
@@ -16,7 +17,7 @@ export const getMyPageSpots = async (
   size: number = 5,
   sortOrder: string = 'desc',
   selectOption: string = 'all',
-) => {
+): Promise<{ content: TMyPageSpot[]; total_page: number }> => {
   return myPageSpotRequest(
     `?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'

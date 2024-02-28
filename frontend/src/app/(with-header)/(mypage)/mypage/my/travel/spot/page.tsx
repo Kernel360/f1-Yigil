@@ -9,17 +9,9 @@ export default async function MyPageMySpot() {
   if (!parsedSpotList.success) return <div>failed</div>;
 
   return (
-    <>
-      {!!spotList.content.length ? (
-        <MyPageSpotList
-          placeList={spotList.content}
-          totalPage={spotList.total_page}
-        />
-      ) : (
-        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-          장소를 추가해주세요.
-        </div>
-      )}
-    </>
+    <MyPageSpotList
+      placeList={parsedSpotList.data}
+      totalPage={spotList.total_page}
+    />
   );
 }
