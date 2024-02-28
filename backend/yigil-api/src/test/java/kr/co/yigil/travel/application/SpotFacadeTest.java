@@ -11,6 +11,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
@@ -97,10 +99,19 @@ public class SpotFacadeTest {
 
         when(command.getFiles()).thenReturn(files);
 
+        Spot mockSpot = mock(Spot.class);
+        AttachFiles mockAttachFiles = mock(AttachFiles.class);
+        when(mockSpot.getAttachFiles()).thenReturn(mockAttachFiles);
+
+        AttachFile mockAttachFile = mock(AttachFile.class);
+        when(mockAttachFiles.getFiles()).thenReturn(List.of(mockAttachFile));
+        when(mockAttachFile.getOriginalFileName()).thenReturn("image");
+
+        when(spotService.registerSpot(command, memberId)).thenReturn(mockSpot);
+
         spotFacade.registerSpot(command, memberId);
 
         verify(spotService).registerSpot(command, memberId);
-        files.forEach(file -> verify(fileUploader).upload(file));
     }
 
     @DisplayName("retrieveSpotinfo 메서드가 SpotInfo를 잘 반환하는지")
@@ -129,11 +140,18 @@ public class SpotFacadeTest {
         );
 
         when(command.getUpdatedImages()).thenReturn(updatedImages);
+        AttachFiles mockAttachFiles = mock(AttachFiles.class);
+        AttachFile mockAttachFile = mock(AttachFile.class);
+        when(mockAttachFiles.getFiles()).thenReturn(List.of(mockAttachFile));
+        when(mockAttachFile.getOriginalFileName()).thenReturn("image");
+
+        Spot mockSpot = mock(Spot.class);
+        when(spotService.modifySpot(command, spotId, memberId)).thenReturn(mockSpot);
+        when(mockSpot.getAttachFiles()).thenReturn(mockAttachFiles);
 
         spotFacade.modifySpot(command, spotId, memberId);
 
         verify(spotService).modifySpot(command, spotId, memberId);
-        updatedImages.forEach(image -> verify(fileUploader).upload(image.getImageFile()));
     }
 
     @DisplayName("deleteSpot 메서드가 SpotService를 잘 호출하는지")

@@ -22,6 +22,5 @@ public class FollowFacade {
     public void unfollow(Long unfollowerId, Long unfollowingId) {
         followService.unfollow(unfollowerId, unfollowingId);
         notificationService.sendNotification(NotificationType.UNFOLLOW, unfollowerId, unfollowingId);
-
     }
 }

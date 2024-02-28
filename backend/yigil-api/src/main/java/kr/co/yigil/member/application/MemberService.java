@@ -60,7 +60,7 @@ public class MemberService {
 
     public MemberUpdateResponse updateMemberInfo(final Long memberId, MemberUpdateRequest request) {
         Member member = findMemberById(memberId);
-        FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile());
+        FileUploadEvent event = new FileUploadEvent(this, request.getProfileImageFile(), "getFileName");
         applicationEventPublisher.publishEvent(event);
 
         return new MemberUpdateResponse("회원 정보 업데이트 성공");

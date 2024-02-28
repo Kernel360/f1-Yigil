@@ -3,6 +3,8 @@ package kr.co.yigil.travel.domain.course;
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
 
 import java.util.Objects;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -29,6 +31,8 @@ public class CourseServiceImpl implements CourseService {
     private final CourseSeriesFactory courseSeriesFactory;
     private final CourseSpotSeriesFactory courseSpotSeriesFactory;
 
+    private final FileUploader fileUploader;
+
     @Override
     public Slice<Course> getCoursesSliceInPlace(Long placeId, Pageable pageable) {
         return courseReader.getCoursesSliceInPlace(placeId, pageable);
@@ -36,21 +40,21 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public void registerCourse(RegisterCourseRequest command, Long memberId) {
+    public Course registerCourse(RegisterCourseRequest command, Long memberId) {
         Member member = memberReader.getMember(memberId);
         var spots = courseSpotSeriesFactory.store(command, memberId);
         var initCourse = command.toEntity(spots, member);
-        var course = courseStore.store(initCourse);
+        return courseStore.store(initCourse);
     }
 
     @Override
     @Transactional
-    public void registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command,
+    public Course registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command,
             Long memberId) {
         Member member = memberReader.getMember(memberId);
         var spots = courseSpotSeriesFactory.store(command, memberId);
         var initCourse = command.toEntity(spots, member);
-        var course = courseStore.store(initCourse);
+        return courseStore.store(initCourse);
     }
 
     @Override
@@ -62,10 +66,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public void modifyCourse(ModifyCourseRequest command, Long courseId, Long memberId) {
+    public Course modifyCourse(ModifyCourseRequest command, Long courseId, Long memberId) {
         var course = courseReader.getCourse(courseId);
         if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
-        var modifedCourse = courseSeriesFactory.modify(command, course);
+        return courseSeriesFactory.modify(command, course);
     }
 
     @Override

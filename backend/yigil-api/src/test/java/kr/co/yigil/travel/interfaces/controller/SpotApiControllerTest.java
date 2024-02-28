@@ -15,7 +15,11 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartBody;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -155,20 +159,22 @@ public class SpotApiControllerTest {
         MockMultipartFile mapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png", "image/png", "<<png data>>".getBytes());
         MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png", "image/png", "<<png data>>".getBytes());
 
+        String requestBody = "{\"title\": \"스팟 타이틀\"}";
+
         mockMvc.perform(multipart("/api/v1/spots")
                         .file("files", image1.getBytes())
                         .file("files", image2.getBytes())
                         .file("mapStaticImageFile", mapStaticImage.getBytes())
                         .file("placeImageFile", placeImage.getBytes())
                         .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .param("pointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
-                        .param("title", "스팟 타이틀")
-                        .param("description", "스팟 본문")
-                        .param("rate", "5.0")
-                        .param("placeName", "장소 타이틀")
-                        .param("placeAddress", "장소구 장소면 장소리")
-                        .param("placePointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
-                        .contentType(MediaType.APPLICATION_JSON)
+//                        .param("pointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
+//                        .param("title", "스팟 타이틀")
+//                        .param("description", "스팟 본문")
+//                        .param("rate", "5.0")
+//                        .param("placeName", "장소 타이틀")
+//                        .param("placeAddress", "장소구 장소면 장소리")
+//                        .param("placePointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
+                        .content(requestBody)
                 ).andDo(document(
                                 "spots/regist-spot",
                                 getDocumentRequest(),
@@ -177,6 +183,15 @@ public class SpotApiControllerTest {
                                         partWithName("files").description("Spot의 이미지 파일 (다중파일)"),
                                         partWithName("mapStaticImageFile").description("Spot의 장소를 나타내는 지도 이미지 파일(필수x)"),
                                         partWithName("placeImageFile").description("Spot의 장소를 나타내는 썸네일 이미지 파일(필수x)")
+                                ),
+                                requestFields(
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("스팟 관련 장소 명")
+//                                        fieldWithPath("title").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
+//                                        fieldWithPath("description").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
+//                                        fieldWithPath("rate").type(JsonFieldType.NUMBER).description("스팟 관련 장소 명"),
+//                                        fieldWithPath("placeName").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
+//                                        fieldWithPath("placeAddress").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
+//                                        fieldWithPath("placePointJson").type(JsonFieldType.STRING).description("스팟 관련 장소 명")
                                 ),
                                 responseFields(
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
