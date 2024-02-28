@@ -6,8 +6,7 @@ public enum NotificationType {
 
     FOLLOW((sender, receiver) -> sender + "님이 팔로우 하였습니다."),
     UNFOLLOW((sender, receiver) -> sender + "님이 언팔로우 하였습니다."),
-
-FAVOR((sender, receiver) -> sender + "님이 게시글에 좋아요를 눌렀습니다."),
+    FAVOR((sender, receiver) -> sender + "님이 게시글에 좋아요를 눌렀습니다."),
     ;
 
     private final BiFunction<String, String, String> messageComposer;
