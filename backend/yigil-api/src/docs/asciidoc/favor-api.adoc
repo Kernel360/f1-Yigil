@@ -1,0 +1,37 @@
+==  FAVOR API
+
+=== TRAVEL 좋아요 하기
+==== Request
+
+===== HTTP Request 예시
+include::{snippets}/likes/add-favor/http-request.adoc[]
+===== Path parameters
+include::{snippets}/likes/add-favor/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/likes/add-favor/response-fields.adoc[]
+==== Response Body
+include::{snippets}/likes/add-favor/response-body.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/likes/add-favor/http-response.adoc[]
+'''
+
+=== TRAVEL 좋아요 취소하기
+
+==== Request
+
+===== HTTP Request 예시
+
+include::{snippets}/likes/delete-favor/http-request.adoc[]
+
+===== Path parameters
+
+include::{snippets}/likes/delete-favor/path-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/likes/delete-favor/response-fields.adoc[]
+==== Response Body
+
+include::{snippets}/likes/delete-favor/response-body.adoc[]

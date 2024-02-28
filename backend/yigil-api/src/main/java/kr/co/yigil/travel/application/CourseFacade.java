@@ -24,12 +24,10 @@ public class CourseFacade {
 
     public void registerCourse(RegisterCourseRequest command, Long memberId) {
         courseService.registerCourse(command, memberId);
-        fileUploader.upload(command.getMapStaticImageFile());
     }
 
     public void registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command, Long memberId) {
         courseService.registerCourseWithoutSeries(command, memberId);
-        fileUploader.upload(command.getMapStaticImageFile());
     }
 
     public CourseInfo.Main retrieveCourseInfo(Long courseId) { return courseService.retrieveCourseInfo(courseId); }

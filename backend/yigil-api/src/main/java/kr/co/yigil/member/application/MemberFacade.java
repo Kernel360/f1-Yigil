@@ -21,8 +21,7 @@ public class MemberFacade {
     public MemberInfo.MemberUpdateResponse updateMemberInfo(final Long memberId,
         MemberCommand.MemberUpdateRequest request) {
 
-        boolean fileChanged = memberService.updateMemberInfo(memberId, request);
-        if(fileChanged) fileUploader.upload(request.getProfileImageFile());
+        memberService.updateMemberInfo(memberId, request);
         return new MemberInfo.MemberUpdateResponse("회원 정보 업데이트 성공");
     }
 

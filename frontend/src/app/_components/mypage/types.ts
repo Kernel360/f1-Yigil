@@ -9,18 +9,18 @@ export interface TUserInfo {
 export interface TMyPageSpot {
   spot_id: number;
   image_url: string;
-  rating: number;
-  post_date: string;
+  rate: number;
+  created_date: string;
   title: string;
-  isSecret: boolean;
+  is_private: boolean;
 }
 
 export interface TMyPageCourse {
   course_id: number;
   title: string;
-  static_image_url: string;
-  isSecret: boolean;
-  created_at: string;
+  map_static_image_url: string;
+  is_private: boolean;
+  created_date: string;
   rate: number;
   spot_count: number;
 }

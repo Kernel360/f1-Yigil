@@ -2,10 +2,13 @@ package kr.co.yigil.member.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.Member;
@@ -31,6 +34,8 @@ class MemberServiceImplTest {
     private MemberStore memberStore;
     @Mock
     private FollowReader followReader;
+    @Mock
+    private FileUploader fileUploader;
 
     @DisplayName("retrieveMemberInfo 를 호출했을 때 멤버 정보 조회가 잘 되는지 확인")
     @Test
@@ -66,13 +71,15 @@ class MemberServiceImplTest {
         MemberCommand.MemberUpdateRequest request = new MemberUpdateRequest("nickname", "10대", "여성",
             mockFile);
 
-        String currentProfileImageUrl = "current.jpg";
-        Member mockMember = new Member(memberId, null, null, null, currentProfileImageUrl, null,
-            null, null);
+        Member mockMember = mock(Member.class);
+
+        AttachFile mockAttachFile = mock(AttachFile.class);
 
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
+        when(fileUploader.upload(mockFile)).thenReturn(mockAttachFile);
+        when(mockAttachFile.getFileUrl()).thenReturn("images/image.jpg");
 
-        var result = memberService.updateMemberInfo(memberId, request);
-        assertThat(result).isTrue();
+        memberService.updateMemberInfo(memberId, request);
+        verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), anyString());
     }
 }
