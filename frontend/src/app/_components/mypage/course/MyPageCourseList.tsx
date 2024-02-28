@@ -165,7 +165,7 @@ export default function MyPageCourseList({
 
   return (
     <>
-      <div className="my-4">
+      <div className="my-4 px-2">
         <MyPageSelectBtns
           selectOption={selectOption}
           sortOption={sortOption}
