@@ -1,4 +1,4 @@
-package kr.co.yigil.login.dto.response;
+package kr.co.yigil.login.interfaces.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

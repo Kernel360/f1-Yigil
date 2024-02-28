@@ -1,4 +1,4 @@
-package kr.co.yigil.login.application;
+package kr.co.yigil.login.infrastructure;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

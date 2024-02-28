@@ -12,8 +12,6 @@ import org.springframework.data.domain.Slice;
 @Mapper(componentModel = "spring")
 public interface NotificationMapper {
 
-//    NotificationMapper INSTANCE = Mappers.getMapper(NotificationMapper.class);
-
     default NotificationsResponse notificationSliceToNotificationsResponse(Slice<Notification> notificationSlice) {
         List<NotificationInfoDto> notificationInfoDtoList = notificationsToNotificationInfoDtoList(notificationSlice.getContent());
         boolean hasNext = notificationSlice.hasNext();
