@@ -23,8 +23,6 @@ export default function MyPageCourseList({
 }) {
   const [allCourseList, setAllCourseList] =
     useState<TMyPageCourse[]>(placeList);
-  const [renderCourseList, setRenderCourseList] =
-    useState<TMyPageCourse[]>(placeList);
   const [checkedList, setCheckedList] = useState<
     { course_id: TMyPageCourse['course_id']; isSecret: boolean }[]
   >([]);
@@ -103,10 +101,6 @@ export default function MyPageCourseList({
     getCourse(1, divideCount, sortOption, selectOption);
   }, [selectOption, sortOption]);
 
-  useEffect(() => {
-    setRenderCourseList(allCourseList);
-  }, [allCourseList]);
-
   const onClickDelete = () => {};
   const onClickUnLock = () => {};
   const onClickLock = () => {};
@@ -124,7 +118,8 @@ export default function MyPageCourseList({
     setCheckedList([]);
   };
 
-  const onChangeSortOption = (option: string) => {
+  const onChangeSortOption = (option: string | number) => {
+    if (typeof option === 'number') return;
     resetCourseList();
     setSortOption(option);
     resetCheckList();
@@ -168,7 +163,7 @@ export default function MyPageCourseList({
     }
   };
 
-  return !!placeList.length ? (
+  return (
     <>
       <div className="my-4">
         <MyPageSelectBtns
@@ -188,27 +183,22 @@ export default function MyPageCourseList({
           />
         </div>
       )}
-      {!!renderCourseList.length &&
-        renderCourseList.map(({ course_id, ...data }, idx) => (
-          <MyPageCourseItem
-            key={course_id}
-            idx={idx}
-            course_id={course_id}
-            {...data}
-            checkedList={checkedList}
-            onChangeCheckedList={onChangeCheckedList}
-            selectOption={selectOption}
-          />
-        ))}
+      {allCourseList.map(({ course_id, ...data }, idx) => (
+        <MyPageCourseItem
+          key={course_id}
+          idx={idx}
+          course_id={course_id}
+          {...data}
+          checkedList={checkedList}
+          onChangeCheckedList={onChangeCheckedList}
+          selectOption={selectOption}
+        />
+      ))}
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPage={totalPageCount}
       />
     </>
-  ) : (
-    <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-      코스를 추가해주세요.
-    </div>
   );
 }
