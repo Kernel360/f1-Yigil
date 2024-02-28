@@ -1,6 +1,5 @@
 package kr.co.yigil.file;
 
-import static kr.co.yigil.file.FileUploadUtil.generateUniqueFileName;
 import static kr.co.yigil.file.FileUploadUtil.getPath;
 
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -29,11 +28,8 @@ public class FileUploadEventListener {
     public void handleFileUpload(FileUploadEvent event) throws IOException {
         MultipartFile file = event.getFile();
         FileType fileType = event.getFileType();
-        String fileName = generateUniqueFileName(file.getOriginalFilename());
+        String fileName = event.getFileName();
         String s3Path = getPath(fileType, fileName);
-
-        AttachFile attachFile = new AttachFile(fileType, s3Path, file.getOriginalFilename(),
-                file.getSize());
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());

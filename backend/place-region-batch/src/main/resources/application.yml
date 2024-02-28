@@ -1,0 +1,28 @@
+spring:
+  batch:
+    job:
+      enabled: true
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
+    username: postgres
+    password: 12345678
+logging:
+  level:
+    root: info
+  slack:
+    webhook-uri: https://hooks.slack.com/services/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
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+server:
+  port: 8001
