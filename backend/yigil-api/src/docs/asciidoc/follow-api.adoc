@@ -1,0 +1,97 @@
+== FOLLOW API
+
+=== 팔로우
+
+==== Request
+로그인 필수 : Y
+
+===== Path parameter
+include::{snippets}/follows/follow/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/follows/follow/http-request.adoc[]
+
+==== Response
+include::{snippets}/follows/follow/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/follows/follow/http-response.adoc[]
+
+=== 언팔로우
+
+
+==== Request
+로그인 필수 : Y
+
+===== Path parameter
+include::{snippets}/follows/unfollow/path-parameters.adoc[]
+
+
+===== HTTP Request 예시
+include::{snippets}/follows/unfollow/http-request.adoc[]
+
+==== Response
+include::{snippets}/follows/unfollow/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/follows/unfollow/http-response.adoc[]
+
+=== 내 팔로잉 리스트
+
+==== Request
+로그인 필수 : Y
+
+===== Path parameter
+include::{snippets}/follows/get-my-following-list/query-parameters.adoc[]
+===== HTTP Request 예시
+include::{snippets}/follows/get-my-following-list/http-request.adoc[]
+==== Response
+include::{snippets}/follows/get-my-following-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/follows/get-my-following-list/http-response.adoc[]
+'''
+=== 내 팔로워 리스트
+
+==== Request
+로그인 필수 : Y
+
+===== Path parameter
+include::{snippets}/follows/get-my-follower-list/query-parameters.adoc[]
+===== HTTP Request 예시
+include::{snippets}/follows/get-my-follower-list/http-request.adoc[]
+==== Response
+include::{snippets}/follows/get-my-follower-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/follows/get-my-follower-list/http-response.adoc[]
+
+
+=== 멤버의 팔로잉 리스트
+
+==== Request
+로그인 필수 : Y
+
+// ===== Path parameter
+// include::{snippets}/follows/get-member-following-list/request-body.adoc[]
+===== HTTP Request 예시
+include::{snippets}/follows/get-member-following-list/http-request.adoc[]
+==== Response
+include::{snippets}/follows/get-member-following-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/follows/get-member-following-list/http-response.adoc[]
+'''
+
+=== 멤버의 팔로워 리스트
+
+==== Request
+로그인 필수 : Y
+
+// ===== Path parameter
+// include::{snippets}/follows/get-member-follower-list/query-parameters.adoc[]
+===== HTTP Request 예시
+include::{snippets}/follows/get-member-follower-list/http-request.adoc[]
+==== Response
+include::{snippets}/follows/get-member-follower-list/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/follows/get-member-follower-list/http-response.adoc[]
+
+'''

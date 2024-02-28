@@ -27,7 +27,11 @@ export default function AddConfirmContent() {
       </div>
       <ul className="mx-10 flex flex-col items-center gap-y-4">
         <Link
-          href="/mypage"
+          href={`${
+            url.includes('spot')
+              ? '/mypage/my/travel/spot'
+              : '/mypage/my/travel/course'
+          }`}
           className="w-full py-4 flex justify-center items-center bg-gray-100 text-gray-500 text-2xl leading-7 font-semibold rounded-xl hover:bg-gray-200 hover:text-gray-400 active:bg-gray-300 active:text-white"
         >
           마이페이지로 바로가기
