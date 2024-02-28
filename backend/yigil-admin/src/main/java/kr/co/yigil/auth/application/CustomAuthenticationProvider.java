@@ -5,8 +5,8 @@ import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_PASSWORD_DOES_NOT
 
 import java.util.List;
 import java.util.stream.Collectors;
-import kr.co.yigil.admin.domain.Admin;
-import kr.co.yigil.admin.infrastructure.AdminRepository;
+import kr.co.yigil.admin.domain.admin.Admin;
+import kr.co.yigil.admin.infrastructure.admin.AdminRepository;
 import kr.co.yigil.global.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

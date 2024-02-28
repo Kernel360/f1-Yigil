@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import kr.co.yigil.admin.domain.AdminService;
-import kr.co.yigil.admin.interfaces.dto.request.AdminSingupRequest;
+import kr.co.yigil.admin.domain.admin.AdminService;
+import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;
 import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
 import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignupResponse;
@@ -49,7 +49,7 @@ public class AdminApiControllerTest {
     @DisplayName("회원가입이 요청 되었을 때 200 응답과 response가 잘 반환되는지")
     @Test
     void whenSendSignUpRequest_thenReturns200AndAdminSignupResponse() throws Exception {
-        AdminSingupRequest request = new AdminSingupRequest();
+        AdminSignupRequest request = new AdminSignupRequest();
         AdminSignupResponse response = new AdminSignupResponse();
 
         given(adminService.sendSignUpRequest(request)).willReturn(response);

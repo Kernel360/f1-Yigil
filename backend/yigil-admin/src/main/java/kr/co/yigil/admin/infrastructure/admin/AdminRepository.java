@@ -1,7 +1,7 @@
-package kr.co.yigil.admin.infrastructure;
+package kr.co.yigil.admin.infrastructure.admin;
 
 import java.util.Optional;
-import kr.co.yigil.admin.domain.Admin;
+import kr.co.yigil.admin.domain.admin.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {

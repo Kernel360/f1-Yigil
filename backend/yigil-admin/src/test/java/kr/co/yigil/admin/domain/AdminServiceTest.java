@@ -13,13 +13,13 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import kr.co.yigil.admin.domain.Admin;
-import kr.co.yigil.admin.domain.AdminService;
-import kr.co.yigil.admin.domain.AdminSignUp;
-import kr.co.yigil.admin.infrastructure.AdminRepository;
-import kr.co.yigil.admin.infrastructure.AdminSignUpRepository;
+import kr.co.yigil.admin.domain.admin.Admin;
+import kr.co.yigil.admin.domain.admin.AdminService;
+import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
+import kr.co.yigil.admin.infrastructure.admin.AdminRepository;
+import kr.co.yigil.admin.infrastructure.adminSignUp.AdminSignUpRepository;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
-import kr.co.yigil.admin.interfaces.dto.request.AdminSingupRequest;
+import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;
 import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
 import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignUpListResponse;
@@ -82,7 +82,7 @@ public class AdminServiceTest {
     @DisplayName("회원가입 요청 메서드가 잘 동작하는지")
     @Test
     void sendSignUpRequestTest() {
-        AdminSingupRequest singupRequest = new AdminSingupRequest("user@example.com", "user");
+        AdminSignupRequest singupRequest = new AdminSignupRequest("user@example.com", "user");
         when(adminSignUpRepository.save(any(AdminSignUp.class))).thenReturn(null);
 
         AdminSignupResponse response = adminService.sendSignUpRequest(singupRequest);
@@ -93,7 +93,7 @@ public class AdminServiceTest {
     @DisplayName("이미 존재하는 어드민 정보로 회원가입 요청 시 예외가 잘 발생하는지")
     @Test
     void sendSignUpRequest_FailureAlreadyExists() {
-        AdminSingupRequest request = new AdminSingupRequest("email@example.com", "nickname");
+        AdminSignupRequest request = new AdminSignupRequest("email@example.com", "nickname");
 
         when(adminRepository.existsByEmailOrNickname(request.getEmail(), request.getNickname())).thenReturn(true);
 
@@ -103,7 +103,7 @@ public class AdminServiceTest {
     @DisplayName("이미 보낸 회원가입 요청과 중복되는 정보로 요청 시 예외가 잘 발생하는지")
     @Test
     void sendSignUpRequest_FailureDataIntegrityViolation() {
-        AdminSingupRequest request = new AdminSingupRequest("email@example.com", "nickname");
+        AdminSignupRequest request = new AdminSignupRequest("email@example.com", "nickname");
 
         when(adminRepository.existsByEmailOrNickname(request.getEmail(), request.getNickname())).thenReturn(false);
         doThrow(new DataIntegrityViolationException("")).when(adminSignUpRepository).save(any());

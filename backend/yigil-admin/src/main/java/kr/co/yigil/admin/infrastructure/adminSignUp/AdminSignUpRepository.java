@@ -1,7 +1,6 @@
-package kr.co.yigil.admin.infrastructure;
+package kr.co.yigil.admin.infrastructure.adminSignUp;
 
-import kr.co.yigil.admin.domain.AdminSignUp;
-import org.springframework.data.domain.Page;
+import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdminSignUpRepository extends JpaRepository<AdminSignUp, Long> {

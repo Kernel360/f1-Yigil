@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.domain;
+package kr.co.yigil.admin.domain.adminSignUp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

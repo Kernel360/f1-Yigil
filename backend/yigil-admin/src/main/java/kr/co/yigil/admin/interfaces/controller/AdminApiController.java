@@ -1,8 +1,8 @@
 package kr.co.yigil.admin.interfaces.controller;
 
-import kr.co.yigil.admin.domain.AdminService;
+import kr.co.yigil.admin.application.AdminFacade;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
-import kr.co.yigil.admin.interfaces.dto.request.AdminSingupRequest;
+import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;
 import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpAcceptRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpRejectRequest;
@@ -26,49 +26,51 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/api/v1/admins")
+@RequestMapping("/api/v1/admins")
 public class AdminApiController {
 
-    private final AdminService adminService;
-
-    @PostMapping("/login")
-    public JwtToken login(@RequestBody LoginRequest request) throws Exception {
-        return adminService.signIn(request);
-    }
+    private final AdminFacade adminFacade;
 
     @PostMapping("/signup")
-    public ResponseEntity<AdminSignupResponse> sendSignUpRequest(@RequestBody AdminSingupRequest request) {
-        AdminSignupResponse response = adminService.sendSignUpRequest(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<AdminSignupResponse> sendSignUpRequest(@RequestBody AdminSignupRequest request) {
+        adminFacade.sendSignUpRequest(request);
+
+        return  ResponseEntity.ok(new AdminSignupResponse("회원가입 요청이 완료되었습니다."));
     }
 
     @GetMapping("/signup/list")
     public ResponseEntity<Page<AdminSignUpListResponse>> getSignUpRequestList(@ModelAttribute AdminSignUpListRequest request) {
-        Page<AdminSignUpListResponse> response = adminService.getSignUpRequestList(request);
+        Page<AdminSignUpListResponse> response = adminFacade.getSignUpRequestList(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/signup/accept")
     public ResponseEntity<SignUpAcceptResponse> acceptSignUp(@RequestBody SignUpAcceptRequest request) {
-        SignUpAcceptResponse response = adminService.acceptAdminSignUp(request);
-        return ResponseEntity.ok(response);
+        adminFacade.acceptAdminSignUp(request);
+        return ResponseEntity.ok(new SignUpAcceptResponse("가입 승인 완료");
+);
     }
 
     @PostMapping("/signup/reject")
     public ResponseEntity<SignUpRejectResponse> rejectSignUp(@RequestBody SignUpRejectRequest request) {
-        SignUpRejectResponse response = adminService.rejectAdminSignUp(request);
-        return ResponseEntity.ok(response);
+        adminFacade.rejectAdminSignUp(request);
+        return ResponseEntity.ok(new SignUpRejectResponse("가입 거절 완료"));
+    }
+
+    @PostMapping("/login")
+    public JwtToken login(@RequestBody LoginRequest request) throws Exception {
+        return adminFacade.signIn(request);
     }
 
     @GetMapping("/info")
     public ResponseEntity<AdminInfoResponse> getMemberInfo(@AuthenticationPrincipal User user) {
-        AdminInfoResponse response = adminService.getAdminInfoByEmail(user.getUsername());
+        AdminInfoResponse response = adminFacade.getAdminInfoByEmail(user.getUsername());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/test")
     public ResponseEntity<String> testSignUp() {
-        adminService.testSignUp();
+        adminFacade.testSignUp();
         return ResponseEntity.ok("succeed test");
     }
 }

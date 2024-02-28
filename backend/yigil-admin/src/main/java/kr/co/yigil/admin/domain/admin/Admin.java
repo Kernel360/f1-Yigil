@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.domain;
+package kr.co.yigil.admin.domain.admin;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
