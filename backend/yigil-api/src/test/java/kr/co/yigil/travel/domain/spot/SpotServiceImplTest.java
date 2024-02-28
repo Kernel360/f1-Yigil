@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
@@ -279,7 +278,7 @@ public class SpotServiceImplTest {
         PageRequest pageable = PageRequest.of(0, 10);
         String selected = "private";
         AttachFile mockAttachFile = new AttachFile(mock(FileType.class), "fileUrl",
-            "originalFileName", 100L);
+            "originalFileName", "filename", 100L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
         Member mockMember = mock(Member.class);
         Spot mockSpot = new Spot(spotId, mockMember, mock(Point.class), false, "title",

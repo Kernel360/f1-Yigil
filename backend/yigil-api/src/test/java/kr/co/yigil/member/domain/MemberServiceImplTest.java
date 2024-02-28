@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.Member;
@@ -31,6 +32,8 @@ class MemberServiceImplTest {
     private MemberStore memberStore;
     @Mock
     private FollowReader followReader;
+    @Mock
+    private FileUploader fileUploader;
 
     @DisplayName("retrieveMemberInfo 를 호출했을 때 멤버 정보 조회가 잘 되는지 확인")
     @Test
@@ -72,7 +75,7 @@ class MemberServiceImplTest {
 
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
 
-        var result = memberService.updateMemberInfo(memberId, request);
-        assertThat(result).isTrue();
+        memberService.updateMemberInfo(memberId, request);
+
     }
 }

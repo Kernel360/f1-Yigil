@@ -9,6 +9,6 @@ public interface MemberService {
 
     void withdrawal(Long memberId);
 
-    boolean updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request);
+    void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request);
 
 }
