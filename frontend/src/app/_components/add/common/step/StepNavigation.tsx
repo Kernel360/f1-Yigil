@@ -48,31 +48,17 @@ export default function StepNavigation({
   }
 
   async function handleConfirm() {
-    const { name, address, spotMapImageUrl, images, rating, review } = state;
+    const result = await postSpotData(state);
 
-    const parsedImages = images.map(
-      ({ filename, uri }) => new File([dataUrlToBlob(uri)], filename),
-    );
-
-    const data = new FormData();
-    data.append('place_name', name);
-    data.append('place_address', address);
-    data.append('rate', rating.toString());
-    data.append('description', review.review);
-
-    parsedImages.forEach((image) => data.append('files', image));
-
-    if (spotMapImageUrl.startsWith('data://')) {
-      data.append(
-        'map_static_image_file',
-        new File([dataUrlToBlob(spotMapImageUrl)], `${name} 지도 이미지`),
-      );
+    if (result.success) {
+      console.log(result.data);
+      setIsOpen(false);
+      next();
+      return;
     }
 
-    await postSpotData(data);
-
-    setIsOpen(false);
-    next();
+    console.log(result.error);
+    console.error(result.error);
   }
 
   if (label === '완료') {
