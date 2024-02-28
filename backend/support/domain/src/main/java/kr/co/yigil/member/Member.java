@@ -27,6 +27,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @SQLDelete(sql = "UPDATE member SET status = 'WITHDRAW' WHERE id = ?")
 @Where(clause = "status = 'ACTIVE'")
 public class Member {
+    private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -121,5 +122,14 @@ public class Member {
         this.ages = Ages.from(age);
         this.gender = Gender.from(gender);
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getProfileImageUrl() {
+        if(profileImageUrl == null)
+            return null;
+        if(profileImageUrl.startsWith("http://"))
+            return profileImageUrl;
+        else
+            return DEFAULT_PROFILE_CDN + profileImageUrl;
     }
 }
