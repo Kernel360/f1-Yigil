@@ -8,16 +8,14 @@ public class FavorDto {
     @Getter
     @Builder
     @ToString
-    public class AddFavorResponse {
+    public static class AddFavorResponse {
         private String message;
     }
 
     @Getter
     @Builder
     @ToString
-    public class DeleteFavorResponse {
+    public static class DeleteFavorResponse {
         private String message;
     }
-
-
 }
