@@ -72,6 +72,7 @@ export default function MyPageSpotList({
       sortOption,
       selectOption,
     );
+    console.log(content);
     setTotalPageCount(total_page);
     setAllSpotList([...content]);
   };
@@ -233,23 +234,21 @@ export default function MyPageSpotList({
       )}
 
       {allSpotList.map(({ spot_id, ...data }, idx) => (
-        <>
-          <MyPageSpotItem
-            idx={idx}
-            key={spot_id}
-            spot_id={spot_id}
-            {...data}
-            checkedList={checkedList}
-            onChangeCheckedList={onChangeCheckedList}
-            selectOption={selectOption}
-          />
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPage={totalPageCount}
-          />
-        </>
+        <MyPageSpotItem
+          idx={idx}
+          key={spot_id}
+          spot_id={spot_id}
+          {...data}
+          checkedList={checkedList}
+          onChangeCheckedList={onChangeCheckedList}
+          selectOption={selectOption}
+        />
       ))}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPage={totalPageCount}
+      />
     </>
   );
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
 import { TMyPageSpot } from '../types';
+import IconWithCounts from '../../IconWithCounts';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[];
@@ -79,10 +80,13 @@ const MyPageSpotItem = ({
           {title}
         </div>
         <div className="flex gap-x-2 items-center">
-          <StarIcon className="w-4 h-4 fill-[#FBBC05]" />
-          <div className="grow text-xl leading-6 text-gray-500 font-semibold">
-            {rate.toFixed(1)}
-          </div>
+          <IconWithCounts
+            icon={
+              <StarIcon className="w-4 h-4 fill-[#FACC15] stroke-[#FACC15]" />
+            }
+            count={rate}
+            rating
+          />
           <div className="text-gray-300 font-bold">{created_date}</div>
         </div>
       </div>

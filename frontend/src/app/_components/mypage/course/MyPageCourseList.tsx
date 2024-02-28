@@ -169,7 +169,7 @@ export default function MyPageCourseList({
     }
   };
 
-  return !!placeList.length ? (
+  return (
     <>
       <div className="my-4">
         <MyPageSelectBtns
@@ -207,9 +207,5 @@ export default function MyPageCourseList({
         totalPage={totalPageCount}
       />
     </>
-  ) : (
-    <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-      코스를 추가해주세요.
-    </div>
   );
 }

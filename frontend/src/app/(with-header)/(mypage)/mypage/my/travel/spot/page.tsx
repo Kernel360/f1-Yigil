@@ -7,10 +7,15 @@ export default async function MyPageMySpot() {
   const spotList = await getMyPageSpots();
   const parsedSpotList = myPageSpotListSchema.safeParse(spotList.content);
   if (!parsedSpotList.success) return <div>failed</div>;
+  console.log(spotList);
 
   return (
     <>
-      {!!spotList.content.length ? (
+      <MyPageSpotList
+        placeList={spotList.content}
+        totalPage={spotList.total_page}
+      />
+      {/* {!!spotList.content.length ? (
         <MyPageSpotList
           placeList={spotList.content}
           totalPage={spotList.total_page}
@@ -19,7 +24,7 @@ export default async function MyPageMySpot() {
         <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
           장소를 추가해주세요.
         </div>
-      )}
+      )} */}
     </>
   );
 }

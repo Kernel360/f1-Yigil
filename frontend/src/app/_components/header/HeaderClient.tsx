@@ -9,7 +9,7 @@ import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
 import AddIcon from '/public/icons/add.svg'; // 지울것
 import { TUserInfo } from '../mypage/types';
-import { authenticateUser } from '../mypage/hooks/mypageActions';
+import { authenticateUser } from '../mypage/hooks/myPageActions';
 
 export default function HeaderClient() {
   const router = useRouter();
