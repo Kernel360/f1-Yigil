@@ -203,7 +203,7 @@ export default function MyPageSpotList({
     }
   };
 
-  return !!allSpotList.length ? (
+  return (
     <>
       <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
@@ -233,26 +233,23 @@ export default function MyPageSpotList({
       )}
 
       {allSpotList.map(({ spot_id, ...data }, idx) => (
-        <MyPageSpotItem
-          idx={idx}
-          key={spot_id}
-          spot_id={spot_id}
-          {...data}
-          checkedList={checkedList}
-          onChangeCheckedList={onChangeCheckedList}
-          selectOption={selectOption}
-        />
+        <>
+          <MyPageSpotItem
+            idx={idx}
+            key={spot_id}
+            spot_id={spot_id}
+            {...data}
+            checkedList={checkedList}
+            onChangeCheckedList={onChangeCheckedList}
+            selectOption={selectOption}
+          />
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPage={totalPageCount}
+          />
+        </>
       ))}
-      
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPage={totalPageCount}
-      />
     </>
-  ) : (
-    <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-      장소를 추가해주세요.
-    </div>
   );
 }
