@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 public class MemberInfo {
-    private static final String DEFAULT_PROFILE_CND = "http://cnd.yigil.co.kr";
 
     /**
      * 멤버 정보 조회 응답
@@ -27,7 +26,7 @@ public class MemberInfo {
             this.memberId = member.getId();
             this.email = member.getEmail();
             this.nickname = member.getNickname();
-            this.profileImageUrl = DEFAULT_PROFILE_CND + "/" + member.getProfileImageUrl();
+            this.profileImageUrl = member.getProfileImageUrl();
             this.followingCount = followCount.getFollowingCount();
             this.followerCount = followCount.getFollowerCount();
         }
