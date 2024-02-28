@@ -20,7 +20,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.awt.print.Book;
 import java.util.List;
 import kr.co.yigil.bookmark.application.BookmarkFacade;
 import kr.co.yigil.bookmark.domain.Bookmark;
@@ -33,7 +32,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -120,7 +118,7 @@ class BookmarkApiControllerTest {
         Slice<Bookmark> bookmarkSlice = new SliceImpl<>(List.of(bookmark), pageRequest, true);
         when(bookmarkFacade.getBookmarkSlice(anyLong(), any(PageRequest.class))).thenReturn(bookmarkSlice);
 
-        BookmarkInfoDto bookmarkInfoDto = new BookmarkInfoDto(1L, "placeName", "placeImage", 5.0, true);
+        BookmarkInfoDto bookmarkInfoDto = new BookmarkInfoDto(1L, "placeName", "placeImage", 5.0);
         BookmarksResponse bookmarksResponse = new BookmarksResponse(List.of(bookmarkInfoDto), true);
         when(bookmarkMapper.bookmarkSliceToBookmarksResponse(bookmarkSlice)).thenReturn(bookmarksResponse);
         mockMvc.perform(get("/api/v1/bookmarks")
@@ -141,8 +139,7 @@ class BookmarkApiControllerTest {
                                 fieldWithPath("bookmarks[].place_id").description("Bookmark한 장소 아이디"),
                                 fieldWithPath("bookmarks[].place_name").description("Bookmark한 장소 이름"),
                                 fieldWithPath("bookmarks[].place_image").description("Bookmark한 장소 이미지 URL"),
-                                fieldWithPath("bookmarks[].rate").description("Bookmark한 장소 평점"),
-                                fieldWithPath("bookmarks[].is_bookmarked").description("북마크 여부 .. 이거 꼭 필요한까요? 필요없다면 나중에 빼겠습니다ㅎㅎ")
+                                fieldWithPath("bookmarks[].rate").description("Bookmark한 장소 평점")
                         )
                 ));
         verify(bookmarkFacade).getBookmarkSlice(anyLong(), any(PageRequest.class));

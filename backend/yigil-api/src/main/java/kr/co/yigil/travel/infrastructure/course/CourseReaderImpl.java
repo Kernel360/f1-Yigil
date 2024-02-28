@@ -6,6 +6,7 @@ import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseReader;
 import kr.co.yigil.travel.infrastructure.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
@@ -25,5 +26,14 @@ public class CourseReaderImpl implements CourseReader {
     @Override
     public Slice<Course> getCoursesSliceInPlace(Long placeId, Pageable pageable) {
         return courseRepository.findBySpotPlaceId(placeId, pageable);
+    }
+
+    @Override
+    public Page<Course> getMemberCourseList(Long memberId, Pageable pageable,
+        String visibility) {
+        if (visibility.equals("all")) {
+            return courseRepository.findAllByMemberId(memberId, pageable);
+        }
+        return courseRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
     }
 }

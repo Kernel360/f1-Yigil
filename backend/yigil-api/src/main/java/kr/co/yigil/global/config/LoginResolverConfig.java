@@ -1,8 +1,7 @@
 package kr.co.yigil.global.config;
 
 import java.util.List;
-import java.util.logging.Handler;
-import kr.co.yigil.login.application.LoginArgumentResolver;
+import kr.co.yigil.login.infrastructure.LoginArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

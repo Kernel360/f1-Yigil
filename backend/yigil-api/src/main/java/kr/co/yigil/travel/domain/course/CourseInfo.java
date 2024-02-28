@@ -52,4 +52,40 @@ public class CourseInfo {
         }
     }
 
+    @Getter
+    @ToString
+    public static class MyCoursesResponse {
+
+        private final List<CourseListInfo> content;
+        private final int totalPages;
+        public MyCoursesResponse(List<CourseListInfo> courseList, int totalPages) {
+            this.content = courseList;
+            this.totalPages = totalPages;
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class CourseListInfo {
+
+        private final Long courseId;
+        private final String title;
+        private final Double rate;
+        private final Integer spotCount;
+        private final LocalDateTime createdDate;
+        private final String mapStaticImageUrl;
+        private final Boolean isPrivate;
+
+        public CourseListInfo(Course course) {
+            this.courseId = course.getId();
+            this.title = course.getTitle();
+            this.rate = course.getRate();
+            this.spotCount = course.getSpots().size();
+            this.createdDate = course.getCreatedAt();
+            this.isPrivate = course.isPrivate();
+            this.mapStaticImageUrl = course.getMapStaticImageFile().getFileUrl();
+        }
+    }
+
+
 }

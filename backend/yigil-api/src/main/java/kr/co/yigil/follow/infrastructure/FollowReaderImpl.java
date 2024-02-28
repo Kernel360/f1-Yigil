@@ -1,11 +1,9 @@
 package kr.co.yigil.follow.infrastructure;
 
+import kr.co.yigil.follow.FollowCountDto;
 import kr.co.yigil.follow.domain.Follow;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;
-import kr.co.yigil.follow.FollowCountDto;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.domain.MemberReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -14,14 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class FollowReaderImpl implements FollowReader {
+
     private final FollowRepository followRepository;
-    private final MemberReader memberReader;
 
     @Override
     public FollowCount getFollowCount(Long memberId) {
-        Member member = memberReader.getMember(memberId);
-        FollowCountDto followCountDto = followRepository.getFollowCounts(member);
-        return new FollowCount(memberId, followCountDto.getFollowerCount(), followCountDto.getFollowingCount());
+        FollowCountDto followCountDto = followRepository.getFollowCounts(memberId);
+        return new FollowCount(memberId, followCountDto.getFollowerCount(),
+            followCountDto.getFollowingCount());
     }
 
     @Override
@@ -29,18 +27,14 @@ public class FollowReaderImpl implements FollowReader {
         return followRepository.existsByFollowerIdAndFollowingId(followerId, followingId);
     }
 
-
     @Override
     public Slice<Follow> getFollowerSlice(Long memberId, Pageable pageable) {
-        Member member = memberReader.getMember(memberId);
-        return followRepository.findAllByFollower(member, pageable);
+        return followRepository.findAllByFollowingId(memberId, pageable);
     }
 
     @Override
     public Slice<Follow> getFollowingSlice(Long memberId, Pageable pageable) {
-        Member member = memberReader.getMember(memberId);
-        return followRepository.findAllByFollowing(member, pageable);
+        return followRepository.findAllByFollowerId(memberId, pageable);
+
     }
-
-
 }
