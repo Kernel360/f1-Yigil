@@ -47,12 +47,18 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                     Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest));
 
                     var spot = spotStore.store(registerSpotRequest.toEntity(member, place, true));
-                    registerSpotRequest.getFiles().forEach(fileUploader::upload);
+                    var attachFiles = spot.getAttachFiles().getFiles();
+                    var requestFiles = registerSpotRequest.getFiles();
+                    for(var attachFile : attachFiles) {
+                        for(var file : requestFiles) {
+                            if(attachFile.getOriginalFileName().equals(file.getOriginalFilename())) {
+                                fileUploader.upload(file, attachFile.getFileName());
+                            }
+                        }
+                    }
                     var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
-
                     return spot;
                 }).collect(Collectors.toList());
-
     }
 
     @Override
@@ -63,8 +69,9 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {
-        fileUploader.upload(command.getPlaceImageFile());
-        fileUploader.upload(command.getMapStaticImageFile());
-        return placeStore.store(command.toEntity());
+        var place = placeStore.store(command.toEntity());
+        fileUploader.upload(command.getPlaceImageFile(), place.getImageFile().getFileName());
+        fileUploader.upload(command.getMapStaticImageFile(), place.getMapStaticImageFile().getFileName());
+        return place;
     }
 }

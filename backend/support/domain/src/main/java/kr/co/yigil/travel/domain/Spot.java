@@ -26,7 +26,7 @@ import org.locationtech.jts.geom.Point;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Spot extends Travel {
 
-    @Column(columnDefinition = "geometry(Point,4326)")
+    @Column(columnDefinition = "geometry(Point,5186)")
     private Point location;
 
     @Setter

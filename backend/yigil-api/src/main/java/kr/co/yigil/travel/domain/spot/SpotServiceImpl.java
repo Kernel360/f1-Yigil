@@ -55,15 +55,13 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional
-    public void registerSpot(RegisterSpotRequest command, Long memberId) {
+    public Spot registerSpot(RegisterSpotRequest command, Long memberId) {
         Member member = memberReader.getMember(memberId);
-        Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(
-            command.getRegisterPlaceRequest().getPlaceName(),
-            command.getRegisterPlaceRequest().getPlaceAddress());
-        Place place = optionalPlace.orElseGet(
-            () -> registerNewPlace(command.getRegisterPlaceRequest()));
+        Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(command.getRegisterPlaceRequest().getPlaceName(), command.getRegisterPlaceRequest().getPlaceAddress());
+        Place place = optionalPlace.orElseGet(()-> registerNewPlace(command.getRegisterPlaceRequest()));
         var spot = spotStore.store(command.toEntity(member, place, false));
         var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
+        return spot;
     }
 
     @Override
@@ -75,31 +73,25 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional
-    public void modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
+    public Spot modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
         var spot = spotReader.getSpot(spotId);
-        if (!Objects.equals(spot.getMember().getId(), memberId)) {
-            throw new AuthException(ExceptionCode.INVALID_AUTHORITY);
-        }
-        var modifiedSpot = spotSeriesFactory.modify(command, spot);
+        if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(ExceptionCode.INVALID_AUTHORITY);
+        return spotSeriesFactory.modify(command, spot);
     }
 
     @Override
     @Transactional
     public void deleteSpot(Long spotId, Long memberId) {
         var spot = spotReader.getSpot(spotId);
-        if (!Objects.equals(spot.getMember().getId(), memberId)) {
-            throw new AuthException(
+        if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(
                 ExceptionCode.INVALID_AUTHORITY);
-        }
         spotStore.remove(spot);
-        if (spot.getPlace() != null) {
-            placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
-        }
+        if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {
-        fileUploader.upload(command.getPlaceImageFile());
-        fileUploader.upload(command.getMapStaticImageFile());
+        fileUploader.upload(command.getPlaceImageFile(), "");
+        fileUploader.upload(command.getMapStaticImageFile(), "");
         return placeStore.store(command.toEntity());
     }
 

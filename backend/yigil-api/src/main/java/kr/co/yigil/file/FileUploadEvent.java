@@ -17,15 +17,15 @@ public class FileUploadEvent extends ApplicationEvent {
 
     private final MultipartFile file;
     private final FileType fileType;
+    private final String fileName;
 
-    public FileUploadEvent(Object source, MultipartFile file) {
+    public FileUploadEvent(Object source, MultipartFile file, String fileName) {
         super(source);
         this.file = file;
         this.fileType = determineFileType(file);
+        this.fileName = fileName;
         validateFileSize(fileType, file.getSize());
     }
-
-
 
     private void validateFileSize(FileType fileType, long size) {
         long maxSize = fileType == FileType.IMAGE ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE;
