@@ -33,7 +33,6 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
         <button
           className="w-[9px] h-[16px] cursor-pointer px-1"
           onClick={minusPage}
-          tabIndex={currentPage !== 1 ? 0 : -1}
         >
           <LeftIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
         </button>
@@ -57,9 +56,6 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
         <button
           className="w-[9px] h-[16px] cursor-pointer px-1"
           onClick={addPage}
-          tabIndex={
-            renderPage.includes(totalPage) && currentPage !== totalPage ? -1 : 0
-          }
         >
           <RightIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
         </button>
