@@ -72,7 +72,6 @@ export default function MyPageSpotList({
       sortOption,
       selectOption,
     );
-    console.log(content);
     setTotalPageCount(total_page);
     setAllSpotList([...content]);
   };

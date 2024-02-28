@@ -11,11 +11,7 @@ export default async function MyPageMySpot() {
 
   return (
     <>
-      <MyPageSpotList
-        placeList={spotList.content}
-        totalPage={spotList.total_page}
-      />
-      {/* {!!spotList.content.length ? (
+      {!!spotList.content.length ? (
         <MyPageSpotList
           placeList={spotList.content}
           totalPage={spotList.total_page}
@@ -24,7 +20,7 @@ export default async function MyPageMySpot() {
         <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
           장소를 추가해주세요.
         </div>
-      )} */}
+      )}
     </>
   );
 }
