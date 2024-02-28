@@ -27,7 +27,7 @@ public class MemberInfo {
             this.memberId = member.getId();
             this.email = member.getEmail();
             this.nickname = member.getNickname();
-            this.profileImageUrl = DEFAULT_PROFILE_CND + "/" + member.getProfileImageUrl();
+            this.profileImageUrl = member.getProfileImageUrl();
             this.followingCount = followCount.getFollowingCount();
             this.followerCount = followCount.getFollowerCount();
         }
@@ -50,8 +50,6 @@ public class MemberInfo {
         }
     }
 
-
-
     @Getter
     @ToString
     public static class MemberUpdateResponse {
@@ -61,7 +59,6 @@ public class MemberInfo {
             this.message = message;
         }
     }
-
 
 
     @Getter
