@@ -56,6 +56,8 @@ export const placeDetailSchema = z.object({
   rating: z.number(),
 });
 
+export type TPlaceDetail = z.infer<typeof placeDetailSchema>;
+
 export const searchItemSchema = z.object({
   title: z.string(),
   roadAddress: z.string(),
