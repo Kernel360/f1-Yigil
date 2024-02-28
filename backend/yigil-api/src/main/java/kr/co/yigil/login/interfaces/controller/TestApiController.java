@@ -1,4 +1,4 @@
-package kr.co.yigil.login.presentation;
+package kr.co.yigil.login.interfaces.controller;
 
 import jakarta.servlet.http.HttpSession;
 import kr.co.yigil.member.repository.MemberRepository;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class testController {
+public class TestApiController {
 
     private final MemberRepository repository;
 

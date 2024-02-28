@@ -1,4 +1,4 @@
-package kr.co.yigil.login.application.strategy;
+package kr.co.yigil.login.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -9,16 +9,15 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpMethod.GET;
 
-import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.InvalidTokenException;
-import kr.co.yigil.login.dto.request.LoginRequest;
-import kr.co.yigil.login.dto.response.GoogleTokenInfoResponse;
-import kr.co.yigil.login.dto.response.LoginResponse;
+import kr.co.yigil.login.domain.LoginCommand;
+import kr.co.yigil.login.interfaces.dto.response.GoogleTokenInfoResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
-import kr.co.yigil.member.repository.MemberRepository;
+import kr.co.yigil.member.domain.MemberReader;
+import kr.co.yigil.member.domain.MemberStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,10 @@ import org.springframework.web.client.RestTemplate;
 public class GoogleLoginStrategyTest {
 
     @MockBean
-    private MemberRepository memberRepository;
+    private MemberStore memberStore;
+
+    @MockBean
+    private MemberReader memberReader;
 
     @MockBean
     private RestTemplate restTemplate;
@@ -54,6 +56,7 @@ public class GoogleLoginStrategyTest {
     void whenTokenIsValid_andMemberExists_thenLoginSuccessful() {
         GoogleTokenInfoResponse mockResponse = new GoogleTokenInfoResponse();
         mockResponse.setUserId(12345678L);
+
         String accessToken = "mockAccessToken";
 
         when(restTemplate.exchange(
@@ -64,18 +67,18 @@ public class GoogleLoginStrategyTest {
                 eq(accessToken)
         )).thenReturn(ResponseEntity.ok(mockResponse));
 
-        Member mockMember = new Member("email@example.com", "12345678", "user", "image_url", "google");
+        Long memberId = 1L;
+        Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.GOOGLE);
 
-        when(memberRepository.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(
+        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(
                 Optional.of(mockMember));
 
-        HttpSession mockSession = mock(HttpSession.class);
+        LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
+        when(loginCommand.getId()).thenReturn(12345678L);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "google");
+        Long response = googleLoginStrategy.processLogin(loginCommand, accessToken);
 
-        LoginResponse response = googleLoginStrategy.login(loginRequest, accessToken, mockSession);
-
-        assertThat(response.getMessage()).isEqualTo("로그인 성공");
+        assertThat(response).isEqualTo(memberId);
     }
 
     @DisplayName("토큰이 유효하지 않은 경우 예외가 잘 발생하는지")
@@ -91,10 +94,9 @@ public class GoogleLoginStrategyTest {
                 eq(accessToken)
         )).thenThrow(new InvalidTokenException(ExceptionCode.INVALID_ACCESS_TOKEN));
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "user", "image_url", "email@example.com", "google");
-        HttpSession mockSession = mock(HttpSession.class);
+        LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
 
-        Throwable thrown = catchThrowable(() -> googleLoginStrategy.login(loginRequest, accessToken, mockSession));
+        Throwable thrown = catchThrowable(() -> googleLoginStrategy.processLogin(loginCommand, accessToken));
 
         assertThat(thrown).isInstanceOf(InvalidTokenException.class);
     }
@@ -114,15 +116,18 @@ public class GoogleLoginStrategyTest {
                 eq(accessToken)
         )).thenReturn(ResponseEntity.ok(mockResponse));
 
-        when(memberRepository.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(Optional.empty());
-        when(memberRepository.save(any(Member.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
+        when(loginCommand.getId()).thenReturn(12345678L);
 
-        HttpSession mockSession = mock(HttpSession.class);
+        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(Optional.empty());
+        Long memberId = 1L;
+        Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.GOOGLE);
+        when(loginCommand.toEntity(anyString())).thenReturn(mockMember);
+        when(memberStore.save(any(Member.class))).thenReturn(mockMember);
 
-        LoginRequest loginRequest = new LoginRequest(12345678L, "newUser", "new_image_url", "new_email@example.com", "google");
-        LoginResponse response = googleLoginStrategy.login(loginRequest, accessToken, mockSession);
+        Long response = googleLoginStrategy.processLogin(loginCommand, accessToken);
 
-        assertThat(response.getMessage()).isEqualTo("로그인 성공");
+        assertThat(response).isEqualTo(memberId);
 
     }
 }

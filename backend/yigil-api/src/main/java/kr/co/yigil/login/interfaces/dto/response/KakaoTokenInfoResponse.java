@@ -1,4 +1,4 @@
-package kr.co.yigil.login.dto.response;
+package kr.co.yigil.login.interfaces.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

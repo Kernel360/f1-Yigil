@@ -1,10 +1,10 @@
-package kr.co.yigil.login.application;
+package kr.co.yigil.login.domain;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import kr.co.yigil.login.application.strategy.LoginStrategy;
+import kr.co.yigil.login.infrastructure.LoginStrategy;
 import org.springframework.stereotype.Service;
 
 @Service

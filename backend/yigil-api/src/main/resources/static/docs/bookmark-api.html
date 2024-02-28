@@ -698,11 +698,6 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Bookmark한 장소 평점</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarks[].is_bookmarked</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">북마크 여부 .. 이거 꼭 필요한까요? 필요없다면 나중에 빼겠습니다ㅎㅎ</p></td>
-</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -711,15 +706,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 181
+Content-Length: 153
 
 {
   "bookmarks" : [ {
     "place_id" : 1,
     "place_name" : "placeName",
     "place_image" : "placeImage",
-    "rate" : 5.0,
-    "is_bookmarked" : true
+    "rate" : 5.0
   } ],
   "has_next" : true
 }</code></pre>
@@ -734,7 +728,7 @@ Content-Length: 181
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-02-27 18:26:22 +0900
+Last updated 2024-02-27 12:32:56 +0900
 </div>
 </div>
 </body>
