@@ -9,8 +9,7 @@ import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
 import AddIcon from '/public/icons/add.svg'; // 지울것
 import { TUserInfo } from '../mypage/types';
-import { authenticateUser } from '../mypage/hooks/myPageActions';
-import { useSession } from 'next-auth/react';
+import { authenticateUser } from '../mypage/hooks/mypageActions';
 
 export default function HeaderClient() {
   const router = useRouter();

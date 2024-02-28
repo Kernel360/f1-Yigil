@@ -3,7 +3,7 @@ import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import FloatingActionButton from '../../FloatingActionButton';
 import { TPopOverData } from '../../ui/popover/types';
-import { getMyPageCourses } from '../hooks/myPageActions';
+import { getMyPageCourses } from '../spot/spotActions';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
 import { TMyPageCourse } from '../types';

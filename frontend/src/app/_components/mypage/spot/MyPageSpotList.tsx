@@ -4,7 +4,7 @@ import FloatingActionButton from '../../FloatingActionButton';
 import MyPageSpotItem from './MyPageSpotItem';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
-import { getMyPageSpots } from '../hooks/myPageActions';
+import { getMyPageSpots } from './spotActions';
 import CalendarIcon from '/public/icons/calendar.svg';
 import UnLockIcon from '/public/icons/unlock.svg';
 import TrashIcon from '/public/icons/trash.svg';
@@ -85,14 +85,6 @@ export default function MyPageSpotList({
     setAllSpotList([...content]);
   };
 
-  // TODO: checkPopOverState 함수를 생성 인수로 (selectOption, checkedList)
-
-  // 전체 스팟 리스트 불러오기 시 render도 변경
-  useEffect(() => {
-    setRenderSpotList(allSpotList);
-  }, [allSpotList]);
-
-  // pop over 데이터 변경을 위한 현재 체크된 아이템 잠금 데이터 여부 리스닝 함수
   useEffect(() => {
     if (selectOption === 'all') {
       setPopOverData([
@@ -220,7 +212,7 @@ export default function MyPageSpotList({
     }
   };
 
-  return !!placeList.length ? (
+  return !!allSpotList.length ? (
     <>
       <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
@@ -249,7 +241,7 @@ export default function MyPageSpotList({
         </div>
       )}
 
-      {renderSpotList.map(({ spot_id, ...data }, idx) => (
+      {allSpotList.map(({ spot_id, ...data }, idx) => (
         <MyPageSpotItem
           idx={idx}
           key={spot_id}
