@@ -47,6 +47,11 @@ public enum ExceptionCode {
     ALREADY_BOOKMARKED(7001, "이미 북마크된 장소입니다."),
     NOT_BOOKMARKED(7002, "북마크되지 않은 장소입니다."),
 
+    // Favor
+    FAVOR_NOT_FOUND(8001, "좋아요가 존재하지 않습니다." ),
+    ALREADY_FAVOR(8002, "이미 좋아요를 누른 게시글입니다."),
+    NOT_FAVOR(8003, "좋아요를 누르지 않은 게시글입니다."),
+
     // Authorization & Authentication
     INVALID_ACCESS_TOKEN(9101, "올바르지 않은 형식의 Access Token입니다."),
     INVALID_AUTHORITY(9201, "해당 요청에 대한 접근 권한이 없습니다."),
