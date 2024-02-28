@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const { CDN_URL } = process.env;
+
 export const backendErrorSchema = z.object({
   code: z.number(),
   message: z.string(),
@@ -31,14 +33,14 @@ export const regionSchema = z.enum(REGION_VALUES);
 
 export const placeSchema = z.object({
   id: z.number().int(),
-  region: regionSchema,
-  name: z.string(),
-  image_url: z.string(),
-  liked: z.boolean().optional(),
-  review_count: z.number().int(),
-  liked_count: z.number().int(),
-  rating: z.number(),
+  place_name: z.string(),
+  review_count: z.string(),
+  thumbnail_image_url: z.string().transform((url) => `${CDN_URL}/${url}`),
+  rate: z.string(),
+  bookmarked: z.boolean(),
 });
+
+export type TPlace = z.infer<typeof placeSchema>;
 
 export const placesSchema = z.array(placeSchema);
 

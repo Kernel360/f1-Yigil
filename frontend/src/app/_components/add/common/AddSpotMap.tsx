@@ -98,7 +98,7 @@ export default function AddSpotMap({
       console.log('지도 이미지를 얻지 못했습니다!');
       alert('지도 이미지를 얻지 못했습니다!');
     } else {
-      dispatchSpot({ type: 'SET_SPOT_MAP_URL', payload: imageUrl });
+      dispatchSpot({ type: 'SET_SPOT_MAP_URL', payload: imageUrl.data });
       dispatchStep({ type: 'next' });
     }
   }

@@ -54,7 +54,7 @@ const handler = NextAuth({
   },
   events: {
     signOut: async () => {
-      const res = await fetch(`${BASE_URL}/v1/signout`, {
+      const res = await fetch(`${BASE_URL}/v1/logout`, {
         method: 'GET',
         headers: {
           Cookie: `SESSION=${cookies().get('SESSION')?.value}`,
