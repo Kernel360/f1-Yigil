@@ -41,7 +41,7 @@ export default function HeaderClient() {
   useLayoutEffect(() => {
     (async () => {
       const memberInfo = await authenticateUser();
-      if (memberInfo.code === 9201) {
+      if (memberInfo?.code === 9201) {
         setIsLoading(false);
 
         return;
