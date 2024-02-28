@@ -7,7 +7,6 @@ export default async function MyPageMySpot() {
   const spotList = await getMyPageSpots();
   const parsedSpotList = myPageSpotListSchema.safeParse(spotList.content);
   if (!parsedSpotList.success) return <div>failed</div>;
-  console.log(spotList);
 
   return (
     <>
