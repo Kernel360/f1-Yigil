@@ -10,10 +10,12 @@ export default function SpotList({
   title,
   data,
   variant,
+  isLoggedIn,
 }: {
   title: string;
   data: TPlace[];
   variant: 'primary' | 'secondary';
+  isLoggedIn: boolean;
 }) {
   const [emblaRef] = useEmblaCarousel({
     loop: false,
@@ -28,7 +30,13 @@ export default function SpotList({
       <div className="overflow-hidden px-4" ref={emblaRef}>
         <div className="flex">
           {data.map((post, index) => (
-            <Place key={post.id} data={post} order={index} variant={variant} />
+            <Place
+              key={post.id}
+              data={post}
+              order={index}
+              variant={variant}
+              isLoggedIn={isLoggedIn}
+            />
           ))}
         </div>
       </div>
