@@ -12,6 +12,5 @@ public class BookmarkInfoDto {
     private String placeName;
     private String placeImage;
     private Double rate;
-    private Boolean isBookmarked;
 
 }

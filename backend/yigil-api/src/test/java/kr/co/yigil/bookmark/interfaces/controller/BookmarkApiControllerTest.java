@@ -120,7 +120,7 @@ class BookmarkApiControllerTest {
         Slice<Bookmark> bookmarkSlice = new SliceImpl<>(List.of(bookmark), pageRequest, true);
         when(bookmarkFacade.getBookmarkSlice(anyLong(), any(PageRequest.class))).thenReturn(bookmarkSlice);
 
-        BookmarkInfoDto bookmarkInfoDto = new BookmarkInfoDto(1L, "placeName", "placeImage", 5.0, true);
+        BookmarkInfoDto bookmarkInfoDto = new BookmarkInfoDto(1L, "placeName", "placeImage", 5.0);
         BookmarksResponse bookmarksResponse = new BookmarksResponse(List.of(bookmarkInfoDto), true);
         when(bookmarkMapper.bookmarkSliceToBookmarksResponse(bookmarkSlice)).thenReturn(bookmarksResponse);
         mockMvc.perform(get("/api/v1/bookmarks")
@@ -141,8 +141,7 @@ class BookmarkApiControllerTest {
                                 fieldWithPath("bookmarks[].place_id").description("Bookmark한 장소 아이디"),
                                 fieldWithPath("bookmarks[].place_name").description("Bookmark한 장소 이름"),
                                 fieldWithPath("bookmarks[].place_image").description("Bookmark한 장소 이미지 URL"),
-                                fieldWithPath("bookmarks[].rate").description("Bookmark한 장소 평점"),
-                                fieldWithPath("bookmarks[].is_bookmarked").description("북마크 여부 .. 이거 꼭 필요한까요? 필요없다면 나중에 빼겠습니다ㅎㅎ")
+                                fieldWithPath("bookmarks[].rate").description("Bookmark한 장소 평점")
                         )
                 ));
         verify(bookmarkFacade).getBookmarkSlice(anyLong(), any(PageRequest.class));
