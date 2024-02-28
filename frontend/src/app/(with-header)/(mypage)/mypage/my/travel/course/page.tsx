@@ -5,14 +5,13 @@ import React from 'react';
 
 export default async function MyPageMyCourse() {
   const courseList = await getMyPageCourses();
-  console.log(courseList.content);
   const parsedCourseList = myPageCourseListSchema.safeParse(courseList.content);
   if (!parsedCourseList.success) return <div>failed</div>;
   return (
     <>
       <MyPageCourseList
         placeList={courseList.content}
-        totalPage={courseList.totalPage}
+        totalPage={courseList.total_page}
       />
     </>
   );

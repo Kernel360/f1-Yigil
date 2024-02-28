@@ -3,7 +3,6 @@ import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import FloatingActionButton from '../../FloatingActionButton';
 import { TPopOverData } from '../../ui/popover/types';
-import { getMyPageCourses } from '../hooks/myPageActions';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
 import { TMyPageCourse } from '../types';
@@ -13,6 +12,7 @@ import TrashIcon from '/public/icons/trash.svg';
 import LockIcon from '/public/icons/lock.svg';
 import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
+import { getMyPageCourses } from '../hooks/myPageActions';
 
 export default function MyPageCourseList({
   placeList,
@@ -26,7 +26,7 @@ export default function MyPageCourseList({
   const [renderCourseList, setRenderCourseList] =
     useState<TMyPageCourse[]>(placeList);
   const [checkedList, setCheckedList] = useState<
-    { course_id: TMyPageCourse['course_id']; isSecret: boolean }[]
+    { course_id: TMyPageCourse['course_id']; is_private: boolean }[]
   >([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -58,13 +58,13 @@ export default function MyPageCourseList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, totalPage } = await getMyPageCourses(
+    const { content, total_page } = await getMyPageCourses(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setTotalPageCount(totalPage);
+    setTotalPageCount(total_page);
     setAllCourseList([...content]);
   };
 
@@ -124,7 +124,8 @@ export default function MyPageCourseList({
     setCheckedList([]);
   };
 
-  const onChangeSortOption = (option: string) => {
+  const onChangeSortOption = (option: string | number) => {
+    if (typeof option === 'number') return;
     resetCourseList();
     setSortOption(option);
     resetCheckList();
@@ -137,7 +138,7 @@ export default function MyPageCourseList({
   ) => {
     if (e.currentTarget.checked) {
       const allCourses = allCourseList.map((course) => {
-        return { course_id: course.course_id, isSecret: course.isSecret };
+        return { course_id: course.course_id, is_private: course.is_private };
       });
       setCheckedList(allCourses);
       setIsChecked(true);
@@ -149,16 +150,16 @@ export default function MyPageCourseList({
 
   const onChangeCheckedList = (
     course_id: TMyPageCourse['course_id'],
-    isSecret: boolean,
+    is_private: boolean,
   ) => {
-    if (!checkedList.length) setCheckedList([{ course_id, isSecret }]);
+    if (!checkedList.length) setCheckedList([{ course_id, is_private }]);
     else {
       // checkList 배열의 각 값을 확인 후 값이 없으면 체크 리스트 추가 값이 있으면 filter로 제거
       const found = checkedList.find(
         (checked) => checked.course_id === course_id,
       );
       if (!found) {
-        setCheckedList([...checkedList, { course_id, isSecret }]);
+        setCheckedList([...checkedList, { course_id, is_private }]);
       } else {
         const filteredList = checkedList.filter(
           (checkedId) => checkedId.course_id !== course_id,
@@ -168,7 +169,7 @@ export default function MyPageCourseList({
     }
   };
 
-  return !!placeList.length ? (
+  return (
     <>
       <div className="my-4">
         <MyPageSelectBtns
@@ -206,9 +207,5 @@ export default function MyPageCourseList({
         totalPage={totalPageCount}
       />
     </>
-  ) : (
-    <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-      코스를 추가해주세요.
-    </div>
   );
 }

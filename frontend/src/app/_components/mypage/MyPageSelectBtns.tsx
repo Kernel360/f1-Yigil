@@ -1,8 +1,6 @@
 import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import IconWithCounts from '../IconWithCounts';
 import Select from '../ui/select/Select';
-import StarIcon from '/public/icons/star.svg';
 
 const selectBtns = [
   { label: '전체', value: 'all' },
@@ -60,7 +58,7 @@ export default function MyPageSelectBtns({
           </button>
         ))}
       </ul>
-      <div className="flex justify-between mx-5 mt-4">
+      <div className="flex justify-between ml-2 mt-4">
         <div className="flex items-center gap-x-4">
           <input
             type="checkbox"

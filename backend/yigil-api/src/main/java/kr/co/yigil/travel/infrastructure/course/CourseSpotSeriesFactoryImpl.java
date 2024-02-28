@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -46,13 +47,15 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                     Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(registerPlaceRequest.getPlaceName(), registerPlaceRequest.getPlaceAddress());
                     Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest));
 
-                    var spot = spotStore.store(registerSpotRequest.toEntity(member, place, true));
-                    registerSpotRequest.getFiles().forEach(fileUploader::upload);
-                    var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
+                    var attachFiles = new AttachFiles(registerSpotRequest.getFiles().stream()
+                            .map(fileUploader::upload)
+                            .collect(Collectors.toList()));
 
+                    var spot = spotStore.store(registerSpotRequest.toEntity(member, place, true, attachFiles));
+
+                    var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
                     return spot;
                 }).collect(Collectors.toList());
-
     }
 
     @Override
@@ -63,8 +66,8 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {
-        fileUploader.upload(command.getPlaceImageFile());
-        fileUploader.upload(command.getMapStaticImageFile());
-        return placeStore.store(command.toEntity());
+        var placeImage = fileUploader.upload(command.getPlaceImageFile());
+        var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
+        return placeStore.store(command.toEntity(placeImage, mapStaticImage));
     }
 }

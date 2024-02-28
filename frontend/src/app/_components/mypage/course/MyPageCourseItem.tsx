@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
-
 import Image from 'next/image';
 import MapPinIcon from '/public/icons/filled-map-pin.svg';
 import { TMyPageCourse } from '../types';
@@ -9,17 +8,17 @@ import IconWithCounts from '../../IconWithCounts';
 
 interface TMyPageCourseItem extends TMyPageCourse {
   idx: number;
-  checkedList: { course_id: number; isSecret: boolean }[];
-  onChangeCheckedList: (id: number, isSecret: boolean) => void;
+  checkedList: { course_id: number; is_private: boolean }[];
+  onChangeCheckedList: (id: number, is_private: boolean) => void;
   selectOption: string;
 }
 
 export default function MyPageCourseItem({
-  static_image_url,
+  map_static_image_url,
   course_id,
   title,
-  isSecret,
-  created_at,
+  is_private,
+  created_date,
   rate,
   spot_count,
   idx,
@@ -40,7 +39,7 @@ export default function MyPageCourseItem({
   }, [checkedList.length]);
 
   useEffect(() => {
-    if (selectOption === 'all' && isSecret) {
+    if (selectOption === 'all' && is_private) {
       setIsCheckDisabled(true);
       setIsChecked(false);
     }
@@ -57,18 +56,18 @@ export default function MyPageCourseItem({
         className="w-[32px] h-[32px]"
         checked={isChecked}
         onChange={() => {
-          onChangeCheckedList(course_id, isSecret);
+          onChangeCheckedList(course_id, is_private);
         }}
       />
       <div className="flex flex-col gap-y-2 relative">
         <Image
-          src={static_image_url}
+          src={map_static_image_url || ''}
           alt="course-image"
           width={360}
           height={160}
           className="w-[360px] h-[160px] rounded-md"
         />
-        {isSecret && (
+        {is_private && (
           <div className="absolute top-2 right-2 p-3 bg-black rounded-full">
             <LockIcon className="w-5 h-5" />
           </div>
@@ -90,7 +89,7 @@ export default function MyPageCourseItem({
               count={spot_count}
             />
           </div>
-          <div className="text-gray-300 font-bold">{created_at}</div>
+          <div className="text-gray-300 font-bold">{created_date}</div>
         </div>
       </div>
     </div>

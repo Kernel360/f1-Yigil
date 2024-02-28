@@ -2,10 +2,10 @@
 
 import { requestWithCookie } from '../../api/httpRequest';
 
-export const myPageSpotRequest = requestWithCookie('members/spots');
-export const myPageCourseRequest = requestWithCookie('members/courses');
-export const myPageFollowerRequest = requestWithCookie('members/followers');
-export const myPageFollowingRequest = requestWithCookie('members/followings');
+export const myPageSpotRequest = requestWithCookie('spots/my');
+export const myPageCourseRequest = requestWithCookie('courses/my');
+export const myPageFollowerRequest = requestWithCookie('follows/followers');
+export const myPageFollowingRequest = requestWithCookie('follows/followings');
 
 export const authenticateUser = async () => {
   return requestWithCookie('members')()()()();
@@ -18,8 +18,10 @@ export const getMyPageSpots = async (
   selectOption: string = 'all',
 ) => {
   return myPageSpotRequest(
-    `?page=${pageNo}&size=${size}&sortOrder=${
-      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
+    `?page=${pageNo}&size=${size}&sortBy=${
+      sortOrder !== 'rate'
+        ? `createdAt&sortOrder=${sortOrder}`
+        : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();
 };
@@ -35,8 +37,10 @@ export const getMyPageCourses = (
   selectOption: string = 'all',
 ) => {
   return myPageCourseRequest(
-    `?page=${pageNo}&size=${size}&sortOrder=${
-      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
+    `?page=${pageNo}&size=${size}&sortBy=${
+      sortOrder !== 'rate'
+        ? `createdAt&sortOrder=${sortOrder}`
+        : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();
 };
@@ -49,8 +53,8 @@ export const getMyPageFollwers = async (
   sortBy?: string,
 ) => {
   const res = await myPageFollowerRequest(
-    `?page=${pageNo}&size=${size}&sortOrder=${sortBy ? 'desc' : sortOrder}${
-      sortBy ? '&sortBy=rate' : ''
+    `?page=${pageNo}&size=${size}&sortBy=${
+      sortOrder !== 'rate' ? `id&sortOrder=${sortOrder}` : `rate&sortOrder=desc`
     }`,
   )()()();
   return res;
@@ -69,9 +73,23 @@ export const getMyPageFollwings = async (
   return res;
 };
 
-export const getSpotList = async () => {
-  const res = await requestWithCookie('spots/places')(
-    `/1?page=1&size=5&sortBy=rate&sortOrder=desc`,
+export const getMyPageBookmarks = (
+  pageNo: number = 1,
+  size: number = 5,
+  sortOrder: string = 'desc',
+  sortBy?: string,
+) => {
+  return requestWithCookie('bookmarks')(
+    `?page=${pageNo}&size=${size}&sortOrder=${
+      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
+    }`,
   )()()();
-  return res;
+};
+
+export const deleteMyPageBookmark = (placeId: number) => {
+  return requestWithCookie('delete-bookmark')(`${placeId}`)()()();
+};
+
+export const addMyPageBookmark = (placeId: number) => {
+  return requestWithCookie('add-bookmark')(`${placeId}`)()()();
 };
