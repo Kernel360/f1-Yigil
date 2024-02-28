@@ -35,7 +35,8 @@ public class SpotCommand {
 
             var attachFiles = new AttachFiles(files.stream()
                     .map(FileUploadUtil::predictAttachFile)
-                    .collect(Collectors.toList()));
+                    .toList()
+            );
 
             return new Spot(
                     member,

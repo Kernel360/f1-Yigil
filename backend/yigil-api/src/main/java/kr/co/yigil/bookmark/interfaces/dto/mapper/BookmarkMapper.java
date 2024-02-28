@@ -28,6 +28,5 @@ public interface BookmarkMapper {
     @Mapping(target = "placeName", source = "place.name")
     @Mapping(target = "placeImage", source = "place.imageFile.fileUrl")
     @Mapping(target = "rate", constant = "5.0") // todo add rate
-    @Mapping(target = "isBookmarked", constant = "true")
     BookmarkInfoDto bookmarkToBookmarkInfoDto(Bookmark bookmark);
 }

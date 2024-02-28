@@ -13,6 +13,7 @@ import kr.co.yigil.travel.interfaces.dto.response.CourseDeleteResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CourseRegisterResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CourseUpdateResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
+import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -102,6 +103,24 @@ public class CourseApiController {
         Long memberId = accessor.getMemberId();
         courseFacade.deleteCourse(courseId, memberId);
         return ResponseEntity.ok().body(new CourseDeleteResponse("Course 삭제 완료"));
+    }
+
+    @GetMapping("/my")
+    @MemberOnly
+    public ResponseEntity<MyCoursesResponse> getMyCourseList(
+        @Auth final Accessor accessor,
+        @PageableDefault(size = 5) Pageable pageable,
+        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
+        @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+            Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+
+        final var memberCoursesInfo = courseFacade.getMemberCoursesInfo(
+            accessor.getMemberId(), pageRequest, visibility);
+        var myCoursesResponse = courseMapper.of(memberCoursesInfo);
+        return ResponseEntity.ok().body(myCoursesResponse);
     }
 
 }

@@ -581,13 +581,84 @@ Content-Length: 54
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_게시글_리스트_공개비공개_전환">게시글 리스트 공개/비공개 전환</h3>
+<div class="sect3">
+<h4 id="_request_3">Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "travel_ids" : [ 1 ],
+  "is_private" : false
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_3">HTTP Request 예시</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/travels/change-visibility HTTP/1.1
+Content-Type: application/json
+Content-Length: 50
+Host: spring.restdocs.test
+
+{
+  "travel_ids" : [ 1 ],
+  "is_private" : false
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_3">Response</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_3">HTTP Response 예시</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 54
+
+{
+  "message" : "리뷰 공개 상태 변경 완료"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-02-27 14:48:44 +0900
+Last updated 2024-02-28 11:14:51 +0900
 </div>
 </div>
 </body>
