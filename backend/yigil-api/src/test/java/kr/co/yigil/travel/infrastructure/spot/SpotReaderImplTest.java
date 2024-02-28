@@ -3,6 +3,7 @@ package kr.co.yigil.travel.infrastructure.spot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -49,6 +50,17 @@ public class SpotReaderImplTest {
         when(spotRepository.findById(spotId)).thenReturn(Optional.empty());
 
         assertThrows(BadRequestException.class, () -> spotReader.getSpot(spotId));
+    }
+
+    @DisplayName("findByPlaceIdAndMemberId 메서드가 Spot의 Optional 객체를 잘 반환하는지")
+    @Test
+    void findByPlaceIdAndMemberId_ReturnsOptionalOfSpot() {
+        Optional<Spot> expected = mock(Optional.class);
+        when(spotRepository.findByPlaceIdAndMemberId(anyLong(), anyLong())).thenReturn(expected);
+
+        Optional<Spot> result = spotReader.findSpotByPlaceIdAndMemberId(1L, 1L);
+
+        assertEquals(expected, result);
     }
 
     @DisplayName("getSpots 메서드가 Spot List를 잘 반환하는지")

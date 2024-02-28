@@ -1,8 +1,7 @@
 package kr.co.yigil.place.infrastructure;
 
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceStore;
-import kr.co.yigil.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

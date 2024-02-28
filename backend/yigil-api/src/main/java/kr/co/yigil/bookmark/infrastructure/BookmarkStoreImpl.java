@@ -3,7 +3,7 @@ package kr.co.yigil.bookmark.infrastructure;
 import kr.co.yigil.bookmark.domain.Bookmark;
 import kr.co.yigil.bookmark.domain.BookmarkStore;
 import kr.co.yigil.member.Member;
-import kr.co.yigil.place.Place;
+import kr.co.yigil.place.domain.Place;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

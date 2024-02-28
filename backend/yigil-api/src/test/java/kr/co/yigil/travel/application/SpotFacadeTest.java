@@ -2,6 +2,7 @@ package kr.co.yigil.travel.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -20,7 +21,9 @@ import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.UpdateSpotImage;
+import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,6 +74,18 @@ public class SpotFacadeTest {
 
         assertEquals(expectedSlice, result);
         verify(spotService).getSpotSliceInPlace(placeId, pageable);
+    }
+
+    @DisplayName("getMySpotInPlace 메서드가 응답을 잘 반환하는지")
+    @Test
+    void getMySpotInPlace_ShouldReturnResponse() {
+        SpotInfo.MySpot mySpot = mock(MySpot.class);
+
+        when(spotService.retrieveMySpotInfoInPlace(anyLong(), anyLong())).thenReturn(mySpot);
+
+        spotFacade.retrieveMySpotInfoInPlace(1L, 1L);
+
+        verify(spotService).retrieveMySpotInfoInPlace(1L, 1L);
     }
 
     @DisplayName("registerSpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
