@@ -48,8 +48,6 @@ public class MemberInfo {
         }
     }
 
-
-
     @Getter
     @ToString
     public static class MemberUpdateResponse {
@@ -59,7 +57,6 @@ public class MemberInfo {
             this.message = message;
         }
     }
-
 
 
     @Getter

@@ -27,18 +27,21 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
   const clickPage = (page: number) => {
     setCurrentPage(page);
   };
-
   return (
-    <div className={`my-4 pb-20 flex justify-center items-center gap-x-6`}>
-      <span className="w-[9px] h-[16px] cursor-pointer" onClick={minusPage}>
+    <nav className={`my-4 pb-[50px] flex justify-center items-center gap-x-6`}>
+      <button
+        className="w-[9px] h-[16px] cursor-pointer px-1"
+        onClick={minusPage}
+        tabIndex={currentPage !== 1 ? 0 : -1}
+      >
         {currentPage !== 1 && (
           <LeftIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
         )}
-      </span>
+      </button>
 
       {renderPage &&
         renderPage.map((v, idx) => (
-          <span
+          <button
             key={idx}
             className={`${
               currentPage === v
@@ -48,14 +51,20 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
             onClick={() => clickPage(v)}
           >
             {v}
-          </span>
+          </button>
         ))}
-      <span className="w-[9px] h-[16px] cursor-pointer px-1" onClick={addPage}>
-        {currentPage !== totalPage && (
+      <button
+        className="w-[9px] h-[16px] cursor-pointer px-1"
+        onClick={addPage}
+        tabIndex={
+          renderPage.includes(totalPage) && currentPage !== totalPage ? -1 : 0
+        }
+      >
+        {!renderPage.includes(totalPage) && currentPage !== totalPage && (
           <RightIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
         )}
-      </span>
-    </div>
+      </button>
+    </nav>
   );
 }
 
