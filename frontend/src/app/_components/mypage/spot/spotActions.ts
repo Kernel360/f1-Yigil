@@ -11,8 +11,10 @@ export const getMyPageSpots = async (
   selectOption: string = 'all',
 ) => {
   return myPageSpotRequest(
-    `?page=${pageNo}&size=${size}&sortOrder=${
-      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
+    `?page=${pageNo}&size=${size}&sortBy=${
+      sortOrder !== 'rate'
+        ? `createdAt&sortOrder=${sortOrder}`
+        : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();
 };

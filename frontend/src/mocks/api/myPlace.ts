@@ -3,16 +3,17 @@ import { myPlaceCourseData, myPlaceSpotData } from './data/myPlaceData';
 
 const handlers = [
   http.get(`api/v1/spots/my`, ({ request }) => {
-    const [page, size, sortOrder] = request.url.split('?')[1].split('&');
-    const sortByIdx = request.url.indexOf('sortBy');
+    const [page, size, sortBy, sortOrder] = request.url
+      .split('?')[1]
+      .split('&');
 
     const selectedIdx = request.url.indexOf('selected');
-    const rate = sortByIdx > -1 && request.url.slice(sortByIdx, sortByIdx + 11);
+
     const selected =
       selectedIdx > -1 && request.url.slice(selectedIdx, selectedIdx + 16);
     const pageNum = Number(page.split('=')[1]);
     const sortOrdered = sortOrder.split('=')[1];
-    const sortBy = rate && rate.split('=')[1];
+    const sortedBy = sortBy && sortBy.split('=')[1];
     const select = selected && selected.split('=')[1];
 
     if (select === 'all') {
@@ -142,7 +143,7 @@ const handlers = [
             },
           );
         }
-      } else if (sortBy === 'rate') {
+      } else if (sortedBy === 'rate') {
         if (pageNum === 1) {
           const data = JSON.stringify({
             content: myPlaceSpotData
@@ -347,7 +348,7 @@ const handlers = [
             },
           );
         }
-      } else if (sortBy === 'rate') {
+      } else if (sortedBy === 'rate') {
         if (pageNum === 1) {
           const data = JSON.stringify({
             content: myPlaceSpotData
@@ -558,7 +559,7 @@ const handlers = [
             },
           );
         }
-      } else if (sortBy === 'rate') {
+      } else if (sortedBy === 'rate') {
         if (pageNum === 1) {
           const data = JSON.stringify({
             content: myPlaceSpotData
@@ -631,15 +632,17 @@ const handlers = [
   }),
 
   http.get(`api/v1/members/courses`, ({ request }) => {
-    const [page, size, sortOrder] = request.url.split('?')[1].split('&');
-    const sortByIdx = request.url.indexOf('sortBy');
+    const [page, size, sortBy, sortOrder] = request.url
+      .split('?')[1]
+      .split('&');
+
     const selectedIdx = request.url.indexOf('selected');
-    const rate = sortByIdx > -1 && request.url.slice(sortByIdx, sortByIdx + 11);
+
     const selected =
       selectedIdx > -1 && request.url.slice(selectedIdx, selectedIdx + 16);
     const pageNum = Number(page.split('=')[1]);
     const sortOrdered = sortOrder.split('=')[1];
-    const sortBy = rate && rate.split('=')[1];
+    const sortedBy = sortBy && sortBy.split('=')[1];
     const select = selected && selected.split('=')[1];
 
     if (select === 'all') {
@@ -768,7 +771,7 @@ const handlers = [
             },
           );
         }
-      } else if (sortBy === 'rate') {
+      } else if (sortedBy === 'rate') {
         if (pageNum === 1) {
           const data = JSON.stringify({
             content: myPlaceCourseData
@@ -931,7 +934,7 @@ const handlers = [
             },
           );
         }
-      } else if (sortBy === 'rate') {
+      } else if (sortedBy === 'rate') {
         if (pageNum === 1) {
           const data = JSON.stringify({
             content: myPlaceCourseData
@@ -1074,7 +1077,7 @@ const handlers = [
             },
           );
         }
-      } else if (sortBy === 'rate') {
+      } else if (sortedBy === 'rate') {
         if (pageNum === 1) {
           const data = JSON.stringify({
             content: myPlaceCourseData
