@@ -13,7 +13,7 @@ export default async function MyPageMySpot() {
     <>
       <MyPageSpotList
         placeList={spotList.content}
-        totalPage={spotList.totalPage}
+        totalPage={spotList.total_page}
       />
     </>
   );

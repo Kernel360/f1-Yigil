@@ -14,15 +14,7 @@ import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import Dialog from '../../ui/dialog/Dialog';
-
-export interface TMyPageSpot {
-  spot_id: number;
-  image_url: string;
-  rating: number;
-  post_date: string;
-  title: string;
-  isSecret: boolean;
-}
+import { TMyPageSpot } from '../types';
 
 export default function MyPageSpotList({
   placeList,
@@ -32,9 +24,8 @@ export default function MyPageSpotList({
   totalPage: number;
 }) {
   const [allSpotList, setAllSpotList] = useState<TMyPageSpot[]>(placeList);
-  const [renderSpotList, setRenderSpotList] = useState<TMyPageSpot[]>([]);
   const [checkedList, setCheckedList] = useState<
-    { spot_id: TMyPageSpot['spot_id']; isSecret: boolean }[]
+    { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[]
   >([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -75,13 +66,13 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, totalPage } = await getMyPageSpots(
+    const { content, total_page } = await getMyPageSpots(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setTotalPageCount(totalPage);
+    setTotalPageCount(total_page);
     setAllSpotList([...content]);
   };
 
@@ -167,7 +158,7 @@ export default function MyPageSpotList({
   ) => {
     if (e.currentTarget.checked) {
       const allSpots = allSpotList.map((spot) => {
-        return { spot_id: spot.spot_id, isSecret: spot.isSecret };
+        return { spot_id: spot.spot_id, is_private: spot.is_private };
       });
       setCheckedList(allSpots);
       setIsChecked(true);
@@ -194,15 +185,15 @@ export default function MyPageSpotList({
 
   const onChangeCheckedList = (
     spot_id: TMyPageSpot['spot_id'],
-    isSecret: boolean,
+    is_private: boolean,
   ) => {
-    if (!checkedList.length) setCheckedList([{ spot_id, isSecret }]);
+    if (!checkedList.length) setCheckedList([{ spot_id, is_private }]);
     else {
       // checkList 배열의 각 값을 확인 후 값이 없으면 체크 리스트 추가 값이 있으면 filter로 제거
       const found = checkedList.find((checked) => checked.spot_id === spot_id);
 
       if (!found) {
-        setCheckedList([...checkedList, { spot_id, isSecret }]);
+        setCheckedList([...checkedList, { spot_id, is_private }]);
       } else {
         const filteredList = checkedList.filter(
           (checkedId) => checkedId.spot_id !== spot_id,

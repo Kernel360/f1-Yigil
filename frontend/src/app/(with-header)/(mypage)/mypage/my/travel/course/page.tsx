@@ -12,7 +12,7 @@ export default async function MyPageMyCourse() {
     <>
       <MyPageCourseList
         placeList={courseList.content}
-        totalPage={courseList.totalPage}
+        totalPage={courseList.total_page}
       />
     </>
   );

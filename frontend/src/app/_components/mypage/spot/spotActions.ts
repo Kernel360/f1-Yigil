@@ -2,7 +2,7 @@
 
 import { requestWithCookie } from '../../api/httpRequest';
 
-export const myPageSpotRequest = requestWithCookie('members/spots');
+export const myPageSpotRequest = requestWithCookie('spots/my');
 
 export const getMyPageSpots = async (
   pageNo: number = 1,
