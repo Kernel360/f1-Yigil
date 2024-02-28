@@ -12,17 +12,19 @@ public class FileUploadUtil {
 
     public static AttachFile predictAttachFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
-        String uniqueFileName = generateUniqueFileName(fileName);
+        String uniqueFileName = generateUniqueFileName(file);
         FileType fileType = determineFileType(file);
         String path = getPath(fileType, uniqueFileName);
         long fileSize = file.getSize();
         validateFileSize(fileType, fileSize);
-        return new AttachFile(fileType, path, fileName, fileSize);
+        return new AttachFile(fileType, path, fileName, uniqueFileName, fileSize);
     }
 
-    public static String generateUniqueFileName(String originalFilename) {
-        return UUID.randomUUID() + "_" + originalFilename;
+    public static String generateUniqueFileName(MultipartFile file) {
+        return UUID.randomUUID() + "_" + file.getOriginalFilename();
     }
+
+
 
     public static FileType determineFileType(MultipartFile file) {
         if (file.getContentType() == null) {
