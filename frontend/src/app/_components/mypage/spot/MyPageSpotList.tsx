@@ -48,7 +48,7 @@ export default function MyPageSpotList({
 
   // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
-    getUser(currentPage, divideCount, sortOption, selectOption);
+    getSpots(currentPage, divideCount, sortOption, selectOption);
   }, [currentPage]);
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
@@ -69,7 +69,7 @@ export default function MyPageSpotList({
     },
   ]);
 
-  const getUser = async (
+  const getSpots = async (
     pageNum: number,
     size: number,
     sortOption: string,
@@ -149,7 +149,7 @@ export default function MyPageSpotList({
   // 공개 여부에 따라 렌더링 할 spot list 정렬
   useEffect(() => {
     setCurrentPage(1);
-    getUser(1, divideCount, sortOption, selectOption);
+    getSpots(1, divideCount, sortOption, selectOption);
   }, [selectOption, sortOption]);
 
   // 함수 분리 예정
@@ -197,7 +197,7 @@ export default function MyPageSpotList({
     setSortOption(option);
     setCheckedList([]);
     setCurrentPage(1);
-    getUser(1, divideCount, option, selectOption);
+    getSpots(1, divideCount, option, selectOption);
   };
 
   const onChangeCheckedList = (
