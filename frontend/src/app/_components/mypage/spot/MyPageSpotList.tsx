@@ -260,6 +260,7 @@ export default function MyPageSpotList({
           selectOption={selectOption}
         />
       ))}
+      
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

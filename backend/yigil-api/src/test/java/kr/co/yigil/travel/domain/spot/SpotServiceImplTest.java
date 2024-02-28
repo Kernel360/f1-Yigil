@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.domain.spot;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,9 +16,11 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -36,9 +39,12 @@ import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -263,5 +269,27 @@ public class SpotServiceImplTest {
         });
 
         assertEquals(ExceptionCode.INVALID_AUTHORITY.getMessage(), exception.getMessage());
+    }
+
+    @DisplayName("retrieveSpotList 를 호출했을 때 스팟 리스트 조회가 잘 되는지 확인")
+    @Test
+    void WhenRetrieveSpotList_ThenShouldReturnSpotListResponse() {
+        Long memberId = 1L;
+        Long spotId = 1L;
+        PageRequest pageable = PageRequest.of(0, 10);
+        String selected = "private";
+        AttachFile mockAttachFile = new AttachFile(mock(FileType.class), "fileUrl",
+            "originalFileName", 100L);
+        AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
+        Member mockMember = mock(Member.class);
+        Spot mockSpot = new Spot(spotId, mockMember, mock(Point.class), false, "title",
+            "description", mockAttachFiles, null, 3.5);
+        PageImpl<Spot> mockSpotList = new PageImpl<>(List.of(mockSpot));
+        when(spotReader.getMemberSpotList(anyLong(), any(), any())).thenReturn(mockSpotList);
+
+        var result = spotService.retrieveSpotList(memberId, pageable, selected);
+
+        assertThat(result).isNotNull().isInstanceOf(SpotInfo.MySpotsResponse.class);
+        assertThat(result.getContent().getFirst()).isInstanceOf(SpotInfo.SpotListInfo.class);
     }
 }

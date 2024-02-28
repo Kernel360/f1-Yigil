@@ -4,11 +4,13 @@ import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.travel.application.SpotFacade;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
 import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.SpotMapper;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.MySpotInPlaceResponse;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotsResponseDto;
 import kr.co.yigil.travel.interfaces.dto.response.SpotDeleteResponse;
 import kr.co.yigil.travel.interfaces.dto.response.SpotRegisterResponse;
 import kr.co.yigil.travel.interfaces.dto.response.SpotUpdateResponse;
@@ -102,6 +104,23 @@ public class SpotApiController {
         Long memberId = accessor.getMemberId();
         spotFacade.deleteSpot(spotId, memberId);
         return ResponseEntity.ok().body(new SpotDeleteResponse("Spot 삭제 완료"));
+    }
+
+    @GetMapping("/my")
+    @MemberOnly
+    public ResponseEntity<MySpotsResponseDto> getMySpotList(
+        @Auth final Accessor accessor,
+        @PageableDefault(size = 5) Pageable pageable,
+        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
+        @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+            Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        final MySpotsResponse mySpotsResponse = spotFacade.getMemberSpotsInfo(
+            accessor.getMemberId(), pageRequest, visibility);
+        var response = spotMapper.of(mySpotsResponse);
+        return ResponseEntity.ok().body(response);
     }
 
 }

@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-22T19:53:37+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
+    date = "2024-02-25T01:16:31+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class CourseMapperImpl implements CourseMapper {
@@ -39,7 +39,7 @@ public class CourseMapperImpl implements CourseMapper {
         courseInfoDto.setMapStaticImageFileUrl( course.getMapStaticImageFile().getFileUrl() );
         courseInfoDto.setTitle( course.getTitle() );
         courseInfoDto.setRate( String.valueOf(course.getRate()) );
-        courseInfoDto.setCourseCount( String.valueOf(course.getSpots().size()) );
+        courseInfoDto.setSpotCount( String.valueOf(course.getSpots().size()) );
         courseInfoDto.setCreateDate( course.getCreatedAt().toString() );
         courseInfoDto.setOwnerProfileImageUrl( course.getMember().getProfileImageUrl() );
         courseInfoDto.setOwnerNickname( course.getMember().getNickname() );

@@ -92,15 +92,15 @@ export default function AddSpotMap({
     dispatchSpot({ type: 'SET_COORDS', payload: coords });
 
     // Image URL | Base64 DataURL
-    const image = await getMap(name, roadAddress, coords);
+    const imageUrl = await getMap(name, roadAddress, coords);
 
-    if (image.status === 'failed') {
+    if (imageUrl.status === 'failed') {
       console.log('지도 이미지를 얻지 못했습니다!');
+      alert('지도 이미지를 얻지 못했습니다!');
     } else {
-      dispatchSpot({ type: 'SET_SPOT_MAP_URL', payload: image.data });
+      dispatchSpot({ type: 'SET_SPOT_MAP_URL', payload: imageUrl });
+      dispatchStep({ type: 'next' });
     }
-
-    dispatchStep({ type: 'next' });
   }
 
   return (

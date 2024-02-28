@@ -19,3 +19,17 @@ export async function blobTodataUrl(blob: Blob) {
 
   return `data:${blob.type};base64,${buffer.toString('base64')}`;
 }
+
+export function getMIMETypeFromDataURI(dataURI: string) {
+  const dataType = dataURI.split(',')[0];
+  const types = dataType.split(':')[1];
+
+  return types.split(';')[0];
+}
+
+export function coordsToGeoJSONPoint(coords: { lat: number; lng: number }) {
+  return JSON.stringify({
+    type: 'Point',
+    coordinates: [coords.lat, coords.lng],
+  });
+}
