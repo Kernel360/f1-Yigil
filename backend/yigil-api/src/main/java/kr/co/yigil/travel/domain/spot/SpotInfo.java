@@ -1,11 +1,9 @@
 package kr.co.yigil.travel.domain.spot;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.travel.domain.Spot;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -32,6 +30,42 @@ public class SpotInfo {
             description = spot.getDescription();
         }
     }
+
+    @Getter
+    @ToString
+    public static class MySpotsResponse {
+
+        private final List<SpotListInfo> content;
+        private final int totalPages;
+
+        public MySpotsResponse(List<SpotListInfo> spotList, int totalPages) {
+            this.content = spotList;
+            this.totalPages = totalPages;
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class SpotListInfo {
+
+        private final Long spotId;
+        private final String title;
+        private final double rate;
+        private final String imageUrl;
+        private final LocalDateTime createdDate;
+        private final Boolean isPrivate;
+
+        public SpotListInfo(Spot spot) {
+            this.spotId = spot.getId();
+            this.title = spot.getTitle();
+            this.rate = spot.getRate();
+            this.imageUrl = spot.getAttachFiles().getUrls().getFirst();
+            this.createdDate = spot.getCreatedAt();
+            this.isPrivate = spot.isPrivate();
+        }
+    }
+
+
 
     @Getter
     @ToString

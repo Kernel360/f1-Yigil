@@ -2,7 +2,6 @@ package kr.co.yigil.travel.application;
 
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.travel.domain.Course;
-import kr.co.yigil.travel.domain.course.CourseCommand;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
@@ -40,4 +39,9 @@ public class CourseFacade {
     }
 
     public void deleteCourse(Long courseId, Long memberId) { courseService.deleteCourse(courseId, memberId); }
+
+    public CourseInfo.MyCoursesResponse getMemberCoursesInfo(final Long memberId,
+        Pageable pageable, String selected) {
+        return courseService.retrieveCourseList(memberId, pageable, selected);
+    }
 }

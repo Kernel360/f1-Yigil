@@ -8,7 +8,6 @@ import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotService;
-import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -60,5 +59,10 @@ public class SpotFacade {
 
     public void deleteSpot(Long spotId, Long memberId) {
         spotService.deleteSpot(spotId, memberId);
+    }
+
+    public SpotInfo.MySpotsResponse getMemberSpotsInfo(final Long memberId, Pageable pageable,
+        String selected) {
+        return spotService.retrieveSpotList(memberId, pageable, selected);
     }
 }

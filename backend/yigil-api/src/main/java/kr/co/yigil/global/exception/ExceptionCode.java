@@ -18,6 +18,7 @@ public enum ExceptionCode {
 
 
     // travel 3000
+    INVALID_VISIBILITY_REQUEST(3001, "올바르지 않은 visibility 요청입니다."),
 
     // spot 3100
     ALREADY_EXIST_SPOT(3001, "이미 등록된 spot입니다."),

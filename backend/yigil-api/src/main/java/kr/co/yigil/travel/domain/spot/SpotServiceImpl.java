@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.domain.spot;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import kr.co.yigil.file.FileUploader;
@@ -17,6 +18,7 @@ import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
+import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class SpotServiceImpl implements SpotService {
+
     private final MemberReader memberReader;
     private final SpotReader spotReader;
     private final PlaceReader placeReader;
@@ -36,6 +39,7 @@ public class SpotServiceImpl implements SpotService {
 
     private final SpotSeriesFactory spotSeriesFactory;
     private final FileUploader fileUploader;
+
     @Override
     @Transactional(readOnly = true)
     public Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable) {
@@ -89,5 +93,15 @@ public class SpotServiceImpl implements SpotService {
         fileUploader.upload(command.getPlaceImageFile(), "");
         fileUploader.upload(command.getMapStaticImageFile(), "");
         return placeStore.store(command.toEntity());
+    }
+
+    @Override
+    @Transactional
+    public MySpotsResponse retrieveSpotList(Long memberId, Pageable pageable, String visibility) {
+        var pageSpot = spotReader.getMemberSpotList(memberId, pageable, visibility);
+        List<SpotInfo.SpotListInfo> spotInfoList = pageSpot.getContent().stream()
+            .map(SpotInfo.SpotListInfo::new)
+            .toList();
+        return new MySpotsResponse(spotInfoList, pageSpot.getTotalPages());
     }
 }

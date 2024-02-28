@@ -10,8 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +22,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"social_login_id", "social_login_type"})
+    @UniqueConstraint(columnNames = {"social_login_id", "social_login_type"})
 })
 @SQLDelete(sql = "UPDATE member SET status = 'WITHDRAW' WHERE id = ?")
 @Where(clause = "status = 'ACTIVE'")
 public class Member {
+    private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,7 +64,8 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public Member(final String email, final String socialLoginId, final String nickname, final String profileImageUrl, final String socialLoginTypeString) {
+    public Member(final String email, final String socialLoginId, final String nickname,
+        final String profileImageUrl, final String socialLoginTypeString) {
         this.email = email;
         this.socialLoginId = socialLoginId;
         this.nickname = nickname;
@@ -76,7 +76,8 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Member(final String email, final String socialLoginId, final String nickname, final String profileImageUrl, final SocialLoginType socialLoginType) {
+    public Member(final String email, final String socialLoginId, final String nickname,
+        final String profileImageUrl, final SocialLoginType socialLoginType) {
         this.email = email;
         this.socialLoginId = socialLoginId;
         this.nickname = nickname;
@@ -87,7 +88,9 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Member(final Long id, final String email, final String socialLoginId, final String nickname, final String profileImageUrl, final SocialLoginType socialLoginType) {
+    public Member(final Long id, final String email, final String socialLoginId,
+        final String nickname, final String profileImageUrl,
+        final SocialLoginType socialLoginType) {
         this.id = id;
         this.email = email;
         this.socialLoginId = socialLoginId;
@@ -99,7 +102,8 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Member(Long id, String email, String socialLoginId, String nickname, String profileImageUrl, SocialLoginType socialLoginType, Ages ages, Gender gender) {
+    public Member(Long id, String email, String socialLoginId, String nickname,
+        String profileImageUrl, SocialLoginType socialLoginType, Ages ages, Gender gender) {
         this.id = id;
         this.email = email;
         this.socialLoginId = socialLoginId;
@@ -111,5 +115,18 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
         this.ages = ages;
         this.gender = gender;
+    }
+
+    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl) {
+        this.nickname = nickname;
+        this.ages = Ages.from(age);
+        this.gender = Gender.from(gender);
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getProfileImageUrl() {
+        if(profileImageUrl == null) return null;
+        if(profileImageUrl.startsWith("http://")) return profileImageUrl;
+        else return DEFAULT_PROFILE_CDN + profileImageUrl;
     }
 }

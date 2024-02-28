@@ -1,0 +1,60 @@
+== MEMBER API
+[[get-my-info]]
+=== 내 정보 조회
+==== Request
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/members/get-my-info/http-request.adoc[]
+
+==== Response
+include::{snippets}/members/get-my-info/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-my-info/http-response.adoc[]
+'''
+
+[[update-my-info]]
+=== 내 정보 수정
+
+노션 링크:
+
+==== Request
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/members/update-my-info/http-request.adoc[]
+===== Request Parts
+include::{snippets}/members/update-my-info/request-parts.adoc[]
+
+==== Response
+include::{snippets}/members/update-my-info/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/update-my-info/http-response.adoc[]
+'''
+
+[[withdraw]]
+=== 탈퇴
+==== Request
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/members/withdraw/http-request.adoc[]
+==== Response
+include::{snippets}/members/withdraw/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/withdraw/http-response.adoc[]
+
+'''
+[[get-member-info]]
+=== 회원 정보 조회
+로그인 필수: N
+
+==== Request
+===== HTTP Request 예시
+include::{snippets}/members/get-member-info/http-request.adoc[]
+==== Response
+include::{snippets}/members/get-member-info/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/members/get-member-info/http-response.adoc[]
+'''
+

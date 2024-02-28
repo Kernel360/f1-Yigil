@@ -2,6 +2,7 @@ package kr.co.yigil.travel.domain.course;
 
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
 
+import java.util.List;
 import java.util.Objects;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
+
     private final MemberReader memberReader;
     private final CourseReader courseReader;
 
@@ -81,4 +83,14 @@ public class CourseServiceImpl implements CourseService {
         course.getSpots().forEach(Spot::changeOutOfCourse);
     }
 
+    @Override
+    @Transactional
+    public CourseInfo.MyCoursesResponse retrieveCourseList(Long memberId, Pageable pageable,
+        String visibility) {
+        var pageCourse = courseReader.getMemberCourseList(memberId, pageable, visibility);
+        List<CourseInfo.CourseListInfo> courseInfoList = pageCourse.getContent().stream()
+            .map(CourseInfo.CourseListInfo::new)
+            .toList();
+        return new CourseInfo.MyCoursesResponse(courseInfoList, pageCourse.getTotalPages());
+    }
 }
