@@ -1,24 +1,25 @@
 'use server';
 import { requestWithCookie } from '../../api/httpRequest';
 
-export const myPageBookmarkRequest = requestWithCookie('members/bookmarks');
-
 export const getMyPageBookmarks = (
   pageNo: number = 1,
   size: number = 5,
   sortOrder: string = 'desc',
   sortBy?: string,
 ) => {
-  return myPageBookmarkRequest(
-    `?page=${pageNo}&size=${size}&sortOrder=${
-      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
+  return requestWithCookie('bookmarks')(
+    `?page=${pageNo}&size=${size}&sortBy=${
+      sortOrder !== 'rate'
+        ? `createdAt&sortOrder=${sortOrder}`
+        : `rate&sortOrder=desc`
     }`,
   )()()();
 };
 
-// TODO: url 변경 여부 확인해야 함.
 export const deleteMyPageBookmark = (placeId: number) => {
-  return myPageBookmarkRequest(`/${placeId}`)()()('삭제 실패');
+  return requestWithCookie('delete-bookmark')(`${placeId}`)()()();
 };
 
-export const addMyPageBookmark = (placeId: number) => {};
+export const addMyPageBookmark = (placeId: number) => {
+  return requestWithCookie('add-bookmark')(`${placeId}`)()()();
+};

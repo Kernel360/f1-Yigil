@@ -28,7 +28,7 @@ export interface TMyPageCourse {
 export interface TMyPageBookmark {
   place_id: number;
   place_name: string;
-  place_image_url: string;
+  place_image: string;
   rate: number;
   is_bookmarked: boolean;
 }
