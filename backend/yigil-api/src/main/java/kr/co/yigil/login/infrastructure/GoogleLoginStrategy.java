@@ -5,12 +5,11 @@ import static kr.co.yigil.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 import java.util.Collections;
 import kr.co.yigil.global.exception.InvalidTokenException;
 import kr.co.yigil.login.domain.LoginCommand;
-import kr.co.yigil.login.interfaces.dto.request.LoginRequest;
 import kr.co.yigil.login.interfaces.dto.response.GoogleTokenInfoResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.member.repository.MemberRepository;
+import kr.co.yigil.member.domain.MemberStore;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +26,11 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class GoogleLoginStrategy implements LoginStrategy {
     private final MemberReader memberReader;
-//    private final MemberStore memberStore;
+
+    private final MemberStore memberStore;
 
     private static final String PROVIDER_NAME = "google";
 
-    private final MemberRepository memberRepository;
 
     @Setter
     private RestTemplate restTemplate = new RestTemplate();
@@ -90,6 +89,6 @@ public class GoogleLoginStrategy implements LoginStrategy {
 
     private Member registerNewMember(LoginCommand.LoginRequest loginCommand) {
         Member newMember = loginCommand.toEntity(PROVIDER_NAME);
-        return memberRepository.save(newMember);
+        return memberStore.save(newMember);
     }
 }

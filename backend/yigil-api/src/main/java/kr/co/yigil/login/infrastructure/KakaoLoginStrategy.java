@@ -9,7 +9,7 @@ import kr.co.yigil.login.interfaces.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.member.repository.MemberRepository;
+import kr.co.yigil.member.domain.MemberStore;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +30,12 @@ import org.springframework.web.client.RestTemplate;
 public class KakaoLoginStrategy implements LoginStrategy {
     private final MemberReader memberReader;
 
+    private final MemberStore memberStore;
+
     private final static String PROVIDER_NAME = "kakao";
 
     @Value("${kakao.token.info.url}")
     private String KAKAO_TOKEN_INFO_URL;
-
-    private final MemberRepository memberRepository;
 
     @Setter
     private RestTemplate restTemplate = new RestTemplate();
@@ -91,7 +91,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
     private Member registerNewMember(LoginCommand.LoginRequest loginCommand) {
         Member newMember = loginCommand.toEntity(PROVIDER_NAME);
-        return memberRepository.save(newMember);
+        return memberStore.save(newMember);
     }
 
 }

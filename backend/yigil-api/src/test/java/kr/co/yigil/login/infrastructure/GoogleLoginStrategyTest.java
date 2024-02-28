@@ -17,7 +17,7 @@ import kr.co.yigil.login.interfaces.dto.response.GoogleTokenInfoResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.member.repository.MemberRepository;
+import kr.co.yigil.member.domain.MemberStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,13 +35,10 @@ import org.springframework.web.client.RestTemplate;
 public class GoogleLoginStrategyTest {
 
     @MockBean
-    private MemberRepository memberRepository;
+    private MemberStore memberStore;
 
     @MockBean
     private MemberReader memberReader;
-
-    @MockBean
-    private LoginCommand.LoginRequest loginCommand;
 
     @MockBean
     private RestTemplate restTemplate;
@@ -126,7 +123,7 @@ public class GoogleLoginStrategyTest {
         Long memberId = 1L;
         Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.GOOGLE);
         when(loginCommand.toEntity(anyString())).thenReturn(mockMember);
-        when(memberRepository.save(any(Member.class))).thenReturn(mockMember);
+        when(memberStore.save(any(Member.class))).thenReturn(mockMember);
 
         Long response = googleLoginStrategy.processLogin(loginCommand, accessToken);
 

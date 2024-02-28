@@ -17,7 +17,7 @@ import kr.co.yigil.login.interfaces.dto.response.KakaoTokenInfoResponse;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.member.repository.MemberRepository;
+import kr.co.yigil.member.domain.MemberStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,13 +35,10 @@ import org.springframework.web.client.RestTemplate;
 public class KakaoLoginStrategyTest {
 
     @MockBean
-    private MemberRepository memberRepository;
+    private MemberStore memberStore;
 
     @MockBean
     private MemberReader memberReader;
-
-    @MockBean
-    private LoginCommand.LoginRequest loginCommand;
 
     @MockBean
     private RestTemplate restTemplate;
@@ -107,7 +104,7 @@ public class KakaoLoginStrategyTest {
         Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.KAKAO);
         when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.empty());
         when(loginCommand.toEntity(anyString())).thenReturn(mockMember);
-        when(memberRepository.save(any(Member.class))).thenReturn(mockMember);
+        when(memberStore.save(any(Member.class))).thenReturn(mockMember);
 
         Long response = kakaoLoginStrategy.processLogin(loginCommand, "mockAccessToken");
 
