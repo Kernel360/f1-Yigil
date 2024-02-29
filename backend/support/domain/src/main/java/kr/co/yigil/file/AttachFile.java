@@ -31,16 +31,12 @@ public class AttachFile {
     private String originalFileName;
 
     @NotNull
-    private String fileName;
-
-    @NotNull
     private Long fileSize;
 
-    public AttachFile(final FileType fileType, final String fileUrl, final String originalFileName, final String fileName, final Long fileSize) {
+    public AttachFile(final FileType fileType, final String fileUrl, final String originalFileName, final Long fileSize) {
         this.fileType = fileType;
         this.fileUrl = fileUrl;
         this.originalFileName = originalFileName;
-        this.fileName = fileName;
         this.fileSize = fileSize;
     }
 }

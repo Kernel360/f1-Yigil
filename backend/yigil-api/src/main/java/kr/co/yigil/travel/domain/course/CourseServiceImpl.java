@@ -42,21 +42,23 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public Course registerCourse(RegisterCourseRequest command, Long memberId) {
+    public void registerCourse(RegisterCourseRequest command, Long memberId) {
         Member member = memberReader.getMember(memberId);
         var spots = courseSpotSeriesFactory.store(command, memberId);
-        var initCourse = command.toEntity(spots, member);
-        return courseStore.store(initCourse);
+        var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
+        var initCourse = command.toEntity(spots, member, mapStaticImage);
+        courseStore.store(initCourse);
     }
 
     @Override
     @Transactional
-    public Course registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command,
+    public void registerCourseWithoutSeries(RegisterCourseRequestWithSpotInfo command,
             Long memberId) {
         Member member = memberReader.getMember(memberId);
         var spots = courseSpotSeriesFactory.store(command, memberId);
-        var initCourse = command.toEntity(spots, member);
-        return courseStore.store(initCourse);
+        var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
+        var initCourse = command.toEntity(spots, member, mapStaticImage);
+        courseStore.store(initCourse);
     }
 
     @Override

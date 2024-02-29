@@ -92,51 +92,26 @@ public class CourseFacadeTest {
         verify(courseService, times(1)).getCoursesSliceInPlace(eq(placeId), any(Pageable.class));
     }
 
-    @DisplayName("registerCourse 메서드가 CourseService와 FileUploader를 잘 호출하는지")
+    @DisplayName("registerCourse 메서드가 CourseServicer를 잘 호출하는지")
     @Test
-    void registerCourse_ShouldCallServiceAndUploader() {
+    void registerCourse_ShouldCallService() {
         RegisterCourseRequest command = mock(RegisterCourseRequest.class);
         Long memberId = 1L;
-        MultipartFile file = new MockMultipartFile("file", new byte[1]);
-        when(command.getMapStaticImageFile()).thenReturn(file);
-        Course mockCourse = mock(Course.class);
-        AttachFile mockAttachFile = mock(AttachFile.class);
-        when(mockCourse.getMapStaticImageFile()).thenReturn(mockAttachFile);
-        when(mockAttachFile.getFileName()).thenReturn("file");
-
-        when(courseService.registerCourse(command, memberId)).thenReturn(mockCourse);
-        MultipartFile mockFile = command.getMapStaticImageFile();
-
-        doNothing().when(fileUploader).upload(mockFile, "file");
 
         courseFacade.registerCourse(command, memberId);
 
         verify(courseService).registerCourse(command, memberId);
-        verify(fileUploader).upload(command.getMapStaticImageFile(),"file");
     }
 
-    @DisplayName("registerCourseWithoutSeries 메서드가 CourseService와 FileUploader를 잘 호출하는지")
+    @DisplayName("registerCourseWithoutSeries 메서드가 CourseService를 잘 호출하는지")
     @Test
     void registerCourseWithoutSeries_ShouldCallServiceAndUploader() {
         RegisterCourseRequestWithSpotInfo command = mock(RegisterCourseRequestWithSpotInfo.class);
         Long memberId = 1L;
-        MultipartFile file = new MockMultipartFile("file", new byte[1]);
-        when(command.getMapStaticImageFile()).thenReturn(file);
-
-        Course mockCourse = mock(Course.class);
-        AttachFile mockAttachFile = mock(AttachFile.class);
-        when(mockCourse.getMapStaticImageFile()).thenReturn(mockAttachFile);
-        when(mockAttachFile.getFileName()).thenReturn("file");
-
-        when(courseService.registerCourseWithoutSeries(command, memberId)).thenReturn(mockCourse);
-        MultipartFile mockFile = command.getMapStaticImageFile();
-
-        doNothing().when(fileUploader).upload(mockFile, "file");
 
         courseFacade.registerCourseWithoutSeries(command, memberId);
 
         verify(courseService).registerCourseWithoutSeries(command, memberId);
-        verify(fileUploader).upload(command.getMapStaticImageFile(), "file");
     }
 
     @DisplayName("retrieveCourseInfo 메서드가 CourseInfo를 잘 반환하는지")
@@ -203,7 +178,7 @@ public class CourseFacadeTest {
         boolean isPrivate = false;
         List<Spot> spots = Collections.emptyList();
         int representativeSpotOrder = 0;
-        AttachFile mapStaticImageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", "", 10L);
+        AttachFile mapStaticImageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
 
         Course mockCourse = new Course(courseId, member, title, null, rate, path, isPrivate,
             spots, representativeSpotOrder, mapStaticImageFile);

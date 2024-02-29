@@ -95,24 +95,13 @@ public class SpotFacadeTest {
         verify(spotService).retrieveMySpotInfoInPlace(1L, 1L);
     }
 
-    @DisplayName("registerSpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
+    @DisplayName("registerSpot 메서드가 SpotService를 잘 호출하는지")
     @Test
-    void registerSpot_ShouldCallServiceAndUploader() {
+    void registerSpot_ShouldCallService() {
         RegisterSpotRequest command = mock(RegisterSpotRequest.class);
         Long memberId = 1L;
-        List<MultipartFile> files = List.of(mock(MultipartFile.class), mock(MultipartFile.class));
 
-        when(command.getFiles()).thenReturn(files);
-
-        Spot mockSpot = mock(Spot.class);
-        AttachFiles mockAttachFiles = mock(AttachFiles.class);
-        when(mockSpot.getAttachFiles()).thenReturn(mockAttachFiles);
-
-        AttachFile mockAttachFile = mock(AttachFile.class);
-        when(mockAttachFiles.getFiles()).thenReturn(List.of(mockAttachFile));
-        when(mockAttachFile.getOriginalFileName()).thenReturn("image");
-
-        when(spotService.registerSpot(command, memberId)).thenReturn(mockSpot);
+        doNothing().when(spotService).registerSpot(command, memberId);
 
         spotFacade.registerSpot(command, memberId);
 
@@ -133,26 +122,14 @@ public class SpotFacadeTest {
         verify(spotService).retrieveSpotInfo(spotId);
     }
 
-    @DisplayName("modifySpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
+    @DisplayName("modifySpot 메서드가 SpotService를 잘 호출하는지")
     @Test
-    void modifySpot_ShouldCallServiceAndUploader() {
+    void modifySpot_ShouldCallService() {
         ModifySpotRequest command = mock(ModifySpotRequest.class);
         Long spotId = 1L;
         Long memberId = 1L;
-        List<SpotCommand.UpdateSpotImage> updatedImages = List.of(
-                new UpdateSpotImage(mock(MultipartFile.class), 1),
-                new UpdateSpotImage(mock(MultipartFile.class), 2)
-        );
 
-        when(command.getUpdatedImages()).thenReturn(updatedImages);
-        AttachFiles mockAttachFiles = mock(AttachFiles.class);
-        AttachFile mockAttachFile = mock(AttachFile.class);
-        when(mockAttachFiles.getFiles()).thenReturn(List.of(mockAttachFile));
-        when(mockAttachFile.getOriginalFileName()).thenReturn("image");
-
-        Spot mockSpot = mock(Spot.class);
-        when(spotService.modifySpot(command, spotId, memberId)).thenReturn(mockSpot);
-        when(mockSpot.getAttachFiles()).thenReturn(mockAttachFiles);
+        doNothing().when(spotService).modifySpot(command, spotId, memberId);
 
         spotFacade.modifySpot(command, spotId, memberId);
 
@@ -190,7 +167,7 @@ public class SpotFacadeTest {
         Long spotId = 1L;
         String title = "Test Spot Title";
         double rate = 5.0;
-        AttachFile imageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", "", 10L);
+        AttachFile imageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
         AttachFiles imageFiles = new AttachFiles(Collections.singletonList(imageFile));
 
         Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, null, rate);

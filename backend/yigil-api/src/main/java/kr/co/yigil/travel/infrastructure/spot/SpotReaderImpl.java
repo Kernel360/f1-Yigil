@@ -54,7 +54,7 @@ public class SpotReaderImpl implements SpotReader {
 
     @Override
     public Page<Spot> getSpotSliceByMemberId(Long memberId, Pageable pageable) {
-        return spotRepository.findAllByMemberIdAndIsInCourseFalse(memberId, pageable);
+        return spotRepository.findAllByMemberIdAndIsInCourseIsFalse(memberId, pageable);
     }
 
     @Override

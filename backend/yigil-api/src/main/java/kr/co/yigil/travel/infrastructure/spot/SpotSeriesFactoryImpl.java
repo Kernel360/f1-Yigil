@@ -5,10 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileReader;
-import kr.co.yigil.file.FileUploadUtil;
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
+import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotSeriesFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class SpotSeriesFactoryImpl implements SpotSeriesFactory {
 
     private final FileReader fileReader;
+    private final FileUploader fileUploader;
 
     @Override
     public Spot modify(ModifySpotRequest command, Spot spot) {
@@ -28,7 +31,7 @@ public class SpotSeriesFactoryImpl implements SpotSeriesFactory {
         if(command.getUpdatedImages() != null) {
             spotComibinedImageList.addAll(command.getUpdatedImages().stream()
                     .map(image -> new CombinedImage(
-                            FileUploadUtil.predictAttachFile(image.getImageFile()), image.getIndex()))
+                            fileUploader.upload(image.getImageFile()), image.getIndex()))
                     .toList());
         }
 
@@ -45,7 +48,14 @@ public class SpotSeriesFactoryImpl implements SpotSeriesFactory {
 
         return spot;
     }
-    private record CombinedImage(AttachFile attachFile, int index) {
+
+    @Override
+    public AttachFiles initAttachFiles(RegisterSpotRequest command) {
+        return new AttachFiles(command.getFiles().stream()
+                .map(fileUploader::upload)
+                .collect(Collectors.toList()));
 
     }
+
+    private record CombinedImage(AttachFile attachFile, int index) { }
 }

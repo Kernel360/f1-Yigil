@@ -1,8 +1,13 @@
 package kr.co.yigil.file.infrastructure;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploadEvent;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.exception.ExceptionCode;
+import kr.co.yigil.global.exception.FileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -15,9 +20,30 @@ public class FileUploaderImpl implements FileUploader {
     private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public void upload(MultipartFile file, String fileName) {
-        FileUploadEvent event = new FileUploadEvent(this, file, fileName);
+    public AttachFile upload(MultipartFile file) {
+        CompletableFuture<String> fileUploadResult = new CompletableFuture<>();
+
+        FileUploadEvent event = new FileUploadEvent(this, file, fileUploadResult::complete);
         eventPublisher.publishEvent(event);
+
+        String fileUrl = fileUploadResult.join();
+        FileType fileType = determineFileType(file);
+
+        return new AttachFile(fileType, fileUrl, file.getOriginalFilename(), file.getSize());
+    }
+
+    private FileType determineFileType(MultipartFile file) {
+        if (file.getContentType() == null) throw new FileException(ExceptionCode.EMPTY_FILE);
+
+        if(file.getContentType().startsWith("image/")) {
+            return FileType.IMAGE;
+        }
+
+        if(file.getContentType().startsWith("video/")) {
+            return FileType.VIDEO;
+        }
+
+        throw new FileException(ExceptionCode.INVALID_FILE_TYPE);
     }
 
 }

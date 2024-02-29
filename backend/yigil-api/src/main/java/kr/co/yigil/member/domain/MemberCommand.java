@@ -18,12 +18,4 @@ public class MemberCommand {
         private MultipartFile profileImageFile;
     }
 
-//    @Getter
-//    @Builder
-//    @ToString
-//    public static class VisibilityChangeRequest {
-//
-//        private List<Long> travelIds;
-//        private Boolean isPrivate;
-//    }
 }

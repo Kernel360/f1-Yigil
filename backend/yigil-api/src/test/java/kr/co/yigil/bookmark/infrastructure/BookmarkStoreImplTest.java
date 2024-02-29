@@ -38,7 +38,7 @@ public class BookmarkStoreImplTest {
 
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", "",10L );
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L );
         Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처", 0.0, mockPoint, mockAttachFile, mockAttachFile);
 
         bookmarkStore.store(member, mockPlace);
@@ -53,7 +53,7 @@ public class BookmarkStoreImplTest {
         Long placeId = 1L;
         GeometryFactory geometryFactory = new GeometryFactory();
         Point mockPoint = geometryFactory.createPoint(new Coordinate(0, 0));
-        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", "", 10L);
+        AttachFile mockAttachFile = new AttachFile(FileType.IMAGE, "img.url", "original.name", 10L);
         Place mockPlace = new Place("패스트캠퍼스", "봉은사역 근처",0.0, mockPoint, mockAttachFile, mockAttachFile);
 
 
