@@ -23,7 +23,8 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"name", "address"})})
+    @UniqueConstraint(columnNames = {"name", "address"})}
+)
 public class Place {
 
     @Id
@@ -40,11 +41,11 @@ public class Place {
     @Column(columnDefinition = "geometry(Point,5186)")
     private Point location;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "map_static_image_file_id")
     private AttachFile mapStaticImageFile;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_file_id")
     private AttachFile imageFile;
 
@@ -71,6 +72,14 @@ public class Place {
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
+    }
+
+    public String getImageFileUrl() {
+        return imageFile.getFileUrl();
+    }
+
+    public String getMapStaticImageFileUrl() {
+        return mapStaticImageFile.getFileUrl();
     }
 
     public void updateRegion(Region region) {

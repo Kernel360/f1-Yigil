@@ -187,13 +187,12 @@ public class SpotServiceImplTest {
         Long spotId = 1L;
         Spot spot = mock(Spot.class);
         Place place = mock(Place.class);
-        AttachFile attachFile = mock(AttachFile.class);
         AttachFiles attachFiles = mock(AttachFiles.class);
 
         when(spotReader.getSpot(spotId)).thenReturn(spot);
         when(spot.getPlace()).thenReturn(place);
         when(spot.getAttachFiles()).thenReturn(attachFiles);
-        when(place.getMapStaticImageFile()).thenReturn(attachFile);
+        when(place.getMapStaticImageFileUrl()).thenReturn("~~");
 
         Main result = spotService.retrieveSpotInfo(spotId);
 
