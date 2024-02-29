@@ -45,6 +45,7 @@ export async function GET(request: NextRequest) {
 
   // Schema 작성
   const userInfoResponse = await userInfoRequest(accessToken);
+
   const userInfoJson = await userInfoResponse.json();
 
   if (!userInfoResponse.ok) {
@@ -73,6 +74,7 @@ export async function GET(request: NextRequest) {
   };
 
   const backendResponse = await backendLoginRequest(backendRequestData);
+
   const backendJson = await backendResponse.json();
 
   if (!backendResponse.ok) {
@@ -151,12 +153,14 @@ function backendLoginRequest(data: {
   provider: string;
   accessToken: string;
 }) {
-  const { BASE_URL } = process.env;
+  const { ENVIRONMENT, BASE_URL, DEV_BASE_URL } = process.env;
+
+  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
 
   const { id, nickname, profile_image_url, email, provider, accessToken } =
     data;
 
-  return fetch(`${BASE_URL}/v1/login`, {
+  return fetch(`${baseUrl}/v1/login`, {
     method: 'POST',
     body: JSON.stringify({
       id,

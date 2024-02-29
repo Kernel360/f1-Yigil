@@ -14,8 +14,6 @@ export default async function LoginPage() {
 
   const href = await kakaoOAuthEndpoint(KAKAO_ID);
 
-  console.log(href);
-
   return (
     <div className="w-full h-full bg-main flex flex-col items-center">
       <CloseButton
