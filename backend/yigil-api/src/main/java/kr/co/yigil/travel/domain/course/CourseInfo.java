@@ -23,7 +23,7 @@ public class CourseInfo {
         public Main(Course course) {
             this.title = course.getTitle();
             this.rate = course.getRate();
-            this.mapStaticImageUrl = course.getMapStaticImageFile().getFileUrl();
+            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
             this.description = course.getDescription();
             AtomicInteger index = new AtomicInteger(1);
             this.courseSpotList = course.getSpots().stream()
@@ -83,7 +83,7 @@ public class CourseInfo {
             this.spotCount = course.getSpots().size();
             this.createdDate = course.getCreatedAt();
             this.isPrivate = course.isPrivate();
-            this.mapStaticImageUrl = course.getMapStaticImageFile().getFileUrl();
+            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
         }
     }
 

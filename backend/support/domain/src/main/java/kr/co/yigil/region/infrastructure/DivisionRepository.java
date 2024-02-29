@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface DivisionRepository extends JpaRepository<Division, Integer> {
-    @Query(value = "SELECT * FROM Division d WHERE ST_Contains(d.geom, CAST(:location AS geometry))", nativeQuery = true)
+    @Query(value = "SELECT * FROM Division d WHERE ST_Contains(d.geom, ST_SetSRID(CAST(:location AS geometry), 5186)) LIMIT 1", nativeQuery = true)
     Optional<Division> findContainingDivision(@Param("location") Point location);
 }
