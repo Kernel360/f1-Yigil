@@ -25,8 +25,11 @@ include::{snippets}/courses/get-courses-in-place/http-response.adoc[]
 링크 :
 
 ==== Request
-include::{snippets}/courses/register-course/request-body.adoc[]
+include::{snippets}/courses/register-course/request-fields.adoc[]
 로그인 필수 : Y
+
+===== Request Part
+include::{snippets}/courses/register-course/request-parts.adoc[]
 
 ===== HTTP Request 예시
 include::{snippets}/courses/register-course/http-request.adoc[]
@@ -41,8 +44,11 @@ include::{snippets}/courses/register-course/http-response.adoc[]
 링크 :
 
 ==== Request
-include::{snippets}/courses/register-course-only/request-body.adoc[]
+include::{snippets}/courses/register-course-only/request-fields.adoc[]
 로그인 필수 : Y
+
+===== Request Part
+include::{snippets}/courses/register-course-only/request-parts.adoc[]
 
 ===== HTTP Request 예시
 include::{snippets}/courses/register-course-only/http-request.adoc[]
@@ -75,11 +81,14 @@ include::{snippets}/courses/retrieve-course/http-response.adoc[]
 링크 :
 
 ==== Request
-include::{snippets}/courses/update-course/request-body.adoc[]
+include::{snippets}/courses/update-course/request-fields.adoc[]
 로그인 필수 : Y
 
 ===== Path Parameter
 include::{snippets}/courses/update-course/path-parameters.adoc[]
+
+==== Request Part
+include::{snippets}/courses/update-course/request-parts.adoc[]
 
 ===== HTTP Request 예시
 include::{snippets}/courses/update-course/http-request.adoc[]

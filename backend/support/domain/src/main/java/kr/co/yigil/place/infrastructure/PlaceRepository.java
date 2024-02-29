@@ -11,6 +11,5 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
     List<Place> findTop5ByOrderByIdAsc();
     Optional<Place> findByNameAndAddress(String name, String address);
-
-    Page<Place> findByRegionIsNull(Pageable pageable);
+    List<Place> findTop5ByRegionIdOrderByIdDesc(Long regionId);
 }
