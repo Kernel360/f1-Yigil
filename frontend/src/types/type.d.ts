@@ -22,6 +22,10 @@ declare global {
       NAVER_SEARCH_ID: string;
       NAVER_SEARCH_SECRET: string;
       MAP_SECRET: string;
+
+      DEV_BASE_URL: string;
+      ENVIRONMENT: string;
+      CDN_URL: string;
     }
   }
 }

@@ -12,12 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileReader;
-import kr.co.yigil.file.FileUploadUtil;
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotCommand.OriginalSpotImage;
 import kr.co.yigil.travel.domain.spot.SpotCommand.UpdateSpotImage;
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,15 +33,11 @@ public class SpotSeriesFactoryImplTest {
     @Mock
     private FileReader fileReader;
 
-    private static MockedStatic<FileUploadUtil> fileUploadUtil;
+    @Mock
+    private FileUploader fileUploader;
 
     @InjectMocks
     private SpotSeriesFactoryImpl spotSeriesFactory;
-
-    @BeforeAll
-    public static void beforeAll() {
-        fileUploadUtil = mockStatic(FileUploadUtil.class);
-    }
 
     @Test
     void modify_UpdatesSpotSuccessfully() {
@@ -60,7 +55,7 @@ public class SpotSeriesFactoryImplTest {
         AttachFile attachFile = mock(AttachFile.class);
 
         when(fileReader.getFileByUrl(anyString())).thenReturn(attachFile);
-        when(FileUploadUtil.predictAttachFile(any())).thenReturn(attachFile);
+        when(fileUploader.upload(any())).thenReturn(attachFile);
 
         SpotCommand.ModifySpotRequest command = SpotCommand.ModifySpotRequest.builder()
                 .rate(newRate)
@@ -74,8 +69,5 @@ public class SpotSeriesFactoryImplTest {
         assertNotNull(modifiedSpot);
     }
 
-    @AfterAll
-    public static void afterAll() {
-        fileUploadUtil.close();
-    }
+
 }

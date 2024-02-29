@@ -1,22 +1,14 @@
 package kr.co.yigil.favor.presentation;
 
-import kr.co.yigil.auth.Auth;
-import kr.co.yigil.auth.MemberOnly;
-import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.favor.application.FavorService;
-import kr.co.yigil.favor.dto.response.AddFavorResponse;
-import kr.co.yigil.favor.dto.response.DeleteFavorResponse;
+import kr.co.yigil.favor.application.FavorFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 public class FavorController {
 
-    private final FavorService favorService;
+    private final FavorFacade favorFacade;
 
 //    @PostMapping("/api/v1/like/{postId}")
 //    @MemberOnly

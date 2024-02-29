@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Ages;
@@ -93,19 +95,17 @@ public class SpotFacadeTest {
         verify(spotService).retrieveMySpotInfoInPlace(1L, 1L);
     }
 
-    @DisplayName("registerSpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
+    @DisplayName("registerSpot 메서드가 SpotService를 잘 호출하는지")
     @Test
-    void registerSpot_ShouldCallServiceAndUploader() {
+    void registerSpot_ShouldCallService() {
         RegisterSpotRequest command = mock(RegisterSpotRequest.class);
         Long memberId = 1L;
-        List<MultipartFile> files = List.of(mock(MultipartFile.class), mock(MultipartFile.class));
 
-        when(command.getFiles()).thenReturn(files);
+        doNothing().when(spotService).registerSpot(command, memberId);
 
         spotFacade.registerSpot(command, memberId);
 
         verify(spotService).registerSpot(command, memberId);
-        files.forEach(file -> verify(fileUploader).upload(file));
     }
 
     @DisplayName("retrieveSpotinfo 메서드가 SpotInfo를 잘 반환하는지")
@@ -122,23 +122,18 @@ public class SpotFacadeTest {
         verify(spotService).retrieveSpotInfo(spotId);
     }
 
-    @DisplayName("modifySpot 메서드가 SpotService와 FileUploader를 잘 호출하는지")
+    @DisplayName("modifySpot 메서드가 SpotService를 잘 호출하는지")
     @Test
-    void modifySpot_ShouldCallServiceAndUploader() {
+    void modifySpot_ShouldCallService() {
         ModifySpotRequest command = mock(ModifySpotRequest.class);
         Long spotId = 1L;
         Long memberId = 1L;
-        List<SpotCommand.UpdateSpotImage> updatedImages = List.of(
-                new UpdateSpotImage(mock(MultipartFile.class), 1),
-                new UpdateSpotImage(mock(MultipartFile.class), 2)
-        );
 
-        when(command.getUpdatedImages()).thenReturn(updatedImages);
+        doNothing().when(spotService).modifySpot(command, spotId, memberId);
 
         spotFacade.modifySpot(command, spotId, memberId);
 
         verify(spotService).modifySpot(command, spotId, memberId);
-        updatedImages.forEach(image -> verify(fileUploader).upload(image.getImageFile()));
     }
 
     @DisplayName("deleteSpot 메서드가 SpotService를 잘 호출하는지")

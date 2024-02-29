@@ -134,9 +134,11 @@ public class SpotServiceImplTest {
         String placeAddress = "Test Address";
         Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null);
         Spot spot = mock(Spot.class);
+        AttachFiles mockAttachFiles = mock(AttachFiles.class);
 
         when(command.getRegisterPlaceRequest()).thenReturn(placeCommand);
-        when(command.toEntity(member, place, false)).thenReturn(spot);
+        when(spotSeriesFactory.initAttachFiles(command)).thenReturn(mockAttachFiles);
+        when(command.toEntity(member, place, false, mockAttachFiles)).thenReturn(spot);
         when(placeCommand.getPlaceName()).thenReturn(placeName);
         when(placeCommand.getPlaceAddress()).thenReturn(placeAddress);
         when(memberReader.getMember(memberId)).thenReturn(member);
@@ -161,10 +163,12 @@ public class SpotServiceImplTest {
         Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null);
         Spot spot = mock(Spot.class);
         RegisterPlaceRequest placeCommand = mock(RegisterPlaceRequest.class);
+        AttachFiles mockAttachFiles = mock(AttachFiles.class);
 
         when(memberReader.getMember(memberId)).thenReturn(member);
         when(command.getRegisterPlaceRequest()).thenReturn(placeCommand);
-        when(command.toEntity(member, place, false)).thenReturn(spot);
+        when(spotSeriesFactory.initAttachFiles(command)).thenReturn(mockAttachFiles);
+        when(command.toEntity(member, place, false, mockAttachFiles)).thenReturn(spot);
         when(placeCommand.getPlaceName()).thenReturn(placeName);
         when(placeCommand.getPlaceAddress()).thenReturn(placeAddress);
         when(placeReader.findPlaceByNameAndAddress(anyString(), anyString())).thenReturn(Optional.empty());
