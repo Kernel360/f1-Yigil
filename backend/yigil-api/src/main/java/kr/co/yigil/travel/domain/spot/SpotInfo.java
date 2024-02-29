@@ -24,7 +24,7 @@ public class SpotInfo {
             placeName = spot.getPlace().getName();
             placeAddress = spot.getPlace().getAddress();
             rate = spot.getRate();
-            mapStaticImageFileUrl = spot.getPlace().getMapStaticImageFile().getFileUrl();
+            mapStaticImageFileUrl = spot.getPlace().getMapStaticImageFileUrl();
             imageUrls = spot.getAttachFiles().getUrls();
             createDate = spot.getCreatedAt();
             description = spot.getDescription();

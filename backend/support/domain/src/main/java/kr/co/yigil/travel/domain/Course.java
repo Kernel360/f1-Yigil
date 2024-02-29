@@ -62,4 +62,8 @@ public class Course extends Travel {
         this.spots.clear();
         this.spots.addAll(spots);
     }
+
+    public String getMapStaticImageFileUrl() {
+        return mapStaticImageFile.getFileUrl();
+    }
 }

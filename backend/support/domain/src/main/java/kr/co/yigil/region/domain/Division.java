@@ -10,26 +10,20 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "division2")
+@Table(name = "division")
 public class Division {
 
     @Id
     private int gid;
 
-    @Column(name = "sigungu_cd")
-    private String divisionCode;
-
-
-    @Column(name = "sigungu_nm")
-    private String koreanName;
-
-    @Column(columnDefinition = "geometry(Polygon,5186)", name = "geom")
-    private Polygon geometry;
+    @Column(columnDefinition = "geometry(MultiPolygon,5186)", name = "geom")
+    private MultiPolygon geometry;
 
     @Column(name = "city")
     private String city;

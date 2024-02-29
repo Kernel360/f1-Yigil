@@ -97,9 +97,8 @@ public class CourseServiceImplTest {
     void retrieveCourseInfo_ShouldReturnCourseInfo() {
         Long courseId = 1L;
         Course course = mock(Course.class);
-        AttachFile attachFile = mock(AttachFile.class);
         when(courseReader.getCourse(courseId)).thenReturn(course);
-        when(course.getMapStaticImageFile()).thenReturn(attachFile);
+        when(course.getMapStaticImageFileUrl()).thenReturn("~~~");
         Main result = courseService.retrieveCourseInfo(courseId);
 
         assertNotNull(result);

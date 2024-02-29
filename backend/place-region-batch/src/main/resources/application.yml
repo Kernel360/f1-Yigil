@@ -8,11 +8,13 @@ spring:
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
     username: postgres
     password: 12345678
+
 logging:
   level:
     root: info
