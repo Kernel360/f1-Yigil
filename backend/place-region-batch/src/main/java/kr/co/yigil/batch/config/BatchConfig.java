@@ -54,7 +54,7 @@ public class BatchConfig {
             ItemWriter<Place> placeItemWriter
     ) {
         return new StepBuilder("updateRegionStep", jobRepository)
-                .<Place, Place>chunk(10, platformTransactionManager)
+                .<Place, Place>chunk(3, platformTransactionManager)
                 .reader(placeItemReader)
                 .processor(placeItemProcessor)
                 .writer(placeItemWriter)
