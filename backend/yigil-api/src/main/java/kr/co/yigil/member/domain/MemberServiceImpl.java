@@ -3,6 +3,7 @@ package kr.co.yigil.member.domain;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.domain.MemberInfo.Main;
+import kr.co.yigil.region.domain.RegionReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberStore memberStore;
     private final FollowReader followReader;
     private final FileUploader fileUploader;
+    private final RegionReader regionReader;
 
     @Override
     @Transactional
@@ -35,6 +37,8 @@ public class MemberServiceImpl implements MemberService {
     public void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request) {
         var member = memberReader.getMember(memberId);
         var updatedProfile = fileUploader.upload(request.getProfileImageFile());
+
+        regionReader.validateRegions(request.getFavoriteRegionIds());
 
         member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
             updatedProfile.getFileUrl(), request.getFavoriteRegionIds());
