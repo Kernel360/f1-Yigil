@@ -70,8 +70,8 @@ dependencies {
 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
-    implementation 'com.querydsl:querydsl-core:5.1.0'
-    implementation 'com.querydsl:querydsl-jpa:5.1.0'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+
 
 }
 
