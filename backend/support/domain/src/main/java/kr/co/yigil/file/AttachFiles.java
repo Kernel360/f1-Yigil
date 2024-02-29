@@ -54,7 +54,7 @@ public class AttachFiles {
     public List<String> getUrls() {
         List<String> urls = new ArrayList<>();
         for (AttachFile file : files) {
-            urls.add("http://cdn.yigi.co.kr/" + file.getFileUrl());
+            urls.add(file.getFileUrl());
         }
         return urls;
     }

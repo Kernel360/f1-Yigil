@@ -75,11 +75,11 @@ public class Place {
     }
 
     public String getImageFileUrl() {
-        return "http://cdn.yigil.co.kr/" + imageFile.getFileUrl();
+        return imageFile.getFileUrl();
     }
 
     public String getMapStaticImageFileUrl() {
-        return "http://cdn.yigil.co.kr/" + mapStaticImageFile.getFileUrl();
+        return mapStaticImageFile.getFileUrl();
     }
 
     public void updateRegion(Region region) {
