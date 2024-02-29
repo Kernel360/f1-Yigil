@@ -16,7 +16,7 @@ import org.locationtech.jts.geom.Polygon;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "dong_division2")
+@Table(name = "dong_division")
 public class DongDivision {
     @Id
     private int gid;
@@ -30,7 +30,7 @@ public class DongDivision {
     @Column(name = "adm_cd")
     private String divisionCode;
 
-    @Column(columnDefinition = "geometry(Polygon,5186)", name = "geom")
+    @Column(columnDefinition = "geometry(MultiPolygon,5186)", name = "geom")
     private MultiPolygon geometry;
 
     @ManyToOne(fetch = FetchType.LAZY)

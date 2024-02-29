@@ -16,13 +16,13 @@ import org.locationtech.jts.geom.Polygon;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "division2")
+@Table(name = "division")
 public class Division {
 
     @Id
     private int gid;
 
-    @Column(columnDefinition = "geometry(Polygon,5186)", name = "geom")
+    @Column(columnDefinition = "geometry(MultiPolygon,5186)", name = "geom")
     private MultiPolygon geometry;
 
     @Column(name = "city")

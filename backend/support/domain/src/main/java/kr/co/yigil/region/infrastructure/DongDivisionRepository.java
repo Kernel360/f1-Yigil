@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface DongDivisionRepository extends JpaRepository<DongDivision, Integer> {
-    @Query(value = "SELECT * FROM dong_division2 d WHERE ST_Contains(d.geom , ST_SetSRID(CAST(:location AS geometry), 5186)) LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM dong_division d WHERE ST_Contains(d.geom , ST_SetSRID(CAST(:location AS geometry), 5186)) LIMIT 1", nativeQuery = true)
     Optional<DongDivision> findContainingDivision(@Param("location") Point location);
 }
