@@ -1,14 +1,17 @@
-package kr.co.yigil.admin.interfaces.dto.request;
+package kr.co.yigil.admin.interfaces.dto;
 
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class AdminSignupRequest {
+@NoArgsConstructor
+public class AdminSignUpInfoDto {
+
+    private Long id;
     private String email;
     private String nickname;
+    private String requestDatetime;
+
 }

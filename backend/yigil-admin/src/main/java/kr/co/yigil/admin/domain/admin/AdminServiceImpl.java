@@ -2,7 +2,7 @@ package kr.co.yigil.admin.domain.admin;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
+import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
@@ -27,9 +27,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
-    public JwtToken signIn(LoginRequest request) {
-        UsernamePasswordAuthenticationToken authenticationToken = new
-                UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+    public JwtToken signIn(LoginRequest command) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
@@ -38,9 +37,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(readOnly = true)
-    public AdminInfoResponse getAdminInfoByEmail(String email) {
+    public AdminInfo.AdminInfoResponse getAdminInfoByEmail(String email) {
         Admin admin = adminReader.getAdminByEmail(email);
-        return AdminInfoResponse.from(admin);
+        return new AdminInfo.AdminInfoResponse(admin);
     }
 
     @Override

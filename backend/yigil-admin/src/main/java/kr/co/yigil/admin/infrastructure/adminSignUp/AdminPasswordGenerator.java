@@ -1,4 +1,4 @@
-package kr.co.yigil.admin.infrastructure;
+package kr.co.yigil.admin.infrastructure.adminSignUp;
 
 import java.util.Random;
 import lombok.RequiredArgsConstructor;

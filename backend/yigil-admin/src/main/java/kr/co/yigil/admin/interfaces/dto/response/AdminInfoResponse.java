@@ -13,7 +13,4 @@ public class AdminInfoResponse {
     private String username;
     private String profileUrl;
 
-    public static AdminInfoResponse from(Admin admin) {
-        return new AdminInfoResponse(admin.getNickname(), admin.getProfileImageUrl());
-    }
 }

@@ -7,12 +7,11 @@ import java.util.List;
 import kr.co.yigil.admin.domain.admin.Admin;
 import kr.co.yigil.admin.domain.admin.AdminReader;
 import kr.co.yigil.admin.domain.admin.AdminStore;
-import kr.co.yigil.admin.infrastructure.AdminPasswordGenerator;
+import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;
+import kr.co.yigil.admin.infrastructure.adminSignUp.AdminPasswordGenerator;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
-import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpAcceptRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpRejectRequest;
-import kr.co.yigil.admin.interfaces.dto.response.AdminSignUpListResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminSignUpServiceImpl implements AdminSignUpService {
 
+
     private final AdminSignUpReader adminSignUpReader;
     private final AdminSignUpStore adminSignUpStore;
     private final EmailSender emailSender;
@@ -40,28 +40,26 @@ public class AdminSignUpServiceImpl implements AdminSignUpService {
 
     @Override
     @Transactional
-    public void sendSignUpRequest(AdminSignupRequest request) {
-        validateRequestAlreadySignedUp(request);
+    public void sendSignUpRequest(AdminSignUpRequest command) {
+        validateRequestAlreadySignedUp(command);
         try {
-            adminSignUpStore.store(request.toEntity());
+            adminSignUpStore.store(command.toEntity());
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException(ADMIN_ALREADY_EXISTED);
         }
     }
 
-    private void validateRequestAlreadySignedUp(AdminSignupRequest request) {
-        if (adminReader.existsByEmailOrNickname(request.getEmail(), request.getNickname())) {
+    private void validateRequestAlreadySignedUp(AdminSignUpRequest command) {
+        if (adminReader.existsByEmailOrNickname(command.getEmail(), command.getNickname())) {
             throw new BadRequestException(ADMIN_ALREADY_EXISTED);
         }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<AdminSignUpListResponse> getSignUpRequestList(AdminSignUpListRequest request) {
+    public Page<AdminSignUp> getAdminSignUpList(AdminSignUpListRequest request) {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getDataCount());
-        Page<AdminSignUp> adminSignUps = adminSignUpReader.findAll(pageable);
-
-        return convertAdminSignUpPageToResponse(adminSignUps);
+        return adminSignUpReader.findAll(pageable);
     }
 
     @Override
@@ -114,16 +112,5 @@ public class AdminSignUpServiceImpl implements AdminSignUpService {
         List<String> rejectedAdminIds = request.getIds();
         deleteAdminSignUpRequests(rejectedAdminIds);
     }
-
-    private Page<AdminSignUpListResponse> convertAdminSignUpPageToResponse(
-            Page<AdminSignUp> adminSignUps) {
-        return adminSignUps.map(adminSignUp -> new AdminSignUpListResponse(
-                adminSignUp.getId(),
-                adminSignUp.getEmail(),
-                adminSignUp.getNickname(),
-                adminSignUp.getCreatedAt()
-        ));
-    }
-
 
 }
