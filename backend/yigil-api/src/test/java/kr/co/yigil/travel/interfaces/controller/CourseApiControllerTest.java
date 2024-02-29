@@ -15,6 +15,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -135,16 +137,48 @@ public class CourseApiControllerTest {
         MockMultipartFile mapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png",
             "image/png", "<<png data>>".getBytes());
 
+        MockMultipartFile image1 = new MockMultipartFile("image", "image.jpg", "image/jpeg", "<<jpg data>>".getBytes());
+        MockMultipartFile image2 = new MockMultipartFile("pic", "pic.jpg", "image/jpeg", "<<jpg data>>".getBytes());
+
+        MockMultipartFile spotMapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png", "image/png", "<<png data>>".getBytes());
+        MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png", "image/png", "<<png data>>".getBytes());
+
+        String requestBody = "{\"title\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"isPrivate\" : false, \"representativeSpotOrder\" : 1, \"lineStringJson\" : \"test\", \"spotRegisterRequests\" : [{\"pointJson\" : \"test\", \"title\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"placeName\" : \"test\", \"placeAddress\" : \"test\", \"placePointJson\" : \"test\"}]}";
+
         mockMvc.perform(multipart("/api/v1/courses")
-                .file("mapStaticImageFile", mapStaticImage.getBytes())
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .file("mapStaticImageFile", mapStaticImage.getBytes())
+                        .file("spotRegisterRequests[0].files", image1.getBytes())
+                        .file("spotRegisterRequests[0].files", image2.getBytes())
+                        .file("spotRegisterRequests[0].mapStaticImageFile", spotMapStaticImage.getBytes())
+                        .file("spotRegisterRequests[0].placeImageFile", placeImage.getBytes())
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(requestBody))
             .andExpect(status().isOk())
             .andDo(document(
                 "courses/register-course",
                 getDocumentRequest(),
                 getDocumentResponse(),
                 requestParts(
-                    partWithName("mapStaticImageFile").description("Course의 위치 정보를 나타내는 지도 이미지 파일")
+                    partWithName("mapStaticImageFile").description("Course의 위치 정보를 나타내는 지도 이미지 파일"),
+                        partWithName("spotRegisterRequests[0].files").description("스팟 관련 이미지 파일"),
+                        partWithName("spotRegisterRequests[0].mapStaticImageFile").description("스팟의 위치 정보를 나타내는 지도 이미지 파일"),
+                        partWithName("spotRegisterRequests[0].placeImageFile").description("스팟의 장소 이미지 파일")
+                ),
+                requestFields(
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("코스의 제목"),
+                        fieldWithPath("description").type(JsonFieldType.STRING).description("코스의 본문"),
+                        fieldWithPath("rate").type(JsonFieldType.NUMBER).description("코스의 평점"),
+                        fieldWithPath("isPrivate").type(JsonFieldType.BOOLEAN).description("코스의 공개 여부"),
+                        fieldWithPath("representativeSpotOrder").type(JsonFieldType.NUMBER).description("코스의 대표 스팟 순서 번호"),
+                        fieldWithPath("lineStringJson").type(JsonFieldType.STRING).description("코스의 라인 스트링 정보"),
+                        subsectionWithPath("spotRegisterRequests").description("코스 내 스팟의 정보"),
+                        fieldWithPath("spotRegisterRequests[].pointJson").type(JsonFieldType.STRING).description("스팟의 포인트 정보"),
+                        fieldWithPath("spotRegisterRequests[].title").type(JsonFieldType.STRING).description("스팟의 제목"),
+                        fieldWithPath("spotRegisterRequests[].description").type(JsonFieldType.STRING).description("스팟의 본문"),
+                        fieldWithPath("spotRegisterRequests[].rate").type(JsonFieldType.NUMBER).description("스팟의 평점"),
+                        fieldWithPath("spotRegisterRequests[].placeName").type(JsonFieldType.STRING).description("스팟의 장소명"),
+                        fieldWithPath("spotRegisterRequests[].placeAddress").type(JsonFieldType.STRING).description("스팟의 장소 주소"),
+                        fieldWithPath("spotRegisterRequests[].placePointJson").type(JsonFieldType.STRING).description("스팟의 장소 포인트 정보")
                 ),
                 responseFields(
                     fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
@@ -160,9 +194,12 @@ public class CourseApiControllerTest {
         MockMultipartFile mapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png",
             "image/png", "<<png data>>".getBytes());
 
+        String requestBody = "{\"title\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"isPrivate\" : false, \"representativeSpotOrder\" : 1, \"lineStringJson\" : \"test\", \"spotIds\" : [1, 2]}";
+
         mockMvc.perform(multipart("/api/v1/courses/only")
                 .file("mapStaticImageFile", mapStaticImage.getBytes())
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(requestBody))
             .andExpect(status().isOk())
             .andDo(document(
                 "courses/register-course-only",
@@ -170,6 +207,15 @@ public class CourseApiControllerTest {
                 getDocumentResponse(),
                 requestParts(
                     partWithName("mapStaticImageFile").description("Course의 위치 정보를 나타내는 지도 이미지 파일")
+                ),
+                requestFields(
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("코스의 제목"),
+                        fieldWithPath("description").type(JsonFieldType.STRING).description("코스의 본문"),
+                        fieldWithPath("rate").type(JsonFieldType.NUMBER).description("코스의 평점"),
+                        fieldWithPath("isPrivate").type(JsonFieldType.BOOLEAN).description("코스의 공개 여부"),
+                        fieldWithPath("representativeSpotOrder").type(JsonFieldType.NUMBER).description("코스의 대표 스팟 순서 번호"),
+                        fieldWithPath("lineStringJson").type(JsonFieldType.STRING).description("코스의 라인 스트링 정보"),
+                        fieldWithPath("spotIds").type(JsonFieldType.ARRAY).description("코스 내 스팟의 아이디 배열")
                 ),
                 responseFields(
                     fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
@@ -228,8 +274,14 @@ public class CourseApiControllerTest {
     @DisplayName("updateCourse 메서드가 잘 동작하는지")
     @Test
     void updateCourse_ShouldReturnOk() throws Exception {
-        mockMvc.perform(post("/api/v1/courses/{courseId}", 1L)
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+        MockMultipartFile image1 = new MockMultipartFile("image", "image.jpg", "image/jpeg", "<<jpg data>>".getBytes());
+
+        String requestBody = "{\"description\" : \"test\", \"rate\" : 4.5, \"spotIdOrder\" : [1, 2], \"courseSpotUpdateRequests\" : [{\"id\" : 1, \"description\" : \"test\", \"rate\" : 4.5, \"originalSpotImages\" : [{\"imageUrl\" : \"images/spot.jpg\", \"index\" : 1}], \"updateSpotImages\" : [{\"index\" : 1}]}]}";
+
+        mockMvc.perform(multipart("/api/v1/courses/{courseId}", 1L)
+                        .file("courseSpotUpdateRequests[0].updateSpotImages[0].imageFile", image1.getBytes())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(requestBody))
             .andExpect(status().isOk())
             .andDo(document(
                 "courses/update-course",
@@ -237,6 +289,23 @@ public class CourseApiControllerTest {
                 getDocumentResponse(),
                 pathParameters(
                     parameterWithName("courseId").description("코스 아이디")
+                ),
+                requestParts(
+                    partWithName("courseSpotUpdateRequests[0].updateSpotImages[0].imageFile").description("스팟 관련 이미지 파일")
+                ),
+                requestFields(
+                    fieldWithPath("description").type(JsonFieldType.STRING).description("코스의 본문"),
+                    fieldWithPath("rate").type(JsonFieldType.NUMBER).description("코스의 평점"),
+                    fieldWithPath("spotIdOrder").type(JsonFieldType.ARRAY).description("코스 내 스팟의 아이디 배열"),
+                    subsectionWithPath("courseSpotUpdateRequests").description("코스 내 스팟의 정보"),
+                    fieldWithPath("courseSpotUpdateRequests[].id").type(JsonFieldType.NUMBER).description("스팟의 아이디"),
+                    fieldWithPath("courseSpotUpdateRequests[].description").type(JsonFieldType.STRING).description("스팟의 본문"),
+                    fieldWithPath("courseSpotUpdateRequests[].rate").type(JsonFieldType.NUMBER).description("스팟의 평점"),
+                    fieldWithPath("courseSpotUpdateRequests[].originalSpotImages").type(JsonFieldType.ARRAY).description("스팟의 기존 이미지 정보"),
+                    fieldWithPath("courseSpotUpdateRequests[].updateSpotImages").type(JsonFieldType.ARRAY).description("스팟의 업데이트 이미지 정보"),
+                    fieldWithPath("courseSpotUpdateRequests[].originalSpotImages[].imageUrl").type(JsonFieldType.STRING).description("스팟의 기존 이미지 경로"),
+                    fieldWithPath("courseSpotUpdateRequests[].originalSpotImages[].index").type(JsonFieldType.NUMBER).description("스팟의 기존 이미지 인덱스"),
+                    fieldWithPath("courseSpotUpdateRequests[].updateSpotImages[].index").type(JsonFieldType.NUMBER).description("스팟의 업데이트 이미지 인덱스")
                 ),
                 responseFields(
                     fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
