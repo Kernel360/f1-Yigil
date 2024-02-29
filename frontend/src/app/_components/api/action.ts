@@ -3,6 +3,8 @@
 import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { requestWithCookie } from './httpRequest';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export async function logout() {
   const response = await requestWithCookie('logout')()()()(
