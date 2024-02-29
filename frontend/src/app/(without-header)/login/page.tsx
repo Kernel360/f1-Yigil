@@ -6,6 +6,8 @@ import LoginLogo from '/public/logo/yigil_logo.svg';
 import CloseButton from '@/app/_components/ui/button/CloseButton';
 
 export default function LoginPage() {
+  const { KAKAO_ID } = process.env;
+
   return (
     <div className="w-full h-full bg-main flex flex-col items-center">
       <CloseButton
@@ -23,7 +25,7 @@ export default function LoginPage() {
           </div>
         </div>
         <div className="w-full mt-10 px-7 flex flex-col items-center justify-center gap-4">
-          <KakaoBtn />
+          <KakaoBtn clientId={KAKAO_ID} />
           <GoogleLoginButton />
         </div>
       </div>
