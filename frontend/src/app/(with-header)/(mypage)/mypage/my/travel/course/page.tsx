@@ -7,6 +7,7 @@ export default async function MyPageMyCourse() {
   const courseList = await getMyPageCourses();
   const parsedCourseList = myPageCourseListSchema.safeParse(courseList.content);
   if (!parsedCourseList.success) return <div>failed</div>;
+
   return (
     <>
       {!!courseList.content.length ? (
