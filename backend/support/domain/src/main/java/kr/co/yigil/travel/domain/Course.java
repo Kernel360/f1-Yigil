@@ -62,4 +62,8 @@ public class Course extends Travel {
         this.spots.clear();
         this.spots.addAll(spots);
     }
+
+    public String getMapStaticImageFileUrl() {
+        return "http://cdn.yigil.co.kr/" + mapStaticImageFile.getFileUrl();
+    }
 }

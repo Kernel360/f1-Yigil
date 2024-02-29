@@ -20,7 +20,7 @@ public class PlaceInfo {
             id = place.getId();
             name = place.getName();
             reviewCount = spotCount;
-            thumbnailImageUrl = place.getImageFile().getFileUrl();
+            thumbnailImageUrl = place.getImageFileUrl();
             rate = place.getRate();
             isBookmarked = false;
         }
@@ -28,7 +28,7 @@ public class PlaceInfo {
             id = place.getId();
             name = place.getName();
             reviewCount = spotCount;
-            thumbnailImageUrl = place.getImageFile().getFileUrl();
+            thumbnailImageUrl = place.getImageFileUrl();
             rate = place.getRate();
             this.isBookmarked = isBookmarked;
         }
@@ -47,8 +47,7 @@ public class PlaceInfo {
             } else {
                 exists = true;
                 imageUrl = placeOptional.get()
-                        .getMapStaticImageFile()
-                        .getFileUrl();
+                        .getMapStaticImageFileUrl();
             }
         }
     }

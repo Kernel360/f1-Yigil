@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;
 
 @Entity
@@ -30,7 +31,7 @@ public class DongDivision {
     private String divisionCode;
 
     @Column(columnDefinition = "geometry(Polygon,5186)", name = "geom")
-    private Polygon geometry;
+    private MultiPolygon geometry;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
