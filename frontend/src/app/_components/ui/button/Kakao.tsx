@@ -1,9 +1,9 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import React from 'react';
-import KakaoLogo from '/public/loginBtns/kakao_logo.svg';
 import Link from 'next/link';
+
+import KakaoLogo from '/public/loginBtns/kakao_logo.svg';
 
 export default function KakaoBtn({ href }: { href: string }) {
   return (
