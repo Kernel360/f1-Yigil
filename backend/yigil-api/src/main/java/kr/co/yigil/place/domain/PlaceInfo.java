@@ -36,6 +36,40 @@ public class PlaceInfo {
 
     @Getter
     @ToString
+    public static class Detail {
+        private final Long id;
+        private final String name;
+        private final String address;
+        private final String thumbnailImageUrl;
+        private final String mapStaticImageUrl;
+        private final boolean isBookmarked;
+        private final double rate;
+        private final int reviewCount;
+
+        public Detail(Place place, int spotCount) {
+            id = place.getId();
+            name = place.getName();
+            address = place.getAddress();
+            thumbnailImageUrl = place.getImageFileUrl();
+            mapStaticImageUrl = place.getMapStaticImageFileUrl();
+            rate = place.getRate();
+            reviewCount = spotCount;
+            isBookmarked = false;
+        }
+        public Detail(Place place, int spotCount, boolean isBookmarked) {
+            id = place.getId();
+            name = place.getName();
+            address = place.getAddress();
+            thumbnailImageUrl = place.getImageFileUrl();
+            mapStaticImageUrl = place.getMapStaticImageFileUrl();
+            rate = place.getRate();
+            reviewCount = spotCount;
+            this.isBookmarked = isBookmarked;
+        }
+    }
+
+    @Getter
+    @ToString
     public static class MapStaticImageInfo {
         private final String imageUrl;
         private final boolean exists;
