@@ -43,9 +43,11 @@ include::{snippets}/spots/get-my-spot-in-place/http-response.adoc[]
 노션 링크 :
 
 ==== Request
-include::{snippets}/spots/register-spot/request-parts.adoc[]
-
+include::{snippets}/spots/register-spot/request-fields.adoc[]
 로그인 필수 : Y
+
+===== Request Parts
+include::{snippets}/spots/register-spot/request-parts.adoc[]
 
 ===== HTTP Request 예시
 include::{snippets}/spots/register-spot/http-request.adoc[]
@@ -78,11 +80,14 @@ include::{snippets}/spots/retrieve-spot/http-response.adoc[]
 링크 :
 
 ==== Request
-include::{snippets}/spots/update-spot/http-request.adoc[]
+include::{snippets}/spots/update-spot/request-fields.adoc[]
 로그인 필수 : Y
 
 ===== Path Parameter
 include::{snippets}/spots/update-spot/path-parameters.adoc[]
+
+===== Request Parts
+include::{snippets}/spots/update-spot/request-parts.adoc[]
 
 ===== HTTP Request 예시
 include::{snippets}/spots/update-spot/request-body.adoc[]

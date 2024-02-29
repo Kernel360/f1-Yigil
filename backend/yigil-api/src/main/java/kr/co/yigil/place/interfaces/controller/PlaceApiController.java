@@ -4,13 +4,17 @@ import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.application.PlaceFacade;
+import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
 import kr.co.yigil.place.interfaces.dto.request.PlaceStaticImageRequest;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +41,26 @@ public class PlaceApiController {
     ) {
         var placeInfo = placeFacade.getPopularPlace(accessor);
         var response = placeMapper.toPopularPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{placeId}")
+    public ResponseEntity<PlaceDetailInfoDto> retrievePlace(
+            @PathVariable("placeId") Long placeId,
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.retrievePlaceInfo(placeId, accessor);
+        var response = placeMapper.toPlaceDetailInfoDto(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/region/{regionId}")
+    public ResponseEntity<RegionPlaceResponse> getRegionPlace(
+            @PathVariable("regionId") Long regionId,
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPlaceInRegion(regionId, accessor);
+        var response = placeMapper.toRegionPlaceResponse(placeInfo);
         return ResponseEntity.ok().body(response);
     }
 

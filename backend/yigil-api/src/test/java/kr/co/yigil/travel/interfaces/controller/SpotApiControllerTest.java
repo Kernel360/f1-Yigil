@@ -168,7 +168,7 @@ public class SpotApiControllerTest {
         MockMultipartFile mapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png", "image/png", "<<png data>>".getBytes());
         MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png", "image/png", "<<png data>>".getBytes());
 
-        String requestBody = "{\"title\": \"스팟 타이틀\"}";
+        String requestBody = "{\"pointJson\": \"{ \\\"type\\\" : \\\"Point\\\", \\\"coordinates\\\": [ 555,  555 ] }\", \"title\": \"스팟 타이틀\", \"description\": \"스팟 본문\", \"rate\": 5.0, \"placeName\": \"장소 타이틀\", \"placeAddress\": \"장소구 장소면 장소리\", \"placePointJson\": \"{ \\\"type\\\" : \\\"Point\\\", \\\"coordinates\\\": [ 555,  555 ] }\"}";
 
         mockMvc.perform(multipart("/api/v1/spots")
                         .file("files", image1.getBytes())
@@ -176,16 +176,9 @@ public class SpotApiControllerTest {
                         .file("mapStaticImageFile", mapStaticImage.getBytes())
                         .file("placeImageFile", placeImage.getBytes())
                         .contentType(MediaType.MULTIPART_FORM_DATA)
-//                        .param("pointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
-//                        .param("title", "스팟 타이틀")
-//                        .param("description", "스팟 본문")
-//                        .param("rate", "5.0")
-//                        .param("placeName", "장소 타이틀")
-//                        .param("placeAddress", "장소구 장소면 장소리")
-//                        .param("placePointJson", "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }")
                         .content(requestBody)
                 ).andDo(document(
-                                "spots/regist-spot",
+                                "spots/register-spot",
                                 getDocumentRequest(),
                                 getDocumentResponse(),
                                 requestParts(
@@ -194,13 +187,13 @@ public class SpotApiControllerTest {
                                         partWithName("placeImageFile").description("Spot의 장소를 나타내는 썸네일 이미지 파일(필수x)")
                                 ),
                                 requestFields(
-                                        fieldWithPath("title").type(JsonFieldType.STRING).description("스팟 관련 장소 명")
-//                                        fieldWithPath("title").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
-//                                        fieldWithPath("description").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
-//                                        fieldWithPath("rate").type(JsonFieldType.NUMBER).description("스팟 관련 장소 명"),
-//                                        fieldWithPath("placeName").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
-//                                        fieldWithPath("placeAddress").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
-//                                        fieldWithPath("placePointJson").type(JsonFieldType.STRING).description("스팟 관련 장소 명")
+                                        fieldWithPath("pointJson").type(JsonFieldType.STRING).description("스팟의 위치를 나타내는 geojson"),
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("스팟의 제목"),
+                                        fieldWithPath("description").type(JsonFieldType.STRING).description("스팟의 본문"),
+                                        fieldWithPath("rate").type(JsonFieldType.NUMBER).description("스팟 관련 평점 정보"),
+                                        fieldWithPath("placeName").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
+                                        fieldWithPath("placeAddress").type(JsonFieldType.STRING).description("스팟 관련 장소 주소"),
+                                        fieldWithPath("placePointJson").type(JsonFieldType.STRING).description("스팟 관련 장소의 위치를 나타내는 geojson")
                                 ),
                                 responseFields(
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
@@ -245,8 +238,15 @@ public class SpotApiControllerTest {
     @DisplayName("updateSpot 메서드가 잘 동작하는지")
     @Test
     void updateSpot_ShouldReturnOk() throws Exception {
+
+        MockMultipartFile image1 = new MockMultipartFile("image", "image.jpg", "image/jpeg", "<<jpg data>>".getBytes());
+
+        String requestBody = "{\"id\" : 1, \"description\" : \"스팟 설명\", \"rate\" : 4.5, \"originalSpotImages\" : [ { \"imageUrl\" : \"images/spot.jpg\", \"index\" : 0 } ], \"updateSpotImages\" : [ { \"index\" : 0 } ]}";
+
         mockMvc.perform(multipart("/api/v1/spots/{spotId}", 1L)
-                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .file("updateSpotImages[0].imageFile", image1.getBytes())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .content(requestBody))
                 .andExpect(status().isOk())
                         .andDo(document(
                                 "spots/update-spot",
@@ -254,6 +254,19 @@ public class SpotApiControllerTest {
                                 getDocumentResponse(),
                                 pathParameters(
                                         parameterWithName("spotId").description("스팟 아이디")
+                                ),
+                                requestParts(
+                                  partWithName("updateSpotImages[0].imageFile").description("업데이트 할 스팟의 새로운 이미지 파일")
+                                ),
+                                requestFields(
+                                  fieldWithPath("id").type(JsonFieldType.NUMBER).description("스팟 아이디"),
+                                  fieldWithPath("description").type(JsonFieldType.STRING).description("스팟의 본문 정보"),
+                                  fieldWithPath("rate").type(JsonFieldType.NUMBER).description("스팟의 평점 정보"),
+                                  subsectionWithPath("originalSpotImages").description("기존 스팟 이미지 정보"),
+                                  fieldWithPath("originalSpotImages[].imageUrl").type(JsonFieldType.STRING).description("기존 스팟 이미지의 url"),
+                                  fieldWithPath("originalSpotImages[].index").type(JsonFieldType.NUMBER).description("기존 스팟 이미지의 index"),
+                                  subsectionWithPath("updateSpotImages").description("업데이트 할 스팟 이미지 정보"),
+                                  fieldWithPath("updateSpotImages[].index").type(JsonFieldType.NUMBER).description("업데이트 할 스팟 이미지의 index")
                                 ),
                                 responseFields(
                                         fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")
