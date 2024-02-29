@@ -3,6 +3,7 @@ import {
   KAKAO_AUTH_BASE_URL,
   KAKAO_BASE_URL,
   kakaoRedrectUri,
+  getCallbackUrlBase,
 } from './constants';
 
 export async function GET(request: NextRequest) {
@@ -12,16 +13,18 @@ export async function GET(request: NextRequest) {
 
   if (!code) {
     return NextResponse.json(
-      { message: 'Failed to get Authorization code' },
+      { message: 'Failed to get Authorization codew' },
       { status: 400 },
     );
   }
 
-  const { KAKAO_ID, KAKAO_SECRET } = process.env;
+  const { KAKAO_ID, KAKAO_SECRET, ENVIRONMENT } = process.env;
+
+  const redirectUri = await kakaoRedrectUri();
 
   const userTokenResponse = await userTokenRequest(
     KAKAO_ID,
-    kakaoRedrectUri(),
+    redirectUri,
     code,
     KAKAO_SECRET,
   );
@@ -85,15 +88,16 @@ export async function GET(request: NextRequest) {
     .split('; ')[0]
     .split('=');
 
-  const response = NextResponse.redirect(
-    new URL('/', new URL(request.url).origin),
-  );
+  const baseUrl = await getCallbackUrlBase();
+
+  const response = NextResponse.redirect(new URL('/', baseUrl), {
+    status: 302,
+  });
+
   response.cookies.set({
     name: key,
     value,
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: true,
+    secure: ENVIRONMENT === 'production',
   });
 
   return response;
