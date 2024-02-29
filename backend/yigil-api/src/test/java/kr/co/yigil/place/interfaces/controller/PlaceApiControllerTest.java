@@ -179,6 +179,9 @@ public class PlaceApiControllerTest {
                         "places/get-region-place",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("regionId").description("지역의 고유 아이디")
+                        ),
                         responseFields(
                                 subsectionWithPath("places").description("place의 정보"),
                                 fieldWithPath("places[].id").type(JsonFieldType.NUMBER).description("place의 고유 Id"),
