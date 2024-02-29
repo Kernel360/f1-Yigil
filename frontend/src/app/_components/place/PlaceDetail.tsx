@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import LikeButton from '@/app/_components/place/LikeButton';
+import LikeButton from '@/app/_components/place/BookmarkButton';
 import IconWithCounts from '@/app/_components/IconWithCounts';
 
 import ReviewIcon from '/public/icons/review.svg';

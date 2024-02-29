@@ -30,6 +30,6 @@ export function getMIMETypeFromDataURI(dataURI: string) {
 export function coordsToGeoJSONPoint(coords: { lat: number; lng: number }) {
   return JSON.stringify({
     type: 'Point',
-    coordinates: [coords.lat, coords.lng],
+    coordinates: [coords.lng, coords.lat],
   });
 }

@@ -25,6 +25,7 @@ declare global {
 
       DEV_BASE_URL: string;
       ENVIRONMENT: string;
+      CDN_URL: string;
     }
   }
 }

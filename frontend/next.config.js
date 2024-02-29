@@ -58,6 +58,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'cdn.yigil.co.kr',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   output: 'standalone',
