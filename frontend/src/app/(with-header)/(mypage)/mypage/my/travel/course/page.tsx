@@ -12,7 +12,7 @@ export default async function MyPageMyCourse() {
       {!!courseList.content.length ? (
         <MyPageCourseList
           placeList={courseList.content}
-          totalPage={courseList.totalPage}
+          totalPage={courseList.total_pages}
         />
       ) : (
         <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">

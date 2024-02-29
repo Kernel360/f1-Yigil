@@ -56,13 +56,13 @@ export default function MyPageCourseList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, total_page } = await getMyPageCourses(
+    const { content, total_pages } = await getMyPageCourses(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setTotalPageCount(total_page);
+    setTotalPageCount(total_pages);
     setAllCourseList([...content]);
   };
 
