@@ -31,4 +31,9 @@ public class PlaceReaderImpl implements PlaceReader {
         return placeRepository.findTop5ByOrderByIdAsc();
     }
 
+    @Override
+    public List<Place> getPlaceInRegion(Long regionId) {
+        return placeRepository.findTop5ByRegionIdOrderByIdDesc(regionId);
+    }
+
 }
