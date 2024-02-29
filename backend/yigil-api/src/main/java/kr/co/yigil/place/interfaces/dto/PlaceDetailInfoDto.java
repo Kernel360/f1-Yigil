@@ -14,5 +14,4 @@ public class PlaceDetailInfoDto {
     private boolean isBookmarked;
     private double rate;
     private int reviewCount;
-
 }
