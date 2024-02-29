@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-const { CDN_URL } = process.env;
-
 export const backendErrorSchema = z.object({
   code: z.number(),
   message: z.string(),
@@ -35,7 +33,7 @@ export const placeSchema = z.object({
   id: z.number().int(),
   place_name: z.string(),
   review_count: z.string(),
-  thumbnail_image_url: z.string().transform((url) => `${CDN_URL}/${url}`),
+  thumbnail_image_url: z.string(),
   rate: z.string(),
   bookmarked: z.boolean(),
 });
