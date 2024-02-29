@@ -79,7 +79,7 @@ const MyPageSpotItem = ({
         <div className="text-2xl leading-7 text-gray-900 font-semibold">
           {title}
         </div>
-        <div className="flex gap-x-2 items-center">
+        <div className="flex gap-x-2 items-center justify-between ml-1 text-xl leading-6 text-gray-500 font-semibold">
           <IconWithCounts
             icon={
               <StarIcon className="w-4 h-4 fill-[#FACC15] stroke-[#FACC15]" />
@@ -87,7 +87,9 @@ const MyPageSpotItem = ({
             count={rate}
             rating
           />
-          <div className="text-gray-300 font-bold">{created_date}</div>
+          <div className="text-gray-300 font-bold">
+            {new Date(created_date).toLocaleDateString()}
+          </div>
         </div>
       </div>
     </div>

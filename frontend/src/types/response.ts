@@ -31,14 +31,14 @@ export const regionSchema = z.enum(REGION_VALUES);
 
 export const placeSchema = z.object({
   id: z.number().int(),
-  region: regionSchema,
-  name: z.string(),
-  image_url: z.string(),
-  liked: z.boolean().optional(),
-  review_count: z.number().int(),
-  liked_count: z.number().int(),
-  rating: z.number(),
+  place_name: z.string(),
+  review_count: z.string(),
+  thumbnail_image_url: z.string(),
+  rate: z.string(),
+  bookmarked: z.boolean(),
 });
+
+export type TPlace = z.infer<typeof placeSchema>;
 
 export const placesSchema = z.array(placeSchema);
 
@@ -53,6 +53,8 @@ export const placeDetailSchema = z.object({
   liked_count: z.number().int(),
   rating: z.number(),
 });
+
+export type TPlaceDetail = z.infer<typeof placeDetailSchema>;
 
 export const searchItemSchema = z.object({
   title: z.string(),

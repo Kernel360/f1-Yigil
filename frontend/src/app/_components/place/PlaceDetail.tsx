@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import LikeButton from '@/app/_components/place/LikeButton';
+import LikeButton from '@/app/_components/place/BookmarkButton';
 import IconWithCounts from '@/app/_components/IconWithCounts';
 
 import ReviewIcon from '/public/icons/review.svg';
@@ -36,7 +36,11 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
           unoptimized
         />
         {liked && (
-          <LikeButton className="absolute top-4 right-4" liked={liked} />
+          <LikeButton
+            className="absolute top-4 right-4"
+            bookmarked={liked}
+            isLoggedIn={false}
+          />
         )}
       </div>
       <div className="px-4 py-2 flex flex-col gap-2">
