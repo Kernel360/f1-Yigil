@@ -61,9 +61,5 @@ public class SpotReaderImpl implements SpotReader {
     public Page<Spot> getMemberSpotList(Long memberId, Pageable pageable,
         String visibility) {
         return spotQueryDslRepository.findAllByMemberIdAndIsPrivate(memberId, visibility, pageable);
-//        if (visibility.equals("all")) {
-//            return spotRepository.findAllByMemberId(memberId, pageable);
-//        }
-//        return spotRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
     }
 }
