@@ -29,6 +29,5 @@ export const myPageBookmarkListSchema = z.array(
     place_name: z.string(),
     place_image: z.string(),
     rate: z.number(),
-    is_bookmarked: z.boolean(),
   }),
 );

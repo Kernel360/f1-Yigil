@@ -2,24 +2,26 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import BookmarkIcon from '/public/icons/bookmark.svg';
-
 import { TMyPageBookmark } from '../types';
 import IconWithCounts from '../../IconWithCounts';
+import { addMyPageBookmark, deleteMyPageBookmark } from './bookmarkActions';
+
 export default function MyPageBookmarkItem({
   place_id,
   place_name,
   place_image,
   rate,
-  is_bookmarked,
+
   idx,
 }: TMyPageBookmark & { idx: number }) {
   const [isBookmarked, setIsBookmarked] = useState(true);
   const onChangeBookmarkStatus = () => {
     setIsBookmarked(!isBookmarked);
+    // api 디바운싱 추가 필요
     if (isBookmarked) {
-      // deleteMyPageBookmark(place_id)
+      deleteMyPageBookmark(place_id);
     } else {
-      // add
+      addMyPageBookmark(place_id);
     }
   };
   return (
@@ -51,8 +53,10 @@ export default function MyPageBookmarkItem({
       <div>
         <button onClick={onChangeBookmarkStatus}>
           <BookmarkIcon
-            className={`${
-              isBookmarked ? 'fill-main stroke-main' : 'stroke-gray-300'
+            className={`w-5 h-6 ${
+              isBookmarked
+                ? 'fill-main stroke-main'
+                : 'fill-none stroke-gray-300 stroke-[4px]'
             }`}
           />
         </button>

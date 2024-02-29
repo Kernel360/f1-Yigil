@@ -30,7 +30,6 @@ export interface TMyPageBookmark {
   place_name: string;
   place_image: string;
   rate: number;
-  is_bookmarked: boolean;
 }
 /**
  * "course_id": 1,

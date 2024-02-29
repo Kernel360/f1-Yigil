@@ -45,7 +45,6 @@ export const getMyPageCourses = (
   )()()();
 };
 
-
 export const getMyPageFollwers = async (
   pageNo: number = 1,
   size: number = 5,
@@ -71,25 +70,4 @@ export const getMyPageFollwings = async (
     }`,
   )()()();
   return res;
-};
-
-export const getMyPageBookmarks = (
-  pageNo: number = 1,
-  size: number = 5,
-  sortOrder: string = 'desc',
-  sortBy?: string,
-) => {
-  return requestWithCookie('bookmarks')(
-    `?page=${pageNo}&size=${size}&sortOrder=${
-      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
-    }`,
-  )()()();
-};
-
-export const deleteMyPageBookmark = (placeId: number) => {
-  return requestWithCookie('delete-bookmark')(`${placeId}`)()()();
-};
-
-export const addMyPageBookmark = (placeId: number) => {
-  return requestWithCookie('add-bookmark')(`${placeId}`)()()();
 };

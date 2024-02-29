@@ -17,9 +17,9 @@ export const getMyPageBookmarks = (
 };
 
 export const deleteMyPageBookmark = (placeId: number) => {
-  return requestWithCookie('delete-bookmark')(`${placeId}`)()()();
+  return requestWithCookie('delete-bookmark')(`${placeId}`)('POST')()();
 };
 
 export const addMyPageBookmark = (placeId: number) => {
-  return requestWithCookie('add-bookmark')(`${placeId}`)()()();
+  return requestWithCookie('add-bookmark')(`${placeId}`)('POST')()();
 };
