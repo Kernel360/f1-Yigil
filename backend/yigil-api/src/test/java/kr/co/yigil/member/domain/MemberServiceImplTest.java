@@ -1,12 +1,14 @@
 package kr.co.yigil.member.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowCount;
@@ -69,7 +71,7 @@ class MemberServiceImplTest {
             "image/jpeg",
             "test".getBytes());
         MemberCommand.MemberUpdateRequest request = new MemberUpdateRequest("nickname", "10대", "여성",
-            mockFile);
+            mockFile, List.of(1L, 2L, 3L));
 
         Member mockMember = mock(Member.class);
 
@@ -80,6 +82,6 @@ class MemberServiceImplTest {
         when(mockAttachFile.getFileUrl()).thenReturn("images/image.jpg");
 
         memberService.updateMemberInfo(memberId, request);
-        verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), anyString());
+        verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), anyString(), anyList());
     }
 }

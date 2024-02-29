@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +57,9 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     private Ages ages = Ages.NONE;
+
+    @Column
+    private List<Long> favoriteRegionIds;
 
     @CreatedDate
     @Column(updatable = false)
@@ -117,11 +121,12 @@ public class Member {
         this.gender = gender;
     }
 
-    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl) {
+    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl, List<Long> favoriteRegionIds) {
         this.nickname = nickname;
         this.ages = Ages.from(age);
         this.gender = Gender.from(gender);
         this.profileImageUrl = profileImageUrl;
+        this.favoriteRegionIds = favoriteRegionIds;
     }
 
     public String getProfileImageUrl() {

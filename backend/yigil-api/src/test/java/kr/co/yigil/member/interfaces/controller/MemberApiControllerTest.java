@@ -128,6 +128,7 @@ class MemberApiControllerTest {
                 .param("nickname", "nickname")
                 .param("age", "10대")
                 .param("gender", "남성")
+                .param("favoriteRegionIds", "1", "2", "3")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andExpect(status().isOk())

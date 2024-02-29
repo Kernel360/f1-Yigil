@@ -37,6 +37,6 @@ public class MemberServiceImpl implements MemberService {
         var updatedProfile = fileUploader.upload(request.getProfileImageFile());
 
         member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
-            updatedProfile.getFileUrl());
+            updatedProfile.getFileUrl(), request.getFavoriteRegionIds());
     }
 }

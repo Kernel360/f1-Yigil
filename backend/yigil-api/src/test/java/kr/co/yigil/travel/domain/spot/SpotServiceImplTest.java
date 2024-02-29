@@ -281,7 +281,7 @@ public class SpotServiceImplTest {
         PageRequest pageable = PageRequest.of(0, 10);
         String selected = "private";
         AttachFile mockAttachFile = new AttachFile(mock(FileType.class), "fileUrl",
-            "originalFileName", "filename", 100L);
+            "originalFileName", 100L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
         Member mockMember = mock(Member.class);
         Spot mockSpot = new Spot(spotId, mockMember, mock(Point.class), false, "title",
