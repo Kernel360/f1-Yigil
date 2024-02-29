@@ -14,7 +14,7 @@ public class RegionReaderImpl implements RegionReader {
 
     public void validateRegions(List<Long> regionIds) {
         regionIds.forEach(regionId -> {
-            if (!regionRepository.isExistRegion(regionId)) {
+            if (!regionRepository.existsById(regionId)) {
                 throw new IllegalArgumentException("존재하지 않는 지역입니다.");
             }
         });
