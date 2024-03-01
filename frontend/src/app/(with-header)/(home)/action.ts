@@ -1,8 +1,7 @@
-import { requestWithoutCookie } from '@/app/_components/api/httpRequest';
-
-import { placesSchema } from '@/types/response';
-import { revalidatePath } from 'next/cache';
 import z from 'zod';
+
+import { requestWithoutCookie } from '@/app/_components/api/httpRequest';
+import { placesSchema } from '@/types/response';
 
 const requestPopularPlaces =
   requestWithoutCookie('places/popular')()()()(
@@ -17,7 +16,6 @@ export async function getPopularPlaces() {
   const json = await requestPopularPlaces;
 
   const result = placeResponseSchema.safeParse(json);
-  revalidatePath('/', 'layout');
 
   return result;
 }
