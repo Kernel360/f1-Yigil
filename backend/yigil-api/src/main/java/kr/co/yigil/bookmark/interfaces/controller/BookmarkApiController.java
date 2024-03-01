@@ -52,11 +52,11 @@ public class BookmarkApiController {
     @MemberOnly
     public ResponseEntity<BookmarksResponse> getBookmarks(
             @Auth final Accessor accessor,
-            @PageableDefault(size = 5) Pageable pageable,
+            @PageableDefault(size = 5, page = 1) Pageable pageable,
             @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         Slice<Bookmark> bookmarkSlice = bookmarkFacade.getBookmarkSlice(accessor.getMemberId(), pageRequest);
         BookmarksResponse response = bookmarkMapper.bookmarkSliceToBookmarksResponse(bookmarkSlice);
         return ResponseEntity.ok(response);
