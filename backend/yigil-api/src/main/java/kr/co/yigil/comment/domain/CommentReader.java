@@ -17,4 +17,6 @@ public interface CommentReader {
     int getCommentCount(Long travelId);
 
     Long getTravelIdByCommentId(Long commentId);
+
+    int getChildrenCommentCount(Long travelId);
 }

@@ -25,8 +25,12 @@ public class CommentInfo {
         private List<CommentsUnitInfo> content;
         private boolean hasNext;
 
+        public CommentsResponse(List<CommentsUnitInfo> comments, boolean hasNext) {
+            this.content = comments;
+            this.hasNext = hasNext;
+        }
         public CommentsResponse(Slice<Comment> comments) {
-            this.content = comments.stream().map(CommentsUnitInfo::new).toList();
+            this.content = comments.getContent().stream().map(CommentsUnitInfo::new).toList();
             this.hasNext = comments.hasNext();
         }
     }
@@ -39,14 +43,25 @@ public class CommentInfo {
         private final Long memberId;
         private final String memberNickname;
         private final String memberImageUrl;
+        private final int childCount;
         private final String createdAt;
 
+        public CommentsUnitInfo(Comment comment, int childCount) {
+            this.id = comment.getId();
+            this.content = comment.getContent();
+            this.memberId = comment.getMember().getId();
+            this.memberNickname = comment.getMember().getNickname();
+            this.memberImageUrl = comment.getMember().getProfileImageUrl();
+            this.childCount = childCount;
+            this.createdAt = comment.getCreatedAt().toString();
+        }
         public CommentsUnitInfo(Comment comment) {
             this.id = comment.getId();
             this.content = comment.getContent();
             this.memberId = comment.getMember().getId();
             this.memberNickname = comment.getMember().getNickname();
             this.memberImageUrl = comment.getMember().getProfileImageUrl();
+            this.childCount = 0;
             this.createdAt = comment.getCreatedAt().toString();
         }
     }

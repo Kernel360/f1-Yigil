@@ -1,9 +1,11 @@
 package kr.co.yigil.comment.domain;
 
 
+import java.util.List;
 import kr.co.yigil.comment.domain.CommentCommand.CommentCreateRequest;
 import kr.co.yigil.comment.domain.CommentCommand.CommentUpdateRequest;
 import kr.co.yigil.comment.domain.CommentInfo.CommentsResponse;
+import kr.co.yigil.comment.domain.CommentInfo.CommentsUnitInfo;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.travel.domain.Travel;
@@ -53,9 +55,16 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public CommentsResponse getParentComments(Long travelId, Pageable pageable) {
+
         Slice<Comment> comments = commentReader.getParentCommentsByTravelId(travelId,
             pageable);
-        return new CommentsResponse(comments);
+        boolean hasNext = comments.hasNext();
+        List<CommentsUnitInfo> commentsUnitInfoList = comments.getContent().stream()
+            .map(comment -> {
+                int childCount = commentReader.getChildrenCommentCount(comment.getId());
+                return new CommentsUnitInfo(comment, childCount);
+            }).toList();
+        return new CommentsResponse(commentsUnitInfoList, hasNext);
     }
 
     @Override

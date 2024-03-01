@@ -22,7 +22,8 @@ public class CommentFacade {
     public CommentInfo.CommentCreateResponse createComment(Long memberId, Long travelId,
         CommentCommand.CommentCreateRequest commentCreateRequest) {
         var response = commentService.createComment(memberId, travelId, commentCreateRequest);
-        notificationService.sendNotification(NotificationType.NEW_COMMENT, memberId,
+        if(response.getNotifiedReceiverId() != null)
+            notificationService.sendNotification(NotificationType.NEW_COMMENT, memberId,
             response.getNotifiedReceiverId());
         return new CommentInfo.CommentCreateResponse("댓글 생성 성공");
     }
@@ -49,7 +50,7 @@ public class CommentFacade {
 
     @Transactional
     public CommentInfo.DeleteResponse deleteComment(Long memberId, Long commentId) {
-        commentService.deleteComment(commentId, memberId);
+        commentService.deleteComment(memberId, commentId);
         //notif 필요?
         return new CommentInfo.DeleteResponse("댓글 삭제 성공");
     }

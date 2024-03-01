@@ -37,5 +37,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> findByIdAndMemberId(Long commentId, Long memberId);
 
-    Optional<Long> findTravelIdById(Long commentId);
+    @Query("SELECT c.travel.id FROM Comment c WHERE c.id = :commentId")
+    Optional<Long> findTravelIdByCommentId(@Param("commentId") Long commentId);
+
+    @Query("SELECT COUNT(c) FROM Comment c WHERE c.parent.id = :parentId")
+    int countByParentId(@Param("parentId") Long parentId);
+
 }
