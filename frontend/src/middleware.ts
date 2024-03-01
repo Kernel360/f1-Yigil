@@ -4,7 +4,7 @@ import { myInfoSchema } from './types/response';
 
 const restricted = ['/add', '/mypage'];
 
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const { ENVIRONMENT, PRODUCTION_FRONTEND_URL, DEV_FRONTEND_URL } =
     process.env;
 
@@ -18,13 +18,12 @@ export default function middleware(request: NextRequest) {
   const session = request.cookies.get('SESSION');
 
   if (restricted.some((pathname) => request.url.includes(pathname))) {
-    const json = authenticateUser();
+    const json = await authenticateUser();
 
     const member = myInfoSchema.safeParse(json);
 
-    console.log(member);
-
     if (!member.success) {
+      console.log(member.error);
       return NextResponse.redirect(`${baseUrl}/login`);
     }
 
