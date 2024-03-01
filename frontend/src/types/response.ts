@@ -86,3 +86,12 @@ export const postSpotResponseSchema = z.object({
 });
 
 export type TPostSpotSuccess = z.infer<typeof postSpotResponseSchema>;
+
+export const myInfoSchema = z.object({
+  member_id: z.number().int(),
+  email: z.string().email(),
+  nickname: z.string(),
+  profile_image_url: z.string().url(),
+  following_count: z.number().int(),
+  follower_count: z.number().int(),
+});
