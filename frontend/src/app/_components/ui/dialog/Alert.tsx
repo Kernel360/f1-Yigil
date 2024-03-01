@@ -1,20 +1,14 @@
-'use client';
-
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import ViewPortal from '../../Portal';
 
-export default function Dialog({
+export default function Alert({
   text,
   closeModal,
-  handleConfirm,
 }: {
   text: string;
   closeModal: () => void;
-  handleConfirm: () => Promise<void>;
 }) {
-  const [isLoading, setIsLoading] = useState(false);
-
   const mouseEventPrevent = (e: Event) => {
     e.preventDefault();
   };
@@ -35,16 +29,10 @@ export default function Dialog({
     };
   }, []);
 
-  async function handleClickConfirm() {
-    setIsLoading(true);
-    await handleConfirm();
-    setIsLoading(false);
-  }
-
   return (
     <ViewPortal closeModal={closeModal} backdropStyle="bg-black bg-opacity-10">
       <div
-        className="absolute inset-0 m-auto w-2/3 h-1/4 bg-white rounded-xl flex flex-col"
+        className="p-4 absolute inset-0 m-auto w-2/3 h-1/4 bg-white rounded-xl flex flex-col"
         onClick={(event) => {
           event.stopPropagation();
         }}
@@ -52,29 +40,14 @@ export default function Dialog({
           (e.key === 'Esc' /** IE/Edge */ || e.key === 'Escape') && closeModal()
         }
       >
-        <div className="h-full relative">
-          <div className="p-4 h-full flex flex-col">
-            <div className="flex justify-center items-center grow">{text}</div>
-            <div className="flex justify-between gap-2">
-              <button
-                className="w-1/2 py-2 rounded-lg bg-main"
-                onClick={handleClickConfirm}
-              >
-                예
-              </button>
-              <button
-                className="w-1/2 py-2 rounded-lg bg-gray-300"
-                onClick={closeModal}
-              >
-                아니오
-              </button>
-            </div>
-          </div>
-
-          {/* 로딩 상태 표현을 위한 UI 필요 */}
-          {isLoading && (
-            <div className="absolute top-0 rounded-xl w-full h-full bg-black/25 z-30"></div>
-          )}
+        <div className="flex justify-center items-center grow">{text}</div>
+        <div className="flex">
+          <button
+            className="py-2 w-full rounded-lg bg-main"
+            onClick={closeModal}
+          >
+            확인
+          </button>
         </div>
       </div>
     </ViewPortal>
