@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateUser } from './app/_components/mypage/hooks/myPageActions';
-import { authenticateSuccess } from './types/response';
+import { myInfoSchema } from './types/response';
 
 const restricted = ['/add', '/mypage'];
 
@@ -20,7 +20,7 @@ export default function middleware(request: NextRequest) {
   if (restricted.some((pathname) => request.url.includes(pathname))) {
     const json = authenticateUser();
 
-    const member = authenticateSuccess.safeParse(json);
+    const member = myInfoSchema.safeParse(json);
 
     console.log(member);
 

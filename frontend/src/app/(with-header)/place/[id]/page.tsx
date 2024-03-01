@@ -1,31 +1,23 @@
-import { placeDetailSchema } from '@/types/response';
-
 import PlaceDetail from '@/app/_components/place/PlaceDetail';
-
-const url =
-  process.env.NODE_ENV === 'production'
-    ? process.env.BASE_URL
-    : 'http://localhost:8080/api/v1';
+import { getPlaceDetail } from '../action';
+import { authenticateUser } from '@/app/_components/mypage/hooks/myPageActions';
+import { myInfoSchema } from '@/types/response';
 
 export default async function PlaceDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const response = await fetch(`${url}/places/${params.id}`, {
-    method: 'GET',
-  });
+  const memberJson = await authenticateUser();
+  const memberInfo = myInfoSchema.safeParse(memberJson);
 
-  const body = await response.json();
-  const detail = placeDetailSchema.safeParse(body);
+  const detail = await getPlaceDetail(params.id);
 
-  // response parse 실패
-  // ErrorBoundary 또는 Suspense 검토 가능
   if (!detail.success) {
     console.log({ message: detail.error.message });
 
     return <main>Failed</main>;
   }
 
-  return <PlaceDetail detail={detail.data} />;
+  return <PlaceDetail detail={detail.data} isLoggedIn={memberInfo.success} />;
 }
