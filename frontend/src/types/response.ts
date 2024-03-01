@@ -44,14 +44,13 @@ export const placesSchema = z.array(placeSchema);
 
 export const placeDetailSchema = z.object({
   id: z.number().int(),
-  name: z.string(),
+  place_name: z.string(),
   address: z.string(),
-  image_url: z.string(),
-  map_image_url: z.string(),
-  liked: z.boolean().optional(),
+  thumbnail_image_url: z.string(),
+  map_static_image_url: z.string(),
+  bookmarked: z.boolean(),
   review_count: z.number().int(),
-  liked_count: z.number().int(),
-  rating: z.number(),
+  rate: z.number(),
 });
 
 export type TPlaceDetail = z.infer<typeof placeDetailSchema>;
