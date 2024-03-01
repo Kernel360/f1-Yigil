@@ -9,7 +9,10 @@ import kr.co.yigil.comment.interfaces.dto.CommentDto;
 import kr.co.yigil.comment.interfaces.dto.CommentDto.CommentCreateRequest;
 import kr.co.yigil.comment.interfaces.dto.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,12 +49,14 @@ public class CommentApiController {
     @GetMapping("/travels/{travel_id}")
     public ResponseEntity<CommentDto.CommentsResponse> getParentCommentList(
         @PathVariable("travel_id") Long travelId,
-        @PageableDefault(size = 5)
-        Pageable pageable
+        @PageableDefault(size = 5, page = 1 ) Pageable pageable
     ) {
+
+        var pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize()
+            , Sort.by(Sort.Direction.ASC, "createdAt"));
         CommentInfo.CommentsResponse parentCommentList = commentFacade.getParentCommentList(
             travelId,
-            pageable);
+            pageRequest);
         var response = commentMapper.of(parentCommentList);
         return ResponseEntity.ok().body(response);
     }
@@ -59,10 +64,13 @@ public class CommentApiController {
     @GetMapping("/parents/{comment_id}")
     public ResponseEntity<CommentDto.CommentsResponse> getChildCommentList(
         @PathVariable("comment_id") Long commentId,
-        @PageableDefault(size = 5) Pageable pageable
+        @PageableDefault(size = 5, page = 1 ) Pageable pageable
     ) {
+
+        var pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize()
+            , Sort.by(Direction.ASC, "createdAt"));
         CommentInfo.CommentsResponse childCommentList = commentFacade.getChildCommentList(commentId,
-            pageable);
+            pageRequest);
         var response = commentMapper.of(childCommentList);
         return ResponseEntity.ok().body(response);
     }

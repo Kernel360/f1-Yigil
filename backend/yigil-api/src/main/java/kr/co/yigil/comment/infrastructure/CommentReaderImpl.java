@@ -49,7 +49,12 @@ public class CommentReaderImpl implements CommentReader {
 
     @Override
     public Long getTravelIdByCommentId(Long commentId) {
-        return commentRepository.findTravelIdById(commentId).orElseThrow(
+        return commentRepository.findTravelIdByCommentId(commentId).orElseThrow(
             () -> new BadRequestException(ExceptionCode.NOT_FOUND_TRAVEL_ID));
+    }
+
+    @Override
+    public int getChildrenCommentCount(Long travelId) {
+        return commentRepository.countByParentId(travelId);
     }
 }
