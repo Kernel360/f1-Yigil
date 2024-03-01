@@ -84,7 +84,9 @@ export default function SearchBox({
 
   // 검색어 자동완성 기능 구현될 시 conditional rendering
   return (
-    <section className="flex flex-col">
+    <section
+      className={`flex flex-col bg-white gap-3 z-10 ${showResult && 'grow'}`}
+    >
       <SearchBar
         search={search}
         addHistory={addHistory}
@@ -92,6 +94,7 @@ export default function SearchBox({
         closeResults={closeResults}
         cancellable
       />
+      <hr />
       <div className="grow" aria-label="Result/History container">
         {showHistory && <SearchHistory {...searchHistoryProps} />}
         {showResult && (

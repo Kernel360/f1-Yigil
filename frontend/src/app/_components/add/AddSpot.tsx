@@ -64,7 +64,7 @@ export default function AddSpot() {
   }>();
 
   return (
-    <section className="flex flex-col grow">
+    <section className="flex flex-col grow relative">
       <AddSpotContext.Provider value={addSpotState}>
         <StepNavigation
           currentStep={step}
@@ -74,20 +74,21 @@ export default function AddSpot() {
         <ProgressIndicator step={step} />
 
         {stepLabel === '장소 입력' && (
-          <section className=" flex flex-col justify-between grow">
+          <section className="flex flex-col justify-between grow">
             <SearchBox
               searchResults={searchResults}
               search={search}
               setCurrentFoundPlace={setCurrentFoundPlace}
             />
-            <hr className="my-2 pb-1 align-bottom" />
-            <MapComponent width="100%" height="100%">
-              <Common.AddSpotMap
-                place={currentFoundPlace}
-                dispatchStep={dispatchStep}
-                dispatchSpot={dispatchSpot}
-              />
-            </MapComponent>
+            <div className="absolute w-full h-full">
+              <MapComponent width="100%" height="100%">
+                <Common.AddSpotMap
+                  place={currentFoundPlace}
+                  dispatchStep={dispatchStep}
+                  dispatchSpot={dispatchSpot}
+                />
+              </MapComponent>
+            </div>
           </section>
         )}
         {stepLabel === '정보 입력' && (

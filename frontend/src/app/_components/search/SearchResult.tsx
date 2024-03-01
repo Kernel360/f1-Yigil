@@ -35,7 +35,7 @@ export default function SearchResult({
   }
 
   return (
-    <section className="relative h-[600px]">
+    <section className="absolute">
       <ul className="absolute top-5 w-full z-10 bg-white flex flex-col grow gap-y-4 mt-4">
         {searchResults.map(({ name, roadAddress }, index) => (
           <button
