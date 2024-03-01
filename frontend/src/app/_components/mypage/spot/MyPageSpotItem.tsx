@@ -2,11 +2,12 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
-import { TMyPageSpot } from './MyPageSpotList';
+import { TMyPageSpot } from '../types';
+import IconWithCounts from '../../IconWithCounts';
 
 interface TMyPageSpotItem extends TMyPageSpot {
-  checkedList: { spot_id: TMyPageSpot['spot_id']; isSecret: boolean }[];
-  onChangeCheckedList: (id: number, isSecret: boolean) => void;
+  checkedList: { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[];
+  onChangeCheckedList: (id: number, is_private: boolean) => void;
   idx: number;
   selectOption: string;
 }
@@ -15,11 +16,11 @@ const MyPageSpotItem = ({
   spot_id,
 
   image_url,
-  rating,
-  post_date,
+  rate,
+  created_date,
   title,
 
-  isSecret,
+  is_private,
   checkedList,
   onChangeCheckedList,
   idx,
@@ -37,7 +38,7 @@ const MyPageSpotItem = ({
   }, [checkedList.length]);
 
   useEffect(() => {
-    if (selectOption === 'all' && isSecret) {
+    if (selectOption === 'all' && is_private) {
       setIsCheckDisabled(true);
       setIsChecked(false);
     }
@@ -56,18 +57,18 @@ const MyPageSpotItem = ({
         className="w-[32px] h-[32px]"
         checked={isChecked}
         onChange={() => {
-          onChangeCheckedList(spot_id, isSecret);
+          onChangeCheckedList(spot_id, is_private);
         }}
       />
       <div className="relative">
         <Image
-          src={image_url}
+          src={image_url || ''}
           alt="spot-image"
           width={100}
           height={100}
           className="w-[100px] h-[100px] rounded-md"
         />
-        {isSecret && (
+        {is_private && (
           <div className="absolute top-2 right-2 p-2 bg-black rounded-full">
             <LockIcon className="w-4 h-4" />
           </div>
@@ -79,11 +80,14 @@ const MyPageSpotItem = ({
           {title}
         </div>
         <div className="flex gap-x-2 items-center">
-          <StarIcon className="w-4 h-4 fill-[#FBBC05]" />
-          <div className="grow text-xl leading-6 text-gray-500 font-semibold">
-            {rating.toFixed(1)}
-          </div>
-          <div className="text-gray-300 font-bold">{post_date}</div>
+          <IconWithCounts
+            icon={
+              <StarIcon className="w-4 h-4 fill-[#FACC15] stroke-[#FACC15]" />
+            }
+            count={rate}
+            rating
+          />
+          <div className="text-gray-300 font-bold">{created_date}</div>
         </div>
       </div>
     </div>
