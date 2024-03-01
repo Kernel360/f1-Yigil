@@ -95,7 +95,7 @@ export default function SearchBox({
         cancellable
       />
       <hr />
-      <div className="grow" aria-label="Result/History container">
+      <div className="relative grow" aria-label="Result/History container">
         {showHistory && <SearchHistory {...searchHistoryProps} />}
         {showResult && (
           <SearchResult

@@ -33,6 +33,7 @@ export default function SearchBar({
   const [searchValue, setSearchValue] = useState(initialSearchValue);
 
   function handleChange(term: string) {
+    openResults();
     setSearchValue(term);
 
     const params = new URLSearchParams(searchParams);
@@ -69,6 +70,7 @@ export default function SearchBar({
   }
 
   function handleErase() {
+    closeResults();
     setSearchValue('');
     search('');
     replace(`${pathname}`);
@@ -94,8 +96,6 @@ export default function SearchBar({
           value={searchValue}
           onChange={(event) => handleChange(event.target.value)}
           onKeyDown={handleEnter}
-          onFocus={() => openResults()}
-          onBlur={() => closeResults()}
         />
         {searchParams.size !== 0 && (
           <button
