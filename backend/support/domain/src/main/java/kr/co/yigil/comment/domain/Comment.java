@@ -24,6 +24,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @SQLDelete(sql = "UPDATE Comment SET is_deleted = true WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -59,6 +60,7 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
+
     public Comment(String content, Member member, Travel travel, Comment parent) {
         this.content = content;
         this.member = member;
@@ -76,6 +78,7 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
+
     public Comment(Long id, String content, Member member, Travel travel, Comment parent) {
         this.id = id;
         this.content = content;
@@ -91,4 +94,10 @@ public class Comment {
         this.modifiedAt = LocalDateTime.now();
     }
 
+    public String getContent() {
+        if(this.isDeleted){
+            return "삭제된 댓글입니다.";
+        }
+        return this.content;
+    }
 }
