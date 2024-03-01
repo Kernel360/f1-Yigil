@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import PlaceDetail from '@/app/_components/place/PlaceDetail';
 import { getPlaceDetail } from '../action';
 
@@ -6,6 +7,8 @@ export default async function PlaceDetailPage({
 }: {
   params: { id: string };
 }) {
+  const session = cookies().get('SESSION');
+
   const detail = await getPlaceDetail(params.id);
 
   // response parse 실패
@@ -16,5 +19,7 @@ export default async function PlaceDetailPage({
     return <main>Failed</main>;
   }
 
-  return <PlaceDetail detail={detail.data} />;
+  return (
+    <PlaceDetail detail={detail.data} isLoggedIn={session !== undefined} />
+  );
 }

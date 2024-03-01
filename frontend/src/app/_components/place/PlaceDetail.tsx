@@ -10,7 +10,13 @@ import LocationIcon from '/public/icons/map-pin.svg';
 import type { TPlaceDetail } from '@/types/response';
 import Link from 'next/link';
 
-export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
+export default function PlaceDetail({
+  detail,
+  isLoggedIn,
+}: {
+  detail: TPlaceDetail;
+  isLoggedIn: boolean;
+}) {
   const {
     place_name,
     address,
@@ -35,7 +41,7 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
         <BookmarkButton
           className="absolute top-4 right-4"
           bookmarked={bookmarked}
-          isLoggedIn={false}
+          isLoggedIn={isLoggedIn}
         />
       </div>
       <div className="px-4 py-2 flex flex-col gap-2">
