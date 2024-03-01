@@ -19,6 +19,7 @@ import MapComponent from '../naver-map/MapComponent';
 import type { DataInput, Making } from './common/step/types';
 
 import { searchAction } from '../search/action';
+import Alert from '../ui/dialog/Alert';
 
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
@@ -56,6 +57,8 @@ export default function AddSpot() {
     }
   }
 
+  const [alertOpened, setAlertOpened] = useState(false);
+
   // 검색을 통해 선택한 장소
   const [currentFoundPlace, setCurrentFoundPlace] = useState<{
     name: string;
@@ -68,9 +71,22 @@ export default function AddSpot() {
       <AddSpotContext.Provider value={addSpotState}>
         <StepNavigation
           currentStep={step}
-          next={() => dispatchStep({ type: 'next' })}
+          next={() => {
+            if (!currentFoundPlace) {
+              setAlertOpened(true);
+              return;
+            }
+
+            dispatchStep({ type: 'next' });
+          }}
           previous={() => dispatchStep({ type: 'previous' })}
         />
+        {alertOpened && (
+          <Alert
+            text="지도에서 장소를 선택해주세요!"
+            closeModal={() => setAlertOpened(false)}
+          />
+        )}
         <ProgressIndicator step={step} />
 
         {stepLabel === '장소 입력' && (

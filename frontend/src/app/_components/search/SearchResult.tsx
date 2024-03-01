@@ -1,5 +1,7 @@
 import { getCoords } from './action';
+
 import SearchIcon from '/public/icons/search.svg';
+import XIcon from '/public/icons/x-mark.svg';
 
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -50,7 +52,10 @@ export default function SearchResult({
           ))}
         </ul>
       ) : (
-        <>검색해주세요!</>
+        <div className="h-full flex flex-col gap-16 justify-center items-center">
+          <XIcon className="w-32 h-32" />
+          <p>해당 검색어에 대한 장소를 찾을 수 없습니다!</p>
+        </div>
       )}
     </section>
   );

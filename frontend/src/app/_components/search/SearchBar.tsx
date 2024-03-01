@@ -33,7 +33,6 @@ export default function SearchBar({
   const [searchValue, setSearchValue] = useState(initialSearchValue);
 
   function handleChange(term: string) {
-    openResults();
     setSearchValue(term);
 
     const params = new URLSearchParams(searchParams);
@@ -49,13 +48,18 @@ export default function SearchBar({
 
   // 리팩토링 필요
   async function handleSearch() {
+    if (searchValue === '') {
+      return;
+    }
+
     addHistory(searchValue);
     const params = new URLSearchParams(searchParams);
 
     if (pathname === '/search') {
       push(`${pathname}/result?${params.toString()}`);
     } else {
-      search(searchValue);
+      await search(searchValue);
+      openResults();
     }
   }
 
@@ -70,7 +74,6 @@ export default function SearchBar({
   }
 
   function handleErase() {
-    closeResults();
     setSearchValue('');
     search('');
     replace(`${pathname}`);
