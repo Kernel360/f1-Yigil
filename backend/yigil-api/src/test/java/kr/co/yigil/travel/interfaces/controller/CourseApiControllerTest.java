@@ -87,7 +87,7 @@ public class CourseApiControllerTest {
         when(courseMapper.courseSliceToCourseInPlaceResponse(mockSlice)).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/courses/place/{placeId}", 1L)
-                .param("page", "0")
+                .param("page", "1")
                 .param("size", "5")
                 .param("sortBy", "createdAt")
                 .param("sortOrder", "desc"))
