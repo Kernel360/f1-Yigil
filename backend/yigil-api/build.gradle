@@ -70,9 +70,7 @@ dependencies {
 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-
-
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
 }
 
 test {
