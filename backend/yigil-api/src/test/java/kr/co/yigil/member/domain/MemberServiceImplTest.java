@@ -15,6 +15,7 @@ import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
+import kr.co.yigil.region.domain.RegionReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,9 @@ class MemberServiceImplTest {
     private FollowReader followReader;
     @Mock
     private FileUploader fileUploader;
+
+    @Mock
+    private RegionReader regionReader;
 
     @DisplayName("retrieveMemberInfo 를 호출했을 때 멤버 정보 조회가 잘 되는지 확인")
     @Test
@@ -79,9 +83,11 @@ class MemberServiceImplTest {
 
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
         when(fileUploader.upload(mockFile)).thenReturn(mockAttachFile);
+
         when(mockAttachFile.getFileUrl()).thenReturn("images/image.jpg");
 
         memberService.updateMemberInfo(memberId, request);
         verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), anyString(), anyList());
+        verify(regionReader).validateRegions(anyList());
     }
 }

@@ -18,9 +18,9 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
 import kr.co.yigil.member.application.MemberFacade;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.interfaces.dto.MemberDto;
@@ -78,6 +78,7 @@ class MemberApiControllerTest {
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.igil.co.kr/images/profile.jpg")
+            .favoriteRegionIds(List.of(1L, 2L, 3L))
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -96,6 +97,7 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("favorite_region_ids").description("좋아하는 지역 ID 리스트"),
                     fieldWithPath("following_count").description("팔로잉 수"),
                     fieldWithPath("follower_count").description("팔로워 수")
                 )
@@ -122,13 +124,20 @@ class MemberApiControllerTest {
                 .message("회원 정보 업데이트 성공")
                 .build()
         );
+        String requestJson = "{\n"
+            + "  \"nickname\": \"nickname\",\n"
+            + "  \"age\": \"10대\",\n"
+            + "  \"gender\": \"남성\",\n"
+            + "  \"favoriteRegionIds\": [1, 2, 3]\n"
+            + "}";
 
         mockMvc.perform(multipart("/api/v1/members")
                 .file("profileImageFile", multipartFile.getBytes())
-                .param("nickname", "nickname")
-                .param("age", "10대")
-                .param("gender", "남성")
-                .param("favoriteRegionIds", "1", "2", "3")
+//                .param("nickname", "nickname")
+//                .param("age", "10대")
+//                .param("gender", "남성")
+//                .param("favoriteRegionIds", "1", "2", "3")
+                .content(requestJson)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andExpect(status().isOk())
@@ -179,6 +188,7 @@ class MemberApiControllerTest {
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
+            .favoriteRegionIds(List.of(1L, 2L, 3L))
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -200,6 +210,7 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("favorite_region_ids").description("좋아하는 지역 ID 리스트"),
                     fieldWithPath("following_count").description("팔로잉 수"),
                     fieldWithPath("follower_count").description("팔로워 수")
                 )

@@ -114,7 +114,7 @@ public class CourseApiController {
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
         @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
 
         final var memberCoursesInfo = courseFacade.getMemberCoursesInfo(
