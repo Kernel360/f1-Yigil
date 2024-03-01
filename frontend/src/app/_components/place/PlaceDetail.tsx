@@ -36,7 +36,11 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
           unoptimized
         />
         {liked && (
-          <LikeButton className="absolute top-4 right-4" liked={liked} />
+          <LikeButton
+            className="absolute top-4 right-4"
+            bookmarked={liked}
+            isLoggedIn={false}
+          />
         )}
       </div>
       <div className="px-4 py-2 flex flex-col gap-2">

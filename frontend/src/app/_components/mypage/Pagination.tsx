@@ -29,14 +29,18 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
   };
   return (
     <nav className={`my-4 pb-[50px] flex justify-center items-center gap-x-6`}>
-      {currentPage !== 1 && (
-        <button
-          className="w-[9px] h-[16px] cursor-pointer px-1"
-          onClick={minusPage}
-        >
+      <span
+        className={`w-[9px] h-[16px] px-1 ${
+          currentPage !== 1 && 'cursor-pointer'
+        }`}
+        onClick={minusPage}
+        onKeyDown={(e) => e.key === 'Enter' && minusPage()}
+        tabIndex={currentPage !== 1 ? 0 : -1}
+      >
+        {currentPage !== 1 && (
           <LeftIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
-        </button>
-      )}
+        )}
+      </span>
 
       {renderPage &&
         renderPage.map((v, idx) => (
@@ -52,14 +56,20 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
             {v}
           </button>
         ))}
-      {!renderPage.includes(totalPage) && currentPage !== totalPage && (
-        <button
-          className="w-[9px] h-[16px] cursor-pointer px-1"
-          onClick={addPage}
-        >
+      <span
+        className={`w-[9px] h-[16px] px-1 ${
+          currentPage !== 1 && 'cursor-pointer'
+        }`}
+        onClick={addPage}
+        onKeyDown={(e) => e.key === 'Enter' && addPage()}
+        tabIndex={
+          !renderPage.includes(totalPage) && currentPage !== totalPage ? 0 : -1
+        }
+      >
+        {!renderPage.includes(totalPage) && currentPage !== totalPage && (
           <RightIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
-        </button>
-      )}
+        )}
+      </span>
     </nav>
   );
 }

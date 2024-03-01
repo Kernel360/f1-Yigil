@@ -17,7 +17,7 @@ export async function getPopularPlaces() {
   const json = await requestPopularPlaces;
 
   const result = placeResponseSchema.safeParse(json);
-  revalidatePath('/');
+  revalidatePath('/', 'layout');
 
   return result;
 }
