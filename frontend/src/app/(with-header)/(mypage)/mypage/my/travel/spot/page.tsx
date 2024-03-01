@@ -13,7 +13,7 @@ export default async function MyPageMySpot() {
       {!!spotList.content.length ? (
         <MyPageSpotList
           placeList={spotList.content}
-          totalPage={spotList.total_page}
+          totalPage={spotList.total_pages}
         />
       ) : (
         <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">

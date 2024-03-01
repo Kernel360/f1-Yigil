@@ -66,13 +66,13 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, total_page } = await getMyPageSpots(
+    const { content, total_pages } = await getMyPageSpots(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setTotalPageCount(total_page);
+    setTotalPageCount(total_pages);
     setAllSpotList([...content]);
   };
 
