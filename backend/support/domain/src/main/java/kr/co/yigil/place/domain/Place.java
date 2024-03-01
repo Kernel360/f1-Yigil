@@ -38,7 +38,7 @@ public class Place {
 
     private double rate;
 
-    @Column(columnDefinition = "geometry(Point,5186)")
+    @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
 
     @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
