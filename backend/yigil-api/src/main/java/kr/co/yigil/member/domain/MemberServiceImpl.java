@@ -1,8 +1,10 @@
 package kr.co.yigil.member.domain;
 
+import java.util.List;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.domain.MemberInfo.Main;
+import kr.co.yigil.region.domain.Region;
 import kr.co.yigil.region.domain.RegionReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +42,9 @@ public class MemberServiceImpl implements MemberService {
 
         regionReader.validateRegions(request.getFavoriteRegionIds());
 
+        List<Region> regions = regionReader.getRegions(request.getFavoriteRegionIds());
+
         member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
-            updatedProfile.getFileUrl(), request.getFavoriteRegionIds());
+            updatedProfile.getFileUrl() ,regions);
     }
 }

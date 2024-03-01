@@ -6,4 +6,5 @@ public interface RegionReader {
 
     void validateRegions(List<Long> regionIds);
 
+    List<Region> getRegions(List<Long> favoriteRegionIds);
 }
