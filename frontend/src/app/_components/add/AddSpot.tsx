@@ -17,9 +17,54 @@ import ImageHandler from '../images';
 import MapComponent from '../naver-map/MapComponent';
 
 import type { DataInput, Making } from './common/step/types';
+import type { TAddSpotProps } from './spot/SpotContext';
 
 import { searchAction } from '../search/action';
 import Alert from '../ui/dialog/Alert';
+
+function getAlertText(step: DataInput.TDataInputStep) {
+  switch (step.data.label) {
+    case '시작': {
+      return '지도에서 장소를 선택해주세요!';
+    }
+    case '사진': {
+      return '사진을 한 장 이상 선택해주세요!';
+    }
+    case '리뷰': {
+      return '리뷰 내용을 입력해주세요!';
+    }
+    case '주소':
+    case '순서':
+    case '별점':
+      return '';
+  }
+}
+
+function canGoNext(
+  step: DataInput.TDataInputStep,
+  addSpotState: TAddSpotProps,
+  currentFoundPlace?: {
+    name: string;
+    roadAddress: string;
+    coords: { lat: number; lng: number };
+  },
+) {
+  const label = step.data.label;
+
+  if (label === '시작' && currentFoundPlace === undefined) {
+    return false;
+  }
+
+  if (label === '사진' && addSpotState.images.length === 0) {
+    return false;
+  }
+
+  if (label === '리뷰' && addSpotState.review.review === '') {
+    return false;
+  }
+
+  return true;
+}
 
 export default function AddSpot() {
   const [step, dispatchStep] = useReducer(
@@ -72,7 +117,7 @@ export default function AddSpot() {
         <StepNavigation
           currentStep={step}
           next={() => {
-            if (!currentFoundPlace) {
+            if (!canGoNext(step.inputStep, addSpotState, currentFoundPlace)) {
               setAlertOpened(true);
               return;
             }
@@ -81,12 +126,6 @@ export default function AddSpot() {
           }}
           previous={() => dispatchStep({ type: 'previous' })}
         />
-        {alertOpened && (
-          <Alert
-            text="지도에서 장소를 선택해주세요!"
-            closeModal={() => setAlertOpened(false)}
-          />
-        )}
         <ProgressIndicator step={step} />
 
         {stepLabel === '장소 입력' && (
@@ -151,6 +190,12 @@ export default function AddSpot() {
         {stepLabel === '장소 확정' && <Common.SpotCheck />}
         {stepLabel === '완료' && <Common.AddConfirmContent />}
       </AddSpotContext.Provider>
+      {alertOpened && (
+        <Alert
+          text={getAlertText(step.inputStep)}
+          closeModal={() => setAlertOpened(false)}
+        />
+      )}
     </section>
   );
 }
