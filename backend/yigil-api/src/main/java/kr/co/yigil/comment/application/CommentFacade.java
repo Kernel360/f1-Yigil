@@ -31,20 +31,11 @@ public class CommentFacade {
     @Transactional(readOnly = true)
     public CommentInfo.CommentsResponse getParentCommentList(Long travelId, Pageable pageable) {
 
-//        Slice<Comment> comments = commentService.findParentCommentsByTravelId(travelId, pageable);
-//        List<CommentResponse> commentResponses = comments.stream().map(CommentResponse::from)
-//                .toList();
-//
-//        return new SliceImpl<>(commentResponses, pageable, comments.hasNext());
         return commentService.getParentComments(travelId, pageable);
     }
 
     @Transactional(readOnly = true)
     public CommentInfo.CommentsResponse getChildCommentList(Long parentId, Pageable pageable) {
-//        Slice<Comment> comments = commentService.findChildCommentsByParentId(parentId, pageable);
-//        List<CommentResponse> commentResponses = comments.stream().map(CommentResponse::from)
-//                .toList();
-//        return new CommentsResponse(commentResponses, pageable, comments.hasNext());
         return commentService.getChildComments(parentId, pageable);
     }
 
@@ -59,7 +50,8 @@ public class CommentFacade {
         CommentUpdateRequest command) {
         var response = commentService.updateComment(commentId, memberId, command);
 
-        notificationService.sendNotification(NotificationType.NEW_COMMENT, memberId, response.getNotifiedReceiverId());
+        if(response.getNotifiedReceiverId() != null)
+            notificationService.sendNotification(NotificationType.NEW_COMMENT, memberId, response.getNotifiedReceiverId());
     }
 }
 

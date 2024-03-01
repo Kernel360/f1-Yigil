@@ -1,7 +1,6 @@
 package kr.co.yigil.comment.interfaces.dto;
 
 import java.util.List;
-import kr.co.yigil.comment.domain.CommentInfo.CommentsUnitInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,6 +51,20 @@ public class CommentDto {
 
         private List<CommentsUnitInfo> content;
         private boolean hasNext;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CommentsUnitInfo{
+
+        private Long id;
+        private String content;
+        private Long memberId;
+        private String memberNickname;
+        private String memberImageUrl;
+        private int childCount;
+        private String createdAt;
     }
 
     @Data
