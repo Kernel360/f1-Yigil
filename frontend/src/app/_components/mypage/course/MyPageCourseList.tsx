@@ -12,7 +12,8 @@ import TrashIcon from '/public/icons/trash.svg';
 import LockIcon from '/public/icons/lock.svg';
 import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
-import { getMyPageCourses } from '../hooks/myPageActions';
+import { deleteMyCourse, getMyPageCourses } from '../hooks/myPageActions';
+import Dialog from '../../ui/dialog/Dialog';
 
 export default function MyPageCourseList({
   placeList,
@@ -33,6 +34,9 @@ export default function MyPageCourseList({
 
   const [selectOption, setSelectOption] = useState('all');
   const [sortOption, setSortOption] = useState<string>('desc');
+
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
+
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
       label: '기록 나만보기',
@@ -42,7 +46,7 @@ export default function MyPageCourseList({
     {
       label: '기록 삭제하기',
       icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => onClickUnLock(),
+      onClick: () => setIsDialogOpened(true),
     },
   ]);
 
@@ -77,7 +81,7 @@ export default function MyPageCourseList({
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => setIsDialogOpened(true),
         },
       ]);
     } else {
@@ -90,7 +94,7 @@ export default function MyPageCourseList({
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => setIsDialogOpened(true),
         },
       ]);
     }
@@ -101,9 +105,16 @@ export default function MyPageCourseList({
     getCourse(1, divideCount, sortOption, selectOption);
   }, [selectOption, sortOption]);
 
-  const onClickDelete = () => {};
+  const onClickDelete = (courseIds: number[]) => {
+    Promise.all(courseIds.map((course_id) => deleteMyCourse(course_id)));
+  };
+  // TODO: lock, unlock은 단일 id이냐 아니냐에 따라 다르게 호출
   const onClickUnLock = () => {};
   const onClickLock = () => {};
+
+  const closeDialog = () => {
+    setIsDialogOpened(false);
+  };
 
   const onClickSelectOption = (option: string) => {
     setSelectOption(option);
@@ -176,6 +187,15 @@ export default function MyPageCourseList({
       </div>
       {!!checkedList.length && (
         <div className="relative z-40">
+          {isDialogOpened && (
+            <Dialog
+              text="기록을 삭제하시겠나요?"
+              closeModal={closeDialog}
+              handleConfirm={() =>
+                onClickDelete(checkedList.map((list) => list.course_id))
+              }
+            />
+          )}
           <FloatingActionButton
             popOverData={popOverData}
             openedIcon={<PlusIcon className="rotate-45 duration-200 z-30" />}
