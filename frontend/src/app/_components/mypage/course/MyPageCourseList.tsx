@@ -106,7 +106,8 @@ export default function MyPageCourseList({
   }, [selectOption, sortOption]);
 
   const onClickDelete = (courseIds: number[]) => {
-    Promise.all(courseIds.map((course_id) => deleteMyCourse(course_id)));
+    // promise로 여러 코스 삭제를 한번에 처리하는 로직 필요
+    // Promise.all(courseIds.map((course_id) => deleteMyCourse(course_id)));
   };
   // TODO: lock, unlock은 단일 id이냐 아니냐에 따라 다르게 호출
   const onClickUnLock = () => {};
