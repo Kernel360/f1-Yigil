@@ -1,8 +1,7 @@
 'use client';
+import { TMyPageBookmark } from '@/types/myPageResponse';
 import React, { useEffect, useState } from 'react';
 import Select from '../../ui/select/Select';
-import Pagination from '../Pagination';
-import { TMyPageBookmark } from '../types';
 import { getMyPageBookmarks } from './bookmarkActions';
 import MyPageBookmarkItem from './MyPageBookmarkItem';
 
@@ -15,15 +14,13 @@ const sortOptions = [
 
 export default function MyPageBookmarkList({
   bookmarkList,
-  totalPage,
 }: {
   bookmarkList: TMyPageBookmark[];
-  totalPage: number;
 }) {
   const [sortOption, setSortOption] = useState('desc');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const divideCount = 5;
-  const [totalPageCount, setTotalPageCount] = useState(totalPage);
+
   const [allBookmarkList, setAllBookmarkList] = useState(bookmarkList);
 
   const onChangeSortOption = (option: string | number) => {
@@ -36,13 +33,13 @@ export default function MyPageBookmarkList({
     size: number,
     sortOrder: string,
   ) => {
-    const { content, totalPage } = await getMyPageBookmarks(
-      pageNum,
-      size,
-      sortOrder,
-    );
-    setTotalPageCount(totalPage);
-    setAllBookmarkList([...content]);
+    const bookmarkList = await getMyPageBookmarks(pageNum, size, sortOrder);
+    if (!bookmarkList.success) {
+      setAllBookmarkList([]);
+      return;
+    }
+
+    setAllBookmarkList([...bookmarkList.data.content]);
   };
 
   useEffect(() => {
@@ -75,11 +72,6 @@ export default function MyPageBookmarkList({
               {...bookmark}
             />
           ))}
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPage={totalPageCount}
-          />
         </>
       ) : (
         <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">

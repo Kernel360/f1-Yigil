@@ -1,19 +1,23 @@
 'use server';
+import { myPageBookmarkListSchema } from '@/types/myPageResponse';
 import { requestWithCookie } from '../../api/httpRequest';
 
-export const getMyPageBookmarks = (
+export const getMyPageBookmarks = async (
   pageNo: number = 1,
   size: number = 5,
   sortOrder: string = 'desc',
   sortBy?: string,
 ) => {
-  return requestWithCookie('bookmarks')(
+  const bookmarkList = await requestWithCookie('bookmarks')(
     `?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'
         ? `createdAt&sortOrder=${sortOrder}`
         : `rate&sortOrder=desc`
     }`,
   )()()();
+
+  const parsedBookmarkList = myPageBookmarkListSchema.safeParse(bookmarkList);
+  return parsedBookmarkList;
 };
 
 export const deleteMyPageBookmark = (placeId: number) => {

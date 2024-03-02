@@ -2,9 +2,9 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import BookmarkIcon from '/public/icons/bookmark.svg';
-import { TMyPageBookmark } from '../types';
 import IconWithCounts from '../../IconWithCounts';
 import { addMyPageBookmark, deleteMyPageBookmark } from './bookmarkActions';
+import { TMyPageBookmark } from '@/types/myPageResponse';
 
 export default function MyPageBookmarkItem({
   place_id,
