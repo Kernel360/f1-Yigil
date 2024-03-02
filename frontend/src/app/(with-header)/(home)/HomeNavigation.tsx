@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
+import InfoIcon from '/public/icons/info.svg';
 import SearchIcon from '/public/icons/search.svg';
 
 // 메뉴가 늘어나지 않을 것으로 상정하고 스타일 지정 조건을 하드코딩하였음
@@ -23,6 +23,12 @@ export default function HomeNavigation() {
           href="/nearby"
         >
           주변
+        </Link>
+        <Link
+          href="https://docs.google.com/forms/d/e/1FAIpQLSfsbhvjAjiY_KSTTUrWNcGB8A7gXshwRW0Or7e_vvAbpGBVgg/viewform"
+          className="self-center ml-4"
+        >
+          <InfoIcon />
         </Link>
       </div>
       {pathname === '/' && (
