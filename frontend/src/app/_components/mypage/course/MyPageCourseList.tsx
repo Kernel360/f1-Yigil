@@ -52,7 +52,7 @@ export default function MyPageCourseList({
 
   useEffect(() => {
     getCourse(currentPage, divideCount, sortOption, selectOption);
-  }, [currentPage]);
+  }, [currentPage, sortOption, selectOption]);
 
   const getCourse = async (
     pageNum: number,
