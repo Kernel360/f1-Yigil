@@ -1,5 +1,11 @@
 'use client';
-import React, { Dispatch, useEffect, useRef, useState } from 'react';
+import React, {
+  Dispatch,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import { plusMarker } from '../../naver-map/plusMarker';
 
@@ -27,25 +33,26 @@ export default function AddSpotMap({
     lng: 127.0621708,
   });
 
-  function onSuccessGeolocation(position: {
-    coords: { latitude: number; longitude: number };
-  }) {
-    if (!mapRef.current) return;
+  const onSuccessGeolocation = useCallback(
+    (position: { coords: { latitude: number; longitude: number } }) => {
+      if (!mapRef.current) return;
 
-    const location = new navermaps.LatLng(
-      position.coords.latitude,
-      position.coords.longitude,
-    );
-    mapRef.current.setCenter(location);
-    mapRef.current.setZoom(15);
+      const location = new navermaps.LatLng(
+        position.coords.latitude,
+        position.coords.longitude,
+      );
+      mapRef.current.setCenter(location);
+      mapRef.current.setZoom(15);
 
-    setCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    });
-  }
+      setCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
+    },
+    [navermaps.LatLng],
+  );
 
-  function onErrorGeolocation() {
+  const onErrorGeolocation = useCallback(() => {
     if (!mapRef.current) return;
 
     if (navigator.geolocation) {
@@ -56,7 +63,7 @@ export default function AddSpotMap({
     } else {
       setCenter({ lat: 37.5452605, lng: 127.0526252 });
     }
-  }
+  }, [onSuccessGeolocation]);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -71,14 +78,14 @@ export default function AddSpotMap({
     } else {
       setCenter({ lat: 37.5452605, lng: 127.0526252 });
     }
-  }, [mapRef]);
+  }, [mapRef, onSuccessGeolocation, onErrorGeolocation]);
 
   useEffect(() => {
     if (mapRef.current && place) {
       const coord = { ...place.coords };
       mapRef.current.panTo(coord);
     }
-  }, []);
+  }, [place]);
 
   async function handleClick(place: {
     name: string;

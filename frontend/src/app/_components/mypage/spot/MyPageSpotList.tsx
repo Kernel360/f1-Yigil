@@ -40,7 +40,7 @@ export default function MyPageSpotList({
   // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
     getSpots(currentPage, divideCount, sortOption, selectOption);
-  }, [currentPage]);
+  }, [currentPage, sortOption, selectOption]);
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
@@ -221,7 +221,7 @@ export default function MyPageSpotList({
             <Dialog
               text="기록을 삭제하시겠나요?"
               closeModal={closeDialog}
-              handleConfirm={onClickDelete}
+              handleConfirm={async () => onClickDelete()}
             />
           )}
           <FloatingActionButton

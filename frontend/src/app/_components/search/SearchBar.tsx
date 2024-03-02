@@ -48,13 +48,18 @@ export default function SearchBar({
 
   // 리팩토링 필요
   async function handleSearch() {
+    if (searchValue === '') {
+      return;
+    }
+
     addHistory(searchValue);
     const params = new URLSearchParams(searchParams);
 
     if (pathname === '/search') {
       push(`${pathname}/result?${params.toString()}`);
     } else {
-      search(searchValue);
+      await search(searchValue);
+      openResults();
     }
   }
 
@@ -71,8 +76,8 @@ export default function SearchBar({
   function handleErase() {
     setSearchValue('');
     search('');
-    inputRef.current?.focus();
     replace(`${pathname}`);
+    inputRef.current?.focus();
   }
 
   async function handleEnter(event: EventFor<'input', 'onKeyDown'>) {
@@ -85,7 +90,7 @@ export default function SearchBar({
 
   return (
     <div className="flex gap-4 px-6">
-      <div className="w-full px-4 py-2 bg-[#e5e7eb] shadow-xl rounded-full flex gap-4 items-center">
+      <div className="w-full px-4 py-2 bg-[#e5e7eb] shadow-lg rounded-full flex gap-4 items-center">
         <input
           className="w-full text-lg bg-transparent outline-none focus:border-b-2 focus:border-black"
           ref={inputRef}
@@ -94,7 +99,6 @@ export default function SearchBar({
           value={searchValue}
           onChange={(event) => handleChange(event.target.value)}
           onKeyDown={handleEnter}
-          onFocus={() => openResults()}
         />
         {searchParams.size !== 0 && (
           <button
