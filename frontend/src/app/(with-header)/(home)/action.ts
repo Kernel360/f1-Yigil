@@ -1,19 +1,25 @@
 import z from 'zod';
 
-import { requestWithoutCookie } from '@/app/_components/api/httpRequest';
 import { placesSchema } from '@/types/response';
 
-const requestPopularPlaces =
-  requestWithoutCookie('places/popular')()()()(
-    '장소들을 불러올 수 없었습니다!',
-  );
+async function fetchPopularPlaces() {
+  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+
+  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+
+  const response = await fetch(`${baseUrl}/v1/places/popular`, {
+    next: { tags: ['popularPlaces'] },
+  });
+
+  return await response.json();
+}
 
 const placeResponseSchema = z.object({
   places: placesSchema,
 });
 
 export async function getPopularPlaces() {
-  const json = await requestPopularPlaces;
+  const json = await fetchPopularPlaces();
 
   const result = placeResponseSchema.safeParse(json);
 

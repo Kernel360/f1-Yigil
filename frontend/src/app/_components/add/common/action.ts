@@ -18,7 +18,7 @@ import {
 } from '@/types/response';
 
 import type { TAddSpotProps } from '../spot/SpotContext';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 
 const cookie = cookies().get('SESSION')?.value;
 const backendStaticMapRequest = requestWithCookie('places/static-image');
@@ -162,7 +162,7 @@ export async function postSpotData(state: TAddSpotProps) {
   const result = postSpotResponseSchema.safeParse(json);
 
   if (result.success) {
-    revalidatePath('/');
+    revalidateTag('popularPlaces');
     return result;
   }
 
