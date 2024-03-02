@@ -15,6 +15,7 @@ public enum ExceptionCode {
     NOT_FOUND_COMMENT_ID(1051, "해당하는 comment가 없습니다"),
     NOT_FOUND_PLACE_ID(1061, "해당하는 place가 없습니다"),
     NOT_FOUND_FAVOR_COUNT(1071, "해당하는 favor count가 없습니다"),
+    NOT_FOUND_REGION_ID(1081, "해당하는 region이 없습니다"),
 
 
     // travel 3000

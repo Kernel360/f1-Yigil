@@ -1,26 +1,30 @@
 import Image from 'next/image';
 
-import LikeButton from '@/app/_components/place/BookmarkButton';
+import BookmarkButton from '@/app/_components/place/BookmarkButton';
 import IconWithCounts from '@/app/_components/IconWithCounts';
 
 import ReviewIcon from '/public/icons/review.svg';
-import HeartIcon from '/public/icons/heart.svg';
 import StarIcon from '/public/icons/star.svg';
 import LocationIcon from '/public/icons/map-pin.svg';
 
 import type { TPlaceDetail } from '@/types/response';
 import Link from 'next/link';
 
-export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
+export default function PlaceDetail({
+  detail,
+  isLoggedIn,
+}: {
+  detail: TPlaceDetail;
+  isLoggedIn: boolean;
+}) {
   const {
-    name,
+    place_name,
     address,
-    liked,
-    image_url,
-    map_image_url,
+    bookmarked,
+    thumbnail_image_url,
+    map_static_image_url,
     review_count,
-    liked_count,
-    rating,
+    rate,
   } = detail;
 
   const hasReview = false;
@@ -30,31 +34,28 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
       <div className="relative aspect-square shrink-0">
         <Image
           className="object-cover"
-          src={image_url}
-          alt={`${name} 대표 이미지`}
+          src={thumbnail_image_url}
+          alt={`${place_name} 대표 이미지`}
           fill
-          unoptimized
         />
-        {liked && (
-          <LikeButton className="absolute top-4 right-4" liked={liked} />
-        )}
+        <BookmarkButton
+          className="absolute top-4 right-4"
+          bookmarked={bookmarked}
+          isLoggedIn={isLoggedIn}
+        />
       </div>
       <div className="px-4 py-2 flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold select-all">{name}</h1>
+        <h1 className="text-2xl font-semibold select-all">{place_name}</h1>
         <div className="flex gap-3 items-center">
           <IconWithCounts
             icon={<ReviewIcon className="w-4 h-4" />}
             count={review_count}
           />
           <IconWithCounts
-            icon={<HeartIcon className="w-4 h-4" />}
-            count={liked_count}
-          />
-          <IconWithCounts
             icon={
               <StarIcon className="w-4 h-4 fill-[#FACC15] stroke-[#FACC15]" />
             }
-            count={rating}
+            count={rate}
             rating
           />
         </div>
@@ -65,10 +66,9 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
         <div className="relative grow">
           <Image
             className="object-cover"
-            src={map_image_url}
-            alt={`${name} 위치 이미지`}
+            src={map_static_image_url}
+            alt={`${place_name} 위치 이미지`}
             fill
-            unoptimized
           />
         </div>
         <span className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export default function PlaceDetail({ detail }: { detail: TPlaceDetail }) {
           </p>
           <Link
             className="py-2 w-full bg-[#3B82F6] rounded-md text-xl text-white flex justify-center items-center "
-            href={`/add/spot?keyword=${name}`}
+            href={`/add/spot?keyword=${place_name}`}
           >
             장소 기록하기
           </Link>

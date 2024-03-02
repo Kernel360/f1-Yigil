@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-const { CDN_URL } = process.env;
-
 export const backendErrorSchema = z.object({
   code: z.number(),
   message: z.string(),
@@ -35,7 +33,7 @@ export const placeSchema = z.object({
   id: z.number().int(),
   place_name: z.string(),
   review_count: z.string(),
-  thumbnail_image_url: z.string().transform((url) => `${CDN_URL}/${url}`),
+  thumbnail_image_url: z.string(),
   rate: z.string(),
   bookmarked: z.boolean(),
 });
@@ -46,14 +44,13 @@ export const placesSchema = z.array(placeSchema);
 
 export const placeDetailSchema = z.object({
   id: z.number().int(),
-  name: z.string(),
+  place_name: z.string(),
   address: z.string(),
-  image_url: z.string(),
-  map_image_url: z.string(),
-  liked: z.boolean().optional(),
+  thumbnail_image_url: z.string(),
+  map_static_image_url: z.string(),
+  bookmarked: z.boolean(),
   review_count: z.number().int(),
-  liked_count: z.number().int(),
-  rating: z.number(),
+  rate: z.number(),
 });
 
 export type TPlaceDetail = z.infer<typeof placeDetailSchema>;
@@ -89,3 +86,12 @@ export const postSpotResponseSchema = z.object({
 });
 
 export type TPostSpotSuccess = z.infer<typeof postSpotResponseSchema>;
+
+export const myInfoSchema = z.object({
+  member_id: z.number().int(),
+  email: z.string().email(),
+  nickname: z.string(),
+  profile_image_url: z.string().url(),
+  following_count: z.number().int(),
+  follower_count: z.number().int(),
+});

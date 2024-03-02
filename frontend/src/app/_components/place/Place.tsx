@@ -46,7 +46,6 @@ export default function Place({
             alt={`${place_name} 대표 이미지`}
             fill
             sizes="33vw"
-            unoptimized
           />
         </Link>
         <BookmarkButton

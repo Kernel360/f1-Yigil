@@ -50,11 +50,11 @@ public class FollowApiController {
     @MemberOnly
     public ResponseEntity<FollowDto.FollowerResponse> getMyFollowerList(
         @Auth final Accessor accessor,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         FollowInfo.FollowersResponse followerListResponse = followFacade.getFollowerList(
             accessor.getMemberId(), pageRequest);

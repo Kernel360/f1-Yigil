@@ -38,11 +38,11 @@ public class NotificationApiController {
     @MemberOnly
     public ResponseEntity<NotificationsResponse> getNotifications(
             @Auth Accessor accessor,
-            @PageableDefault(size = 5) Pageable pageable,
+            @PageableDefault(size = 5, page = 1) Pageable pageable,
             @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
             ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         Slice<Notification> notificationSlice = notificationFacade.getNotificationSlice(
                 accessor.getMemberId(), pageRequest);
         NotificationsResponse response = notificationMapper.notificationSliceToNotificationsResponse(notificationSlice);
