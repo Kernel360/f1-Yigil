@@ -3,8 +3,8 @@ import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
 import Image from 'next/image';
 import MapPinIcon from '/public/icons/filled-map-pin.svg';
-import { TMyPageCourse } from '../types';
 import IconWithCounts from '../../IconWithCounts';
+import { TMyPageCourse } from '@/types/myPageResponse';
 
 interface TMyPageCourseItem extends TMyPageCourse {
   idx: number;
