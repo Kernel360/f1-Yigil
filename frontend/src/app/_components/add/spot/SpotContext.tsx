@@ -29,14 +29,10 @@ export interface TAddSpotAction {
 
 import { createContext } from 'react';
 
-const examplePlaceName = '이구성수';
-const exampleAddressName = '서울 성동구 아차산로 78';
-const placeholderImageUrl = 'https://placehold.co/400x300';
-
 export const initialAddSpotState: TAddSpotProps = {
-  name: examplePlaceName,
-  address: exampleAddressName,
-  spotMapImageUrl: placeholderImageUrl,
+  name: '',
+  address: '',
+  spotMapImageUrl: '',
   images: [],
   coords: { lat: 0, lng: 0 },
   rating: 1,

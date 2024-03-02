@@ -1,11 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { authenticateUser } from './app/_components/mypage/hooks/myPageActions';
+import { myInfoSchema } from './types/response';
+
+const restricted = ['/add', '/mypage'];
 
 export default function middleware(request: NextRequest) {
-  const { ENVIRONMENT } = process.env;
+  const { ENVIRONMENT, PRODUCTION_FRONTEND_URL, DEV_FRONTEND_URL } =
+    process.env;
+
+  const baseUrl =
+    ENVIRONMENT === 'production'
+      ? PRODUCTION_FRONTEND_URL
+      : ENVIRONMENT === 'dev'
+      ? DEV_FRONTEND_URL
+      : 'http://localhost:3000';
+
+  const session = request.cookies.get('SESSION');
+
+  if (restricted.some((pathname) => request.url.includes(pathname))) {
+    const json = authenticateUser();
+
+    const member = myInfoSchema.safeParse(json);
+
+    console.log(member);
+
+    if (!member.success) {
+      return NextResponse.redirect(`${baseUrl}/login`);
+    }
+
+    return NextResponse.next();
+  }
 
   const response = NextResponse.next();
 
-  if (request.cookies.has('SESSION')) {
+  if (!session) {
     const session = request.cookies.get('SESSION');
 
     if (!session) {
