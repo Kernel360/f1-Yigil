@@ -49,5 +49,6 @@ const ImageItem = forwardRef<HTMLDivElement, ItemProps>(
     );
   },
 );
+ImageItem.displayName = 'ImageItem';
 
 export default ImageItem;

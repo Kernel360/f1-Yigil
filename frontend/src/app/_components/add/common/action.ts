@@ -2,7 +2,6 @@
 
 import { cookies } from 'next/headers';
 
-import { requestWithCookie } from '@/app/_components/api/httpRequest';
 import {
   blobTodataUrl,
   coordsToGeoJSONPoint,
@@ -18,9 +17,7 @@ import {
 } from '@/types/response';
 
 import type { TAddSpotProps } from '../spot/SpotContext';
-
-const cookie = cookies().get('SESSION')?.value;
-const backendStaticMapRequest = requestWithCookie('places/static-image');
+import { revalidateTag } from 'next/cache';
 
 function staticMapUrl(
   width: number,
@@ -38,11 +35,25 @@ function staticMapUrl(
   return `${endpoint}?${queryString}`;
 }
 
-const getStaticMapUrlFromBackend = (name: string, address: string) => {
-  return backendStaticMapRequest(`name=${name}&address=${address}`)()()(
-    'First time adding',
+async function getStaticMapUrlFromBackend(name: string, address: string) {
+  const cookie = cookies().get('SESSION')?.value;
+
+  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+
+  const queryParams = `name=${name}&address=${address}`;
+
+  const response = await fetch(
+    `${baseUrl}/v1/places/static-image?${queryParams}`,
+    {
+      headers: {
+        Cookie: `SESSION=${cookie}`,
+      },
+    },
   );
-};
+
+  return await response.json();
+}
 
 export async function getMap(
   name: string,
@@ -135,6 +146,8 @@ async function parseAddSpotProps(state: TAddSpotProps) {
 }
 
 export async function postSpotData(state: TAddSpotProps) {
+  const session = cookies().get('SESSION')?.value;
+
   const formData = await parseAddSpotProps(state);
 
   const { ENVIRONMENT, BASE_URL, DEV_BASE_URL } = process.env;
@@ -147,7 +160,7 @@ export async function postSpotData(state: TAddSpotProps) {
     method: 'POST',
     body: formData,
     headers: {
-      Cookie: `SESSION=${cookie}`,
+      Cookie: `SESSION=${session}`,
     },
   });
 
@@ -161,6 +174,7 @@ export async function postSpotData(state: TAddSpotProps) {
   const result = postSpotResponseSchema.safeParse(json);
 
   if (result.success) {
+    revalidateTag('popularPlaces');
     return result;
   }
 
