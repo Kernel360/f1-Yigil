@@ -67,7 +67,7 @@ public class BatchConfig {
                 .name("placeItemReader")
                 .repository(placeRepository)
                 .methodName("findByRegionIsNull")
-                .pageSize(10)
+                .pageSize(3)
                 .arguments(List.of())
                 .sorts(Collections.singletonMap("id", Direction.DESC))
                 .build();
