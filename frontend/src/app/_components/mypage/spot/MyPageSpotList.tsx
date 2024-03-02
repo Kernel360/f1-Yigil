@@ -4,7 +4,6 @@ import FloatingActionButton from '../../FloatingActionButton';
 import MyPageSpotItem from './MyPageSpotItem';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
-import { getMyPageSpots } from '../hooks/myPageActions';
 import CalendarIcon from '/public/icons/calendar.svg';
 import UnLockIcon from '/public/icons/unlock.svg';
 import TrashIcon from '/public/icons/trash.svg';
@@ -13,15 +12,9 @@ import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
-
-export interface TMyPageSpot {
-  spot_id: number;
-  image_url: string;
-  rating: number;
-  post_date: string;
-  title: string;
-  isSecret: boolean;
-}
+import Dialog from '../../ui/dialog/Dialog';
+import { TMyPageSpot } from '../types';
+import { getMyPageSpots } from '../hooks/myPageActions';
 
 export default function MyPageSpotList({
   placeList,
@@ -31,9 +24,8 @@ export default function MyPageSpotList({
   totalPage: number;
 }) {
   const [allSpotList, setAllSpotList] = useState<TMyPageSpot[]>(placeList);
-  const [renderSpotList, setRenderSpotList] = useState<TMyPageSpot[]>([]);
   const [checkedList, setCheckedList] = useState<
-    { spot_id: TMyPageSpot['spot_id']; isSecret: boolean }[]
+    { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[]
   >([]);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -43,9 +35,11 @@ export default function MyPageSpotList({
   const [selectOption, setSelectOption] = useState('all');
   const [sortOption, setSortOption] = useState<string>('desc');
 
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
+
   // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
-    getUser(currentPage, divideCount, sortOption, selectOption);
+    getSpots(currentPage, divideCount, sortOption, selectOption);
   }, [currentPage]);
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
@@ -57,7 +51,7 @@ export default function MyPageSpotList({
     {
       label: '기록 삭제하기',
       icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => onClickUnLock(),
+      onClick: () => setIsDialogOpened(true),
     },
     {
       href: '/add/course',
@@ -66,30 +60,22 @@ export default function MyPageSpotList({
     },
   ]);
 
-  const getUser = async (
+  const getSpots = async (
     pageNum: number,
     size: number,
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, totalPage } = await getMyPageSpots(
+    const { content, total_pages } = await getMyPageSpots(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setTotalPageCount(totalPage);
+    setTotalPageCount(total_pages);
     setAllSpotList([...content]);
   };
 
-  // TODO: checkPopOverState 함수를 생성 인수로 (selectOption, checkedList)
-
-  // 전체 스팟 리스트 불러오기 시 render도 변경
-  useEffect(() => {
-    setRenderSpotList(allSpotList);
-  }, [allSpotList]);
-
-  // pop over 데이터 변경을 위한 현재 체크된 아이템 잠금 데이터 여부 리스닝 함수
   useEffect(() => {
     if (selectOption === 'all') {
       setPopOverData([
@@ -146,11 +132,12 @@ export default function MyPageSpotList({
   // 공개 여부에 따라 렌더링 할 spot list 정렬
   useEffect(() => {
     setCurrentPage(1);
-    getUser(1, divideCount, 'desc', selectOption);
-  }, [selectOption]);
+    getSpots(1, divideCount, sortOption, selectOption);
+  }, [selectOption, sortOption]);
 
   // 함수 분리 예정
   const onClickDelete = () => {
+    setIsDialogOpened(true);
     // delete 로직
     // delete(checkedList)
   };
@@ -161,13 +148,17 @@ export default function MyPageSpotList({
 
   const onClickLock = () => {};
 
+  const closeDialog = () => {
+    setIsDialogOpened(false);
+  };
+
   const onChangeAllSpots = (
     e: EventFor<'input', 'onChange'>,
     setIsChecked: Dispatch<SetStateAction<boolean>>,
   ) => {
     if (e.currentTarget.checked) {
       const allSpots = allSpotList.map((spot) => {
-        return { spot_id: spot.spot_id, isSecret: spot.isSecret };
+        return { spot_id: spot.spot_id, is_private: spot.is_private };
       });
       setCheckedList(allSpots);
       setIsChecked(true);
@@ -189,20 +180,20 @@ export default function MyPageSpotList({
     setSortOption(option);
     setCheckedList([]);
     setCurrentPage(1);
-    getUser(1, divideCount, option, selectOption);
+    getSpots(1, divideCount, option, selectOption);
   };
 
   const onChangeCheckedList = (
     spot_id: TMyPageSpot['spot_id'],
-    isSecret: boolean,
+    is_private: boolean,
   ) => {
-    if (!checkedList.length) setCheckedList([{ spot_id, isSecret }]);
+    if (!checkedList.length) setCheckedList([{ spot_id, is_private }]);
     else {
       // checkList 배열의 각 값을 확인 후 값이 없으면 체크 리스트 추가 값이 있으면 filter로 제거
       const found = checkedList.find((checked) => checked.spot_id === spot_id);
 
       if (!found) {
-        setCheckedList([...checkedList, { spot_id, isSecret }]);
+        setCheckedList([...checkedList, { spot_id, is_private }]);
       } else {
         const filteredList = checkedList.filter(
           (checkedId) => checkedId.spot_id !== spot_id,
@@ -212,7 +203,7 @@ export default function MyPageSpotList({
     }
   };
 
-  return !!placeList.length ? (
+  return (
     <>
       <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
@@ -226,6 +217,13 @@ export default function MyPageSpotList({
 
       {!!checkedList.length && (
         <div className="relative">
+          {isDialogOpened && (
+            <Dialog
+              text="기록을 삭제하시겠나요?"
+              closeModal={closeDialog}
+              handleConfirm={onClickDelete}
+            />
+          )}
           <FloatingActionButton
             popOverData={popOverData}
             openedIcon={<PlusIcon className="rotate-45 duration-200 z-30" />}
@@ -234,7 +232,7 @@ export default function MyPageSpotList({
         </div>
       )}
 
-      {renderSpotList.map(({ spot_id, ...data }, idx) => (
+      {allSpotList.map(({ spot_id, ...data }, idx) => (
         <MyPageSpotItem
           idx={idx}
           key={spot_id}
@@ -245,16 +243,11 @@ export default function MyPageSpotList({
           selectOption={selectOption}
         />
       ))}
-      
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPage={totalPageCount}
       />
     </>
-  ) : (
-    <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-      장소를 추가해주세요.
-    </div>
   );
 }

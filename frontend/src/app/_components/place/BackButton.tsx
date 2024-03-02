@@ -9,7 +9,7 @@ export default function BackButton({ className }: { className?: string }) {
 
   return (
     <button className={`${className} p-2`} onClick={back}>
-      <ChevronLeftIcon className="w-6 h-6" />
+      <ChevronLeftIcon className="w-6 h-6 stroke-gray-500 stroke-2 [stroke-linecap:round] [stroke-linejoin:round]" />
     </button>
   );
 }

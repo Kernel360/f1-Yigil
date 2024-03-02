@@ -171,3 +171,5 @@ gradle-app.setting
 
 src/test/java/kr/co/yigil/global/config/JasyptApplicationTest.java
 
+# Q class
+support/src/main/generated/*

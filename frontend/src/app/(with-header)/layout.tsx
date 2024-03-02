@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import '../globals.css';
 import Header from '../_components/header/Header';
-import { authenticateUser } from '../_components/mypage/hooks/myPageActions';
 
 export default async function WithHeaderLayout({
   children,

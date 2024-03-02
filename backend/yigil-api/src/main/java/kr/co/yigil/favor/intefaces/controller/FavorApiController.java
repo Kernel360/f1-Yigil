@@ -4,7 +4,7 @@ import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.application.FavorFacade;
-import kr.co.yigil.favor.intefaces.dto.mapper.FavorDto;
+import kr.co.yigil.favor.intefaces.dto.FavorDto;
 import kr.co.yigil.favor.intefaces.dto.mapper.FavorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -36,6 +35,7 @@ public class Place {
 
     private String address;
 
+    @Column(columnDefinition = "double default 0")
     private double rate;
 
     @Column(columnDefinition = "geometry(Point,4326)")

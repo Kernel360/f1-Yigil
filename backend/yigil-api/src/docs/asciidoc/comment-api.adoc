@@ -1,0 +1,72 @@
+== COMMENT API
+
+=== comment 생성
+
+==== Request
+로그인 필수 : N
+include::{snippets}/comments/comment-create/request-body.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/comments/comment-create/http-request.adoc[]
+
+==== Response
+include::{snippets}/comments/comment-create/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/comments/comment-create/http-response.adoc[]
+
+=== 댓글 리스트 조회
+
+==== Request
+로그인 필수 : N
+
+===== Path parameter
+include::{snippets}/comments/comment-get-parent/path-parameters.adoc[]
+include::{snippets}/comments/comment-get-parent/query-parameters.adoc[]
+===== HTTP Request 예시
+include::{snippets}/comments/comment-get-parent/http-request.adoc[]
+==== Response
+include::{snippets}/comments/comment-get-parent/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/comments/comment-get-parent/http-response.adoc[]
+
+=== 대댓글 리스트 조회
+
+==== Request
+로그인 필수 : N
+
+===== Path parameter
+include::{snippets}/comments/comment-get-child/path-parameters.adoc[]
+include::{snippets}/comments/comment-get-child/query-parameters.adoc[]
+===== HTTP Request 예시
+include::{snippets}/comments/comment-get-child/http-request.adoc[]
+==== Response
+include::{snippets}/comments/comment-get-child/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/comments/comment-get-child/http-response.adoc[]
+
+=== comment 삭제
+
+==== Request
+로그인 필수 : Y
+include::{snippets}/comments/comment-delete/request-body.adoc[]
+===== HTTP Request 예시
+include::{snippets}/comments/comment-delete/http-request.adoc[]
+==== Response
+include::{snippets}/comments/comment-delete/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/comments/comment-delete/http-response.adoc[]
+
+=== comment 수정
+
+==== Request
+로그인 필수 : Y
+
+include::{snippets}/comments/comment-update/request-body.adoc[]
+===== HTTP Request 예시
+include::{snippets}/comments/comment-update/http-request.adoc[]
+
+==== Response
+include::{snippets}/comments/comment-update/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/comments/comment-update/http-response.adoc[]

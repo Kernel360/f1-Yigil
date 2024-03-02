@@ -31,28 +31,29 @@ export const regionSchema = z.enum(REGION_VALUES);
 
 export const placeSchema = z.object({
   id: z.number().int(),
-  region: regionSchema,
-  name: z.string(),
-  image_url: z.string(),
-  liked: z.boolean().optional(),
-  review_count: z.number().int(),
-  liked_count: z.number().int(),
-  rating: z.number(),
+  place_name: z.string(),
+  review_count: z.string(),
+  thumbnail_image_url: z.string(),
+  rate: z.string(),
+  bookmarked: z.boolean(),
 });
+
+export type TPlace = z.infer<typeof placeSchema>;
 
 export const placesSchema = z.array(placeSchema);
 
 export const placeDetailSchema = z.object({
   id: z.number().int(),
-  name: z.string(),
+  place_name: z.string(),
   address: z.string(),
-  image_url: z.string(),
-  map_image_url: z.string(),
-  liked: z.boolean().optional(),
+  thumbnail_image_url: z.string(),
+  map_static_image_url: z.string(),
+  bookmarked: z.boolean(),
   review_count: z.number().int(),
-  liked_count: z.number().int(),
-  rating: z.number(),
+  rate: z.number(),
 });
+
+export type TPlaceDetail = z.infer<typeof placeDetailSchema>;
 
 export const searchItemSchema = z.object({
   title: z.string(),
@@ -85,3 +86,12 @@ export const postSpotResponseSchema = z.object({
 });
 
 export type TPostSpotSuccess = z.infer<typeof postSpotResponseSchema>;
+
+export const myInfoSchema = z.object({
+  member_id: z.number().int(),
+  email: z.string().email(),
+  nickname: z.string(),
+  profile_image_url: z.string().url(),
+  following_count: z.number().int(),
+  follower_count: z.number().int(),
+});
