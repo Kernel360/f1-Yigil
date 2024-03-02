@@ -5,17 +5,21 @@ import React from 'react';
 
 export default async function MyPageMySpot() {
   const spotList = await getMyPageSpots();
-
-  const parsedSpotList = myPageSpotListSchema.safeParse(spotList.content[0]);
-
+  const parsedSpotList = myPageSpotListSchema.safeParse(spotList.content);
   if (!parsedSpotList.success) return <div>failed</div>;
 
   return (
     <>
-      <MyPageSpotList
-        placeList={spotList.content}
-        totalPage={spotList.totalPage}
-      />
+      {!!spotList.content.length ? (
+        <MyPageSpotList
+          placeList={spotList.content}
+          totalPage={spotList.total_pages}
+        />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          장소를 추가해주세요.
+        </div>
+      )}
     </>
   );
 }

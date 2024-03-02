@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -32,6 +33,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseServiceImplTest {
@@ -46,6 +48,9 @@ public class CourseServiceImplTest {
     private CourseSeriesFactory courseSeriesFactory;
     @Mock
     private CourseSpotSeriesFactory courseSpotSeriesFactory;
+
+    @Mock
+    private FileUploader fileUploader;
 
     @InjectMocks
     private CourseServiceImpl courseService;
@@ -73,10 +78,14 @@ public class CourseServiceImplTest {
         Member member = mock(Member.class);
         List<Spot> spots = new ArrayList<>();
         Course course = mock(Course.class);
+        MultipartFile mockMultipartFile = mock(MultipartFile.class);
+        AttachFile mockAttachFile = mock(AttachFile.class);
 
+        when(command.getMapStaticImageFile()).thenReturn(mockMultipartFile);
         when(memberReader.getMember(memberId)).thenReturn(member);
         when(courseSpotSeriesFactory.store(command, memberId)).thenReturn(spots);
-        when(command.toEntity(spots, member)).thenReturn(course);
+        when(fileUploader.upload(mockMultipartFile)).thenReturn(mockAttachFile);
+        when(command.toEntity(spots, member, mockAttachFile)).thenReturn(course);
 
         courseService.registerCourse(command, memberId);
 
@@ -88,9 +97,8 @@ public class CourseServiceImplTest {
     void retrieveCourseInfo_ShouldReturnCourseInfo() {
         Long courseId = 1L;
         Course course = mock(Course.class);
-        AttachFile attachFile = mock(AttachFile.class);
         when(courseReader.getCourse(courseId)).thenReturn(course);
-        when(course.getMapStaticImageFile()).thenReturn(attachFile);
+        when(course.getMapStaticImageFileUrl()).thenReturn("~~~");
         Main result = courseService.retrieveCourseInfo(courseId);
 
         assertNotNull(result);

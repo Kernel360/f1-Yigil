@@ -10,7 +10,6 @@ import { headerPopOverData } from '../ui/popover/constants';
 import AddIcon from '/public/icons/add.svg'; // 지울것
 import { TUserInfo } from '../mypage/types';
 import { authenticateUser } from '../mypage/hooks/myPageActions';
-import { useSession } from 'next-auth/react';
 
 export default function HeaderClient() {
   const router = useRouter();
@@ -42,7 +41,7 @@ export default function HeaderClient() {
   useLayoutEffect(() => {
     (async () => {
       const memberInfo = await authenticateUser();
-      if (memberInfo.code === 9201) {
+      if (memberInfo?.code === 9201) {
         setIsLoading(false);
 
         return;

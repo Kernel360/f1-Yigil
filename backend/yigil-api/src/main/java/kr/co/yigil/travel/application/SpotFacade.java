@@ -29,7 +29,6 @@ public class SpotFacade {
 
     public void registerSpot(RegisterSpotRequest command, Long memberId) {
         spotService.registerSpot(command, memberId);
-        command.getFiles().forEach(fileUploader::upload);
     }
 
     public Main retrieveSpotInfo(Long spotId) {
@@ -38,7 +37,6 @@ public class SpotFacade {
 
     public void modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
         spotService.modifySpot(command, spotId, memberId);
-        command.getUpdatedImages().forEach(image -> fileUploader.upload(image.getImageFile()));
     }
 
     public void deleteSpot(Long spotId, Long memberId) {

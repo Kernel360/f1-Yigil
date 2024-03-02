@@ -1,6 +1,6 @@
 package kr.co.yigil.member.domain;
 
-import kr.co.yigil.file.FileUploadUtil;
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.domain.MemberInfo.Main;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberReader memberReader;
     private final MemberStore memberStore;
     private final FollowReader followReader;
+    private final FileUploader fileUploader;
 
     @Override
     @Transactional
@@ -31,15 +32,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public boolean updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request) {
-
+    public void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request) {
         var member = memberReader.getMember(memberId);
-        var currentProfileUrl = member.getProfileImageUrl();
-        var updatedProfile = FileUploadUtil.predictAttachFile(request.getProfileImageFile());
+        var updatedProfile = fileUploader.upload(request.getProfileImageFile());
 
         member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
             updatedProfile.getFileUrl());
-
-        return currentProfileUrl == null || !currentProfileUrl.equals(updatedProfile.getFileUrl());
     }
 }

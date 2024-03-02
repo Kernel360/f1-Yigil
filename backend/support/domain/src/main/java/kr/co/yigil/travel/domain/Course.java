@@ -22,7 +22,7 @@ import org.locationtech.jts.geom.LineString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course extends Travel {
 
-    @Column(columnDefinition = "geometry(LineString,4326)")
+    @Column(columnDefinition = "geometry(LineString,5186)")
     private LineString path;
 
     @OneToMany(cascade = CascadeType.PERSIST)
@@ -61,5 +61,9 @@ public class Course extends Travel {
         updateTravel(description, rate);
         this.spots.clear();
         this.spots.addAll(spots);
+    }
+
+    public String getMapStaticImageFileUrl() {
+        return mapStaticImageFile.getFileUrl();
     }
 }

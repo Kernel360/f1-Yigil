@@ -28,6 +28,7 @@ export const requestWithoutCookie =
           ...headerInitOption,
           ...headers,
         },
+        next: { revalidate: 0 },
 
         ...(body && { body: JSON.stringify(body) }),
       });

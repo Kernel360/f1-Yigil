@@ -9,13 +9,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import kr.co.yigil.member.application.MemberFacade;
@@ -62,7 +65,7 @@ class MemberApiControllerTest {
                 .withScheme("https")
                 .withHost("yigil.co.kr")
                 .withPort(80)
-                )
+            )
             .build();
     }
 
@@ -100,8 +103,6 @@ class MemberApiControllerTest {
 
         verify(memberFacade).getMemberInfo(anyLong());
     }
-
-
 
     @DisplayName("내 정보 업데이트가 잘 되는지")
     @Test
@@ -171,6 +172,7 @@ class MemberApiControllerTest {
     @DisplayName("회원 정보 조회가 잘 되는지")
     @Test
     void WhenGetMemberInfo_ThenShouldReturnOk() throws Exception {
+        Long memberId = 1L;
         MemberDto.Main response = Main.builder()
             .memberId(1L)
             .email("test@yigil.co.kr")
@@ -183,12 +185,15 @@ class MemberApiControllerTest {
         when(memberFacade.getMemberInfo(anyLong())).thenReturn(mock(MemberInfo.Main.class));
         when(memberDtoMapper.of(any(MemberInfo.Main.class))).thenReturn(response);
 
-        mockMvc.perform(get("/api/v1/members/{memberId}", 1L))
+        mockMvc.perform(get("/api/v1/members/{memberId}", memberId))
             .andExpect(status().isOk())
             .andDo(document(
                 "members/get-member-info",
                 getDocumentRequest(),
                 getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("memberId").description("회원 ID")
+                ),
                 responseFields(
                     fieldWithPath("member_id").description("회원 ID"),
                     fieldWithPath("email").description("이메일"),

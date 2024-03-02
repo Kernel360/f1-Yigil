@@ -36,7 +36,7 @@ export default function Select({
   useEffect(() => {
     const selectedLabel = list.find((item) => item.value === selectOption);
     setViewSelectOption(selectedLabel?.label);
-  }, [selectOption]);
+  }, [selectOption, list]);
 
   return (
     <ul

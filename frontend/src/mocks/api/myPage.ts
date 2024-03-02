@@ -6,8 +6,8 @@ const handlers = [
     if (cookies.SESSION) {
       return HttpResponse.json({
         status: 200,
-        data: myPageData,
         code: 0,
+        ...myPageData,
       });
     } else {
       return HttpResponse.json({

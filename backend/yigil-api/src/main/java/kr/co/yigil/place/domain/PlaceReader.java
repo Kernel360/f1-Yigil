@@ -10,4 +10,6 @@ public interface PlaceReader {
     Place getPlace(Long placeId);
 
     List<Place> getPopularPlace();
+
+    List<Place> getPlaceInRegion(Long regionId);
 }

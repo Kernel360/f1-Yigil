@@ -1,8 +1,6 @@
 import { EventFor } from '@/types/type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import IconWithCounts from '../IconWithCounts';
 import Select from '../ui/select/Select';
-import StarIcon from '/public/icons/star.svg';
 
 const selectBtns = [
   { label: '전체', value: 'all' },

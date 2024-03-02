@@ -80,7 +80,7 @@ export default function ImagesContainer({
         setActiveId(null);
       }
     },
-    [images],
+    [images, dispatch],
   );
 
   function removeImage(filename: string) {

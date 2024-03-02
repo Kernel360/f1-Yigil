@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
+import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,30 @@ public class PlaceServiceImpl implements PlaceService {
                     return new Main(place, spotCount);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Main> getPlaceInRegion(Long regionId, Accessor accessor) {
+        return placeReader.getPlaceInRegion(regionId).stream()
+                .map(place -> {
+                    int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    if (accessor.isMember()) {
+                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
+                        return new Main(place, spotCount, isBookmarked);
+                    }
+                    return new Main(place, spotCount);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Detail retrievePlace(Long placeId, Accessor accessor) {
+        var place = placeReader.getPlace(placeId);
+        int spotCount = placeCacheReader.getSpotCount(placeId);
+        return accessor.isMember()
+                ? new Detail(place, spotCount, bookmarkReader.isBookmarked(accessor.getMemberId(), placeId))
+                : new Detail(place, spotCount);
     }
 
     @Override

@@ -39,4 +39,8 @@ public class AttachFile {
         this.originalFileName = originalFileName;
         this.fileSize = fileSize;
     }
+
+    public String getFileUrl() {
+        return "http://cdn.yigil.co.kr/" + fileUrl;
+    }
 }

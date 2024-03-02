@@ -3,14 +3,18 @@ package kr.co.yigil.place.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +24,8 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"name", "address"})})
+    @UniqueConstraint(columnNames = {"name", "address"})}
+)
 public class Place {
 
     @Id
@@ -33,16 +38,20 @@ public class Place {
 
     private double rate;
 
-    @Column(columnDefinition = "geometry(Point,4326)")
+    @Column(columnDefinition = "geometry(Point,5186)")
     private Point location;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "map_static_image_file_id")
     private AttachFile mapStaticImageFile;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_file_id")
     private AttachFile imageFile;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
 
     public Place(final String name, final String address, final double rate,
         final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
@@ -63,5 +72,17 @@ public class Place {
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
+    }
+
+    public String getImageFileUrl() {
+        return imageFile.getFileUrl();
+    }
+
+    public String getMapStaticImageFileUrl() {
+        return mapStaticImageFile.getFileUrl();
+    }
+
+    public void updateRegion(Region region) {
+        this.region = region;
     }
 }

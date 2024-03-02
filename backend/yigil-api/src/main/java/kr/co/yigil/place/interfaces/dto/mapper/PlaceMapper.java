@@ -3,11 +3,14 @@ package kr.co.yigil.place.interfaces.dto.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.place.domain.PlaceInfo;
+import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
+import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -39,4 +42,21 @@ public interface PlaceMapper {
         List<PlaceInfoDto> dtos = mains.stream().map(this::mainToDto).collect(Collectors.toList());
         return new PopularPlaceResponse(dtos);
     }
+
+    default RegionPlaceResponse toRegionPlaceResponse(List<Main> mains) {
+        List<PlaceInfoDto> dtos = mains.stream().map(this::mainToDto).collect(Collectors.toList());
+        return new RegionPlaceResponse(dtos);
+    }
+
+    @Mappings({
+            @Mapping(target = "id", source = "id"),
+            @Mapping(target = "placeName", source = "name"),
+            @Mapping(target = "address", source = "address"),
+            @Mapping(target = "thumbnailImageUrl", source = "thumbnailImageUrl"),
+            @Mapping(target = "mapStaticImageUrl", source = "mapStaticImageUrl"),
+            @Mapping(target = "isBookmarked", source = "bookmarked"),
+            @Mapping(target = "rate", source = "rate"),
+            @Mapping(target = "reviewCount", source = "reviewCount")
+    })
+    PlaceDetailInfoDto toPlaceDetailInfoDto(Detail detail);
 }
