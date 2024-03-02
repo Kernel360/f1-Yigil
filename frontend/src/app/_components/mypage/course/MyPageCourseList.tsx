@@ -191,7 +191,7 @@ export default function MyPageCourseList({
             <Dialog
               text="기록을 삭제하시겠나요?"
               closeModal={closeDialog}
-              handleConfirm={() =>
+              handleConfirm={async () =>
                 onClickDelete(checkedList.map((list) => list.course_id))
               }
             />
