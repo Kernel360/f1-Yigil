@@ -7,6 +7,7 @@ import kr.co.yigil.comment.application.CommentFacade;
 import kr.co.yigil.comment.domain.CommentInfo;
 import kr.co.yigil.comment.interfaces.dto.CommentDto;
 import kr.co.yigil.comment.interfaces.dto.CommentDto.CommentCreateRequest;
+import kr.co.yigil.comment.interfaces.dto.CommentDto.CommentCreateResponse;
 import kr.co.yigil.comment.interfaces.dto.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -40,10 +41,8 @@ public class CommentApiController {
     ) {
 
         var command = commentMapper.of(commentCreateRequest);
-        var commentCreateResponse = commentFacade.createComment(
-            accessor.getMemberId(), travelId, command);
-        var response = commentMapper.of(commentCreateResponse);
-        return ResponseEntity.ok().body(response);
+        commentFacade.createComment(accessor.getMemberId(), travelId, command);
+        return ResponseEntity.ok().body(new CommentCreateResponse("댓글 생성 성공"));
     }
 
     @GetMapping("/travels/{travel_id}")
@@ -93,9 +92,7 @@ public class CommentApiController {
         @PathVariable("comment_id") Long commentId,
         @Auth final Accessor accessor
     ) {
-        var commentDeleteResponse = commentFacade.deleteComment(
-            accessor.getMemberId(), commentId);
-        var response = commentMapper.of(commentDeleteResponse);
-        return ResponseEntity.ok().body(response);
+        commentFacade.deleteComment(accessor.getMemberId(), commentId);
+        return ResponseEntity.ok().body(new CommentDto.CommentDeleteResponse("댓글 삭제 성공"));
     }
 }

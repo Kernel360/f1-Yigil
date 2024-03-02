@@ -2,8 +2,8 @@ package kr.co.yigil.comment.domain;
 
 
 import java.util.List;
-import kr.co.yigil.comment.domain.CommentCommand.CommentCreateRequest;
 import kr.co.yigil.comment.domain.CommentCommand.CommentUpdateRequest;
+import kr.co.yigil.comment.domain.CommentInfo.CommentNotiInfo;
 import kr.co.yigil.comment.domain.CommentInfo.CommentsResponse;
 import kr.co.yigil.comment.domain.CommentInfo.CommentsUnitInfo;
 import kr.co.yigil.member.Member;
@@ -11,7 +11,6 @@ import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.domain.TravelReader;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -29,26 +28,27 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentInfo.CommentCreateResponse createComment(Long memberId, Long travelId,
+    public CommentNotiInfo createComment(Long memberId, Long travelId,
         CommentCommand.CommentCreateRequest commentCreateRequest) {
 
         Member member = memberReader.getMember(memberId);
         Travel travel = travelReader.getTravel(travelId);
-        Comment parentComment = getParentComment(commentCreateRequest);
-
+        Comment parentComment = commentReader.findComment(commentCreateRequest.getParentId()).orElse(null);
         var newComment = commentCreateRequest.toEntity(member, travel, parentComment);
-        commentStore.save(newComment);
+        var savedComment = commentStore.save(newComment);
 
         commentCountCacheStore.increaseCommentCount(travelId);
-        return new CommentInfo.CommentCreateResponse("댓글 생성 성공");
+
+        return new CommentNotiInfo(savedComment);
     }
 
     @Override
     @Transactional
     public void deleteComment(Long memberId, Long commentId) {
-        var travelId = commentReader.getTravelIdByCommentId(commentId);
-        Comment comment = commentReader.getCommentByMemberId(commentId, memberId);
+        Comment comment = commentReader.getCommentWithMemberId(commentId, memberId);
         commentStore.delete(comment);
+
+        var travelId = commentReader.getTravelIdByCommentId(commentId);
         commentCountCacheStore.decreaseCommentCount(travelId);
     }
 
@@ -76,18 +76,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentInfo.UpdateResponse updateComment(Long commentId, Long memberId, CommentUpdateRequest command) {
-        Comment comment = commentReader.getCommentByMemberId(commentId, memberId);
-        Long travelId = commentReader.getTravelIdByCommentId(commentId);
+    public CommentNotiInfo updateComment(Long commentId, Long memberId, CommentUpdateRequest command) {
+        Comment comment = commentReader.getCommentWithMemberId(commentId, memberId);
         comment.updateComment(command.getContent());
-        return new CommentInfo.UpdateResponse(travelId);
-    }
 
-    @Nullable
-    private Comment getParentComment(CommentCreateRequest commentCreateRequest) {
-        if (commentCreateRequest.getParentId() == null) {
-            return null;
-        }
-        return commentReader.getComment(commentCreateRequest.getParentId());
+        return new CommentNotiInfo(comment);
     }
 }

@@ -2,7 +2,6 @@ package kr.co.yigil.comment.interfaces.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,6 @@ public class CommentDto {
 
         private String content;
         private Long parentId;
-        private Long notifiedMemberId;
     }
 
     @Data
@@ -28,8 +26,6 @@ public class CommentDto {
     public static class CommentUpdateRequest {
 
         private String content;
-        private Long parentId;
-        private Long notifiedMemberId;
     }
 
     //response
@@ -71,12 +67,12 @@ public class CommentDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CommentUpdateResponse {
-        private String message;
+        private String content;
     }
 
     @Getter
-    @Builder
     @ToString
+    @AllArgsConstructor
     public static class CommentDeleteResponse {
 
         private final String message;
