@@ -1,5 +1,4 @@
-package kr.co.yigil.global.config;
-
+package kr.co.yigil.batch.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
