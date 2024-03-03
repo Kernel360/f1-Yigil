@@ -55,7 +55,7 @@ public class CommentReaderImpl implements CommentReader {
     }
 
     @Override
-    public int getChildrenCommentCount(Long travelId) {
-        return commentRepository.countByParentId(travelId);
+    public int getChildrenCommentCount(Long parentId) {
+        return commentRepository.countByParentId(parentId);
     }
 }
