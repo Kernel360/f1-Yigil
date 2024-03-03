@@ -67,7 +67,7 @@ public class CommentDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CommentUpdateResponse {
-        private String content;
+        private String message;
     }
 
     @Getter

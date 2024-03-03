@@ -1,7 +1,6 @@
 package kr.co.yigil.comment.domain;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.Getter;
 import org.springframework.data.domain.Slice;
 
@@ -19,15 +18,15 @@ public class CommentInfo {
             this.travelMemberId = comment.getTravel().getMember().getId();
         }
 
-        public Optional<Long> getNotificationMemberId(Long memberId) {
+        public Long getNotificationMemberId(Long memberId) {
             if (parentCommentMemberId != null && !parentCommentMemberId.equals(memberId)) {
-                return Optional.of(parentCommentMemberId);
+                return parentCommentMemberId;
             }
             assert travelMemberId != null;
             if (!travelMemberId.equals(memberId)) {
-                return Optional.of(travelMemberId);
+                return travelMemberId;
             }
-            return Optional.empty();
+            return null;
         }
     }
 

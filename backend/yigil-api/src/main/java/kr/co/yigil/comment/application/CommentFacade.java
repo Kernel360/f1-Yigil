@@ -1,6 +1,5 @@
 package kr.co.yigil.comment.application;
 
-import java.util.Optional;
 import kr.co.yigil.comment.domain.CommentCommand;
 import kr.co.yigil.comment.domain.CommentCommand.CommentUpdateRequest;
 import kr.co.yigil.comment.domain.CommentInfo;
@@ -26,10 +25,11 @@ public class CommentFacade {
         var createdCommentInfo = commentService.createComment(memberId, travelId,
             commentCreateRequest);
 
-        Optional<Long> notifiedMemberId = createdCommentInfo.getNotificationMemberId(memberId);
-        notifiedMemberId.ifPresent(
-            id -> notificationService.sendNotification(NotificationType.NEW_COMMENT, memberId, id)
-        );
+        Long notifiedMemberId = createdCommentInfo.getNotificationMemberId(memberId);
+        if (notifiedMemberId != null) {
+            notificationService.sendNotification(NotificationType.NEW_COMMENT, memberId,
+                notifiedMemberId);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -52,10 +52,12 @@ public class CommentFacade {
         CommentUpdateRequest command) {
         var updatedCommentInfo = commentService.updateComment(commentId, memberId, command);
 
-        Optional<Long> notifiedMemberId = updatedCommentInfo.getNotificationMemberId(memberId);
-        notifiedMemberId.ifPresent(
-            id -> notificationService.sendNotification(NotificationType.UPDATE_COMMENT, memberId, id)
-        );
+        Long notifiedMemberId = updatedCommentInfo.getNotificationMemberId(memberId);
+        if (notifiedMemberId != null) {
+            notificationService.sendNotification(NotificationType.UPDATE_COMMENT, memberId,
+                notifiedMemberId);
+        }
+
     }
 }
 
