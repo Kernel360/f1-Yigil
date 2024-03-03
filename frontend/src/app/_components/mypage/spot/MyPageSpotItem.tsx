@@ -35,14 +35,14 @@ const MyPageSpotItem = ({
 
     if (found) setIsChecked(true);
     else setIsChecked(false);
-  }, [checkedList.length]);
+  }, [checkedList, spot_id]);
 
   useEffect(() => {
     if (selectOption === 'all' && is_private) {
       setIsCheckDisabled(true);
       setIsChecked(false);
     }
-  }, [selectOption, checkedList.length]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
+  }, [selectOption, checkedList, is_private]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
 
   return (
     <div
