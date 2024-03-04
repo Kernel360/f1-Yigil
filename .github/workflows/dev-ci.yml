@@ -1,0 +1,91 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: ./backend
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:    
+    ## jdk setting
+    - uses: actions/checkout@v3
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    ## application.yml 생성 후 secret 값 복붙
+
+    - name: make properties files
+      shell: bash
+      env:
+        JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
+        KAKAO_TOKEN_INFO_URL: ${{ secrets.KAKAO_TOKEN_INFO_URL }}
+      run: |
+        echo "Jasypt-Secret-Key=$JASYPT_SECRET_KEY" > ./yigil-api/src/main/resources/config.properties
+        echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./yigil-api/src/main/resources/url.properties
+        
+    - name: Set api application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_PORT@|${{ secrets.REDIS_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@S3_BUCKET@|${{ secrets.S3_BUCKET }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+    # cat ./yigil-api/src/main/resources/*
+    
+    - name: Set admin application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@REDIS_PORT@|${{ secrets.REDIS_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@S3_BUCKET@|${{ secrets.S3_BUCKET }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@JWT_SECRET@|${{ secrets.JWT_SECRET }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_HOST@|${{ secrets.MAIL_HOST }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_PORT@|${{ secrets.MAIL_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
+    # cat ./yigil-admin/src/main/resources/*
+
+
+    # Gradle Build를 위한 권한 부여
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    # Gradle Build (test 제외)
+    - name: Build with Gradle
+      run: ./gradlew clean build test
+

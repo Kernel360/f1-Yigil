@@ -1,18 +1,22 @@
 import MyPageCourseList from '@/app/_components/mypage/course/MyPageCourseList';
 import { getMyPageCourses } from '@/app/_components/mypage/hooks/myPageActions';
-import { myPageCourseListSchema } from '@/types/myPageResponse';
 import React from 'react';
 
 export default async function MyPageMyCourse() {
   const courseList = await getMyPageCourses();
-  const parsedCourseList = myPageCourseListSchema.safeParse(courseList.content);
-  if (!parsedCourseList.success) return <div>failed</div>;
+  if (!courseList.success) return <div>failed</div>;
   return (
     <>
-      <MyPageCourseList
-        placeList={courseList.content}
-        totalPage={courseList.total_pages}
-      />
+      {!!courseList.data.content.length ? (
+        <MyPageCourseList
+          placeList={courseList.data.content}
+          totalPage={courseList.data.total_pages}
+        />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          장소를 추가해주세요.
+        </div>
+      )}
     </>
   );
 }

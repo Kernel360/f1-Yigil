@@ -4,25 +4,20 @@
 # documentation.
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
-name: Java CI with Gradle
-
+name: Java CD with Gradle
 on:
-  pull_request:
-    branches: [ "develop" ]
-
+  push:
+    branches: [ "main" ]
 permissions:
   contents: read
-
 defaults:
   run:
     working-directory: ./backend
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    steps:
     
-    steps:    
     ## jdk setting
     - uses: actions/checkout@v3
     - name: Set up JDK 21
@@ -30,17 +25,16 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-    ## application.yml 생성 후 secret 값 복붙
-
-    - name: make properties files
-      shell: bash
-      env:
-        JASYPT_SECRET_KEY: ${{ secrets.JASYPT_SECRET_KEY }}
-        KAKAO_TOKEN_INFO_URL: ${{ secrets.KAKAO_TOKEN_INFO_URL }}
+    ## docker-compose 설치
+    - name: Set up Docker-Compose
       run: |
-        echo "Jasypt-Secret-Key=$JASYPT_SECRET_KEY" > ./yigil-api/src/main/resources/config.properties
-        echo "kakao.token.info.url=$KAKAO_TOKEN_INFO_URL" > ./yigil-api/src/main/resources/url.properties
-        
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+    ## docker-compose.yml 생성 후 secret 값 복붙
+    - uses: actions/checkout@v3
+    - run: touch docker-compose.yml
+    - run: echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
+    ## application secrets 값 주입
     - name: Set api application.yml
       run: |
         sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
@@ -57,7 +51,6 @@ jobs:
         sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
     # cat ./yigil-api/src/main/resources/*
-    
     - name: Set admin application.yml
       run: |
         sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-admin/src/main/resources/application.yml
@@ -80,12 +73,37 @@ jobs:
         sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
     # cat ./yigil-admin/src/main/resources/*
 
-
+    ## Dockerfile secrets 값 주입
+    - name: Set Dockerfile
+      run: |
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/Dockerfile
+        sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/Dockerfile
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    
     # Gradle Build (test 제외)
     - name: Build with Gradle
-      run: ./gradlew clean build -x test
-
+      run: ./gradlew clean build
+    # DockerHub 로그인
+    - name: DockerHub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    # Docker 이미지 빌드
+    - name: Docker-Compose Image Build
+      run: docker-compose build
+    # DockerHub Push
+    - name: DockerHub Push
+      run: docker-compose push
+    
+    # EC2 인스턴스 접속 및 애플리케이션 실행
+    - name: Application Run
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        
+        script: |
+          allin
