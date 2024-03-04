@@ -27,12 +27,11 @@ export default function MyPageFollowingList({
 }) {
   const [selectOption, setSelectOption] = useState('id');
   const [currentPage, setCurrentPage] = useState(0);
-  // TODO: api 바뀌면 page 1로 바꿔야 함
   const [hasNext, setHasNext] = useState(false);
   const [allFollowingList, setAllFollowingList] =
     useState<TMyPageFollow[]>(followingList);
-
   const ref = useRef(null);
+
   const onChangeSelectOption = (option: string | number) => {
     if (typeof option === 'number') return;
     setSelectOption(option);
@@ -66,11 +65,9 @@ export default function MyPageFollowingList({
           defaultValue="이름순"
         />
       </div>
-      <div className="flex justify-center items-center py-3">
-        {allFollowingList.map((follow, idx) => (
-          <MyPageFollowingItem key={follow.member_id} {...follow} idx={idx} />
-        ))}
-      </div>
+      {allFollowingList.map((follow, idx) => (
+        <MyPageFollowingItem key={follow.member_id} {...follow} idx={idx} />
+      ))}
     </div>
   );
 }

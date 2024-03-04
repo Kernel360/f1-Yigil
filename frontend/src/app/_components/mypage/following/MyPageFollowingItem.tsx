@@ -24,7 +24,7 @@ export default function MyPageFollowingItem({
     setIsFollowing(!isFollowing);
   };
   return (
-    <>
+    <div className="flex justify-center items-center py-3">
       <RoundProfile img={profile_image_url} size={48} />
       <div className="grow ml-4 text-gray-900">{nickname}</div>
       <button
@@ -35,6 +35,6 @@ export default function MyPageFollowingItem({
       >
         팔로잉
       </button>
-    </>
+    </div>
   );
 }

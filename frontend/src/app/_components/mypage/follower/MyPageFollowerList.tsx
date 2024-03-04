@@ -64,11 +64,10 @@ export default function MyPageFollowerList({
           defaultValue="이름순"
         />
       </div>
-      <div className="grid grid-rows-4">
-        {allFollowerList.map((follow, idx) => (
-          <MyPageFollowerItem key={follow.member_id} {...follow} idx={idx} />
-        ))}
-      </div>
+
+      {allFollowerList.map((follow, idx) => (
+        <MyPageFollowerItem key={follow.member_id} {...follow} idx={idx} />
+      ))}
     </div>
   );
 }

@@ -35,9 +35,11 @@ export default function MyPageFollowerItem({
     <div className="flex justify-center items-center py-3">
       {/* <div className="flex items-center"> */}
       <RoundProfile img={profile_image_url} size={48} />
-      <div className="ml-4 text-gray-900 grow">{nickname}</div>
+      <div className="ml-4 text-gray-900  overflow-hidden text-ellipsis whitespace-nowrap break-words">
+        {nickname}
+      </div>
       <button
-        className={` ml-4 text-start  ${
+        className={`ml-4 text-start grow shrink-0 ${
           isFollowing ? 'text-gray-500' : 'text-blue-500'
         }`}
         onClick={onClickFollowingBtn}
@@ -45,9 +47,10 @@ export default function MyPageFollowerItem({
         {isFollowing ? '팔로잉' : '팔로우'}
       </button>
       {/* </div> */}
-      <div className="grow-[4]"></div>
+      {/* <div className="grow-[4]"></div> */}
       <button
-        className={`bg-gray-200 text-gray-500 rounded-md px-6 py-2 leading-5`}
+        onClick={() => setIsDialogOpened(true)}
+        className={`bg-gray-200 text-gray-500 rounded-md px-6 py-2 leading-5 shrink-0 ml-6`}
       >
         삭제
       </button>

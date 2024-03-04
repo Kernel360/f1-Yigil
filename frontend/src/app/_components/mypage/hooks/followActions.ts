@@ -13,7 +13,7 @@ const BASE_URL =
     : 'http://localhost:3000/api';
 
 export const getFollowingList = async (
-  pageNo: number = 0,
+  pageNo: number = 1,
   size: number = 5,
   sortOrder: string = 'asc',
 ) => {
@@ -27,7 +27,7 @@ export const getFollowingList = async (
   );
   const followingList = await res.json();
   const parsedFollowList = myPageFollowListSchema.safeParse(followingList);
-  return parsedFollowList;
+  return JSON.parse(JSON.stringify(parsedFollowList));
 };
 
 export const getFollowerList = async (
@@ -45,7 +45,7 @@ export const getFollowerList = async (
   );
   const followerList = await res.json();
   const parsedFollowList = myPageFollowListSchema.safeParse(followerList);
-  return parsedFollowList;
+  return JSON.parse(JSON.stringify(parsedFollowList));
 };
 
 export const addFollow = async (memberId: number) => {
