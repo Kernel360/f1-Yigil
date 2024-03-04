@@ -23,14 +23,14 @@ const handlers = [
             content: myPlaceSpotData
               .filter((item) => item.spot_id < 6)
               .sort((a, b) => a.spot_id - b.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .filter((item) => item.spot_id < 6)
                 .sort((a, b) => a.spot_id - b.spot_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -43,14 +43,14 @@ const handlers = [
             content: myPlaceSpotData
               .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
               .sort((a, b) => a.spot_id - b.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
                 .sort((a, b) => a.spot_id - b.spot_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -63,7 +63,7 @@ const handlers = [
             content: myPlaceSpotData
               .filter((item) => item.spot_id > 11)
               .sort((a, b) => a.spot_id - b.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -71,7 +71,7 @@ const handlers = [
                 .filter((item) => item.spot_id > 11)
                 .sort((a, b) => a.spot_id - b.spot_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -86,14 +86,14 @@ const handlers = [
             content: myPlaceSpotData
               .sort((a, b) => b.spot_id - a.spot_id)
               .filter((item, idx) => idx < 5),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .sort((a, b) => b.spot_id - a.spot_id)
                 .filter((item, idx) => idx < 5),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -107,14 +107,14 @@ const handlers = [
               .sort((a, b) => b.spot_id - a.spot_id)
               .filter((item, idx) => idx > 5 && idx <= 10),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .sort((a, b) => b.spot_id - a.spot_id)
                 .filter((item, idx) => idx > 5 && idx <= 10),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -127,14 +127,14 @@ const handlers = [
             content: myPlaceSpotData
               .sort((a, b) => b.spot_id - a.spot_id)
               .filter((item, idx) => idx > 10),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .sort((a, b) => b.spot_id - a.spot_id)
                 .filter((item, idx) => idx > 10),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -149,14 +149,14 @@ const handlers = [
             content: myPlaceSpotData
               .sort((a, b) => b.rate - a.rate)
               .filter((item, idx) => idx < 5),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .sort((a, b) => b.rate - a.rate)
                 .filter((item, idx) => idx < 5),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -169,14 +169,14 @@ const handlers = [
             content: myPlaceSpotData
               .sort((a, b) => b.rate - a.rate)
               .filter((item, idx) => idx > 5 && idx <= 10),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .sort((a, b) => b.rate - a.rate)
                 .filter((item, idx) => idx > 5 && idx <= 10),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -189,14 +189,14 @@ const handlers = [
             content: myPlaceSpotData
               .filter((item, idx) => idx > 11)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceSpotData
                 .sort((a, b) => b.rate - a.rate)
                 .filter((item, idx) => idx > 11),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -214,7 +214,7 @@ const handlers = [
               .sort((a, b) => a.spot_id - b.spot_id)
               .filter((item, idx) => idx < 6)
               .filter((item) => !item.is_private),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -222,7 +222,7 @@ const handlers = [
                 .sort((a, b) => a.spot_id - b.spot_id)
                 .filter((item, idx) => idx < 6)
                 .filter((item) => !item.is_private),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -236,7 +236,7 @@ const handlers = [
               .filter((item, idx) => idx > 5 && idx <= 10)
               .filter((item) => !item.is_private)
               .sort((a, b) => a.spot_id - b.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -244,7 +244,7 @@ const handlers = [
                 .filter((item, idx) => idx > 5 && idx <= 10)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => a.spot_id - b.spot_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -258,7 +258,7 @@ const handlers = [
               .filter((item, idx) => idx > 10)
               .filter((item) => !item.is_private)
               .sort((a, b) => a.spot_id - b.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -266,7 +266,7 @@ const handlers = [
                 .filter((item, idx) => idx > 10)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => a.spot_id - b.spot_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -282,7 +282,7 @@ const handlers = [
               .filter((item) => item.spot_id < 6)
               .filter((item) => !item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -291,7 +291,7 @@ const handlers = [
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -306,7 +306,7 @@ const handlers = [
               .filter((item) => !item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -315,7 +315,7 @@ const handlers = [
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -330,7 +330,7 @@ const handlers = [
               .filter((item) => !item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -339,7 +339,7 @@ const handlers = [
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -355,7 +355,7 @@ const handlers = [
               .filter((item) => item.spot_id < 6)
               .filter((item) => !item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -363,7 +363,7 @@ const handlers = [
                 .filter((item) => item.spot_id < 6)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -377,7 +377,7 @@ const handlers = [
               .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
               .filter((item) => !item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -385,7 +385,7 @@ const handlers = [
                 .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -399,7 +399,7 @@ const handlers = [
               .filter((item) => item.spot_id > 11)
               .filter((item) => !item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -407,7 +407,7 @@ const handlers = [
                 .filter((item) => item.spot_id > 11)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -425,7 +425,7 @@ const handlers = [
               .filter((item) => item.spot_id < 6)
               .filter((item) => item.is_private)
               .sort((a, b) => a.spot_id - b.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -433,7 +433,7 @@ const handlers = [
                 .filter((item) => item.spot_id < 6)
                 .filter((item) => item.is_private)
                 .sort((a, b) => a.spot_id - b.spot_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -447,7 +447,7 @@ const handlers = [
               .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
               .filter((item) => item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -455,7 +455,7 @@ const handlers = [
                 .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -469,7 +469,7 @@ const handlers = [
               .filter((item, idx) => idx > 11)
               .filter((item) => item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -477,7 +477,7 @@ const handlers = [
                 .filter((item, idx) => idx > 11)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -493,7 +493,7 @@ const handlers = [
               .filter((item, idx) => idx < 6)
               .filter((item) => item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -502,7 +502,7 @@ const handlers = [
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -517,7 +517,7 @@ const handlers = [
               .filter((item) => item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -526,7 +526,7 @@ const handlers = [
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -541,7 +541,7 @@ const handlers = [
               .filter((item) => item.is_private)
               .sort((a, b) => b.spot_id - a.spot_id),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -550,7 +550,7 @@ const handlers = [
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.spot_id - a.spot_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -566,7 +566,7 @@ const handlers = [
               .filter((item) => item.spot_id < 6)
               .filter((item) => item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -574,7 +574,7 @@ const handlers = [
                 .filter((item) => item.spot_id < 6)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -588,7 +588,7 @@ const handlers = [
               .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
               .filter((item) => item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -596,7 +596,7 @@ const handlers = [
                 .filter((item) => item.spot_id > 6 && item.spot_id <= 11)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -610,7 +610,7 @@ const handlers = [
               .filter((item) => item.spot_id > 11)
               .filter((item) => item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -618,7 +618,7 @@ const handlers = [
                 .filter((item) => item.spot_id > 11)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -631,7 +631,7 @@ const handlers = [
     }
   }),
 
-  http.get(`api/v1/members/courses`, ({ request }) => {
+  http.get(`api/v1/courses/my`, ({ request }) => {
     const [page, size, sortBy, sortOrder] = request.url
       .split('?')[1]
       .split('&');
@@ -652,14 +652,14 @@ const handlers = [
             content: myPlaceCourseData
               .filter((item) => item.course_id < 6)
               .sort((a, b) => a.course_id - b.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceCourseData
                 .filter((item) => item.course_id < 6)
                 .sort((a, b) => a.course_id - b.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -672,14 +672,14 @@ const handlers = [
             content: myPlaceCourseData
               .filter((item) => item.course_id > 5 && item.course_id <= 11)
               .sort((a, b) => a.course_id - b.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceCourseData
                 .filter((item) => item.course_id > 5 && item.course_id <= 11)
                 .sort((a, b) => a.course_id - b.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -692,7 +692,7 @@ const handlers = [
             content: myPlaceCourseData
               .filter((item) => item.course_id > 11)
               .sort((a, b) => a.course_id - b.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -700,7 +700,7 @@ const handlers = [
                 .filter((item) => item.course_id > 11)
                 .sort((a, b) => a.course_id - b.course_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -715,14 +715,14 @@ const handlers = [
             content: myPlaceCourseData
               .filter((item) => item.course_id < 6)
               .sort((a, b) => b.course_id - a.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceCourseData
                 .filter((item) => item.course_id < 6)
                 .sort((a, b) => b.course_id - a.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -735,14 +735,14 @@ const handlers = [
             content: myPlaceCourseData
               .filter((item) => item.course_id > 6 && item.course_id <= 11)
               .sort((a, b) => b.course_id - a.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceCourseData
                 .filter((item) => item.course_id > 6 && item.course_id <= 11)
                 .sort((a, b) => b.course_id - a.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -755,14 +755,14 @@ const handlers = [
             content: myPlaceCourseData
               .filter((item) => item.course_id > 11)
               .sort((a, b) => b.course_id - a.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceCourseData
                 .filter((item) => item.course_id > 11)
                 .sort((a, b) => b.course_id - a.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -777,14 +777,14 @@ const handlers = [
             content: myPlaceCourseData
               .sort((a, b) => b.rate - a.rate)
               .filter((item, idx) => idx < 5),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceCourseData
                 .filter((item, idx) => idx < 5)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -797,14 +797,14 @@ const handlers = [
             content: myPlaceCourseData
               .sort((a, b) => b.rate - a.rate)
               .filter((item, idx) => idx > 5 && idx <= 10),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
               content: myPlaceCourseData
                 .sort((a, b) => b.rate - a.rate)
                 .filter((item, idx) => idx > 5 && idx <= 10),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -822,7 +822,7 @@ const handlers = [
               .sort((a, b) => a.course_id - b.course_id)
               .filter((item, idx) => idx < 6)
               .filter((item) => !item.is_private),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -830,7 +830,7 @@ const handlers = [
                 .sort((a, b) => a.course_id - b.course_id)
                 .filter((item, idx) => idx < 6)
                 .filter((item) => !item.is_private),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -844,7 +844,7 @@ const handlers = [
               .filter((item, idx) => idx > 5 && idx <= 10)
               .filter((item) => !item.is_private)
               .sort((a, b) => a.course_id - b.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -852,7 +852,7 @@ const handlers = [
                 .filter((item, idx) => idx > 5 && idx <= 10)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => a.course_id - b.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -868,7 +868,7 @@ const handlers = [
               .filter((item) => item.course_id < 6)
               .filter((item) => !item.is_private)
               .sort((a, b) => b.course_id - a.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -877,7 +877,7 @@ const handlers = [
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.course_id - a.course_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -892,7 +892,7 @@ const handlers = [
               .filter((item) => !item.is_private)
               .sort((a, b) => b.course_id - a.course_id),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -901,7 +901,7 @@ const handlers = [
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.course_id - a.course_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -916,7 +916,7 @@ const handlers = [
               .filter((item) => !item.is_private)
               .sort((a, b) => b.course_id - a.course_id),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -925,7 +925,7 @@ const handlers = [
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.course_id - a.course_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -941,7 +941,7 @@ const handlers = [
               .filter((item) => item.course_id < 6)
               .filter((item) => !item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -949,7 +949,7 @@ const handlers = [
                 .filter((item) => item.course_id < 6)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -963,7 +963,7 @@ const handlers = [
               .filter((item) => item.course_id > 6 && item.course_id <= 11)
               .filter((item) => !item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -971,7 +971,7 @@ const handlers = [
                 .filter((item) => item.course_id > 6 && item.course_id <= 11)
                 .filter((item) => !item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -989,7 +989,7 @@ const handlers = [
               .filter((item) => item.course_id < 6)
               .filter((item) => item.is_private)
               .sort((a, b) => a.course_id - b.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -997,7 +997,7 @@ const handlers = [
                 .filter((item) => item.course_id < 6)
                 .filter((item) => item.is_private)
                 .sort((a, b) => a.course_id - b.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -1011,7 +1011,7 @@ const handlers = [
               .filter((item) => item.course_id > 6 && item.course_id <= 11)
               .filter((item) => item.is_private)
               .sort((a, b) => b.course_id - a.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -1019,7 +1019,7 @@ const handlers = [
                 .filter((item) => item.course_id > 6 && item.course_id <= 11)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.course_id - a.course_id),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -1035,7 +1035,7 @@ const handlers = [
               .filter((item, idx) => idx < 6)
               .filter((item) => item.is_private)
               .sort((a, b) => b.course_id - a.course_id),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -1044,7 +1044,7 @@ const handlers = [
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.course_id - a.course_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -1059,7 +1059,7 @@ const handlers = [
               .filter((item) => item.is_private)
               .sort((a, b) => b.course_id - a.course_id),
 
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -1068,7 +1068,7 @@ const handlers = [
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.course_id - a.course_id),
 
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -1084,7 +1084,7 @@ const handlers = [
               .filter((item) => item.course_id < 6)
               .filter((item) => item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -1092,7 +1092,7 @@ const handlers = [
                 .filter((item) => item.course_id < 6)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {
@@ -1106,7 +1106,7 @@ const handlers = [
               .filter((item) => item.course_id > 6 && item.course_id <= 11)
               .filter((item) => item.is_private)
               .sort((a, b) => b.rate - a.rate),
-            total_page: 13,
+            total_pages: 13,
           });
           return HttpResponse.json(
             {
@@ -1114,7 +1114,7 @@ const handlers = [
                 .filter((item) => item.course_id > 6 && item.course_id <= 11)
                 .filter((item) => item.is_private)
                 .sort((a, b) => b.rate - a.rate),
-              total_page: 13,
+              total_pages: 13,
             },
             {
               headers: {

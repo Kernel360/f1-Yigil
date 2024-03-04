@@ -7,12 +7,19 @@ export default async function MyPageMyCourse() {
   const courseList = await getMyPageCourses();
   const parsedCourseList = myPageCourseListSchema.safeParse(courseList.content);
   if (!parsedCourseList.success) return <div>failed</div>;
+
   return (
     <>
-      <MyPageCourseList
-        placeList={courseList.content}
-        totalPage={courseList.total_pages}
-      />
+      {!!courseList.content.length ? (
+        <MyPageCourseList
+          placeList={courseList.content}
+          totalPage={courseList.total_pages}
+        />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          코스를 추가해주세요.
+        </div>
+      )}
     </>
   );
 }
