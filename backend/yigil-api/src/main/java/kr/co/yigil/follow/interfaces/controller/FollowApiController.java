@@ -66,7 +66,7 @@ public class FollowApiController {
     @MemberOnly
     public ResponseEntity<FollowDto.FollowingResponse> getMyFollowingList(
         @Auth final Accessor accessor,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
@@ -81,7 +81,7 @@ public class FollowApiController {
     @GetMapping("/{memberId}/followers")
     public ResponseEntity<FollowDto.FollowerResponse> getMemberFollowerList(
         @PathVariable("memberId") final Long memberId,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
@@ -95,7 +95,7 @@ public class FollowApiController {
     @GetMapping("/{memberId}/followings")
     public ResponseEntity<FollowDto.FollowingResponse> getMemberFollowingList(
         @PathVariable("memberId") final Long memberId,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
