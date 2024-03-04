@@ -5,13 +5,13 @@ import FloatingActionButton from '../../FloatingActionButton';
 import { TPopOverData } from '../../ui/popover/types';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
-import { TMyPageCourse } from '../types';
 import MyPageCourseItem from './MyPageCourseItem';
 import UnLockIcon from '/public/icons/unlock.svg';
 import TrashIcon from '/public/icons/trash.svg';
 import LockIcon from '/public/icons/lock.svg';
 import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
+import { TMyPageCourse } from '@/types/myPageResponse';
 import { deleteMyCourse, getMyPageCourses } from '../hooks/myPageActions';
 import Dialog from '../../ui/dialog/Dialog';
 
@@ -60,14 +60,17 @@ export default function MyPageCourseList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, total_pages } = await getMyPageCourses(
+    const courseList = await getMyPageCourses(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setTotalPageCount(total_pages);
-    setAllCourseList([...content]);
+    if (!courseList.success) {
+      return setAllCourseList([]);
+    }
+    setTotalPageCount(courseList.data.total_pages);
+    setAllCourseList([...courseList.data.content]);
   };
 
   useEffect(() => {

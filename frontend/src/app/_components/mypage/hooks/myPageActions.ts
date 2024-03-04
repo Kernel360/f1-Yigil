@@ -1,5 +1,9 @@
 'use server';
 
+import {
+  myPageCourseListSchema,
+  myPageSpotListSchema,
+} from '@/types/myPageResponse';
 import { revalidatePath } from 'next/cache';
 import { requestWithCookie } from '../../api/httpRequest';
 
@@ -20,13 +24,15 @@ export const getMyPageSpots = async (
   sortOrder: string = 'desc',
   selectOption: string = 'all',
 ) => {
-  return myPageSpotRequest(
+  const spotList = await myPageSpotRequest(
     `?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'
         ? `createdAt&sortOrder=${sortOrder}`
         : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();
+  const parsedSpotList = myPageSpotListSchema.safeParse(spotList);
+  return parsedSpotList;
 };
 
 export const deleteMySpot = async (spotId: number) => {
@@ -37,19 +43,21 @@ export const deleteMySpot = async (spotId: number) => {
   }
 };
 
-export const getMyPageCourses = (
+export const getMyPageCourses = async (
   pageNo: number = 1,
   size: number = 5,
   sortOrder: string = 'desc',
   selectOption: string = 'all',
 ) => {
-  return myPageCourseRequest(
+  const courseList = await myPageCourseRequest(
     `?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'
         ? `createdAt&sortOrder=${sortOrder}`
         : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();
+  const parsedCourseList = myPageCourseListSchema.safeParse(courseList);
+  return parsedCourseList;
 };
 
 export const deleteMyCourse = async (courseId: number) => {
