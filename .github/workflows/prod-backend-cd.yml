@@ -37,10 +37,10 @@ jobs:
     ## application secrets 값 주입
     - name: Set api application.yml
       run: |
-        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL_PROD }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
-        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL_PROD }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-api/src/main/resources/application.yml
@@ -88,8 +88,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: ap-northeast-2
       ## ECR에 로그인합니다
     - name: Login to Amazon ECR
@@ -107,8 +107,8 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_HOST_PROD }}
-        username: ${{ secrets.EC2_USERNAME_PROD }}
-        key: ${{ secrets.EC2_KEY_PROD }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
         
         script: |
           awslogin
