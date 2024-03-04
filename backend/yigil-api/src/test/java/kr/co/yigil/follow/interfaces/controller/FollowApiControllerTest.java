@@ -125,7 +125,7 @@ public class FollowApiControllerTest {
         when(followDtoMapper.of(any(FollowInfo.FollowersResponse.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/follows/followers")
-                .param("page", "0")
+                .param("page", "1")
                 .param("size", "5")
                 .param("sortBy", "id")
                 .param("sortOrder", "asc")

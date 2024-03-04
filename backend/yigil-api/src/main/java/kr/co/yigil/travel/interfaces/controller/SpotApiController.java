@@ -41,11 +41,11 @@ public class SpotApiController {
     @GetMapping("/place/{placeId}")
     public ResponseEntity<SpotsInPlaceResponse> getSpotsInPlace(
             @PathVariable("placeId") Long placeId,
-            @PageableDefault(size = 5)Pageable pageable,
+            @PageableDefault(size = 5, page = 1)Pageable pageable,
             @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         var result = spotFacade.getSpotSliceInPlace(placeId, pageRequest);
         SpotsInPlaceResponse response = spotMapper.spotsSliceToSpotInPlaceResponse(result);
         return ResponseEntity.ok().body(response);

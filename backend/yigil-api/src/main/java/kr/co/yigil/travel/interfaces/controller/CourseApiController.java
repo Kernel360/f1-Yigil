@@ -40,11 +40,11 @@ public class CourseApiController {
     @GetMapping("/place/{placeId}")
     public ResponseEntity<CoursesInPlaceResponse> getCoursesInPlace(
             @PathVariable("placeId") Long placeId,
-            @PageableDefault(size = 5) Pageable pageable,
+            @PageableDefault(size = 5, page = 1) Pageable pageable,
             @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         var result = courseFacade.getCourseSliceInPlace(placeId, pageRequest);
         var response = courseMapper.courseSliceToCourseInPlaceResponse(result);
         return ResponseEntity.ok().body(response);
@@ -109,12 +109,12 @@ public class CourseApiController {
     @MemberOnly
     public ResponseEntity<MyCoursesResponse> getMyCourseList(
         @Auth final Accessor accessor,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
         @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
 
         final var memberCoursesInfo = courseFacade.getMemberCoursesInfo(
