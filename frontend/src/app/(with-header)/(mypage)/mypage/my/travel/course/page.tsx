@@ -7,7 +7,7 @@ export default async function MyPageMyCourse() {
   if (!courseList.success) return <div>failed</div>;
   return (
     <>
-      {!!courseList.data.content ? (
+      {!!courseList.data.content.length ? (
         <MyPageCourseList
           placeList={courseList.data.content}
           totalPage={courseList.data.total_pages}

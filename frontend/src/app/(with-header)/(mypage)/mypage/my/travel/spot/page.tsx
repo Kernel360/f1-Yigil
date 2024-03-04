@@ -9,7 +9,7 @@ export default async function MyPageMySpot() {
 
   return (
     <>
-      {!!spotList.data.content ? (
+      {!!spotList.data.content.length ? (
         <MyPageSpotList
           placeList={spotList.data.content}
           totalPage={spotList.data.total_pages}
