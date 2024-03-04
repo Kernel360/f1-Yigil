@@ -48,9 +48,9 @@ public class SecurityConfig {
                 .authenticationProvider(customAuthenticationProvider)
                 .userDetailsService(customUserDetailsService)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/api/v1/admins/login").permitAll()
-                        .requestMatchers("/admin/api/v1/admins/signup").permitAll()
-                        .requestMatchers("/admin/api/v1/admins/test").permitAll()
+                        .requestMatchers("/api/v1/admins/login").permitAll()
+                        .requestMatchers("/api/v1/admins/signup").permitAll()
+                        .requestMatchers("/api/v1/admins/test").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
