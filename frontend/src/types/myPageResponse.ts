@@ -38,7 +38,7 @@ export const myPageFollowSchema = z.object({
   profile_image_url: z.string(),
 });
 
-export type TMyPageFollowing = z.infer<typeof myPageFollowSchema>;
+export type TMyPageFollow = z.infer<typeof myPageFollowSchema>;
 
 export const myPageFollowListSchema = z.object({
   content: z.array(myPageFollowSchema),

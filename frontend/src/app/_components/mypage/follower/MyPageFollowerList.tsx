@@ -2,8 +2,8 @@
 import { TMyPageFollow } from '@/types/myPageResponse';
 import React, { useEffect, useRef, useState } from 'react';
 import Select from '../../ui/select/Select';
-import { getFollowingList } from '../hooks/followActions';
-import MyPageFollowingItem from './MyPageFollowingItem';
+import { getFollowerList } from '../hooks/followActions';
+import MyPageFollowerItem from './MyPageFollowerItem';
 
 const selectList = [
   {
@@ -20,18 +20,16 @@ const selectList = [
   },
 ];
 
-export default function MyPageFollowingList({
-  followingList,
+export default function MyPageFollowerList({
+  followerList,
 }: {
-  followingList: TMyPageFollow[];
+  followerList: TMyPageFollow[];
 }) {
   const [selectOption, setSelectOption] = useState('id');
-  const [currentPage, setCurrentPage] = useState(0);
-  // TODO: api 바뀌면 page 1로 바꿔야 함
+  const [currentPage, setCurrentPage] = useState(1);
   const [hasNext, setHasNext] = useState(false);
-  const [allFollowingList, setAllFollowingList] =
-    useState<TMyPageFollow[]>(followingList);
-
+  const [allFollowerList, setAllFollowerList] =
+    useState<TMyPageFollow[]>(followerList);
   const ref = useRef(null);
   const onChangeSelectOption = (option: string | number) => {
     if (typeof option === 'number') return;
@@ -44,13 +42,13 @@ export default function MyPageFollowingList({
     size: number,
     selectOption: string,
   ) => {
-    const followingList = await getFollowingList(pageNo, size, selectOption);
-    if (!followingList.success) {
-      setAllFollowingList([]);
+    const followerList = await getFollowerList(pageNo, size, selectOption);
+    if (!followerList.success) {
+      setAllFollowerList([]);
       return;
     }
-    setAllFollowingList(followingList.data.content);
-    setHasNext(followingList.data.has_next);
+    setAllFollowerList(followerList.data.content);
+    setHasNext(followerList.data.has_next);
   };
 
   useEffect(() => {
@@ -66,9 +64,9 @@ export default function MyPageFollowingList({
           defaultValue="이름순"
         />
       </div>
-      <div className="flex justify-center items-center py-3">
-        {allFollowingList.map((follow, idx) => (
-          <MyPageFollowingItem key={follow.member_id} {...follow} idx={idx} />
+      <div className="grid grid-rows-4">
+        {allFollowerList.map((follow, idx) => (
+          <MyPageFollowerItem key={follow.member_id} {...follow} idx={idx} />
         ))}
       </div>
     </div>
