@@ -1,6 +1,7 @@
 package kr.co.yigil.comment.infrastructure;
 
 
+import java.util.Optional;
 import kr.co.yigil.comment.domain.Comment;
 import kr.co.yigil.comment.domain.CommentReader;
 import kr.co.yigil.global.exception.BadRequestException;
@@ -16,13 +17,13 @@ public class CommentReaderImpl implements CommentReader {
     private final CommentRepository commentRepository;
 
     @Override
-    public Comment getComment(Long commentId) {
-        return commentRepository.findById(commentId).orElseThrow(
-            () -> new BadRequestException(ExceptionCode.NOT_FOUND_COMMENT_ID));
+    public Optional<Comment> findComment(Long commentId) {
+        if(commentId == null) return Optional.empty();
+        return commentRepository.findById(commentId);
     }
 
     @Override
-    public Comment getCommentByMemberId(Long commentId, Long memberId) {
+    public Comment getCommentWithMemberId(Long commentId, Long memberId) {
         return commentRepository.findByIdAndMemberId(commentId, memberId).orElseThrow(
             () -> new BadRequestException(ExceptionCode.INVALID_AUTHORITY));
     }
@@ -54,7 +55,7 @@ public class CommentReaderImpl implements CommentReader {
     }
 
     @Override
-    public int getChildrenCommentCount(Long travelId) {
-        return commentRepository.countByParentId(travelId);
+    public int getChildrenCommentCount(Long parentId) {
+        return commentRepository.countByParentId(parentId);
     }
 }

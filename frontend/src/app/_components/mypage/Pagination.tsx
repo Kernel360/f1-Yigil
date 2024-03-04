@@ -13,7 +13,7 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
     const start = Math.floor((currentPage - 1) / 5) * 5 + 1;
     const end = Math.min(start + 5 - 1, totalPage);
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }, [currentPage, totalPage, 5]);
+  }, [currentPage, totalPage]);
 
   const addPage = () => {
     if (currentPage >= totalPage) return;

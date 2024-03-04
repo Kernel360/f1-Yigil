@@ -5,12 +5,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberService;
+import kr.co.yigil.region.domain.Region;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +38,11 @@ class MemberFacadeTest {
         String socialLoginId = "12345";
         String nickname = "member1";
         String profileImageUrl = "http://profile.com/member1";
+
+        List<Region> regions = List.of(
+            new Region(),
+            new Region()
+        );
         int followingCount = 10;
         int followerCount = 20;
 
@@ -52,6 +59,7 @@ class MemberFacadeTest {
             followingCount,
             followerCount
         );
+
         MemberInfo.Main mockMemberInfoMain = new MemberInfo.Main(mockMember, mockFollowCount);
 
         when(memberService.retrieveMemberInfo(memberId)).thenReturn(mockMemberInfoMain);

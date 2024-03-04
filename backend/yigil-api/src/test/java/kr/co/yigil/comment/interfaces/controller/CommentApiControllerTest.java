@@ -81,18 +81,12 @@ class CommentApiControllerTest {
 
         Accessor accessor = Accessor.member(1L);
 
-        CommentDto.CommentCreateRequest request = new CommentDto.CommentCreateRequest("content", 1L,
-            1L);
+        CommentDto.CommentCreateRequest request = new CommentDto.CommentCreateRequest("content", 1L);
 
         String json = objectMapper.writeValueAsString(request);
 
         when(commentMapper.of(any(CommentDto.CommentCreateRequest.class))).thenReturn(
             mock(CommentCommand.CommentCreateRequest.class));
-        when(commentFacade.createComment(anyLong(), anyLong(),
-            any(CommentCommand.CommentCreateRequest.class))).thenReturn(
-            mock(CommentInfo.CommentCreateResponse.class));
-        when(commentMapper.of(any(CommentInfo.CommentCreateResponse.class))).thenReturn(
-            mockResponse);
 
         mockMvc.perform(post("/api/v1/comments/travels/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -105,13 +99,14 @@ class CommentApiControllerTest {
                 getDocumentResponse(),
                 requestFields(
                     fieldWithPath("content").description("댓글 내용"),
-                    fieldWithPath("parentId").description("부모 댓글 id"),
-                    fieldWithPath("notifiedMemberId").description("알림을 받을 회원 id")
+                    fieldWithPath("parentId").description("부모 댓글 id")
                 ),
                 responseFields(
                     fieldWithPath("message").description("응답 메시지")
                 )
             ));
+
+        verify(commentFacade).createComment(anyLong(), anyLong(), any(CommentCommand.CommentCreateRequest.class));
     }
 
     @DisplayName("부모 댓글 조회 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
@@ -222,14 +217,12 @@ class CommentApiControllerTest {
     @DisplayName("comment 수정 요청이 왔을 때 200 응답과 response가 잘 반환되는지")
     @Test
     void whenUpdateComment_thenReturns200AndCommentUpdateResponse() throws Exception {
-        CommentDto.CommentUpdateRequest request = new CommentDto.CommentUpdateRequest("content", 1L,
-            1L);
+        CommentDto.CommentUpdateRequest request = new CommentDto.CommentUpdateRequest("content");
 
         String json = objectMapper.writeValueAsString(request);
 
         when(commentMapper.of(any(CommentDto.CommentUpdateRequest.class))).thenReturn(
             mock(CommentCommand.CommentUpdateRequest.class));
-
 
         mockMvc.perform(post("/api/v1/comments/{commentId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -243,9 +236,7 @@ class CommentApiControllerTest {
                     parameterWithName("commentId").description("댓글 id")
                 ),
                 requestFields(
-                    fieldWithPath("content").description("댓글 내용"),
-                    fieldWithPath("parentId").description("부모 댓글 id"),
-                    fieldWithPath("notifiedMemberId").description("알림을 받을 회원 id")
+                    fieldWithPath("content").description("댓글 내용")
                 ),
                 responseFields(
                     fieldWithPath("message").description("응답 메시지")
@@ -259,12 +250,8 @@ class CommentApiControllerTest {
     @Test
     void whenDeleteComment_thenReturns200AndCommentDeleteResponse() throws Exception {
 
-        CommentDto.CommentDeleteResponse mockResponse = CommentDto.CommentDeleteResponse.builder()
-            .message("댓글 삭제 성공")
-            .build();
+        CommentDto.CommentDeleteResponse mockResponse = new CommentDto.CommentDeleteResponse("댓글 삭제 성공");
 
-        when(commentFacade.deleteComment(anyLong(), anyLong())).thenReturn(
-            mock(CommentInfo.DeleteResponse.class));
         when(commentMapper.of(any(CommentInfo.DeleteResponse.class))).thenReturn(
             mockResponse);
 
@@ -282,5 +269,7 @@ class CommentApiControllerTest {
                     fieldWithPath("message").description("응답 메시지")
                 )
             ));
+
+        verify(commentFacade).deleteComment(anyLong(), anyLong());
     }
 }

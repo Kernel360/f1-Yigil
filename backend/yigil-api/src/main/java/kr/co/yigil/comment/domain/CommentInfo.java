@@ -7,14 +7,26 @@ import org.springframework.data.domain.Slice;
 public class CommentInfo {
 
     @Getter
-    public static class CommentCreateResponse {
+    public static class CommentNotiInfo {
 
-        private final String message;
-        private final Long notifiedReceiverId;
+        private final Long parentCommentMemberId;
+        private final Long travelMemberId;
 
-        public CommentCreateResponse(String message) {
-            this.message = message;
-            this.notifiedReceiverId = null;
+        public CommentNotiInfo(Comment comment) {
+            this.parentCommentMemberId =
+                comment.getParent() != null ? comment.getParent().getMember().getId() : null;
+            this.travelMemberId = comment.getTravel().getMember().getId();
+        }
+
+        public Long getNotificationMemberId(Long memberId) {
+            if (parentCommentMemberId != null && !parentCommentMemberId.equals(memberId)) {
+                return parentCommentMemberId;
+            }
+            assert travelMemberId != null;
+            if (!travelMemberId.equals(memberId)) {
+                return travelMemberId;
+            }
+            return null;
         }
     }
 
@@ -22,13 +34,14 @@ public class CommentInfo {
     @Getter
     public static class CommentsResponse {
 
-        private List<CommentsUnitInfo> content;
-        private boolean hasNext;
+        private final List<CommentsUnitInfo> content;
+        private final boolean hasNext;
 
         public CommentsResponse(List<CommentsUnitInfo> comments, boolean hasNext) {
             this.content = comments;
             this.hasNext = hasNext;
         }
+
         public CommentsResponse(Slice<Comment> comments) {
             this.content = comments.getContent().stream().map(CommentsUnitInfo::new).toList();
             this.hasNext = comments.hasNext();
@@ -55,6 +68,7 @@ public class CommentInfo {
             this.childCount = childCount;
             this.createdAt = comment.getCreatedAt().toString();
         }
+
         public CommentsUnitInfo(Comment comment) {
             this.id = comment.getId();
             this.content = comment.getContent();
@@ -66,23 +80,7 @@ public class CommentInfo {
         }
     }
 
-    @Getter
-    public static class DeleteResponse {
+    public record DeleteResponse(String message) {
 
-        private final String message;
-
-        public DeleteResponse(String message) {
-            this.message = message;
-        }
-    }
-
-    @Getter
-    public static class UpdateResponse {
-
-        private final Long notifiedReceiverId;
-
-        public UpdateResponse(Long notifiedReceiverId) {
-            this.notifiedReceiverId = notifiedReceiverId;
-        }
     }
 }
