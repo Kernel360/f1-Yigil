@@ -1,13 +1,20 @@
 import z from 'zod';
 
 import { placesSchema } from '@/types/response';
+import { getBaseUrl } from '@/app/utilActions';
+
+async function fetchMorePopularPlaces() {
+  const BASE_URL = await getBaseUrl();
+
+  const response = await fetch(`${BASE_URL}/v1/places/popular`);
+
+  return await response.json();
+}
 
 async function fetchPopularPlaces() {
-  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+  const BASE_URL = await getBaseUrl();
 
-  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
-
-  const response = await fetch(`${baseUrl}/v1/places/popular`, {
+  const response = await fetch(`${BASE_URL}/v1/places/popular`, {
     next: { tags: ['popularPlaces'] },
   });
 
@@ -20,6 +27,14 @@ const placeResponseSchema = z.object({
 
 export async function getPopularPlaces() {
   const json = await fetchPopularPlaces();
+
+  const result = placeResponseSchema.safeParse(json);
+
+  return result;
+}
+
+export async function getMorePopularPlaces() {
+  const json = await fetchMorePopularPlaces();
 
   const result = placeResponseSchema.safeParse(json);
 

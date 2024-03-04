@@ -37,12 +37,14 @@ export default async function HomePage() {
       <PlaceList
         title="인기"
         variant="primary"
+        moreUrl="popular"
         data={places}
         isLoggedIn={memberInfo.success}
       />
       <PlaceList
         title="관심 지역"
         variant="secondary"
+        moreUrl="region"
         data={places}
         isLoggedIn={memberInfo.success}
       />
