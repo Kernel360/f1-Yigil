@@ -96,7 +96,7 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
     # Docker 이미지 빌드
     - name: Docker-Compose Image Build
-      run: docker-compose -f build
+      run: docker-compose build
     # DockerHub Push
     - name: DockerHub Push
       run: docker-compose push
