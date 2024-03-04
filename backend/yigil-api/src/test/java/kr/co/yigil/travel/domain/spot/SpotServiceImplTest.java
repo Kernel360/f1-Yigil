@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;

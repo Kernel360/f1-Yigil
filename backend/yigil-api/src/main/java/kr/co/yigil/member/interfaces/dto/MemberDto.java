@@ -1,5 +1,6 @@
 package kr.co.yigil.member.interfaces.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,12 +20,10 @@ public class MemberDto {
     public static class MemberUpdateRequest {
 
         private String nickname;
-
         private String ages;
-
         private String gender;
-
         private MultipartFile profileImageFile;
+        private List<Long> favoriteRegionIds;
     }
 
     @Getter
@@ -36,6 +35,7 @@ public class MemberDto {
         private final String email;
         private final String nickname;
         private final String profileImageUrl;
+        private final List<Long> favoriteRegionIds;
         private final int followingCount;
         private final int followerCount;
     }
