@@ -215,11 +215,13 @@ export default function MyPageCourseList({
           selectOption={selectOption}
         />
       ))}
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPage={totalPageCount}
-      />
+      {!!allCourseList.length && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPage={totalPageCount}
+        />
+      )}
     </>
   );
 }
