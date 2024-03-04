@@ -7,7 +7,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import kr.co.yigil.admin.domain.admin.AdminCommand;
+import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
+import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminService;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
@@ -116,7 +119,32 @@ public class AdminFacadeTest {
         verify(adminService).getAdminInfoByEmail(email);
     }
 
-    @DisplayName("testSignUp 메서드가 AdminService를 잘 호출하는지")
+    @DisplayName("getAdminDetailInfoByEmail 메서드가 AdminDetailInfoResponse를 잘 반환하는지")
+    @Test
+    void getAdminDetailInfoByEmail_ShouldReturnAdminDetailInfoResponse() {
+        String email = "test@test.com";
+        AdminDetailInfoResponse expectedResponse = mock(AdminDetailInfoResponse.class);
+
+        when(adminService.getAdminDetailInfoByEmail(email)).thenReturn(expectedResponse);
+
+        AdminDetailInfoResponse result = adminFacade.getAdminDetailInfoByEmail(email);
+
+        assertEquals(expectedResponse, result);
+        verify(adminService).getAdminDetailInfoByEmail(email);
+    }
+
+    @DisplayName("updateAdminDetailInfo 메서드가 AdminService를 잘 호출하는지")
+    @Test
+    void updateAdminDetailInfo_ShouldCallService() {
+        String email = "test@test.com";
+        AdminUpdateRequest command = mock(AdminUpdateRequest.class);
+
+        adminFacade.updateAdminDetailInfo(email, command);
+
+        verify(adminService).updateAdminDetailInfo(email, command);
+    }
+
+        @DisplayName("testSignUp 메서드가 AdminService를 잘 호출하는지")
     @Test
     void testSignUp_ShouldCallService() {
         doNothing().when(adminService).testSignUp();

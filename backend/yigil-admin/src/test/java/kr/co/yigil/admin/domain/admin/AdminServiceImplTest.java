@@ -1,6 +1,7 @@
 package kr.co.yigil.admin.domain.admin;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -9,6 +10,8 @@ import static org.mockito.Mockito.when;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
+import kr.co.yigil.file.domain.AdminAttachFile;
+import kr.co.yigil.file.domain.FileUploader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +36,8 @@ public class AdminServiceImplTest {
     private JwtTokenProvider jwtTokenProvider;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private FileUploader fileUploader;
 
     @InjectMocks
     private AdminServiceImpl adminService;
@@ -44,7 +49,8 @@ public class AdminServiceImplTest {
         Authentication authentication = mock(Authentication.class);
         JwtToken expectedToken = new JwtToken("mockType", "mockAccessToken", "mockRefreshToken");
 
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
+        when(authenticationManager.authenticate(
+                any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
         when(jwtTokenProvider.generateToken(authentication)).thenReturn(expectedToken);
 
         JwtToken result = adminService.signIn(command);
@@ -58,16 +64,52 @@ public class AdminServiceImplTest {
     @Test
     void getAdminInfoByEmail_ShouldReturnAdminInfoResponse() {
         String email = "test@test.com";
+        String expectedName = "Test Admin";
         Admin admin = mock(Admin.class);
-        AdminInfo.AdminInfoResponse expectedResponse = new AdminInfo.AdminInfoResponse(admin);
 
+        when(admin.getNickname()).thenReturn(expectedName);
         when(adminReader.getAdminByEmail(email)).thenReturn(admin);
 
         AdminInfo.AdminInfoResponse result = adminService.getAdminInfoByEmail(email);
 
-        assertEquals(expectedResponse.getUsername(), result.getUsername());
+        assertEquals(expectedName, result.getNickname());
+
         verify(adminReader).getAdminByEmail(email);
     }
+
+    @DisplayName("getAdminDetailInfoByEmail 메서드가 AdminDetailInfoResponse를 잘 반환하는지")
+    @Test
+    void getAdminDetailInfoByEmail_ShouldReturnAdminDetailInfoResponse() {
+        String email = "test@test.com";
+        String expectedName = "Test Admin";
+        Admin admin = mock(Admin.class);
+
+        when(admin.getNickname()).thenReturn(expectedName);
+        when(adminReader.getAdminByEmail(email)).thenReturn(admin);
+
+        AdminInfo.AdminDetailInfoResponse result = adminService.getAdminDetailInfoByEmail(email);
+
+        assertEquals(expectedName, result.getNickname());
+
+        verify(adminReader).getAdminByEmail(email);
+    }
+
+    @DisplayName("updateAdminDetailInfo 메서드가 Admin을 잘 업데이트하는지")
+    @Test
+    void updateAdminDetailInfo_ShouldUpdateAdmin() {
+        Admin admin = mock(Admin.class);
+        AdminCommand.AdminUpdateRequest command = mock(AdminCommand.AdminUpdateRequest.class);
+        when(adminReader.getAdminByEmail(anyString())).thenReturn(admin);
+        AdminAttachFile adminAttachFile = mock(AdminAttachFile.class);
+        when(adminAttachFile.getFileUrl()).thenReturn("fileUrl");
+        when(fileUploader.upload(any())).thenReturn(adminAttachFile);
+        when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
+
+        adminService.updateAdminDetailInfo("email", command);
+
+        verify(admin).updateAdmin(anyString(), any(), anyString());
+    }
+
 
     @Test
     void testSignUp_ShouldStoreAdmin() {

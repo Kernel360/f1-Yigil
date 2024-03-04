@@ -2,10 +2,13 @@ package kr.co.yigil.admin.domain.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
-import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
+import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
+import kr.co.yigil.file.domain.AdminAttachFile;
+import kr.co.yigil.file.domain.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,10 +28,13 @@ public class AdminServiceImpl implements AdminService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
+    private final FileUploader fileUploader;
+
     @Override
     @Transactional(readOnly = true)
     public JwtToken signIn(LoginRequest command) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(command.getEmail(), command.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                command.getEmail(), command.getPassword());
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
@@ -40,6 +46,23 @@ public class AdminServiceImpl implements AdminService {
     public AdminInfo.AdminInfoResponse getAdminInfoByEmail(String email) {
         Admin admin = adminReader.getAdminByEmail(email);
         return new AdminInfo.AdminInfoResponse(admin);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AdminDetailInfoResponse getAdminDetailInfoByEmail(String email) {
+        Admin admin = adminReader.getAdminByEmail(email);
+        return new AdminDetailInfoResponse(admin);
+    }
+
+    @Override
+    @Transactional
+    public void updateAdminDetailInfo(String email, AdminUpdateRequest command) {
+        Admin admin = adminReader.getAdminByEmail(email);
+        AdminAttachFile updatedProfile = fileUploader.upload(command.getProfileImageFile());
+        String encodedPassword = passwordEncoder.encode(command.getPassword());
+
+        admin.updateAdmin(encodedPassword, command.getNickname(), updatedProfile.getFileUrl());
     }
 
     @Override
@@ -56,5 +79,4 @@ public class AdminServiceImpl implements AdminService {
 
         adminStore.store(admin);
     }
-
 }

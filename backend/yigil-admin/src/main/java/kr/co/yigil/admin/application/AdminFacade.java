@@ -1,7 +1,9 @@
 package kr.co.yigil.admin.application;
 
+import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo;
+import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminService;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
@@ -46,7 +48,16 @@ public class AdminFacade {
         return adminService.getAdminInfoByEmail(email);
     }
 
+    public AdminDetailInfoResponse getAdminDetailInfoByEmail(String email) {
+        return adminService.getAdminDetailInfoByEmail(email);
+    }
+
+    public void updateAdminDetailInfo(String email, AdminUpdateRequest command) {
+        adminService.updateAdminDetailInfo(email, command);
+    }
+
     public void testSignUp() {
         adminService.testSignUp();
     }
+
 }

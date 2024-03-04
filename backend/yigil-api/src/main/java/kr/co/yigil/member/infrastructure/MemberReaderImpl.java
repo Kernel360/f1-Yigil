@@ -18,7 +18,7 @@ public class MemberReaderImpl implements MemberReader {
     @Override
     public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+                .orElseThrow(() ->new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 
     @Override

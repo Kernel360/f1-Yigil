@@ -9,12 +9,15 @@ import kr.co.yigil.admin.interfaces.dto.mapper.AdminMapper;
 import kr.co.yigil.admin.interfaces.dto.mapper.AdminSignupMapper;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;
+import kr.co.yigil.admin.interfaces.dto.request.AdminUpdateRequest;
 import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpAcceptRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpRejectRequest;
+import kr.co.yigil.admin.interfaces.dto.response.AdminDetailInfoResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignUpsResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignupResponse;
+import kr.co.yigil.admin.interfaces.dto.response.AdminUpdateResponse;
 import kr.co.yigil.admin.interfaces.dto.response.SignUpAcceptResponse;
 import kr.co.yigil.admin.interfaces.dto.response.SignUpRejectResponse;
 import kr.co.yigil.auth.dto.JwtToken;
@@ -78,6 +81,20 @@ public class AdminApiController {
         AdminInfo.AdminInfoResponse info = adminFacade.getAdminInfoByEmail(user.getUsername());
         AdminInfoResponse response = adminMapper.toResponse(info);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/detail-info")
+    public ResponseEntity<AdminDetailInfoResponse> getMemberDetailInfo(@AuthenticationPrincipal User user) {
+        AdminInfo.AdminDetailInfoResponse info = adminFacade.getAdminDetailInfoByEmail(user.getUsername());
+        AdminDetailInfoResponse response = adminMapper.toResponse(info);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/detail-info")
+    public ResponseEntity<AdminUpdateResponse> updateMemberDetailInfo(@AuthenticationPrincipal User user, @ModelAttribute AdminUpdateRequest request) {
+        AdminCommand.AdminUpdateRequest command = adminMapper.toCommand(request);
+        adminFacade.updateAdminDetailInfo(user.getUsername(), command);
+        return ResponseEntity.ok(new AdminUpdateResponse("수정 완료"));
     }
 
     @PostMapping("/test")
