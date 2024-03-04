@@ -1,2 +1,5 @@
-package kr.co.yigil.place.infrastructure;public class PlaceReaderImplTest {
+package kr.co.yigil.place.infrastructure;
+
+public class PlaceReaderImplTest {
+
 }
