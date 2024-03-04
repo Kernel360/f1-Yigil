@@ -49,6 +49,8 @@ include::{snippets}/comments/comment-get-child/http-response.adoc[]
 
 ==== Request
 로그인 필수 : Y
+
+include::{snippets}/comments/comment-delete/path-parameters.adoc[]
 include::{snippets}/comments/comment-delete/request-body.adoc[]
 ===== HTTP Request 예시
 include::{snippets}/comments/comment-delete/http-request.adoc[]
@@ -62,6 +64,7 @@ include::{snippets}/comments/comment-delete/http-response.adoc[]
 ==== Request
 로그인 필수 : Y
 
+include::{snippets}/comments/comment-update/path-parameters.adoc[]
 include::{snippets}/comments/comment-update/request-body.adoc[]
 ===== HTTP Request 예시
 include::{snippets}/comments/comment-update/http-request.adoc[]

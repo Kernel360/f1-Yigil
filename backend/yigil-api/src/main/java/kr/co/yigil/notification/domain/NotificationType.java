@@ -7,8 +7,7 @@ public enum NotificationType {
     UNFOLLOW((sender, receiver) -> sender + "님이 언팔로우 하였습니다."),
     FAVOR((sender, receiver) -> sender + "님이 게시글에 좋아요를 눌렀습니다."),
     NEW_COMMENT((sender, receiver) -> sender + "님이 게시글에 댓글을 달았습니다."),
-    REPLY_COMMENT((sender, receiver) -> sender + "님이 댓글을 수정하였습니다.")
-    ;
+    UPDATE_COMMENT((sender, receiver) -> sender + "님이 댓글을 수정하였습니다."),;
 
     private final BinaryOperator<String> messageComposer;
 

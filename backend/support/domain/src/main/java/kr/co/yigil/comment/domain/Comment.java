@@ -65,25 +65,6 @@ public class Comment {
         this.content = content;
         this.member = member;
         this.travel = travel;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
-        this.parent = parent;
-    }
-
-    public Comment(Long id, String content, Member member, Travel travel) {
-        this.id = id;
-        this.content = content;
-        this.member = member;
-        this.travel = travel;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
-    }
-
-    public Comment(Long id, String content, Member member, Travel travel, Comment parent) {
-        this.id = id;
-        this.content = content;
-        this.member = member;
-        this.travel = travel;
         this.parent = parent;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();

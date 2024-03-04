@@ -21,7 +21,6 @@ public interface CommentMapper {
     CommentCommand.CommentUpdateRequest of(CommentDto.CommentUpdateRequest commentUpdateRequest);
 
     //response
-    CommentDto.CommentCreateResponse of(CommentInfo.CommentCreateResponse commentCreateResponse);
 
     CommentDto.CommentsResponse of(CommentInfo.CommentsResponse commentsResponse);
 

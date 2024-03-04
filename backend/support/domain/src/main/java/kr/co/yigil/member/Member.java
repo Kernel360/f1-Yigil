@@ -8,13 +8,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import kr.co.yigil.region.domain.Region;
+import kr.co.yigil.region.domain.MemberRegion;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,14 +63,8 @@ public class Member {
     private Ages ages = Ages.NONE;
 
     @Column
-
-    @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(
-        name = "member_favorite_region",
-        joinColumns = @jakarta.persistence.JoinColumn(name = "member_id"),
-        inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "region_id")
-    )
-    private List<Region> favoriteRegions;
+    @OneToMany(fetch = FetchType.LAZY)
+    private final List<MemberRegion> favoriteRegions =  new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
@@ -132,12 +126,13 @@ public class Member {
         this.gender = gender;
     }
 
-    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl, List<Region> favoriteRegionIds) {
+    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl, List<MemberRegion> favoriteRegionIds) {
         this.nickname = nickname;
         this.ages = Ages.from(age);
         this.gender = Gender.from(gender);
         this.profileImageUrl = profileImageUrl;
-        this.favoriteRegions = favoriteRegionIds;
+        this.favoriteRegions.clear();
+        this.favoriteRegions.addAll(favoriteRegions);
     }
 
     public String getProfileImageUrl() {
@@ -147,6 +142,8 @@ public class Member {
     }
 
     public List<Long> getFavoriteRegionIds() {
-        return favoriteRegions.stream().map(Region::getId).toList();
+        return favoriteRegions.stream().map(
+            memberRegion -> memberRegion.getRegion().getId()
+        ).toList();
     }
 }

@@ -14,7 +14,6 @@ public class CommentCommand {
     public static class CommentCreateRequest {
         private final String content;
         private final Long parentId;
-        private final Long notifiedMemberId;
 
         public Comment toEntity(Member member, Travel travel, Comment parentComment) {
             return new Comment(
@@ -32,8 +31,6 @@ public class CommentCommand {
     public static class CommentUpdateRequest {
 
         private String content;
-        private Long parentId;
-        private Long notifiedMemberId;
 
         public Comment toEntity(Member member, Travel travel, Comment parentComment) {
             return new Comment(
