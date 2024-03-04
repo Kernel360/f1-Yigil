@@ -1,7 +1,7 @@
-package kr.co.yigil.favor.intefaces.dto.mapper;
+package kr.co.yigil.favor.interfaces.dto.mapper;
 
 import kr.co.yigil.favor.domain.FavorInfo;
-import kr.co.yigil.favor.intefaces.dto.FavorDto;
+import kr.co.yigil.favor.interfaces.dto.FavorDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

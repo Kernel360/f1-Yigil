@@ -1,4 +1,4 @@
-package kr.co.yigil.favor.intefaces.dto;
+package kr.co.yigil.favor.interfaces.dto;
 
 import lombok.Builder;
 import lombok.Getter;
