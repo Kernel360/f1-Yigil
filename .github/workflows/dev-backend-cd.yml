@@ -7,7 +7,7 @@
 name: Java CD with Gradle
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "devlop" ]
 permissions:
   contents: read
 defaults:
@@ -33,9 +33,10 @@ jobs:
     ## docker-compose.yml 생성 후 secret 값 복붙
     - uses: actions/checkout@v3
     - run: touch docker-compose.yml
-    - run: echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
+    - run: |
+        echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
     ## application secrets 값 주입
-    - name: Set api application.yml
+    - name: Set application.yml
       run: |
         sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
@@ -50,7 +51,6 @@ jobs:
         sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
         sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
-    # cat ./yigil-api/src/main/resources/*
     - name: Set admin application.yml
       run: |
         sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-admin/src/main/resources/application.yml
@@ -72,7 +72,6 @@ jobs:
         sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
     # cat ./yigil-admin/src/main/resources/*
-
     ## Dockerfile secrets 값 주입
     - name: Set Dockerfile
       run: |
@@ -83,13 +82,18 @@ jobs:
       run: chmod +x gradlew
     # Gradle Build (test 제외)
     - name: Build with Gradle
-      run: ./gradlew clean build
-    # DockerHub 로그인
-    - name: DockerHub Login
-      uses: docker/login-action@v2
+      run: ./gradlew clean build -x test
+    ## AWS에 로그인합니다. aws-region은 서울로 설정(ap-northeast-2)했습니다
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ap-northeast-2
+      ## ECR에 로그인합니다
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
     # Docker 이미지 빌드
     - name: Docker-Compose Image Build
       run: docker-compose build
@@ -101,9 +105,10 @@ jobs:
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6
       with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_KEY }}
+        host: ${{ secrets.EC2_HOST_DEV }}
+        username: ${{ secrets.EC2_USERNAME_DEV }}
+        key: ${{ secrets.EC2_KEY_DEV }}
         
         script: |
+          awslogin
           allin
