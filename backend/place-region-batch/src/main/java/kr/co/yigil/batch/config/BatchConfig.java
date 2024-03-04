@@ -56,7 +56,7 @@ public class BatchConfig {
             ItemWriter<Place> placeItemWriter
     ) {
         return new StepBuilder("updateRegionStep", jobRepository)
-                .<Place, Place>chunk(3, platformTransactionManager)
+                .<Place, Place>chunk(50, platformTransactionManager)
                 .reader(placeItemReader)
                 .processor(placeItemProcessor)
                 .writer(placeItemWriter)
@@ -69,7 +69,7 @@ public class BatchConfig {
                 .name("placeItemReader")
                 .repository(placeRepository)
                 .methodName("findByRegionIsNull")
-                .pageSize(3)
+                .pageSize(50)
                 .arguments(List.of())
                 .sorts(Collections.singletonMap("id", Direction.DESC))
                 .build();
