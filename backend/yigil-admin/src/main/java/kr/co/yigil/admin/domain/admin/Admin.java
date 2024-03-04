@@ -86,7 +86,7 @@ public class Admin implements UserDetails {
 
     public String getProfileImageUrl() {
         if(profileImageUrl == null) return null;
-        if(profileImageUrl.startsWith("http://")) return profileImageUrl;
+        if(profileImageUrl.startsWith("http://") || profileImageUrl.startsWith("https://")) return profileImageUrl;
         else return DEFAULT_PROFILE_CDN + profileImageUrl;
     }
 
