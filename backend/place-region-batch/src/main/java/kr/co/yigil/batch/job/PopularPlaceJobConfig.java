@@ -62,25 +62,25 @@ public class PopularPlaceJobConfig {
     public Step calculatePopularPlacesStep(
             JobRepository jobRepository,
             PlatformTransactionManager platformTransactionManager,
-            ItemReader<Object[]> placeItemReader,
+            ItemReader<Object[]> popularPlaceItemReader,
             ItemProcessor<Object[], PopularPlace> popularPlaceItemProcessor,
             ItemWriter<PopularPlace> popularPlaceItemWriter
     ) {
         return new StepBuilder("calculatePopularPlacesStep", jobRepository)
                 .<Object[], PopularPlace>chunk(10, platformTransactionManager)
-                .reader(placeItemReader)
+                .reader(popularPlaceItemReader)
                 .processor(popularPlaceItemProcessor)
                 .writer(popularPlaceItemWriter)
                 .build();
     }
 
     @Bean
-    public RepositoryItemReader<Object[]> placeItemReader() {
+    public RepositoryItemReader<Object[]> popularPlaceItemReader() {
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = endDate.minusWeeks(1);
 
         return new RepositoryItemReaderBuilder<Object[]>()
-                .name("placeItemReader")
+                .name("popularPlaceItemReader")
                 .repository(spotRepository)
                 .methodName("findPlaceReferenceCountBetweenDates")
                 .pageSize(10)
