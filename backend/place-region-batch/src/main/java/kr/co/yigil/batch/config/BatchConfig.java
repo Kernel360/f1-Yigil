@@ -24,7 +24,9 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
+import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
+import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort.Direction;
@@ -86,18 +88,11 @@ public class BatchConfig {
     }
 
     @Bean
-    public ItemWriter<Place> placeItemWriter(EntityManagerFactory entityManagerFactory) {
-        return places -> {
-            EntityManager entityManager = entityManagerFactory.createEntityManager();
-            entityManager.getTransaction().begin();
-            for (Place place : places) {
-                if (place != null) {
-                    entityManager.merge(place);
-                }
-            }
-            entityManager.getTransaction().commit();
-            entityManager.close();
-        };
+    public RepositoryItemWriter<Place> placeItemWriter() {
+        return new RepositoryItemWriterBuilder<Place>()
+                .repository(placeRepository)
+                .methodName("save")
+                .build();
     }
 
 

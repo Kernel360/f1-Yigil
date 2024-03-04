@@ -13,21 +13,17 @@ spring:
     master:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: jdbc:postgresql://localhost:5432/yigil-db
-        #        jdbc-url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildb
+        jdbc-url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
         read-only: false
         username: postgres
-        #        password: 12345678
-        password: 1234
+        password: 12345678
     slave:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: jdbc:postgresql://localhost:5433/yigil-db
-        #        jdbc-url: jdbc:postgresql://database-1- read.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildb
+        jdbc-url: jdbc:postgresql://database-1-read.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
         read-only: true
         username: postgres
-        #        password: 12345678
-        password: 1234
+        password: 12345678
   data:
     redis:
       host: localhost
@@ -38,7 +34,6 @@ spring:
 cloud:
   aws:
     s3:
-    #      bucket: yigilbucket
     bucket: cdn.yigil.co.kr
     credentials:
       access-key: AKIA57RFG4SU5VO6U3PQ
@@ -50,11 +45,14 @@ cloud:
       auto: false
 
 server:
+  port: 8080
   servlet:
     session:
       cookie:
         http-only: true
         secure: false
+  tomcat:
+    max-http-form-post-size: 500MB
 
 jasypt:
   encryptor:
@@ -63,8 +61,8 @@ jasypt:
 logging:
   level:
     root: DEBUG
-#  slack:
-#    webhook-uri: https://hooks.slack.com/services/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
+  slack:
+    webhook-uri: https://hooks.slack.com/services/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
 
 decorator:
   datasource:
