@@ -1,5 +1,6 @@
 package kr.co.yigil.member.domain;
 
+import java.util.List;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.domain.Place;
@@ -18,6 +19,7 @@ public class MemberInfo {
         private final String email;
         private final String nickname;
         private final String profileImageUrl;
+        private final List<Long> favoriteRegionIds;
         private final int followingCount;
         private final int followerCount;
 
@@ -28,6 +30,7 @@ public class MemberInfo {
             this.profileImageUrl = member.getProfileImageUrl();
             this.followingCount = followCount.getFollowingCount();
             this.followerCount = followCount.getFollowerCount();
+            this.favoriteRegionIds = member.getFavoriteRegionIds();
         }
     }
 

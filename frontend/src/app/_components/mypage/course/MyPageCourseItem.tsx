@@ -9,7 +9,7 @@ import { TMyPageCourse } from '@/types/myPageResponse';
 interface TMyPageCourseItem extends TMyPageCourse {
   idx: number;
   checkedList: { course_id: number; is_private: boolean }[];
-  onChangeCheckedList: (id: number, is_private: boolean) => void;
+  onChangeCheckedList: (course_id: number, is_private: boolean) => void;
   selectOption: string;
 }
 

@@ -18,7 +18,7 @@ import kr.co.yigil.favor.application.FavorFacade;
 import kr.co.yigil.favor.domain.FavorInfo;
 import kr.co.yigil.favor.domain.FavorInfo.AddFavorResponse;
 import kr.co.yigil.favor.domain.FavorInfo.DeleteFavorResponse;
-import kr.co.yigil.favor.intefaces.dto.mapper.FavorDto;
+import kr.co.yigil.favor.intefaces.dto.FavorDto;
 import kr.co.yigil.favor.intefaces.dto.mapper.FavorMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

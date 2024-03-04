@@ -1,6 +1,5 @@
 package kr.co.yigil.member.application;
 
-import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberService;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class MemberFacade {
 
     private final MemberService memberService;
-    private final FileUploader fileUploader;
 
     public MemberInfo.Main getMemberInfo(final Long memberId) {
         return memberService.retrieveMemberInfo(memberId);

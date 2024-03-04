@@ -11,8 +11,9 @@ import TrashIcon from '/public/icons/trash.svg';
 import LockIcon from '/public/icons/lock.svg';
 import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
-import { getMyPageCourses } from '../hooks/myPageActions';
 import { TMyPageCourse } from '@/types/myPageResponse';
+import { deleteMyCourse, getMyPageCourses } from '../hooks/myPageActions';
+import Dialog from '../../ui/dialog/Dialog';
 
 export default function MyPageCourseList({
   placeList,
@@ -22,8 +23,6 @@ export default function MyPageCourseList({
   totalPage: number;
 }) {
   const [allCourseList, setAllCourseList] =
-    useState<TMyPageCourse[]>(placeList);
-  const [renderCourseList, setRenderCourseList] =
     useState<TMyPageCourse[]>(placeList);
   const [checkedList, setCheckedList] = useState<
     { course_id: TMyPageCourse['course_id']; is_private: boolean }[]
@@ -35,6 +34,9 @@ export default function MyPageCourseList({
 
   const [selectOption, setSelectOption] = useState('all');
   const [sortOption, setSortOption] = useState<string>('desc');
+
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
+
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
       label: '기록 나만보기',
@@ -44,7 +46,7 @@ export default function MyPageCourseList({
     {
       label: '기록 삭제하기',
       icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => onClickUnLock(),
+      onClick: () => setIsDialogOpened(true),
     },
   ]);
 
@@ -82,7 +84,7 @@ export default function MyPageCourseList({
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => setIsDialogOpened(true),
         },
       ]);
     } else {
@@ -95,7 +97,7 @@ export default function MyPageCourseList({
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => setIsDialogOpened(true),
         },
       ]);
     }
@@ -106,13 +108,17 @@ export default function MyPageCourseList({
     getCourse(1, divideCount, sortOption, selectOption);
   }, [selectOption, sortOption]);
 
-  useEffect(() => {
-    setRenderCourseList(allCourseList);
-  }, [allCourseList]);
-
-  const onClickDelete = () => {};
+  const onClickDelete = (courseIds: number[]) => {
+    // promise로 여러 코스 삭제를 한번에 처리하는 로직 필요
+    // Promise.all(courseIds.map((course_id) => deleteMyCourse(course_id)));
+  };
+  // TODO: lock, unlock은 단일 id이냐 아니냐에 따라 다르게 호출
   const onClickUnLock = () => {};
   const onClickLock = () => {};
+
+  const closeDialog = () => {
+    setIsDialogOpened(false);
+  };
 
   const onClickSelectOption = (option: string) => {
     setSelectOption(option);
@@ -174,7 +180,7 @@ export default function MyPageCourseList({
 
   return (
     <>
-      <div className="my-4">
+      <div className="my-4 px-2">
         <MyPageSelectBtns
           selectOption={selectOption}
           sortOption={sortOption}
@@ -185,6 +191,15 @@ export default function MyPageCourseList({
       </div>
       {!!checkedList.length && (
         <div className="relative z-40">
+          {isDialogOpened && (
+            <Dialog
+              text="기록을 삭제하시겠나요?"
+              closeModal={closeDialog}
+              handleConfirm={async () =>
+                onClickDelete(checkedList.map((list) => list.course_id))
+              }
+            />
+          )}
           <FloatingActionButton
             popOverData={popOverData}
             openedIcon={<PlusIcon className="rotate-45 duration-200 z-30" />}
@@ -192,23 +207,24 @@ export default function MyPageCourseList({
           />
         </div>
       )}
-      {!!renderCourseList.length &&
-        renderCourseList.map(({ course_id, ...data }, idx) => (
-          <MyPageCourseItem
-            key={course_id}
-            idx={idx}
-            course_id={course_id}
-            {...data}
-            checkedList={checkedList}
-            onChangeCheckedList={onChangeCheckedList}
-            selectOption={selectOption}
-          />
-        ))}
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPage={totalPageCount}
-      />
+      {allCourseList.map(({ course_id, ...data }, idx) => (
+        <MyPageCourseItem
+          key={course_id}
+          idx={idx}
+          course_id={course_id}
+          {...data}
+          checkedList={checkedList}
+          onChangeCheckedList={onChangeCheckedList}
+          selectOption={selectOption}
+        />
+      ))}
+      {!!allCourseList.length && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPage={totalPageCount}
+        />
+      )}
     </>
   );
 }

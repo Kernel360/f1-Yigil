@@ -247,11 +247,13 @@ export default function MyPageSpotList({
           selectOption={selectOption}
         />
       ))}
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPage={totalPageCount}
-      />
+      {!!allSpotList.length && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPage={totalPageCount}
+        />
+      )}
     </>
   );
 }
