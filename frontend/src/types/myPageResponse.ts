@@ -22,3 +22,16 @@ export const myPageCourseListSchema = z.array(
     spot_count: z.number(),
   }),
 );
+
+export const myPageFollowSchema = z.object({
+  member_id: z.number().int(),
+  nickname: z.string(),
+  profile_image_url: z.string(),
+});
+
+export type TMyPageFollowing = z.infer<typeof myPageFollowSchema>;
+
+export const myPageFollowListSchema = z.object({
+  content: z.array(myPageFollowSchema),
+  has_next: z.boolean(),
+});
