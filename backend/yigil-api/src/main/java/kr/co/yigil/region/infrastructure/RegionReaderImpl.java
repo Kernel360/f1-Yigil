@@ -1,4 +1,4 @@
-package kr.co.yigil.region.infrastructur;
+package kr.co.yigil.region.infrastructure;
 
 import java.util.List;
 import kr.co.yigil.global.exception.BadRequestException;
@@ -24,8 +24,8 @@ public class RegionReaderImpl implements RegionReader {
     }
 
     @Override
-    public List<Region> getRegions(List<Long> favoriteRegionIds) {
-        return favoriteRegionIds.stream().map(regionRepository::findById).map(
+    public List<Region> getRegions(List<Long> regionIds) {
+        return regionIds.stream().map(regionRepository::findById).map(
             region -> region.orElseThrow(
                 () -> new BadRequestException(ExceptionCode.NOT_FOUND_REGION_ID)
             )

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.region.domain.MemberRegion;
+import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -145,5 +146,10 @@ public class Member {
         return favoriteRegions.stream().map(
             memberRegion -> memberRegion.getRegion().getId()
         ).toList();
+    }
+
+    public boolean isFavoriteRegion(Region region) {
+        return favoriteRegions.stream()
+                .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
     }
 }

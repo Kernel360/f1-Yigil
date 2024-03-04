@@ -170,7 +170,7 @@ public class FollowApiControllerTest {
             mock(FollowInfo.FollowingsResponse.class));
         when(followDtoMapper.of(any(FollowInfo.FollowingsResponse.class))).thenReturn(response);
         mockMvc.perform(get("/api/v1/follows/followings")
-                .param("page", "0")
+                .param("page", "1")
                 .param("size", "5")
                 .param("sortBy", "id")
                 .param("sortOrder", "asc")
@@ -215,7 +215,7 @@ public class FollowApiControllerTest {
         when(followDtoMapper.of(any(FollowInfo.FollowersResponse.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/follows/{memberId}/followers", 1L)
-                .param("page", "0")
+                .param("page", "1")
                 .param("size", "5")
                 .param("sortBy", "id")
                 .param("sortOrder", "asc")
@@ -256,7 +256,7 @@ public class FollowApiControllerTest {
         when(followDtoMapper.of(any(FollowInfo.FollowingsResponse.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/follows/{memberId}/followings", 1L)
-                .param("page", "0")
+                .param("page", "1")
                 .param("size", "5")
                 .param("sortBy", "id")
                 .param("sortOrder", "asc")

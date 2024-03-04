@@ -1,4 +1,4 @@
-package kr.co.yigil.favor.intefaces.controller;
+package kr.co.yigil.favor.interfaces.controller;
 
 import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
 import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
@@ -18,8 +18,8 @@ import kr.co.yigil.favor.application.FavorFacade;
 import kr.co.yigil.favor.domain.FavorInfo;
 import kr.co.yigil.favor.domain.FavorInfo.AddFavorResponse;
 import kr.co.yigil.favor.domain.FavorInfo.DeleteFavorResponse;
-import kr.co.yigil.favor.intefaces.dto.FavorDto;
-import kr.co.yigil.favor.intefaces.dto.mapper.FavorMapper;
+import kr.co.yigil.favor.interfaces.dto.FavorDto;
+import kr.co.yigil.favor.interfaces.dto.mapper.FavorMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

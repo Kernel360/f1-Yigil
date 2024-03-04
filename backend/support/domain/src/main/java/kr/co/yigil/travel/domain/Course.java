@@ -22,8 +22,7 @@ import org.locationtech.jts.geom.LineString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course extends Travel {
 
-//    @Column(columnDefinition = "geometry(LineString,5186)")
-@Column(columnDefinition = "geometry(LineString,4326)")
+    @Column(columnDefinition = "geometry(LineString,4326)")
     private LineString path;
 
     @OneToMany(cascade = CascadeType.PERSIST)
