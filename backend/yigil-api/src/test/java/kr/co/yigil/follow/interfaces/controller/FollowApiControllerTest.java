@@ -22,7 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import kr.co.yigil.follow.application.FollowFacade;
 import kr.co.yigil.follow.domain.FollowInfo;
-import kr.co.yigil.follow.interfaces.dto.FollowDto;
+import kr.co.yigil.follow.interfaces.dto.FollowDto.FollowerInfo;
+import kr.co.yigil.follow.interfaces.dto.FollowDto.FollowersResponse;
+import kr.co.yigil.follow.interfaces.dto.FollowDto.FollowingInfo;
+import kr.co.yigil.follow.interfaces.dto.FollowDto.FollowingsResponse;
 import kr.co.yigil.follow.interfaces.dto.FollowDtoMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -110,11 +113,12 @@ public class FollowApiControllerTest {
     @Test
     void WhenGetMyFollowerList_ThenShouldReturnOk() throws Exception {
 
-        FollowDto.FollowerResponse response = FollowDto.FollowerResponse.builder()
-            .content(List.of(FollowDto.FollowBasicInfo.builder()
+        FollowersResponse response = FollowersResponse.builder()
+            .content(List.of(FollowerInfo.builder()
                 .memberId(1L)
                 .nickname("test user")
                 .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
+                .isFollowing(true)
                 .build())
             )
             .hasNext(false)
@@ -145,6 +149,7 @@ public class FollowApiControllerTest {
                     fieldWithPath("content[].member_id").description("회원 ID"),
                     fieldWithPath("content[].nickname").description("닉네임"),
                     fieldWithPath("content[].profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("content[].is_following").description("팔로우 여부"),
                     fieldWithPath("has_next").description("다음 페이지 존재 여부")
                 )
 
@@ -156,8 +161,8 @@ public class FollowApiControllerTest {
     @Test
     void WhenGetMyFollowingList_ThenShouldReturnOk() throws Exception {
 
-        FollowDto.FollowingResponse response = FollowDto.FollowingResponse.builder()
-            .content(List.of(FollowDto.FollowBasicInfo.builder()
+        FollowingsResponse response = FollowingsResponse.builder()
+            .content(List.of(FollowingInfo.builder()
                 .memberId(1L)
                 .nickname("test user")
                 .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
@@ -200,11 +205,12 @@ public class FollowApiControllerTest {
     @Test
     void WhenGetMemberFollowerList_ThenReturnOk() throws Exception {
 
-        FollowDto.FollowerResponse response = FollowDto.FollowerResponse.builder()
-            .content(List.of(FollowDto.FollowBasicInfo.builder()
+        FollowersResponse response = FollowersResponse.builder()
+            .content(List.of(FollowerInfo.builder()
                 .memberId(1L)
                 .nickname("test user")
                 .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
+                .isFollowing(true)
                 .build())
             )
             .hasNext(false)
@@ -229,6 +235,7 @@ public class FollowApiControllerTest {
                     fieldWithPath("content[].member_id").description("회원 ID"),
                     fieldWithPath("content[].nickname").description("닉네임"),
                     fieldWithPath("content[].profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("content[].is_following").description("팔로우 여부"),
                     fieldWithPath("has_next").description("다음 페이지 존재 여부")
                 )
             ));
@@ -241,8 +248,8 @@ public class FollowApiControllerTest {
     @Test
     void WhenGetMemberFollowingList_ThenShouldReturnOk() throws Exception {
 
-        FollowDto.FollowingResponse response = FollowDto.FollowingResponse.builder()
-            .content(List.of(FollowDto.FollowBasicInfo.builder()
+        FollowingsResponse response = FollowingsResponse.builder()
+            .content(List.of(FollowingInfo.builder()
                 .memberId(1L)
                 .nickname("test user")
                 .profileImageUrl("https://cdn.yigil.co.kr/images/images/profile.jpg")
