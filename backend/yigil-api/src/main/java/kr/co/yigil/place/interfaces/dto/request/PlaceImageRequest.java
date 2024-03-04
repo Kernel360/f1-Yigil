@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PlaceStaticImageRequest {
+public class PlaceImageRequest {
     private String name;
     private String address;
 }
