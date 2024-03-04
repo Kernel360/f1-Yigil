@@ -13,8 +13,8 @@ import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import Dialog from '../../ui/dialog/Dialog';
-import { TMyPageSpot } from '../types';
 import { getMyPageSpots } from '../hooks/myPageActions';
+import { TMyPageSpot } from '@/types/myPageResponse';
 
 export default function MyPageSpotList({
   placeList,
@@ -66,14 +66,18 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, total_pages } = await getMyPageSpots(
+    const spotList = await getMyPageSpots(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-    setTotalPageCount(total_pages);
-    setAllSpotList([...content]);
+    if (!spotList.success) {
+      setAllSpotList([]);
+      return;
+    }
+    setTotalPageCount(spotList.data.total_pages);
+    setAllSpotList([...spotList.data.content]);
   };
 
   useEffect(() => {
@@ -243,11 +247,13 @@ export default function MyPageSpotList({
           selectOption={selectOption}
         />
       ))}
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPage={totalPageCount}
-      />
+      {!!allSpotList.length && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPage={totalPageCount}
+        />
+      )}
     </>
   );
 }

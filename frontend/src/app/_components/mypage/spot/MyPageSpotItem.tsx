@@ -2,8 +2,8 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
-import { TMyPageSpot } from '../types';
 import IconWithCounts from '../../IconWithCounts';
+import { TMyPageSpot } from '@/types/myPageResponse';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[];
@@ -87,9 +87,7 @@ const MyPageSpotItem = ({
             count={rate}
             rating
           />
-          <div className="text-gray-300 font-bold">
-            {new Date(created_date).toLocaleDateString()}
-          </div>
+          <div className="text-gray-300 font-bold">{created_date}</div>
         </div>
       </div>
     </div>

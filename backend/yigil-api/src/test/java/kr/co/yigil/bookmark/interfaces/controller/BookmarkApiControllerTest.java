@@ -128,10 +128,10 @@ class BookmarkApiControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         queryParameters(
-                                parameterWithName("page").description("현재 페이지").optional(),
-                                parameterWithName("size").description("페이지 크기").optional(),
-                                parameterWithName("sortBy").description("정렬 옵션").optional(),
-                                parameterWithName("sortOrder").description("정렬 순서").optional()
+                                parameterWithName("page").description("현재 페이지 - default:1").optional(),
+                                parameterWithName("size").description("페이지 크기 - default:5").optional(),
+                                parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
+                                parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
                         ),
                         responseFields(
                                 fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 여부"),
