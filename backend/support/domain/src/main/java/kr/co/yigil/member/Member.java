@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.region.domain.MemberRegion;
+import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -137,7 +138,7 @@ public class Member {
 
     public String getProfileImageUrl() {
         if(profileImageUrl == null) return null;
-        if(profileImageUrl.startsWith("http://")) return profileImageUrl;
+        if(profileImageUrl.startsWith("http://") || profileImageUrl.startsWith("https://")) return profileImageUrl;
         else return DEFAULT_PROFILE_CDN + profileImageUrl;
     }
 
@@ -145,5 +146,10 @@ public class Member {
         return favoriteRegions.stream().map(
             memberRegion -> memberRegion.getRegion().getId()
         ).toList();
+    }
+
+    public boolean isFavoriteRegion(Region region) {
+        return favoriteRegions.stream()
+                .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
     }
 }

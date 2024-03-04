@@ -66,11 +66,11 @@ public class FollowApiController {
     @MemberOnly
     public ResponseEntity<FollowDto.FollowingResponse> getMyFollowingList(
         @Auth final Accessor accessor,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         final FollowingsResponse followingListResponse = followFacade.getFollowingList(
             accessor.getMemberId(), pageRequest);
@@ -81,11 +81,11 @@ public class FollowApiController {
     @GetMapping("/{memberId}/followers")
     public ResponseEntity<FollowDto.FollowerResponse> getMemberFollowerList(
         @PathVariable("memberId") final Long memberId,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         FollowInfo.FollowersResponse followerList = followFacade.getFollowerList(memberId, pageRequest);
         var response = followDtoMapper.of(followerList);
@@ -95,11 +95,11 @@ public class FollowApiController {
     @GetMapping("/{memberId}/followings")
     public ResponseEntity<FollowDto.FollowingResponse> getMemberFollowingList(
         @PathVariable("memberId") final Long memberId,
-        @PageableDefault(size = 5) Pageable pageable,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(),
             Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
         FollowingsResponse followingList = followFacade.getFollowingList(memberId, pageRequest);
         var response = followDtoMapper.of(followingList);

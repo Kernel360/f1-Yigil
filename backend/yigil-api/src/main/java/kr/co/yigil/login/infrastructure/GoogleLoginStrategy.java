@@ -38,12 +38,12 @@ public class GoogleLoginStrategy implements LoginStrategy {
     @Override
     public Long processLogin(LoginCommand.LoginRequest loginCommand, String accessToken) {
 
-        if(!isTokenValid(accessToken, loginCommand.getId())) {
+        if(!isTokenValid(accessToken, loginCommand.getEmail())) {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
 
         Member member = memberReader.findMemberBySocialLoginIdAndSocialLoginType(
-                        loginCommand.getId().toString(), SocialLoginType.GOOGLE)
+                        loginCommand.getId(), SocialLoginType.GOOGLE)
                 .orElseGet(() -> registerNewMember(loginCommand));
 
         return member.getId();
@@ -54,9 +54,9 @@ public class GoogleLoginStrategy implements LoginStrategy {
         return "google";
     }
 
-    private boolean isTokenValid(String accessToken, Long expectedUserId) {
+    private boolean isTokenValid(String accessToken, String expectedUserEmail) {
         GoogleTokenInfoResponse tokenInfo = requestGoogleTokenInfo(accessToken);
-        return isUserIdValid(tokenInfo, expectedUserId);
+        return isUserIdValid(tokenInfo, expectedUserEmail);
     }
 
     private GoogleTokenInfoResponse requestGoogleTokenInfo(String accessToken) {
@@ -83,8 +83,8 @@ public class GoogleLoginStrategy implements LoginStrategy {
         }
     }
 
-    private boolean isUserIdValid(GoogleTokenInfoResponse tokenInfo, Long expectedUserId) {
-        return tokenInfo != null && tokenInfo.getUserId().equals(expectedUserId);
+    private boolean isUserIdValid(GoogleTokenInfoResponse tokenInfo, String expectedUserEmail) {
+        return tokenInfo != null && tokenInfo.getEmail().equals(expectedUserEmail);
     }
 
     private Member registerNewMember(LoginCommand.LoginRequest loginCommand) {

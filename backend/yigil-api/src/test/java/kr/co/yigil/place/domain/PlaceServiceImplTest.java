@@ -19,13 +19,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class PlaceServiceImplTest {
 
-    @Mock PlaceReader placeReader;
+    @Mock
+    private PlaceReader placeReader;
 
-    @Mock PlaceCacheReader placeCacheReader;
+    @Mock
+    private PlaceCacheReader placeCacheReader;
 
-    @Mock BookmarkReader bookmarkReader;
+    @Mock
+    private BookmarkReader bookmarkReader;
 
-    @InjectMocks PlaceServiceImpl placeService;
+    @InjectMocks
+    private PlaceServiceImpl placeService;
 
     @DisplayName("getPopularPlace 메서드가 Info 객체의 List를 잘 반환하는지")
     @Test

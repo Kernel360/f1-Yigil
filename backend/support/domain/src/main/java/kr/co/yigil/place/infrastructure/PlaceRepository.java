@@ -8,7 +8,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaceRepository extends JpaRepository<Place, Long> {
-
     List<Place> findTop5ByOrderByIdAsc();
     Optional<Place> findByNameAndAddress(String name, String address);
     List<Place> findTop5ByRegionIdOrderByIdDesc(Long regionId);
