@@ -1,7 +1,9 @@
 package kr.co.yigil.member.domain;
 
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
+import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
 import kr.co.yigil.member.domain.MemberInfo.Main;
 import kr.co.yigil.region.domain.MemberRegion;
 import kr.co.yigil.region.domain.RegionReader;
@@ -38,13 +40,24 @@ public class MemberServiceImpl implements MemberService {
     public void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request) {
 
         var member = memberReader.getMember(memberId);
-        var updatedProfile = fileUploader.upload(request.getProfileImageFile());
+        AttachFile updatedProfile = getAttachFile(request);
 
         var memberRegions = regionReader.getRegions(request.getFavoriteRegionIds())
             .stream().map(region -> new MemberRegion(member, region))
             .toList();
 
+//        memberRegions.forEach(memberRegion -> memberRegionStore.save(memberRegion));
+
         member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
-            updatedProfile.getFileUrl() , memberRegions);
+            updatedProfile , memberRegions);
+
+     }
+
+    private AttachFile getAttachFile(MemberUpdateRequest request) {
+
+        if(request.getProfileImageFile() != null) {
+            return fileUploader.upload(request.getProfileImageFile());
+        }
+        return null;
     }
 }

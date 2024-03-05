@@ -1,6 +1,7 @@
 package kr.co.yigil.member.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -87,6 +88,6 @@ class MemberServiceImplTest {
         when(mockAttachFile.getFileUrl()).thenReturn("images/image.jpg");
 
         memberService.updateMemberInfo(memberId, request);
-        verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), anyString(), anyList());
+        verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), any(AttachFile.class), anyList());
     }
 }
