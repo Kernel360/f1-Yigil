@@ -57,7 +57,7 @@ public class SpotInfo {
 
         public SpotListInfo(Spot spot) {
             this.spotId = spot.getId();
-            this.title = spot.getTitle();
+            this.title = spot.getPlace().getName();
             this.rate = spot.getRate();
             this.imageUrl = spot.getAttachFiles().getUrls().getFirst();
             this.createdDate = spot.getCreatedAt();

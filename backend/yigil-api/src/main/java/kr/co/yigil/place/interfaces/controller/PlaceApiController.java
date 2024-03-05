@@ -6,11 +6,12 @@ import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.application.PlaceFacade;
 import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
-import kr.co.yigil.place.interfaces.dto.request.PlaceStaticImageRequest;
+import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
+import kr.co.yigil.place.interfaces.dto.request.PlaceImageRequest;
+import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class PlaceApiController {
     @GetMapping("/static-image")
     @MemberOnly
     public ResponseEntity<PlaceStaticImageResponse> findPlaceStaticImage(
-            PlaceStaticImageRequest request,
+            PlaceImageRequest request,
             @Auth Accessor accessor
     ) {
         var placeInfo = placeFacade.findPlaceStaticImage(request.getName(), request.getAddress());
@@ -64,4 +65,11 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/near")
+    public ResponseEntity<NearPlaceResponse> getNearPlace(NearPlaceRequest request) {
+        var nearPlaceCommand = placeMapper.toNearPlaceCommand(request);
+        var placeInfo = placeFacade.getNearPlace(nearPlaceCommand);
+        var response = placeMapper.toNearPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
 }

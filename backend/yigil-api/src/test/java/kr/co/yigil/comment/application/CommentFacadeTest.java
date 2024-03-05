@@ -31,7 +31,8 @@ class CommentFacadeTest {
     @Mock
     private NotificationService notificationService;
 
-    @DisplayName("createComment 메서드가 유효한 요청이 들어왔을 때 CommentService의 createComment 메서드와 알림을 잘 호출하는지")    @Test
+    @DisplayName("createComment 메서드가 유효한 요청이 들어왔을 때 CommentService의 createComment 메서드와 알림을 잘 호출하는지")
+    @Test
     void whenCreateComment_thenShouldNotThrowAnError() {
         // given
         Long commentMemberId = 3L;

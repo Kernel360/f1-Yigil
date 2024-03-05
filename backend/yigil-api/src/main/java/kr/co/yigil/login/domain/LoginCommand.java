@@ -11,7 +11,7 @@ public class LoginCommand {
     @Builder
     @ToString
     public static class LoginRequest {
-        private final Long id;
+        private final String id;
         private final String nickname;
         private final String profileImageUrl;
         private final String email;
@@ -20,7 +20,7 @@ public class LoginCommand {
         public Member toEntity(String providerName) {
             return new Member(
                     email,
-                    id.toString(),
+                    id,
                     nickname,
                     profileImageUrl,
                     providerName

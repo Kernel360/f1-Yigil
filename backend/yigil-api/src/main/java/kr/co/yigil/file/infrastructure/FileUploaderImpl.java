@@ -1,6 +1,5 @@
 package kr.co.yigil.file.infrastructure;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileType;

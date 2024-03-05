@@ -1,0 +1,123 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+name: Java CD with Gradle
+on:
+  pull_request:
+    types: ["closed"]
+    branches: [ "develop" ]
+permissions:
+  contents: read
+defaults:
+  run:
+    working-directory: ./backend
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+    
+    # jdk setting
+    - uses: actions/checkout@v3
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    # application secrets 값 주입
+    - name: Set application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@REDIS_PORT@|${{ secrets.REDIS_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@S3_BUCKET@|${{ secrets.S3_BUCKET }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-api/src/main/resources/application.yml
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/src/main/resources/application.yml
+    - name: Set admin application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_URL@|${{ secrets.SLAVE_DB_URL }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_USERNAME@|${{ secrets.SLAVE_DB_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLAVE_DB_PASSWORD@|${{ secrets.SLAVE_DB_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@REDIS_HOST@|${{ secrets.REDIS_HOST }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@REDIS_PORT@|${{ secrets.REDIS_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@S3_BUCKET@|${{ secrets.S3_BUCKET }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@AWS_ACCESS_KEY@|${{ secrets.AWS_ACCESS_KEY }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@AWS_SECRET_KEY@|${{ secrets.AWS_SECRET_KEY }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@JWT_SECRET@|${{ secrets.JWT_SECRET }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_HOST@|${{ secrets.MAIL_HOST }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_PORT@|${{ secrets.MAIL_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
+        sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
+    # Dockerfile secrets 값 주입
+    - name: Set Dockerfile
+      run: |
+        sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/Dockerfile
+        sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/Dockerfile
+    # Gradle Build를 위한 권한 부여
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    # Gradle Build (test 제외)
+    - name: Build with Gradle
+      run: ./gradlew clean build
+    # AWS 로그인
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    # Docker 이미지 빌드
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-admin
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }}
+    # EC2 인스턴스 접속 및 애플리케이션 실행
+    - name: Application Run
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.EC2_HOST_DEV }}
+        username: ${{ secrets.EC2_USERNAME_DEV }}
+        key: ${{ secrets.EC2_KEY_DEV }}
+        
+        script: |
+          awslogin
+          allin

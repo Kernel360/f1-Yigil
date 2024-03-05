@@ -64,12 +64,7 @@ export async function getMap(
   const backend = staticMapUrlSchema.safeParse(backendResponse);
 
   if (backend.success && backend.data.exists) {
-    const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
-    const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
-
-    const imageUrl = `${baseUrl}/${backend.data.map_static_image_url}`;
-
-    return { status: 'backend', data: imageUrl };
+    return { status: 'backend', data: backend.data.map_static_image_url };
   }
 
   const url = staticMapUrl(300, 200, coords);
