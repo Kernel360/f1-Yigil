@@ -2,6 +2,8 @@ package kr.co.yigil.place.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -9,12 +11,16 @@ import java.util.Arrays;
 import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceReaderImplTest {
@@ -88,5 +94,26 @@ public class PlaceReaderImplTest {
                 Arrays.asList(place1, place2, place3, place4, place5));
 
         assertEquals(placeReader.getPlaceInRegion(regionId).size(), 5);
+    }
+
+    @DisplayName("getNearPlace 메서드가 Page<Place>를 잘 반환하는지")
+    @Test
+    void getNearPlace_ReturnsPageOfPlace() {
+        PlaceCommand.NearPlaceRequest command = mock(PlaceCommand.NearPlaceRequest.class);
+        when(command.getPageNo()).thenReturn(1);
+        PlaceCommand.Coordinate mockCoordinate = mock(PlaceCommand.Coordinate.class);
+        when(mockCoordinate.getX()).thenReturn(1.0);
+        when(mockCoordinate.getY()).thenReturn(1.0);
+        when(command.getMinCoordinate()).thenReturn(mockCoordinate);
+        when(command.getMaxCoordinate()).thenReturn(mockCoordinate);
+
+        Page<Place> mockPage = mock(Page.class);
+
+        when(placeRepository.findWithinCoordinates(
+                anyDouble(), anyDouble(), anyDouble(), anyDouble(), any(Pageable.class))).thenReturn(mockPage);
+
+        var result = placeReader.getNearPlace(command);
+
+        assertEquals(result, mockPage);
     }
 }
