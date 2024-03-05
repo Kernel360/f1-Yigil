@@ -2,12 +2,17 @@ package kr.co.yigil.place.interfaces.dto.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
 import kr.co.yigil.place.domain.PlaceInfo;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
+import kr.co.yigil.place.interfaces.dto.PlaceCoordinateDto;
 import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
+import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
+import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
@@ -15,6 +20,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
 public interface PlaceMapper {
@@ -59,4 +65,27 @@ public interface PlaceMapper {
             @Mapping(target = "reviewCount", source = "reviewCount")
     })
     PlaceDetailInfoDto toPlaceDetailInfoDto(Detail detail);
+
+    @Mapping(target = "minCoordinate.x", source = "minX")
+    @Mapping(target = "minCoordinate.y", source = "minY")
+    @Mapping(target = "maxCoordinate.x", source = "maxX")
+    @Mapping(target = "maxCoordinate.y", source = "maxY")
+    @Mapping(target = "pageNo", source = "page")
+    PlaceCommand.NearPlaceRequest toNearPlaceCommand(NearPlaceRequest nearPlaceRequest);
+
+    @Mappings({
+            @Mapping(target = "id", source = "id"),
+            @Mapping(target = "placeName", source = "name"),
+            @Mapping(target = "x", source = "location.x"),
+            @Mapping(target = "y", source = "location.y")
+    })
+    PlaceCoordinateDto placeToPlaceCoordinateDto(Place place);
+
+    default NearPlaceResponse toNearPlaceResponse(Page<Place> page) {
+        List<PlaceCoordinateDto> placeCoordinateDtos = page.getContent().stream()
+                .map(this::placeToPlaceCoordinateDto)
+                .toList();
+
+        return new NearPlaceResponse(placeCoordinateDtos, page.getNumber() + 1, page.getTotalPages());
+    }
 }

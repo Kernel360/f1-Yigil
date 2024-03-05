@@ -6,8 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand.Coordinate;
+import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceReader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,6 +39,18 @@ public class PlaceReaderImpl implements PlaceReader {
     @Override
     public List<Place> getPlaceInRegion(Long regionId) {
         return placeRepository.findTop5ByRegionIdOrderByIdDesc(regionId);
+    }
+
+    @Override
+    public Page<Place> getNearPlace(NearPlaceRequest command) {
+        Coordinate maxCoordinate = command.getMaxCoordinate();
+        Coordinate minCoordinate = command.getMinCoordinate();
+        PageRequest pageRequest = PageRequest.of(command.getPageNo() - 1, 5, Sort.by("id").descending());
+        return placeRepository.findWithinCoordinates(
+                minCoordinate.getX(), minCoordinate.getY(),
+                maxCoordinate.getX(), maxCoordinate.getY(),
+                pageRequest
+        );
     }
 
 }
