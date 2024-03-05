@@ -27,12 +27,6 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-
-    ## docker-compose.yml 생성 후 secret 값 복붙
-    - uses: actions/checkout@v3
-    - run: touch docker-compose.yml
-    - run: |
-        echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
     ## application secrets 값 주입
     - name: Set application.yml
       run: |
@@ -88,17 +82,21 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: ap-northeast-2
-      ## ECR에 로그인합니다
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     # Docker 이미지 빌드
-    - name: Docker-Compose Image Build
-      run: docker-compose build
-    # DockerHub Push
-    - name: DockerHub Push
-      run: docker-compose push
-    
+    - name: Docker image build
+      run : |
+        docker build -f yigil-api/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }} . --platform=linux/amd64
+        docker build -f yigil-admin/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
+        docker build -f support/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
+    - name: Docker image push
+      run : |
+        docker push -f yigil-api/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }}
+        docker push -f yigil-admin/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }}
+        docker push -f support/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }}
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6
