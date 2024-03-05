@@ -7,8 +7,8 @@ import Link from 'next/link';
 import { EventFor } from '@/types/type';
 import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
-import { authenticateUser } from '../mypage/hooks/myPageActions';
 import { TMyInfo } from '@/types/response';
+import { authenticateUser } from '../mypage/hooks/authenticateUser';
 
 export default function HeaderClient() {
   const router = useRouter();

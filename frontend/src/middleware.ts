@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateUser } from './app/_components/mypage/hooks/myPageActions';
+import { authenticateUser } from './app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from './types/response';
 
 const restricted = ['/add', '/mypage'];
@@ -19,10 +19,10 @@ export default async function middleware(request: NextRequest) {
 
   if (restricted.some((pathname) => request.url.includes(pathname))) {
     const json = await authenticateUser();
-
     const member = myInfoSchema.safeParse(json);
 
     if (!member.success) {
+      console.log(json);
       console.log(member.error);
       return NextResponse.redirect(`${baseUrl}/login`);
     }
