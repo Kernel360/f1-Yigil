@@ -88,7 +88,8 @@ jobs:
     # Docker 이미지 빌드
     - name: Docker image build
       run : |
-        docker build -f yigil-api/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }} . --platform=linux/amd64
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }} . --platform=linux/amd64
         docker build -f yigil-admin/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
         docker build -f support/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
     - name: Docker image push
