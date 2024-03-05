@@ -42,8 +42,8 @@ public class GoogleLoginStrategy implements LoginStrategy {
             throw new InvalidTokenException(INVALID_ACCESS_TOKEN);
         }
 
-        Member member = memberReader.findMemberBySocialLoginIdAndSocialLoginType(
-                        loginCommand.getId(), SocialLoginType.GOOGLE)
+        Member member = memberReader.findMemberByEmailAndSocialLoginType(
+                        loginCommand.getEmail(), SocialLoginType.GOOGLE)
                 .orElseGet(() -> registerNewMember(loginCommand));
 
         return member.getId();
