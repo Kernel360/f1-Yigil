@@ -88,6 +88,5 @@ class MemberServiceImplTest {
 
         memberService.updateMemberInfo(memberId, request);
         verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), anyString(), anyList());
-        verify(regionReader).validateRegions(anyList());
     }
 }

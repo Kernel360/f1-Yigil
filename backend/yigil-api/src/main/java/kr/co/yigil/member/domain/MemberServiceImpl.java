@@ -40,9 +40,6 @@ public class MemberServiceImpl implements MemberService {
         var member = memberReader.getMember(memberId);
         var updatedProfile = fileUploader.upload(request.getProfileImageFile());
 
-        if(request.getFavoriteRegionIds() != null)
-            regionReader.validateRegions(request.getFavoriteRegionIds());
-
         var memberRegions = regionReader.getRegions(request.getFavoriteRegionIds())
             .stream().map(region -> new MemberRegion(member, region))
             .toList();
