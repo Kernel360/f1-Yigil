@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.jetbrains.kotlin.jvm'
-//    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'kr.co.yigil'
@@ -53,22 +52,3 @@ bootJar {
 jar {
     enabled = true
 }
-
-//def querydslDir = "src/generated/querydsl"
-
-//querydsl {
-//    jpa = true
-//    querydslSourcesDir = querydslDir
-//}
-//sourceSets {
-//    main.java.srcDirs += [querydslDir]
-//}
-//tasks.withType(JavaCompile).configureEach {
-//    options.annotationProcessorPath = files(configurations.querydsl)
-//}
-//compileQuerydsl {
-//    options.annotationProcessorPath = configurations.querydsl
-//}
-//clean.doLast {
-//    file(querydslDir).deleteDir()
-//}
