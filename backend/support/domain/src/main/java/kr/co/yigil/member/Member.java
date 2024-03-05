@@ -1,5 +1,6 @@
 package kr.co.yigil.member;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +15,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.region.domain.MemberRegion;
 import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
@@ -33,6 +35,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @SQLDelete(sql = "UPDATE member SET status = 'WITHDRAW' WHERE id = ?")
 @Where(clause = "status = 'ACTIVE'")
 public class Member {
+
     private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/";
 
     @Id
@@ -64,8 +67,8 @@ public class Member {
     private Ages ages = Ages.NONE;
 
     @Column
-    @OneToMany(fetch = FetchType.LAZY)
-    private final List<MemberRegion> favoriteRegions =  new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private final List<MemberRegion> favoriteRegions = new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
@@ -112,8 +115,8 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Member(Long id, String email, String socialLoginId, String nickname,
-        String profileImageUrl, SocialLoginType socialLoginType, Ages ages, Gender gender) {
+    public Member(final Long id, final String email, final String socialLoginId, final String nickname,
+        final String profileImageUrl, final SocialLoginType socialLoginType, final Ages ages, final Gender gender) {
         this.id = id;
         this.email = email;
         this.socialLoginId = socialLoginId;
@@ -127,19 +130,27 @@ public class Member {
         this.gender = gender;
     }
 
-    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl, List<MemberRegion> favoriteRegionIds) {
+    public void updateMemberInfo(final String nickname, final String age, final String gender,
+        final AttachFile profileImageFile, final List<MemberRegion> favoriteRegions) {
         this.nickname = nickname;
         this.ages = Ages.from(age);
         this.gender = Gender.from(gender);
-        this.profileImageUrl = profileImageUrl;
+        if (profileImageFile != null) {
+            this.profileImageUrl = profileImageFile.getFileUrl();
+        }
         this.favoriteRegions.clear();
         this.favoriteRegions.addAll(favoriteRegions);
     }
 
     public String getProfileImageUrl() {
-        if(profileImageUrl == null) return null;
-        if(profileImageUrl.startsWith("http://") || profileImageUrl.startsWith("https://")) return profileImageUrl;
-        else return DEFAULT_PROFILE_CDN + profileImageUrl;
+        if (profileImageUrl == null) {
+            return null;
+        }
+        if (profileImageUrl.startsWith("http://") || profileImageUrl.startsWith("https://")) {
+            return profileImageUrl;
+        } else {
+            return DEFAULT_PROFILE_CDN + profileImageUrl;
+        }
     }
 
     public List<Long> getFavoriteRegionIds() {
@@ -150,6 +161,6 @@ public class Member {
 
     public boolean isFavoriteRegion(Region region) {
         return favoriteRegions.stream()
-                .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
+            .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
     }
 }

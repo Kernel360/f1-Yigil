@@ -145,7 +145,7 @@ function userInfoRequest(accessToken: string) {
   });
 }
 
-function backendLoginRequest(data: {
+export function backendLoginRequest(data: {
   id: string;
   nickname: string;
   profile_image_url: string;
