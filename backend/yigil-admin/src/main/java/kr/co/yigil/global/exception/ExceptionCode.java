@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ExceptionCode {
-
+  
     INVALID_REQUEST(1000, "올바르지 않은 요청입니다."),
     ADMIN_NOT_FOUND(1101, "관리자 정보를 찾을 수 없습니다."),
     ADMIN_PASSWORD_DOES_NOT_MATCH(1102, "비밀번호가 맞지 않습니다."),
@@ -14,6 +14,10 @@ public enum ExceptionCode {
     ADMIN_SIGNUP_REQUEST_NOT_FOUND(1202, "관리자 가입 요청 정보를 찾을 수 없습니다."),
 
     NOTICE_NOT_FOUND(3001, "공지사항을 찾을 수 없습니다."),
+
+    EMPTY_FILE(5001, "업로드한 파일이 비어있습니다."),
+    INVALID_FILE_TYPE(5002, "지원하지 않는 형식의 파일입니다."),
+    EXCEED_FILE_CAPACITY(5003, "업로드 가능한 파일 용량을 초과했습니다."),
 
     INVALID_JWT_TOKEN(9101, "올바르지 않은 형식의 JWT 토큰입니다."),
     EXPIRED_JWT_TOKEN(9102, "만료된 JWT 토큰입니다."),
