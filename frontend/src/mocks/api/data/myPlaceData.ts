@@ -1,4 +1,4 @@
-import { TMyPageCourse, TMyPageSpot } from '@/app/_components/mypage/types';
+import { TMyPageCourse, TMyPageSpot } from '@/types/myPageResponse';
 
 export const myPlaceSpotData: TMyPageSpot[] = [
   {
