@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-04T17:25:08+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2024-03-05T16:25:42+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
 public class NoticeMapperImpl implements NoticeMapper {
@@ -36,9 +36,16 @@ public class NoticeMapperImpl implements NoticeMapper {
             return null;
         }
 
-        NoticeDto.NoticeItem noticeItem1 = new NoticeDto.NoticeItem();
+        NoticeDto.NoticeItem.NoticeItemBuilder noticeItem1 = NoticeDto.NoticeItem.builder();
 
-        return noticeItem1;
+        noticeItem1.id( noticeItem.getId() );
+        noticeItem1.title( noticeItem.getTitle() );
+        noticeItem1.content( noticeItem.getContent() );
+        noticeItem1.author( noticeItem.getAuthor() );
+        noticeItem1.createdAt( noticeItem.getCreatedAt() );
+        noticeItem1.updatedAt( noticeItem.getUpdatedAt() );
+
+        return noticeItem1.build();
     }
 
     @Override

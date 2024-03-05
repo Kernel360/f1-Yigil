@@ -45,6 +45,13 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/popular/more")
+    public ResponseEntity<PopularPlaceResponse> getPopularPlaceMore(@Auth Accessor accessor) {
+        var placeInfo = placeFacade.getPopularPlaceMore(accessor);
+        var response = placeMapper.toPopularPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping("/{placeId}")
     public ResponseEntity<PlaceDetailInfoDto> retrievePlace(
             @PathVariable("placeId") Long placeId,

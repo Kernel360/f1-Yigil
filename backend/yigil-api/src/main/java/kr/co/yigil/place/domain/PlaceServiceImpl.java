@@ -18,13 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
     private final PlaceReader placeReader;
+    private final PopularPlaceReader popularPlaceReader;
     private final PlaceCacheReader placeCacheReader;
     private final BookmarkReader bookmarkReader;
 
     @Override
     @Transactional(readOnly = true)
     public List<Main> getPopularPlace(final Accessor accessor) {
-        return placeReader.getPopularPlace().stream()
+        return popularPlaceReader.getPopularPlace().stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
                     if (accessor.isMember()) {
@@ -37,6 +38,22 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Main> getPopularPlaceMore(final Accessor accessor) {
+        return popularPlaceReader.getPopularPlaceMore().stream()
+                .map(place -> {
+                    int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    if (accessor.isMember()) {
+                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
+                        return new Main(place, spotCount, isBookmarked);
+                    }
+                    return new Main(place, spotCount);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Main> getPlaceInRegion(final Long regionId, final Accessor accessor) {
         return placeReader.getPlaceInRegion(regionId).stream()
                 .map(place -> {
