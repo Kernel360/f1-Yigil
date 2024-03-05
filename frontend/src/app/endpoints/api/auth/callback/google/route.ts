@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { userInfo } from 'os';
 import { getCallbackUrlBase } from '../kakao/constants';
-import { backendLoginRequest } from '../kakao/route';
+
 import {
   googldRedirectUri,
   googleOAuthEndPoint,
@@ -12,7 +12,6 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   const token = searchParams.get('code');
-  console.log('token', token);
   if (!token) {
     return NextResponse.json({
       message: 'Failed to get Authorization code',
@@ -38,7 +37,6 @@ export async function GET(request: NextRequest) {
     });
   }
   const userTokenJson = await userTokenResponse.json();
-  console.log('userTokeb', userTokenJson);
 
   const userInfoResponse = await userInfoRequest(userTokenJson.access_token);
   if (!userInfoResponse.ok) {
@@ -50,67 +48,48 @@ export async function GET(request: NextRequest) {
   const userInfoJson = await userInfoResponse.json();
 
   const backendRequestData = {
-    id: Number(userInfoJson.id),
+    id: userInfoJson.id,
     nickname: userInfoJson.name,
     profile_image_url: userInfoJson.picture,
     email: userInfoJson.email,
     provider: 'google',
     accessToken: userTokenJson.access_token,
   };
-  console.log(backendRequestData);
 
-  const res = await fetch(`${process.env.DEV_BASE_URL}/v1/login`, {
-    method: 'POST',
-    body: JSON.stringify({
-      id: Number(userInfoJson.id),
-      nickname: userInfoJson.name,
-      profileImageUrl: '/public/icons.test.png',
-      email: userInfoJson.email,
-      provider: 'google',
-    }),
-    headers: {
-      Authorization: `Bearer ${userTokenJson.id_token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  console.log('res', res);
-  const result = await res.json();
-  console.log('result', result);
   /**
    * TODO: 백엔드 api 연결 에러 해결해야 함.
-   * 
+   *
    */
 
-  // const backendResponse = await backendLoginRequest(backendRequestData);
+  const backendResponse = await backendGoogleLoginRequest(backendRequestData);
 
-  // const backendJson = await backendResponse.json();
+  const backendJson = await backendResponse.json();
 
-  // if (!backendResponse.ok) {
-  //   // console.log(backendJson);
-  //   return NextResponse.json(
-  //     { message: 'Failed to login to backend server' },
-  //     { status: 400 },
-  //   );
-  // }
+  if (!backendResponse.ok) {
+    return NextResponse.json(
+      { message: 'Failed to login to backend server' },
+      { status: 400 },
+    );
+  }
 
-  // const [key, value] = backendResponse.headers
-  //   .getSetCookie()[0]
-  //   .split('; ')[0]
-  //   .split('=');
+  const [key, value] = backendResponse.headers
+    .getSetCookie()[0]
+    .split('; ')[0]
+    .split('=');
 
-  // const baseUrl = await getCallbackUrlBase();
+  const baseUrl = await getCallbackUrlBase();
 
-  // const response = NextResponse.redirect(new URL('/', baseUrl), {
-  //   status: 302,
-  // });
+  const response = NextResponse.redirect(new URL('/', baseUrl), {
+    status: 302,
+  });
 
-  // response.cookies.set({
-  //   name: key,
-  //   value,
-  //   secure: ENVIRONMENT === 'production',
-  // });
+  response.cookies.set({
+    name: key,
+    value,
+    secure: ENVIRONMENT === 'production',
+  });
 
-  // return response;
+  return response;
 }
 
 function userTokenRequest(
@@ -134,6 +113,35 @@ function userInfoRequest(token: string) {
   return fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: {
       authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+function backendGoogleLoginRequest(data: {
+  id: string;
+  nickname: string;
+  profile_image_url: string;
+  email: string;
+  provider: string;
+  accessToken: string;
+}) {
+  const { BASE_URL } = process.env;
+
+  const { id, nickname, profile_image_url, email, provider, accessToken } =
+    data;
+
+  return fetch(`${BASE_URL}/v1/login`, {
+    method: 'POST',
+    body: JSON.stringify({
+      id,
+      nickname,
+      profile_image_url,
+      email,
+      provider,
+    }),
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
     },
   });
 }
