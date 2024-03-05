@@ -1,7 +1,6 @@
+import { backendLoginRequest } from '@/app/_components/api/action';
 import { NextRequest, NextResponse } from 'next/server';
 import { getCallbackUrlBase } from '../kakao/constants';
-import { backendLoginRequest } from '../kakao/route';
-
 import { googldRedirectUri } from './constants';
 
 export async function GET(request: NextRequest) {
