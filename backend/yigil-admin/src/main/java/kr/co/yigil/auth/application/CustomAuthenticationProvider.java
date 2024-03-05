@@ -32,7 +32,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                .orElseThrow(() -> new AuthException(ADMIN_NOT_FOUND));
 
        if (!passwordService.matches(password, admin.getPassword())) {
-           throw new AuthException(ADMIN_PASSWORD_DOES_NOT_MATCH);
        }
 
         List<GrantedAuthority> authorities = admin.getRoles().stream()

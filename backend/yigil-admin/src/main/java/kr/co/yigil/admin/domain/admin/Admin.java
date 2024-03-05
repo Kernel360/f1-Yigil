@@ -82,4 +82,12 @@ public class Admin implements UserDetails {
         this.roles = roles;
         this.profileImageUrl = profileImageUrl;
     }
+
+    public void updateProfileImage(String fileUrl) {
+        this.profileImageUrl = fileUrl;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }
