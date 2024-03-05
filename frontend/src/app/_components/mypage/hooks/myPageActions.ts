@@ -7,10 +7,6 @@ export const myPageCourseRequest = requestWithCookie('courses/my');
 export const myPageFollowerRequest = requestWithCookie('follows/followers');
 export const myPageFollowingRequest = requestWithCookie('follows/followings');
 
-export const authenticateUser = async () => {
-  return requestWithCookie('members')()()()();
-};
-
 export const getMyPageSpots = async (
   pageNo: number = 1,
   size: number = 5,

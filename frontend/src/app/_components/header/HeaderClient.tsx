@@ -8,7 +8,7 @@ import { EventFor } from '@/types/type';
 import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
 import { TUserInfo } from '../mypage/types';
-import { authenticateUser } from '../mypage/hooks/myPageActions';
+import { authenticateUser } from '../mypage/hooks/authenticateUser';
 
 export default function HeaderClient() {
   const router = useRouter();

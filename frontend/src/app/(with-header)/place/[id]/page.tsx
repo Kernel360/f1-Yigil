@@ -1,7 +1,7 @@
 import PlaceDetail from '@/app/_components/place/PlaceDetail';
 import { getPlaceDetail } from '../action';
-import { authenticateUser } from '@/app/_components/mypage/hooks/myPageActions';
 import { myInfoSchema } from '@/types/response';
+import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 
 export default async function PlaceDetailPage({
   params,
