@@ -40,8 +40,5 @@ public class AdminAttachFile {
         this.fileSize = fileSize;
     }
 
-    public String getFileUrl() {
-        return "http://cdn.yigil.co.kr/" + fileUrl;
-    }
 
 }

@@ -2,7 +2,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 50MB
-      max-request-size: 250MB
+      max-request-size: 100MB
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
@@ -13,28 +13,30 @@ spring:
     master:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: @MASTER_DB_URL@
+        jdbc-url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
         read-only: false
-        username: @MASTER_DB_USERNAME@
-        password: @MASTER_DB_PASSWORD@
+        username: postgres
+        password: 12345678
     slave:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: @SLAVE_DB_URL@
+        jdbc-url: jdbc:postgresql://database-1- read.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
         read-only: true
-        username: @SLAVE_DB_USERNAME@
-        password: @SLAVE_DB_PASSWORD@
+        username: postgres
+        password: 12345678
   data:
     redis:
-      host: @REDIS_HOST@
-      port: @REDIS_PORT@
+      host: localhost
+      port: 6379
+
   jackson:
     property-naming-strategy: SNAKE_CASE
+
   mail:
-    host: @MAIL_HOST@
-    port: @MAIL_PORT@
-    username: @MAIL_USERNAME@
-    password: @MAIL_PASSWORD@
+    host: smtp.gmail.com
+    port: 587
+    username: kiit0901
+    password: irbjczbuoksnjjad
 
     properties:
       mail:
@@ -47,10 +49,10 @@ spring:
 cloud:
   aws:
     s3:
-    bucket: @S3_BUCKET@
+    bucket: cdn.yigil.co.kr
     credentials:
-      access-key: @AWS_ACCESS_KEY@
-      secret-key: @AWS_SECRET_KEY@
+      access-key: AKIA57RFG4SU5VO6U3PQ
+      secret-key: 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
     region:
       static: ap-northeast-2
       auto: false
@@ -58,12 +60,12 @@ cloud:
       auto: false
 
 server:
-  port: @YIGIL_ADMIN_PORT@
+  port: 8081
   servlet:
-      session:
-        cookie:
-          http-only: true
-          secure: false
+    session:
+      cookie:
+        http-only: true
+        secure: false
 
 jasypt:
   encryptor:
@@ -73,9 +75,10 @@ logging:
   level:
     root: DEBUG
   slack:
-    webhook-uri: @SLACK_WEBHOOK_URI@
+    webhook-uri: https://hooks.slack.com/services/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
+
 jwt:
-  secret: @JWT_SECRET@
+  secret: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
 
 decorator:
   datasource:
