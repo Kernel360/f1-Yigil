@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { userInfo } from 'os';
 import { getCallbackUrlBase } from '../kakao/constants';
+import { backendLoginRequest } from '../kakao/route';
 
-import {
-  googldRedirectUri,
-  googleOAuthEndPoint,
-  GOOGLE_AUTH_URL,
-} from './constants';
+import { googldRedirectUri } from './constants';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -56,12 +52,7 @@ export async function GET(request: NextRequest) {
     accessToken: userTokenJson.access_token,
   };
 
-  /**
-   * TODO: 백엔드 api 연결 에러 해결해야 함.
-   *
-   */
-
-  const backendResponse = await backendGoogleLoginRequest(backendRequestData);
+  const backendResponse = await backendLoginRequest(backendRequestData);
 
   const backendJson = await backendResponse.json();
 
@@ -113,35 +104,6 @@ function userInfoRequest(token: string) {
   return fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: {
       authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-function backendGoogleLoginRequest(data: {
-  id: string;
-  nickname: string;
-  profile_image_url: string;
-  email: string;
-  provider: string;
-  accessToken: string;
-}) {
-  const { BASE_URL } = process.env;
-
-  const { id, nickname, profile_image_url, email, provider, accessToken } =
-    data;
-
-  return fetch(`${BASE_URL}/v1/login`, {
-    method: 'POST',
-    body: JSON.stringify({
-      id,
-      nickname,
-      profile_image_url,
-      email,
-      provider,
-    }),
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
     },
   });
 }

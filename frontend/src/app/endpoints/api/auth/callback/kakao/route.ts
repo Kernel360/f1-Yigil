@@ -145,7 +145,7 @@ function userInfoRequest(accessToken: string) {
   });
 }
 
-function backendLoginRequest(data: {
+export function backendLoginRequest(data: {
   id: string;
   nickname: string;
   profile_image_url: string;
@@ -153,12 +153,14 @@ function backendLoginRequest(data: {
   provider: string;
   accessToken: string;
 }) {
-  const { BASE_URL } = process.env;
+  const { ENVIRONMENT, BASE_URL, DEV_BASE_URL } = process.env;
+
+  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
 
   const { id, nickname, profile_image_url, email, provider, accessToken } =
     data;
 
-  return fetch(`${BASE_URL}/v1/login`, {
+  return fetch(`${baseUrl}/v1/login`, {
     method: 'POST',
     body: JSON.stringify({
       id,
