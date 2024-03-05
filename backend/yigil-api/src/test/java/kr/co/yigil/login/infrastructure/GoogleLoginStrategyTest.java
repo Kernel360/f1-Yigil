@@ -69,7 +69,7 @@ public class GoogleLoginStrategyTest {
         Long memberId = 1L;
         Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.GOOGLE);
 
-        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(
+        when(memberReader.findMemberByEmailAndSocialLoginType("email@example.com", SocialLoginType.GOOGLE)).thenReturn(
                 Optional.of(mockMember));
 
         LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
@@ -120,7 +120,7 @@ public class GoogleLoginStrategyTest {
         when(loginCommand.getId()).thenReturn("12345678");
         when(loginCommand.getEmail()).thenReturn("test@test.com");
 
-        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(Optional.empty());
+        when(memberReader.findMemberByEmailAndSocialLoginType("test@test.com", SocialLoginType.GOOGLE)).thenReturn(Optional.empty());
         Long memberId = 1L;
         Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.GOOGLE);
         when(loginCommand.toEntity(anyString())).thenReturn(mockMember);

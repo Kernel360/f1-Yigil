@@ -1,6 +1,5 @@
 import React from 'react';
 import HeaderClient from './HeaderClient';
-import { TUserInfo } from '../mypage/types';
 
 export default function Header() {
   return (
