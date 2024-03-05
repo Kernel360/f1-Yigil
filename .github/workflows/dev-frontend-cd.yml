@@ -45,11 +45,9 @@ jobs:
       # Docker 이미지 빌드
       - name: Docker image build
         run : |
-          cd yigil-api
           docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT }} . --platform=linux/amd64
       - name: Docker image push
         run : |
-          cd yigil-api
           docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT }}
       # EC2 인스턴스 접속 및 애플리케이션 실행
       - name: Application Run
