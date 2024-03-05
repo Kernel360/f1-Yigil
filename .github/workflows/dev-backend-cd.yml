@@ -20,14 +20,14 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
     
-    ## jdk setting
+    # jdk setting
     - uses: actions/checkout@v3
     - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
         java-version: '21'
         distribution: 'temurin'
-    ## application secrets 값 주입
+    # application secrets 값 주입
     - name: Set application.yml
       run: |
         sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
@@ -63,8 +63,7 @@ jobs:
         sed -i "s|@MAIL_PORT@|${{ secrets.MAIL_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
-    # cat ./yigil-admin/src/main/resources/*
-    ## Dockerfile secrets 값 주입
+    # Dockerfile secrets 값 주입
     - name: Set Dockerfile
       run: |
         sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/Dockerfile
@@ -74,8 +73,8 @@ jobs:
       run: chmod +x gradlew
     # Gradle Build (test 제외)
     - name: Build with Gradle
-      run: ./gradlew clean build -x test
-    ## AWS에 로그인합니다. aws-region은 서울로 설정(ap-northeast-2)했습니다
+      run: ./gradlew clean build
+    # AWS 로그인
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
