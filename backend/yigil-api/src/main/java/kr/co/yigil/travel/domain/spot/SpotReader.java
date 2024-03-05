@@ -2,6 +2,7 @@ package kr.co.yigil.travel.domain.spot;
 
 import java.util.List;
 import java.util.Optional;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.domain.Spot;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,6 @@ public interface SpotReader {
 
     Page<Spot> getSpotSliceByMemberId(Long memberId, Pageable pageable);
 
-    Page<Spot> getMemberSpotList(Long memberId, Pageable pageable, String selected);
+    Page<Spot> getMemberSpotList(Long memberId, Selected selected, Pageable pageable);
 
 }
