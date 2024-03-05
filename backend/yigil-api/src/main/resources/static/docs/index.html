@@ -4743,7 +4743,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].is_following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
 </tr>
@@ -4760,14 +4760,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 198
+Content-Length: 195
 
 {
   "content" : [ {
     "member_id" : 1,
     "nickname" : "test user",
     "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
-    "is_following" : true
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -4902,7 +4902,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].is_following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
 </tr>
@@ -4919,14 +4919,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 198
+Content-Length: 195
 
 {
   "content" : [ {
     "member_id" : 1,
     "nickname" : "test user",
     "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
-    "is_following" : true
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -5599,7 +5599,7 @@ Content-Length: 524
 
 id:1
 event:test event
-data:{"id":null,"member":{"id":1,"email":"email","social_login_id":"12345678","nickname":"nickname","profile_image_url":"http://cdn.yigil.co.kr/image.jpg","status":"ACTIVE","social_login_type":"KAKAO","gender":"NONE","ages":"NONE","favorite_regions":[],"joined_at":"2024-03-04T22:00:59.974061","modified_at":"2024-03-04T22:00:59.974063","favorite_region_ids":[]},"message":"새로운 알림입니다.","created_at":"2024-03-04T22:00:59.974065","modified_at":"2024-03-04T22:00:59.974065","read":false}</code></pre>
+data:{"id":null,"member":{"id":1,"email":"email","social_login_id":"12345678","nickname":"nickname","profile_image_url":"http://cdn.yigil.co.kr/image.jpg","status":"ACTIVE","social_login_type":"KAKAO","gender":"NONE","ages":"NONE","favorite_regions":[],"joined_at":"2024-03-05T10:51:43.211937","modified_at":"2024-03-05T10:51:43.211943","favorite_region_ids":[]},"message":"새로운 알림입니다.","created_at":"2024-03-05T10:51:43.211944","modified_at":"2024-03-05T10:51:43.211945","read":false}</code></pre>
 </div>
 </div>
 </div>
@@ -5785,7 +5785,7 @@ Content-Length: 72
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-04 20:51:40 +0900
+Last updated 2024-03-05 10:51:15 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

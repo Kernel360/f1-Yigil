@@ -793,7 +793,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].is_following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
 </tr>
@@ -810,14 +810,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 198
+Content-Length: 195
 
 {
   "content" : [ {
     "member_id" : 1,
     "nickname" : "test user",
     "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
-    "is_following" : true
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -952,7 +952,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].is_following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
 </tr>
@@ -969,14 +969,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 198
+Content-Length: 195
 
 {
   "content" : [ {
     "member_id" : 1,
     "nickname" : "test user",
     "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
-    "is_following" : true
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
