@@ -23,9 +23,7 @@ export default function ImageCarousel({
   label: string;
   variant: 'primary' | 'secondary' | 'thumbnail';
 }) {
-  const [emblaRef] = useEmblaCarousel({
-    loop: false,
-  });
+  const [emblaRef] = useEmblaCarousel();
 
   return (
     <div
@@ -33,17 +31,20 @@ export default function ImageCarousel({
       ref={emblaRef}
       aria-label={`${label} 이미지들`}
     >
-      <div className="flex">
+      <div className="flex gap-2">
         {images.map((url, index) => (
           <div
             key={index}
-            className={`relative ${getImageSize(variant)} aspect-square`}
+            className={`relative ${getImageSize(
+              variant,
+            )} aspect-square shrink-0`}
           >
             <Image
               className="rounded-lg"
               src={url}
               alt={`${label} 이미지`}
               fill
+              sizes="20vw"
             />
           </div>
         ))}
