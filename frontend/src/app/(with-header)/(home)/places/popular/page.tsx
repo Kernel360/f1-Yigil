@@ -3,7 +3,7 @@ import { myInfoSchema } from '@/types/response';
 import { getMorePopularPlaces } from '../../action';
 import { Place } from '@/app/_components/place';
 
-export default async function PlacesPage() {
+export default async function PopularPlacesPage() {
   const memberJson = await authenticateUser();
   const memberInfo = myInfoSchema.safeParse(memberJson);
 

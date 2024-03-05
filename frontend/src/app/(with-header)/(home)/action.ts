@@ -1,7 +1,16 @@
 import z from 'zod';
 
-import { placesSchema } from '@/types/response';
+import { cookies } from 'next/headers';
+import { placeSchema, regionSchema } from '@/types/response';
 import { getBaseUrl } from '@/app/utilActions';
+
+const placeResponseSchema = z.object({
+  places: z.array(placeSchema),
+});
+
+const regionResponseSchema = z.object({
+  regions: z.array(regionSchema),
+});
 
 async function fetchMorePopularPlaces() {
   const BASE_URL = await getBaseUrl();
@@ -21,9 +30,30 @@ async function fetchPopularPlaces() {
   return await response.json();
 }
 
-const placeResponseSchema = z.object({
-  places: placesSchema,
-});
+async function fetchInterestedRegions() {
+  const BASE_URL = await getBaseUrl();
+
+  const session = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/regions/my`, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+    next: { tags: ['interestedRegions'] },
+  });
+
+  return await response.json();
+}
+
+async function fetchPlacesOfRegion(id: number) {
+  const BASE_URL = await getBaseUrl();
+
+  const response = await fetch(`${BASE_URL}/v1/places/region/${id}`, {
+    next: { tags: ['placesOfRegion'] },
+  });
+
+  return await response.json();
+}
 
 export async function getPopularPlaces() {
   const json = await fetchPopularPlaces();
@@ -35,6 +65,22 @@ export async function getPopularPlaces() {
 
 export async function getMorePopularPlaces() {
   const json = await fetchMorePopularPlaces();
+
+  const result = placeResponseSchema.safeParse(json);
+
+  return result;
+}
+
+export async function getInterestedRegions() {
+  const json = await fetchInterestedRegions();
+
+  const result = regionResponseSchema.safeParse(json);
+
+  return result;
+}
+
+export async function getPlacesOfRegion(id: number) {
+  const json = await fetchPlacesOfRegion(id);
 
   const result = placeResponseSchema.safeParse(json);
 
