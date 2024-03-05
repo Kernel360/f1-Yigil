@@ -1,4 +1,4 @@
-import { authenticateUser } from '@/app/_components/mypage/hooks/myPageActions';
+import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
 import { getMorePopularPlaces } from '../../action';
 import { Place } from '@/app/_components/place';
