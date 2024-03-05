@@ -6,12 +6,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ExceptionCode {
-
+  
     INVALID_REQUEST(1000, "올바르지 않은 요청입니다."),
     ADMIN_NOT_FOUND(1101, "관리자 정보를 찾을 수 없습니다."),
     ADMIN_PASSWORD_DOES_NOT_MATCH(1102, "비밀번호가 맞지 않습니다."),
     ADMIN_ALREADY_EXISTED(1201, "이미 존재하는 이메일 또는 닉네임입니다."),
     ADMIN_SIGNUP_REQUEST_NOT_FOUND(1202, "관리자 가입 요청 정보를 찾을 수 없습니다."),
+
+    NOTICE_NOT_FOUND(3001, "공지사항을 찾을 수 없습니다."),
 
     EMPTY_FILE(5001, "업로드한 파일이 비어있습니다."),
     INVALID_FILE_TYPE(5002, "지원하지 않는 형식의 파일입니다."),
