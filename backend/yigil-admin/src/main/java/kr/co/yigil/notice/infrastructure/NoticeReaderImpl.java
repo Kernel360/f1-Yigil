@@ -5,8 +5,8 @@ import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.notice.domain.Notice;
 import kr.co.yigil.notice.domain.NoticeReader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +22,7 @@ public class NoticeReaderImpl implements NoticeReader {
     }
 
     @Override
-    public Slice<Notice> getNoticeList(PageRequest pageRequest) {
+    public Page<Notice> getNoticeList(PageRequest pageRequest) {
         return noticeRepository.findAll(pageRequest);
     }
 }

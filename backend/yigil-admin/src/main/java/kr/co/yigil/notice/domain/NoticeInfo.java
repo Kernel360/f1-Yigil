@@ -3,7 +3,7 @@ package kr.co.yigil.notice.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
 
 public class NoticeInfo {
 
@@ -22,7 +22,7 @@ public class NoticeInfo {
         private final List<NoticeItem> noticeList;
         private final boolean hasNext;
 
-        public NoticeListInfo(Slice<Notice> noticeSlice) {
+        public NoticeListInfo(Page<Notice> noticeSlice) {
             this.noticeList = noticeSlice.getContent().stream().map(NoticeItem::new).toList();
             this.hasNext = noticeSlice.hasNext();
         }
@@ -34,7 +34,7 @@ public class NoticeInfo {
         private final Long id;
         private final String title;
         private final String content;
-        private final String writer;
+        private final String author;
         private final LocalDateTime createdAt;
         private final LocalDateTime updatedAt;
 
@@ -42,7 +42,7 @@ public class NoticeInfo {
             id = notice.getId();
             title = notice.getTitle();
             content = notice.getContent();
-            writer = notice.getAuthor();
+            author = notice.getAuthor();
             createdAt = notice.getCreatedAt();
             updatedAt = notice.getModifiedAt();
         }
@@ -77,6 +77,7 @@ public class NoticeInfo {
     public static class NoticeDetail {
 
         private final Long id;
+        private final String author;
         private final String title;
         private final String content;
         private final LocalDateTime createdAt;
@@ -84,6 +85,7 @@ public class NoticeInfo {
 
         public NoticeDetail(Notice notice) {
             this.id = notice.getId();
+            this.author = notice.getAuthor();
             this.title = notice.getTitle();
             this.content = notice.getContent();
             this.createdAt = notice.getCreatedAt();

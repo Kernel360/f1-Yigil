@@ -5,20 +5,22 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class NoticeDto {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class NoticeCreateRequest{
         private String author;
         private String title;
         private String content;
-
     }
 
     @Getter
-    @Builder
+    @AllArgsConstructor
     public static class NoticeUpdateRequest{
         private String author;
         private String title;
@@ -31,22 +33,22 @@ public class NoticeDto {
         private final String message;
     }
 
-
     @Getter
     @Builder
     public static class NoticeListResponse{
         List<NoticeItem> noticeList;
         boolean hasNext;
     }
+    @Getter
+    @Builder
     public static class NoticeItem {
         private Long id;
         private String title;
         private String content;
-        private String writer;
+        private String author;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }
-
 
     @Getter
     public static class NoticeCreateResponse extends BaseMessageResponse {
