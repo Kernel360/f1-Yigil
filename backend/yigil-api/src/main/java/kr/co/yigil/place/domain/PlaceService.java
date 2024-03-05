@@ -11,4 +11,8 @@ public interface PlaceService {
     public PlaceInfo.Detail retrievePlace(Long placeId, Accessor accessor);
     public PlaceInfo.MapStaticImageInfo findPlaceStaticImage(String placeName, String address);
     public Page<Place> getNearPlace(PlaceCommand.NearPlaceRequest command);
+
+    List<Main> getPopularPlaceByDemographics(Long memberId);
+
+    List<Main> getPopularPlaceByDemographicsMore(Long memberId);
 }

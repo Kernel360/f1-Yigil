@@ -5,6 +5,9 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_PLACE_ID;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.place.domain.DemographicPlace;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand.Coordinate;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
@@ -18,7 +21,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PlaceReaderImpl implements PlaceReader {
+
     private final PlaceRepository placeRepository;
+    private final DemographicPlaceRepository demographicPlaceRepository;
 
     @Override
     public Optional<Place> findPlaceByNameAndAddress(String placeName, String placeAddress) {
@@ -51,6 +56,18 @@ public class PlaceReaderImpl implements PlaceReader {
                 maxCoordinate.getX(), maxCoordinate.getY(),
                 pageRequest
         );
+    }
+
+    @Override
+    public List<Place> getPopularPlaceByDemographics(Ages ages, Gender gender) {
+        return demographicPlaceRepository.findTop5ByAgesAndGenderOrderByReferenceCountDesc(ages, gender)
+                .stream().map(DemographicPlace::getPlace).toList();
+    }
+
+    @Override
+    public List<Place> getPopularPlaceByDemographicsMore(Ages ages, Gender gender) {
+        return demographicPlaceRepository.findTop20ByAgesAndGenderOrderByReferenceCountDesc(ages, gender)
+                .stream().map(DemographicPlace::getPlace).toList();
     }
 
 }
