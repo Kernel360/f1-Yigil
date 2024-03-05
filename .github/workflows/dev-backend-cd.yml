@@ -115,8 +115,8 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_HOST_DEV }}
-        username: ${{ secrets.EC2_USERNAME_DEV }}
-        key: ${{ secrets.EC2_KEY_DEV }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
         
         script: |
           awslogin
