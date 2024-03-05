@@ -6,7 +6,8 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 name: Java CD with Gradle
 on:
-  push:
+  pull_request:
+    types: [ "closed" ]
     branches: [ "main" ]
 permissions:
   contents: read
@@ -25,15 +26,6 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-    ## docker-compose 설치
-    - name: Set up Docker-Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        chmod +x /usr/local/bin/docker-compose
-    ## docker-compose.yml 생성 후 secret 값 복붙
-    - uses: actions/checkout@v3
-    - run: touch docker-compose.yml
-    - run: echo "${{ secrets.DOCKER_COMPOSE_PROD }}" > docker-compose-prod.yml
     ## application secrets 값 주입
     - name: Set api application.yml
       run: |
@@ -96,12 +88,31 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     # Docker 이미지 빌드
-    - name: Docker-Compose Image Build
-      run: docker-compose build
-    # DockerHub Push
-    - name: DockerHub Push
-      run: docker-compose push
-    
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK_PROD }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-admin
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK_PROD }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT_PROD }} . --platform=linux/amd64
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK_PROD }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK_PROD }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT_PROD }}
+
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6
@@ -111,5 +122,4 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         
         script: |
-          awslogin
-          allin
+          sh ./gitaction.sh

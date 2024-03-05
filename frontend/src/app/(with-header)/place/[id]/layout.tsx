@@ -17,7 +17,7 @@ export default function PlaceDetailLayout({
       </nav>
       {children}
       <hr className="border-8" />
-      {reviews}
+      {/* {reviews} */}
     </main>
   );
 }

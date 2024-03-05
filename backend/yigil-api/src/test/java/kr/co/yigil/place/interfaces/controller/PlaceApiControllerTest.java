@@ -23,13 +23,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.application.PlaceFacade;
+import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
+import kr.co.yigil.place.interfaces.dto.PlaceCoordinateDto;
 import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
+import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
@@ -40,6 +45,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -188,6 +194,51 @@ public class PlaceApiControllerTest {
                                 fieldWithPath("places[].thumbnail_image_url").type(JsonFieldType.STRING).description("장소의 대표 이미지의 Url"),
                                 fieldWithPath("places[].rate").type(JsonFieldType.STRING).description("장소의 평점 정보"),
                                 fieldWithPath("places[].bookmarked").type(JsonFieldType.BOOLEAN).description("해당 장소의 북마크 여부")
+                        )
+                ));
+    }
+
+    @DisplayName("getNearPlace 메서드가 잘 동작하는지")
+    @Test
+    void getNearPlace_ShouldReturnOk() throws Exception {
+        PlaceCommand.NearPlaceRequest mockRequest = mock(NearPlaceRequest.class);
+        when(placeMapper.toNearPlaceCommand(any(
+                kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest.class))).thenReturn(mockRequest);
+
+        Page<Place> mockPage = mock(Page.class);
+        when(placeFacade.getNearPlace(mockRequest)).thenReturn(mockPage);
+
+        PlaceCoordinateDto mockDto = new PlaceCoordinateDto(1L, 127.0, 38.0, "장소명");
+        NearPlaceResponse mockResponse = new NearPlaceResponse(List.of(mockDto), 1, 1);
+
+        when(placeMapper.toNearPlaceResponse(mockPage)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/places/near")
+                        .param("minX", "1")
+                        .param("minY", "1")
+                        .param("maxX", "2")
+                        .param("maxY", "2")
+                        .param("page", "1"))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "places/get-near-place",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        queryParameters(
+                                parameterWithName("minX").description("최소 x 좌표"),
+                                parameterWithName("minY").description("최소 y 좌표"),
+                                parameterWithName("maxX").description("최대 x 좌표"),
+                                parameterWithName("maxY").description("최대 y 좌표"),
+                                parameterWithName("page").description("페이지 번호")
+                        ),
+                        responseFields(
+                                subsectionWithPath("places").description("주변 장소의 정보"),
+                                fieldWithPath("places[].id").type(JsonFieldType.NUMBER).description("장소의 고유 아이디"),
+                                fieldWithPath("places[].place_name").type(JsonFieldType.STRING).description("장소의 이름"),
+                                fieldWithPath("places[].x").type(JsonFieldType.NUMBER).description("장소의 x 좌표"),
+                                fieldWithPath("places[].y").type(JsonFieldType.NUMBER).description("장소의 y 좌표"),
+                                fieldWithPath("current_page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("total_pages").type(JsonFieldType.NUMBER).description("총 페이지의 개수")
                         )
                 ));
     }

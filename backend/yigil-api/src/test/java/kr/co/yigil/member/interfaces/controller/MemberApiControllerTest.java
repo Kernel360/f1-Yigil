@@ -60,12 +60,7 @@ class MemberApiControllerTest {
     void setUp(WebApplicationContext webApplicationContext,
         RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-            .apply(documentationConfiguration(restDocumentation)
-                .uris()
-                .withScheme("https")
-                .withHost("yigil.co.kr")
-                .withPort(80)
-            )
+            .apply(documentationConfiguration(restDocumentation))
             .build();
     }
 

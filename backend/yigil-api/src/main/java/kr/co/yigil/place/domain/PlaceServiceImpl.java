@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
+import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +23,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Main> getPopularPlace(Accessor accessor) {
+    public List<Main> getPopularPlace(final Accessor accessor) {
         return placeReader.getPopularPlace().stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
@@ -35,7 +37,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<Main> getPlaceInRegion(Long regionId, Accessor accessor) {
+    public List<Main> getPlaceInRegion(final Long regionId, final Accessor accessor) {
         return placeReader.getPlaceInRegion(regionId).stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
@@ -50,7 +52,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Detail retrievePlace(Long placeId, Accessor accessor) {
+    public Detail retrievePlace(final Long placeId, final Accessor accessor) {
         var place = placeReader.getPlace(placeId);
         int spotCount = placeCacheReader.getSpotCount(placeId);
         return accessor.isMember()
@@ -63,5 +65,11 @@ public class PlaceServiceImpl implements PlaceService {
     public MapStaticImageInfo findPlaceStaticImage(final String placeName, final String address) {
         var placeOptional = placeReader.findPlaceByNameAndAddress(placeName, address);
         return new MapStaticImageInfo(placeOptional);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Place> getNearPlace(final NearPlaceRequest command) {
+        return placeReader.getNearPlace(command);
     }
 }

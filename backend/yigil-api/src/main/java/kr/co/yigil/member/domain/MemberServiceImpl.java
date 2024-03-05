@@ -1,7 +1,9 @@
 package kr.co.yigil.member.domain;
 
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
+import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
 import kr.co.yigil.member.domain.MemberInfo.Main;
 import kr.co.yigil.region.domain.MemberRegion;
 import kr.co.yigil.region.domain.RegionReader;
@@ -21,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public Main retrieveMemberInfo(Long memberId) {
+    public Main retrieveMemberInfo(final Long memberId) {
         var member = memberReader.getMember(memberId);
         var followCount = followReader.getFollowCount(memberId);
         return new Main(member, followCount);
@@ -29,25 +31,31 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void withdrawal(Long memberId) {
+    public void withdrawal(final Long memberId) {
         memberStore.deleteMember(memberId);
     }
 
     @Override
     @Transactional
-    public void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request) {
+    public void updateMemberInfo(final Long memberId, final MemberCommand.MemberUpdateRequest request) {
 
         var member = memberReader.getMember(memberId);
-        var updatedProfile = fileUploader.upload(request.getProfileImageFile());
-
-        if(request.getFavoriteRegionIds() != null)
-            regionReader.validateRegions(request.getFavoriteRegionIds());
+        AttachFile updatedProfile = getAttachFile(request);
 
         var memberRegions = regionReader.getRegions(request.getFavoriteRegionIds())
             .stream().map(region -> new MemberRegion(member, region))
             .toList();
 
         member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
-            updatedProfile.getFileUrl() , memberRegions);
+            updatedProfile , memberRegions);
+
+     }
+
+    private AttachFile getAttachFile(final MemberUpdateRequest request) {
+
+        if(request.getProfileImageFile() != null) {
+            return fileUploader.upload(request.getProfileImageFile());
+        }
+        return null;
     }
 }
