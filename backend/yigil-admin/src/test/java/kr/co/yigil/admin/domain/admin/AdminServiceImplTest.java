@@ -1,9 +1,11 @@
 package kr.co.yigil.admin.domain.admin;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +14,7 @@ import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
 import kr.co.yigil.file.domain.AdminAttachFile;
 import kr.co.yigil.file.domain.FileUploader;
+import kr.co.yigil.global.exception.AuthException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +25,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminServiceImplTest {
@@ -94,22 +98,57 @@ public class AdminServiceImplTest {
         verify(adminReader).getAdminByEmail(email);
     }
 
-    @DisplayName("updateAdminDetailInfo 메서드가 Admin을 잘 업데이트하는지")
+    @DisplayName("updateProfileImage 메서드가 Admin을 잘 업데이트하는지")
     @Test
-    void updateAdminDetailInfo_ShouldUpdateAdmin() {
+    void updateProfileImage_ShouldUpdateAdmin() {
         Admin admin = mock(Admin.class);
-        AdminCommand.AdminUpdateRequest command = mock(AdminCommand.AdminUpdateRequest.class);
-        when(adminReader.getAdminByEmail(anyString())).thenReturn(admin);
+        MultipartFile profileImageFile = mock(MultipartFile.class);
         AdminAttachFile adminAttachFile = mock(AdminAttachFile.class);
+        when(adminReader.getAdminByEmail(anyString())).thenReturn(admin);
         when(adminAttachFile.getFileUrl()).thenReturn("fileUrl");
         when(fileUploader.upload(any())).thenReturn(adminAttachFile);
-        when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
 
-        adminService.updateAdminDetailInfo("email", command);
+        adminService.updateProfileImage("email", profileImageFile);
 
-        verify(admin).updateAdmin(anyString(), any(), anyString());
+        verify(admin).updateProfileImage(anyString());
     }
 
+    @DisplayName("updatePassword 메서드의 파라미터로 올바른 existingPassword 입력시 Admin password를 잘 업데이트하는지")
+    @Test
+    void updatePassword_ShouldUpdateAdmin() {
+        Admin admin = mock(Admin.class);
+        AdminCommand.AdminPasswordUpdateRequest command = AdminCommand.AdminPasswordUpdateRequest.builder()
+                .existingPassword("oldPassword")
+                .newPassword("newPassword")
+                .build();
+        when(adminReader.getAdminByEmail(anyString())).thenReturn(admin);
+        when(admin.getPassword()).thenReturn("existingencodedPassword");
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
+        adminService.updatePassword("email", command);
+
+        verify(admin).updatePassword(anyString());
+    }
+
+    @DisplayName("updatePassword 메서드가 기존 비밀번호가 틀렸을 때 예외를 잘 던지는지")
+    @Test
+    void updatePassword_ShouldThrowException_WhenExistingPasswordIsIncorrect() {
+        Admin admin = mock(Admin.class);
+        AdminCommand.AdminPasswordUpdateRequest command = AdminCommand.AdminPasswordUpdateRequest.builder()
+                .existingPassword("wrongOldPassword")
+                .newPassword("newPassword")
+                .build();
+        when(adminReader.getAdminByEmail(anyString())).thenReturn(admin);
+        when(admin.getPassword()).thenReturn("existingencodedPassword");
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+        assertThrows(AuthException.class, () -> {
+            adminService.updatePassword("email", command);
+        });
+
+        verify(admin, never()).updatePassword(anyString());
+    }
 
     @Test
     void testSignUp_ShouldStoreAdmin() {

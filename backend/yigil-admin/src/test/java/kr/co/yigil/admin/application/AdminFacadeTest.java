@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import kr.co.yigil.admin.domain.admin.AdminCommand;
+import kr.co.yigil.admin.domain.admin.AdminCommand.AdminPasswordUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
@@ -28,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminFacadeTest {
@@ -133,17 +135,30 @@ public class AdminFacadeTest {
         verify(adminService).getAdminDetailInfoByEmail(email);
     }
 
-    @DisplayName("updateAdminDetailInfo 메서드가 AdminService를 잘 호출하는지")
+    @DisplayName("updateProfileImage 메서드가 AdminService를 잘 호출하는지")
     @Test
-    void updateAdminDetailInfo_ShouldCallService() {
+    void updateProfileImage_ShouldCallService() {
         String email = "test@test.com";
-        AdminUpdateRequest command = mock(AdminUpdateRequest.class);
+        MultipartFile mockFile = mock(MultipartFile.class);
 
-        adminFacade.updateAdminDetailInfo(email, command);
+        adminFacade.updateProfileImage(email, mockFile);
 
-        verify(adminService).updateAdminDetailInfo(email, command);
+        verify(adminService).updateProfileImage(email, mockFile);
     }
 
+    @DisplayName("updatePassword 메서드가 AdminService를 잘 호출하는지")
+    @Test
+    void updatePassword_ShouldCallService() {
+        String email = "test@test.com";
+        AdminCommand.AdminPasswordUpdateRequest command = AdminCommand.AdminPasswordUpdateRequest.builder()
+                .existingPassword("oldPassword")
+                .newPassword("newPassword")
+                .build();
+
+        adminFacade.updatePassword(email, command);
+
+        verify(adminService).updatePassword(email, command);
+    }
         @DisplayName("testSignUp 메서드가 AdminService를 잘 호출하는지")
     @Test
     void testSignUp_ShouldCallService() {

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploaderImpl implements FileUploader {
 
     private final ApplicationEventPublisher eventPublisher;
+    private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/";
 
     @Override
     public AdminAttachFile upload(MultipartFile file) {
@@ -24,7 +25,7 @@ public class FileUploaderImpl implements FileUploader {
         FileUploadEvent event = new FileUploadEvent(this, file, fileUploadResult::complete);
         eventPublisher.publishEvent(event);
 
-        String fileUrl = fileUploadResult.join();
+        String fileUrl = DEFAULT_PROFILE_CDN + fileUploadResult.join();
         FileType fileType = determineFileType(file);
 
         return new AdminAttachFile(fileType, fileUrl, file.getOriginalFilename(), file.getSize());

@@ -23,7 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Admin implements UserDetails {
-    private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/"; // todo change cdn path to admin어쩌구
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,15 +83,11 @@ public class Admin implements UserDetails {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public String getProfileImageUrl() {
-        if(profileImageUrl == null) return null;
-        if(profileImageUrl.startsWith("http://") || profileImageUrl.startsWith("https://")) return profileImageUrl;
-        else return DEFAULT_PROFILE_CDN + profileImageUrl;
+    public void updateProfileImage(String fileUrl) {
+        this.profileImageUrl = fileUrl;
     }
 
-    public void updateAdmin(String password, String username, String fileUrl) {
-        this.password = password;
-        this.nickname = username;
-        this.profileImageUrl = fileUrl;
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
     }
 }

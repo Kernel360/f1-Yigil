@@ -1,7 +1,10 @@
 package kr.co.yigil.admin.domain.admin;
 
+import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_PASSWORD_DOES_NOT_MATCH;
+
 import java.util.ArrayList;
 import java.util.List;
+import kr.co.yigil.admin.domain.admin.AdminCommand.AdminPasswordUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
@@ -9,6 +12,7 @@ import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
 import kr.co.yigil.file.domain.AdminAttachFile;
 import kr.co.yigil.file.domain.FileUploader;
+import kr.co.yigil.global.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -57,12 +62,25 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void updateAdminDetailInfo(String email, AdminUpdateRequest command) {
+    public void updateProfileImage(String email, MultipartFile profileImageFile) {
         Admin admin = adminReader.getAdminByEmail(email);
-        AdminAttachFile updatedProfile = fileUploader.upload(command.getProfileImageFile());
-        String encodedPassword = passwordEncoder.encode(command.getPassword());
+        AdminAttachFile updatedProfile = fileUploader.upload(profileImageFile);
 
-        admin.updateAdmin(encodedPassword, command.getNickname(), updatedProfile.getFileUrl());
+        admin.updateProfileImage(updatedProfile.getFileUrl());
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(String email, AdminPasswordUpdateRequest command) {
+        Admin admin = adminReader.getAdminByEmail(email);
+
+        if (!passwordEncoder.matches(command.getExistingPassword(), admin.getPassword())) {
+            throw new AuthException(ADMIN_PASSWORD_DOES_NOT_MATCH);
+        }
+
+        String encodedPassword = passwordEncoder.encode(command.getNewPassword());
+        admin.updatePassword(encodedPassword);
+
     }
 
     @Override

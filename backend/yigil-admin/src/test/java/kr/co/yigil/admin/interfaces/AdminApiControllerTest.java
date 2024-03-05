@@ -177,16 +177,29 @@ public class AdminApiControllerTest {
                 .andExpect(jsonPath("$.profile_url").value(response.getProfileUrl()));
     }
 
-    @DisplayName("어드민 상세 정보가 수정 되었을 때 200 응답과 response가 잘 반환되는지")
+    @DisplayName("어드민 프로필 이미지가 수정 되었을 때 200 응답과 response가 잘 반환되는지")
     @Test
     @WithMockUser(username = "tester@tester.com")
-    void whenUpdateMemberDetailInfo_thenReturns200AndAdminUpdateResponse() throws Exception {
+    void whenUpdateProfileImage_thenReturns200AndAdminProfileImageUpdateResponse() throws Exception {
 
-        mockMvc.perform(post("/api/v1/admins/detail-info")
+        mockMvc.perform(post("/api/v1/admins/profile-image")
                         .with(SecurityMockMvcRequestPostProcessors.user("tester").roles("USER"))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
 
-        verify(adminFacade).updateAdminDetailInfo(anyString(), any());
+        verify(adminFacade).updateProfileImage(anyString(), any());
+    }
+
+    @DisplayName("어드민 비밀번호가 수정 되었을 때 200 응답과 response가 잘 반환되는지")
+    @Test
+    @WithMockUser(username = "tester@tester.com")
+    void whenUpdatePassword_thenReturns200AndAdminPasswordUpdateResponse() throws Exception {
+        mockMvc.perform(post("/api/v1/admins/password")
+                        .with(SecurityMockMvcRequestPostProcessors.user("tester").roles("USER"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"existingPassword\": \"testPassword\", \"newPassword\": \"newPassword\"}"))
+                .andExpect(status().isOk());
+
+        verify(adminFacade).updatePassword(anyString(), any());
     }
 }

@@ -27,5 +27,14 @@ public class AdminCommand {
 
     }
 
+    @Getter
+    @Builder
+    @ToString
+    public static class AdminPasswordUpdateRequest {
+        private String existingPassword;
+        private String newPassword;
+
+    }
+
 
 }
