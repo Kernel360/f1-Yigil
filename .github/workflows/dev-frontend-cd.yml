@@ -1,0 +1,61 @@
+name: Frontend CD
+
+on:
+  pull_request:
+    types: ["closed"]
+    branches: ["develop"]
+
+defaults:
+  run:
+    working-directory: ./frontend
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(join(github.event.pull_request.labels.*.name, ','), '💻Frontend')
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: frontend
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+      - name: npm install library
+        run: npm ci
+      # npm 테스트 진행
+      - name: Run test
+        run: npm run test
+      # AWS 로그인
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      # Docker 이미지 빌드
+      - name: Docker image build
+        run : |
+          docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT }} . --platform=linux/amd64
+      - name: Docker image push
+        run : |
+          docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT }}
+      # EC2 인스턴스 접속 및 애플리케이션 실행
+      - name: Application Run
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST_DEV }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+        
+          script: |
+            sh ./gitaction.sh

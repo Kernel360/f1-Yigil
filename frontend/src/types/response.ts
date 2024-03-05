@@ -96,4 +96,13 @@ export const myInfoSchema = z.object({
   follower_count: z.number().int(),
 });
 
+export const mySpotForPlaceSchema = z.object({
+  exists: z.boolean(),
+  rate: z.string(),
+  image_urls: z.array(z.string()),
+  create_date: z.coerce.date(),
+  description: z.string(),
+});
 export type TMyInfo = z.infer<typeof myInfoSchema>;
+
+export type TMySpotForPlace = z.infer<typeof mySpotForPlaceSchema>;

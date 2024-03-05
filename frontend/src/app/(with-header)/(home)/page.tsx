@@ -3,11 +3,10 @@ export const dynamic = 'force-dynamic';
 import FloatingActionButton from '@/app/_components/FloatingActionButton';
 import { PlaceList } from '@/app/_components/place';
 import { homePopOverData } from '@/app/_components/ui/popover/constants';
-import { authenticateUser } from '@/app/_components/mypage/hooks/myPageActions';
 import { getPopularPlaces } from './action';
-
 import PlusIcon from '@/../public/icons/plus.svg';
 import { myInfoSchema } from '@/types/response';
+import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 
 function OpenedFABIcon() {
   return <PlusIcon className="rotate-45 duration-200 z-30" />;
