@@ -119,6 +119,4 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         
         script: |
-          source ~/.bashrc
-          awslogin
-          allin
+          sh ./gitaction.sh
