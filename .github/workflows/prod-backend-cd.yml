@@ -112,7 +112,7 @@ jobs:
       run : |
         cd yigil-api
         docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT_PROD }}
-    
+
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6
@@ -122,5 +122,4 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         
         script: |
-          awslogin
-          allin
+          sh ./gitaction.sh

@@ -2,11 +2,14 @@ package kr.co.yigil.place.application;
 
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.place.domain.PlaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,5 +31,9 @@ public class PlaceFacade {
 
     public List<Main> getPlaceInRegion(final Long regionId, final Accessor accessor) {
         return placeService.getPlaceInRegion(regionId, accessor);
+    }
+
+    public Page<Place> getNearPlace(NearPlaceRequest command) {
+        return placeService.getNearPlace(command);
     }
 }

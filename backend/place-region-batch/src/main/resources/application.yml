@@ -6,7 +6,7 @@ spring:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     defer-datasource-initialization: true
 
   datasource:

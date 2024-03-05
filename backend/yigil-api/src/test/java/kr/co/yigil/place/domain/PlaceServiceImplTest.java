@@ -98,4 +98,26 @@ public class PlaceServiceImplTest {
 
         assertNotNull(detail);
     }
+
+    @DisplayName("findPlaceStaticImage 메서드가 MapStaticImageInfo 객체를 잘 반환하는지")
+    @Test
+    void findPlaceStaticImage_ShouldReturnMapStaticImageInfo() {
+        Place mockPlace = mock(Place.class);
+        when(placeReader.findPlaceByNameAndAddress("장소", "장소구 장소면 장소리")).thenReturn(java.util.Optional.of(mockPlace));
+
+        PlaceInfo.MapStaticImageInfo mapStaticImageInfo = placeService.findPlaceStaticImage("장소", "장소구 장소면 장소리");
+
+        assertNotNull(mapStaticImageInfo);
+    }
+
+    @DisplayName("getNearPlace 메서드가 Page 객체를 잘 반환하는지")
+    @Test
+    void getNearPlace_ShouldReturnPage() {
+        PlaceCommand.NearPlaceRequest mockCommand = mock(PlaceCommand.NearPlaceRequest.class);
+        when(placeReader.getNearPlace(mockCommand)).thenReturn(mock(org.springframework.data.domain.Page.class));
+
+        var result = placeService.getNearPlace(mockCommand);
+
+        assertNotNull(result);
+    }
 }
