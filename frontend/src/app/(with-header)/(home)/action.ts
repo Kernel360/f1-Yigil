@@ -1,8 +1,11 @@
+'use server';
+
 import z from 'zod';
 
 import { cookies } from 'next/headers';
 import { placeSchema, regionSchema } from '@/types/response';
 import { getBaseUrl } from '@/app/utilActions';
+import { revalidateTag } from 'next/cache';
 
 const placeResponseSchema = z.object({
   places: z.array(placeSchema),
@@ -45,11 +48,11 @@ async function fetchInterestedRegions() {
   return await response.json();
 }
 
-async function fetchPlacesOfRegion(id: number) {
+async function fetchRegionPlaces(id: number) {
   const BASE_URL = await getBaseUrl();
 
   const response = await fetch(`${BASE_URL}/v1/places/region/${id}`, {
-    next: { tags: ['placesOfRegion'] },
+    next: { tags: ['regionPlaces'] },
   });
 
   return await response.json();
@@ -79,8 +82,12 @@ export async function getInterestedRegions() {
   return result;
 }
 
-export async function getPlacesOfRegion(id: number) {
-  const json = await fetchPlacesOfRegion(id);
+export async function getRegionPlaces(id: number) {
+  revalidateTag('regionPlaces');
+
+  const json = await fetchRegionPlaces(id);
+
+  console.log(json);
 
   const result = placeResponseSchema.safeParse(json);
 

@@ -1,62 +1,60 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import type { TRegion } from '@/types/response';
-import { useEffect } from 'react';
+import { getRegionPlaces } from '@/app/(with-header)/(home)/action';
+
+import type { Dispatch, SetStateAction } from 'react';
+import type { TPlace, TRegion } from '@/types/response';
 
 export default function RegionSelect({
-  initialRegion,
   userRegions,
+  setRegionPlaces,
 }: {
-  initialRegion?: TRegion;
   userRegions: TRegion[];
+  setRegionPlaces: Dispatch<SetStateAction<TPlace[]>>;
 }) {
-  const { replace } = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  async function handleSelect(region: TRegion) {
+    setCurrentRegion(region);
 
-  useEffect(() => {
-    if (initialRegion) {
-      replace(`${pathname}?${initialRegion?.region_name}`);
-    }
-  }, [replace, initialRegion, pathname]);
+    const regionPlacesResult = await getRegionPlaces(region.id);
 
-  function handleSelect(value: string) {
-    const params = new URLSearchParams(searchParams);
-
-    if (value) {
-      params.set('name', value);
-    } else {
-      params.delete('name');
+    if (!regionPlacesResult.success) {
+      console.log('Failed to get region places');
+      return;
     }
 
-    replace(`${pathname}?${params.toString()}`);
+    setRegionPlaces(regionPlacesResult.data.places);
+  }
+
+  if (userRegions.length === 0) {
+    <nav className="flex items-center gap-2">
+      <span>관심 지역을 설정하세요.</span>
+      <Link className="underline text-gray-500" href="#">
+        설정
+      </Link>
+    </nav>;
   }
 
   const selectedStyle = 'bg-gray-500 text-white';
   const unselectedStyle = 'bg-gray-200 text-gray-500';
 
+  const [currentRegion, setCurrentRegion] = useState(userRegions[0]);
+
   return (
     <nav className="flex items-center gap-2">
-      {userRegions.length !== 0 ? (
-        userRegions.map(({ id, region_name }) => (
-          <button
-            className={`min-w-14 px-4 py-[6px] rounded-full font-light ${
-              searchParams.get('name') === region_name
-                ? selectedStyle
-                : unselectedStyle
-            }`}
-            key={id}
-            onClick={() => handleSelect(region_name)}
-          >
-            {region_name}
-          </button>
-        ))
-      ) : (
-        <span>관심 지역을 설정하세요.</span>
-      )}
+      {userRegions.map((region) => (
+        <button
+          className={`min-w-14 px-4 py-[6px] rounded-full font-light ${
+            currentRegion.id === region.id ? selectedStyle : unselectedStyle
+          }`}
+          key={region.id}
+          onClick={() => handleSelect(region)}
+        >
+          {region.name}
+        </button>
+      ))}
       <Link className="underline text-gray-500" href="#">
         설정
       </Link>

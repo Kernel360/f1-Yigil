@@ -76,7 +76,7 @@ export type TMyInfo = z.infer<typeof myInfoSchema>;
 
 export const regionSchema = z.object({
   id: z.number().int(),
-  region_name: z.string(),
+  name: z.string(),
 });
 
 export type TRegion = z.infer<typeof regionSchema>;
