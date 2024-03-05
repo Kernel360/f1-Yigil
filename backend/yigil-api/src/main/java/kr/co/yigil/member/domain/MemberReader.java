@@ -10,5 +10,7 @@ public interface MemberReader {
 
     Optional<Member> findMemberBySocialLoginIdAndSocialLoginType(String socialLoginId, SocialLoginType socialLoginType);
 
+    Optional<Member> findMemberByEmailAndSocialLoginType(String email, SocialLoginType socialLoginType);
+
     void validateMember(Long memberId);
 }
