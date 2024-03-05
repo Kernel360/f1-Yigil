@@ -103,5 +103,6 @@ export const mySpotForPlaceSchema = z.object({
   create_date: z.coerce.date(),
   description: z.string(),
 });
+export type TMyInfo = z.infer<typeof myInfoSchema>;
 
 export type TMySpotForPlace = z.infer<typeof mySpotForPlaceSchema>;
