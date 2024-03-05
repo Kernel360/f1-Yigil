@@ -85,8 +85,6 @@ class MemberServiceImplTest {
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
         when(fileUploader.upload(mockFile)).thenReturn(mockAttachFile);
 
-        when(mockAttachFile.getFileUrl()).thenReturn("images/image.jpg");
-
         memberService.updateMemberInfo(memberId, request);
         verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), any(AttachFile.class), anyList());
     }

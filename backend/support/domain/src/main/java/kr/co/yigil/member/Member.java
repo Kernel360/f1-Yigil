@@ -115,8 +115,8 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Member(Long id, String email, String socialLoginId, String nickname,
-        String profileImageUrl, SocialLoginType socialLoginType, Ages ages, Gender gender) {
+    public Member(final Long id, final String email, final String socialLoginId, final String nickname,
+        final String profileImageUrl, final SocialLoginType socialLoginType, final Ages ages, final Gender gender) {
         this.id = id;
         this.email = email;
         this.socialLoginId = socialLoginId;
@@ -130,8 +130,8 @@ public class Member {
         this.gender = gender;
     }
 
-    public void updateMemberInfo(String nickname, String age, String gender,
-        AttachFile profileImageFile, List<MemberRegion> favoriteRegions) {
+    public void updateMemberInfo(final String nickname, final String age, final String gender,
+        final AttachFile profileImageFile, final List<MemberRegion> favoriteRegions) {
         this.nickname = nickname;
         this.ages = Ages.from(age);
         this.gender = Gender.from(gender);
