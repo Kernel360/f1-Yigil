@@ -69,7 +69,7 @@ public class KakaoLoginStrategyTest {
         when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.KAKAO)).thenReturn(Optional.of(mockMember));
 
         LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
-        when(loginCommand.getId()).thenReturn(12345678L);
+        when(loginCommand.getId()).thenReturn("12345678");
 
         Long response = kakaoLoginStrategy.processLogin(loginCommand, "mockAccessToken");
 
@@ -98,7 +98,7 @@ public class KakaoLoginStrategyTest {
                 .thenReturn(ResponseEntity.ok(mockResponse));
 
         LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
-        when(loginCommand.getId()).thenReturn(12345678L);
+        when(loginCommand.getId()).thenReturn("12345678");
 
         Long memberId = 1L;
         Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.KAKAO);

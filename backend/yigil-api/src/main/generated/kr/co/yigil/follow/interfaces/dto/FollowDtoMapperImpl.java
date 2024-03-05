@@ -8,62 +8,90 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-03T20:17:29+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2024-03-05T14:42:07+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
 public class FollowDtoMapperImpl implements FollowDtoMapper {
 
     @Override
-    public FollowDto.FollowerResponse of(FollowInfo.FollowersResponse followersResponse) {
+    public FollowDto.FollowersResponse of(FollowInfo.FollowersResponse followersResponse) {
         if ( followersResponse == null ) {
             return null;
         }
 
-        FollowDto.FollowerResponse.FollowerResponseBuilder followerResponse = FollowDto.FollowerResponse.builder();
+        FollowDto.FollowersResponse.FollowersResponseBuilder followersResponse1 = FollowDto.FollowersResponse.builder();
 
-        followerResponse.content( followBasicInfoListToFollowBasicInfoList( followersResponse.getContent() ) );
-        followerResponse.hasNext( followersResponse.isHasNext() );
+        followersResponse1.content( followerInfoListToFollowerInfoList( followersResponse.getContent() ) );
+        followersResponse1.hasNext( followersResponse.isHasNext() );
 
-        return followerResponse.build();
+        return followersResponse1.build();
     }
 
     @Override
-    public FollowDto.FollowingResponse of(FollowInfo.FollowingsResponse followingsResponse) {
+    public FollowDto.FollowingsResponse of(FollowInfo.FollowingsResponse followingsResponse) {
         if ( followingsResponse == null ) {
             return null;
         }
 
-        FollowDto.FollowingResponse.FollowingResponseBuilder followingResponse = FollowDto.FollowingResponse.builder();
+        FollowDto.FollowingsResponse.FollowingsResponseBuilder followingsResponse1 = FollowDto.FollowingsResponse.builder();
 
-        followingResponse.content( followBasicInfoListToFollowBasicInfoList( followingsResponse.getContent() ) );
-        followingResponse.hasNext( followingsResponse.isHasNext() );
+        followingsResponse1.content( followingInfoListToFollowingInfoList( followingsResponse.getContent() ) );
+        followingsResponse1.hasNext( followingsResponse.isHasNext() );
 
-        return followingResponse.build();
+        return followingsResponse1.build();
     }
 
-    protected FollowDto.FollowBasicInfo followBasicInfoToFollowBasicInfo(FollowInfo.FollowBasicInfo followBasicInfo) {
-        if ( followBasicInfo == null ) {
+    protected FollowDto.FollowerInfo followerInfoToFollowerInfo(FollowInfo.FollowerInfo followerInfo) {
+        if ( followerInfo == null ) {
             return null;
         }
 
-        FollowDto.FollowBasicInfo.FollowBasicInfoBuilder followBasicInfo1 = FollowDto.FollowBasicInfo.builder();
+        FollowDto.FollowerInfo.FollowerInfoBuilder followerInfo1 = FollowDto.FollowerInfo.builder();
 
-        followBasicInfo1.memberId( followBasicInfo.getMemberId() );
-        followBasicInfo1.nickname( followBasicInfo.getNickname() );
-        followBasicInfo1.profileImageUrl( followBasicInfo.getProfileImageUrl() );
+        followerInfo1.memberId( followerInfo.getMemberId() );
+        followerInfo1.nickname( followerInfo.getNickname() );
+        followerInfo1.profileImageUrl( followerInfo.getProfileImageUrl() );
+        followerInfo1.following( followerInfo.isFollowing() );
 
-        return followBasicInfo1.build();
+        return followerInfo1.build();
     }
 
-    protected List<FollowDto.FollowBasicInfo> followBasicInfoListToFollowBasicInfoList(List<FollowInfo.FollowBasicInfo> list) {
+    protected List<FollowDto.FollowerInfo> followerInfoListToFollowerInfoList(List<FollowInfo.FollowerInfo> list) {
         if ( list == null ) {
             return null;
         }
 
-        List<FollowDto.FollowBasicInfo> list1 = new ArrayList<FollowDto.FollowBasicInfo>( list.size() );
-        for ( FollowInfo.FollowBasicInfo followBasicInfo : list ) {
-            list1.add( followBasicInfoToFollowBasicInfo( followBasicInfo ) );
+        List<FollowDto.FollowerInfo> list1 = new ArrayList<FollowDto.FollowerInfo>( list.size() );
+        for ( FollowInfo.FollowerInfo followerInfo : list ) {
+            list1.add( followerInfoToFollowerInfo( followerInfo ) );
+        }
+
+        return list1;
+    }
+
+    protected FollowDto.FollowingInfo followingInfoToFollowingInfo(FollowInfo.FollowingInfo followingInfo) {
+        if ( followingInfo == null ) {
+            return null;
+        }
+
+        FollowDto.FollowingInfo.FollowingInfoBuilder followingInfo1 = FollowDto.FollowingInfo.builder();
+
+        followingInfo1.memberId( followingInfo.getMemberId() );
+        followingInfo1.nickname( followingInfo.getNickname() );
+        followingInfo1.profileImageUrl( followingInfo.getProfileImageUrl() );
+
+        return followingInfo1.build();
+    }
+
+    protected List<FollowDto.FollowingInfo> followingInfoListToFollowingInfoList(List<FollowInfo.FollowingInfo> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<FollowDto.FollowingInfo> list1 = new ArrayList<FollowDto.FollowingInfo>( list.size() );
+        for ( FollowInfo.FollowingInfo followingInfo : list ) {
+            list1.add( followingInfoToFollowingInfo( followingInfo ) );
         }
 
         return list1;

@@ -69,4 +69,21 @@ include::{snippets}/places/get-region-place/response-fields.adoc[]
 ===== HTTP Response 예시
 include::{snippets}/places/get-region-place/http-response.adoc[]
 
+=== 주변 장소 검색
+
+==== Request
+include::{snippets}/places/get-near-place/request-body.adoc[]
+로그인 필수: N
+
+===== Query Parameters
+include::{snippets}/places/get-near-place/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/places/get-near-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/places/get-near-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/places/get-near-place/http-response.adoc[]
 

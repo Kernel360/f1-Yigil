@@ -18,13 +18,19 @@ public class MemberReaderImpl implements MemberReader {
     @Override
     public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+                .orElseThrow(() ->new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 
     @Override
     public Optional<Member> findMemberBySocialLoginIdAndSocialLoginType(String socialLoginId,
             SocialLoginType socialLoginType) {
         return memberRepository.findMemberBySocialLoginIdAndSocialLoginType(socialLoginId, socialLoginType);
+    }
+
+    @Override
+    public Optional<Member> findMemberByEmailAndSocialLoginType(String email,
+            SocialLoginType socialLoginType) {
+        return memberRepository.findMemberByEmailAndSocialLoginType(email, socialLoginType);
     }
 
     public void validateMember(Long memberId) {

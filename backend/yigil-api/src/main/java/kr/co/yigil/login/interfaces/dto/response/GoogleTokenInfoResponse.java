@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class GoogleTokenInfoResponse {
-    private Long userId;
+    private String email;
     private int expiresIn;
 }

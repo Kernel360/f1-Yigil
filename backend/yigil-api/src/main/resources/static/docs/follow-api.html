@@ -645,7 +645,7 @@ Content-Length: 39
 <h5 id="_http_request_예시_3">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/follows/followings?page=0&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/follows/followings?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -793,6 +793,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
@@ -805,13 +810,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 171
+Content-Length: 195
 
 {
   "content" : [ {
     "member_id" : 1,
     "nickname" : "test user",
-    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg"
+    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -831,7 +837,7 @@ Content-Length: 171
 <h5 id="_http_request_예시_5">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/follows/1/followings?page=0&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/follows/1/followings?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -908,7 +914,7 @@ Content-Length: 178
 <h5 id="_http_request_예시_6">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/follows/1/followers?page=0&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/follows/1/followers?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -946,6 +952,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
@@ -958,13 +969,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 171
+Content-Length: 195
 
 {
   "content" : [ {
     "member_id" : 1,
     "nickname" : "test user",
-    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg"
+    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -980,7 +992,7 @@ Content-Length: 171
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-02-28 15:21:27 +0900
+Last updated 2024-03-04 17:53:15 +0900
 </div>
 </div>
 </body>

@@ -9,16 +9,20 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.place.domain.PlaceService;
+import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceFacadeTest {
@@ -86,5 +90,20 @@ public class PlaceFacadeTest {
 
         assertEquals(result, List.of(mockResponse));
         verify(placeService).getPlaceInRegion(anyLong(), any(Accessor.class));
+    }
+
+    @DisplayName("getNearPlace 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getNearPlace_ShouldReturnResponse() {
+        PlaceCommand.NearPlaceRequest mockCommand = mock(PlaceCommand.NearPlaceRequest.class);
+        Page<Place> mockResponse = mock(Page.class);
+
+        when(placeService.getNearPlace(mockCommand)).thenReturn(mockResponse);
+
+        var result = placeFacade.getNearPlace(mockCommand);
+
+        assertEquals(result, mockResponse);
+        verify(placeService).getNearPlace(any(
+                kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest.class));
     }
 }

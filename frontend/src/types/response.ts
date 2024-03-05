@@ -72,6 +72,8 @@ export const myInfoSchema = z.object({
   follower_count: z.number().int(),
 });
 
+export type TMyInfo = z.infer<typeof myInfoSchema>;
+
 export const regionSchema = z.object({
   id: z.number().int(),
   region_name: z.string(),
