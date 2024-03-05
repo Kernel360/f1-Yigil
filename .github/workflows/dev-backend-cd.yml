@@ -90,13 +90,26 @@ jobs:
       run : |
         cd yigil-api
         docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }} . --platform=linux/amd64
-        docker build -f yigil-admin/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
-        docker build -f support/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-admin
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
     - name: Docker image push
       run : |
-        docker push -f yigil-api/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }}
-        docker push -f yigil-admin/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }}
-        docker push -f support/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }}
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }}
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6
