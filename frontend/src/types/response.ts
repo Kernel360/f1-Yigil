@@ -97,3 +97,18 @@ export const myInfoSchema = z.object({
 });
 
 export type TMyInfo = z.infer<typeof myInfoSchema>;
+
+export const TMapPlaceSchema = z.object({
+  id: z.number().int(),
+  place_name: z.string(),
+  x: z.number(),
+  y: z.number(),
+});
+
+export const TMapPlacesSchema = z.object({
+  places: z.array(TMapPlaceSchema),
+  total_pages: z.number(),
+  current_page: z.number(),
+});
+
+export type TMapPlace = z.infer<typeof TMapPlaceSchema>;
