@@ -8,7 +8,7 @@ name: Java CD with Gradle
 on:
   pull_request:
     types: ["closed"]
-    branches: [ "devlop" ]
+    branches: [ "develop" ]
 permissions:
   contents: read
 defaults:
