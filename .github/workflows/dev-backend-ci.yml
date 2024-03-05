@@ -22,7 +22,7 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    if: contains(join(github.event.pull_request.labels.*.name, ','), '🛜Backend')
     steps:    
     ## jdk setting
     - uses: actions/checkout@v3

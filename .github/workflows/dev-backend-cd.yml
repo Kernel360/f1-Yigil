@@ -17,7 +17,9 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(join(github.event.pull_request.labels.*.name, ','), '🛜Backend')
     steps:
     
     # jdk setting

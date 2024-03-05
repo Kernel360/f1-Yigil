@@ -3,7 +3,7 @@ name: Frontend CD
 on:
   pull_request:
     types: ["closed"]
-    branches: ["develop"]
+    branches: ["main"]
 
 defaults:
   run:
@@ -45,15 +45,15 @@ jobs:
       # Docker 이미지 빌드
       - name: Docker image build
         run : |
-          docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT }} . --platform=linux/amd64
+          docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT_PROD }} . --platform=linux/amd64
       - name: Docker image push
         run : |
-          docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT }}
+          docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_FRONT_PROD }}
       # EC2 인스턴스 접속 및 애플리케이션 실행
       - name: Application Run
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.EC2_HOST_DEV }}
+          host: ${{ secrets.EC2_HOST_PROD }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
         
