@@ -1,7 +1,5 @@
-package kr.co.yigil.batch.config;
+package kr.co.yigil.batch.job;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +33,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class BatchConfig {
+public class UpdateRegionJobConfig {
     private final PlaceRepository placeRepository;
     private final DivisionRepository divisionRepository;
     private final DongDivisionRepository dongDivisionRepository;
