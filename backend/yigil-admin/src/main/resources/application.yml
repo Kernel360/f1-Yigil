@@ -13,14 +13,14 @@ spring:
     master:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildb
+        jdbc-url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
         read-only: false
         username: postgres
         password: 12345678
     slave:
       hikari:
         driver-class-name: org.postgresql.Driver
-        jdbc-url: jdbc:postgresql://database-1- read.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildb
+        jdbc-url: jdbc:postgresql://database-1- read.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
         read-only: true
         username: postgres
         password: 12345678
