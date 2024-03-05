@@ -13,10 +13,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartBody;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -89,7 +87,7 @@ public class CourseApiControllerTest {
         when(courseMapper.courseSliceToCourseInPlaceResponse(mockSlice)).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/courses/place/{placeId}", 1L)
-                .param("page", "0")
+                .param("page", "1")
                 .param("size", "5")
                 .param("sortBy", "createdAt")
                 .param("sortOrder", "desc"))
@@ -102,10 +100,10 @@ public class CourseApiControllerTest {
                     parameterWithName("placeId").description("장소 아이디")
                 ),
                 queryParameters(
-                    parameterWithName("page").description("현재 페이지").optional(),
-                    parameterWithName("size").description("페이지 크기").optional(),
-                    parameterWithName("sortBy").description("정렬 옵션").optional(),
-                    parameterWithName("sortOrder").description("정렬 순서").optional()
+                        parameterWithName("page").description("현재 페이지 - default:1").optional(),
+                        parameterWithName("size").description("페이지 크기 - default:5").optional(),
+                        parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
+                        parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
                 ),
                 responseFields(
                     fieldWithPath("has_next").type(JsonFieldType.BOOLEAN)
@@ -360,7 +358,7 @@ public class CourseApiControllerTest {
         when(courseMapper.of(any(CourseInfo.MyCoursesResponse.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/courses/my")
-                .param("page", "0")
+                .param("page", "1")
                 .param("size", "5")
                 .param("sortBy", "createdAt")
                 .param("sortOrder", "desc")
@@ -372,11 +370,11 @@ public class CourseApiControllerTest {
                 getDocumentRequest(),
                 getDocumentResponse(),
                 queryParameters(
-                    parameterWithName("page").description("현재 페이지").optional(),
-                    parameterWithName("size").description("페이지 크기").optional(),
-                    parameterWithName("sortBy").description("정렬 옵션").optional(),
-                    parameterWithName("sortOrder").description("정렬 순서").optional(),
-                    parameterWithName("selected").description("필터 기능(전체 공개 비공개)").optional()
+                        parameterWithName("page").description("현재 페이지 - default:1").optional(),
+                        parameterWithName("size").description("페이지 크기 - default:5").optional(),
+                        parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
+                        parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional(),
+                        parameterWithName("selected").description("필터 기능 - all(디폴트값) 전체공개 / private 비공개").optional()
                 ),
                 responseFields(
                     fieldWithPath("content[].course_id").description("코스 ID"),

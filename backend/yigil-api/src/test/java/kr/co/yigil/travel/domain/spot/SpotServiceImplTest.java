@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
@@ -285,9 +284,11 @@ public class SpotServiceImplTest {
             "originalFileName", 100L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
         Member mockMember = mock(Member.class);
+        Place mockPlace = mock(Place.class);
         Spot mockSpot = new Spot(spotId, mockMember, mock(Point.class), false, "title",
-            "description", mockAttachFiles, null, 3.5);
+            "description", mockAttachFiles, mockPlace, 3.5);
         PageImpl<Spot> mockSpotList = new PageImpl<>(List.of(mockSpot));
+        when(mockPlace.getName()).thenReturn("장소장소");
         when(spotReader.getMemberSpotList(anyLong(), any(), any())).thenReturn(mockSpotList);
 
         var result = spotService.retrieveSpotList(memberId, pageable, selected);

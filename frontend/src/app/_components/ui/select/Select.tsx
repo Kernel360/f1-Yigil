@@ -49,7 +49,7 @@ export default function Select({
       aria-label="select"
     >
       <div
-        className={`flex items-center justify-between p-2 gap-x-4 ${
+        className={`flex items-center justify-between p-2 gap-x-2 ${
           defaultValueColor ? defaultValueColor : 'text-gray-700'
         }`}
       >

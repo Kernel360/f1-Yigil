@@ -23,6 +23,7 @@ import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
@@ -170,7 +171,9 @@ public class SpotFacadeTest {
         AttachFile imageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
         AttachFiles imageFiles = new AttachFiles(Collections.singletonList(imageFile));
 
-        Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, null, rate);
+        Place mockPlace = mock(Place.class);
+        when(mockPlace.getName()).thenReturn("장소명");
+        Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, mockPlace, rate);
 
         SpotInfo.SpotListInfo spotInfo = new SpotInfo.SpotListInfo(spot);
         List<SpotInfo.SpotListInfo> spotList = Collections.singletonList(spotInfo);

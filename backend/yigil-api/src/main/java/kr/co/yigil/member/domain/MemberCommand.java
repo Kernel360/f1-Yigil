@@ -1,5 +1,6 @@
 package kr.co.yigil.member.domain;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,6 +17,7 @@ public class MemberCommand {
         private String ages;
         private String gender;
         private MultipartFile profileImageFile;
+        private List<Long> favoriteRegionIds;
     }
 
 }

@@ -48,7 +48,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
         }
 
         Member member = memberReader.findMemberBySocialLoginIdAndSocialLoginType(
-                        loginCommand.getId().toString(), SocialLoginType.KAKAO)
+                        loginCommand.getId(), SocialLoginType.KAKAO)
                 .orElseGet(() -> registerNewMember(loginCommand));
 
         return member.getId();
@@ -59,7 +59,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
         return PROVIDER_NAME;
     }
 
-    private boolean isTokenValid(String accessToken, Long expectedUserId) {
+    private boolean isTokenValid(String accessToken, String expectedUserId) {
         KakaoTokenInfoResponse tokenInfo = requestKakaoTokenInfo(accessToken);
         return isUserIdValid(tokenInfo, expectedUserId);
     }
@@ -85,8 +85,8 @@ public class KakaoLoginStrategy implements LoginStrategy {
         }
     }
 
-    private boolean isUserIdValid(KakaoTokenInfoResponse tokenInfo, Long expectedUserId) {
-        return tokenInfo != null && tokenInfo.getId().equals(expectedUserId);
+    private boolean isUserIdValid(KakaoTokenInfoResponse tokenInfo, String expectedUserId) {
+        return tokenInfo != null && tokenInfo.getId().toString().equals(expectedUserId);
     }
 
     private Member registerNewMember(LoginCommand.LoginRequest loginCommand) {

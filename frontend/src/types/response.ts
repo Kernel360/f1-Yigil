@@ -95,3 +95,5 @@ export const myInfoSchema = z.object({
   following_count: z.number().int(),
   follower_count: z.number().int(),
 });
+
+export type TMyInfo = z.infer<typeof myInfoSchema>;

@@ -7,14 +7,14 @@ import Link from 'next/link';
 import { EventFor } from '@/types/type';
 import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
-import { TUserInfo } from '../mypage/types';
+import { TMyInfo } from '@/types/response';
 import { authenticateUser } from '../mypage/hooks/authenticateUser';
 
 export default function HeaderClient() {
   const router = useRouter();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [user, setUser] = useState<TUserInfo | null>(null);
+  const [user, setUser] = useState<TMyInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
 

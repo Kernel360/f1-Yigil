@@ -493,19 +493,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 - default:1</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기 - default:5</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - createdAt(디폴트값) / rate</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순</p></td>
 </tr>
 </tbody>
 </table>
@@ -514,7 +514,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h5 id="_http_request_예시">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/spots/place/1?page=0&amp;size=5&amp;sortBy=createdAt&amp;sortOrder=desc HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/spots/place/1?page=1&amp;size=5&amp;sortBy=createdAt&amp;sortOrder=desc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -1252,23 +1252,23 @@ Content-Length: 38
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 - default:1</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기 - default:5</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - createdAt(디폴트값) / rate</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>selected</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필터 기능(전체 공개 비공개)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필터 기능 - all(디폴트값) 전체공개 / private 비공개</p></td>
 </tr>
 </tbody>
 </table>
@@ -1367,7 +1367,7 @@ Content-Length: 210
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-02-29 18:14:36 +0900
+Last updated 2024-03-04 11:21:51 +0900
 </div>
 </div>
 </body>

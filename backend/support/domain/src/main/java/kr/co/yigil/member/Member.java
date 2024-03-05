@@ -4,12 +4,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import kr.co.yigil.region.domain.MemberRegion;
+import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +62,10 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     private Ages ages = Ages.NONE;
+
+    @Column
+    @OneToMany(fetch = FetchType.LAZY)
+    private final List<MemberRegion> favoriteRegions =  new ArrayList<>();
 
     @CreatedDate
     @Column(updatable = false)
@@ -117,16 +127,29 @@ public class Member {
         this.gender = gender;
     }
 
-    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl) {
+    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl, List<MemberRegion> favoriteRegionIds) {
         this.nickname = nickname;
         this.ages = Ages.from(age);
         this.gender = Gender.from(gender);
         this.profileImageUrl = profileImageUrl;
+        this.favoriteRegions.clear();
+        this.favoriteRegions.addAll(favoriteRegions);
     }
 
     public String getProfileImageUrl() {
         if(profileImageUrl == null) return null;
-        if(profileImageUrl.startsWith("http://")) return profileImageUrl;
+        if(profileImageUrl.startsWith("http://") || profileImageUrl.startsWith("https://")) return profileImageUrl;
         else return DEFAULT_PROFILE_CDN + profileImageUrl;
+    }
+
+    public List<Long> getFavoriteRegionIds() {
+        return favoriteRegions.stream().map(
+            memberRegion -> memberRegion.getRegion().getId()
+        ).toList();
+    }
+
+    public boolean isFavoriteRegion(Region region) {
+        return favoriteRegions.stream()
+                .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
     }
 }
