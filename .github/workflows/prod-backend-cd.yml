@@ -17,8 +17,10 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(join(github.event.pull_request.labels.*.name, ','), '🛜Backend')
     steps:
-    
     ## jdk setting
     - uses: actions/checkout@v3
     - name: Set up JDK 21
@@ -90,15 +92,29 @@ jobs:
     # Docker 이미지 빌드
     - name: Docker image build
       run : |
-        docker build -f yigil-api/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }} . --platform=linux/amd64
-        docker build -f yigil-admin/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
-        docker build -f support/Dockerfile -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK_PROD }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-admin
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK_PROD }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT_PROD }} . --platform=linux/amd64
     - name: Docker image push
       run : |
-        docker push -f yigil-api/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }}
-        docker push -f yigil-admin/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }}
-        docker push -f support/Dockerfile ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }}
-    
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK_PROD }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK_PROD }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT_PROD }}
+
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6
@@ -108,5 +124,4 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         
         script: |
-          awslogin
-          allin
+          sh ./gitaction.sh

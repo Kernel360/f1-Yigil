@@ -5,16 +5,15 @@ import FloatingActionButton from '@/app/_components/FloatingActionButton';
 import { PopularPlaces, RegionPlaces } from '@/app/_components/place';
 import DummyPlaces from '@/app/_components/place/dummy/DummyPlaces';
 
-import { authenticateUser } from '@/app/_components/mypage/hooks/myPageActions';
 import {
   getInterestedRegions,
   getPopularPlaces,
   getRegionPlaces,
 } from './action';
 
-import { myInfoSchema } from '@/types/response';
-
 import PlusIcon from '@/../public/icons/plus.svg';
+import { myInfoSchema } from '@/types/response';
+import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 
 function OpenedFABIcon() {
   return <PlusIcon className="rotate-45 duration-200 z-30" />;
