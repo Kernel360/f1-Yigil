@@ -43,7 +43,7 @@ public class FollowDto {
             private final Long memberId;
             private final String nickname;
             private final String profileImageUrl;
-            private final Boolean isFollowing;
+            private final boolean following;
     }
 
 }

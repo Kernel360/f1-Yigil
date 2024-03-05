@@ -109,7 +109,7 @@ public class FollowApiControllerTest {
         verify(followFacade).unfollow(anyLong(), anyLong());
     }
 
-    @DisplayName("팔로우 목록 조회가 잘 되는지")
+    @DisplayName("내 팔로우 목록 조회가 잘 되는지")
     @Test
     void WhenGetMyFollowerList_ThenShouldReturnOk() throws Exception {
 
@@ -118,7 +118,7 @@ public class FollowApiControllerTest {
                 .memberId(1L)
                 .nickname("test user")
                 .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
-                .isFollowing(true)
+                .following(true)
                 .build())
             )
             .hasNext(false)
@@ -149,7 +149,7 @@ public class FollowApiControllerTest {
                     fieldWithPath("content[].member_id").description("회원 ID"),
                     fieldWithPath("content[].nickname").description("닉네임"),
                     fieldWithPath("content[].profile_image_url").description("프로필 이미지 URL"),
-                    fieldWithPath("content[].is_following").description("팔로우 여부"),
+                    fieldWithPath("content[].following").description("팔로우 여부"),
                     fieldWithPath("has_next").description("다음 페이지 존재 여부")
                 )
 
@@ -210,7 +210,7 @@ public class FollowApiControllerTest {
                 .memberId(1L)
                 .nickname("test user")
                 .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
-                .isFollowing(true)
+                .following(true)
                 .build())
             )
             .hasNext(false)
@@ -235,7 +235,7 @@ public class FollowApiControllerTest {
                     fieldWithPath("content[].member_id").description("회원 ID"),
                     fieldWithPath("content[].nickname").description("닉네임"),
                     fieldWithPath("content[].profile_image_url").description("프로필 이미지 URL"),
-                    fieldWithPath("content[].is_following").description("팔로우 여부"),
+                    fieldWithPath("content[].following").description("팔로우 여부"),
                     fieldWithPath("has_next").description("다음 페이지 존재 여부")
                 )
             ));

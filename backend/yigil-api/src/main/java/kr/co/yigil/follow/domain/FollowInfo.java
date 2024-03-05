@@ -56,13 +56,13 @@ public class FollowInfo {
             private final Long memberId;
             private final String nickname;
             private final String profileImageUrl;
-            private final Boolean isFollowing;
+            private final boolean following;
 
-            public FollowerInfo(Member member, Boolean isFollowing) {
+            public FollowerInfo(Member member, boolean following) {
                 this.memberId = member.getId();
                 this.nickname = member.getNickname();
                 this.profileImageUrl = member.getProfileImageUrl();
-                this.isFollowing = isFollowing;
+                this.following = following;
             }
 
     }

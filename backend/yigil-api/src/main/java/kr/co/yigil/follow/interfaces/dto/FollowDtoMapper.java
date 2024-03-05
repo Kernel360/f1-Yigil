@@ -13,25 +13,6 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface FollowDtoMapper {
-//
-//    default FollowersResponse of (FollowInfo.FollowersResponse followersResponse) {
-//        return new FollowersResponse(
-//                toFollowerInfoList(followersResponse.getContent()),
-//                followersResponse.isHasNext());
-//    }
-//
-//    default List<FollowerInfo> toFollowerInfoList(List<FollowInfo.FollowerInfo> followerInfoList) {
-//        return followerInfoList.stream()
-//                .map(this::toFollowerInfo)
-//                .toList();
-//    }
-//
-//    @Mapping(source = "memberId", target = "memberId")
-//    @Mapping(source = "nickname", target = "nickname")
-//    @Mapping(source = "profileImageUrl", target = "profileImageUrl")
-//    @Mapping(source = "isFollowing", target = "isFollowing")
-//    FollowDto.FollowerInfo toFollowerInfo(FollowInfo.FollowerInfo followerInfo);
-
     FollowersResponse of (FollowInfo.FollowersResponse followersResponse);
 
     FollowingsResponse of (FollowInfo.FollowingsResponse followingsResponse);
