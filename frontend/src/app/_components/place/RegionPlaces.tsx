@@ -13,10 +13,12 @@ export default function RegionPlaces({
   regions,
   initialRegionPlaces,
   isLoggedIn,
+  variant,
 }: {
   regions: TRegion[];
   initialRegionPlaces: TPlace[];
   isLoggedIn: boolean;
+  variant?: 'primary' | 'secondary';
 }) {
   const [regionPlaces, setRegionPlaces] =
     useState<TPlace[]>(initialRegionPlaces);
@@ -54,7 +56,7 @@ export default function RegionPlaces({
       <div className="pt-4 pl-8">
         <RegionSelect setRegionPlaces={setRegionPlaces} userRegions={regions} />
       </div>
-      <Places data={regionPlaces} isLoggedIn={isLoggedIn} variant="secondary" />
+      <Places data={regionPlaces} isLoggedIn={isLoggedIn} variant={variant} />
     </section>
   );
 }

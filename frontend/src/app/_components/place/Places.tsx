@@ -12,13 +12,11 @@ export default function Places({
   isLoggedIn,
 }: {
   data: TPlace[];
-  variant: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary';
   isLoggedIn: boolean;
 }) {
-  const [emblaRef] = useEmblaCarousel({
-    loop: false,
-    dragFree: true,
-  });
+  const [emblaRef] = useEmblaCarousel();
+
   return (
     <div className="overflow-hidden px-4" ref={emblaRef}>
       <div className="flex">

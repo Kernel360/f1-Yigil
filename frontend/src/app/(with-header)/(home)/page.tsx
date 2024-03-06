@@ -72,6 +72,7 @@ export default async function HomePage({
           initialRegionPlaces={[]}
           regions={regions}
           isLoggedIn={memberInfo.success}
+          variant="secondary"
         />
         <FloatingActionButton
           popOverData={homePopOverData}
@@ -98,6 +99,7 @@ export default async function HomePage({
         initialRegionPlaces={regionPlaces}
         regions={regions}
         isLoggedIn={memberInfo.success}
+        variant="secondary"
       />
       <FloatingActionButton
         popOverData={homePopOverData}
