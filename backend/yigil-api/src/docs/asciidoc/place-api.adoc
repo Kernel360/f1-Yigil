@@ -84,6 +84,24 @@ include::{snippets}/places/get-region-place/response-fields.adoc[]
 ===== HTTP Response 예시
 include::{snippets}/places/get-region-place/http-response.adoc[]
 
+=== 지역별 장소 목록 더보기
+
+==== Request
+include::{snippets}/places/get-region-place-more/request-body.adoc[]
+로그인 필수: N
+
+===== Path Parameters
+include::{snippets}/places/get-region-place-more/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/places/get-region-place-more/http-request.adoc[]
+
+==== Response
+include::{snippets}/places/get-region-place-more/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/places/get-region-place-more/http-response.adoc[]
+
 === 주변 장소 검색
 
 ==== Request

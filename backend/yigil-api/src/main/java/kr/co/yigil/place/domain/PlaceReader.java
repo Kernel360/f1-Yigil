@@ -14,5 +14,7 @@ public interface PlaceReader {
 
     List<Place> getPlaceInRegion(Long regionId);
 
+    List<Place> getPlaceInRegionMore(Long regionId);
+
     Page<Place> getNearPlace(PlaceCommand.NearPlaceRequest command);
 }

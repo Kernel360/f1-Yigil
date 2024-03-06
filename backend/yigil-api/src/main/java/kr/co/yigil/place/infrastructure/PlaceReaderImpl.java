@@ -42,6 +42,11 @@ public class PlaceReaderImpl implements PlaceReader {
     }
 
     @Override
+    public List<Place> getPlaceInRegionMore(Long regionId) {
+        return placeRepository.findTop20ByRegionIdOrderByIdDesc(regionId);
+    }
+
+    @Override
     public Page<Place> getNearPlace(NearPlaceRequest command) {
         Coordinate maxCoordinate = command.getMaxCoordinate();
         Coordinate minCoordinate = command.getMinCoordinate();

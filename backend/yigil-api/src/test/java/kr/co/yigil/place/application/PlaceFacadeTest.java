@@ -106,6 +106,21 @@ public class PlaceFacadeTest {
         verify(placeService).getPlaceInRegion(anyLong(), any(Accessor.class));
     }
 
+    @DisplayName("getPlaceRegionMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPlaceRegionMore_ShouldReturnResponse() {
+        Accessor mockAccessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+        Long regionId = 1L;
+
+        when(placeService.getPlaceInRegionMore(regionId, mockAccessor)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPlaceInRegionMore(regionId, mockAccessor);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPlaceInRegionMore(anyLong(), any(Accessor.class));
+    }
+
     @DisplayName("getNearPlace 메서드가 Response를 잘 반환하는지")
     @Test
     void getNearPlace_ShouldReturnResponse() {

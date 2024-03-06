@@ -69,6 +69,21 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Main> getPlaceInRegionMore(Long regionId, Accessor accessor) {
+        return placeReader.getPlaceInRegionMore(regionId).stream()
+                .map(place -> {
+                    int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    if (accessor.isMember()) {
+                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
+                        return new Main(place, spotCount, isBookmarked);
+                    }
+                    return new Main(place, spotCount);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Detail retrievePlace(final Long placeId, final Accessor accessor) {
         var place = placeReader.getPlace(placeId);
         int spotCount = placeCacheReader.getSpotCount(placeId);

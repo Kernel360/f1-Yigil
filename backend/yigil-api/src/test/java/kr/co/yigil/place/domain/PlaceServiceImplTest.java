@@ -85,6 +85,23 @@ public class PlaceServiceImplTest {
         assertNotNull(placeInRegion);
     }
 
+    @DisplayName("getPlaceInRegionMore 메서드가 Info 객체의 List를 잘 반환하는지")
+    @Test
+    void getPlaceInRegionMore_ShouldRetrunListOfInfo() {
+        Place mockPlace = mock(Place.class);
+        when(mockPlace.getId()).thenReturn(1L);
+        Accessor mockAccessor = mock(Accessor.class);
+        when(mockAccessor.isMember()).thenReturn(true);
+        when(mockAccessor.getMemberId()).thenReturn(1L);
+        when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
+        when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
+        when(placeReader.getPlaceInRegionMore(1L)).thenReturn(List.of(mockPlace));
+
+        List<PlaceInfo.Main> placeInRegionMore = placeService.getPlaceInRegionMore(1L, mockAccessor);
+
+        assertNotNull(placeInRegionMore);
+    }
+
     @DisplayName("retrievePlace 메서드가 Detail 객체를 잘 반환하는지")
     @Test
     void retrievePlace_ShouldReturnDetail() {

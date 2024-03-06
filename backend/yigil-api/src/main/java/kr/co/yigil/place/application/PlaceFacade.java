@@ -37,6 +37,10 @@ public class PlaceFacade {
         return placeService.getPlaceInRegion(regionId, accessor);
     }
 
+    public List<Main> getPlaceInRegionMore(final Long regionId, final Accessor accessor) {
+        return placeService.getPlaceInRegionMore(regionId, accessor);
+    }
+
     public Page<Place> getNearPlace(final NearPlaceRequest command) {
         return placeService.getNearPlace(command);
     }

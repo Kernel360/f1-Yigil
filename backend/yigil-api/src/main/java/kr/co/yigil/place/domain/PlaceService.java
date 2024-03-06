@@ -9,6 +9,7 @@ public interface PlaceService {
     public List<Main> getPopularPlace(Accessor accessor);
     public List<Main> getPopularPlaceMore(Accessor accessor);
     public List<Main> getPlaceInRegion(Long regionId, Accessor accessor);
+    public List<Main> getPlaceInRegionMore(Long regionId, Accessor accessor);
     public PlaceInfo.Detail retrievePlace(Long placeId, Accessor accessor);
     public PlaceInfo.MapStaticImageInfo findPlaceStaticImage(String placeName, String address);
     public Page<Place> getNearPlace(PlaceCommand.NearPlaceRequest command);
