@@ -4,8 +4,8 @@ import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
 
 import java.util.List;
 import java.util.Objects;
-import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -88,7 +88,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public CourseInfo.MyCoursesResponse retrieveCourseList(Long memberId, Pageable pageable,
-        String visibility) {
+        Selected visibility) {
         var pageCourse = courseReader.getMemberCourseList(memberId, pageable, visibility);
         List<CourseInfo.CourseListInfo> courseInfoList = pageCourse.getContent().stream()
             .map(CourseInfo.CourseListInfo::new)

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -18,6 +17,7 @@ import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
@@ -40,8 +40,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseFacadeTest {
@@ -191,11 +189,11 @@ public class CourseFacadeTest {
             totalPages
         );
 
-        when(courseService.retrieveCourseList(anyLong(), any(Pageable.class), anyString())).thenReturn(
+        when(courseService.retrieveCourseList(anyLong(), any(Pageable.class), any(Selected.class))).thenReturn(
             mockCourseListResponse);
 
         // When
-        var result = courseFacade.getMemberCoursesInfo(memberId, pageable, "private");
+        var result = courseFacade.getMemberCoursesInfo(memberId, pageable, Selected.ALL);
 
         // Then
         assertThat(result).isNotNull()
