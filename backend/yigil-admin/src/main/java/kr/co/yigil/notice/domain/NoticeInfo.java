@@ -3,6 +3,7 @@ package kr.co.yigil.notice.domain;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 public class NoticeInfo {
 
@@ -17,10 +18,14 @@ public class NoticeInfo {
 
     @Getter
     public static class NoticeListInfo {
-        private final Page<NoticeItem> noticeList;
+
+        private final PageImpl<NoticeItem> noticeList;
 
         public NoticeListInfo(Page<Notice> noticePage) {
-            this.noticeList = noticePage.map(NoticeItem::new);
+            this.noticeList = new PageImpl<>(
+                noticePage.getContent().stream().map(NoticeItem::new).toList(),
+                noticePage.getPageable(),
+                noticePage.getTotalElements());
         }
     }
 

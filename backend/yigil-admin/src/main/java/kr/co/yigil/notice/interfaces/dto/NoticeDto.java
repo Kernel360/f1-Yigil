@@ -3,6 +3,7 @@ package kr.co.yigil.notice.interfaces.dto;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,13 +32,16 @@ public class NoticeDto {
         private final String message;
     }
 
-    @Getter
-    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class NoticeListResponse{
         Page<NoticeItem> noticeList;
     }
-    @Getter
-    @Builder
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class NoticeItem {
         private Long noticeId;
         private String title;
