@@ -4,13 +4,13 @@ import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_PASSWORD_DOES_NOT
 
 import java.util.ArrayList;
 import java.util.List;
+import kr.co.yigil.admin.domain.Admin;
 import kr.co.yigil.admin.domain.admin.AdminCommand.AdminPasswordUpdateRequest;
-import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
-import kr.co.yigil.file.domain.AdminAttachFile;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.domain.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
 import lombok.RequiredArgsConstructor;
@@ -64,9 +64,9 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public void updateProfileImage(String email, MultipartFile profileImageFile) {
         Admin admin = adminReader.getAdminByEmail(email);
-        AdminAttachFile updatedProfile = fileUploader.upload(profileImageFile);
+        AttachFile updatedProfile = fileUploader.upload(profileImageFile);
 
-        admin.updateProfileImage(updatedProfile.getFileUrl());
+        admin.updateProfileImage(updatedProfile);
     }
 
     @Override
@@ -92,8 +92,7 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = new Admin("kiit7@naver.com",
                 passwordEncoder.encode("0000"),
                 "스톤",
-                roles,
-                "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fko%2Fimages%2Fsearch%2F%25ED%2594%2584%25EB%25A1%259C%25ED%2595%2584%2F&psig=AOvVaw0bBAscVMby6pWvg2XGqdjW&ust=1706775743831000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKCe6KCZh4QDFQAAAAAdAAAAABAE");
+                roles);
 
         adminStore.store(admin);
     }

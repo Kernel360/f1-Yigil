@@ -32,7 +32,7 @@ public class FileUploaderImpl implements FileUploader {
     }
 
     private FileType determineFileType(MultipartFile file) {
-        if (file.getContentType() == null) throw new FileException(ExceptionCode.EMPTY_FILE);
+        if (file == null) throw new FileException(ExceptionCode.EMPTY_FILE);
 
         if(file.getContentType().startsWith("image/")) {
             return FileType.IMAGE;

@@ -1,7 +1,10 @@
 package kr.co.yigil.admin.domain.admin;
 
+import java.util.Optional;
+import kr.co.yigil.admin.domain.Admin;
 import lombok.Getter;
 import lombok.ToString;
+import kr.co.yigil.file.AttachFile;
 
 public class AdminInfo {
 
@@ -13,7 +16,9 @@ public class AdminInfo {
 
         public AdminInfoResponse(Admin admin) {
             nickname = admin.getNickname();
-            profileUrl = admin.getProfileImageUrl();
+            profileUrl = Optional.ofNullable(admin.getProfileImage())
+                    .map(AttachFile::getFileUrl)
+                    .orElse("");
         }
 
     }
@@ -28,7 +33,9 @@ public class AdminInfo {
 
         public AdminDetailInfoResponse(Admin admin) {
             nickname = admin.getNickname();
-            profileUrl = admin.getProfileImageUrl();
+            profileUrl = Optional.ofNullable(admin.getProfileImage())
+                    .map(AttachFile::getFileUrl)
+                    .orElse("");
             email = admin.getEmail();
             password = admin.getPassword();
         }

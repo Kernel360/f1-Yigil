@@ -1,21 +1,28 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSelectedLayoutSegment } from 'next/navigation';
 import InfoIcon from '/public/icons/info.svg';
 import SearchIcon from '/public/icons/search.svg';
 
-// 메뉴가 늘어나지 않을 것으로 상정하고 스타일 지정 조건을 하드코딩하였음
 export default function HomeNavigation() {
   const pathname = usePathname();
-  const isHomeOrSearch = pathname === '/' || pathname === '/search';
+  const upperSegment = useSelectedLayoutSegment();
+
+  const segmentsWhereHomeIsActive = ['search', 'places'];
+
+  const isHomeActive =
+    upperSegment === null ||
+    segmentsWhereHomeIsActive.some((segment) =>
+      pathname.slice(1).startsWith(segment),
+    );
 
   const selected = 'border-b-4 border-black text-black';
 
   return (
-    <nav className="px-8 py-4 text-3xl font-semibold text-gray-300 flex justify-between items-center">
+    <nav className="px-4 py-4 text-3xl font-semibold text-gray-300 flex justify-between items-center">
       <div className="flex gap-4">
-        <Link className={`${isHomeOrSearch && selected}`} href="/">
+        <Link className={`${isHomeActive && selected}`} href="/">
           홈
         </Link>
         <Link

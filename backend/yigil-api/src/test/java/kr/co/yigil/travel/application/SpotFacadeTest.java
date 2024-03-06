@@ -4,7 +4,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -15,20 +14,17 @@ import java.util.Collections;
 import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
-import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
-import kr.co.yigil.travel.domain.spot.SpotCommand.UpdateSpotImage;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
@@ -43,7 +39,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class SpotFacadeTest {
@@ -183,11 +178,11 @@ public class SpotFacadeTest {
             totalPages
         );
 
-        when(spotService.retrieveSpotList(anyLong(), any(Pageable.class), anyString())).thenReturn(
+        when(spotService.retrieveSpotList(anyLong(), any(Selected.class), any(Pageable.class))).thenReturn(
             mockSpotListResponse);
 
         // When
-        var result = spotFacade.getMemberSpotsInfo(memberId, pageable, "private");
+        var result = spotFacade.getMemberSpotsInfo(memberId, Selected.PRIVATE, pageable);
 
         // Then
         assertThat(result).isNotNull()

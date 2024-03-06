@@ -1,10 +1,13 @@
 package kr.co.yigil.notice.domain;
 
+import kr.co.yigil.admin.domain.admin.AdminReader;
 import kr.co.yigil.notice.domain.NoticeCommand.NoticeCreateRequest;
 import kr.co.yigil.notice.domain.NoticeCommand.NoticeUpdateRequest;
 import kr.co.yigil.notice.domain.NoticeInfo.NoticeListInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +17,16 @@ public class NoticeServiceImpl implements NoticeService{
 
     private final NoticeReader noticeReader;
     private final NoticeStore noticeStore;
+    private final AdminReader adminReader;
 
     @Override
     @Transactional
     public void createNotice(NoticeCreateRequest noticeCommand) {
-        var notice = noticeCommand.toEntity();
+        Authentication authentication = SecurityContextHolder
+            .getContext()
+            .getAuthentication();
+        var admin = adminReader.getAdminByEmail(authentication.getName());
+        var notice = noticeCommand.toEntity(admin);
         noticeStore.save(notice);
     }
 
@@ -40,7 +48,7 @@ public class NoticeServiceImpl implements NoticeService{
     @Transactional
     public void updateNotice(Long noticeId, NoticeUpdateRequest noticeCommand) {
         var notice = noticeReader.getNotice(noticeId);
-        notice.updateNotice(noticeCommand.toEntity());
+        notice.updateNotice(noticeCommand.getTitle(), noticeCommand.getContent());
     }
 
     @Override

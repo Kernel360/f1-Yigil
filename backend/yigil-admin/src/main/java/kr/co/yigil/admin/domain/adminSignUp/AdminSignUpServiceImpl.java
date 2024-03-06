@@ -4,7 +4,8 @@ import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_ALREADY_EXISTED;
 
 import java.util.ArrayList;
 import java.util.List;
-import kr.co.yigil.admin.domain.admin.Admin;
+import kr.co.yigil.admin.domain.Admin;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.admin.AdminReader;
 import kr.co.yigil.admin.domain.admin.AdminStore;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;
@@ -12,6 +13,7 @@ import kr.co.yigil.admin.infrastructure.adminSignUp.AdminPasswordGenerator;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpAcceptRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpRejectRequest;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -85,8 +87,7 @@ public class AdminSignUpServiceImpl implements AdminSignUpService {
         Admin admin = new Admin(signUp.getEmail(),
                 passwordEncoder.encode(temporaryPassword),
                 signUp.getNickname(),
-                roles,
-                "http://cdn.yigil.co.kr/images/0a1d6eaf-24ad-4c2a-b383-15eac96daec0_%E1%84%90%E1%85%A9%E1%84%81%E1%85%B5.jpeg");
+                roles);
 
         adminStore.store(admin);
         emailSender.sendAcceptEmail(signUp, temporaryPassword);

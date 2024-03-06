@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.infrastructure.course;
 
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.travel.domain.Course;
@@ -32,7 +33,7 @@ public class CourseReaderImpl implements CourseReader {
 
     @Override
     public Page<Course> getMemberCourseList(Long memberId, Pageable pageable,
-        String visibility) {
+        Selected visibility) {
         return courseQueryDslRepository.findAllByMemberIdAndIsPrivate(memberId, visibility, pageable);
     }
 }

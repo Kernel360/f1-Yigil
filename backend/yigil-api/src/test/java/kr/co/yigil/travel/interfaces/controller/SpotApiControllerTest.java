@@ -4,7 +4,6 @@ import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
 import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,6 +24,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.application.SpotFacade;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
@@ -59,7 +59,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(SpotApiController.class)
 @AutoConfigureRestDocs
-public class SpotApiControllerTest {
+class SpotApiControllerTest {
 
     private MockMvc mockMvc;
 
@@ -81,7 +81,7 @@ public class SpotApiControllerTest {
     void getSpotsInPlace_ShouldReturnOk() throws Exception {
         Slice<Spot> mockSlice = mock(Slice.class);
         SpotInfoDto spotInfo = new SpotInfoDto(List.of("images/image.png", "images/photo.jpeg"),
-            "images/profile.jpg", "오너 닉네임", "4.5", "2024-02-01");
+            "설명", "images/profile.jpg", "오너 닉네임", "4.5", "2024-02-01");
         SpotsInPlaceResponse response = new SpotsInPlaceResponse(List.of(spotInfo), false);
 
         when(spotFacade.getSpotSliceInPlace(anyLong(), any(Pageable.class))).thenReturn(mockSlice);
@@ -101,16 +101,19 @@ public class SpotApiControllerTest {
                     parameterWithName("placeId").description("장소 아이디")
                 ),
                 queryParameters(
-                        parameterWithName("page").description("현재 페이지 - default:1").optional(),
-                        parameterWithName("size").description("페이지 크기 - default:5").optional(),
-                        parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
-                        parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
+                    parameterWithName("page").description("현재 페이지 - default:1").optional(),
+                    parameterWithName("size").description("페이지 크기 - default:5").optional(),
+                    parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate")
+                        .optional(),
+                    parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순")
+                        .optional()
                 ),
                 responseFields(
                     fieldWithPath("has_next").type(JsonFieldType.BOOLEAN)
                         .description("다음 페이지가 있는지 여부"),
                     subsectionWithPath("spots").description("spot의 정보"),
                     fieldWithPath("spots[].image_url_list").description("imageUrl의 List"),
+                    fieldWithPath("spots[].description").description("Spot의 설명"),
                     fieldWithPath("spots[].owner_profile_image_url").type(JsonFieldType.STRING)
                         .description("Spot 등록 사용자의 프로필 이미지 Url"),
                     fieldWithPath("spots[].owner_nickname").type(JsonFieldType.STRING)
@@ -330,8 +333,8 @@ public class SpotApiControllerTest {
             .totalPages(1)
             .build();
 
-        when(spotFacade.getMemberSpotsInfo(anyLong(), any(PageRequest.class),
-            anyString())).thenReturn(mock(MySpotsResponse.class));
+        when(spotFacade.getMemberSpotsInfo(anyLong(), any(Selected.class),
+            any(PageRequest.class))).thenReturn(mock(MySpotsResponse.class));
         when(spotMapper.of(any(SpotInfo.MySpotsResponse.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/spots/my")
@@ -347,11 +350,14 @@ public class SpotApiControllerTest {
                 getDocumentRequest(),
                 getDocumentResponse(),
                 queryParameters(
-                        parameterWithName("page").description("현재 페이지 - default:1").optional(),
-                        parameterWithName("size").description("페이지 크기 - default:5").optional(),
-                        parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
-                        parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional(),
-                        parameterWithName("selected").description("필터 기능 - all(디폴트값) 전체공개 / private 비공개").optional()
+                    parameterWithName("page").description("현재 페이지 - default:1").optional(),
+                    parameterWithName("size").description("페이지 크기 - default:5").optional(),
+                    parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate")
+                        .optional(),
+                    parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순")
+                        .optional(),
+                    parameterWithName("selected").description(
+                        "필터 기능 - all(디폴트값) 전체공개 / private 비공개").optional()
                 ),
                 responseFields(
                     fieldWithPath("content[].spot_id").description("장소 ID"),
@@ -364,6 +370,6 @@ public class SpotApiControllerTest {
                 ))
             );
 
-        verify(spotFacade).getMemberSpotsInfo(anyLong(), any(PageRequest.class), anyString());
+        verify(spotFacade).getMemberSpotsInfo(anyLong(), any(Selected.class), any(PageRequest.class));
     }
 }

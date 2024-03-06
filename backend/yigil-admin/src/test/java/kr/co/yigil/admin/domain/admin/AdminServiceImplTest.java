@@ -9,10 +9,11 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import kr.co.yigil.admin.domain.Admin;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
-import kr.co.yigil.file.domain.AdminAttachFile;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.domain.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
 import org.junit.jupiter.api.DisplayName;
@@ -74,6 +75,10 @@ public class AdminServiceImplTest {
         when(admin.getNickname()).thenReturn(expectedName);
         when(adminReader.getAdminByEmail(email)).thenReturn(admin);
 
+        AttachFile attachFile = mock(AttachFile.class);
+        when(attachFile.getFileUrl()).thenReturn("http://test.com");
+        when(admin.getProfileImage()).thenReturn(attachFile);
+
         AdminInfo.AdminInfoResponse result = adminService.getAdminInfoByEmail(email);
 
         assertEquals(expectedName, result.getNickname());
@@ -91,6 +96,10 @@ public class AdminServiceImplTest {
         when(admin.getNickname()).thenReturn(expectedName);
         when(adminReader.getAdminByEmail(email)).thenReturn(admin);
 
+        AttachFile attachFile = mock(AttachFile.class);
+        when(attachFile.getFileUrl()).thenReturn("http://test.com");
+        when(admin.getProfileImage()).thenReturn(attachFile);
+
         AdminInfo.AdminDetailInfoResponse result = adminService.getAdminDetailInfoByEmail(email);
 
         assertEquals(expectedName, result.getNickname());
@@ -103,14 +112,13 @@ public class AdminServiceImplTest {
     void updateProfileImage_ShouldUpdateAdmin() {
         Admin admin = mock(Admin.class);
         MultipartFile profileImageFile = mock(MultipartFile.class);
-        AdminAttachFile adminAttachFile = mock(AdminAttachFile.class);
+        AttachFile adminAttachFile = mock(AttachFile.class);
         when(adminReader.getAdminByEmail(anyString())).thenReturn(admin);
-        when(adminAttachFile.getFileUrl()).thenReturn("fileUrl");
         when(fileUploader.upload(any())).thenReturn(adminAttachFile);
 
         adminService.updateProfileImage("email", profileImageFile);
 
-        verify(admin).updateProfileImage(anyString());
+        verify(admin).updateProfileImage(any());
     }
 
     @DisplayName("updatePassword 메서드의 파라미터로 올바른 existingPassword 입력시 Admin password를 잘 업데이트하는지")
