@@ -1,5 +1,6 @@
 package kr.co.yigil.admin.domain.admin;
 
+import kr.co.yigil.admin.domain.Admin;
 import lombok.Getter;
 import lombok.ToString;
 
