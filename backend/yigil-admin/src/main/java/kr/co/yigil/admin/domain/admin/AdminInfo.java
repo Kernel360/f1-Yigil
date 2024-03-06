@@ -14,7 +14,7 @@ public class AdminInfo {
 
         public AdminInfoResponse(Admin admin) {
             nickname = admin.getNickname();
-            profileUrl = admin.getProfileImageUrl();
+            profileUrl = admin.getProfileImage().getFileUrl();
         }
 
     }
@@ -29,7 +29,7 @@ public class AdminInfo {
 
         public AdminDetailInfoResponse(Admin admin) {
             nickname = admin.getNickname();
-            profileUrl = admin.getProfileImageUrl();
+            profileUrl = admin.getProfileImage().getFileUrl();
             email = admin.getEmail();
             password = admin.getPassword();
         }

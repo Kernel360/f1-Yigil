@@ -7,10 +7,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import kr.co.yigil.file.AttachFile;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,8 +42,9 @@ public class Admin implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    @Column(columnDefinition = "TEXT")
-    private String profileImageUrl;
+    @OneToOne
+    @JoinColumn(name = "profile_image_id")
+    private AttachFile profileImage;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -74,16 +78,23 @@ public class Admin implements UserDetails {
         return true;
     }
 
-    public Admin(String email, String password, String nickname, List<String> roles, String profileImageUrl) {
+    public Admin(String email, String password, String nickname, List<String> roles, AttachFile profileImage) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.roles = roles;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImage = profileImage;
     }
 
-    public void updateProfileImage(String fileUrl) {
-        this.profileImageUrl = fileUrl;
+    public Admin(String email, String password, String nickname, List<String> roles) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.roles = roles;
+    }
+
+    public void updateProfileImage(AttachFile profileImage) {
+        this.profileImage = profileImage;
     }
 
     public void updatePassword(String encodedPassword) {
