@@ -35,9 +35,7 @@ async function fetchMySpotForPlace(id: number) {
   return await response.json();
 }
 
-export async function getPlaceDetail(idString: string) {
-  const id = Number.parseInt(idString, 10);
-
+export async function getPlaceDetail(id: number) {
   const json = await fetchPlaceDetail(id);
 
   const result = placeDetailSchema.safeParse(json);
@@ -45,9 +43,7 @@ export async function getPlaceDetail(idString: string) {
   return result;
 }
 
-export async function getMySpotForPlace(idString: string) {
-  const id = Number.parseInt(idString, 10);
-
+export async function getMySpotForPlace(id: number) {
   const json = await fetchMySpotForPlace(id);
 
   const result = mySpotForPlaceSchema.safeParse(json);

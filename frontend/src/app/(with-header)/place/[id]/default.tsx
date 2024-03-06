@@ -1,10 +1,10 @@
-import PlaceDetail from '@/app/_components/place/PlaceDetail';
-import { myInfoSchema } from '@/types/response';
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
+import { myInfoSchema } from '@/types/response';
 import { getMySpotForPlace, getPlaceDetail } from '../action';
-import PlaceMySpot from '@/app/_components/place/PlaceMySpot';
+import PlaceDetail from '@/app/_components/place/PlaceDetail';
+import PlaceDetailWithMySpot from '@/app/_components/place/PlaceDetailWithMySpot';
 
-export default async function PlaceDetailPage({
+export default async function PlaceDetailDefault({
   params,
 }: {
   params: { id: number };
@@ -37,10 +37,10 @@ export default async function PlaceDetailPage({
   const mySpot = mySpotResult.data;
 
   return (
-    <section className="flex flex-col">
-      <PlaceDetail detail={detail} isLoggedIn={memberInfo.success} />
-      <hr className="border-8" />
-      <PlaceMySpot placeName={detail.place_name} data={mySpot} />
-    </section>
+    <PlaceDetailWithMySpot
+      detail={detail}
+      isLoggedIn={memberInfo.success}
+      mySpot={mySpot}
+    />
   );
 }
