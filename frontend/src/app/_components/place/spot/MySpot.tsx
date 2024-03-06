@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import ChevronDownIcon from '/public/icons/chevron-down.svg';
 import StarIcon from '/public/icons/star.svg';
-import ImageCarousel from '../ui/carousel/ImageCarousel';
+import ImageCarousel from '../../ui/carousel/ImageCarousel';
 
 export default function MySpot({
   placeName,

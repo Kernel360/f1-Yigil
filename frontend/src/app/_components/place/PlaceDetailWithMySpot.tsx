@@ -1,6 +1,6 @@
 import PlaceDetail from '@/app/_components/place/PlaceDetail';
 import { TMySpotForPlace, TPlaceDetail } from '@/types/response';
-import PlaceMySpot from '@/app/_components/place/PlaceMySpot';
+import PlaceMySpot from '@/app/_components/place/spot/PlaceMySpot';
 
 export default function PlaceDetailWithMySpot({
   detail,

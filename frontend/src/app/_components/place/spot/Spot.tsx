@@ -1,9 +1,9 @@
 import { TSpot } from '@/types/response';
-import RoundProfile from '../ui/profile/RoundProfile';
-import IconWithCounts from '../IconWithCounts';
+import RoundProfile from '../../ui/profile/RoundProfile';
+import IconWithCounts from '../../IconWithCounts';
 
 import StarIcon from '/public/icons/star.svg';
-import ImageCarousel from '../ui/carousel/ImageCarousel';
+import ImageCarousel from '../../ui/carousel/ImageCarousel';
 
 export default function Spot({ data }: { data: TSpot }) {
   const {
