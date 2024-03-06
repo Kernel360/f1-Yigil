@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import IconWithCounts from '../../IconWithCounts';
 
+import PlaceholderImage from '/public/images/placeholder.png';
 import BookmarkIcon from '/public/icons/bookmark.svg';
 import ReviewIcon from '/public/icons/review.svg';
 import StarIcon from '/public/icons/star.svg';
@@ -25,7 +26,7 @@ export default function DummyPlace({
         <span className="w-full relative aspect-square inline-block w-fit h-fit">
           <Image
             className="rounded-lg select-none"
-            src={''}
+            src={PlaceholderImage}
             alt={`장소 이미지`}
             fill
             sizes="33vw"
