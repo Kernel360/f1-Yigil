@@ -48,6 +48,7 @@ public class NoticeApiController {
 
     @PostMapping
     public ResponseEntity<NoticeCreateResponse> createNotice(
+
         @ModelAttribute NoticeCreateRequest request
     ){
         var noticeCommand = noticeMapper.toCommand(request);

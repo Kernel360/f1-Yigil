@@ -62,6 +62,48 @@ public class PlaceFacadeTest {
         verify(placeService).getPopularPlace(any(Accessor.class));
     }
 
+    @DisplayName("getPopularPlaceMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPopularPlaceMore_ShouldReturnResponse() {
+        Accessor mockAccessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+
+        when(placeService.getPopularPlaceMore(mockAccessor)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPopularPlaceMore(mockAccessor);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPopularPlaceMore(any(Accessor.class));
+    }
+
+    @DisplayName("getPopularPlaceByDemographics 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographics_ShouldReturnResponse() {
+        Long memberId = 1L;
+        Main mockResponse = mock(Main.class);
+
+        when(placeService.getPopularPlaceByDemographics(memberId)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPopularPlaceByDemographics(memberId);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPopularPlaceByDemographics(anyLong());
+    }
+
+    @DisplayName("getPopularPlaceByDemographicsMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographicsMore_ShouldReturnResponse() {
+        Long memberId = 1L;
+        Main mockResponse = mock(Main.class);
+
+        when(placeService.getPopularPlaceByDemographicsMore(memberId)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPopularPlaceByDemographicsMore(memberId);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPopularPlaceByDemographicsMore(anyLong());
+    }
+
     @DisplayName("retrievePlaceInfo 메서드가 Response를 잘 반환하는지")
     @Test
     void retrievePlaceInfo_ShouldReturnResponse() {
@@ -90,6 +132,21 @@ public class PlaceFacadeTest {
 
         assertEquals(result, List.of(mockResponse));
         verify(placeService).getPlaceInRegion(anyLong(), any(Accessor.class));
+    }
+
+    @DisplayName("getPlaceRegionMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPlaceRegionMore_ShouldReturnResponse() {
+        Accessor mockAccessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+        Long regionId = 1L;
+
+        when(placeService.getPlaceInRegionMore(regionId, mockAccessor)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPlaceInRegionMore(regionId, mockAccessor);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPlaceInRegionMore(anyLong(), any(Accessor.class));
     }
 
     @DisplayName("getNearPlace 메서드가 Response를 잘 반환하는지")

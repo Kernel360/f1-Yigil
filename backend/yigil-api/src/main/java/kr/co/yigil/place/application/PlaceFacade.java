@@ -25,6 +25,10 @@ public class PlaceFacade {
         return placeService.getPopularPlace(accessor);
     }
 
+    public List<Main> getPopularPlaceMore(final Accessor accessor) {
+        return placeService.getPopularPlaceMore(accessor);
+    }
+
     public PlaceInfo.Detail retrievePlaceInfo(final Long placeId, final Accessor accessor) {
         return placeService.retrievePlace(placeId, accessor);
     }
@@ -33,7 +37,19 @@ public class PlaceFacade {
         return placeService.getPlaceInRegion(regionId, accessor);
     }
 
-    public Page<Place> getNearPlace(NearPlaceRequest command) {
+    public List<Main> getPlaceInRegionMore(final Long regionId, final Accessor accessor) {
+        return placeService.getPlaceInRegionMore(regionId, accessor);
+    }
+
+    public Page<Place> getNearPlace(final NearPlaceRequest command) {
         return placeService.getNearPlace(command);
+    }
+
+    public List<Main> getPopularPlaceByDemographics(final Long memberId) {
+        return placeService.getPopularPlaceByDemographics(memberId);
+    }
+
+    public List<Main> getPopularPlaceByDemographicsMore(final Long memberId) {
+        return placeService.getPopularPlaceByDemographicsMore(memberId);
     }
 }

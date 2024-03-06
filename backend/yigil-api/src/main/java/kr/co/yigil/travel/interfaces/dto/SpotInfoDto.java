@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class SpotInfoDto {
     private List<String> imageUrlList;
 
+    private String description;
+
     private String ownerProfileImageUrl;
 
     private String ownerNickname;

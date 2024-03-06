@@ -31,23 +31,20 @@ public class NoticeInfo {
     @Getter
     public static class NoticeItem {
 
-        private final Long id;
+        private final Long noticeId;
         private final String title;
-        private final String content;
+        private final Long authorId;
         private final String author;
         private final LocalDateTime createdAt;
-        private final LocalDateTime updatedAt;
 
         public NoticeItem(Notice notice) {
-            id = notice.getId();
+            noticeId = notice.getId();
             title = notice.getTitle();
-            content = notice.getContent();
-            author = notice.getAuthor();
+            author = notice.getAuthor().getNickname();
+            authorId = notice.getAuthor().getId();
             createdAt = notice.getCreatedAt();
-            updatedAt = notice.getModifiedAt();
         }
     }
-
 
     @Getter
     public static class NoticeCreateResponse extends BaseResponse {
@@ -76,20 +73,22 @@ public class NoticeInfo {
     @Getter
     public static class NoticeDetail {
 
-        private final Long id;
-        private final String author;
+        private final Long noticeId;
         private final String title;
         private final String content;
+        private final Long authorId;
+        private final String authorNickname;
+        private final String profileImageUrl;
         private final LocalDateTime createdAt;
-        private final LocalDateTime updatedAt;
 
         public NoticeDetail(Notice notice) {
-            this.id = notice.getId();
-            this.author = notice.getAuthor();
+            this.noticeId = notice.getId();
             this.title = notice.getTitle();
             this.content = notice.getContent();
+            this.authorNickname = notice.getAuthor().getNickname();
+            this.authorId = notice.getAuthor().getId();
+            this.profileImageUrl = notice.getAuthor().getProfileImageUrl();
             this.createdAt = notice.getCreatedAt();
-            this.updatedAt = notice.getModifiedAt();
         }
     }
 }
