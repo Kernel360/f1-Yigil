@@ -1,3 +1,4 @@
+import Spot from '@/app/_components/place/Spot';
 import { getSpots } from './action';
 
 export default async function Spots({ params }: { params: { id: number } }) {
@@ -7,5 +8,13 @@ export default async function Spots({ params }: { params: { id: number } }) {
     return <section>Failed to get spots</section>;
   }
 
-  return <section>Spots</section>;
+  const spots = spotsResult.data.spots;
+
+  return (
+    <section className="pt-6">
+      {spots.map((spot, index) => (
+        <Spot key={index} data={spot} />
+      ))}
+    </section>
+  );
 }
