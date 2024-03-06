@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-04T18:48:06+0900",
+    date = "2024-03-06T14:18:02+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -37,6 +37,7 @@ public class SpotMapperImpl implements SpotMapper {
         spotInfoDto.setOwnerNickname( spot.getMember().getNickname() );
         spotInfoDto.setRate( String.valueOf(spot.getRate()) );
         spotInfoDto.setCreateDate( spot.getCreatedAt().toString() );
+        spotInfoDto.setDescription( spot.getDescription() );
 
         return spotInfoDto;
     }
