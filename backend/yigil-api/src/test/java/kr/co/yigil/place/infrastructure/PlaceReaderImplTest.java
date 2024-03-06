@@ -2,14 +2,19 @@ package kr.co.yigil.place.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.place.domain.DemographicPlace;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +24,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +31,9 @@ public class PlaceReaderImplTest {
 
     @Mock
     private PlaceRepository placeRepository;
+
+    @Mock
+    private DemographicPlaceRepository demographicPlaceRepository;
 
     @InjectMocks
     private PlaceReaderImpl placeReader;
@@ -116,4 +123,37 @@ public class PlaceReaderImplTest {
 
         assertEquals(result, mockPage);
     }
+
+    @DisplayName("getPopularPlaceByDemographics 메서드가 Place의 리스트를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographics_ReturnsListOfPlace() {
+        DemographicPlace demographicPlace1 = mock(DemographicPlace.class);
+        Place place1 = mock(Place.class);
+        when(demographicPlace1.getPlace()).thenReturn(place1);
+        when(demographicPlaceRepository.findTop5ByAgesAndGenderOrderByReferenceCountDesc(
+                any(), any())).thenReturn(List.of(demographicPlace1));
+
+        List<Place> result = placeReader.getPopularPlaceByDemographics(Ages.TWENTIES, Gender.MALE);
+
+        assertEquals(result.size(), 1);
+        assertTrue(result.containsAll(Arrays.asList(place1)));
+
+    }
+
+    @DisplayName("getPopularPlaceByDemographicsMore 메서드가 Place의 리스트를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographicsMore_ReturnsListOfPlace() {
+        DemographicPlace demographicPlace1 = mock(DemographicPlace.class);
+        Place place1 = mock(Place.class);
+        when(demographicPlace1.getPlace()).thenReturn(place1);
+        when(demographicPlaceRepository.findTop20ByAgesAndGenderOrderByReferenceCountDesc(
+                any(), any())).thenReturn(List.of(demographicPlace1));
+
+        List<Place> result = placeReader.getPopularPlaceByDemographicsMore(Ages.TWENTIES,
+                Gender.NONE);
+
+        assertEquals(result.size(), 1);
+        assertTrue(result.containsAll(Arrays.asList(place1)));
+    }
+
 }
