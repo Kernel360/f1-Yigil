@@ -42,7 +42,7 @@ public class NotificationApiController {
         @Auth Accessor accessor,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) SortOrder sortOrder
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
