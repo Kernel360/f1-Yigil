@@ -2,6 +2,8 @@ import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUse
 import { Place, RegionPlaces } from '@/app/_components/place';
 import { myInfoSchema } from '@/types/response';
 import { getInterestedRegions, getRegionPlaces } from '../../action';
+import DummyPlace from '@/app/_components/place/dummy/DummyPlace';
+import Link from 'next/link';
 
 export default async function RegionsPlacePage() {
   const memberJson = await authenticateUser();
@@ -17,12 +19,19 @@ export default async function RegionsPlacePage() {
 
   if (regions.length === 0) {
     return (
-      <main className="px-4 max-w-full flex flex-col">
-        <RegionPlaces
-          initialRegionPlaces={[]}
-          regions={regions}
-          isLoggedIn={memberInfo.success}
-        />
+      <main className="px-4 max-w-full flex flex-col grow">
+        <div className="relative grow">
+          <DummyPlace />
+          <div className="absolute inset-0 bg-white/75 flex flex-col gap-4 justify-center items-center">
+            <span className="text-lg font-semibold text-center">
+              관심 지역을 설정하시면
+              <br />더 많은 장소를 확인할 수 있습니다.
+            </span>
+            <Link className="p-2 rounded-lg bg-main text-white" href="/">
+              홈으로
+            </Link>
+          </div>
+        </div>
       </main>
     );
   }

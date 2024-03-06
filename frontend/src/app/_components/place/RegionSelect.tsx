@@ -15,6 +15,8 @@ export default function RegionSelect({
   userRegions: TRegion[];
   setRegionPlaces: Dispatch<SetStateAction<TPlace[]>>;
 }) {
+  const [currentRegion, setCurrentRegion] = useState(userRegions[0]);
+
   async function handleSelect(region: TRegion) {
     setCurrentRegion(region);
 
@@ -29,18 +31,19 @@ export default function RegionSelect({
   }
 
   if (userRegions.length === 0) {
-    <nav className="flex items-center gap-2">
-      <span>관심 지역을 설정하세요.</span>
-      <Link className="underline text-gray-500" href="#">
-        설정
-      </Link>
-    </nav>;
+    return (
+      <nav className="flex items-center gap-2">
+        <span>관심 지역을 설정하세요.</span>
+        {/* 사용자 정보 수정 UI로 연결 */}
+        {/* <Link className="underline text-gray-500" href="#">
+          설정
+        </Link> */}
+      </nav>
+    );
   }
 
   const selectedStyle = 'bg-gray-500 text-white';
   const unselectedStyle = 'bg-gray-200 text-gray-500';
-
-  const [currentRegion, setCurrentRegion] = useState(userRegions[0]);
 
   return (
     <nav className="flex items-center gap-2">
