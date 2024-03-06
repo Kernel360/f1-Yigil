@@ -25,12 +25,20 @@ public class PlaceFacade {
         return placeService.getPopularPlace(accessor);
     }
 
+    public List<Main> getPopularPlaceMore(final Accessor accessor) {
+        return placeService.getPopularPlaceMore(accessor);
+    }
+
     public PlaceInfo.Detail retrievePlaceInfo(final Long placeId, final Accessor accessor) {
         return placeService.retrievePlace(placeId, accessor);
     }
 
     public List<Main> getPlaceInRegion(final Long regionId, final Accessor accessor) {
         return placeService.getPlaceInRegion(regionId, accessor);
+    }
+
+    public List<Main> getPlaceInRegionMore(final Long regionId, final Accessor accessor) {
+        return placeService.getPlaceInRegionMore(regionId, accessor);
     }
 
     public Page<Place> getNearPlace(final NearPlaceRequest command) {

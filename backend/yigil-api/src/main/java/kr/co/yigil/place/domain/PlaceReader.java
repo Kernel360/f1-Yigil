@@ -16,6 +16,8 @@ public interface PlaceReader {
 
     List<Place> getPlaceInRegion(Long regionId);
 
+    List<Place> getPlaceInRegionMore(Long regionId);
+
     Page<Place> getNearPlace(PlaceCommand.NearPlaceRequest command);
 
     List<Place> getPopularPlaceByDemographics(Ages ages, Gender gender);

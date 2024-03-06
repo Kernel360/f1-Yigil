@@ -103,6 +103,37 @@ public class PlaceReaderImplTest {
         assertEquals(placeReader.getPlaceInRegion(regionId).size(), 5);
     }
 
+    @DisplayName("getPlaceInRegionMore 메서드가 Place의 리스트를 잘 반환하는지")
+    @Test
+    void getPlaceInRegionMore_ReturnsListOfPlace() {
+        Long regionId = 1L;
+        Place place1 = mock(Place.class);
+        Place place2 = mock(Place.class);
+        Place place3 = mock(Place.class);
+        Place place4 = mock(Place.class);
+        Place place5 = mock(Place.class);
+        Place place6 = mock(Place.class);
+        Place place7 = mock(Place.class);
+        Place place8 = mock(Place.class);
+        Place place9 = mock(Place.class);
+        Place place10 = mock(Place.class);
+        Place place11 = mock(Place.class);
+        Place place12 = mock(Place.class);
+        Place place13 = mock(Place.class);
+        Place place14 = mock(Place.class);
+        Place place15 = mock(Place.class);
+        Place place16 = mock(Place.class);
+        Place place17 = mock(Place.class);
+        Place place18 = mock(Place.class);
+        Place place19 = mock(Place.class);
+        Place place20 = mock(Place.class);
+        when(placeRepository.findTop20ByRegionIdOrderByIdDesc(regionId)).thenReturn(
+                Arrays.asList(place1, place2, place3, place4, place5, place6, place7, place8, place9, place10,
+                        place11, place12, place13, place14, place15, place16, place17, place18, place19, place20));
+
+        assertEquals(placeReader.getPlaceInRegionMore(regionId).size(), 20);
+    }
+
     @DisplayName("getNearPlace 메서드가 Page<Place>를 잘 반환하는지")
     @Test
     void getNearPlace_ReturnsPageOfPlace() {

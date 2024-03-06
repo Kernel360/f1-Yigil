@@ -85,6 +85,16 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/region/{regionId}/more")
+    public ResponseEntity<RegionPlaceResponse> getRegionPlaceMore(
+            @PathVariable("regionId") Long regionId,
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPlaceInRegionMore(regionId, accessor);
+        var response = placeMapper.toRegionPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping("/near")
     public ResponseEntity<NearPlaceResponse> getNearPlace(NearPlaceRequest request) {
         var nearPlaceCommand = placeMapper.toNearPlaceCommand(request);

@@ -32,6 +32,7 @@ public interface SpotMapper {
     @Mapping(target = "ownerNickname", expression = "java(spot.getMember().getNickname())")
     @Mapping(target = "rate", expression = "java(String.valueOf(spot.getRate()))")
     @Mapping(target = "createDate", expression = "java(spot.getCreatedAt().toString())")
+    @Mapping(target = "description", expression = "java(spot.getDescription())")
     SpotInfoDto spotToSpotInfoDto(Spot spot);
 
     default List<SpotInfoDto> spotsToSpotInfoDtoList(List<Spot> spots) {
