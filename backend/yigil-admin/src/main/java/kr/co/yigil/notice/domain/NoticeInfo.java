@@ -1,7 +1,6 @@
 package kr.co.yigil.notice.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
@@ -18,13 +17,10 @@ public class NoticeInfo {
 
     @Getter
     public static class NoticeListInfo {
+        private final Page<NoticeItem> noticeList;
 
-        private final List<NoticeItem> noticeList;
-        private final boolean hasNext;
-
-        public NoticeListInfo(Page<Notice> noticeSlice) {
-            this.noticeList = noticeSlice.getContent().stream().map(NoticeItem::new).toList();
-            this.hasNext = noticeSlice.hasNext();
+        public NoticeListInfo(Page<Notice> noticePage) {
+            this.noticeList = noticePage.map(NoticeItem::new);
         }
     }
 
