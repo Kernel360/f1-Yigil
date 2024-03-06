@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploaderImpl implements FileUploader {
 
     private final ApplicationEventPublisher eventPublisher;
-    private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/";
 
     @Override
     public AttachFile upload(MultipartFile file) {
@@ -25,14 +24,14 @@ public class FileUploaderImpl implements FileUploader {
         FileUploadEvent event = new FileUploadEvent(this, file, fileUploadResult::complete);
         eventPublisher.publishEvent(event);
 
-        String fileUrl = DEFAULT_PROFILE_CDN + fileUploadResult.join();
+        String fileUrl = fileUploadResult.join();
         FileType fileType = determineFileType(file);
 
         return new AttachFile(fileType, fileUrl, file.getOriginalFilename(), file.getSize());
     }
 
     private FileType determineFileType(MultipartFile file) {
-        if (file.getContentType() == null) throw new FileException(ExceptionCode.EMPTY_FILE);
+        if (file == null) throw new FileException(ExceptionCode.EMPTY_FILE);
 
         if(file.getContentType().startsWith("image/")) {
             return FileType.IMAGE;
