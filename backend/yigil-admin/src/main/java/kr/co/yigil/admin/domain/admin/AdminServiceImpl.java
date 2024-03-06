@@ -66,7 +66,7 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = adminReader.getAdminByEmail(email);
         AttachFile updatedProfile = fileUploader.upload(profileImageFile);
 
-        admin.updateProfileImage(updatedProfile.getFileUrl());
+        admin.updateProfileImage(updatedProfile);
     }
 
     @Override
@@ -92,8 +92,7 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = new Admin("kiit7@naver.com",
                 passwordEncoder.encode("0000"),
                 "스톤",
-                roles,
-                "https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fko%2Fimages%2Fsearch%2F%25ED%2594%2584%25EB%25A1%259C%25ED%2595%2584%2F&psig=AOvVaw0bBAscVMby6pWvg2XGqdjW&ust=1706775743831000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKCe6KCZh4QDFQAAAAAdAAAAABAE");
+                roles);
 
         adminStore.store(admin);
     }
