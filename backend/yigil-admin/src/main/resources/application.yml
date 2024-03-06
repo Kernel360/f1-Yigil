@@ -30,6 +30,19 @@ spring:
       port: @REDIS_PORT@
   jackson:
     property-naming-strategy: SNAKE_CASE
+  mail:
+    host: @MAIL_HOST@
+    port: @MAIL_PORT@
+    username: @MAIL_USERNAME@
+    password: @MAIL_PASSWORD@
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 
 cloud:
   aws:
@@ -45,7 +58,7 @@ cloud:
       auto: false
 
 server:
-  port: @YIGIL_API_PORT@
+  port: @YIGIL_ADMIN_PORT@
   servlet:
       session:
         cookie:
@@ -61,6 +74,8 @@ logging:
     root: DEBUG
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
+jwt:
+  secret: @JWT_SECRET@
 
 decorator:
   datasource:
