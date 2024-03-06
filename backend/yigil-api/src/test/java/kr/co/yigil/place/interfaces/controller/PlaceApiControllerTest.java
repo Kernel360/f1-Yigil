@@ -134,6 +134,36 @@ public class PlaceApiControllerTest {
                 ));
     }
 
+    @DisplayName("getPopularPlaceMore가 잘 동작하는지")
+    @Test
+    void getPopularPlaceMore_ShouldReturnOk() throws Exception {
+        Main placeInfo = mock(Main.class);
+        List<Main> mockInfo = List.of(placeInfo);
+        PlaceInfoDto mockDto = new PlaceInfoDto(1L, "장소명", "10", "http://image.com", "3.5", true);
+        PopularPlaceResponse mockResponse = new PopularPlaceResponse(List.of(mockDto));
+
+        when(placeFacade.getPopularPlaceMore(any(Accessor.class))).thenReturn(mockInfo);
+        when(placeMapper.toPopularPlaceResponse(mockInfo)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/places/popular/more"))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "places/get-popular-place-more",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                subsectionWithPath("places").description("place의 정보"),
+                                fieldWithPath("places[].id").type(JsonFieldType.NUMBER).description("place의 고유 Id"),
+                                fieldWithPath("places[].place_name").type(JsonFieldType.STRING).description("장소의 장소명"),
+                                fieldWithPath("places[].review_count").type(JsonFieldType.STRING).description("리뷰의 개수"),
+                                fieldWithPath("places[].thumbnail_image_url").type(JsonFieldType.STRING).description("장소의 대표 이미지의 Url"),
+                                fieldWithPath("places[].rate").type(JsonFieldType.STRING).description("장소의 평점 정보"),
+                                fieldWithPath("places[].bookmarked").type(JsonFieldType.BOOLEAN).description("해당 장소의 북마크 여부")
+                        )
+                ));
+
+    }
+
     @DisplayName("retrievePlace 메서드가 잘 동작하는지")
     @Test
     void retrievePlace_ShouldReturnOk() throws Exception {

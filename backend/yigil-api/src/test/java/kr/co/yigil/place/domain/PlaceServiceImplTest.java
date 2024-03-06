@@ -23,6 +23,9 @@ public class PlaceServiceImplTest {
     private PlaceReader placeReader;
 
     @Mock
+    private PopularPlaceReader popularPlaceReader;
+
+    @Mock
     private PlaceCacheReader placeCacheReader;
 
     @Mock
@@ -41,11 +44,28 @@ public class PlaceServiceImplTest {
         when(mockAccessor.getMemberId()).thenReturn(1L);
         when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
-        when(placeReader.getPopularPlace()).thenReturn(List.of(mockPlace));
+        when(popularPlaceReader.getPopularPlace()).thenReturn(List.of(mockPlace));
 
         List<PlaceInfo.Main> popularPlace = placeService.getPopularPlace(mockAccessor);
 
         assertNotNull(popularPlace);
+    }
+
+    @DisplayName("getPopularPlaceMore 메서드가 Info 객체의 List를 잘 반환하는지")
+    @Test
+    void getPopularPlaceMore_ShouldReturnListOfInfo() {
+        Place mockPlace = mock(Place.class);
+        when(mockPlace.getId()).thenReturn(1L);
+        Accessor mockAccessor = mock(Accessor.class);
+        when(mockAccessor.isMember()).thenReturn(true);
+        when(mockAccessor.getMemberId()).thenReturn(1L);
+        when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
+        when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
+        when(popularPlaceReader.getPopularPlaceMore()).thenReturn(List.of(mockPlace));
+
+        List<PlaceInfo.Main> popularPlaceMore = placeService.getPopularPlaceMore(mockAccessor);
+
+        assertNotNull(popularPlaceMore);
     }
 
     @DisplayName("getPlaceInRegion 메서드가 Info 객체의 List를 잘 반환하는지")

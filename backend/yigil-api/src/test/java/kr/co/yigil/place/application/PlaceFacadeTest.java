@@ -62,6 +62,20 @@ public class PlaceFacadeTest {
         verify(placeService).getPopularPlace(any(Accessor.class));
     }
 
+    @DisplayName("getPopularPlaceMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPopularPlaceMore_ShouldReturnResponse() {
+        Accessor mockAccessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+
+        when(placeService.getPopularPlaceMore(mockAccessor)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPopularPlaceMore(mockAccessor);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPopularPlaceMore(any(Accessor.class));
+    }
+
     @DisplayName("retrievePlaceInfo 메서드가 Response를 잘 반환하는지")
     @Test
     void retrievePlaceInfo_ShouldReturnResponse() {
