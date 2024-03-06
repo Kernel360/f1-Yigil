@@ -1,4 +1,5 @@
 import Place from './Place';
-import PlaceList from './PlaceList';
+import PopularPlaces from './PopularPlaces';
+import RegionPlaces from './RegionPlaces';
 
-export { Place, PlaceList };
+export { Place, PopularPlaces, RegionPlaces };

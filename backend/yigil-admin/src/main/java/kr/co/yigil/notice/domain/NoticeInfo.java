@@ -88,7 +88,7 @@ public class NoticeInfo {
             this.content = notice.getContent();
             this.authorNickname = notice.getAuthor().getNickname();
             this.authorId = notice.getAuthor().getId();
-            this.profileImageUrl = notice.getAuthor().getProfileImageUrl();
+            this.profileImageUrl = notice.getAuthor().getProfileImage().getFileUrl();
             this.createdAt = notice.getCreatedAt();
         }
     }

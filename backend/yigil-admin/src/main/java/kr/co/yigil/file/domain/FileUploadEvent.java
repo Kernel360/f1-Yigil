@@ -34,7 +34,7 @@ public class FileUploadEvent extends ApplicationEvent {
     }
 
     private kr.co.yigil.file.FileType determineFileType(MultipartFile file) {
-        if (file.getContentType() == null) throw new FileException(ExceptionCode.EMPTY_FILE);
+        if (file == null) throw new FileException(ExceptionCode.EMPTY_FILE);
 
         if(file.getContentType().startsWith("image/")) {
             return kr.co.yigil.file.FileType.IMAGE;
