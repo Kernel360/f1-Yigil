@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import kr.co.yigil.notice.application.NoticeFacade;
 import kr.co.yigil.notice.domain.NoticeCommand;
@@ -41,7 +40,7 @@ class NoticeApiControllerTest {
     @MockBean
     private NoticeMapper noticeMapper;
     private MockMvc mockMvc;
-    ObjectMapper objectMapper = new ObjectMapper();
+
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {

@@ -14,7 +14,6 @@ public class NoticeDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class NoticeCreateRequest{
-        private String author;
         private String title;
         private String content;
     }
@@ -22,7 +21,6 @@ public class NoticeDto {
     @Getter
     @AllArgsConstructor
     public static class NoticeUpdateRequest{
-        private String author;
         private String title;
         private String content;
     }
@@ -42,12 +40,11 @@ public class NoticeDto {
     @Getter
     @Builder
     public static class NoticeItem {
-        private Long id;
+        private Long noticeId;
         private String title;
-        private String content;
+        private String authorId;
         private String author;
         private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
     }
 
     @Getter
@@ -74,13 +71,12 @@ public class NoticeDto {
     @Getter
     @Builder
     public static class NoticeDetailResponse {
-        private Long id;
+        private Long noticeId;
         private String title;
         private String content;
+        private Long authorId;
+        private String authorNickname;
+        private String profileImageUrl;
         private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
     }
-
-
-
 }

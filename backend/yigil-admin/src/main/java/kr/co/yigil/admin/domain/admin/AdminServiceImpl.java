@@ -4,8 +4,8 @@ import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_PASSWORD_DOES_NOT
 
 import java.util.ArrayList;
 import java.util.List;
+import kr.co.yigil.admin.domain.Admin;
 import kr.co.yigil.admin.domain.admin.AdminCommand.AdminPasswordUpdateRequest;
-import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.auth.application.JwtTokenProvider;

@@ -17,10 +17,11 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface NoticeMapper {
-    @Mapping(target="noticeList", source="noticeList")
+
+    @Mapping(target = "noticeList", source = "noticeList")
     NoticeDto.NoticeListResponse toDto(NoticeListInfo response);
 
-    NoticeDto.NoticeItem of (NoticeItem noticeItem);
+    NoticeDto.NoticeItem of(NoticeItem noticeItem);
 
     NoticeDto.NoticeDetailResponse toDto(NoticeDetail response);
 
