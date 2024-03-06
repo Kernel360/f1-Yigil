@@ -4,7 +4,6 @@ import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
 import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,6 +24,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.application.CourseFacade;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseInfo;
@@ -354,7 +354,7 @@ public class CourseApiControllerTest {
             .build();
 
         when(courseFacade.getMemberCoursesInfo(anyLong(), any(PageRequest.class),
-            anyString())).thenReturn(mock(CourseInfo.MyCoursesResponse.class));
+            any(Selected.class))).thenReturn(mock(CourseInfo.MyCoursesResponse.class));
         when(courseMapper.of(any(CourseInfo.MyCoursesResponse.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/courses/my")
@@ -387,6 +387,6 @@ public class CourseApiControllerTest {
                     fieldWithPath("total_pages").description("총 페이지 수")
                 )
             ));
-        verify(courseFacade).getMemberCoursesInfo(anyLong(), any(PageRequest.class), anyString());
+        verify(courseFacade).getMemberCoursesInfo(anyLong(), any(PageRequest.class), any(Selected.class));
     }
 }

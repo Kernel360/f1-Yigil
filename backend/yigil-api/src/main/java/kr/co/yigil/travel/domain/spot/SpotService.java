@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.domain.spot;
 
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
@@ -21,5 +22,5 @@ public interface SpotService {
 
     void deleteSpot(Long spotId, Long memberId);
 
-    MySpotsResponse retrieveSpotList(Long memberId, Pageable pageable, String selected);
+    MySpotsResponse retrieveSpotList(Long memberId, Selected selected, Pageable pageable);
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -173,7 +174,7 @@ public class CourseServiceImplTest {
         Long memberId = 1L;
         Long courseId = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
-        String selected = "private";
+
         // 필요 course 필드: id, title, rate, spotList, mapstaticImageUrl
 
         Course mockCourse = new Course(
@@ -184,7 +185,7 @@ public class CourseServiceImplTest {
 
         when(courseReader.getMemberCourseList(anyLong(), any(), any())).thenReturn(mockCourseList);
 
-        var result = courseService.retrieveCourseList(memberId, pageable, selected);
+        var result = courseService.retrieveCourseList(memberId, pageable, Selected.ALL);
 
         assertThat(result).isNotNull().isInstanceOf(CourseInfo.MyCoursesResponse.class);
         assertThat(result.getContent().getFirst()).isInstanceOf(CourseInfo.CourseListInfo.class);

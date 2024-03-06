@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
@@ -97,8 +98,8 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional
-    public MySpotsResponse retrieveSpotList(Long memberId, Pageable pageable, String visibility) {
-        var pageSpot = spotReader.getMemberSpotList(memberId, pageable, visibility);
+    public MySpotsResponse retrieveSpotList(Long memberId, Selected visibility, Pageable pageable) {
+        var pageSpot = spotReader.getMemberSpotList(memberId, visibility, pageable);
         List<SpotInfo.SpotListInfo> spotInfoList = pageSpot.getContent().stream()
             .map(SpotInfo.SpotListInfo::new)
             .toList();
