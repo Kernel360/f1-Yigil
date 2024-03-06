@@ -53,4 +53,11 @@ public class Notice {
         this.content = content;
         modifiedAt = LocalDateTime.now();
     }
+
+    public String getAuthorProfileImage(){
+        if(author.getProfileImage() == null){
+            return null;
+        }
+        return author.getProfileImage().getFileUrl();
+    }
 }
