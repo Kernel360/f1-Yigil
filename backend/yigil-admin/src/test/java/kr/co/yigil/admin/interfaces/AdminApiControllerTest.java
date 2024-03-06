@@ -12,9 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.yigil.admin.application.AdminFacade;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.admin.AdminCommand;
 import kr.co.yigil.admin.domain.admin.AdminInfo;
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand;
 import kr.co.yigil.admin.interfaces.controller.AdminApiController;
 import kr.co.yigil.admin.interfaces.dto.mapper.AdminMapper;

@@ -1,5 +1,6 @@
 package kr.co.yigil.admin.domain.adminSignUp;
 
+import kr.co.yigil.admin.domain.AdminSignUp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -45,6 +45,35 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/popular/more")
+    public ResponseEntity<PopularPlaceResponse> getPopularPlaceMore(
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPopularPlaceMore(accessor);
+        var response = placeMapper.toPopularPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/popular-demographics")
+    @MemberOnly
+    public ResponseEntity<PopularPlaceResponse> getPopularPlaceByDemographics(
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPopularPlaceByDemographics(accessor.getMemberId());
+        var response = placeMapper.toPopularPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/popular-demographics-more")
+    @MemberOnly
+    public ResponseEntity<PopularPlaceResponse> getPopularPlaceByDemographicsMore(
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPopularPlaceByDemographicsMore(accessor.getMemberId());
+        var response = placeMapper.toPopularPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping("/{placeId}")
     public ResponseEntity<PlaceDetailInfoDto> retrievePlace(
             @PathVariable("placeId") Long placeId,
@@ -61,6 +90,16 @@ public class PlaceApiController {
             @Auth Accessor accessor
     ) {
         var placeInfo = placeFacade.getPlaceInRegion(regionId, accessor);
+        var response = placeMapper.toRegionPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/region/{regionId}/more")
+    public ResponseEntity<RegionPlaceResponse> getRegionPlaceMore(
+            @PathVariable("regionId") Long regionId,
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPlaceInRegionMore(regionId, accessor);
         var response = placeMapper.toRegionPlaceResponse(placeInfo);
         return ResponseEntity.ok().body(response);
     }

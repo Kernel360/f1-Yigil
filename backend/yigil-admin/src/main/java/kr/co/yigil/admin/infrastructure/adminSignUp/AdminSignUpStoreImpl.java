@@ -1,7 +1,8 @@
 package kr.co.yigil.admin.infrastructure.adminSignUp;
 
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpStore;
+import kr.co.yigil.admin.infrastructure.AdminSignUpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

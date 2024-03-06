@@ -10,7 +10,7 @@ import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
-import kr.co.yigil.file.domain.AdminAttachFile;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.domain.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public void updateProfileImage(String email, MultipartFile profileImageFile) {
         Admin admin = adminReader.getAdminByEmail(email);
-        AdminAttachFile updatedProfile = fileUploader.upload(profileImageFile);
+        AttachFile updatedProfile = fileUploader.upload(profileImageFile);
 
         admin.updateProfileImage(updatedProfile.getFileUrl());
     }

@@ -81,7 +81,7 @@ class SpotApiControllerTest {
     void getSpotsInPlace_ShouldReturnOk() throws Exception {
         Slice<Spot> mockSlice = mock(Slice.class);
         SpotInfoDto spotInfo = new SpotInfoDto(List.of("images/image.png", "images/photo.jpeg"),
-            "images/profile.jpg", "오너 닉네임", "4.5", "2024-02-01");
+            "설명", "images/profile.jpg", "오너 닉네임", "4.5", "2024-02-01");
         SpotsInPlaceResponse response = new SpotsInPlaceResponse(List.of(spotInfo), false);
 
         when(spotFacade.getSpotSliceInPlace(anyLong(), any(Pageable.class))).thenReturn(mockSlice);
@@ -113,6 +113,7 @@ class SpotApiControllerTest {
                         .description("다음 페이지가 있는지 여부"),
                     subsectionWithPath("spots").description("spot의 정보"),
                     fieldWithPath("spots[].image_url_list").description("imageUrl의 List"),
+                    fieldWithPath("spots[].description").description("Spot의 설명"),
                     fieldWithPath("spots[].owner_profile_image_url").type(JsonFieldType.STRING)
                         .description("Spot 등록 사용자의 프로필 이미지 Url"),
                     fieldWithPath("spots[].owner_nickname").type(JsonFieldType.STRING)

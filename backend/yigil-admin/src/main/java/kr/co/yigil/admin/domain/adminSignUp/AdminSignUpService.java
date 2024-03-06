@@ -1,5 +1,6 @@
 package kr.co.yigil.admin.domain.adminSignUp;
 
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpAcceptRequest;

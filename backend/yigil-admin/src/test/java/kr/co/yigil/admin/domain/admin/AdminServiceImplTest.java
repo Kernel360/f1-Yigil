@@ -13,7 +13,7 @@ import kr.co.yigil.admin.domain.Admin;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.auth.application.JwtTokenProvider;
 import kr.co.yigil.auth.dto.JwtToken;
-import kr.co.yigil.file.domain.AdminAttachFile;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.domain.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
 import org.junit.jupiter.api.DisplayName;
@@ -104,7 +104,7 @@ public class AdminServiceImplTest {
     void updateProfileImage_ShouldUpdateAdmin() {
         Admin admin = mock(Admin.class);
         MultipartFile profileImageFile = mock(MultipartFile.class);
-        AdminAttachFile adminAttachFile = mock(AdminAttachFile.class);
+        AttachFile adminAttachFile = mock(AttachFile.class);
         when(adminReader.getAdminByEmail(anyString())).thenReturn(admin);
         when(adminAttachFile.getFileUrl()).thenReturn("fileUrl");
         when(fileUploader.upload(any())).thenReturn(adminAttachFile);
