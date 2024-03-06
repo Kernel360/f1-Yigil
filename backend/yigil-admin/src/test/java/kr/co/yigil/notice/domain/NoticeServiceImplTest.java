@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import kr.co.yigil.admin.domain.Admin;
 import kr.co.yigil.admin.domain.admin.AdminReader;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.notice.domain.NoticeCommand.NoticeCreateRequest;
 import kr.co.yigil.notice.domain.NoticeCommand.NoticeUpdateRequest;
 import kr.co.yigil.notice.domain.NoticeInfo.NoticeListInfo;
@@ -64,7 +65,7 @@ class NoticeServiceImplTest {
         Long noticeId = 1L;
 
         Admin admin = new Admin("hllov07@naver.com", "password", "nickname",
-            List.of("ROLE_ADMIN"), "profileImageUrl");
+            List.of("ROLE_ADMIN"), mock(AttachFile.class));
         Notice notice = new Notice(admin, "title", "content");
 
         when(noticeReader.getNotice(noticeId)).thenReturn(notice);
