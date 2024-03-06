@@ -10,6 +10,8 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 @Mapper(
     componentModel = "spring",
@@ -17,14 +19,25 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface NoticeMapper {
-    @Mapping(target="noticeList", source="noticeList")
-    NoticeDto.NoticeListResponse toDto(NoticeListInfo response);
 
-    NoticeDto.NoticeItem of (NoticeItem noticeItem);
+    @Mapping(target = "noticeList", source = "noticeList")
+    default NoticeDto.NoticeListResponse toDto(NoticeListInfo response){
+        return new NoticeDto.NoticeListResponse(mapToPage(response.getNoticeList()));
+    }
+
+    NoticeDto.NoticeItem of(NoticeItem noticeItem);
 
     NoticeDto.NoticeDetailResponse toDto(NoticeDetail response);
 
     NoticeCommand.NoticeCreateRequest toCommand(NoticeCreateRequest request);
 
     NoticeCommand.NoticeUpdateRequest toCommand(NoticeDto.NoticeUpdateRequest request);
+
+    default Page<NoticeDto.NoticeItem> mapToPage(Page<NoticeItem> page) {
+        return new PageImpl<>(page.getContent().stream()
+            .map(this::of)
+            .toList(),
+            page.getPageable(),
+            page.getTotalElements());
+    }
 }

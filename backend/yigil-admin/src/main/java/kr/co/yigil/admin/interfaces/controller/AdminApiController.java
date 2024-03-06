@@ -102,7 +102,6 @@ public class AdminApiController {
     public ResponseEntity<AdminPasswordUpdateResponse> updatePassword(@AuthenticationPrincipal User user, @RequestBody AdminPasswordUpdateRequest request) {
         AdminCommand.AdminPasswordUpdateRequest command = adminMapper.toCommand(request);
         adminFacade.updatePassword(user.getUsername(), command);
-
         return ResponseEntity.ok(new AdminPasswordUpdateResponse("어드민 비밀번호 수정 완료"));
     }
 

@@ -2,10 +2,14 @@ package kr.co.yigil.notice.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import kr.co.yigil.admin.domain.Admin;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,14 +25,14 @@ public class Notice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String author;
-
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-//    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-//    private AttachFile attachFile;
+    @JoinColumn(name = "author_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Admin author;
 
     @CreatedDate
     @Column(updatable = false)
@@ -36,19 +40,17 @@ public class Notice {
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
-    public Notice (String author, String title, String content){
+    public Notice (Admin author, String title, String content){
         this.author = author;
         this.title = title;
         this.content = content;
-//        this.attachFile = attachFile;
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
     }
 
-    public void updateNotice(Notice entity) {
-        this.author = entity.getAuthor();
-        this.title = entity.getTitle();
-        this.content = entity.getContent();
-        this.modifiedAt = LocalDateTime.now();
+    public void updateNotice(String title, String content){
+        this.title = title;
+        this.content = content;
+        modifiedAt = LocalDateTime.now();
     }
 }
