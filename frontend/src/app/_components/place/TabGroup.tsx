@@ -12,7 +12,7 @@ export default function TabGroup({
   items: Item[];
 }) {
   return (
-    <nav className="flex gap-2">
+    <nav className="px-4 flex gap-2">
       {items.map((item) => (
         <Tab
           key={`${path}${item.slug}`}

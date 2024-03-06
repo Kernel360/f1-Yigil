@@ -16,11 +16,11 @@ import { myInfoSchema } from '@/types/response';
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 
 function OpenedFABIcon() {
-  return <PlusIcon className="rotate-45 duration-200 z-30" />;
+  return <PlusIcon className="w-9 h-9 rotate-45 duration-200 z-30" />;
 }
 
 function ClosedFABIcon() {
-  return <PlusIcon className="rotate-0 duration-200" />;
+  return <PlusIcon className="w-9 h-9 rotate-0 duration-200" />;
 }
 
 export default async function HomePage({

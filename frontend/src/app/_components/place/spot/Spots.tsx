@@ -70,14 +70,14 @@ export default function Spots({
   return (
     <section className="pt-6">
       {spots.map((spot, index) => (
-        <Spot key={index} data={spot} />
+        <Spot placeId={placeId} key={index} data={spot} />
       ))}
       {error}
       <div
-        className="p-4 border-black flex justify-center items-center"
+        className="min-h-6 bg-gray-200 flex justify-center items-center"
         ref={endRef}
       >
-        {hasNext ? isLoading ? <>Loading...</> : <>Load?</> : <>End</>}
+        {hasNext ? isLoading ? <>Loading...</> : <>Load?</> : <></>}
       </div>
     </section>
   );

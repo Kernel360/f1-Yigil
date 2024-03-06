@@ -9,8 +9,8 @@ export default function ReviewsLayout({
   children: ReactElement;
 }) {
   return (
-    <section className="px-4">
-      <h2 className="py-2 text-xl font-medium" id="reviews">
+    <section>
+      <h2 className="px-4 py-2 text-xl font-medium" id="reviews">
         리뷰
       </h2>
       <TabGroup

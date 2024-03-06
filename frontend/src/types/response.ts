@@ -100,3 +100,15 @@ export const spotSchema = z.object({
 });
 
 export type TSpot = z.infer<typeof spotSchema>;
+
+export const commentSchema = z.object({
+  id: z.number().int(),
+  content: z.string(),
+  member_id: z.number().int(),
+  member_nickname: z.string(),
+  member_image_url: z.string(),
+  child_count: z.number().int(),
+  created_at: z.coerce.date(),
+});
+
+export type TComment = z.infer<typeof commentSchema>;
