@@ -1,10 +1,8 @@
 package kr.co.yigil.admin.domain.admin;
 
 import kr.co.yigil.admin.domain.admin.AdminCommand.AdminPasswordUpdateRequest;
-import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
-import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
 import kr.co.yigil.auth.dto.JwtToken;
 import org.springframework.web.multipart.MultipartFile;
 

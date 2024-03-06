@@ -6,9 +6,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
+import kr.co.yigil.admin.domain.AdminSignUp;
+import kr.co.yigil.admin.infrastructure.AdminSignUpRepository;
 import kr.co.yigil.global.exception.BadRequestException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

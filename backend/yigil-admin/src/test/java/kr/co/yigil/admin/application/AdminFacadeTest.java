@@ -7,14 +7,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.admin.AdminCommand;
-import kr.co.yigil.admin.domain.admin.AdminCommand.AdminPasswordUpdateRequest;
-import kr.co.yigil.admin.domain.admin.AdminCommand.AdminUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminService;
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpService;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
