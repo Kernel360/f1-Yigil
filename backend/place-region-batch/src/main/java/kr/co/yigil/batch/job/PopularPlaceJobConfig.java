@@ -43,7 +43,7 @@ public class PopularPlaceJobConfig {
     ) {
         return new JobBuilder("popularPlaceJob", jobRepository)
                 .start(clearPopularPlacesStep)
-                .start(calculatePopularPlacesStep)
+                .next(calculatePopularPlacesStep)
                 .incrementer(new RunIdIncrementer())
                 .build();
     }

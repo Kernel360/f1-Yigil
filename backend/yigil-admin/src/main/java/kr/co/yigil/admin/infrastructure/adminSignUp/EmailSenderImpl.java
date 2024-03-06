@@ -1,6 +1,6 @@
 package kr.co.yigil.admin.infrastructure.adminSignUp;
 
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.EmailSender;
 import kr.co.yigil.email.EmailEventType;
 import kr.co.yigil.email.EmailSendEvent;

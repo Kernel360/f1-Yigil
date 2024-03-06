@@ -164,6 +164,64 @@ public class PlaceApiControllerTest {
 
     }
 
+    @DisplayName("getPopularPlaceByDemographics가 잘 동작하는지")
+    @Test
+    void getPopularPlaceByDemographics_ShouldReturnOk() throws Exception {
+        Main placeInfo = mock(Main.class);
+        List<Main> mockInfo = List.of(placeInfo);
+        PlaceInfoDto mockDto = new PlaceInfoDto(1L, "장소명", "10", "http://image.com", "3.5", true);
+        PopularPlaceResponse mockResponse = new PopularPlaceResponse(List.of(mockDto));
+
+        when(placeFacade.getPopularPlaceByDemographics(anyLong())).thenReturn(mockInfo);
+        when(placeMapper.toPopularPlaceResponse(mockInfo)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/places/popular-demographics"))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "places/get-popular-place-by-demographics",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                subsectionWithPath("places").description("place의 정보"),
+                                fieldWithPath("places[].id").type(JsonFieldType.NUMBER).description("place의 고유 Id"),
+                                fieldWithPath("places[].place_name").type(JsonFieldType.STRING).description("장소의 장소명"),
+                                fieldWithPath("places[].review_count").type(JsonFieldType.STRING).description("리뷰의 개수"),
+                                fieldWithPath("places[].thumbnail_image_url").type(JsonFieldType.STRING).description("장소의 대표 이미지의 Url"),
+                                fieldWithPath("places[].rate").type(JsonFieldType.STRING).description("장소의 평점 정보"),
+                                fieldWithPath("places[].bookmarked").type(JsonFieldType.BOOLEAN).description("해당 장소의 북마크 여부")
+                        )
+                ));
+    }
+
+    @DisplayName("getPopularPlaceByDemographicsMore가 잘 동작하는지")
+    @Test
+    void getPopularPlaceByDemographicsMore_ShouldReturnOk() throws Exception {
+        Main placeInfo = mock(Main.class);
+        List<Main> mockInfo = List.of(placeInfo);
+        PlaceInfoDto mockDto = new PlaceInfoDto(1L, "장소명", "10", "http://image.com", "3.5", true);
+        PopularPlaceResponse mockResponse = new PopularPlaceResponse(List.of(mockDto));
+
+        when(placeFacade.getPopularPlaceByDemographicsMore(anyLong())).thenReturn(mockInfo);
+        when(placeMapper.toPopularPlaceResponse(mockInfo)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/places/popular-demographics-more"))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "places/get-popular-place-by-demographics-more",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        responseFields(
+                                subsectionWithPath("places").description("place의 정보"),
+                                fieldWithPath("places[].id").type(JsonFieldType.NUMBER).description("place의 고유 Id"),
+                                fieldWithPath("places[].place_name").type(JsonFieldType.STRING).description("장소의 장소명"),
+                                fieldWithPath("places[].review_count").type(JsonFieldType.STRING).description("리뷰의 개수"),
+                                fieldWithPath("places[].thumbnail_image_url").type(JsonFieldType.STRING).description("장소의 대표 이미지의 Url"),
+                                fieldWithPath("places[].rate").type(JsonFieldType.STRING).description("장소의 평점 정보"),
+                                fieldWithPath("places[].bookmarked").type(JsonFieldType.BOOLEAN).description("해당 장소의 북마크 여부")
+                        )
+                ));
+    }
+
     @DisplayName("retrievePlace 메서드가 잘 동작하는지")
     @Test
     void retrievePlace_ShouldReturnOk() throws Exception {
@@ -211,38 +269,6 @@ public class PlaceApiControllerTest {
                 .andExpect(status().isOk())
                 .andDo(document(
                         "places/get-region-place",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        pathParameters(
-                                parameterWithName("regionId").description("지역의 고유 아이디")
-                        ),
-                        responseFields(
-                                subsectionWithPath("places").description("place의 정보"),
-                                fieldWithPath("places[].id").type(JsonFieldType.NUMBER).description("place의 고유 Id"),
-                                fieldWithPath("places[].place_name").type(JsonFieldType.STRING).description("장소의 장소명"),
-                                fieldWithPath("places[].review_count").type(JsonFieldType.STRING).description("리뷰의 개수"),
-                                fieldWithPath("places[].thumbnail_image_url").type(JsonFieldType.STRING).description("장소의 대표 이미지의 Url"),
-                                fieldWithPath("places[].rate").type(JsonFieldType.STRING).description("장소의 평점 정보"),
-                                fieldWithPath("places[].bookmarked").type(JsonFieldType.BOOLEAN).description("해당 장소의 북마크 여부")
-                        )
-                ));
-    }
-
-    @DisplayName("getRegionPlaceMore 메서드가 잘 동작하는지")
-    @Test
-    void getRegionPlaceMore_ShouldReturnOk() throws Exception {
-        Main placeInfo = mock(Main.class);
-        List<Main> mockInfo = List.of(placeInfo);
-        PlaceInfoDto mockDto = new PlaceInfoDto(1L, "장소명", "10", "http://image.com", "3.5", true);
-        RegionPlaceResponse mockResponse = new RegionPlaceResponse(List.of(mockDto));
-
-        when(placeFacade.getPlaceInRegionMore(anyLong(), any(Accessor.class))).thenReturn(mockInfo);
-        when(placeMapper.toRegionPlaceResponse(mockInfo)).thenReturn(mockResponse);
-
-        mockMvc.perform(get("/api/v1/places/region/{regionId}/more", 1L))
-                .andExpect(status().isOk())
-                .andDo(document(
-                        "places/get-region-place-more",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         pathParameters(

@@ -2,13 +2,18 @@ package kr.co.yigil.place.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.domain.MemberReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +35,9 @@ public class PlaceServiceImplTest {
 
     @Mock
     private BookmarkReader bookmarkReader;
+
+    @Mock
+    private MemberReader memberReader;
 
     @InjectMocks
     private PlaceServiceImpl placeService;
@@ -66,6 +74,47 @@ public class PlaceServiceImplTest {
         List<PlaceInfo.Main> popularPlaceMore = placeService.getPopularPlaceMore(mockAccessor);
 
         assertNotNull(popularPlaceMore);
+    }
+
+    @DisplayName("getPopularPlaceByDemographics 메서드가 Info 객체의 List를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographics_ShouldReturnListOfInfo() {
+        Member member = mock(Member.class);
+        when(memberReader.getMember(anyLong())).thenReturn(member);
+        when(member.getAges()).thenReturn(Ages.FIFTIES);
+        when(member.getGender()).thenReturn(Gender.MALE);
+
+        Place mockPlace = mock(Place.class);
+        List<Place> places = List.of(mockPlace);
+        when(placeReader.getPopularPlaceByDemographics(any(), any())).thenReturn(places);
+        when(mockPlace.getId()).thenReturn(1L);
+        when(placeCacheReader.getSpotCount(anyLong())).thenReturn(1);
+        when(bookmarkReader.isBookmarked(anyLong(), anyLong())).thenReturn(true);
+
+        List<PlaceInfo.Main> popularPlaceByDemographics = placeService.getPopularPlaceByDemographics(1L);
+
+        assertNotNull(popularPlaceByDemographics);
+    }
+
+    @DisplayName("getPopularPlaceByDemographicsMore 메서드가 Info 객체의 List를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographicsMore_ShouldReturnListOfInfo() {
+        Member member = mock(Member.class);
+        when(memberReader.getMember(anyLong())).thenReturn(member);
+        when(member.getAges()).thenReturn(Ages.FIFTIES);
+        when(member.getGender()).thenReturn(Gender.MALE);
+
+        Place mockPlace = mock(Place.class);
+        List<Place> places = List.of(mockPlace);
+        when(placeReader.getPopularPlaceByDemographicsMore(any(), any())).thenReturn(places);
+        when(mockPlace.getId()).thenReturn(1L);
+        when(placeCacheReader.getSpotCount(anyLong())).thenReturn(1);
+        when(bookmarkReader.isBookmarked(anyLong(), anyLong())).thenReturn(true);
+
+        List<PlaceInfo.Main> popularPlaceByDemographicsMore = placeService.getPopularPlaceByDemographicsMore(
+                1L);
+
+        assertNotNull(popularPlaceByDemographicsMore);
     }
 
     @DisplayName("getPlaceInRegion 메서드가 Info 객체의 List를 잘 반환하는지")

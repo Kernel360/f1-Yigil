@@ -1,8 +1,8 @@
 package kr.co.yigil.file.infrastructure;
 
 import java.util.concurrent.CompletableFuture;
-import kr.co.yigil.file.domain.AdminAttachFile;
-import kr.co.yigil.file.domain.FileType;
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.domain.FileUploadEvent;
 import kr.co.yigil.file.domain.FileUploader;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -19,7 +19,7 @@ public class FileUploaderImpl implements FileUploader {
     private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/";
 
     @Override
-    public AdminAttachFile upload(MultipartFile file) {
+    public AttachFile upload(MultipartFile file) {
         CompletableFuture<String> fileUploadResult = new CompletableFuture<>();
 
         FileUploadEvent event = new FileUploadEvent(this, file, fileUploadResult::complete);
@@ -28,7 +28,7 @@ public class FileUploaderImpl implements FileUploader {
         String fileUrl = DEFAULT_PROFILE_CDN + fileUploadResult.join();
         FileType fileType = determineFileType(file);
 
-        return new AdminAttachFile(fileType, fileUrl, file.getOriginalFilename(), file.getSize());
+        return new AttachFile(fileType, fileUrl, file.getOriginalFilename(), file.getSize());
     }
 
     private FileType determineFileType(MultipartFile file) {

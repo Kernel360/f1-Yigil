@@ -1,10 +1,12 @@
 package kr.co.yigil.place.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
@@ -17,10 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
+
     private final PlaceReader placeReader;
     private final PopularPlaceReader popularPlaceReader;
     private final PlaceCacheReader placeCacheReader;
     private final BookmarkReader bookmarkReader;
+    private final MemberReader memberReader;
 
     @Override
     @Transactional(readOnly = true)
@@ -29,7 +33,8 @@ public class PlaceServiceImpl implements PlaceService {
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
                     if (accessor.isMember()) {
-                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
+                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(),
+                                place.getId());
                         return new Main(place, spotCount, isBookmarked);
                     }
                     return new Main(place, spotCount);
@@ -103,5 +108,41 @@ public class PlaceServiceImpl implements PlaceService {
     @Transactional(readOnly = true)
     public Page<Place> getNearPlace(final NearPlaceRequest command) {
         return placeReader.getNearPlace(command);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Main> getPopularPlaceByDemographics(final Long memberId) {
+        var member = memberReader.getMember(memberId);
+        Ages ages = member.getAges();
+        Gender gender = member.getGender();
+
+        return placeReader.getPopularPlaceByDemographics(ages, gender).stream()
+                .map(place -> {
+                    int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    boolean isBookmarked = bookmarkReader.isBookmarked(memberId, place.getId());
+                    return new Main(place, spotCount, isBookmarked);
+
+                })
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Main> getPopularPlaceByDemographicsMore(final Long memberId) {
+        var member = memberReader.getMember(memberId);
+        Ages ages = member.getAges();
+        Gender gender = member.getGender();
+
+        return placeReader.getPopularPlaceByDemographicsMore(ages, gender).stream()
+                .map(place -> {
+                    int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    boolean isBookmarked = bookmarkReader.isBookmarked(memberId, place.getId());
+                    return new Main(place, spotCount, isBookmarked);
+
+                })
+                .collect(Collectors.toList());
+
     }
 }

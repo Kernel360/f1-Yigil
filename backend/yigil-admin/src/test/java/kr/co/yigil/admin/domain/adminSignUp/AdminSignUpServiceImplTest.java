@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
-import kr.co.yigil.admin.domain.admin.Admin;
+import kr.co.yigil.admin.domain.Admin;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.admin.AdminReader;
 import kr.co.yigil.admin.domain.admin.AdminStore;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;

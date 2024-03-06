@@ -45,9 +45,22 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/popular/more")
-    public ResponseEntity<PopularPlaceResponse> getPopularPlaceMore(@Auth Accessor accessor) {
-        var placeInfo = placeFacade.getPopularPlaceMore(accessor);
+    @GetMapping("/popular-demographics")
+    @MemberOnly
+    public ResponseEntity<PopularPlaceResponse> getPopularPlaceByDemographics(
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPopularPlaceByDemographics(accessor.getMemberId());
+        var response = placeMapper.toPopularPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/popular-demographics-more")
+    @MemberOnly
+    public ResponseEntity<PopularPlaceResponse> getPopularPlaceByDemographicsMore(
+            @Auth Accessor accessor
+    ) {
+        var placeInfo = placeFacade.getPopularPlaceByDemographicsMore(accessor.getMemberId());
         var response = placeMapper.toPopularPlaceResponse(placeInfo);
         return ResponseEntity.ok().body(response);
     }
