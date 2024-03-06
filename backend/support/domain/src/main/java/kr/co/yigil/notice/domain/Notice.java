@@ -9,7 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import kr.co.yigil.admin.domain.Admin;
+import kr.co.yigil.file.AttachFile;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,5 +54,11 @@ public class Notice {
         this.title = title;
         this.content = content;
         modifiedAt = LocalDateTime.now();
+    }
+
+    public String getAuthorProfileImage(){
+        return Optional.ofNullable(author.getProfileImage())
+            .map(AttachFile::getFileUrl)
+            .orElse("");
     }
 }
