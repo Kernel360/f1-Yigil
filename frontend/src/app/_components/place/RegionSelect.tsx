@@ -55,9 +55,10 @@ export default function RegionSelect({
           {region.name}
         </button>
       ))}
-      <Link className="underline text-gray-500" href="#">
+      {/* 사용자 정보 수정 UI로 연결 */}
+      {/* <Link className="underline text-gray-500" href="#">
         설정
-      </Link>
+      </Link> */}
     </nav>
   );
 }

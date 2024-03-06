@@ -11,12 +11,15 @@ import type { TPlace, TRegion } from '@/types/response';
 
 export default function RegionPlaces({
   regions,
+  initialRegionPlaces,
   isLoggedIn,
 }: {
   regions: TRegion[];
+  initialRegionPlaces: TPlace[];
   isLoggedIn: boolean;
 }) {
-  const [regionPlaces, setRegionPlaces] = useState<TPlace[]>([]);
+  const [regionPlaces, setRegionPlaces] =
+    useState<TPlace[]>(initialRegionPlaces);
 
   const title = '관심 지역';
 

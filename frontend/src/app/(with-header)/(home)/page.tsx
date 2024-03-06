@@ -69,7 +69,7 @@ export default async function HomePage({
       <main className="max-w-full flex flex-col gap-4 relative">
         <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
         <RegionPlaces
-          // data={popularPlaces}
+          initialRegionPlaces={[]}
           regions={regions}
           isLoggedIn={memberInfo.success}
         />
@@ -83,10 +83,22 @@ export default async function HomePage({
     );
   }
 
+  const regionPlacesResult = await getRegionPlaces(regions[0].id);
+
+  if (!regionPlacesResult.success) {
+    return <main>Failed to get region places</main>;
+  }
+
+  const regionPlaces = regionPlacesResult.data.places;
+
   return (
     <main className="max-w-full flex flex-col gap-4 relative">
       <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
-      <RegionPlaces regions={regions} isLoggedIn={memberInfo.success} />
+      <RegionPlaces
+        initialRegionPlaces={regionPlaces}
+        regions={regions}
+        isLoggedIn={memberInfo.success}
+      />
       <FloatingActionButton
         popOverData={homePopOverData}
         backdropStyle="bg-black bg-opacity-10"

@@ -83,11 +83,7 @@ export async function getInterestedRegions() {
 }
 
 export async function getRegionPlaces(id: number) {
-  revalidateTag('regionPlaces');
-
   const json = await fetchRegionPlaces(id);
-
-  console.log(json);
 
   const result = placeResponseSchema.safeParse(json);
 
