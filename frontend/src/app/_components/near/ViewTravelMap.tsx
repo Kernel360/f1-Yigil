@@ -1,13 +1,21 @@
 'use client';
 import { TMapPlace } from '@/types/response';
 import React, { useEffect, useRef, useState } from 'react';
-import { Marker, NaverMap, useMap, useNavermaps } from 'react-naver-maps';
+import {
+  Listener,
+  Marker,
+  NaverMap,
+  Overlay,
+  useMap,
+  useNavermaps,
+} from 'react-naver-maps';
 import { basicMarker } from '../naver-map/markers/basicMarker';
 import CustomControl from '../naver-map/CustomControl';
 import { useGeolocation } from '../naver-map/hooks/useGeolocation';
 import { getNearPlaces } from './hooks/nearActions';
 import MapPlaces from './MapPlaces';
 import MapPagination from '../naver-map/MapPagination';
+import MapMarker from './MapMarker';
 
 export default function ViewTravelMap() {
   const navermaps = useNavermaps();
@@ -31,6 +39,7 @@ export default function ViewTravelMap() {
     mapRef,
     setCenter,
   );
+  const [markerClickedId, setMarkerClickedId] = useState(-1);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -81,7 +90,15 @@ export default function ViewTravelMap() {
         ref={mapRef}
         onZoomChanged={() => console.log(mapRef.current?.getBounds())}
       >
-        <MapPlaces allPlaces={allPlaces} totalPages={totalPages} />
+        {allPlaces.map((place) => (
+          <MapMarker
+            key={place.id}
+            {...place}
+            markerClickedId={markerClickedId}
+            setMarkerClickedId={setMarkerClickedId}
+          />
+        ))}
+        {/* <MapPlaces allPlaces={allPlaces} totalPages={totalPages} /> */}
       </NaverMap>
       {totalPages && (
         <MapPagination

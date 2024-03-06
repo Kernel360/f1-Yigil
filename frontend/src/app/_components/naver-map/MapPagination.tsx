@@ -32,7 +32,9 @@ export default function MapPagination({
     setCurrentPage(page);
   };
   return (
-    <nav className={`my-4 pb-[50px] flex justify-center items-center gap-x-6`}>
+    <nav
+      className={`absolute bottom-1 left-[45%] -translate-x-1/2 my-4 pb-[50px] flex justify-center items-center gap-x-6`}
+    >
       <span
         className={`w-[9px] h-[16px] px-1 ${
           currentPage !== 1 && 'cursor-pointer'
