@@ -90,3 +90,13 @@ export const regionSchema = z.object({
 });
 
 export type TRegion = z.infer<typeof regionSchema>;
+
+export const spotSchema = z.object({
+  image_url_list: z.array(z.string()),
+  owner_profile_image_url: z.string(),
+  owner_nickname: z.string(),
+  rate: z.string(),
+  create_date: z.coerce.date(),
+});
+
+export type TSpot = z.infer<typeof spotSchema>;
