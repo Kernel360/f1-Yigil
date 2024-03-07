@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import IconWithCounts from '../../IconWithCounts';
 import RoundProfile from '../../ui/profile/RoundProfile';
 import ImageCarousel from '../../ui/carousel/ImageCarousel';
@@ -59,7 +57,7 @@ export default function Spot({
         </span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{description}</div>
       </div>
-      <Reaction placeId={placeId} travelId={id} liked={liked} />
+      <Reaction placeId={placeId} travelId={id} initialLiked={liked} />
     </article>
   );
 }

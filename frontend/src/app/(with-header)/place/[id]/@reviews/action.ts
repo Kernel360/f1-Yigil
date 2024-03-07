@@ -1,4 +1,7 @@
+'use server';
+
 import { z } from 'zod';
+import { cookies } from 'next/headers';
 
 import { getBaseUrl } from '@/app/utilActions';
 import { spotSchema } from '@/types/response';
@@ -16,6 +19,7 @@ async function fetchSpots(
   sortOrder: 'desc' | 'asc',
 ) {
   const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
 
   const endpoint = `${BASE_URL}/v1/spots/place/${placeId}`;
   const queryParams = Object.entries({ page, size, sortBy, sortOrder })
@@ -23,11 +27,11 @@ async function fetchSpots(
     .join('&');
 
   const response = await fetch(`${endpoint}?${queryParams}`, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
     next: { tags: [`spots/${placeId}`] },
-    cache: 'no-store',
   });
-
-  console.log(`fetchSpot action: spots/${placeId}`);
 
   return await response.json();
 }
@@ -40,10 +44,6 @@ export async function getSpots(
   sortOrder: 'desc' | 'asc' = 'desc',
 ) {
   const json = await fetchSpots(placeId, page, size, sortBy, sortOrder);
-
-  // for debug
-  console.log(Date.now());
-  console.log(json.spots[0].liked);
 
   const result = spotsResponseSchema.safeParse(json);
 

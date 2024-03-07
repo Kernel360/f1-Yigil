@@ -17,16 +17,17 @@ import HeartIcon from '/public/icons/heart.svg';
 export default function Reaction({
   placeId,
   travelId,
-  liked,
+  initialLiked,
 }: {
   placeId: number;
   travelId: number;
-  liked: boolean;
+  initialLiked: boolean;
 }) {
   const { push } = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [liked, setLiked] = useState(initialLiked);
 
   const memberStatus = useContext(MemberContext);
 
@@ -48,6 +49,7 @@ export default function Reaction({
       return;
     }
 
+    setLiked(!liked);
     setIsLoading(false);
   }
 
