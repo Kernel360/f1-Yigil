@@ -11,6 +11,7 @@ import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceInfo;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
@@ -162,5 +163,19 @@ public class PlaceFacadeTest {
         assertEquals(result, mockResponse);
         verify(placeService).getNearPlace(any(
                 kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest.class));
+    }
+
+    @DisplayName("getPlaceKeywords 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPlaceKeywords_ShouldReturnResponse() {
+        String keyword = "키워드";
+        PlaceInfo.Keyword mockResponse = mock(PlaceInfo.Keyword.class);
+
+        when(placeService.getPlaceKeywords(keyword)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPlaceKeywords(keyword);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPlaceKeywords(keyword);
     }
 }
