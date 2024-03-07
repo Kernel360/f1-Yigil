@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
@@ -78,13 +79,13 @@ public class SpotServiceImplTest {
     void getSpotSliceInPlace_ShouldReturnSlice() {
         Long placeId = 1L;
         Pageable pageable = mock(Pageable.class);
+        Accessor mockAccessor = mock(Accessor.class);
         Slice<Spot> expectedSlice = mock(Slice.class);
 
         when(spotReader.getSpotSliceInPlace(placeId, pageable)).thenReturn(expectedSlice);
 
-        Slice<Spot> result = spotService.getSpotSliceInPlace(placeId, pageable);
+        SpotInfo.Slice result = spotService.getSpotSliceInPlace(placeId, mockAccessor, pageable);
 
-        assertEquals(expectedSlice, result);
         verify(spotReader).getSpotSliceInPlace(placeId, pageable);
     }
 
@@ -189,11 +190,15 @@ public class SpotServiceImplTest {
         Spot spot = mock(Spot.class);
         Place place = mock(Place.class);
         AttachFiles attachFiles = mock(AttachFiles.class);
+        Member member = mock(Member.class);
 
         when(spotReader.getSpot(spotId)).thenReturn(spot);
         when(spot.getPlace()).thenReturn(place);
         when(spot.getAttachFiles()).thenReturn(attachFiles);
         when(place.getMapStaticImageFileUrl()).thenReturn("~~");
+        when(spot.getMember()).thenReturn(member);
+        when(member.getProfileImageUrl()).thenReturn("image.utl");
+        when(member.getNickname()).thenReturn("nickname");
 
         Main result = spotService.retrieveSpotInfo(spotId);
 
