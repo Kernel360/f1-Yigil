@@ -44,11 +44,11 @@ export default function Spots({
       }
 
       setHasNext(result.data.has_next);
-      setSpots(result.data.spots);
+      setSpots([...spots, ...result.data.spots]);
       setCurrentPage(nextPage);
       setIsLoading(false);
     },
-    [currentPage, placeId],
+    [currentPage, spots, placeId],
   );
 
   useEffect(() => {
