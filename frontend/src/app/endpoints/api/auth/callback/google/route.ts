@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ENVIRONMENT } = process.env;
+  const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV } = process.env;
 
   const redirectUri = await googldRedirectUri();
 
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
   response.cookies.set({
     name: key,
     value,
-    secure: ENVIRONMENT === 'production',
+    secure: NODE_ENV === 'production',
   });
 
   return response;

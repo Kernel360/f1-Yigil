@@ -2,12 +2,11 @@ export const KAKAO_BASE_URL = 'https://kapi.kakao.com';
 export const KAKAO_AUTH_BASE_URL = 'https://kauth.kakao.com';
 
 export async function getCallbackUrlBase() {
-  const { ENVIRONMENT, PRODUCTION_FRONTEND_URL, DEV_FRONTEND_URL } =
-    process.env;
+  const { NODE_ENV, PRODUCTION_FRONTEND_URL, DEV_FRONTEND_URL } = process.env;
 
-  return ENVIRONMENT === 'production'
+  return NODE_ENV === 'production'
     ? PRODUCTION_FRONTEND_URL
-    : ENVIRONMENT === 'dev'
+    : NODE_ENV === 'development'
     ? DEV_FRONTEND_URL
     : 'http://localhost:3000';
 }

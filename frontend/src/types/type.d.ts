@@ -22,10 +22,11 @@ declare global {
       MAP_SECRET: string;
 
       DEV_BASE_URL: string;
-      ENVIRONMENT: string;
 
       PRODUCTION_FRONTEND_URL: string;
       DEV_FRONTEND_URL: string;
+
+      ENVIRONMENT: string;
     }
   }
 }

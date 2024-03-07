@@ -1,7 +1,7 @@
 'use server';
 
 export async function getBaseUrl() {
-  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+  const { BASE_URL, DEV_BASE_URL, NODE_ENV } = process.env;
 
-  return ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+  return NODE_ENV === 'production' ? BASE_URL : DEV_BASE_URL;
 }

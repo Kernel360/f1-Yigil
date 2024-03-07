@@ -5,13 +5,12 @@ import { myInfoSchema } from './types/response';
 const restricted = ['/add', '/mypage'];
 
 export default async function middleware(request: NextRequest) {
-  const { ENVIRONMENT, PRODUCTION_FRONTEND_URL, DEV_FRONTEND_URL } =
-    process.env;
+  const { NODE_ENV, PRODUCTION_FRONTEND_URL, DEV_FRONTEND_URL } = process.env;
 
   const baseUrl =
-    ENVIRONMENT === 'production'
+    NODE_ENV === 'production'
       ? PRODUCTION_FRONTEND_URL
-      : ENVIRONMENT === 'dev'
+      : NODE_ENV === 'development'
       ? DEV_FRONTEND_URL
       : 'http://localhost:3000';
 
@@ -43,7 +42,7 @@ export default async function middleware(request: NextRequest) {
       name: session.name,
       value: session.value,
       httpOnly: true,
-      secure: ENVIRONMENT === 'production',
+      secure: NODE_ENV === 'production',
       sameSite: 'strict',
     });
 
