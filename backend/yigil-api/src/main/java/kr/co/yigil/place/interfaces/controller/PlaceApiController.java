@@ -9,6 +9,7 @@ import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
 import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
 import kr.co.yigil.place.interfaces.dto.request.PlaceImageRequest;
 import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
@@ -113,4 +114,10 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/keyword")
+    public ResponseEntity<PlaceKeywordResponse> getPlaceKeyword(@RequestParam String keyword) {
+        var keywordsInfo = placeFacade.getPlaceKeywords(keyword);
+        var response = placeMapper.toPlaceKeywordResponse(keywordsInfo);
+        return ResponseEntity.ok().body(response);
+    }
 }
