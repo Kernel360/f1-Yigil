@@ -1,5 +1,6 @@
 package kr.co.yigil.admin.domain.admin;
 
+import kr.co.yigil.admin.domain.Admin;
 import kr.co.yigil.admin.domain.admin.AdminCommand.AdminPasswordUpdateRequest;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
@@ -20,4 +21,6 @@ public interface AdminService {
     void updateProfileImage(String email, MultipartFile profileImageFile);
 
     void updatePassword(String email, AdminPasswordUpdateRequest command);
+
+    Admin getAdmin(String username);
 }

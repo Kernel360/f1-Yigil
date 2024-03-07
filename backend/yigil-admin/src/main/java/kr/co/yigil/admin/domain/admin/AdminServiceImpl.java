@@ -84,6 +84,11 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public Admin getAdmin(String username) {
+        return adminReader.getAdminByEmail(username);
+    }
+
+    @Override
     @Transactional
     public void testSignUp() {
         List<String> roles = new ArrayList<>();

@@ -30,7 +30,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-public class AdminFacadeTest {
+public class AdminSpotFacadeTest {
 
     @Mock
     private AdminService adminService;
