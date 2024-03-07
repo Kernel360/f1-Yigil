@@ -43,4 +43,8 @@ public class CourseFacade {
         Pageable pageable, Selected selected) {
         return courseService.retrieveCourseList(memberId, pageable, selected);
     }
+
+//    public Slice searchCourseByPlaceName(String keyword, Pageable pageable) {
+//        return courseService.searchCourseByPlaceName(keyword, pageable);
+//    }
 }
