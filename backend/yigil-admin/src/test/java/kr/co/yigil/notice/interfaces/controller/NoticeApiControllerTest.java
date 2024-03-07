@@ -39,7 +39,6 @@ class NoticeApiControllerTest {
     private NoticeMapper noticeMapper;
     private MockMvc mockMvc;
 
-
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
@@ -49,13 +48,6 @@ class NoticeApiControllerTest {
     @DisplayName("공지사항 목록 조회가 성공하면 OK 상태를 반환한다.")
     @Test
     void whenGetNoticeList_thenShouldReturnOKstatus() throws Exception {
-//        NoticeDto.NoticeItem notice1 = mock(NoticeDto.NoticeItem.class);
-//        NoticeDto.NoticeItem notice2 = mock(NoticeDto.NoticeItem.class);
-//
-//        Page<NoticeItem> page = new PageImpl<>(List.of(notice1, notice2), PageRequest.of(0, 5), 2);
-//
-//        NoticeDto.NoticeListResponse response = new NoticeListResponse(page);
-
 
         PageRequest pageRequest = PageRequest.of(0, 5);
         when(noticeFacade.getNoticeList(pageRequest)).thenReturn(mock(NoticeListInfo.class));
@@ -65,8 +57,6 @@ class NoticeApiControllerTest {
         mockMvc.perform(get("/api/v1/notices"))
             .andExpect(status().isOk());
     }
-
-//    @DisplayName("공지사항 목록 조회가 실패하면 BAD_REQUEST 상태를 반환한다.")
 
     @DisplayName("공지사항이 잘 생성되면 OK 상태를 반환한다.")
     @Test
