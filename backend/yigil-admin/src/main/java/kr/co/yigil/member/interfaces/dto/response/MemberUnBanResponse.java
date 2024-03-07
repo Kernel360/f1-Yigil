@@ -1,6 +1,5 @@
-package kr.co.yigil.admin.interfaces.dto.request;
+package kr.co.yigil.member.interfaces.dto.response;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpAcceptRequest {
-    private List<Long> ids;
+public class MemberUnBanResponse {
+
+    private String message;
 }

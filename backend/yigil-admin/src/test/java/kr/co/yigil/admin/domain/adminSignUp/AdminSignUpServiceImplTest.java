@@ -89,7 +89,7 @@ public class AdminSignUpServiceImplTest {
     @DisplayName("acceptAdminSignUp 메서드가 AdminSignUp을 잘 수락하는지")
     @Test
     void acceptAdminSignUp_ShouldAcceptAdminSignUp() {
-        SignUpAcceptRequest request = new SignUpAcceptRequest(List.of("1", "2"));
+        SignUpAcceptRequest request = new SignUpAcceptRequest(List.of(1L, 2L));
 
         when(adminPasswordGenerator.generateRandomPassword()).thenReturn("password");
         AdminSignUp adminSignUp1 = new AdminSignUp("email@email.com", "nickname");
@@ -107,7 +107,7 @@ public class AdminSignUpServiceImplTest {
     @DisplayName("rejectAdminSignUp 메서드가 AdminSignUp을 잘 거절하는지")
     @Test
     void rejectAdminSignUp_ShouldRejectAdminSignUp() {
-        SignUpRejectRequest request = new SignUpRejectRequest(List.of("1", "2"));
+        SignUpRejectRequest request = new SignUpRejectRequest(List.of(1L, 2L));
         AdminSignUp adminSignUp1 = new AdminSignUp("email@email.com", "nickname");
         AdminSignUp adminSignUp2 = new AdminSignUp("email2@email.com", "nickname2");
         when(adminSignUpReader.findById(1L)).thenReturn(adminSignUp1);
