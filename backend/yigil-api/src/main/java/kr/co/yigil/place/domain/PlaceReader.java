@@ -20,6 +20,8 @@ public interface PlaceReader {
 
     Page<Place> getNearPlace(PlaceCommand.NearPlaceRequest command);
 
+    List<String> getPlaceKeywords(String keyword);
+
     List<Place> getPopularPlaceByDemographics(Ages ages, Gender gender);
 
     List<Place> getPopularPlaceByDemographicsMore(Ages ages, Gender gender);

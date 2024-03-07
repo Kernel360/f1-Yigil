@@ -9,6 +9,7 @@ import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
+import kr.co.yigil.place.domain.PlaceInfo.Keyword;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import lombok.RequiredArgsConstructor;
@@ -108,6 +109,13 @@ public class PlaceServiceImpl implements PlaceService {
     @Transactional(readOnly = true)
     public Page<Place> getNearPlace(final NearPlaceRequest command) {
         return placeReader.getNearPlace(command);
+    }
+
+    @Override
+    public List<Keyword> getPlaceKeywords(String keywords) {
+        return placeReader.getPlaceKeywords(keywords).stream()
+                .map(Keyword::new)
+                .collect(Collectors.toList());
     }
 
     @Override

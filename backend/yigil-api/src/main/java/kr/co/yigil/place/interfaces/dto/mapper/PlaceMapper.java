@@ -13,6 +13,7 @@ import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
 import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
 import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
@@ -87,5 +88,13 @@ public interface PlaceMapper {
                 .toList();
 
         return new NearPlaceResponse(placeCoordinateDtos, page.getNumber() + 1, page.getTotalPages());
+    }
+
+    default PlaceKeywordResponse toPlaceKeywordResponse(List<PlaceInfo.Keyword> keywords) {
+        List<String> keywordStrings = keywords.stream()
+                .map(PlaceInfo.Keyword::getKeyword)
+                .collect(Collectors.toList());
+
+        return new PlaceKeywordResponse(keywordStrings);
     }
 }

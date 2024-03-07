@@ -206,4 +206,13 @@ public class PlaceServiceImplTest {
 
         assertNotNull(result);
     }
+
+    @DisplayName("getPlaceKeywords 메서드가 Keyword 객체의 List를 잘 반환하는지")
+    @Test
+    void getPlaceKeywords_ShouldReturnListOfKeyword() {
+        when(placeReader.getPlaceKeywords("키워드")).thenReturn(List.of("키워드"));
+        var result = placeService.getPlaceKeywords("키워드");
+
+        assertNotNull(result);
+    }
 }
