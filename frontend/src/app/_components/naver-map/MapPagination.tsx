@@ -19,12 +19,12 @@ export default function MapPagination({
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }, [currentPage, totalPage]);
 
-  const addPage = () => {
+  const toNextPage = () => {
     if (currentPage >= totalPage) return;
     setCurrentPage(currentPage + 1);
   };
 
-  const minusPage = () => {
+  const toPrevPage = () => {
     if (currentPage <= 1) return;
     setCurrentPage(currentPage - 1);
   };
@@ -37,8 +37,8 @@ export default function MapPagination({
     >
       <span
         className={` ${currentPage !== 1 && 'cursor-pointer'}`}
-        onClick={minusPage}
-        onKeyDown={(e) => e.key === 'Enter' && minusPage()}
+        onClick={toPrevPage}
+        onKeyDown={(e) => e.key === 'Enter' && toPrevPage()}
         tabIndex={currentPage !== 1 ? 0 : -1}
       >
         {currentPage !== 1 && (
@@ -62,8 +62,8 @@ export default function MapPagination({
         ))}
       <span
         className={`${currentPage !== totalPage && 'cursor-pointer'}`}
-        onClick={addPage}
-        onKeyDown={(e) => e.key === 'Enter' && addPage()}
+        onClick={toNextPage}
+        onKeyDown={(e) => e.key === 'Enter' && toNextPage()}
         tabIndex={
           !renderPage.includes(totalPage) && currentPage !== totalPage ? 0 : -1
         }

@@ -68,7 +68,7 @@ export default function ViewTravelMap() {
     setCenter({ lat, lng });
   };
 
-  let timer: NodeJS.Timeout;
+  let timer: ReturnType<typeof setTimeout>;
   useEffect(() => {
     timer = setTimeout(() => {
       setIsLoading(true);
