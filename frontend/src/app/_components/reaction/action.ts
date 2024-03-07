@@ -4,13 +4,7 @@ import { cookies } from 'next/headers';
 import { revalidateTag } from 'next/cache';
 
 import { getBaseUrl } from '@/app/utilActions';
-import {
-  TComment,
-  commentSchema,
-  fetchableSchema,
-  postResponseSchema,
-  spotSchema,
-} from '@/types/response';
+import { commentSchema, fetchableSchema } from '@/types/response';
 
 async function fetchComments(travelId: number, page: number, size: number) {
   const BASE_URL = await getBaseUrl();
@@ -27,7 +21,7 @@ async function fetchComments(travelId: number, page: number, size: number) {
   return response.json();
 }
 
-async function postComment(travelId: number, content: string) {
+export async function postComment(travelId: number, content: string) {
   const session = cookies().get('SESSION')?.value;
   const BASE_URL = await getBaseUrl();
 
@@ -39,10 +33,15 @@ async function postComment(travelId: number, content: string) {
     }),
     headers: {
       Cookie: `SESSION=${session}`,
+      'Content-Type': 'application/json',
     },
   });
 
-  return response.json();
+  if (response.ok) {
+    revalidateTag(`comments/${travelId}`);
+  }
+
+  return JSON.stringify(await response.json());
 }
 
 export async function getComments(
@@ -53,18 +52,6 @@ export async function getComments(
   const json = await fetchComments(travelId, page, size);
 
   const result = fetchableSchema(commentSchema).safeParse(json);
-
-  return result;
-}
-
-export async function writeComment(travelId: number, content: string) {
-  const json = await postComment(travelId, content);
-
-  const result = postResponseSchema.safeParse(json);
-
-  if (result.success) {
-    revalidateTag(`comments/${travelId}`);
-  }
 
   return result;
 }

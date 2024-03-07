@@ -5,11 +5,11 @@ import Comment from './Comment';
 import { MemberContext } from '@/context/MemberContext';
 
 import { EventFor } from '@/types/type';
-import type { TComment } from '@/types/response';
+import { postResponseSchema, type TComment } from '@/types/response';
 
 import PlusIcon from '/public/icons/plus.svg';
 import { useRouter } from 'next/navigation';
-import { getComments, writeComment } from './action';
+import { getComments, postComment } from './action';
 
 export default function Comments({ parentId }: { parentId: number }) {
   const { push } = useRouter();
@@ -66,9 +66,12 @@ export default function Comments({ parentId }: { parentId: number }) {
     }
 
     setIsLoading(true);
-    const writeResult = await writeComment(parentId, draft);
+    const writeResultJson = JSON.parse(await postComment(parentId, draft));
+
+    const writeResult = postResponseSchema.safeParse(writeResultJson);
 
     if (!writeResult.success) {
+      console.log('Write failed');
       console.log(`Error: ${writeResult.error.message}`);
       // 입력 실패 사용자 확인 UI 필요
       setIsLoading(false);
@@ -78,6 +81,7 @@ export default function Comments({ parentId }: { parentId: number }) {
     const nextCommentsResult = await getComments(parentId);
 
     if (!nextCommentsResult.success) {
+      console.log('Read failed');
       console.log(`Error: ${nextCommentsResult.error.message}`);
       setIsLoading(false);
       return;
@@ -91,9 +95,11 @@ export default function Comments({ parentId }: { parentId: number }) {
 
   return (
     <section>
-      {comments.map((comment) => (
-        <Comment key={comment.id} data={comment} />
-      ))}
+      {!isLoading ? (
+        comments.map((comment) => <Comment key={comment.id} data={comment} />)
+      ) : (
+        <span>Loading...</span>
+      )}
       {/* 무한 스크롤 또는 버튼 */}
       <hr />
       <div className="w-full p-2 flex gap-2 items-center">
@@ -106,7 +112,7 @@ export default function Comments({ parentId }: { parentId: number }) {
         />
         <button
           className="p-2 rounded-full bg-black flex justify-center items-center grow-0"
-          onClick={handleSubmit}
+          onClick={async () => await handleSubmit()}
         >
           <PlusIcon className="w-6 h-6 stroke-white" />
         </button>
