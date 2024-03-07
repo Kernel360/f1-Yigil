@@ -501,7 +501,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - createdAt(디폴트값) / rate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - created_at(디폴트값) / rate</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
@@ -514,7 +514,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h5 id="_http_request_예시">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/courses/place/1?page=1&amp;size=5&amp;sortBy=createdAt&amp;sortOrder=desc HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/courses/place/1?page=1&amp;size=5&amp;sortBy=created_at&amp;sortOrder=desc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -1427,7 +1427,7 @@ Content-Length: 40
 <h5 id="_http_request_예시_7">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/courses/my?page=1&amp;size=5&amp;sortBy=createdAt&amp;sortOrder=desc&amp;selected=public HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/courses/my?page=1&amp;size=5&amp;sortBy=created_at&amp;sortOrder=desc&amp;selected=public HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -1522,7 +1522,7 @@ Content-Length: 246
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-04 17:53:15 +0900
+Last updated 2024-03-07 15:24:05 +0900
 </div>
 </div>
 </body>

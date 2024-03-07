@@ -1,4 +1,4 @@
-package kr.co.yigil.follow.dto.response;
+package kr.co.yigil.member.interfaces.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FollowResponse {
+public class MemberBanResponse {
+
     private String message;
 }

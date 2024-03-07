@@ -53,7 +53,7 @@ public class CommentApiController {
     ) {
 
         var pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize()
-            , Sort.by(Sort.Direction.ASC, SortBy.CREATEDAT.getValue()));
+            , Sort.by(Sort.Direction.ASC, SortBy.CREATED_AT.getValue()));
         CommentInfo.CommentsResponse parentCommentList = commentFacade.getParentCommentList(
             travelId,
             pageRequest);
@@ -68,7 +68,7 @@ public class CommentApiController {
     ) {
 
         var pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize()
-            , Sort.by(Direction.ASC, SortBy.CREATEDAT.getValue()));
+            , Sort.by(Direction.ASC, SortBy.CREATED_AT.getValue()));
         CommentInfo.CommentsResponse childCommentList = commentFacade.getChildCommentList(commentId,
             pageRequest);
         var response = commentMapper.of(childCommentList);

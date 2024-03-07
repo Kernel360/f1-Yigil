@@ -1,23 +1,19 @@
 package kr.co.yigil.notification.domain;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService{
     private final NotificationReader notificationReader;
     private final NotificationSender notificationSender;
-    @Transactional(readOnly = true)
-    @Override
-    public Flux<ServerSentEvent<Notification>> getNotificationStream(Long memberId) {
-        return notificationReader.getNotificationStream(memberId);
-    }
+//    @Transactional(readOnly = true)
+//    @Override
+//    public Flux<ServerSentEvent<Notification>> getNotificationStream(Long memberId) {
+//        return notificationReader.getNotificationStream(memberId);
+//    }
 
     @Transactional
     @Override
@@ -25,10 +21,10 @@ public class NotificationServiceImpl implements NotificationService{
         notificationSender.sendNotification(notificationType, senderId, receiverId);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Slice<Notification> getNotificationSlice(Long memberId, PageRequest pageRequest) {
-        return notificationReader.getNotificationSlice(memberId, pageRequest);
-    }
+//    @Transactional(readOnly = true)
+//    @Override
+//    public Slice<Notification> getNotificationSlice(Long memberId, PageRequest pageRequest) {
+//        return notificationReader.getNotificationSlice(memberId, pageRequest);
+//    }
 
 }

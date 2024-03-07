@@ -3,6 +3,8 @@ package kr.co.yigil.member.domain;
 import java.util.Optional;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface MemberReader {
 
@@ -13,4 +15,8 @@ public interface MemberReader {
     Optional<Member> findMemberByEmailAndSocialLoginType(String email, SocialLoginType socialLoginType);
 
     void validateMember(Long memberId);
+
+    Member getMemberRegardlessOfStatus(Long memberId);
+
+    Page<Member> getMemberPageRegardlessOfStatus(Pageable pageable);
 }

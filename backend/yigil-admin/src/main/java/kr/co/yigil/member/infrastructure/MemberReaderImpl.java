@@ -9,33 +9,49 @@ import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class MemberReaderImpl implements MemberReader {
+
     private final MemberRepository memberRepository;
+
     @Override
     public Member getMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() ->new BadRequestException(NOT_FOUND_MEMBER_ID));
+        return memberRepository.findById(memberId).orElseThrow(
+            () -> new BadRequestException(NOT_FOUND_MEMBER_ID)
+        );
+    }
+
+    @Override
+    public Member getMemberRegardlessOfStatus(Long memberId) {
+        return memberRepository.findByIdRegardlessOfStatus(memberId)
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 
     @Override
     public Optional<Member> findMemberBySocialLoginIdAndSocialLoginType(String socialLoginId,
-            SocialLoginType socialLoginType) {
-        return memberRepository.findMemberBySocialLoginIdAndSocialLoginType(socialLoginId, socialLoginType);
+        SocialLoginType socialLoginType) {
+        return memberRepository.findMemberBySocialLoginIdAndSocialLoginType(socialLoginId,
+            socialLoginType);
     }
 
     @Override
     public Optional<Member> findMemberByEmailAndSocialLoginType(String email,
-            SocialLoginType socialLoginType) {
+        SocialLoginType socialLoginType) {
         return memberRepository.findMemberByEmailAndSocialLoginType(email, socialLoginType);
     }
 
     public void validateMember(Long memberId) {
-        if(!memberRepository.existsById(memberId)){
+        if (!memberRepository.existsById(memberId)) {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
+    }
+
+    public Page<Member> getMemberPageRegardlessOfStatus(Pageable pageable) {
+        return memberRepository.findAllMembersRegardlessOfStatus(pageable);
     }
 }

@@ -1,8 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-
 import { getRegionPlaces } from '@/app/(with-header)/(home)/action';
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -10,16 +7,16 @@ import type { TPlace, TRegion } from '@/types/response';
 
 export default function RegionSelect({
   userRegions,
+  currentRegion,
+  changeRegion,
   setRegionPlaces,
 }: {
   userRegions: TRegion[];
+  currentRegion?: TRegion;
+  changeRegion: (nextRegion: TRegion) => void;
   setRegionPlaces: Dispatch<SetStateAction<TPlace[]>>;
 }) {
-  const [currentRegion, setCurrentRegion] = useState(userRegions[0]);
-
   async function handleSelect(region: TRegion) {
-    setCurrentRegion(region);
-
     const regionPlacesResult = await getRegionPlaces(region.id);
 
     if (!regionPlacesResult.success) {
@@ -28,6 +25,7 @@ export default function RegionSelect({
     }
 
     setRegionPlaces(regionPlacesResult.data.places);
+    changeRegion(region);
   }
 
   if (userRegions.length === 0) {
@@ -50,7 +48,7 @@ export default function RegionSelect({
       {userRegions.map((region) => (
         <button
           className={`min-w-14 px-4 py-[6px] rounded-full font-light ${
-            currentRegion.id === region.id ? selectedStyle : unselectedStyle
+            currentRegion?.id === region.id ? selectedStyle : unselectedStyle
           }`}
           key={region.id}
           onClick={() => handleSelect(region)}

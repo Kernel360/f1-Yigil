@@ -7,4 +7,8 @@ public interface MemberStore {
     public void deleteMember(Long memberId);
 
     public Member save(Member member);
+
+    void banMember(Long memberId);
+
+    void unbanMember(Long memberId);
 }
