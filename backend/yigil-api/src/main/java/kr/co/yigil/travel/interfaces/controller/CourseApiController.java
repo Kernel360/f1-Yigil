@@ -3,6 +3,9 @@ package kr.co.yigil.travel.interfaces.controller;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.global.Selected;
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.travel.application.CourseFacade;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.CourseMapper;
@@ -39,12 +42,15 @@ public class CourseApiController {
 
     @GetMapping("/place/{placeId}")
     public ResponseEntity<CoursesInPlaceResponse> getCoursesInPlace(
-            @PathVariable("placeId") Long placeId,
-            @PageableDefault(size = 5, page = 1) Pageable pageable,
-            @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
+        @PathVariable("placeId") Long placeId,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
+        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+            pageable.getPageSize(),
+            Sort.by(direction, sortBy.getValue()));
         var result = courseFacade.getCourseSliceInPlace(placeId, pageRequest);
         var response = courseMapper.courseSliceToCourseInPlaceResponse(result);
         return ResponseEntity.ok().body(response);
@@ -53,8 +59,8 @@ public class CourseApiController {
     @PostMapping
     @MemberOnly
     public ResponseEntity<CourseRegisterResponse> registerCourse(
-            @ModelAttribute CourseRegisterRequest request,
-            @Auth final Accessor accessor
+        @ModelAttribute CourseRegisterRequest request,
+        @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
         var courseCommand = courseMapper.toRegisterCourseRequest(request);
@@ -65,8 +71,8 @@ public class CourseApiController {
     @PostMapping("/only")
     @MemberOnly
     public ResponseEntity<CourseRegisterResponse> registerCourseWithoutSeries(
-            @ModelAttribute CourseRegisterWithoutSeriesRequest request,
-            @Auth final Accessor accessor
+        @ModelAttribute CourseRegisterWithoutSeriesRequest request,
+        @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
         var courseCommand = courseMapper.toRegisterCourseRequest(request);
@@ -75,7 +81,8 @@ public class CourseApiController {
     }
 
     @GetMapping("/{courseId}")
-    public ResponseEntity<CourseDetailInfoDto> retrieveCourse(@PathVariable("courseId") Long courseId) {
+    public ResponseEntity<CourseDetailInfoDto> retrieveCourse(
+        @PathVariable("courseId") Long courseId) {
         var courseInfo = courseFacade.retrieveCourseInfo(courseId);
         var response = courseMapper.toCourseDetailInfoDto(courseInfo);
         return ResponseEntity.ok().body(response);
@@ -84,9 +91,9 @@ public class CourseApiController {
     @PostMapping("/{courseId}")
     @MemberOnly
     public ResponseEntity<CourseUpdateResponse> updateCourse(
-            @PathVariable("courseId") Long courseId,
-            @ModelAttribute CourseUpdateRequest request,
-            @Auth final Accessor accessor
+        @PathVariable("courseId") Long courseId,
+        @ModelAttribute CourseUpdateRequest request,
+        @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
         var courseCommand = courseMapper.toModifyCourseRequest(request);
@@ -97,8 +104,8 @@ public class CourseApiController {
     @DeleteMapping("/{courseId}")
     @MemberOnly
     public ResponseEntity<CourseDeleteResponse> deleteSpot(
-            @PathVariable("courseId") Long courseId,
-            @Auth final Accessor accessor
+        @PathVariable("courseId") Long courseId,
+        @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
         courseFacade.deleteCourse(courseId, memberId);
@@ -110,12 +117,14 @@ public class CourseApiController {
     public ResponseEntity<MyCoursesResponse> getMyCourseList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
+        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder,
+        @RequestParam(name = "selected", defaultValue = "all", required = false) Selected visibility
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(),
-            Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+            pageable.getPageSize(),
+            Sort.by(direction, sortBy.getValue()));
 
         final var memberCoursesInfo = courseFacade.getMemberCoursesInfo(
             accessor.getMemberId(), pageRequest, visibility);

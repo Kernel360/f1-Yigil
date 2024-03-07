@@ -7,28 +7,6 @@ export const backendErrorSchema = z.object({
 
 export type TBackendError = z.infer<typeof backendErrorSchema>;
 
-const REGION_VALUES = [
-  '서울',
-  '경기',
-  '인천',
-  '강원',
-  '대전',
-  '충남',
-  '충북',
-  '세종',
-  '광주',
-  '전남',
-  '전북',
-  '부산',
-  '대구',
-  '울산',
-  '경남',
-  '경북',
-  '제주',
-] as const;
-
-export const regionSchema = z.enum(REGION_VALUES);
-
 export const placeSchema = z.object({
   id: z.number().int(),
   place_name: z.string(),
@@ -39,8 +17,6 @@ export const placeSchema = z.object({
 });
 
 export type TPlace = z.infer<typeof placeSchema>;
-
-export const placesSchema = z.array(placeSchema);
 
 export const placeDetailSchema = z.object({
   id: z.number().int(),
@@ -96,6 +72,16 @@ export const myInfoSchema = z.object({
   follower_count: z.number().int(),
 });
 
+export const mySpotForPlaceSchema = z.object({
+  exists: z.boolean(),
+  rate: z.string(),
+  image_urls: z.array(z.string()),
+  create_date: z.coerce.date(),
+  description: z.string(),
+});
+
+export type TMySpotForPlace = z.infer<typeof mySpotForPlaceSchema>;
+
 export type TMyInfo = z.infer<typeof myInfoSchema>;
 
 export const TMapPlaceSchema = z.object({
@@ -112,3 +98,10 @@ export const TMapPlacesSchema = z.object({
 });
 
 export type TMapPlace = z.infer<typeof TMapPlaceSchema>;
+
+export const regionSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+});
+
+export type TRegion = z.infer<typeof regionSchema>;

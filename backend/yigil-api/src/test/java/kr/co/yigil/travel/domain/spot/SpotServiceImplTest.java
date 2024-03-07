@@ -21,6 +21,7 @@ import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
@@ -279,7 +280,6 @@ public class SpotServiceImplTest {
         Long memberId = 1L;
         Long spotId = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
-        String selected = "private";
         AttachFile mockAttachFile = new AttachFile(mock(FileType.class), "fileUrl",
             "originalFileName", 100L);
         AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
@@ -289,9 +289,9 @@ public class SpotServiceImplTest {
             "description", mockAttachFiles, mockPlace, 3.5);
         PageImpl<Spot> mockSpotList = new PageImpl<>(List.of(mockSpot));
         when(mockPlace.getName()).thenReturn("장소장소");
-        when(spotReader.getMemberSpotList(anyLong(), any(), any())).thenReturn(mockSpotList);
+        when(spotReader.getMemberSpotList(anyLong(), any(Selected.class), any())).thenReturn(mockSpotList);
 
-        var result = spotService.retrieveSpotList(memberId, pageable, selected);
+        var result = spotService.retrieveSpotList(memberId, Selected.PRIVATE, pageable);
 
         assertThat(result).isNotNull().isInstanceOf(SpotInfo.MySpotsResponse.class);
         assertThat(result.getContent().getFirst()).isInstanceOf(SpotInfo.SpotListInfo.class);

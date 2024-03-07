@@ -6,8 +6,9 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 name: Java CD with Gradle
 on:
-  push:
-    branches: [ "devlop" ]
+  pull_request:
+    types: ["closed"]
+    branches: [ "develop" ]
 permissions:
   contents: read
 defaults:
@@ -16,26 +17,19 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(join(github.event.pull_request.labels.*.name, ','), '🛜Backend')
     steps:
     
-    ## jdk setting
+    # jdk setting
     - uses: actions/checkout@v3
     - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
         java-version: '21'
         distribution: 'temurin'
-    ## docker-compose 설치
-    - name: Set up Docker-Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        chmod +x /usr/local/bin/docker-compose
-    ## docker-compose.yml 생성 후 secret 값 복붙
-    - uses: actions/checkout@v3
-    - run: touch docker-compose.yml
-    - run: |
-        echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
-    ## application secrets 값 주입
+    # application secrets 값 주입
     - name: Set application.yml
       run: |
         sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./yigil-api/src/main/resources/application.yml
@@ -71,8 +65,7 @@ jobs:
         sed -i "s|@MAIL_PORT@|${{ secrets.MAIL_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
-    # cat ./yigil-admin/src/main/resources/*
-    ## Dockerfile secrets 값 주입
+    # Dockerfile secrets 값 주입
     - name: Set Dockerfile
       run: |
         sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/Dockerfile
@@ -82,33 +75,50 @@ jobs:
       run: chmod +x gradlew
     # Gradle Build (test 제외)
     - name: Build with Gradle
-      run: ./gradlew clean build -x test
-    ## AWS에 로그인합니다. aws-region은 서울로 설정(ap-northeast-2)했습니다
+      run: ./gradlew clean build
+    # AWS 로그인
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: ap-northeast-2
-      ## ECR에 로그인합니다
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     # Docker 이미지 빌드
-    - name: Docker-Compose Image Build
-      run: docker-compose build
-    # DockerHub Push
-    - name: DockerHub Push
-      run: docker-compose push
-    
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-admin
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd yigil-api
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }}
+    - name: Docker image push
+      run : |
+        cd yigil-api
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }}
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_HOST_DEV }}
-        username: ${{ secrets.EC2_USERNAME_DEV }}
-        key: ${{ secrets.EC2_KEY_DEV }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
         
         script: |
-          awslogin
-          allin
+          sh ./gitaction.sh

@@ -1,6 +1,7 @@
 package kr.co.yigil.travel.application;
 
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
@@ -43,8 +44,8 @@ public class SpotFacade {
         spotService.deleteSpot(spotId, memberId);
     }
 
-    public SpotInfo.MySpotsResponse getMemberSpotsInfo(final Long memberId, Pageable pageable,
-        String selected) {
-        return spotService.retrieveSpotList(memberId, pageable, selected);
+    public SpotInfo.MySpotsResponse getMemberSpotsInfo(final Long memberId,
+        Selected selected, Pageable pageable) {
+        return spotService.retrieveSpotList(memberId, selected, pageable);
     }
 }

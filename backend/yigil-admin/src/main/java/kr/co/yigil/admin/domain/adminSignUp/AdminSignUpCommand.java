@@ -1,5 +1,6 @@
 package kr.co.yigil.admin.domain.adminSignUp;
 
+import kr.co.yigil.admin.domain.AdminSignUp;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;

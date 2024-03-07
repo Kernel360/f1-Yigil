@@ -24,6 +24,7 @@ public class TravelServiceImpl implements TravelService {
     }
 
     @Override
+    @Transactional
     public void changeOnPrivate(Long travelId, Long memberId) {
         Travel travel = travelReader.getTravel(travelId);
         validateTravelOwner(travel, memberId);

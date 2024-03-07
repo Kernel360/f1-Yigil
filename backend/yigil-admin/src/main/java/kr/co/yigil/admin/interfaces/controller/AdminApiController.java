@@ -1,18 +1,23 @@
 package kr.co.yigil.admin.interfaces.controller;
 
 import kr.co.yigil.admin.application.AdminFacade;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.admin.AdminCommand;
 import kr.co.yigil.admin.domain.admin.AdminInfo;
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;
 import kr.co.yigil.admin.interfaces.dto.mapper.AdminMapper;
 import kr.co.yigil.admin.interfaces.dto.mapper.AdminSignupMapper;
+import kr.co.yigil.admin.interfaces.dto.request.AdminPasswordUpdateRequest;
+import kr.co.yigil.admin.interfaces.dto.request.AdminProfileImageUpdateRequest;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;
 import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpAcceptRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpRejectRequest;
+import kr.co.yigil.admin.interfaces.dto.response.AdminDetailInfoResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminInfoResponse;
+import kr.co.yigil.admin.interfaces.dto.response.AdminPasswordUpdateResponse;
+import kr.co.yigil.admin.interfaces.dto.response.AdminProfileImageUpdateResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignUpsResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignupResponse;
 import kr.co.yigil.admin.interfaces.dto.response.SignUpAcceptResponse;
@@ -78,6 +83,26 @@ public class AdminApiController {
         AdminInfo.AdminInfoResponse info = adminFacade.getAdminInfoByEmail(user.getUsername());
         AdminInfoResponse response = adminMapper.toResponse(info);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/detail-info")
+    public ResponseEntity<AdminDetailInfoResponse> getMemberDetailInfo(@AuthenticationPrincipal User user) {
+        AdminInfo.AdminDetailInfoResponse info = adminFacade.getAdminDetailInfoByEmail(user.getUsername());
+        AdminDetailInfoResponse response = adminMapper.toResponse(info);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/profile-image")
+    public ResponseEntity<AdminProfileImageUpdateResponse> updateProfileImage(@AuthenticationPrincipal User user, @ModelAttribute AdminProfileImageUpdateRequest request) {
+        adminFacade.updateProfileImage(user.getUsername(), request.getProfileImageFile());
+        return ResponseEntity.ok(new AdminProfileImageUpdateResponse("어드민 프로필 이미지 수정 완료"));
+    }
+
+    @PostMapping("/password")
+    public ResponseEntity<AdminPasswordUpdateResponse> updatePassword(@AuthenticationPrincipal User user, @RequestBody AdminPasswordUpdateRequest request) {
+        AdminCommand.AdminPasswordUpdateRequest command = adminMapper.toCommand(request);
+        adminFacade.updatePassword(user.getUsername(), command);
+        return ResponseEntity.ok(new AdminPasswordUpdateResponse("어드민 비밀번호 수정 완료"));
     }
 
     @PostMapping("/test")

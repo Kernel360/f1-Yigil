@@ -3,6 +3,8 @@ package kr.co.yigil.notification.interfaces.controller;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.notification.application.NotificationFacade;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.notification.interfaces.dto.mapper.NotificationMapper;
@@ -37,15 +39,19 @@ public class NotificationApiController {
     @GetMapping("/api/v1/notifications")
     @MemberOnly
     public ResponseEntity<NotificationsResponse> getNotifications(
-            @Auth Accessor accessor,
-            @PageableDefault(size = 5, page = 1) Pageable pageable,
-            @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
-            ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        @Auth Accessor accessor,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
+        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+            pageable.getPageSize(),
+            Sort.by(direction, sortBy.getValue()));
         Slice<Notification> notificationSlice = notificationFacade.getNotificationSlice(
-                accessor.getMemberId(), pageRequest);
-        NotificationsResponse response = notificationMapper.notificationSliceToNotificationsResponse(notificationSlice);
+            accessor.getMemberId(), pageRequest);
+        NotificationsResponse response = notificationMapper.notificationSliceToNotificationsResponse(
+            notificationSlice);
         return ResponseEntity.ok().body(response);
     }
 

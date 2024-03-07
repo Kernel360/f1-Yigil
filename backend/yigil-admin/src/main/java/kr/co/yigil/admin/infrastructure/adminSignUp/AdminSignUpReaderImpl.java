@@ -2,8 +2,9 @@ package kr.co.yigil.admin.infrastructure.adminSignUp;
 
 import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_SIGNUP_REQUEST_NOT_FOUND;
 
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpReader;
+import kr.co.yigil.admin.infrastructure.AdminSignUpRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

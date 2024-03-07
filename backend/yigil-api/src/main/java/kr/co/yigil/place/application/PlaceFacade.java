@@ -2,11 +2,14 @@ package kr.co.yigil.place.application;
 
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.place.domain.PlaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,11 +25,31 @@ public class PlaceFacade {
         return placeService.getPopularPlace(accessor);
     }
 
+    public List<Main> getPopularPlaceMore(final Accessor accessor) {
+        return placeService.getPopularPlaceMore(accessor);
+    }
+
     public PlaceInfo.Detail retrievePlaceInfo(final Long placeId, final Accessor accessor) {
         return placeService.retrievePlace(placeId, accessor);
     }
 
     public List<Main> getPlaceInRegion(final Long regionId, final Accessor accessor) {
         return placeService.getPlaceInRegion(regionId, accessor);
+    }
+
+    public List<Main> getPlaceInRegionMore(final Long regionId, final Accessor accessor) {
+        return placeService.getPlaceInRegionMore(regionId, accessor);
+    }
+
+    public Page<Place> getNearPlace(final NearPlaceRequest command) {
+        return placeService.getNearPlace(command);
+    }
+
+    public List<Main> getPopularPlaceByDemographics(final Long memberId) {
+        return placeService.getPopularPlaceByDemographics(memberId);
+    }
+
+    public List<Main> getPopularPlaceByDemographicsMore(final Long memberId) {
+        return placeService.getPopularPlaceByDemographicsMore(memberId);
     }
 }
