@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
+import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
 import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
@@ -27,25 +28,6 @@ public interface SpotMapper {
 
     SpotMapper INSTANCE = Mappers.getMapper(SpotMapper.class);
 
-    @Mapping(target = "imageUrlList", expression = "java(spot.getAttachFiles().getUrls())")
-    @Mapping(target = "ownerProfileImageUrl", expression = "java(spot.getMember().getProfileImageUrl())")
-    @Mapping(target = "ownerNickname", expression = "java(spot.getMember().getNickname())")
-    @Mapping(target = "rate", expression = "java(String.valueOf(spot.getRate()))")
-    @Mapping(target = "createDate", expression = "java(spot.getCreatedAt().toString())")
-    @Mapping(target = "description", expression = "java(spot.getDescription())")
-    SpotInfoDto spotToSpotInfoDto(Spot spot);
-
-    default List<SpotInfoDto> spotsToSpotInfoDtoList(List<Spot> spots) {
-        return spots.stream()
-            .map(this::spotToSpotInfoDto)
-            .collect(Collectors.toList());
-    }
-
-    default SpotsInPlaceResponse spotsSliceToSpotInPlaceResponse(Slice<Spot> spotsSlice) {
-        List<SpotInfoDto> spotInfoDtoList = spotsToSpotInfoDtoList(spotsSlice.getContent());
-        boolean hasNext = spotsSlice.hasNext();
-        return new SpotsInPlaceResponse(spotInfoDtoList, hasNext);
-    }
 
     @Mappings({
             @Mapping(target = "exists", source = "mySpot.exists"),
@@ -113,4 +95,26 @@ public interface SpotMapper {
     MySpotsResponseDto of(MySpotsResponse mySpotsResponse);
     MySpotsResponseDto.SpotInfo of(SpotInfo.SpotListInfo spotInfo);
 
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "imageUrls", target = "imageUrlList"),
+            @Mapping(source = "description", target = "description"),
+            @Mapping(source = "ownerProfileImageUrl", target = "ownerProfileImageUrl"),
+            @Mapping(source = "ownerNickname", target = "ownerNickname"),
+            @Mapping(source = "rate", target = "rate", numberFormat = "#.#"),
+            @Mapping(source = "createDate", target = "createDate", dateFormat = "yyyy-MM-dd"),
+            @Mapping(source = "liked", target = "liked")
+    })
+    SpotInfoDto toSpotInfoDto(SpotInfo.Main spotInfoMain);
+
+    default List<SpotInfoDto> spotsSliceToSpotInPlaceResponse(List<Main> mains) {
+        return mains.stream()
+                .map(this::toSpotInfoDto)
+                .collect(Collectors.toList());
+    }
+
+    default SpotsInPlaceResponse toSpotsInPlaceResponse(SpotInfo.Slice slice) {
+        List<SpotInfoDto> dtos = spotsSliceToSpotInPlaceResponse(slice.getMains());
+        return new SpotsInPlaceResponse(dtos, slice.isHasNext());
+        }
 }

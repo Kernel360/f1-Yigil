@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum SortBy {
-    CREATEDAT("createdAt"),
+    CREATED_AT("createdAt"),
     RATE("rate"),
     ID("id");
 
