@@ -1,10 +1,10 @@
 package kr.co.yigil.travel.spot.domain;
 
-import kr.co.yigil.travel.spot.domain.AdminSpotInfoDto.AdminSpotDetailInfo;
-import kr.co.yigil.travel.spot.domain.AdminSpotInfoDto.AdminSpotList;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotDetailInfo;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotList;
 import org.springframework.data.domain.Pageable;
 
-public interface AdminSpotService {
+public interface SpotService {
 
 
     AdminSpotDetailInfo getSpot(Long spotId);

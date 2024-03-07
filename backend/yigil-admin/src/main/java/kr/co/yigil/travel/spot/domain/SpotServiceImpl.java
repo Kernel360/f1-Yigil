@@ -3,8 +3,8 @@ package kr.co.yigil.travel.spot.domain;
 import kr.co.yigil.comment.domain.CommentReader;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.spot.domain.AdminSpotInfoDto.AdminSpotDetailInfo;
-import kr.co.yigil.travel.spot.domain.AdminSpotInfoDto.AdminSpotList;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotDetailInfo;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AdminSpotServiceImpl implements AdminSpotService {
+public class SpotServiceImpl implements SpotService {
 
     private final SpotReader spotReader;
     private final SpotStore spotStore;
@@ -28,17 +28,17 @@ public class AdminSpotServiceImpl implements AdminSpotService {
         var spotList = pageSpots.getContent().stream().map(
             spot -> {
                 var spotAdditionalInfo = getAdditionalInfo(spot.getId());
-                return new AdminSpotInfoDto.SpotList(spot, spotAdditionalInfo);
+                return new SpotInfoDto.SpotList(spot, spotAdditionalInfo);
             }
         ).toList();
 
         return new AdminSpotList(spotList, pageSpots.getPageable(), pageSpots.getTotalElements());
     }
 
-    private AdminSpotInfoDto.SpotAdditionalInfo getAdditionalInfo(Long id) {
+    private SpotInfoDto.SpotAdditionalInfo getAdditionalInfo(Long id) {
         int favorCount = favorReader.getFavorCount(id);
         int commentCount = commentReader.getCommentCount(id);
-        return new AdminSpotInfoDto.SpotAdditionalInfo(favorCount, commentCount);
+        return new SpotInfoDto.SpotAdditionalInfo(favorCount, commentCount);
     }
 
     @Override

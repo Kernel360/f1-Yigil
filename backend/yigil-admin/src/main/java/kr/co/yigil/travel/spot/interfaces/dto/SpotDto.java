@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
-public class AdminSpotDto {
+public class SpotDto {
 
 
     @Data

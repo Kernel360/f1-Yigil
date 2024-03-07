@@ -7,9 +7,9 @@ import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.notification.domain.NotificationService;
 import kr.co.yigil.notification.domain.NotificationType;
-import kr.co.yigil.travel.spot.domain.AdminSpotInfoDto.AdminSpotDetailInfo;
-import kr.co.yigil.travel.spot.domain.AdminSpotInfoDto.AdminSpotList;
-import kr.co.yigil.travel.spot.domain.AdminSpotService;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotDetailInfo;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotList;
+import kr.co.yigil.travel.spot.domain.SpotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -19,23 +19,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AdminSpotFacade {
+public class SpotFacade {
 
-    private final AdminSpotService adminSpotService;
+    private final SpotService spotService;
     private final NotificationService notificationService;
     private final AdminService adminService;
 
     public AdminSpotList getSpots(Pageable pageable) {
-        return adminSpotService.getSpots(pageable);
+        return spotService.getSpots(pageable);
     }
 
     public AdminSpotDetailInfo getSpot(Long spotId) {
-        return adminSpotService.getSpot(spotId);
+        return spotService.getSpot(spotId);
     }
 
     public void deleteSpot(Long spotId) {
 
-        var memberId = adminSpotService.deleteSpot(spotId);
+        var memberId = spotService.deleteSpot(spotId);
 
         var adminId = getAdminId();
 
