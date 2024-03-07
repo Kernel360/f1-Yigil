@@ -52,4 +52,5 @@ public class PlaceFacade {
     public List<Main> getPopularPlaceByDemographicsMore(final Long memberId) {
         return placeService.getPopularPlaceByDemographicsMore(memberId);
     }
+
 }

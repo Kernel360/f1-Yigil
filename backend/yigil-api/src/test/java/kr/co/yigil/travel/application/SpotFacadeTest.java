@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
@@ -55,28 +56,16 @@ public class SpotFacadeTest {
     @DisplayName("getSpotSliceInPlace 메서드가 Spot Slice를 잘 반환하는지")
     @Test
     void getSpotSliceInPlace_ShouldReturnSlice() {
-        Long id = 1L;
-        String email = "test@test.com";
-        String socialLoginId = "12345";
-        String nickname = "tester";
-        String profileImageUrl = "test.jpg";
-        Member member = new Member(id, email, socialLoginId, nickname, profileImageUrl,
-                SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
-
-        String title = "Test Spot Title";
-        String description = "Test Course Description";
-        double rate = 5.0;
-        Spot spot = new Spot(id, member, null, false, title, description, null, null, rate);
-
         Long placeId = 1L;
-        Pageable pageable = PageRequest.of(0, 10);
-        Slice<Spot> expectedSlice = new PageImpl<>(Collections.singletonList(spot), pageable, 1);
-        when(spotService.getSpotSliceInPlace(eq(placeId), any(Pageable.class))).thenReturn(expectedSlice);
+        Accessor mockAccessor = mock(Accessor.class);
+        SpotInfo.Slice mockSlice = mock(SpotInfo.Slice.class);
+        Pageable pageable = PageRequest.of(0, 5);
+        when(spotService.getSpotSliceInPlace(eq(placeId), any(Accessor.class), any(Pageable.class))).thenReturn(mockSlice);
 
-        Slice<Spot> result = spotFacade.getSpotSliceInPlace(placeId, pageable);
+        SpotInfo.Slice result = spotFacade.getSpotSliceInPlace(placeId, mockAccessor, pageable);
 
-        assertEquals(expectedSlice, result);
-        verify(spotService).getSpotSliceInPlace(placeId, pageable);
+        assertEquals(mockSlice, result);
+        verify(spotService).getSpotSliceInPlace(placeId, mockAccessor, pageable);
     }
 
     @DisplayName("getMySpotInPlace 메서드가 응답을 잘 반환하는지")
