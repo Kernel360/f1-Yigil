@@ -1,9 +1,10 @@
 'use client';
 
-import { TSpot } from '@/types/response';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Spot from './Spot';
 import { getSpots } from '@/app/(with-header)/place/[id]/@reviews/action';
+
+import type { TSpot } from '@/types/response';
 
 export default function Spots({
   placeId,

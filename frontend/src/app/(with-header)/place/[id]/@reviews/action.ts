@@ -21,7 +21,9 @@ async function fetchSpots(
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
-  const response = await fetch(`${endpoint}?${queryParams}`);
+  const response = await fetch(`${endpoint}?${queryParams}`, {
+    next: { tags: ['spots'] },
+  });
 
   return await response.json();
 }

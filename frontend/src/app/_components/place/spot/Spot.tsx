@@ -11,23 +11,16 @@ import StarIcon from '/public/icons/star.svg';
 import type { TSpot } from '@/types/response';
 import Reaction from '../../reaction/Reaction';
 
-export default function Spot({
-  placeId,
-  data,
-}: {
-  placeId: number;
-  data: TSpot;
-}) {
+export default function Spot({ data }: { placeId: number; data: TSpot }) {
   const {
+    id,
     image_url_list,
     owner_profile_image_url,
     owner_nickname,
     rate,
+    liked,
     create_date,
   } = data;
-
-  // API에 추가 필요
-  const initialLiked = false;
 
   return (
     <article className="py-2 flex flex-col gap-4">
@@ -59,7 +52,7 @@ export default function Spot({
         </span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{'리뷰 내용'}</div>
       </div>
-      <Reaction placeId={placeId} initialLiked={initialLiked} />
+      <Reaction travelId={id} initialLiked={liked} />
     </article>
   );
 }
