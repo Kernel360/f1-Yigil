@@ -1,26 +1,17 @@
 'use client';
 import { TMapPlace } from '@/types/response';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Listener,
-  Marker,
-  NaverMap,
-  Overlay,
-  useMap,
-  useNavermaps,
-} from 'react-naver-maps';
-import { basicMarker } from '../naver-map/markers/basicMarker';
+import { NaverMap, useNavermaps } from 'react-naver-maps';
 import CustomControl from '../naver-map/CustomControl';
 import { useGeolocation } from '../naver-map/hooks/useGeolocation';
 import { getNearPlaces } from './hooks/nearActions';
-import MapPlaces from './MapPlaces';
 import MapPagination from '../naver-map/MapPagination';
 import MapMarker from './MapMarker';
+import LoadingIndicator from '../LoadingIndicator';
 
 export default function ViewTravelMap() {
   const navermaps = useNavermaps();
   const mapRef = useRef<naver.maps.Map>(null);
-  const markerRef = useRef<naver.maps.Marker | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [center, setCenter] = useState<{ lat: number; lng: number }>({
     lat: 37.5135869,
@@ -35,11 +26,14 @@ export default function ViewTravelMap() {
 
   const [allPlaces, setAllPlaces] = useState<TMapPlace[]>([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [markerClickedId, setMarkerClickedId] = useState(-1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isGeolocationLoading, setIsGeolocationLoading] = useState(true);
   const { onSuccessGeolocation, onErrorGeolocation } = useGeolocation(
     mapRef,
     setCenter,
+    setIsGeolocationLoading,
   );
-  const [markerClickedId, setMarkerClickedId] = useState(-1);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -62,43 +56,86 @@ export default function ViewTravelMap() {
       const { x: minX, y: minY } = mapRef.current.getBounds().getMin();
       setMaxMinBounds({ ...maxMinBounds, maxX, maxY, minX, minY });
     }
-  }, [mapRef.current]);
+  }, []);
+
+  const onChangedMap = () => {
+    if (!mapRef.current) return;
+    const { x: maxX, y: maxY } = mapRef.current.getBounds().getMax();
+    const { x: minX, y: minY } = mapRef.current.getBounds().getMin();
+    const { x: lng, y: lat } = mapRef.current.getCenter();
+    setMaxMinBounds({ ...maxMinBounds, maxX, maxY, minX, minY });
+    setCenter({ lat, lng });
+  };
+
+  let timer: NodeJS.Timeout;
+  useEffect(() => {
+    timer = setTimeout(() => {
+      setIsLoading(true);
+      getPlaces();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [center, currentPage, maxMinBounds]);
 
   const getPlaces = async () => {
-    const placeList = await getNearPlaces(maxMinBounds, currentPage);
-    if (!placeList.success) {
-      alert('장소 데이터를 불러오는데 실패했습니다');
-      return;
+    try {
+      const placeList = await getNearPlaces(maxMinBounds, currentPage);
+      if (!placeList.success) {
+        alert('장소 데이터를 불러오는데 실패했습니다');
+        return;
+      }
+      setAllPlaces(placeList.data.places);
+      setTotalPages(placeList.data.total_pages);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-    setAllPlaces(placeList.data.places);
-    setTotalPages(placeList.data.total_pages);
   };
-  useEffect(() => {
-    if (!maxMinBounds.maxX) return;
-    getPlaces();
-  }, [maxMinBounds, currentPage]);
 
   return (
     <>
-      <CustomControl mapRef={mapRef} center={center} />
+      <CustomControl
+        mapRef={mapRef}
+        center={center}
+        setCenter={setCenter}
+        isGeolocationLoading={isGeolocationLoading}
+        setIsGelocationLoading={setIsGeolocationLoading}
+      />
       <NaverMap
-        center={{
-          lat: 37.5135869,
-          lng: 127.0621708,
-        }}
+        center={center}
         zoom={15}
         ref={mapRef}
-        onZoomChanged={() => console.log(mapRef.current?.getBounds())}
+        onSizeChanged={() => console.log(mapRef.current?.getBounds())}
+        onBoundsChanged={onChangedMap}
       >
-        {allPlaces.map((place) => (
-          <MapMarker
-            key={place.id}
-            {...place}
-            markerClickedId={markerClickedId}
-            setMarkerClickedId={setMarkerClickedId}
-          />
-        ))}
-        {/* <MapPlaces allPlaces={allPlaces} totalPages={totalPages} /> */}
+        {isGeolocationLoading || isLoading ? (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <LoadingIndicator
+              backgroundColor="bg-white"
+              loadingText={
+                isGeolocationLoading
+                  ? '내 위치 불러오는중...'
+                  : isLoading
+                  ? '장소 정보 불러오는중...'
+                  : ''
+              }
+            />
+          </div>
+        ) : (
+          allPlaces.map((place) => (
+            <MapMarker
+              key={place.id}
+              {...place}
+              markerClickedId={markerClickedId}
+              setMarkerClickedId={setMarkerClickedId}
+              isClickedMarker={
+                place.id !== markerClickedId || markerClickedId === -1
+                  ? false
+                  : true
+              }
+            />
+          ))
+        )}
       </NaverMap>
       {totalPages && (
         <MapPagination

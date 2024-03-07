@@ -14,6 +14,7 @@ import { basicMarker } from '../naver-map/markers/basicMarker';
 interface TMapMarker extends TMapPlace {
   markerClickedId: number;
   setMarkerClickedId: Dispatch<SetStateAction<number>>;
+  isClickedMarker: boolean;
 }
 
 export default function MapMarker({
@@ -23,48 +24,18 @@ export default function MapMarker({
   y,
   markerClickedId,
   setMarkerClickedId,
+  isClickedMarker,
 }: TMapMarker) {
-  const ref = useRef<naver.maps.Marker | null>(null);
-  const [isClickedMarker, setIsClickedMarker] = useState(false);
   const { push } = useRouter();
 
-  // 내려 받는 clicked id와 비교
-  // id가 -1이면 아무것도 클릭되지 않은 상태이므로 현재 클릭된 id 추가 후 isClickedMarker = true
-  // id와 같다면 id로 이동
-  // id와 다르다면 clikedid와 id가 같은 것만
-
   const onClickMarker = (clickedId: number) => {
-    if (markerClickedId === -1) {
-      setMarkerClickedId(clickedId);
-      setIsClickedMarker(true);
-      markerType(place_name);
+    setMarkerClickedId(clickedId);
+    if (markerClickedId === clickedId) {
+      push(`/place/${clickedId}`);
       return;
-    } else if (markerClickedId !== clickedId) {
-      console.log('marker', markerClickedId);
-      console.log('clickedId', clickedId, id);
-      if (clickedId === id) {
-        setIsClickedMarker(true);
-        markerType(place_name);
-        setMarkerClickedId(clickedId);
-      } else if (clickedId !== id) {
-        setIsClickedMarker(false);
-        markerType(place_name);
-      }
-    } else {
-      setMarkerClickedId(-1);
-      setIsClickedMarker(false);
-      markerType(place_name);
     }
-
-    // if (!isClickedMarker) {
-    //   if (markerClickedId === id) {
-    //     setIsClickedMarker(true);
-    //   }
-    // } else {
-    //   setIsClickedMarker(false);
-    // }
   };
-  console.log(id, isClickedMarker);
+
   const markerType = (placeName: string) => {
     if (!isClickedMarker) {
       return basicMarker(placeName);
@@ -77,15 +48,9 @@ export default function MapMarker({
       key={id}
       title={place_name}
       position={{ x: x, y: y }}
-      icon={markerType(`${place_name}-${id}`)}
+      icon={markerType(place_name)}
       onClick={() => onClickMarker(id)}
-      ref={ref}
+      zIndex={markerClickedId === id ? 1 : -1}
     />
   );
 }
-
-/**
- * TODO: 각 마커 클릭 기능 완료
- * 처음 클릭 했을 때 클릭한 id만 다르게 하고 나머지는 원래 상태로 만들어야 함
- * 한번 클릭했을 때 보여 줄 마커 디자인
- */

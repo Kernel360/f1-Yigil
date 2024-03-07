@@ -33,18 +33,16 @@ export default function MapPagination({
   };
   return (
     <nav
-      className={`absolute bottom-1 left-[45%] -translate-x-1/2 my-4 pb-[50px] flex justify-center items-center gap-x-6`}
+      className={`absolute bottom-1 left-[50%] -translate-x-1/2 bg-white bg-opacity-90 rounded-3xl my-4 mb-6 flex justify-center items-center gap-x-6`}
     >
       <span
-        className={`w-[9px] h-[16px] px-1 ${
-          currentPage !== 1 && 'cursor-pointer'
-        }`}
+        className={` ${currentPage !== 1 && 'cursor-pointer'}`}
         onClick={minusPage}
         onKeyDown={(e) => e.key === 'Enter' && minusPage()}
         tabIndex={currentPage !== 1 ? 0 : -1}
       >
         {currentPage !== 1 && (
-          <LeftIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
+          <LeftIcon className="w-[9px] h-[16px] ml-4 stroke-gray-300 hover:stroke-gray-500" />
         )}
       </span>
 
@@ -63,17 +61,15 @@ export default function MapPagination({
           </button>
         ))}
       <span
-        className={`w-[9px] h-[16px] px-1 ${
-          currentPage !== 1 && 'cursor-pointer'
-        }`}
+        className={`${currentPage !== totalPage && 'cursor-pointer'}`}
         onClick={addPage}
         onKeyDown={(e) => e.key === 'Enter' && addPage()}
         tabIndex={
           !renderPage.includes(totalPage) && currentPage !== totalPage ? 0 : -1
         }
       >
-        {!renderPage.includes(totalPage) && currentPage !== totalPage && (
-          <RightIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
+        {currentPage !== totalPage && (
+          <RightIcon className="w-[9px] h-[16px] mr-4 stroke-gray-300 hover:stroke-gray-500" />
         )}
       </span>
     </nav>

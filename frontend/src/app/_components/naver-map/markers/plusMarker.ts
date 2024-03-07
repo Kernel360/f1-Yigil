@@ -1,6 +1,6 @@
 export const plusMarker = (place: { name: string }) => {
   return {
-    content: `<div style=" border: 1px #60a5fa solid; border-radius: 5px; background-color: #fff; word-break:keep-all;">
+    content: `<div style=" border: 1px #60a5fa solid; border-radius: 5px; background-color: #fff; word-break:keep-all; z-index: 9999;">
   <div style="display: flex; padding: 8px 10px">
   <div style="padding:0px 8px 0px 0px; color:#374151; font-size: 18px; font-weight: 600; text-align: center;">${place.name}</div>
   <div style="display:flex; justify-content: center; align-items: center;">

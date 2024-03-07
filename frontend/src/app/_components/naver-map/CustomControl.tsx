@@ -7,14 +7,21 @@ import {
   useState,
 } from 'react';
 import { useNavermaps } from 'react-naver-maps';
+import { useGeolocation } from './hooks/useGeolocation';
 import CrossHairIcon from '/public/icons/crosshair.svg';
 
 function CustomControl({
   mapRef,
   center,
+  isGeolocationLoading,
+  setCenter,
+  setIsGelocationLoading,
 }: {
   mapRef: RefObject<naver.maps.Map>;
   center: { lat: number; lng: number };
+  isGeolocationLoading: boolean;
+  setCenter: Dispatch<SetStateAction<{ lat: number; lng: number }>>;
+  setIsGelocationLoading: Dispatch<SetStateAction<boolean>>;
 }) {
   const locationBtnHtml = `
     <a href="#" 
@@ -39,42 +46,28 @@ function CustomControl({
     </a>
   `;
   const navermaps = useNavermaps();
-  const [currentPosLoading, setCurrentPosLoading] = useState(false);
-
+  const { onSuccessGeolocation, onErrorGeolocation } = useGeolocation(
+    mapRef,
+    setCenter,
+    setIsGelocationLoading,
+  );
   const mapCurrentLocation = () => {
+    setIsGelocationLoading(true);
     if (navigator.geolocation) {
-      setCurrentPosLoading(true);
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCurrentPosLoading(false);
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          mapRef.current?.setCenter(new navermaps.LatLng(lat, lng));
-        },
-        (error) => {
-          setCurrentPosLoading(false);
-          window.alert('현위치를 가져오는데 실패했습니다!');
-          console.log(error);
-        },
+        onSuccessGeolocation,
+        onErrorGeolocation,
         { enableHighAccuracy: true },
       );
     }
   };
-
   return (
     <button
       className="absolute top-6 left-6 w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center"
       onClick={mapCurrentLocation}
+      disabled={isGeolocationLoading}
     >
-      {currentPosLoading ? (
-        <div className="flex space-x-2 justify-center items-center">
-          <div className="h-2.5 w-2.5 bg-gray-500 rounded-full animate-pulse"></div>
-          <div className="h-2.5 w-2.5 bg-gray-500 rounded-full animate-pulse delay-150"></div>
-          <div className="h-2.5 w-2.5 bg-gray-500 rounded-full animate-pulse delay-300"></div>
-        </div>
-      ) : (
-        <CrossHairIcon />
-      )}
+      <CrossHairIcon />
     </button>
   );
 }
