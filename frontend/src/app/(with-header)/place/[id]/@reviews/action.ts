@@ -11,8 +11,8 @@ async function fetchSpots(
   placeId: number,
   page: number = 1,
   size: number = 5,
-  sortBy: 'createdAt' | 'rate' = 'createdAt',
-  sortOrder: 'desc' | 'asc' = 'desc',
+  sortBy: 'created_at' | 'rate',
+  sortOrder: 'desc' | 'asc',
 ) {
   const BASE_URL = await getBaseUrl();
 
@@ -32,7 +32,7 @@ export async function getSpots(
   placeId: number,
   page: number = 1,
   size: number = 5,
-  sortBy: 'createdAt' | 'rate' = 'createdAt',
+  sortBy: 'created_at' | 'rate' = 'created_at',
   sortOrder: 'desc' | 'asc' = 'desc',
 ) {
   const json = await fetchSpots(placeId, page, size, sortBy, sortOrder);

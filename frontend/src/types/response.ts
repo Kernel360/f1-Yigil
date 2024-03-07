@@ -106,6 +106,7 @@ export type TRegion = z.infer<typeof regionSchema>;
 export const spotSchema = z.object({
   id: z.number().int(),
   image_url_list: z.array(z.string()),
+  description: z.string(),
   owner_profile_image_url: z.string(),
   owner_nickname: z.string(),
   liked: z.boolean(),

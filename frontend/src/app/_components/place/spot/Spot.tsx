@@ -15,6 +15,7 @@ export default function Spot({ data }: { placeId: number; data: TSpot }) {
   const {
     id,
     image_url_list,
+    description,
     owner_profile_image_url,
     owner_nickname,
     rate,
@@ -50,7 +51,7 @@ export default function Spot({ data }: { placeId: number; data: TSpot }) {
         <span className="self-end text-gray-400 font-medium">
           {create_date.toLocaleDateString('ko-KR')}
         </span>
-        <div className="p-4 min-h-32 rounded-lg bg-gray-100">{'리뷰 내용'}</div>
+        <div className="p-4 min-h-32 rounded-lg bg-gray-100">{description}</div>
       </div>
       <Reaction travelId={id} initialLiked={liked} />
     </article>
