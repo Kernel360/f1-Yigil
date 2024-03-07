@@ -97,7 +97,6 @@ export default function ViewTravelMap() {
     <>
       <CustomControl
         mapRef={mapRef}
-        center={center}
         setCenter={setCenter}
         isGeolocationLoading={isGeolocationLoading}
         setIsGelocationLoading={setIsGeolocationLoading}

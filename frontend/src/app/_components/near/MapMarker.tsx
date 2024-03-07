@@ -1,12 +1,6 @@
 import { TMapPlace } from '@/types/response';
 import { useRouter } from 'next/navigation';
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Marker } from 'react-naver-maps';
 import { activateMarker } from '../naver-map/markers/activateMarker';
 import { basicMarker } from '../naver-map/markers/basicMarker';
