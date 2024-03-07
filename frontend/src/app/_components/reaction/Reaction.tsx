@@ -1,10 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+
+import { MemberContext } from '@/context/MemberContext';
+
+import type { EventFor } from '@/types/type';
 
 import CommentIcon from '/public/icons/comment.svg';
 import HeartIcon from '/public/icons/heart.svg';
 import Comments from './Comments';
+import { useRouter } from 'next/navigation';
 
 export default function Reaction({
   placeId,
@@ -13,8 +18,22 @@ export default function Reaction({
   placeId: number;
   initialLiked: boolean;
 }) {
+  const { push } = useRouter();
+
   const [liked, setLiked] = useState(initialLiked);
   const [isOpen, setIsOpen] = useState(false);
+
+  const memberStatus = useContext(MemberContext);
+
+  async function handleLike() {
+    if (memberStatus.isLoggedIn === 'false') {
+      push('/login');
+      return;
+    }
+
+    console.log('Liked');
+    setLiked(!liked);
+  }
 
   return (
     <div className="flex flex-col">
@@ -36,7 +55,7 @@ export default function Reaction({
         </button>
         <button
           className="py-2 flex gap-2 justify-center items-center grow"
-          onClick={() => setLiked(!liked)}
+          onClick={handleLike}
         >
           <HeartIcon
             className={`w-6 h-6 stroke-2 ${
