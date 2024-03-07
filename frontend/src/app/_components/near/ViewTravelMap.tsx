@@ -8,6 +8,7 @@ import { getNearPlaces } from './hooks/nearActions';
 import MapPagination from '../naver-map/MapPagination';
 import MapMarker from './MapMarker';
 import LoadingIndicator from '../LoadingIndicator';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 export default function ViewTravelMap() {
   const navermaps = useNavermaps();
@@ -137,6 +138,13 @@ export default function ViewTravelMap() {
           ))
         )}
       </NaverMap>
+      {markerClickedId > 0 && (
+        <ToastMsg
+          title="한번 더 클릭하면 장소 상세페이지로 이동합니다"
+          timer={2000}
+          id={markerClickedId}
+        />
+      )}
       {totalPages && (
         <MapPagination
           currentPage={currentPage}
