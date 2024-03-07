@@ -13,7 +13,6 @@ public interface FavorRepository extends JpaRepository<Favor, Long> {
 
     boolean existsByMemberIdAndTravelId(Long memberId, Long travelId);
 
-    Optional<Long> getFavorIdByMemberIdAndTravelId(Long memberId, Long travelId);
-
+    Optional<Favor> findFavorByMemberAndTravel(Member member, Travel travel);
 
 }
