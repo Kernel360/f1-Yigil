@@ -980,118 +980,32 @@ Content-Length: 191
 <h3 id="_지역별_장소_목록_더보기">지역별 장소 목록 더보기</h3>
 <div class="sect3">
 <h4 id="_request_6">Request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code></code></pre>
-</div>
-</div>
 <div class="paragraph">
-<p>로그인 필수: N</p>
+<p>Unresolved directive in place-api.adoc - include::/Users/stone_hee/Desktop/kernel/f1-Yigil/backend/yigil-api/build/generated-snippets/places/get-region-place-more/request-body.adoc[]
+로그인 필수: N</p>
 </div>
 <div class="sect4">
 <h5 id="_path_parameters_3">Path Parameters</h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. /api/v1/places/region/{regionId}/more</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">지역의 고유 아이디</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>Unresolved directive in place-api.adoc - include::/Users/stone_hee/Desktop/kernel/f1-Yigil/backend/yigil-api/build/generated-snippets/places/get-region-place-more/path-parameters.adoc[]</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_http_request_예시_6">HTTP Request 예시</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/places/region/1/more HTTP/1.1
-Host: spring.restdocs.test</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in place-api.adoc - include::/Users/stone_hee/Desktop/kernel/f1-Yigil/backend/yigil-api/build/generated-snippets/places/get-region-place-more/http-request.adoc[]</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_response_6">Response</h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">place의 정보</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">place의 고유 Id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].place_name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 장소명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].review_count</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰의 개수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].thumbnail_image_url</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 대표 이미지의 Url</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].rate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 평점 정보</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].bookmarked</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 장소의 북마크 여부</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>Unresolved directive in place-api.adoc - include::/Users/stone_hee/Desktop/kernel/f1-Yigil/backend/yigil-api/build/generated-snippets/places/get-region-place-more/response-fields.adoc[]</p>
+</div>
 <div class="sect4">
 <h5 id="_http_response_예시_6">HTTP Response 예시</h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 191
-
-{
-  "places" : [ {
-    "id" : 1,
-    "place_name" : "장소명",
-    "review_count" : "10",
-    "thumbnail_image_url" : "http://image.com",
-    "rate" : "3.5",
-    "bookmarked" : true
-  } ]
-}</code></pre>
-</div>
+<div class="paragraph">
+<p>Unresolved directive in place-api.adoc - include::/Users/stone_hee/Desktop/kernel/f1-Yigil/backend/yigil-api/build/generated-snippets/places/get-region-place-more/http-response.adoc[]</p>
 </div>
 </div>
 </div>
@@ -1237,7 +1151,7 @@ Content-Length: 147
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-06 12:14:34 +0900
+Last updated 2024-03-07 15:24:05 +0900
 </div>
 </div>
 </body>
