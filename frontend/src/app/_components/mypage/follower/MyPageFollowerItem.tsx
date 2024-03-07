@@ -1,19 +1,17 @@
 import { TMyPageFollow } from '@/types/myPageResponse';
-import React, { useState } from 'react';
+import React, { MutableRefObject, useState } from 'react';
 import Dialog from '../../ui/dialog/Dialog';
 import RoundProfile from '../../ui/profile/RoundProfile';
 import { addFollow, unFollow } from '../hooks/followActions';
 
-interface TMyPageFollowingItem extends TMyPageFollow {
+interface TMyPageFollowerItem extends TMyPageFollow {
   idx: number;
+  ref: MutableRefObject<HTMLDivElement | null>;
 }
-
-export default function MyPageFollowerItem({
-  idx,
-  member_id,
-  nickname,
-  profile_image_url,
-}: TMyPageFollowingItem) {
+const MyPageFollowerItem = React.forwardRef<
+  HTMLDivElement,
+  TMyPageFollowerItem
+>(({ member_id, nickname, profile_image_url }, ref) => {
   const [isFollowing, setIsFollowing] = useState(true);
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const onClickFollowingBtn = async () => {
@@ -31,9 +29,9 @@ export default function MyPageFollowerItem({
   const deleteFollwer = (memberId: number) => {
     // 삭제 로직
   };
+
   return (
-    <div className="flex justify-center items-center py-3">
-      {/* <div className="flex items-center"> */}
+    <div className="flex justify-center items-center py-10" ref={ref}>
       <RoundProfile img={profile_image_url} size={48} />
       <div className="ml-4 text-gray-900  overflow-hidden text-ellipsis whitespace-nowrap break-words">
         {nickname}
@@ -46,8 +44,6 @@ export default function MyPageFollowerItem({
       >
         {isFollowing ? '팔로잉' : '팔로우'}
       </button>
-      {/* </div> */}
-      {/* <div className="grow-[4]"></div> */}
       <button
         onClick={() => setIsDialogOpened(true)}
         className={`bg-gray-200 text-gray-500 rounded-md px-6 py-2 leading-5 shrink-0 ml-6`}
@@ -63,4 +59,6 @@ export default function MyPageFollowerItem({
       )}
     </div>
   );
-}
+});
+
+export default MyPageFollowerItem;

@@ -1,6 +1,7 @@
 'use client';
 import { TMyPageFollow } from '@/types/myPageResponse';
 import React, { useEffect, useRef, useState } from 'react';
+import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import Select from '../../ui/select/Select';
 import { getFollowerList } from '../hooks/followActions';
 import MyPageFollowerItem from './MyPageFollowerItem';
@@ -30,29 +31,56 @@ export default function MyPageFollowerList({
   const [hasNext, setHasNext] = useState(false);
   const [allFollowerList, setAllFollowerList] =
     useState<TMyPageFollow[]>(followerList);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   const onChangeSelectOption = (option: string | number) => {
     if (typeof option === 'number') return;
     setSelectOption(option);
     setCurrentPage(1);
   };
 
-  const getFollowingLists = async (
+  const getFollowerLists = async (
     pageNo: number,
     size: number,
     selectOption: string,
   ) => {
     const followerList = await getFollowerList(pageNo, size, selectOption);
+    console.log(followerList);
     if (!followerList.success) {
       setAllFollowerList([]);
       return;
     }
+
     setAllFollowerList(followerList.data.content);
     setHasNext(followerList.data.has_next);
   };
 
-  useEffect(() => {
-    getFollowingLists(currentPage, 5, selectOption);
+  // const ioCallback = (
+  //   entries: IntersectionObserverEntry,
+  //   io: IntersectionObserver,
+  // ) => {
+  //   entries.forEach((entry) => {
+  //     if (entry.isIntersecting) {
+  //       io.unobserve(entry.target);
+
+  //       setTimeout(() => {
+  //         addNewContent();
+
+  //         observeLastItem(io, document.querySelectorAll('.card'));
+  //       }, 2000);
+  //     }
+  //   });
+  // };
+
+  // const observeLastItem = (io, allFollwerList) => {
+  //   const lastItem = allFollwerList[allFollwerList.length - 1];
+  //   io.observe(lastItem);
+  // };
+
+  // const io = new IntersectionObserver(ioCallback, { threshold: 0.7 });
+  // observeLastItem(io, items);
+
+  출처: https: useEffect(() => {
+    getFollowerLists(currentPage, 5, selectOption);
   }, [currentPage, selectOption]);
   return (
     <div className="px-4">
@@ -66,7 +94,12 @@ export default function MyPageFollowerList({
       </div>
 
       {allFollowerList.map((follow, idx) => (
-        <MyPageFollowerItem key={follow.member_id} {...follow} idx={idx} />
+        <MyPageFollowerItem
+          ref={allFollowerList.length - 1 === idx ? ref : null}
+          key={follow.member_id}
+          {...follow}
+          idx={idx}
+        />
       ))}
     </div>
   );
