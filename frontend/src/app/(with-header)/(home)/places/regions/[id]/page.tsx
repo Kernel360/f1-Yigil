@@ -8,7 +8,7 @@ import { RegionPlaces } from '@/app/_components/place';
 export default async function RegionsPlacePage({
   params,
 }: {
-  params: { id: number };
+  params: { id: string };
 }) {
   const memberJson = await authenticateUser();
   const memberInfo = myInfoSchema.safeParse(memberJson);
@@ -40,9 +40,11 @@ export default async function RegionsPlacePage({
     );
   }
 
-  const currentRegion = regions.find((region) => region.id == params.id);
+  const regionId = Number.parseInt(params.id, 10);
 
-  const regionPlacesResult = await getRegionPlaces(params.id);
+  const currentRegion = regions.find((region) => region.id === regionId);
+
+  const regionPlacesResult = await getRegionPlaces(regionId);
 
   if (!regionPlacesResult.success) {
     return <main>Failed to get region places!</main>;
