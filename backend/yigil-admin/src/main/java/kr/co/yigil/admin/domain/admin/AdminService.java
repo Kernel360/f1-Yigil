@@ -23,4 +23,6 @@ public interface AdminService {
     void updatePassword(String email, AdminPasswordUpdateRequest command);
 
     Admin getAdmin(String username);
+
+    Long getAdminId();
 }

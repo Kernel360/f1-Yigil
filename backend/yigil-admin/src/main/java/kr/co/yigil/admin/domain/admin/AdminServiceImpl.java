@@ -13,10 +13,14 @@ import kr.co.yigil.auth.dto.JwtToken;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.domain.FileUploader;
 import kr.co.yigil.global.exception.AuthException;
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +90,19 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin getAdmin(String username) {
         return adminReader.getAdminByEmail(username);
+    }
+
+    @Override
+    public Long getAdminId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
+        if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+            String userEmail = userDetails.getUsername();
+            Admin admin = getAdmin(userEmail);
+            return admin.getId();
+        }
+
+        throw new BadRequestException(ExceptionCode.ADMIN_NOT_FOUND);
     }
 
     @Override
