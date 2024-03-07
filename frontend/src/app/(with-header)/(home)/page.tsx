@@ -69,10 +69,11 @@ export default async function HomePage({
       <main className="max-w-full flex flex-col gap-4 relative">
         <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
         <RegionPlaces
-          initialRegionPlaces={[]}
           regions={regions}
+          initialRegionPlaces={[]}
           isLoggedIn={memberInfo.success}
           variant="secondary"
+          carousel
         />
         <FloatingActionButton
           popOverData={homePopOverData}
@@ -96,10 +97,12 @@ export default async function HomePage({
     <main className="max-w-full flex flex-col gap-4 relative">
       <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
       <RegionPlaces
-        initialRegionPlaces={regionPlaces}
         regions={regions}
+        initialRegion={regions[0]}
+        initialRegionPlaces={regionPlaces}
         isLoggedIn={memberInfo.success}
         variant="secondary"
+        carousel
       />
       <FloatingActionButton
         popOverData={homePopOverData}

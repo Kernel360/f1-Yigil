@@ -1,11 +1,15 @@
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
-import { Place, RegionPlaces } from '@/app/_components/place';
 import { myInfoSchema } from '@/types/response';
-import { getInterestedRegions, getRegionPlaces } from '../../action';
+import { getInterestedRegions, getRegionPlaces } from '../../../action';
 import DummyPlace from '@/app/_components/place/dummy/DummyPlace';
 import Link from 'next/link';
+import { RegionPlaces } from '@/app/_components/place';
 
-export default async function RegionsPlacePage() {
+export default async function RegionsPlacePage({
+  params,
+}: {
+  params: { id: number };
+}) {
   const memberJson = await authenticateUser();
   const memberInfo = myInfoSchema.safeParse(memberJson);
 
@@ -36,7 +40,9 @@ export default async function RegionsPlacePage() {
     );
   }
 
-  const regionPlacesResult = await getRegionPlaces(regions[0].id);
+  const currentRegion = regions.find((region) => region.id == params.id);
+
+  const regionPlacesResult = await getRegionPlaces(params.id);
 
   if (!regionPlacesResult.success) {
     return <main>Failed to get region places!</main>;
@@ -46,16 +52,13 @@ export default async function RegionsPlacePage() {
 
   return (
     <main className="px-4 max-w-full flex flex-col">
-      <div className="flex flex-col gap-4 relative">
-        {places.map((place) => (
-          <Place
-            key={place.id}
-            order={place.id}
-            data={place}
-            isLoggedIn={memberInfo.success}
-          />
-        ))}
-      </div>
+      <RegionPlaces
+        regions={regions}
+        initialRegion={currentRegion || regions[0]}
+        initialRegionPlaces={places}
+        isLoggedIn={memberInfo.success}
+        more
+      />
     </main>
   );
 }
