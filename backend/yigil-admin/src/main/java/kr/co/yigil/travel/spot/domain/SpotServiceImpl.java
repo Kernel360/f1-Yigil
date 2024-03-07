@@ -3,8 +3,9 @@ package kr.co.yigil.travel.spot.domain;
 import kr.co.yigil.comment.domain.CommentReader;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotDetailInfo;
-import kr.co.yigil.travel.spot.domain.SpotInfoDto.AdminSpotList;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.SpotDetailInfo;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.SpotListUnit;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto.SpotPageInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,17 +23,17 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional(readOnly = true)
-    public AdminSpotList getSpots(Pageable pageable) {
+    public SpotPageInfo getSpots(Pageable pageable) {
         var pageSpots = spotReader.getSpots(pageable);
 
         var spotList = pageSpots.getContent().stream().map(
             spot -> {
                 var spotAdditionalInfo = getAdditionalInfo(spot.getId());
-                return new SpotInfoDto.SpotList(spot, spotAdditionalInfo);
+                return new SpotListUnit(spot, spotAdditionalInfo);
             }
         ).toList();
 
-        return new AdminSpotList(spotList, pageSpots.getPageable(), pageSpots.getTotalElements());
+        return new SpotPageInfo(spotList, pageSpots.getPageable(), pageSpots.getTotalElements());
     }
 
     private SpotInfoDto.SpotAdditionalInfo getAdditionalInfo(Long id) {
@@ -43,10 +44,10 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional(readOnly = true)
-    public AdminSpotDetailInfo getSpot(Long spotId) {
+    public SpotDetailInfo getSpot(Long spotId) {
         Spot spot = spotReader.getSpot(spotId);
         var spotAdditionalInfo = getAdditionalInfo(spotId);
-        return new AdminSpotDetailInfo(spot, spotAdditionalInfo);
+        return new SpotDetailInfo(spot, spotAdditionalInfo);
 
     }
 

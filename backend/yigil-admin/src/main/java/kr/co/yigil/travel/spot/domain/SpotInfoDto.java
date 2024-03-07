@@ -5,7 +5,6 @@ import java.util.List;
 import kr.co.yigil.travel.domain.Spot;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -13,28 +12,26 @@ import org.springframework.data.domain.Pageable;
 public class SpotInfoDto {
 
     @Data
-    @NoArgsConstructor
-    public static class AdminSpotList {
+    public static class SpotPageInfo {
 
-        private Page<SpotList> spots;
+        private final Page<SpotListUnit> spots;
 
-        public AdminSpotList(List<SpotList> spots, Pageable pageable, long totalElements) {
+        public SpotPageInfo(List<SpotListUnit> spots, Pageable pageable, long totalElements) {
             this.spots = new PageImpl<>(spots, pageable, totalElements);
         }
     }
 
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
-    public static class SpotList {
+    public static class SpotListUnit {
 
-        private Long spotId;
-        private String title;
-        private LocalDateTime createdAt;
-        private int favorCount;
-        private int commentCount;
+        private final Long spotId;
+        private final String title;
+        private final LocalDateTime createdAt;
+        private final int favorCount;
+        private final int commentCount;
 
-        public SpotList(Spot spot, SpotAdditionalInfo additionalInfo) {
+        public SpotListUnit(Spot spot, SpotAdditionalInfo additionalInfo) {
             this.spotId = spot.getId();
             this.title = spot.getTitle();
             this.favorCount = additionalInfo.getFavorCount();
@@ -44,38 +41,35 @@ public class SpotInfoDto {
     }
 
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
-    public static class AdminSpotDetailInfo {
+    public static class SpotDetailInfo {
 
-        private Long spotId;
-        private String title;
-        private String content;
-        private String placeName;
+        private final Long spotId;
+        private final String title;
+        private final String content;
+        private final String placeName;
+        private final String mapStaticImageUrl;
+        private final double rate;
+        private final int favorCount;
+        private final int commentCount;
+        private final List<String> imageUrls;
+        private final Long writerId;
+        private final String writerName;
+        private final LocalDateTime createdAt;
 
-        private String mapStaticImageUrl;
-        private double rate;
-        private int favorCount;
-        private int commentCount;
-        private List<String> imageUrls;
-
-        private Long writerId;
-        private String writerName;
-        private LocalDateTime createdAt;
-
-        public AdminSpotDetailInfo(Spot spot, SpotAdditionalInfo additionalInfo) {
+        public SpotDetailInfo(Spot spot, SpotAdditionalInfo additionalInfo) {
             this.spotId = spot.getId();
             this.title = spot.getTitle();
             this.content = spot.getDescription();
             this.placeName = spot.getPlace().getName();
             this.mapStaticImageUrl = spot.getPlace().getMapStaticImageFileUrl();
             this.rate = spot.getRate();
-            this.favorCount = additionalInfo.getFavorCount();
-            this.commentCount = additionalInfo.getCommentCount();
             this.imageUrls = spot.getAttachFiles().getUrls();
             this.writerId = spot.getMember().getId();
             this.writerName = spot.getMember().getNickname();
             this.createdAt = spot.getCreatedAt();
+            this.favorCount = additionalInfo.getFavorCount();
+            this.commentCount = additionalInfo.getCommentCount();
         }
     }
 
