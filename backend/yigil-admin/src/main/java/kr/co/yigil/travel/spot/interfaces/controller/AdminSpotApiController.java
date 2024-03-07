@@ -30,7 +30,7 @@ public class AdminSpotApiController {
     @GetMapping
     public ResponseEntity<AdminSpotDto.AdminSpotsResponse> getSpots(
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
@@ -55,6 +55,4 @@ public class AdminSpotApiController {
         adminSpotFacade.deleteSpot(spotId);
         return ResponseEntity.ok().body(new AdminSpotDto.AdminSpotDeleteResponse("삭제 성공"));
     }
-
-
 }
