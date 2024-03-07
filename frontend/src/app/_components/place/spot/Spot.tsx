@@ -11,7 +11,13 @@ import StarIcon from '/public/icons/star.svg';
 import type { TSpot } from '@/types/response';
 import Reaction from '../../reaction/Reaction';
 
-export default function Spot({ data }: { placeId: number; data: TSpot }) {
+export default function Spot({
+  placeId,
+  data,
+}: {
+  placeId: number;
+  data: TSpot;
+}) {
   const {
     id,
     image_url_list,
@@ -53,7 +59,7 @@ export default function Spot({ data }: { placeId: number; data: TSpot }) {
         </span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{description}</div>
       </div>
-      <Reaction travelId={id} initialLiked={liked} />
+      <Reaction placeId={placeId} travelId={id} liked={liked} />
     </article>
   );
 }

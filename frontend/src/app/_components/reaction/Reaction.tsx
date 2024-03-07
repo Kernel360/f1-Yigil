@@ -1,28 +1,30 @@
 'use client';
 
 import { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { MemberContext } from '@/context/MemberContext';
+import Comments from './Comments';
+import { postResponseSchema } from '@/types/response';
+import { postLike } from '../place/spot/action';
 
 import CommentIcon from '/public/icons/comment.svg';
 import HeartIcon from '/public/icons/heart.svg';
-import Comments from './Comments';
-import { useRouter } from 'next/navigation';
-import { toggleLike } from '../place/spot/action';
 
 /**
  * @todo 좋아요 애니메이션
  */
 export default function Reaction({
+  placeId,
   travelId,
-  initialLiked,
+  liked,
 }: {
+  placeId: number;
   travelId: number;
-  initialLiked: boolean;
+  liked: boolean;
 }) {
   const { push } = useRouter();
 
-  const [liked, setLiked] = useState(initialLiked);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +37,10 @@ export default function Reaction({
     }
 
     setIsLoading(true);
-    const result = await toggleLike(travelId, liked);
+
+    const json = JSON.parse(await postLike(placeId, travelId, liked));
+
+    const result = postResponseSchema.safeParse(json);
 
     if (!result.success) {
       console.log(result.error.message);
@@ -43,8 +48,6 @@ export default function Reaction({
       return;
     }
 
-    console.log('Liked');
-    setLiked(!liked);
     setIsLoading(false);
   }
 

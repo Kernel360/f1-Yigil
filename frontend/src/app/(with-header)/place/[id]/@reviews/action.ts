@@ -1,6 +1,7 @@
+import { z } from 'zod';
+
 import { getBaseUrl } from '@/app/utilActions';
 import { spotSchema } from '@/types/response';
-import { z } from 'zod';
 
 const spotsResponseSchema = z.object({
   spots: z.array(spotSchema),
@@ -22,8 +23,11 @@ async function fetchSpots(
     .join('&');
 
   const response = await fetch(`${endpoint}?${queryParams}`, {
-    next: { tags: ['spots'] },
+    next: { tags: [`spots/${placeId}`] },
+    cache: 'no-store',
   });
+
+  console.log(`fetchSpot action: spots/${placeId}`);
 
   return await response.json();
 }
@@ -36,6 +40,10 @@ export async function getSpots(
   sortOrder: 'desc' | 'asc' = 'desc',
 ) {
   const json = await fetchSpots(placeId, page, size, sortBy, sortOrder);
+
+  // for debug
+  console.log(Date.now());
+  console.log(json.spots[0].liked);
 
   const result = spotsResponseSchema.safeParse(json);
 
