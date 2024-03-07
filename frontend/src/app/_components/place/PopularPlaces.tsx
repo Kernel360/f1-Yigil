@@ -18,7 +18,7 @@ export default function PopularPlaces({
         <span className="pl-4 text-3xl font-medium">인기</span>
         <Link href="places/popular">더보기</Link>
       </div>
-      <Places data={data} isLoggedIn={isLoggedIn} variant="primary" />
+      <Places data={data} isLoggedIn={isLoggedIn} variant="primary" carousel />
     </section>
   );
 }
