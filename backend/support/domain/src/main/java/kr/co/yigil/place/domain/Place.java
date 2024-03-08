@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
@@ -35,7 +36,9 @@ public class Place {
 
     private String address;
 
-    @Column(columnDefinition = "double default 0")
+    private LocalDateTime latestUploadedTime;
+
+    @Column(columnDefinition = "double precision default 0")
     private double rate;
 
     @Column(columnDefinition = "geometry(Point,4326)")
@@ -54,17 +57,18 @@ public class Place {
     private Region region;
 
     public Place(final String name, final String address, final double rate,
-        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
+        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile, final LocalDateTime latestUploadedTime) {
         this.name = name;
         this.address = address;
         this.rate = rate;
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
+        this.latestUploadedTime = latestUploadedTime;
     }
 
     public Place(Long id, final String name, final String address, final double rate,
-        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
+        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile, final LocalDateTime latestUploadedTime) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -72,6 +76,7 @@ public class Place {
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
+        this.latestUploadedTime = latestUploadedTime;
     }
 
     public String getImageFileUrl() {
@@ -84,5 +89,9 @@ public class Place {
 
     public void updateRegion(Region region) {
         this.region = region;
+    }
+
+    public void updateLatestUploadedTime(LocalDateTime latestUploadedTime) {
+        this.latestUploadedTime = latestUploadedTime;
     }
 }

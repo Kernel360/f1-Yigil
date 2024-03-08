@@ -24,6 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceFacadeTest {
@@ -177,5 +179,22 @@ public class PlaceFacadeTest {
 
         assertEquals(result, List.of(mockResponse));
         verify(placeService).getPlaceKeywords(keyword);
+    }
+
+    @DisplayName("searchPlace 메서드가 Response를 잘 반환하는지")
+    @Test
+    void searchPlace_ShouldReturnResponse() {
+        String keyword = "키워드";
+        Pageable pageable = mock(Pageable.class);
+        Accessor accessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+        Slice<Main> mockSlice = mock(Slice.class);
+
+        when(placeService.searchPlace(keyword, pageable, accessor)).thenReturn(mockSlice);
+
+        var result = placeFacade.searchPlace(keyword, pageable, accessor);
+
+        assertEquals(result, mockSlice);
+        verify(placeService).searchPlace(keyword, pageable, accessor);
     }
 }

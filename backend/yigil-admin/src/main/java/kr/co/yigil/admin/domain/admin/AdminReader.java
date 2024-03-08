@@ -7,4 +7,6 @@ public interface AdminReader {
     boolean existsByEmailOrNickname(String email, String nickname);
 
     Admin getAdminByEmail(String email);
+
+    Admin getAdmin(Long adminId);
 }

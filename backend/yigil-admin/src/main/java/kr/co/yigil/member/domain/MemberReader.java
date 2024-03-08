@@ -1,10 +1,20 @@
 package kr.co.yigil.member.domain;
 
+import java.util.Optional;
 import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MemberReader {
+
+    Member getMember(Long memberId);
+
+    Optional<Member> findMemberBySocialLoginIdAndSocialLoginType(String socialLoginId, SocialLoginType socialLoginType);
+
+    Optional<Member> findMemberByEmailAndSocialLoginType(String email, SocialLoginType socialLoginType);
+
+    void validateMember(Long memberId);
 
     Member getMemberRegardlessOfStatus(Long memberId);
 

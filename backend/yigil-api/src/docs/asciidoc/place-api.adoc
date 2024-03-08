@@ -167,3 +167,22 @@ include::{snippets}/places/get-place-keyword/response-fields.adoc[]
 
 ===== HTTP Response 예시
 include::{snippets}/places/get-place-keyword/http-response.adoc[]
+
+=== 장소 검색
+
+==== Request
+include::{snippets}/places/search-place/request-body.adoc[]
+로그인 필수: N
+
+==== Query Parameters
+include::{snippets}/places/search-place/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/places/search-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/places/search-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/places/search-place/http-response.adoc[]
+
