@@ -17,7 +17,7 @@ spring:
 
 logging:
   level:
-    root: info
+    root: DEBUG
   slack:
     webhook-uri: https://hooks.slack.com/services/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
 
