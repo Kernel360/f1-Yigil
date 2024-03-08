@@ -134,3 +134,21 @@ include::{snippets}/courses/get-my-course-list/response-fields.adoc[]
 
 ===== HTTP Response 예시
 include::{snippets}/courses/get-my-course-list/http-response.adoc[]
+
+=== 장소명으로 코스 검색
+
+==== Request
+include::{snippets}/courses/search-course-by-place-name/request-body.adoc[]
+로그인 필수 : N
+
+===== Query Parameter
+include::{snippets}/courses/search-course-by-place-name/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/search-course-by-place-name/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/search-course-by-place-name/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/search-course-by-place-name/http-response.adoc[]
