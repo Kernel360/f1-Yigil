@@ -497,9 +497,19 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_region_ids</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역 ID 리스트</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>following_count</code></p></td>
@@ -519,14 +529,20 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 240
+Content-Length: 314
 
 {
   "member_id" : 1,
   "email" : "test@yigil.co.kr",
   "nickname" : "test user",
   "profile_image_url" : "https://cdn.igil.co.kr/images/profile.jpg",
-  "favorite_region_ids" : [ 1, 2, 3 ],
+  "favorite_regions" : [ {
+    "id" : 1,
+    "name" : "서울"
+  }, {
+    "id" : 2,
+    "name" : "경기"
+  } ],
   "following_count" : 20,
   "follower_count" : 10
 }</code></pre>
@@ -737,9 +753,19 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_region_ids</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역 ID 리스트</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>following_count</code></p></td>
@@ -759,14 +785,20 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 241
+Content-Length: 315
 
 {
   "member_id" : 1,
   "email" : "test@yigil.co.kr",
   "nickname" : "test user",
   "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
-  "favorite_region_ids" : [ 1, 2, 3 ],
+  "favorite_regions" : [ {
+    "id" : 1,
+    "name" : "서울"
+  }, {
+    "id" : 2,
+    "name" : "경기"
+  } ],
   "following_count" : 20,
   "follower_count" : 10
 }</code></pre>
@@ -782,7 +814,7 @@ Content-Length: 241
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-07 15:24:05 +0900
+Last updated 2024-02-28 15:21:27 +0900
 </div>
 </div>
 </body>
