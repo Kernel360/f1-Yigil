@@ -44,7 +44,7 @@ public class CourseApiController {
     public ResponseEntity<CoursesInPlaceResponse> getCoursesInPlace(
         @PathVariable("placeId") Long placeId,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
@@ -117,7 +117,7 @@ public class CourseApiController {
     public ResponseEntity<MyCoursesResponse> getMyCourseList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder,
         @RequestParam(name = "selected", defaultValue = "all", required = false) Selected visibility
     ) {

@@ -89,7 +89,7 @@ public class CourseApiControllerTest {
         mockMvc.perform(get("/api/v1/courses/place/{placeId}", 1L)
                 .param("page", "1")
                 .param("size", "5")
-                .param("sortBy", "createdAt")
+                .param("sortBy", "created_at")
                 .param("sortOrder", "desc"))
             .andExpect(status().isOk())
             .andDo(document(
@@ -360,7 +360,7 @@ public class CourseApiControllerTest {
         mockMvc.perform(get("/api/v1/courses/my")
                 .param("page", "1")
                 .param("size", "5")
-                .param("sortBy", "createdAt")
+                .param("sortBy", "created_at")
                 .param("sortOrder", "desc")
                 .param("selected", "public")
             )
