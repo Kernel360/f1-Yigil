@@ -105,20 +105,28 @@ jobs:
         docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }} . --platform=linux/amd64
     - name: Docker image build
       run : |
-        cd yigil-api
+        cd support
         docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd place-region-batch
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.PLACE_REGION_BATCH }} . --platform=linux/amd64
     - name: Docker image push
       run : |
         cd yigil-api
         docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK }}
     - name: Docker image push
       run : |
-        cd yigil-api
+        cd yigil-admin
         docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK }}
     - name: Docker image push
       run : |
-        cd yigil-api
+        cd support
         docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT }}
+    - name: Docker image push
+      run : |
+        cd place-region-batch
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.PLACE_REGION_BATCH }}
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run
       uses: appleboy/ssh-action@v0.1.6

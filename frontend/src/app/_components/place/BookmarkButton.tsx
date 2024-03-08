@@ -6,21 +6,26 @@ import { useRouter } from 'next/navigation';
 import BookmarkIcon from '/public/icons/bookmark.svg';
 
 import type { EventFor } from '@/types/type';
+import { postBookmark } from './action';
+import { postSpotResponseSchema } from '@/types/response';
 
 export default function BookmarkButton({
   className,
+  placeId,
   bookmarked,
   isLoggedIn,
 }: {
   className?: string;
+  placeId: number;
   bookmarked: boolean;
   isLoggedIn: boolean;
 }) {
   const { push } = useRouter();
 
   const [placeBookmarked, setPlaceBookmarked] = useState(bookmarked);
+  const [isLoading, setIsLoading] = useState(false);
 
-  function handleClick(event: EventFor<'button', 'onClick'>) {
+  async function handleClick(event: EventFor<'button', 'onClick'>) {
     event.stopPropagation();
 
     if (!isLoggedIn) {
@@ -28,14 +33,27 @@ export default function BookmarkButton({
       return;
     }
 
-    console.log('onClick');
+    setIsLoading(true);
+
+    const json = await postBookmark(placeId, placeBookmarked);
+
+    const result = postSpotResponseSchema.safeParse(json);
+
+    if (!result.success) {
+      console.log(result.error.message);
+      // 오류 UI 작성(Toast?)
+      setIsLoading(false);
+    }
+
     setPlaceBookmarked(!placeBookmarked);
+    setIsLoading(false);
   }
 
   return (
     <button
       className={`${className} p-1 border-0 bg-transparent`}
       onClick={handleClick}
+      disabled={isLoading}
     >
       <BookmarkIcon
         className={`w-12 h-12 stroke-white stroke-[3px] ${

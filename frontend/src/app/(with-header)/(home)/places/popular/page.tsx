@@ -1,13 +1,13 @@
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
-import { getMorePopularPlaces } from '../../action';
+import { getPopularPlaces } from '../../action';
 import { Place } from '@/app/_components/place';
 
 export default async function PopularPlacesPage() {
   const memberJson = await authenticateUser();
   const memberInfo = myInfoSchema.safeParse(memberJson);
 
-  const result = await getMorePopularPlaces();
+  const result = await getPopularPlaces('more');
 
   if (!result.success) {
     console.log(result);
