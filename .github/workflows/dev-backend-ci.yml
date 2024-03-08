@@ -79,6 +79,13 @@ jobs:
         sed -i "s|@MAIL_PORT@|${{ secrets.MAIL_PORT }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
+    - name: Set admin application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@PLACE_REGION_BATCH_PORT@|${{ secrets.PLACE_REGION_BATCH_PORT }}|g" ./place-region-batch/src/main/resources/application.yml
     # cat ./yigil-admin/src/main/resources/*
 
 
