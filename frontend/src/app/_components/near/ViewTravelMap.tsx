@@ -1,6 +1,13 @@
 'use client';
 import { TMapPlace } from '@/types/response';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  MutableRefObject,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { NaverMap, useNavermaps } from 'react-naver-maps';
 import CustomControl from '../naver-map/CustomControl';
 import { useGeolocation } from '../naver-map/hooks/useGeolocation';
@@ -57,7 +64,7 @@ export default function ViewTravelMap() {
       const { x: minX, y: minY } = mapRef.current.getBounds().getMin();
       setMaxMinBounds({ ...maxMinBounds, maxX, maxY, minX, minY });
     }
-  }, []);
+  }, [maxMinBounds]);
 
   const onChangedMap = () => {
     if (!mapRef.current) return;
@@ -68,16 +75,7 @@ export default function ViewTravelMap() {
     setCenter({ lat, lng });
   };
 
-  let timer: ReturnType<typeof setTimeout>;
-  useEffect(() => {
-    timer = setTimeout(() => {
-      setIsLoading(true);
-      getPlaces();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [center, currentPage, maxMinBounds]);
-
-  const getPlaces = async () => {
+  const getPlaces = useCallback(async () => {
     try {
       const placeList = await getNearPlaces(maxMinBounds, currentPage);
       if (!placeList.success) {
@@ -91,7 +89,20 @@ export default function ViewTravelMap() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, maxMinBounds]);
+
+  const timer = useRef<null | NodeJS.Timeout>(null);
+  useEffect(() => {
+    if (!timer.current) return;
+    timer.current = setTimeout(() => {
+      setIsLoading(true);
+      getPlaces();
+    }, 500);
+
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, [getPlaces]);
 
   return (
     <>

@@ -24,7 +24,7 @@ export const useGeolocation = (
       });
       setIsGelocationLoading(false);
     },
-    [navermaps.LatLng],
+    [navermaps.LatLng, mapRef, setCenter, setIsGelocationLoading],
   );
 
   const onErrorGeolocation = useCallback(() => {
@@ -38,6 +38,6 @@ export const useGeolocation = (
       setCenter({ lat: 37.5452605, lng: 127.0526252 });
     }
     setIsGelocationLoading(false);
-  }, [onSuccessGeolocation]);
+  }, [onSuccessGeolocation, mapRef, setCenter, setIsGelocationLoading]);
   return { onSuccessGeolocation, onErrorGeolocation };
 };

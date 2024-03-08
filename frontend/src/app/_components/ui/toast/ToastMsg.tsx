@@ -19,7 +19,7 @@ export default function ToastMsg({ title, description, timer, id }: TToast) {
     return () => {
       clearTimeout(timerFunc);
     };
-  }, [id]);
+  }, [id, timer]);
 
   return (
     <Toast.Provider swipeDirection="right">

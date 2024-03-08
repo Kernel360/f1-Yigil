@@ -33,10 +33,12 @@ export default function AddSpotMap({
     lat: 37.5135869,
     lng: 127.0621708,
   });
+  const [isGeolocationLoading, setIsGeolocationLoading] = useState(false);
 
   const { onSuccessGeolocation, onErrorGeolocation } = useGeolocation(
     mapRef,
     setCenter,
+    setIsGeolocationLoading,
   );
 
   useEffect(() => {
