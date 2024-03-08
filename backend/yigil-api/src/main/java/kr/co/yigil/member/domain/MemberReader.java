@@ -13,4 +13,6 @@ public interface MemberReader {
     Optional<Member> findMemberByEmailAndSocialLoginType(String email, SocialLoginType socialLoginType);
 
     void validateMember(Long memberId);
+
+	boolean existsByNickname(String nickname);
 }

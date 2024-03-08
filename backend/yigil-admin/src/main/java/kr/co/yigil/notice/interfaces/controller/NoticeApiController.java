@@ -1,5 +1,19 @@
 package kr.co.yigil.notice.interfaces.controller;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import kr.co.yigil.global.SortBy;
 import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.notice.application.NoticeFacade;
@@ -12,20 +26,6 @@ import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateRequest;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateResponse;
 import kr.co.yigil.notice.interfaces.dto.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,10 +41,8 @@ public class NoticeApiController {
         @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ){
-        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
-            pageable.getPageSize(),
-            Sort.by(direction, sortBy.getValue()));
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(
+            Sort.Direction.fromString(sortOrder.getValue()), sortBy.getValue()));
         var notice = noticeFacade.getNoticeList(pageRequest);
         var response = noticeMapper.toDto(notice);
         return ResponseEntity.ok().body(response);
@@ -59,7 +57,7 @@ public class NoticeApiController {
         return ResponseEntity.ok().body(new NoticeCreateResponse("공지사항 등록 완료"));
     }
 
-    @PostMapping("/{noticeId}")
+    @GetMapping("/{noticeId}")
     public ResponseEntity<NoticeDetailResponse> readNotice(
         @PathVariable("noticeId") Long noticeId
     ){
@@ -68,10 +66,10 @@ public class NoticeApiController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/{noticeId}/update")
+    @PostMapping("/{noticeId}")
     public ResponseEntity<NoticeUpdateResponse> updateNotice(
         @PathVariable("noticeId") Long noticeId,
-        @ModelAttribute NoticeUpdateRequest request
+        @RequestBody NoticeUpdateRequest request
     ){
         // 관리자 권한 필요
         var noticeCommand = noticeMapper.toCommand(request);

@@ -11,4 +11,5 @@ public interface MemberService {
 
     void updateMemberInfo(Long memberId, MemberCommand.MemberUpdateRequest request);
 
+	MemberInfo.NicknameCheckInfo nicknameDuplicateCheck(String nickname);
 }

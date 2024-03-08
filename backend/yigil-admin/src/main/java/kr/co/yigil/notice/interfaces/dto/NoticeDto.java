@@ -47,6 +47,8 @@ public class NoticeDto {
         private String title;
         private Long authorId;
         private String author;
+        private String authorEmail;
+        private String authorProfileImageUrl;
         private LocalDateTime createdAt;
     }
 
