@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import localFont from 'next/font/local';
 
 import MSWComponent from '@/app/_components/MSWComponent';

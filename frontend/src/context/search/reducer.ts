@@ -164,7 +164,34 @@ export function searchReducer(
     }
 
     case 'MORE_PLACE': {
-      // 추가
+      const json = action.payload.json;
+      const page = action.payload.nextPage;
+
+      const searchPlaceResult = searchPlaceData.safeParse(json);
+      const nextPageResult = pageSchema.safeParse(page);
+
+      if (searchPlaceResult.success && nextPageResult.success) {
+        const { places, has_next } = searchPlaceResult.data;
+
+        if (
+          state.result.status === 'backend' &&
+          state.result.data.type === 'place'
+        ) {
+          return {
+            ...state,
+            result: {
+              status: 'backend',
+              data: {
+                type: 'place',
+                currentPage: nextPageResult.data,
+                content: [...state.result.data.content, ...places],
+                hasNext: has_next,
+              },
+            },
+          };
+        }
+      }
+
       return { ...state };
     }
 

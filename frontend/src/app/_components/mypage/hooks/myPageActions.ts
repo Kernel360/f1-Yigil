@@ -23,7 +23,7 @@ export const getMyPageSpots = async (
   const spotList = await myPageSpotRequest(
     `?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'
-        ? `createdAt&sortOrder=${sortOrder}`
+        ? `created_at&sortOrder=${sortOrder}`
         : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();
@@ -48,7 +48,7 @@ export const getMyPageCourses = async (
   const courseList = await myPageCourseRequest(
     `?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'
-        ? `createdAt&sortOrder=${sortOrder}`
+        ? `created_at&sortOrder=${sortOrder}`
         : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();

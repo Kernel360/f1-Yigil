@@ -6,6 +6,7 @@ import { SearchContext } from '@/context/search/SearchContext';
 import BaseSearchHistory from './BaseSearchHistory';
 import TravelSearchResult from './TravelSearchResult';
 import LoadingIndicator from '../LoadingIndicator';
+import KeywordSuggestion from './KeywordSuggestion';
 
 export default function BaseSearchContent() {
   const { state } = useContext(SearchContext);
@@ -24,7 +25,7 @@ export default function BaseSearchContent() {
       );
     }
 
-    return <>추천 검색어</>;
+    return <KeywordSuggestion />;
   }
 
   if (result.status === 'searchEngine') {

@@ -38,7 +38,7 @@ export default function SearchHistory({
             key={item}
             item={item}
             href="#"
-            deleteResult={deleteHistory}
+            // deleteResult={deleteHistory}
             erasable
           />
         ))}

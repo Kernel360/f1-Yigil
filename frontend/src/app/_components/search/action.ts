@@ -1,14 +1,8 @@
 'use server';
 
-import { getBaseUrl } from '@/app/utilActions';
-import {
-  TPlace,
-  dataWithAddressSchema,
-  fetchableSchema,
-  placeSchema,
-  searchItemsSchema,
-} from '@/types/response';
 import { cookies } from 'next/headers';
+import { getBaseUrl } from '@/app/utilActions';
+import { dataWithAddressSchema, searchItemsSchema } from '@/types/response';
 
 function searchUrl(keyword: string) {
   const endpoint = 'https://openapi.naver.com/v1/search/local.json';
@@ -111,6 +105,19 @@ export async function searchPlaces(
     },
     next: { tags: [`search/places/${keyword}`] },
   });
+
+  return await response.json();
+}
+
+export async function keywordSuggestions(keyword: string) {
+  const BASE_URL = await getBaseUrl();
+
+  const response = await fetch(
+    `${BASE_URL}/v1/places/keyword?keyword=${keyword}`,
+    {
+      next: { tags: [`keywords/${keyword}`] },
+    },
+  );
 
   return await response.json();
 }

@@ -10,6 +10,8 @@ export default function NaverContext({
   children: ReactNode;
   ncpClientId: string;
 }) {
+  console.log(ncpClientId);
+
   return (
     <NavermapsProvider ncpClientId={ncpClientId} submodules={['geocoder']}>
       {children}

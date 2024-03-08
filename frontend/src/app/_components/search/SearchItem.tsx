@@ -14,8 +14,6 @@ export default function SearchItem({
   erasable,
 }: {
   item: string;
-  href: string;
-
   erasable?: boolean;
 }) {
   const { dispatch } = useContext(SearchContext);
@@ -34,7 +32,7 @@ export default function SearchItem({
     <div className="flex justify-between">
       <button className="flex gap-1 items-center grow" onClick={handleClick}>
         <SearchIcon className="w-6 h-6 mr-4" />
-        {item}
+        <span className="text-xl font-light">{item}</span>
       </button>
       {erasable && (
         <button

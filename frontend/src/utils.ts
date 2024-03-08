@@ -36,28 +36,6 @@ export function coordsToGeoJSONPoint(coords: { lat: number; lng: number }) {
   });
 }
 
-export function debounce<TArgs = unknown, TReturn = void>(
-  fn: (args: TArgs) => TReturn,
-  ms: number = 300,
-) {
-  let timer: ReturnType<typeof setTimeout>;
-
-  const debouncedFunction = (args: TArgs): Promise<TReturn> =>
-    new Promise((resolve) => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      timer = setTimeout(() => {
-        resolve(fn(args));
-      }, ms);
-    });
-
-  const teardown = () => clearTimeout(timer);
-
-  return [debouncedFunction, teardown];
-}
-
 export function parseSearchHistory(historyStr: string | null) {
   const historiesSchema = z.array(z.string());
 

@@ -51,7 +51,6 @@ export default function StepNavigation({
     const result = await postSpotData(state);
 
     if (result.success) {
-      console.log(result.data);
       setIsOpen(false);
       next();
       return;

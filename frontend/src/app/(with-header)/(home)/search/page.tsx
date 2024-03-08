@@ -1,9 +1,11 @@
-import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
+import MemberProvider from '@/context/MemberContext';
+import SearchProvider from '@/context/search/SearchContext';
 import BaseSearchBar from '@/app/_components/search/BaseSearchBar';
 import BaseSearchContent from '@/app/_components/search/BaseSearchContent';
-import MemberProvider, { TMemberStatus } from '@/context/MemberContext';
-import SearchProvider from '@/context/search/SearchContext';
+import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
+
+import type { TMemberStatus } from '@/context/MemberContext';
 
 export default async function SearchPage({
   searchParams,
@@ -22,7 +24,7 @@ export default async function SearchPage({
       <MemberProvider status={memberStatus}>
         <SearchProvider showHistory initialKeyword={searchParams.keyword}>
           <BaseSearchBar cancellable />
-          <hr className="pt-4 " />
+          <hr className="my-4" />
           <BaseSearchContent />
         </SearchProvider>
       </MemberProvider>
