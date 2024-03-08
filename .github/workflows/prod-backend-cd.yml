@@ -6,7 +6,8 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 name: Java CD with Gradle
 on:
-  push:
+  pull_request:
+    types: [ "closed" ]
     branches: [ "main" ]
 permissions:
   contents: read
@@ -17,6 +18,9 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(join(github.event.pull_request.labels.*.name, ','), '💻Frontend')
     steps:
     ## jdk setting
     - uses: actions/checkout@v3
