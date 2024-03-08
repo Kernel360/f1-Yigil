@@ -17,6 +17,7 @@ export default function PlaceDetail({
   isLoggedIn: boolean;
 }) {
   const {
+    id,
     place_name,
     address,
     bookmarked,
@@ -35,11 +36,12 @@ export default function PlaceDetail({
           alt={`${place_name} 대표 이미지`}
           fill
         />
-        {/* <BookmarkButton
+        <BookmarkButton
           className="absolute top-4 right-4"
+          placeId={id}
           bookmarked={bookmarked}
           isLoggedIn={isLoggedIn}
-        /> */}
+        />
       </div>
       <div className="px-4 py-2 flex flex-col gap-2">
         <h1 className="text-2xl font-semibold select-all">{place_name}</h1>

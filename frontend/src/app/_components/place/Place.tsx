@@ -55,6 +55,7 @@ export default function Place({
         </Link>
         <BookmarkButton
           className="absolute top-4 right-4"
+          placeId={id}
           bookmarked={bookmarked}
           isLoggedIn={isLoggedIn}
         />
