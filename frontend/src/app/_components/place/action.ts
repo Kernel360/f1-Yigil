@@ -27,7 +27,7 @@ export async function postBookmark(placeId: number, bookmarked: boolean) {
 
   if (response.ok) {
     // revalidateTag(`placeDetail`);
-    revalidatePath('/(with-header)/place/[id]');
+    revalidatePath('/(with-header)/place/[id]', 'page');
   }
 
   return await response.json();

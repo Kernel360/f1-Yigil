@@ -11,18 +11,12 @@ async function fetchPlaceDetail(id: number) {
 
   const response = await fetch(`${BASE_URL}/v1/places/${id}`, {
     headers: {
-      Cookies: `SESSION=${session}`,
+      Cookie: `SESSION=${session}`,
     },
     next: { tags: [`placeDetail`] },
   });
 
-  console.log({ header: response.headers });
-
-  const json = await response.json();
-
-  console.log(json);
-
-  return json;
+  return await response.json();
 }
 
 async function fetchMySpotForPlace(id: number) {
