@@ -13,7 +13,5 @@ public interface CommentReader {
 
     int getChildrenCount(Long parentId);
 
-    void deleteComment(Comment comment);
-
     Comment getComment(Long commentId);
 }

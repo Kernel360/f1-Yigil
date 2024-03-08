@@ -9,13 +9,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
     private final CommentReader commentReader;
+    private final CommentStore commentStore;
     @Override
+    @Transactional(readOnly = true)
     public ParentPageComments getParentComments(Long travelId, PageRequest pageRequest) {
         Page<Comment> comments = commentReader.getParentComments(travelId, pageRequest);
         List<ParentListInfo> parentListInfos = comments.getContent().stream().map(
@@ -29,6 +32,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ChildrenPageComments getChildrenComments(Long travelId, PageRequest pageRequest) {
         Page<Comment> comments = commentReader.getChildrenComments(travelId, pageRequest);
 
@@ -40,9 +44,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public Long deleteComment(Long commentId) {
         Comment comment = commentReader.getComment(commentId);
-        commentReader.deleteComment(comment);
+        commentStore.deleteComment(comment);
         return comment.getMember().getId();
     }
 }

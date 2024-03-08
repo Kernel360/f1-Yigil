@@ -37,11 +37,6 @@ public class CommentReaderImpl implements CommentReader {
     }
 
     @Override
-    public void deleteComment(Comment comment) {
-        commentRepository.delete(comment);
-    }
-
-    @Override
     public Comment getComment(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(
             () -> new BadRequestException(ExceptionCode.NOT_FOUND_COMMENT_ID));
