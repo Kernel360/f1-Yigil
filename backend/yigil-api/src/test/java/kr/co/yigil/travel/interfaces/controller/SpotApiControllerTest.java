@@ -129,6 +129,7 @@ class SpotApiControllerTest {
                 ));
 
         verify(spotFacade).getSpotSliceInPlace(anyLong(), any(Accessor.class), any(Pageable.class));
+
     }
     @DisplayName("getMySpotInPlace 메서드가 잘 동작하는지")
     @Test

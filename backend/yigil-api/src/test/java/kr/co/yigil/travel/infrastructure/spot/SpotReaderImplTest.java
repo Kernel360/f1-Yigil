@@ -56,7 +56,7 @@ public class SpotReaderImplTest {
     @Test
     void findByPlaceIdAndMemberId_ReturnsOptionalOfSpot() {
         Optional<Spot> expected = mock(Optional.class);
-        when(spotRepository.findByPlaceIdAndMemberId(anyLong(), anyLong())).thenReturn(expected);
+        when(spotRepository.findTopByPlaceIdAndMemberId(anyLong(), anyLong())).thenReturn(expected);
 
         Optional<Spot> result = spotReader.findSpotByPlaceIdAndMemberId(1L, 1L);
 
