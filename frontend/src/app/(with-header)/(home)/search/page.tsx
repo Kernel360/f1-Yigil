@@ -1,6 +1,10 @@
-import SearchBox from '@/app/_components/search';
+import BaseSearchBar from '@/app/_components/search/BaseSearchBar';
 
 export default function SearchPage() {
-  // 해결 요망
-  // return <SearchBox showHistory />;
+  return (
+    <main className="flex flex-col grow gap-4">
+      <BaseSearchBar cancellable />
+      <hr />
+    </main>
+  );
 }
