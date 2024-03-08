@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum SortBy {
     CREATED_AT("createdAt"),
     RATE("rate"),
-    ID("id");
+    ID("id"),
+    LATEST_UPLOADED_TIME("latestUploadedTime");
 
     private String value;
     SortBy(String value) {

@@ -11,6 +11,8 @@ import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.place.domain.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,6 +56,9 @@ public class PlaceFacade {
         return placeService.getPopularPlaceByDemographicsMore(memberId);
     }
 
+    public Slice<Main> searchPlace(final String keyword, final Pageable pageable,  final Accessor accessor) {
+        return placeService.searchPlace(keyword, pageable, accessor);
+    }
     public List<Keyword> getPlaceKeywords(final String keyword) {
         return placeService.getPlaceKeywords(keyword);
     }

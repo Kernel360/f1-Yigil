@@ -25,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceReaderImplTest {
@@ -199,5 +200,18 @@ public class PlaceReaderImplTest {
         List<String> result = placeReader.getPlaceKeywords(keyword);
 
         assertEquals(result.size(), 2);
+    }
+
+    @DisplayName("getPlacesByKeyword 메서드가 Place의 Slice를 잘 반환하는지")
+    @Test
+    void getPlacesByKeyword_ReturnsSliceOfPlace() {
+        String keyword = "keyword";
+        Pageable pageable = mock(Pageable.class);
+        Slice<Place> mockSlice = mock(Slice.class);
+        when(placeRepository.findByNameOrAddressContainingIgnoreCase(keyword, pageable)).thenReturn(mockSlice);
+
+        var result = placeReader.getPlacesByKeyword(keyword, pageable);
+
+        assertEquals(result, mockSlice);
     }
 }
