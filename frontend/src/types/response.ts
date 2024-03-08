@@ -5,6 +5,10 @@ export const backendErrorSchema = z.object({
   message: z.string(),
 });
 
+export const postSuccessResponseSchema = z.object({
+  message: z.string(),
+});
+
 export type TBackendError = z.infer<typeof backendErrorSchema>;
 
 export const placeSchema = z.object({

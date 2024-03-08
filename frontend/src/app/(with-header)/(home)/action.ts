@@ -5,7 +5,6 @@ import z from 'zod';
 import { cookies } from 'next/headers';
 import { placeSchema, regionSchema } from '@/types/response';
 import { getBaseUrl } from '@/app/utilActions';
-import { revalidateTag } from 'next/cache';
 
 const placeResponseSchema = z.object({
   places: z.array(placeSchema),
@@ -15,18 +14,18 @@ const regionResponseSchema = z.object({
   regions: z.array(regionSchema),
 });
 
-async function fetchMorePopularPlaces() {
+async function fetchPopularPlaces(more: 'more' | undefined) {
   const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
 
-  const response = await fetch(`${BASE_URL}/v1/places/popular`);
+  const endpoint = `${BASE_URL}/v1/places/popular${
+    more === 'more' ? '/more' : ''
+  }`;
 
-  return await response.json();
-}
-
-async function fetchPopularPlaces() {
-  const BASE_URL = await getBaseUrl();
-
-  const response = await fetch(`${BASE_URL}/v1/places/popular`, {
+  const response = await fetch(endpoint, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
     next: { tags: ['popularPlaces'] },
   });
 
@@ -58,16 +57,8 @@ async function fetchRegionPlaces(id: number) {
   return await response.json();
 }
 
-export async function getPopularPlaces() {
-  const json = await fetchPopularPlaces();
-
-  const result = placeResponseSchema.safeParse(json);
-
-  return result;
-}
-
-export async function getMorePopularPlaces() {
-  const json = await fetchMorePopularPlaces();
+export async function getPopularPlaces(more: 'more' | undefined = 'more') {
+  const json = await fetchPopularPlaces(more);
 
   const result = placeResponseSchema.safeParse(json);
 

@@ -14,9 +14,16 @@ async function fetchPlaceDetail(id: number) {
     headers: {
       Cookies: `SESSION=${session}`,
     },
+    next: { tags: [`placeDetail`] },
   });
 
-  return await response.json();
+  console.log({ header: response.headers });
+
+  const json = await response.json();
+
+  console.log(json);
+
+  return json;
 }
 
 async function fetchMySpotForPlace(id: number) {
