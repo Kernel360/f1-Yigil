@@ -301,4 +301,6 @@ public class SpotServiceImplTest {
         assertThat(result).isNotNull().isInstanceOf(SpotInfo.MySpotsResponse.class);
         assertThat(result.getContent().getFirst()).isInstanceOf(SpotInfo.SpotListInfo.class);
     }
+
+
 }

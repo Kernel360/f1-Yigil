@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -14,6 +15,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
@@ -74,7 +76,8 @@ public class CourseFacadeTest {
         int representativeSpotOrder = 0;
         AttachFile mapStaticImageFile = null;
 
-        Course course = new Course(id, member, title, description, rate, path, isPrivate, spots, representativeSpotOrder, mapStaticImageFile);
+        Course course = new Course(id, member, title, description, rate, path, isPrivate, spots,
+                representativeSpotOrder, mapStaticImageFile);
 
         Long placeId = 1L;
         Pageable pageable = PageRequest.of(0, 10);
@@ -167,7 +170,7 @@ public class CourseFacadeTest {
         String nickname = "tester";
         String profileImageUrl = "test.jpg";
         Member member = new Member(memberId, email, socialLoginId, nickname, profileImageUrl,
-            SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
+                SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
 
         Long courseId = 1L;
         String title = "Test Course Title";
@@ -179,26 +182,38 @@ public class CourseFacadeTest {
         AttachFile mapStaticImageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
 
         Course mockCourse = new Course(courseId, member, title, null, rate, path, isPrivate,
-            spots, representativeSpotOrder, mapStaticImageFile);
+                spots, representativeSpotOrder, mapStaticImageFile);
 
         CourseInfo.CourseListInfo courseInfo = new CourseInfo.CourseListInfo(mockCourse);
         List<CourseInfo.CourseListInfo> courseList = Collections.singletonList(courseInfo);
 
         CourseInfo.MyCoursesResponse mockCourseListResponse = new CourseInfo.MyCoursesResponse(
-            courseList,
-            totalPages
+                courseList,
+                totalPages
         );
 
-        when(courseService.retrieveCourseList(anyLong(), any(Pageable.class), any(Selected.class))).thenReturn(
-            mockCourseListResponse);
+        when(courseService.retrieveCourseList(anyLong(), any(Pageable.class),
+                any(Selected.class))).thenReturn(
+                mockCourseListResponse);
 
         // When
         var result = courseFacade.getMemberCoursesInfo(memberId, pageable, Selected.ALL);
 
         // Then
         assertThat(result).isNotNull()
-            .isInstanceOf(CourseInfo.MyCoursesResponse.class)
-            .usingRecursiveComparison().isEqualTo(mockCourseListResponse);
+                .isInstanceOf(CourseInfo.MyCoursesResponse.class)
+                .usingRecursiveComparison().isEqualTo(mockCourseListResponse);
         assertThat(result.getContent().size()).isEqualTo(1);
+    }
+
+    @DisplayName("searchCourseByPlaceName 메서드가 유효한 요청이 들어왔을 때 CourseInfo의 Slice 객체를 잘 반환하는지")
+    @Test
+    void WhenSearchCourseByPlaceName_ThenShouldReturnValidSlice() {
+        CourseInfo.Slice mockSlice = mock(CourseInfo.Slice.class);
+        when(courseService.searchCourseByPlaceName(anyString(), any(Accessor.class), any(Pageable.class))).thenReturn(mockSlice);
+
+        var result = courseFacade.searchCourseByPlaceName("test", mock(Accessor.class), PageRequest.of(0, 5));
+
+        assertThat(result).isNotNull();
     }
 }
