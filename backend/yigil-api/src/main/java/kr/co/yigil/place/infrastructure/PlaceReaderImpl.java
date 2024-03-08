@@ -15,6 +15,8 @@ import kr.co.yigil.place.domain.PlaceReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -64,6 +66,12 @@ public class PlaceReaderImpl implements PlaceReader {
     }
 
     @Override
+    public List<String> getPlaceKeywords(String keyword) {
+        return placeRepository.findTop10ByNameStartingWith(keyword)
+                .stream().map(Place::getName).toList();
+    }
+
+    @Override
     public List<Place> getPopularPlaceByDemographics(Ages ages, Gender gender) {
         return demographicPlaceRepository.findTop5ByAgesAndGenderOrderByReferenceCountDesc(ages, gender)
                 .stream().map(DemographicPlace::getPlace).toList();
@@ -73,6 +81,11 @@ public class PlaceReaderImpl implements PlaceReader {
     public List<Place> getPopularPlaceByDemographicsMore(Ages ages, Gender gender) {
         return demographicPlaceRepository.findTop20ByAgesAndGenderOrderByReferenceCountDesc(ages, gender)
                 .stream().map(DemographicPlace::getPlace).toList();
+    }
+
+    @Override
+    public Slice<Place> getPlacesByKeyword(String keyword, Pageable pageable) {
+        return placeRepository.findByNameOrAddressContainingIgnoreCase(keyword, pageable);
     }
 
 }

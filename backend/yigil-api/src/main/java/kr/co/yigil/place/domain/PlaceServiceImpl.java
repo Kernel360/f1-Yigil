@@ -9,10 +9,13 @@ import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
+import kr.co.yigil.place.domain.PlaceInfo.Keyword;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,6 +114,13 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    public List<Keyword> getPlaceKeywords(String keywords) {
+        return placeReader.getPlaceKeywords(keywords).stream()
+                .map(Keyword::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Main> getPopularPlaceByDemographics(final Long memberId) {
         var member = memberReader.getMember(memberId);
@@ -144,5 +154,20 @@ public class PlaceServiceImpl implements PlaceService {
                 })
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<Main> searchPlace(String keyword, Pageable pageable, Accessor accessor) {
+       return placeReader.getPlacesByKeyword(keyword, pageable).map(
+                place -> {
+                    int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    if (accessor.isMember()) {
+                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
+                        return new Main(place, spotCount, isBookmarked);
+                    }
+                    return new Main(place, spotCount);
+                }
+        );
     }
 }

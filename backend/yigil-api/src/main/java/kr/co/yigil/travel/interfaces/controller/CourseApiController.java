@@ -14,6 +14,7 @@ import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequ
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CourseDeleteResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CourseRegisterResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CourseUpdateResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
@@ -44,7 +45,7 @@ public class CourseApiController {
     public ResponseEntity<CoursesInPlaceResponse> getCoursesInPlace(
         @PathVariable("placeId") Long placeId,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
@@ -117,7 +118,7 @@ public class CourseApiController {
     public ResponseEntity<MyCoursesResponse> getMyCourseList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) SortBy sortBy,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder,
         @RequestParam(name = "selected", defaultValue = "all", required = false) Selected visibility
     ) {
@@ -130,6 +131,24 @@ public class CourseApiController {
             accessor.getMemberId(), pageRequest, visibility);
         var myCoursesResponse = courseMapper.of(memberCoursesInfo);
         return ResponseEntity.ok().body(myCoursesResponse);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<CourseSearchResponse> searchCourseByPlaceName(
+            @Auth Accessor accessor,
+            @PageableDefault(size = 5, page = 1) Pageable pageable,
+            @RequestParam String keyword,
+            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder,
+            @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+                pageable.getPageSize(),
+                Sort.by(direction, sortBy.getValue()));
+
+        var result = courseFacade.searchCourseByPlaceName(keyword, accessor, pageRequest);
+        var response = courseMapper.toCourseSearchResponse(result);
+        return ResponseEntity.ok().body(response);
     }
 
 }

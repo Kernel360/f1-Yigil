@@ -5,6 +5,8 @@ import java.util.Optional;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface PlaceReader {
 
@@ -20,7 +22,11 @@ public interface PlaceReader {
 
     Page<Place> getNearPlace(PlaceCommand.NearPlaceRequest command);
 
+    List<String> getPlaceKeywords(String keyword);
+
     List<Place> getPopularPlaceByDemographics(Ages ages, Gender gender);
 
     List<Place> getPopularPlaceByDemographicsMore(Ages ages, Gender gender);
+
+    Slice<Place> getPlacesByKeyword(String keyword, Pageable pageable);
 }

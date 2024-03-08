@@ -1,6 +1,6 @@
 package kr.co.yigil.travel.application;
 
-import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CourseFacade {
     private final CourseService courseService;
-    private final FileUploader fileUploader;
 
     public Slice<Course> getCourseSliceInPlace(Long placeId, Pageable pageable) {
         return courseService.getCoursesSliceInPlace(placeId, pageable);
@@ -42,5 +41,9 @@ public class CourseFacade {
     public CourseInfo.MyCoursesResponse getMemberCoursesInfo(final Long memberId,
         Pageable pageable, Selected selected) {
         return courseService.retrieveCourseList(memberId, pageable, selected);
+    }
+
+    public CourseInfo.Slice searchCourseByPlaceName(final String keyword, final Accessor accessor, final Pageable pageable) {
+        return courseService.searchCourseByPlaceName(keyword, accessor, pageable);
     }
 }

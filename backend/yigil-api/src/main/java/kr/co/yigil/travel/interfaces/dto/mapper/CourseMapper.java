@@ -6,10 +6,12 @@ import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseCommand;
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
+import kr.co.yigil.travel.interfaces.dto.CourseDto;
 import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
 import org.mapstruct.Mapper;
@@ -104,4 +106,10 @@ public interface CourseMapper {
 
     MyCoursesResponse of (CourseInfo.MyCoursesResponse myCoursesResponse);
     MyCoursesResponse.CourseInfo of (CourseInfo.CourseListInfo courseListInfo);
+
+    @Mapping(source = "courses", target = "courses")
+    CourseSearchResponse toCourseSearchResponse(CourseInfo.Slice slice);
+
+    @Mapping(target = "createDate", source = "createDate")
+    CourseDto toCourseDto(CourseInfo.CourseSearchInfo courseSearchInfo);
 }
