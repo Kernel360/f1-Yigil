@@ -59,19 +59,19 @@ export default function ViewTravelMap() {
   }, [mapRef, onSuccessGeolocation, onErrorGeolocation]);
 
   useEffect(() => {
-    if (mapRef.current) {
+    if (mapRef.current && !isGeolocationLoading) {
       const { x: maxX, y: maxY } = mapRef.current.getBounds().getMax();
       const { x: minX, y: minY } = mapRef.current.getBounds().getMin();
-      setMaxMinBounds((v) => ({ ...v, maxX, maxY, minX, minY }));
+      setMaxMinBounds({ maxX, maxY, minX, minY });
     }
-  }, []);
+  }, [isGeolocationLoading]);
 
   const onChangedMap = () => {
     if (!mapRef.current) return;
     const { x: maxX, y: maxY } = mapRef.current.getBounds().getMax();
     const { x: minX, y: minY } = mapRef.current.getBounds().getMin();
     const { x: lng, y: lat } = mapRef.current.getCenter();
-    setMaxMinBounds({ ...maxMinBounds, maxX, maxY, minX, minY });
+    setMaxMinBounds({ maxX, maxY, minX, minY });
     setCenter({ lat, lng });
     setMarkerClickedId(-1);
   };
