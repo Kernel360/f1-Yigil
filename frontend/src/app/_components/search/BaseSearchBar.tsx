@@ -1,23 +1,25 @@
 'use client';
 
-import { useRef, useState, useContext, useEffect } from 'react';
+import { useRef, useContext } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { SearchContext } from '@/context/search/SearchContext';
+import { searchPlaces } from './action';
 
 import SearchIcon from '/public/icons/search.svg';
 import XMarkIcon from '/public/icons/x-mark.svg';
 
 import type { EventFor } from '@/types/type';
-import { searchPlaces } from './action';
 
+/**
+ * 로딩 상태 UI 필요
+ */
 export default function BaseSearchBar({
   cancellable,
 }: {
   cancellable?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
-
   const { state, dispatch } = useContext(SearchContext);
 
   const searchParams = useSearchParams();
@@ -25,23 +27,24 @@ export default function BaseSearchBar({
   const { push, replace } = useRouter();
 
   function handleChange(term: string) {
-    dispatch({ type: 'SET_KEYWORD', payload: term });
-
     const params = new URLSearchParams(searchParams);
 
-    if (term) {
-      params.set('keyword', term);
-    } else {
+    if (term.length === 0) {
       params.delete('keyword');
+      replace(`${pathname}?${params.toString()}`);
+      dispatch({ type: 'EMPTY_KEYWORD' });
+      return;
     }
 
+    params.set('keyword', term);
     replace(`${pathname}?${params.toString()}`);
+    dispatch({ type: 'SET_KEYWORD', payload: term });
 
     /* 추천 검색어 */
   }
 
   function handleErase() {
-    dispatch({ type: 'SET_KEYWORD', payload: '' });
+    dispatch({ type: 'EMPTY_KEYWORD' });
     replace(`${pathname}`);
     inputRef.current?.focus();
   }
@@ -61,17 +64,39 @@ export default function BaseSearchBar({
 
     dispatch({ type: 'ADD_HISTORY' });
 
-    const result = await searchPlaces(state.keyword);
+    switch (state.result.status) {
+      case 'searchEngine': {
+        // 네이버 장소 검색
+        return;
+      }
 
-    // console.log(result);
+      case 'start': {
+        dispatch({ type: 'SET_LOADING', payload: true });
 
-    // if (!result.success) {
-    //   console.log(result.error.message);
-    //   return;
-    // }
+        const json = await searchPlaces(state.keyword);
 
-    dispatch({ type: 'SEARCH_PLACE' });
-    // dispatch({ type: 'SEARCH_PLACE', payload: result.data });
+        dispatch({ type: 'SEARCH_PLACE', payload: json });
+        dispatch({ type: 'SET_LOADING', payload: false });
+
+        return;
+      }
+
+      case 'backend': {
+        const { type } = state.result.data;
+
+        if (type === 'course') {
+          // 코스 검색
+          return;
+        }
+
+        dispatch({ type: 'SET_LOADING', payload: true });
+
+        const json = await searchPlaces(state.keyword);
+
+        dispatch({ type: 'SEARCH_PLACE', payload: json });
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
+    }
   }
 
   async function handleEnter(event: EventFor<'input', 'onKeyDown'>) {

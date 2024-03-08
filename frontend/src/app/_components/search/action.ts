@@ -101,7 +101,7 @@ export async function searchPlaces(
   const session = cookies().get('SESSION')?.value;
 
   const endpoint = `${BASE_URL}/v1/places/search`;
-  const queryParams = Object.entries({ page, size, sortBy, sortOrder })
+  const queryParams = Object.entries({ keyword, page, size, sortBy, sortOrder })
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 

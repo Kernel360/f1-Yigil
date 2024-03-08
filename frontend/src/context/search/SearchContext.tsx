@@ -30,8 +30,10 @@ function getSearchHistory(searchKey: string) {
 export default function SearchProvider({
   showHistory,
   initialKeyword,
+  loading,
   children,
 }: {
+  loading?: boolean;
   showHistory?: boolean;
   initialKeyword?: string;
   children: ReactNode;
@@ -40,8 +42,9 @@ export default function SearchProvider({
 
   const initialState = createInitialState(
     histories,
-    showHistory,
     initialKeyword,
+    showHistory,
+    loading,
   );
 
   const [state, dispatch] = useReducer(searchReducer, initialState);

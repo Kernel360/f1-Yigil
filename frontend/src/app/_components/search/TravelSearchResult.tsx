@@ -1,32 +1,38 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
+import { searchPlaces } from './action';
 
-import Places from '../place/Places';
-import { MemberContext } from '@/context/MemberContext';
-import { EventFor } from '@/types/type';
+import LoadingIndicator from '../LoadingIndicator';
+import InfinitePlaces from './InfinitePlaces';
+
+import type { EventFor } from '@/types/type';
 
 export default function TravelSearchResult() {
-  const { isLoggedIn } = useContext(MemberContext);
   const { state, dispatch } = useContext(SearchContext);
 
-  const { from } = state.result;
+  const { status } = state.result;
 
-  if (from !== 'backend') {
+  if (status !== 'backend') {
     return null;
   }
 
-  function handlePlaceButton(event: EventFor<'button', 'onClick'>) {
-    if (from === 'backend' && state.result.data.type === 'place') {
+  async function handlePlaceButton(event: EventFor<'button', 'onClick'>) {
+    if (status === 'backend' && state.result.data.type === 'place') {
       return;
     }
 
-    dispatch({ type: 'SEARCH_PLACE' });
+    dispatch({ type: 'SET_LOADING', payload: true });
+
+    const json = await searchPlaces(state.keyword);
+
+    dispatch({ type: 'SEARCH_PLACE', payload: json });
+    dispatch({ type: 'SET_LOADING', payload: false });
   }
 
   function handleCourseButton(event: EventFor<'button', 'onClick'>) {
-    if (from === 'backend' && state.result.data.type === 'course') {
+    if (status === 'backend' && state.result.data.type === 'course') {
       return;
     }
 
@@ -55,9 +61,16 @@ export default function TravelSearchResult() {
           코스
         </button>
       </div>
-      {data.type === 'place' ? (
-        // Infinite Scroll Place
-        <Places data={data.content} isLoggedIn={isLoggedIn === 'true'} />
+      {state.loading ? (
+        <section className="grow flex flex-col justify-center items-center gap-8">
+          <LoadingIndicator loadingText="검색 중..." />
+        </section>
+      ) : data.type === 'place' ? (
+        <InfinitePlaces
+          content={data.content}
+          hasNext={data.hasNext}
+          currentPage={data.currentPage}
+        />
       ) : (
         <section className="grow flex flex-col justify-center items-center gap-8">
           <span className="text-6xl">🚧</span>

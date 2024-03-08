@@ -28,17 +28,9 @@ export default function BaseSearchHistory() {
           모두 삭제
         </button>
       </div>
-      <ul className="pl-3 py-4 grow">
-        {state.histories.map((item, index) => (
-          <SearchItem
-            key={item}
-            item={item}
-            href="#"
-            deleteResult={() =>
-              dispatch({ type: 'DELETE_HISTORY', payload: index })
-            }
-            erasable
-          />
+      <ul className="pl-3 py-4 flex flex-col gap-4 grow">
+        {state.histories.map((item) => (
+          <SearchItem key={item} item={item} href="#" erasable />
         ))}
       </ul>
     </section>
