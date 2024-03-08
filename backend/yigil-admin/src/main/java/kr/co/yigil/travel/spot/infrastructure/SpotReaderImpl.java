@@ -29,12 +29,4 @@ public class SpotReaderImpl implements SpotReader {
             () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
         );
     }
-
-    @Override
-    public Long getMember(Long spotId) {
-
-        return spotRepository.findById(spotId).orElseThrow(
-            () -> new BadRequestException(ExceptionCode.NOT_FOUND_SPOT_ID)
-        ).getMember().getId();
-    }
 }

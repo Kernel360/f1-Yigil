@@ -3,25 +3,25 @@ package kr.co.yigil.travel.spot.interfaces.dto.mapper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
-import kr.co.yigil.travel.spot.domain.AdminSpotInfoDto;
-import kr.co.yigil.travel.spot.interfaces.dto.AdminSpotDto;
+import kr.co.yigil.travel.spot.domain.SpotInfoDto;
+import kr.co.yigil.travel.spot.interfaces.dto.SpotDto;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-07T16:52:41+0900",
+    date = "2024-03-07T23:12:37+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
-public class AdminSpotDtoMapperImpl implements AdminSpotDtoMapper {
+public class SpotDtoMapperImpl implements SpotDtoMapper {
 
     @Override
-    public AdminSpotDto.SpotListInfo of(AdminSpotInfoDto.SpotList spot) {
+    public SpotDto.SpotListInfo of(SpotInfoDto.SpotListUnit spot) {
         if ( spot == null ) {
             return null;
         }
 
-        AdminSpotDto.SpotListInfo spotListInfo = new AdminSpotDto.SpotListInfo();
+        SpotDto.SpotListInfo spotListInfo = new SpotDto.SpotListInfo();
 
         spotListInfo.setSpotId( spot.getSpotId() );
         spotListInfo.setTitle( spot.getTitle() );
@@ -33,29 +33,29 @@ public class AdminSpotDtoMapperImpl implements AdminSpotDtoMapper {
     }
 
     @Override
-    public AdminSpotDto.AdminSpotDetailResponse of(AdminSpotInfoDto.AdminSpotDetailInfo spot) {
+    public SpotDto.SpotDetailResponse of(SpotInfoDto.SpotDetailInfo spot) {
         if ( spot == null ) {
             return null;
         }
 
-        AdminSpotDto.AdminSpotDetailResponse adminSpotDetailResponse = new AdminSpotDto.AdminSpotDetailResponse();
+        SpotDto.SpotDetailResponse spotDetailResponse = new SpotDto.SpotDetailResponse();
 
-        adminSpotDetailResponse.setSpotId( spot.getSpotId() );
-        adminSpotDetailResponse.setTitle( spot.getTitle() );
-        adminSpotDetailResponse.setContent( spot.getContent() );
-        adminSpotDetailResponse.setPlaceName( spot.getPlaceName() );
-        adminSpotDetailResponse.setMapStaticImageUrl( spot.getMapStaticImageUrl() );
-        adminSpotDetailResponse.setCreatedAt( spot.getCreatedAt() );
-        adminSpotDetailResponse.setRate( spot.getRate() );
-        adminSpotDetailResponse.setFavorCount( spot.getFavorCount() );
-        adminSpotDetailResponse.setCommentCount( spot.getCommentCount() );
+        spotDetailResponse.setSpotId( spot.getSpotId() );
+        spotDetailResponse.setTitle( spot.getTitle() );
+        spotDetailResponse.setContent( spot.getContent() );
+        spotDetailResponse.setPlaceName( spot.getPlaceName() );
+        spotDetailResponse.setMapStaticImageUrl( spot.getMapStaticImageUrl() );
+        spotDetailResponse.setCreatedAt( spot.getCreatedAt() );
+        spotDetailResponse.setRate( spot.getRate() );
+        spotDetailResponse.setFavorCount( spot.getFavorCount() );
+        spotDetailResponse.setCommentCount( spot.getCommentCount() );
         List<String> list = spot.getImageUrls();
         if ( list != null ) {
-            adminSpotDetailResponse.setImageUrls( new ArrayList<String>( list ) );
+            spotDetailResponse.setImageUrls( new ArrayList<String>( list ) );
         }
-        adminSpotDetailResponse.setWriterId( spot.getWriterId() );
-        adminSpotDetailResponse.setWriterName( spot.getWriterName() );
+        spotDetailResponse.setWriterId( spot.getWriterId() );
+        spotDetailResponse.setWriterName( spot.getWriterName() );
 
-        return adminSpotDetailResponse;
+        return spotDetailResponse;
     }
 }

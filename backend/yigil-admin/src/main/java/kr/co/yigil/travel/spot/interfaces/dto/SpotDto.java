@@ -14,7 +14,7 @@ public class SpotDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AdminSpotsResponse{
+    public static class SpotsResponse {
         private Page<SpotListInfo> spots;
     }
 
@@ -36,7 +36,7 @@ public class SpotDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AdminSpotDetailResponse{
+    public static class SpotDetailResponse {
         private Long spotId;
         private String title;
         private String content;
@@ -57,7 +57,7 @@ public class SpotDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AdminSpotDeleteResponse{
+    public static class SpotDeleteResponse {
         private String message;
     }
 

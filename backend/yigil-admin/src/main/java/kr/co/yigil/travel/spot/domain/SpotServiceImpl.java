@@ -7,6 +7,8 @@ import kr.co.yigil.travel.spot.domain.SpotInfoDto.SpotDetailInfo;
 import kr.co.yigil.travel.spot.domain.SpotInfoDto.SpotListUnit;
 import kr.co.yigil.travel.spot.domain.SpotInfoDto.SpotPageInfo;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,23 +26,13 @@ public class SpotServiceImpl implements SpotService {
     @Override
     @Transactional(readOnly = true)
     public SpotPageInfo getSpots(Pageable pageable) {
-        var pageSpots = spotReader.getSpots(pageable);
+        Page<Spot> pageSpots = spotReader.getSpots(pageable);
 
-        var spotList = pageSpots.getContent().stream().map(
-            spot -> {
-                var spotAdditionalInfo = getAdditionalInfo(spot.getId());
-                return new SpotListUnit(spot, spotAdditionalInfo);
-            }
-        ).toList();
+        var spotList = pageSpots.getContent().stream().map(this::getSpotListUnit).toList();
 
         return new SpotPageInfo(spotList, pageSpots.getPageable(), pageSpots.getTotalElements());
     }
 
-    private SpotInfoDto.SpotAdditionalInfo getAdditionalInfo(Long id) {
-        int favorCount = favorReader.getFavorCount(id);
-        int commentCount = commentReader.getCommentCount(id);
-        return new SpotInfoDto.SpotAdditionalInfo(favorCount, commentCount);
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -57,5 +49,17 @@ public class SpotServiceImpl implements SpotService {
         Spot spot = spotReader.getSpot(spotId);
         spotStore.deleteSpot(spot);
         return spot.getMember().getId();
+    }
+
+    private SpotInfoDto.SpotAdditionalInfo getAdditionalInfo(Long id) {
+        int favorCount = favorReader.getFavorCount(id);
+        int commentCount = commentReader.getCommentCount(id);
+        return new SpotInfoDto.SpotAdditionalInfo(favorCount, commentCount);
+    }
+
+    @NotNull
+    private SpotListUnit getSpotListUnit(Spot spot) {
+        var spotAdditionalInfo = getAdditionalInfo(spot.getId());
+        return new SpotListUnit(spot, spotAdditionalInfo);
     }
 }

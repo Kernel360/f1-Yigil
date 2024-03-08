@@ -49,7 +49,7 @@ public class CourseDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AdminCourseDeleteResponse{
+    public static class CourseDeleteResponse {
         private String message;
     }
 }

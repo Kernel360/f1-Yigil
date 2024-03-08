@@ -40,7 +40,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public CourseDetailInfo getCourse(Long courseId) {
-        return null;
+        Course course = courseReader.getCourse(courseId);
+        return new CourseDetailInfo(course, getAdditionalInfo(courseId));
     }
 
     @Override

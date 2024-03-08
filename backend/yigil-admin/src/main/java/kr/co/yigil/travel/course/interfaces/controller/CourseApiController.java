@@ -5,7 +5,7 @@ import kr.co.yigil.global.SortBy;
 import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.travel.course.application.CourseFacade;
 import kr.co.yigil.travel.course.domain.CourseInfoDto;
-import kr.co.yigil.travel.course.interfaces.dto.CourseDto;
+import kr.co.yigil.travel.course.interfaces.dto.CourseDto.CourseDeleteResponse;
 import kr.co.yigil.travel.course.interfaces.dto.CourseDto.CourseDetailResponse;
 import kr.co.yigil.travel.course.interfaces.dto.CourseDto.CoursesResponse;
 import kr.co.yigil.travel.course.interfaces.dto.mapper.CourseDtoMapper;
@@ -57,10 +57,10 @@ public class CourseApiController {
     }
 
     @DeleteMapping("/{courseId}")
-    public ResponseEntity<CourseDto.AdminCourseDeleteResponse> deleteCourse(
+    public ResponseEntity<CourseDeleteResponse> deleteCourse(
         @PathVariable Long courseId) {
         courseFacade.deleteCourse(courseId);
-        return ResponseEntity.ok().body(new CourseDto.AdminCourseDeleteResponse("삭제 성공"));
+        return ResponseEntity.ok().body(new CourseDeleteResponse("삭제 성공"));
     }
 
 

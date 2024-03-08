@@ -4,7 +4,9 @@ package kr.co.yigil.travel.spot.interfaces.controller;
 import kr.co.yigil.global.SortBy;
 import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.travel.spot.application.SpotFacade;
-import kr.co.yigil.travel.spot.interfaces.dto.SpotDto;
+import kr.co.yigil.travel.spot.interfaces.dto.SpotDto.SpotDeleteResponse;
+import kr.co.yigil.travel.spot.interfaces.dto.SpotDto.SpotDetailResponse;
+import kr.co.yigil.travel.spot.interfaces.dto.SpotDto.SpotsResponse;
 import kr.co.yigil.travel.spot.interfaces.dto.mapper.SpotDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +30,7 @@ public class SpotApiController {
     private final SpotDtoMapper spotDtoMapper;
 
     @GetMapping
-    public ResponseEntity<SpotDto.AdminSpotsResponse> getSpots(
+    public ResponseEntity<SpotsResponse> getSpots(
         @PageableDefault(size = 5, page = 1) Pageable pageable,
         @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
@@ -43,16 +45,16 @@ public class SpotApiController {
     }
 
     @GetMapping("/{spotId}")
-    public ResponseEntity<SpotDto.AdminSpotDetailResponse> getSpot(@PathVariable Long spotId) {
+    public ResponseEntity<SpotDetailResponse> getSpot(@PathVariable Long spotId) {
         var spot = spotFacade.getSpot(spotId);
         var response = spotDtoMapper.of(spot);
         return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/{spotId}")
-    public ResponseEntity<SpotDto.AdminSpotDeleteResponse> deleteSpot(
+    public ResponseEntity<SpotDeleteResponse> deleteSpot(
         @PathVariable Long spotId) {
         spotFacade.deleteSpot(spotId);
-        return ResponseEntity.ok().body(new SpotDto.AdminSpotDeleteResponse("삭제 성공"));
+        return ResponseEntity.ok().body(new SpotDeleteResponse("삭제 성공"));
     }
 }

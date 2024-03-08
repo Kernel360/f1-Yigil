@@ -10,5 +10,4 @@ public interface SpotReader {
 
     Spot getSpot(Long spotId);
 
-    Long getMember(Long spotId);
 }
