@@ -1,10 +1,11 @@
 package kr.co.yigil.member.application;
 
+import org.springframework.stereotype.Service;
+
 import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +27,9 @@ public class MemberFacade {
     public MemberInfo.MemberDeleteResponse withdraw(final Long memberId) {
         memberService.withdrawal(memberId);
         return new MemberInfo.MemberDeleteResponse("회원 탈퇴 성공");
+    }
+
+    public MemberInfo.NicknameCheckInfo nicknameDuplicateCheck(String nickname) {
+        return memberService.nicknameDuplicateCheck(nickname);
     }
 }

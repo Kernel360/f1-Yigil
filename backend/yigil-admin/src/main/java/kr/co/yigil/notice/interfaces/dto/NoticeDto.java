@@ -45,7 +45,7 @@ public class NoticeDto {
     public static class NoticeItem {
         private Long noticeId;
         private String title;
-        private String authorId;
+        private Long authorId;
         private String author;
         private LocalDateTime createdAt;
     }
