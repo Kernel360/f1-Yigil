@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import kr.co.yigil.comment.domain.CommentReader;
 import kr.co.yigil.favor.domain.FavorReader;
@@ -71,7 +72,7 @@ class SpotServiceImplTest {
         Long spotId = 1L;
         AttachFile mockAttachFile = new AttachFile(null, "url", "filename", 4L);
         Place mockPlace = new Place(1L, "name", "address", 4.0, null, mockAttachFile,
-            mockAttachFile);
+            mockAttachFile, LocalDateTime.now());
         AttachFiles attachFiles = new AttachFiles(List.of(mockAttachFile, mockAttachFile));
         Spot spot = new Spot(1L, mock(Member.class), null, false, null, null, attachFiles,
             mockPlace, 5.0);
