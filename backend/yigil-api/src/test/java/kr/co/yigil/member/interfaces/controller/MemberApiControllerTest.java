@@ -68,12 +68,21 @@ class MemberApiControllerTest {
     @Test
     void getMyInfo_ShouldReturnOk() throws Exception {
 
+        MemberDto.FavoriteRegion favoriteRegion1 = MemberDto.FavoriteRegion.builder()
+            .id(1L)
+            .name("서울")
+            .build();
+        MemberDto.FavoriteRegion favoriteRegion2 = MemberDto.FavoriteRegion.builder()
+            .id(2L)
+            .name("경기")
+            .build();
+
         MemberDto.Main response = Main.builder()
             .memberId(1L)
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.igil.co.kr/images/profile.jpg")
-            .favoriteRegionIds(List.of(1L, 2L, 3L))
+            .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -92,7 +101,9 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
-                    fieldWithPath("favorite_region_ids").description("좋아하는 지역 ID 리스트"),
+                    fieldWithPath("favorite_regions").description("좋아하는 지역리스트"),
+                    fieldWithPath("favorite_regions[].id").description("좋아하는 지역 ID"),
+                    fieldWithPath("favorite_regions[].name").description("좋아하는 지역 이름"),
                     fieldWithPath("following_count").description("팔로잉 수"),
                     fieldWithPath("follower_count").description("팔로워 수")
                 )
@@ -177,13 +188,22 @@ class MemberApiControllerTest {
     @DisplayName("회원 정보 조회가 잘 되는지")
     @Test
     void WhenGetMemberInfo_ThenShouldReturnOk() throws Exception {
+        MemberDto.FavoriteRegion favoriteRegion1 = MemberDto.FavoriteRegion.builder()
+            .id(1L)
+            .name("서울")
+            .build();
+        MemberDto.FavoriteRegion favoriteRegion2 = MemberDto.FavoriteRegion.builder()
+            .id(2L)
+            .name("경기")
+            .build();
+
         Long memberId = 1L;
         MemberDto.Main response = Main.builder()
             .memberId(1L)
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
-            .favoriteRegionIds(List.of(1L, 2L, 3L))
+            .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -205,7 +225,9 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
-                    fieldWithPath("favorite_region_ids").description("좋아하는 지역 ID 리스트"),
+                    fieldWithPath("favorite_regions").description("좋아하는 지역리스트"),
+                    fieldWithPath("favorite_regions[].id").description("좋아하는 지역 ID"),
+                    fieldWithPath("favorite_regions[].name").description("좋아하는 지역 이름"),
                     fieldWithPath("following_count").description("팔로잉 수"),
                     fieldWithPath("follower_count").description("팔로워 수")
                 )

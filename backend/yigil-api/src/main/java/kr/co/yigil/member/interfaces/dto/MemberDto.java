@@ -35,9 +35,17 @@ public class MemberDto {
         private final String email;
         private final String nickname;
         private final String profileImageUrl;
-        private final List<Long> favoriteRegionIds;
+        private final List<FavoriteRegion> favoriteRegions;
         private final int followingCount;
         private final int followerCount;
+    }
+
+    @Getter
+    @Builder
+    public static class FavoriteRegion {
+
+        private final Long id;
+        private final String name;
     }
 
     @Getter
