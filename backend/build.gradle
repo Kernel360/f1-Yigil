@@ -1,10 +1,15 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.1.0"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.0'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'org.jetbrains.kotlin.jvm'
 	id "org.asciidoctor.jvm.convert" version "3.3.2"
-	id 'jacoco'
 }
 
 group = 'kr.co'
@@ -20,10 +25,6 @@ ext {
 	set('snippetsDir', file("build/generated-snippets"))
 }
 
-jacoco {
-	toolVersion = '0.8.5'
-}
-
 allprojects {
 	repositories {
 		mavenCentral()
@@ -35,20 +36,16 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-tasks.withType(Test) {
-	jacoco.includeNoLocationClasses = true
-}
 
 kotlin {
 	jvmToolchain(21)
 }
 
 bootJar {
-    enabled = false
+	enabled = false
 }
 jar {
-    enabled = true
+	enabled = true
 }
-
 
 

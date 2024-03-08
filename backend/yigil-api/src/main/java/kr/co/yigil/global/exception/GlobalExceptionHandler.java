@@ -6,6 +6,7 @@ import static kr.co.yigil.global.exception.ExceptionCode.INVALID_REQUEST;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @Autowired
-    private HttpServletRequest request;
+    private final HttpServletRequest request;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(

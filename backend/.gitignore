@@ -170,3 +170,10 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,intellij
 
 src/test/java/kr/co/yigil/global/config/JasyptApplicationTest.java
+
+# Q class
+support/src/main/generated/*
+
+place-region-batch/src/main/resources/application.yml
+yigil-api/src/main/resources/application.yml
+yigil-admin/src/main/resources/application.yml

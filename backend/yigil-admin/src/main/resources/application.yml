@@ -1,0 +1,83 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 250MB
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
+    hibernate:
+      ddl-auto: validate
+    defer-datasource-initialization: true
+  datasource:
+    master:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: @MASTER_DB_URL@
+        read-only: false
+        username: @MASTER_DB_USERNAME@
+        password: @MASTER_DB_PASSWORD@
+    slave:
+      hikari:
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: @SLAVE_DB_URL@
+        read-only: true
+        username: @SLAVE_DB_USERNAME@
+        password: @SLAVE_DB_PASSWORD@
+  data:
+    redis:
+      host: @REDIS_HOST@
+      port: @REDIS_PORT@
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  mail:
+    host: @MAIL_HOST@
+    port: @MAIL_PORT@
+    username: @MAIL_USERNAME@
+    password: @MAIL_PASSWORD@
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
+cloud:
+  aws:
+    s3:
+    bucket: @S3_BUCKET@
+    credentials:
+      access-key: @AWS_ACCESS_KEY@
+      secret-key: @AWS_SECRET_KEY@
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+server:
+  port: @YIGIL_ADMIN_PORT@
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: false
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+logging:
+  level:
+    root: DEBUG
+  slack:
+    webhook-uri: @SLACK_WEBHOOK_URI@
+jwt:
+  secret: @JWT_SECRET@
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true

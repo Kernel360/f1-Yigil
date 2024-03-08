@@ -40,7 +40,37 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'k.kakaocdn.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'cdn.yigil.co.kr',
+        port: '',
+        pathname: '/**',
+      },
     ],
+  },
+  output: 'standalone',
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '250mb',
+    },
   },
 };
 

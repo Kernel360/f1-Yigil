@@ -1,7 +1,5 @@
 ## Motivation 🧐
 
--
-
 <br>
 
 ## Key Changes 🔑

@@ -1,0 +1,47 @@
+== Travel API
+
+=== 게시글 공개 상태로 전환
+
+==== Request
+include::{snippets}/travels/change-on-public/request-body.adoc[]
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/travels/change-on-public/http-request.adoc[]
+
+==== Response
+include::{snippets}/travels/change-on-public/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/travels/change-on-public/http-response.adoc[]
+
+=== 게시글 비공개 상태로 전환
+
+==== Request
+include::{snippets}/travels/change-on-private/request-body.adoc[]
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/travels/change-on-private/http-request.adoc[]
+
+==== Response
+include::{snippets}/travels/change-on-private/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/travels/change-on-private/http-response.adoc[]
+
+
+=== 게시글 리스트 공개/비공개 전환
+
+==== Request
+include::{snippets}/travels/set-travels-visibility/request-body.adoc[]
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/travels/set-travels-visibility/http-request.adoc[]
+
+==== Response
+include::{snippets}/travels/set-travels-visibility/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/travels/set-travels-visibility/http-response.adoc[]
