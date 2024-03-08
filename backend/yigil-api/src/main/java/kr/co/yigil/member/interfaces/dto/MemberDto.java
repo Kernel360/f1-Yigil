@@ -1,13 +1,15 @@
 package kr.co.yigil.member.interfaces.dto;
 
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.web.multipart.MultipartFile;
 
 public class MemberDto {
 
@@ -61,5 +63,20 @@ public class MemberDto {
     @ToString
     public static class MemberDeleteResponse {
         private final String message;
+    }
+
+    @Getter
+    @Builder
+    public static class NicknameCheckResponse {
+        private final boolean available;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class NicknameCheckRequest {
+        private String nickname;
     }
 }

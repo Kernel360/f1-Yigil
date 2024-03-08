@@ -85,4 +85,13 @@ public class MemberInfo {
             this.message = message;
         }
     }
+
+    @Getter
+    public static class NicknameCheckInfo {
+        private final boolean available;
+
+        public NicknameCheckInfo(boolean isAvailable) {
+            this.available = isAvailable;
+        }
+    }
 }
