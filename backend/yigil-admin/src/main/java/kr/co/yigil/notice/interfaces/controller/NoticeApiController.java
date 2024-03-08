@@ -1,5 +1,7 @@
 package kr.co.yigil.notice.interfaces.controller;
 
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.notice.application.NoticeFacade;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeCreateRequest;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeCreateResponse;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -36,11 +39,11 @@ public class NoticeApiController {
     @GetMapping
     public ResponseEntity<NoticeListResponse> geNoticeList(
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) String sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ){
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(
-            Direction.fromString(sortOrder), sortBy));
+            Direction.fromString(sortOrder.getValue()), sortBy.getValue()));
         var notice = noticeFacade.getNoticeList(pageRequest);
         var response = noticeMapper.toDto(notice);
         return ResponseEntity.ok().body(response);
@@ -48,15 +51,14 @@ public class NoticeApiController {
 
     @PostMapping
     public ResponseEntity<NoticeCreateResponse> createNotice(
-
-        @ModelAttribute NoticeCreateRequest request
+        @RequestBody NoticeCreateRequest request
     ){
         var noticeCommand = noticeMapper.toCommand(request);
         noticeFacade.createNotice(noticeCommand);
         return ResponseEntity.ok().body(new NoticeCreateResponse("공지사항 등록 완료"));
     }
 
-    @PostMapping("/{noticeId}")
+    @GetMapping("/{noticeId}")
     public ResponseEntity<NoticeDetailResponse> readNotice(
         @PathVariable("noticeId") Long noticeId
     ){
@@ -65,10 +67,10 @@ public class NoticeApiController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/{noticeId}/update")
+    @PostMapping("/{noticeId}")
     public ResponseEntity<NoticeUpdateResponse> updateNotice(
         @PathVariable("noticeId") Long noticeId,
-        @ModelAttribute NoticeUpdateRequest request
+        @RequestBody NoticeUpdateRequest request
     ){
         // 관리자 권한 필요
         var noticeCommand = noticeMapper.toCommand(request);

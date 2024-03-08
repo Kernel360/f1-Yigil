@@ -40,8 +40,8 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     @Transactional(readOnly = true)
     public NoticeListInfo getNoticeList(PageRequest pageRequest) {
-        var noticeSlice = noticeReader.getNoticeList(pageRequest);
-        return new NoticeListInfo(noticeSlice);
+        var noticePage = noticeReader.getNoticeList(pageRequest);
+        return new NoticeListInfo(noticePage);
     }
 
     @Override
