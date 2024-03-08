@@ -9,9 +9,6 @@ export const backendErrorSchema = z.object({
   message: z.string(),
 });
 
-export const postSuccessResponseSchema = z.object({
-  message: z.string(),
-});
 export const fetchableSchema = <TOutput, TInput>(
   schema: ZodType<TOutput, ZodTypeDef, TInput>,
 ) =>

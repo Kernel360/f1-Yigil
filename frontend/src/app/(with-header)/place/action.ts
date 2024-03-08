@@ -13,7 +13,7 @@ async function fetchPlaceDetail(id: number) {
     headers: {
       Cookie: `SESSION=${session}`,
     },
-    next: { tags: [`placeDetail`] },
+    next: { tags: [`placeDetail/${id}`] },
   });
 
   return await response.json();
