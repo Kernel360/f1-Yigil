@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService{
-    private final NotificationReader notificationReader;
+
     private final NotificationSender notificationSender;
 //    @Transactional(readOnly = true)
 //    @Override
