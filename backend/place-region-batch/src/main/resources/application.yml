@@ -17,7 +17,7 @@ spring:
 
 logging:
   level:
-    root: info
+    root: DEBUG
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
 
@@ -28,3 +28,4 @@ decorator:
 
 server:
   port: @PLACE_REGION_BATCH_PORT@
+
