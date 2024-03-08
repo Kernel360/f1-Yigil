@@ -1,6 +1,7 @@
 package kr.co.yigil.member.domain;
 
 import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileReader;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
@@ -20,6 +21,7 @@ public class MemberServiceImpl implements MemberService {
     private final FollowReader followReader;
     private final FileUploader fileUploader;
     private final RegionReader regionReader;
+    private final FileReader fileReader;
 
     @Override
     @Transactional

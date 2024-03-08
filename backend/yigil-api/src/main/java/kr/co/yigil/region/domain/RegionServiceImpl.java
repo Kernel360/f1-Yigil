@@ -1,7 +1,6 @@
 package kr.co.yigil.region.domain;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.region.domain.RegionInfo.Category;
 import kr.co.yigil.region.domain.RegionInfo.Main;
@@ -27,7 +26,6 @@ public class RegionServiceImpl implements RegionService{
     public List<Main> getMyRegions(Long memberId) {
         var member = memberReader.getMember(memberId);
         return member.getFavoriteRegions().stream()
-                .map(MemberRegion::getRegion)
                 .map(Main::new)
                 .toList();
     }
