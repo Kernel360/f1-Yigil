@@ -49,9 +49,9 @@ class NoticeApiControllerTest {
     @Test
     void whenGetNoticeList_thenShouldReturnOKstatus() throws Exception {
 
-        PageRequest pageRequest = PageRequest.of(0, 5);
-        when(noticeFacade.getNoticeList(pageRequest)).thenReturn(mock(NoticeListInfo.class));
-        when(noticeMapper.toDto(mock(NoticeListInfo.class))).thenReturn(mock(
+
+        when(noticeFacade.getNoticeList(any(PageRequest.class))).thenReturn(mock(NoticeListInfo.class));
+        when(noticeMapper.toDto(any(NoticeListInfo.class))).thenReturn(mock(
             NoticeDto.NoticeListResponse.class));
 
         mockMvc.perform(get("/api/v1/notices"))
