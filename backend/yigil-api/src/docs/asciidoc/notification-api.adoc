@@ -1,0 +1,31 @@
+== NOTIFICATION API
+
+=== 알림 조회
+
+==== Request
+로그인 필수 : Y
+
+===== Query Parameters
+include::{snippets}/notifications/get-notifications/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/notifications/get-notifications/http-request.adoc[]
+
+==== Response
+include::{snippets}/notifications/get-notifications/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/notifications/get-notifications/http-response.adoc[]
+
+=== 알림 스트림
+
+==== Request
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/notifications/stream-notification/http-request.adoc[]
+
+==== Response
+
+===== HTTP Response 예시
+include::{snippets}/notifications/stream-notification/http-response.adoc[]

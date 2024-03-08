@@ -6,12 +6,21 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import SearchIcon from '/public/icons/search.svg';
 import XMarkIcon from '/public/icons/x-mark.svg';
 
+import type { EventFor } from '@/types/type';
+
+// 컴포넌트의 동작이 URL 상태에 따라 바뀌는 구현을 리팩토링할 필요가 있을지도?
 export default function SearchBar({
   cancellable,
-  addResult,
+  addHistory,
+  search,
+  openResults,
+  closeResults,
 }: {
   cancellable?: boolean;
-  addResult: (result: string) => void;
+  addHistory: (result: string) => void;
+  search: (keyword: string) => Promise<void>;
+  openResults: () => void;
+  closeResults: () => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -37,22 +46,51 @@ export default function SearchBar({
     replace(`${pathname}?${params.toString()}`);
   }
 
-  function handleSearch() {
-    addResult(searchValue);
+  // 리팩토링 필요
+  async function handleSearch() {
+    if (searchValue === '') {
+      return;
+    }
+
+    addHistory(searchValue);
     const params = new URLSearchParams(searchParams);
 
-    push(`${pathname}/result?${params.toString()}`);
+    if (pathname === '/search') {
+      push(`${pathname}/result?${params.toString()}`);
+    } else {
+      await search(searchValue);
+      openResults();
+    }
+  }
+
+  // 리팩토링 필요
+  function handleCancel() {
+    if (pathname === '/search') {
+      back();
+    } else {
+      handleErase();
+      closeResults();
+    }
   }
 
   function handleErase() {
     setSearchValue('');
-    inputRef.current?.focus();
+    search('');
     replace(`${pathname}`);
+    inputRef.current?.focus();
+  }
+
+  async function handleEnter(event: EventFor<'input', 'onKeyDown'>) {
+    if (event.key !== 'Enter') {
+      return;
+    }
+
+    await handleSearch();
   }
 
   return (
     <div className="flex gap-4 px-6">
-      <div className="px-4 py-2 bg-[#e5e7eb] shadow-xl rounded-full flex gap-4 items-center">
+      <div className="w-full px-4 py-2 bg-[#e5e7eb] shadow-lg rounded-full flex gap-4 items-center">
         <input
           className="w-full text-lg bg-transparent outline-none focus:border-b-2 focus:border-black"
           ref={inputRef}
@@ -60,6 +98,7 @@ export default function SearchBar({
           placeholder="검색어를 입력하세요."
           value={searchValue}
           onChange={(event) => handleChange(event.target.value)}
+          onKeyDown={handleEnter}
         />
         {searchParams.size !== 0 && (
           <button
@@ -75,7 +114,7 @@ export default function SearchBar({
         </button>
       </div>
       {cancellable && (
-        <button className="shrink-0" onClick={() => back()}>
+        <button className="shrink-0" onClick={handleCancel}>
           취소
         </button>
       )}

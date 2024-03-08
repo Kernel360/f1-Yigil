@@ -1,33 +1,26 @@
-import Link from 'next/link';
-import React, { ComponentType, Dispatch, SetStateAction } from 'react';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { TPopOverData } from './types';
 
 interface TPopOverIcon {
-  href: string;
-  onClick?: () => void;
-  label: string;
-  setIsModalOpened: Dispatch<SetStateAction<boolean>>;
-  Icon: ComponentType<{ className?: string }>;
+  data: TPopOverData;
+  closeModal: () => void;
 }
 
-export default function PopOverIcon({
-  href,
-  onClick,
-  label,
-  setIsModalOpened,
-  Icon,
-}: TPopOverIcon) {
+export default function PopOverIcon({ data, closeModal }: TPopOverIcon) {
+  const { push } = useRouter();
+  const { href, onClick, label, icon } = data;
   return (
-    <Link
-      key={href}
-      href={href}
+    <div
       onClick={() => {
         onClick && onClick();
-        setIsModalOpened(false);
+        closeModal();
+        href && push(href);
       }}
-      className="flex items-center"
+      className="p-2 flex items-center gap-x-2 cursor-pointer"
     >
       <div>{label}</div>
-      <Icon />
-    </Link>
+      {icon}
+    </div>
   );
 }

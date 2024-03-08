@@ -1,13 +1,19 @@
 package kr.co.yigil.favor.domain.repository;
 
+import java.util.Optional;
 import kr.co.yigil.favor.domain.Favor;
-import kr.co.yigil.member.domain.Member;
-import kr.co.yigil.post.domain.Post;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.travel.domain.Travel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FavorRepository extends JpaRepository<Favor, Long> {
+    int countByTravelId(Long travelId);
 
-    public int countByPostId(Long postId);
+    void deleteByMemberAndTravel(Member member, Travel travel);
 
-    public void deleteByMemberAndPost(Member member, Post post);
+    boolean existsByMemberIdAndTravelId(Long memberId, Long travelId);
+
+    Optional<Long> getFavorIdByMemberIdAndTravelId(Long memberId, Long travelId);
+
+
 }

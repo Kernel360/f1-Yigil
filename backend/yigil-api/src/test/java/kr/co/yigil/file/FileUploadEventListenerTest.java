@@ -1,6 +1,5 @@
 package kr.co.yigil.file;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,7 +42,8 @@ public class FileUploadEventListenerTest {
     @Test
     void shouldUploadFileToS3() throws IOException {
         MultipartFile mockFile = new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[10]);
-        FileUploadEvent event = new FileUploadEvent(new Object(), mockFile, mock(Consumer.class));
+        Consumer<String> mockConsumer = mock(Consumer.class);
+        FileUploadEvent event = new FileUploadEvent(new Object(), mockFile, mockConsumer);
         fileUploadEventListener.handleFileUpload(event);
 
         verify(mockAmazonS3Client).putObject(eq("cdn.yigil.co.kr"), anyString(), any(), any(

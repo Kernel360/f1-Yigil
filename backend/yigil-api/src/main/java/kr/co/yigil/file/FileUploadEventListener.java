@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
-import kr.co.yigil.File.FileType;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileUploadEventListener {
 
     private final AmazonS3Client amazonS3Client;
-
     private final String bucketName = "cdn.yigil.co.kr";
-
 
     @Async
     @EventListener
@@ -33,9 +31,11 @@ public class FileUploadEventListener {
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        metadata.setContentDisposition("inline");
         amazonS3Client.putObject(bucketName, s3Path, file.getInputStream(), metadata);
-        event.getCallback().accept(s3Path);
 
+        event.getCallback().accept(s3Path);
         return CompletableFuture.completedFuture(s3Path);
     }
 

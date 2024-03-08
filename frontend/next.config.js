@@ -52,9 +52,26 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'cdn.yigil.co.kr',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   output: 'standalone',
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '250mb',
+    },
+  },
 };
 
 module.exports = nextConfig;

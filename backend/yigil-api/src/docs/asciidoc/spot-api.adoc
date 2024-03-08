@@ -1,0 +1,138 @@
+== SPOT API
+
+=== 장소 내 Spot 조회
+
+==== Request
+include::{snippets}/spots/get-spots-in-place/request-body.adoc[]
+로그인 필수 : N
+
+===== Path parameter
+include::{snippets}/spots/get-spots-in-place/path-parameters.adoc[]
+
+===== Query Parameter
+include::{snippets}/spots/get-spots-in-place/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/get-spots-in-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/get-spots-in-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/get-spots-in-place/http-response.adoc[]
+
+=== 장소 내 내가 작성한 Spot 조회
+
+==== Request
+include::{snippets}/spots/get-my-spot-in-place/request-body.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/spots/get-my-spot-in-place/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/get-my-spot-in-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/get-my-spot-in-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/get-my-spot-in-place/http-response.adoc[]
+
+=== Spot 신규 등록
+노션 링크 :
+
+==== Request
+include::{snippets}/spots/register-spot/request-fields.adoc[]
+로그인 필수 : Y
+
+===== Request Parts
+include::{snippets}/spots/register-spot/request-parts.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/register-spot/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/register-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/register-spot/http-response.adoc[]
+
+=== Spot 상세 정보 조회
+
+==== Request
+include::{snippets}/spots/retrieve-spot/http-request.adoc[]
+로그인 필수 : N
+
+===== Path Parameter
+include::{snippets}/spots/retrieve-spot/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/retrieve-spot/request-body.adoc[]
+
+==== Response
+include::{snippets}/spots/retrieve-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/retrieve-spot/http-response.adoc[]
+
+=== Spot 수정
+링크 :
+
+==== Request
+include::{snippets}/spots/update-spot/request-fields.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/spots/update-spot/path-parameters.adoc[]
+
+===== Request Parts
+include::{snippets}/spots/update-spot/request-parts.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/update-spot/request-body.adoc[]
+
+==== Response
+include::{snippets}/spots/update-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/update-spot/http-response.adoc[]
+
+=== Spot 삭제
+
+==== Request
+include::{snippets}/spots/delete-spot/http-request.adoc[]
+로그인 필수 : Y
+
+===== Path Parameter
+include::{snippets}/spots/delete-spot/path-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/delete-spot/request-body.adoc[]
+
+==== Response
+include::{snippets}/spots/delete-spot/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/delete-spot/http-response.adoc[]
+
+=== 내 Spot 목록 조회
+
+==== Request
+include::{snippets}/spots/get-my-spot-list/request-body.adoc[]
+로그인 필수 : Y
+
+===== Query Parameter
+include::{snippets}/spots/get-my-spot-list/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/spots/get-my-spot-list/http-request.adoc[]
+
+==== Response
+include::{snippets}/spots/get-my-spot-list/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/spots/get-my-spot-list/http-response.adoc[]
+
+'''
+

@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 
 import SearchBar from './SearchBar';
 import SearchHistory from './SearchHistory';
+import SearchResult from './SearchResult';
+
+import type { Dispatch, SetStateAction } from 'react';
 
 const SEARCH_HISTORY_KEY = 'search-history';
 
@@ -15,8 +18,28 @@ function parseSearchHistory(historyStr: string | null) {
   return JSON.parse(historyStr) as Array<string>;
 }
 
-export default function SearchBox({ showHistory }: { showHistory?: boolean }) {
-  const [searchResults, setSearchResults] = useState<string[]>(() => {
+export default function SearchBox({
+  showHistory,
+  searchResults,
+  search,
+  setCurrentFoundPlace,
+}: {
+  showHistory?: boolean;
+  searchResults: { name: string; roadAddress: string }[];
+  search: (keyword: string) => Promise<void>;
+  setCurrentFoundPlace: Dispatch<
+    SetStateAction<
+      | {
+          name: string;
+          roadAddress: string;
+          coords: { lat: number; lng: number };
+        }
+      | undefined
+    >
+  >;
+}) {
+  const [showResult, setShowResult] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>(() => {
     if (typeof window !== 'undefined') {
       return parseSearchHistory(localStorage.getItem(SEARCH_HISTORY_KEY));
     }
@@ -25,38 +48,62 @@ export default function SearchBox({ showHistory }: { showHistory?: boolean }) {
   });
 
   useEffect(() => {
-    localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(searchResults));
-  }, [searchResults]);
+    localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(searchHistory));
+  }, [searchHistory]);
 
   // Event handlers
-  function deleteResult(result: string) {
-    const nextResults = searchResults.filter((value) => value !== result);
-    setSearchResults(nextResults);
+  function deleteHistory(result: string) {
+    const nextHistory = searchHistory.filter((value) => value !== result);
+    setSearchHistory(nextHistory);
   }
 
-  function deleteResultAll() {
-    setSearchResults([]);
+  function deleteHistoryAll() {
+    setSearchHistory([]);
   }
 
-  function addResult(result: string) {
-    if (!searchResults.includes(result)) {
-      const nextResults = [...searchResults, result];
-      setSearchResults(nextResults);
+  function addHistory(result: string) {
+    if (!searchHistory.includes(result)) {
+      const nextHistory = [...searchHistory, result];
+      setSearchHistory(nextHistory);
     }
   }
 
+  function openResults() {
+    setShowResult(true);
+  }
+
+  function closeResults() {
+    setShowResult(false);
+  }
+
   const searchHistoryProps = {
-    deleteResult,
-    deleteResultAll,
-    searchResults,
+    deleteHistory,
+    deleteHistoryAll,
+    searchHistory,
   };
 
   // 검색어 자동완성 기능 구현될 시 conditional rendering
   return (
-    <section className="flex flex-col grow">
-      <SearchBar addResult={addResult} cancellable />
-      <div className="grow" aria-label="Result/History container">
+    <section
+      className={`flex flex-col bg-white gap-3 z-10 ${showResult && 'grow'}`}
+    >
+      <SearchBar
+        search={search}
+        addHistory={addHistory}
+        openResults={openResults}
+        closeResults={closeResults}
+        cancellable
+      />
+      <hr />
+      <div className="relative grow" aria-label="Result/History container">
         {showHistory && <SearchHistory {...searchHistoryProps} />}
+        {showResult && (
+          <SearchResult
+            searchResults={searchResults}
+            closeResults={closeResults}
+            setCurrentFoundPlace={setCurrentFoundPlace}
+          />
+        )}
       </div>
     </section>
   );

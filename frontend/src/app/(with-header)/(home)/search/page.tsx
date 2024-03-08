@@ -1,5 +1,6 @@
 import SearchBox from '@/app/_components/search';
 
 export default function SearchPage() {
-  return <SearchBox showHistory />;
+  // 해결 요망
+  // return <SearchBox showHistory />;
 }
