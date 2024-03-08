@@ -9,6 +9,8 @@ import kr.co.yigil.bookmark.interfaces.dto.mapper.BookmarkMapper;
 import kr.co.yigil.bookmark.interfaces.dto.response.AddBookmarkResponse;
 import kr.co.yigil.bookmark.interfaces.dto.response.BookmarksResponse;
 import kr.co.yigil.bookmark.interfaces.dto.response.DeleteBookmarkResponse;
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,14 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class BookmarkApiController {
+
     private final BookmarkFacade bookmarkFacade;
     private final BookmarkMapper bookmarkMapper;
 
     @PostMapping("/api/v1/add-bookmark/{place_id}")
     @MemberOnly
     public ResponseEntity<AddBookmarkResponse> addBookmark(
-            @Auth final Accessor accessor,
-            @PathVariable("place_id") final Long placeId
+        @Auth final Accessor accessor,
+        @PathVariable("place_id") final Long placeId
     ) {
         bookmarkFacade.addBookmark(accessor.getMemberId(), placeId);
         return ResponseEntity.ok(new AddBookmarkResponse("장소 북마크 추가 성공"));
@@ -41,8 +44,8 @@ public class BookmarkApiController {
     @PostMapping("/api/v1/delete-bookmark/{place_id}")
     @MemberOnly
     public ResponseEntity<DeleteBookmarkResponse> deleteBookmark(
-            @Auth final Accessor accessor,
-            @PathVariable("place_id") final Long placeId
+        @Auth final Accessor accessor,
+        @PathVariable("place_id") final Long placeId
     ) {
         bookmarkFacade.deleteBookmark(accessor.getMemberId(), placeId);
         return ResponseEntity.ok(new DeleteBookmarkResponse("장소 북마크 제거 성공"));
@@ -51,13 +54,17 @@ public class BookmarkApiController {
     @GetMapping("/api/v1/bookmarks")
     @MemberOnly
     public ResponseEntity<BookmarksResponse> getBookmarks(
-            @Auth final Accessor accessor,
-            @PageableDefault(size = 5, page = 1) Pageable pageable,
-            @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
+        @Auth final Accessor accessor,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        Slice<Bookmark> bookmarkSlice = bookmarkFacade.getBookmarkSlice(accessor.getMemberId(), pageRequest);
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+            pageable.getPageSize(),
+            Sort.by(direction, sortBy.getValue()));
+        Slice<Bookmark> bookmarkSlice = bookmarkFacade.getBookmarkSlice(accessor.getMemberId(),
+            pageRequest);
         BookmarksResponse response = bookmarkMapper.bookmarkSliceToBookmarksResponse(bookmarkSlice);
         return ResponseEntity.ok(response);
     }

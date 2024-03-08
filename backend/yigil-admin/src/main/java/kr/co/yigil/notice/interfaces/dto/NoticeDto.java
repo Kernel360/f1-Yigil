@@ -1,11 +1,12 @@
 package kr.co.yigil.notice.interfaces.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 public class NoticeDto {
 
@@ -14,7 +15,6 @@ public class NoticeDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class NoticeCreateRequest{
-        private String author;
         private String title;
         private String content;
     }
@@ -22,7 +22,6 @@ public class NoticeDto {
     @Getter
     @AllArgsConstructor
     public static class NoticeUpdateRequest{
-        private String author;
         private String title;
         private String content;
     }
@@ -33,21 +32,22 @@ public class NoticeDto {
         private final String message;
     }
 
-    @Getter
-    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class NoticeListResponse{
-        List<NoticeItem> noticeList;
-        boolean hasNext;
+        Page<NoticeItem> noticeList;
     }
-    @Getter
-    @Builder
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class NoticeItem {
-        private Long id;
+        private Long noticeId;
         private String title;
-        private String content;
+        private String authorId;
         private String author;
         private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
     }
 
     @Getter
@@ -74,13 +74,12 @@ public class NoticeDto {
     @Getter
     @Builder
     public static class NoticeDetailResponse {
-        private Long id;
+        private Long noticeId;
         private String title;
         private String content;
+        private Long authorId;
+        private String authorNickname;
+        private String profileImageUrl;
         private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
     }
-
-
-
 }

@@ -10,15 +10,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import kr.co.yigil.notice.application.NoticeFacade;
 import kr.co.yigil.notice.domain.NoticeCommand;
 import kr.co.yigil.notice.domain.NoticeInfo;
 import kr.co.yigil.notice.domain.NoticeInfo.NoticeListInfo;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeCreateRequest;
-import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeListResponse;
 import kr.co.yigil.notice.interfaces.dto.mapper.NoticeMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +38,6 @@ class NoticeApiControllerTest {
     @MockBean
     private NoticeMapper noticeMapper;
     private MockMvc mockMvc;
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext) {
@@ -52,12 +48,6 @@ class NoticeApiControllerTest {
     @DisplayName("공지사항 목록 조회가 성공하면 OK 상태를 반환한다.")
     @Test
     void whenGetNoticeList_thenShouldReturnOKstatus() throws Exception {
-        NoticeDto.NoticeItem notice1 = mock(NoticeDto.NoticeItem.class);
-        NoticeDto.NoticeItem notice2 = mock(NoticeDto.NoticeItem.class);
-        NoticeDto.NoticeListResponse response = NoticeListResponse.builder()
-            .noticeList(List.of(notice1, notice2))
-            .hasNext(false)
-            .build();
 
         PageRequest pageRequest = PageRequest.of(0, 5);
         when(noticeFacade.getNoticeList(pageRequest)).thenReturn(mock(NoticeListInfo.class));
@@ -67,8 +57,6 @@ class NoticeApiControllerTest {
         mockMvc.perform(get("/api/v1/notices"))
             .andExpect(status().isOk());
     }
-
-//    @DisplayName("공지사항 목록 조회가 실패하면 BAD_REQUEST 상태를 반환한다.")
 
     @DisplayName("공지사항이 잘 생성되면 OK 상태를 반환한다.")
     @Test

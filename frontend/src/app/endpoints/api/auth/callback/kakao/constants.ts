@@ -7,7 +7,7 @@ export async function getCallbackUrlBase() {
 
   return ENVIRONMENT === 'production'
     ? PRODUCTION_FRONTEND_URL
-    : ENVIRONMENT === 'dev'
+    : ENVIRONMENT === 'development'
     ? DEV_FRONTEND_URL
     : 'http://localhost:3000';
 }

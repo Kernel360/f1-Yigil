@@ -85,4 +85,14 @@ public class PlaceInfo {
             }
         }
     }
+
+    @Getter
+    @ToString
+    public static class Keyword {
+        private final String keyword;
+
+        public Keyword(String keyword) {
+            this.keyword = keyword;
+        }
+    }
 }

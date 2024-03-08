@@ -1,13 +1,13 @@
 import PlaceDetail from '@/app/_components/place/PlaceDetail';
-import { getMySpotForPlace, getPlaceDetail } from '../action';
-import { authenticateUser } from '@/app/_components/mypage/hooks/myPageActions';
 import { myInfoSchema } from '@/types/response';
-import PlaceMySpot from '@/app/_components/place/PlaceMySpot';
+import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
+import { getMySpotForPlace, getPlaceDetail } from '../action';
+import PlaceMySpot from '@/app/_components/place/spot/PlaceMySpot';
 
 export default async function PlaceDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: { id: number };
 }) {
   const memberJson = await authenticateUser();
   const memberInfo = myInfoSchema.safeParse(memberJson);

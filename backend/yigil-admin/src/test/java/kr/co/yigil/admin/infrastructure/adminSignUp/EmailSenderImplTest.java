@@ -1,13 +1,10 @@
 package kr.co.yigil.admin.infrastructure.adminSignUp;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
-import kr.co.yigil.email.EmailEventType;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.email.EmailSendEvent;
-import kr.co.yigil.event.Event;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

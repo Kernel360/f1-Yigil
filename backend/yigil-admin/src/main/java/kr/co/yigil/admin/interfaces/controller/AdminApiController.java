@@ -1,9 +1,9 @@
 package kr.co.yigil.admin.interfaces.controller;
 
 import kr.co.yigil.admin.application.AdminFacade;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.admin.AdminCommand;
 import kr.co.yigil.admin.domain.admin.AdminInfo;
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;
 import kr.co.yigil.admin.interfaces.dto.mapper.AdminMapper;
 import kr.co.yigil.admin.interfaces.dto.mapper.AdminSignupMapper;
@@ -11,7 +11,6 @@ import kr.co.yigil.admin.interfaces.dto.request.AdminPasswordUpdateRequest;
 import kr.co.yigil.admin.interfaces.dto.request.AdminProfileImageUpdateRequest;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;
-import kr.co.yigil.admin.interfaces.dto.request.AdminUpdateRequest;
 import kr.co.yigil.admin.interfaces.dto.request.LoginRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpAcceptRequest;
 import kr.co.yigil.admin.interfaces.dto.request.SignUpRejectRequest;
@@ -21,7 +20,6 @@ import kr.co.yigil.admin.interfaces.dto.response.AdminPasswordUpdateResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminProfileImageUpdateResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignUpsResponse;
 import kr.co.yigil.admin.interfaces.dto.response.AdminSignupResponse;
-import kr.co.yigil.admin.interfaces.dto.response.AdminUpdateResponse;
 import kr.co.yigil.admin.interfaces.dto.response.SignUpAcceptResponse;
 import kr.co.yigil.admin.interfaces.dto.response.SignUpRejectResponse;
 import kr.co.yigil.auth.dto.JwtToken;

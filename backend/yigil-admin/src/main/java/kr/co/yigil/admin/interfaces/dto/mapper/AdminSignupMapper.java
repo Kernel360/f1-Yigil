@@ -2,7 +2,7 @@ package kr.co.yigil.admin.interfaces.dto.mapper;
 
 
 import java.time.format.DateTimeFormatter;
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
+import kr.co.yigil.admin.domain.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand;
 import kr.co.yigil.admin.interfaces.dto.AdminSignUpInfoDto;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignupRequest;

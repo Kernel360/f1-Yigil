@@ -36,7 +36,7 @@ public class NoticeApiController {
     @GetMapping
     public ResponseEntity<NoticeListResponse> geNoticeList(
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) String sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
     ){
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(
@@ -48,6 +48,7 @@ public class NoticeApiController {
 
     @PostMapping
     public ResponseEntity<NoticeCreateResponse> createNotice(
+
         @ModelAttribute NoticeCreateRequest request
     ){
         var noticeCommand = noticeMapper.toCommand(request);

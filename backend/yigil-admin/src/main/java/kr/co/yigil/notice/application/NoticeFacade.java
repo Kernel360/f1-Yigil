@@ -7,19 +7,21 @@ import kr.co.yigil.notice.domain.NoticeInfo.NoticeListInfo;
 import kr.co.yigil.notice.domain.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class NoticeFacade {
+
     private final NoticeService noticeService;
 
     public NoticeListInfo getNoticeList(PageRequest pageRequest) {
         return noticeService.getNoticeList(pageRequest);
     }
 
-    public void createNotice(
-        NoticeCreateRequest noticeCommand) {
+    public void createNotice(NoticeCreateRequest noticeCommand) {
         noticeService.createNotice(noticeCommand);
     }
 
@@ -28,9 +30,15 @@ public class NoticeFacade {
     }
 
     public void updateNotice(Long noticeId, NoticeUpdateRequest noticeCommand) {
-            noticeService.updateNotice(noticeId, noticeCommand);
+        noticeService.updateNotice(noticeId, noticeCommand);
     }
+
     public void deleteNotice(Long noticeId) {
         noticeService.deleteNotice(noticeId);
+    }
+
+    private String getAuthor() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }

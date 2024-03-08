@@ -11,6 +11,7 @@ import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceInfo;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
@@ -23,6 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceFacadeTest {
@@ -62,6 +65,48 @@ public class PlaceFacadeTest {
         verify(placeService).getPopularPlace(any(Accessor.class));
     }
 
+    @DisplayName("getPopularPlaceMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPopularPlaceMore_ShouldReturnResponse() {
+        Accessor mockAccessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+
+        when(placeService.getPopularPlaceMore(mockAccessor)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPopularPlaceMore(mockAccessor);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPopularPlaceMore(any(Accessor.class));
+    }
+
+    @DisplayName("getPopularPlaceByDemographics 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographics_ShouldReturnResponse() {
+        Long memberId = 1L;
+        Main mockResponse = mock(Main.class);
+
+        when(placeService.getPopularPlaceByDemographics(memberId)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPopularPlaceByDemographics(memberId);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPopularPlaceByDemographics(anyLong());
+    }
+
+    @DisplayName("getPopularPlaceByDemographicsMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPopularPlaceByDemographicsMore_ShouldReturnResponse() {
+        Long memberId = 1L;
+        Main mockResponse = mock(Main.class);
+
+        when(placeService.getPopularPlaceByDemographicsMore(memberId)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPopularPlaceByDemographicsMore(memberId);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPopularPlaceByDemographicsMore(anyLong());
+    }
+
     @DisplayName("retrievePlaceInfo 메서드가 Response를 잘 반환하는지")
     @Test
     void retrievePlaceInfo_ShouldReturnResponse() {
@@ -92,6 +137,21 @@ public class PlaceFacadeTest {
         verify(placeService).getPlaceInRegion(anyLong(), any(Accessor.class));
     }
 
+    @DisplayName("getPlaceRegionMore 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPlaceRegionMore_ShouldReturnResponse() {
+        Accessor mockAccessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+        Long regionId = 1L;
+
+        when(placeService.getPlaceInRegionMore(regionId, mockAccessor)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPlaceInRegionMore(regionId, mockAccessor);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPlaceInRegionMore(anyLong(), any(Accessor.class));
+    }
+
     @DisplayName("getNearPlace 메서드가 Response를 잘 반환하는지")
     @Test
     void getNearPlace_ShouldReturnResponse() {
@@ -105,5 +165,36 @@ public class PlaceFacadeTest {
         assertEquals(result, mockResponse);
         verify(placeService).getNearPlace(any(
                 kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest.class));
+    }
+
+    @DisplayName("getPlaceKeywords 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getPlaceKeywords_ShouldReturnResponse() {
+        String keyword = "키워드";
+        PlaceInfo.Keyword mockResponse = mock(PlaceInfo.Keyword.class);
+
+        when(placeService.getPlaceKeywords(keyword)).thenReturn(List.of(mockResponse));
+
+        var result = placeFacade.getPlaceKeywords(keyword);
+
+        assertEquals(result, List.of(mockResponse));
+        verify(placeService).getPlaceKeywords(keyword);
+    }
+
+    @DisplayName("searchPlace 메서드가 Response를 잘 반환하는지")
+    @Test
+    void searchPlace_ShouldReturnResponse() {
+        String keyword = "키워드";
+        Pageable pageable = mock(Pageable.class);
+        Accessor accessor = mock(Accessor.class);
+        Main mockResponse = mock(Main.class);
+        Slice<Main> mockSlice = mock(Slice.class);
+
+        when(placeService.searchPlace(keyword, pageable, accessor)).thenReturn(mockSlice);
+
+        var result = placeFacade.searchPlace(keyword, pageable, accessor);
+
+        assertEquals(result, mockSlice);
+        verify(placeService).searchPlace(keyword, pageable, accessor);
     }
 }

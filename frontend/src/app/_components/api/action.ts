@@ -3,8 +3,7 @@
 import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { requestWithCookie } from './httpRequest';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { getBaseUrl } from '@/app/utilActions';
 
 export async function logout() {
   const response = await requestWithCookie('logout')()()()(
@@ -25,3 +24,32 @@ export async function logout() {
 const logoutSuccessResponse = z.object({
   message: z.string(),
 });
+
+export async function backendLoginRequest(data: {
+  id: string;
+  nickname: string;
+  profile_image_url: string;
+  email: string;
+  provider: string;
+  accessToken: string;
+}) {
+  const BASE_URL = await getBaseUrl();
+
+  const { id, nickname, profile_image_url, email, provider, accessToken } =
+    data;
+
+  return fetch(`${BASE_URL}/v1/login`, {
+    method: 'POST',
+    body: JSON.stringify({
+      id,
+      nickname,
+      profile_image_url,
+      email,
+      provider,
+    }),
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}

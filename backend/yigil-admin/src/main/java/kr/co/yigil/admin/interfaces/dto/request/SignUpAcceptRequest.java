@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpAcceptRequest {
-    private List<String> ids;
+    private List<Long> ids;
 }
