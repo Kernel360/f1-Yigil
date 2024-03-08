@@ -23,6 +23,13 @@ public class AdminReaderImpl implements AdminReader {
     @Override
     public Admin getAdminByEmail(String email) {
         return adminRepository.findByEmail(email).orElseThrow(() ->
-                new BadRequestException(ADMIN_NOT_FOUND));
+            new BadRequestException(ADMIN_NOT_FOUND));
+    }
+
+    @Override
+    public Admin getAdmin(Long adminId) {
+        return adminRepository.findById(adminId).orElseThrow(
+            () -> new BadRequestException(ADMIN_NOT_FOUND)
+        );
     }
 }
