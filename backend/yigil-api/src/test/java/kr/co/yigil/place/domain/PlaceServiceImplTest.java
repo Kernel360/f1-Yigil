@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,12 +15,17 @@ import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
+import kr.co.yigil.place.domain.PlaceInfo.Main;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceServiceImplTest {
@@ -206,4 +212,32 @@ public class PlaceServiceImplTest {
 
         assertNotNull(result);
     }
+
+    @DisplayName("getPlaceKeywords 메서드가 Keyword 객체의 List를 잘 반환하는지")
+    @Test
+    void getPlaceKeywords_ShouldReturnListOfKeyword() {
+        when(placeReader.getPlaceKeywords("키워드")).thenReturn(List.of("키워드"));
+        var result = placeService.getPlaceKeywords("키워드");
+
+        assertNotNull(result);
+    }
+
+    @DisplayName("searchPlace 메서드가 Main 객체의 Slice를 잘 반환하는지")
+    @Test
+    void searchPlace_ShouldReturnSlice() {
+        Place mockPlace = mock(Place.class);
+        when(mockPlace.getId()).thenReturn(1L);
+        Accessor mockAccessor = mock(Accessor.class);
+        when(mockAccessor.isMember()).thenReturn(true);
+        when(mockAccessor.getMemberId()).thenReturn(1L);
+        when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
+        when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
+        Slice<Place> mockSlice = new SliceImpl<>(List.of(mockPlace));
+        when(placeReader.getPlacesByKeyword(anyString(), any())).thenReturn(mockSlice);
+
+        var result = placeService.searchPlace("키워드", mock(Pageable.class), mockAccessor);
+
+        assertNotNull(result);
+    }
+
 }

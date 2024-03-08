@@ -13,6 +13,8 @@ import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
 import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
 import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceSearchResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
@@ -21,6 +23,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 @Mapper(componentModel = "spring")
 public interface PlaceMapper {
@@ -87,5 +90,18 @@ public interface PlaceMapper {
                 .toList();
 
         return new NearPlaceResponse(placeCoordinateDtos, page.getNumber() + 1, page.getTotalPages());
+    }
+
+    default PlaceSearchResponse toPlaceSearchResponse(Slice<Main> placeInfo) {
+        List<PlaceInfoDto> dtos = placeInfo.getContent().stream().map(this::mainToDto).collect(Collectors.toList());
+        return new PlaceSearchResponse(dtos, placeInfo.hasNext());
+    }
+
+    default PlaceKeywordResponse toPlaceKeywordResponse(List<PlaceInfo.Keyword> keywords) {
+        List<String> keywordStrings = keywords.stream()
+                .map(PlaceInfo.Keyword::getKeyword)
+                .collect(Collectors.toList());
+
+        return new PlaceKeywordResponse(keywordStrings);
     }
 }

@@ -120,3 +120,69 @@ include::{snippets}/places/get-near-place/response-fields.adoc[]
 ===== HTTP Response 예시
 include::{snippets}/places/get-near-place/http-response.adoc[]
 
+=== 개인별 추천 장소 조회
+
+==== Request
+include::{snippets}/places/get-popular-place-by-demographics/request-body.adoc[]
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/places/get-popular-place-by-demographics/http-request.adoc[]
+
+==== Response
+include::{snippets}/places/get-popular-place-by-demographics/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/places/get-popular-place-by-demographics/http-response.adoc[]
+
+=== 개인별 추천 장소 더보기
+
+==== Request
+include::{snippets}/places/get-popular-place-by-demographics-more/request-body.adoc[]
+로그인 필수: Y
+
+===== HTTP Request 예시
+include::{snippets}/places/get-popular-place-by-demographics-more/http-request.adoc[]
+
+==== Response
+include::{snippets}/places/get-popular-place-by-demographics-more/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/places/get-popular-place-by-demographics-more/http-response.adoc[]
+
+=== 추천 검색어 조회
+
+==== Request
+include::{snippets}/places/get-place-keyword/request-body.adoc[]
+로그인 필수: N
+
+==== Query Parameters
+include::{snippets}/places/get-place-keyword/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/places/get-place-keyword/http-request.adoc[]
+
+==== Response
+include::{snippets}/places/get-place-keyword/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/places/get-place-keyword/http-response.adoc[]
+
+=== 장소 검색
+
+==== Request
+include::{snippets}/places/search-place/request-body.adoc[]
+로그인 필수: N
+
+==== Query Parameters
+include::{snippets}/places/search-place/query-parameters.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/places/search-place/http-request.adoc[]
+
+==== Response
+include::{snippets}/places/search-place/response-fields.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/places/search-place/http-response.adoc[]
+

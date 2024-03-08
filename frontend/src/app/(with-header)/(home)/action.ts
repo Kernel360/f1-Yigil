@@ -5,7 +5,6 @@ import z from 'zod';
 import { cookies } from 'next/headers';
 import { placeSchema, regionSchema } from '@/types/response';
 import { getBaseUrl } from '@/app/utilActions';
-import { revalidateTag } from 'next/cache';
 
 const placeResponseSchema = z.object({
   places: z.array(placeSchema),
