@@ -35,7 +35,7 @@ export default function ViewTravelMap() {
   const [allPlaces, setAllPlaces] = useState<TMapPlace[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [markerClickedId, setMarkerClickedId] = useState(-1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isGeolocationLoading, setIsGeolocationLoading] = useState(true);
   const { onSuccessGeolocation, onErrorGeolocation } = useGeolocation(
     mapRef,
@@ -62,9 +62,9 @@ export default function ViewTravelMap() {
     if (mapRef.current) {
       const { x: maxX, y: maxY } = mapRef.current.getBounds().getMax();
       const { x: minX, y: minY } = mapRef.current.getBounds().getMin();
-      setMaxMinBounds({ ...maxMinBounds, maxX, maxY, minX, minY });
+      setMaxMinBounds((v) => ({ ...v, maxX, maxY, minX, minY }));
     }
-  }, [maxMinBounds]);
+  }, []);
 
   const onChangedMap = () => {
     if (!mapRef.current) return;
@@ -73,9 +73,11 @@ export default function ViewTravelMap() {
     const { x: lng, y: lat } = mapRef.current.getCenter();
     setMaxMinBounds({ ...maxMinBounds, maxX, maxY, minX, minY });
     setCenter({ lat, lng });
+    setMarkerClickedId(-1);
   };
 
   const getPlaces = useCallback(async () => {
+    setMarkerClickedId(-1);
     try {
       const placeList = await getNearPlaces(maxMinBounds, currentPage);
       if (!placeList.success) {
@@ -93,14 +95,16 @@ export default function ViewTravelMap() {
 
   const timer = useRef<null | NodeJS.Timeout>(null);
   useEffect(() => {
-    if (!timer.current) return;
     timer.current = setTimeout(() => {
       setIsLoading(true);
       getPlaces();
     }, 500);
 
     return () => {
-      if (timer.current) clearTimeout(timer.current);
+      if (timer.current) {
+        clearTimeout(timer.current);
+        timer.current = null;
+      }
     };
   }, [getPlaces]);
 
@@ -116,7 +120,7 @@ export default function ViewTravelMap() {
         center={center}
         zoom={15}
         ref={mapRef}
-        onSizeChanged={() => console.log(mapRef.current?.getBounds())}
+        onSizeChanged={onChangedMap}
         onBoundsChanged={onChangedMap}
       >
         {isGeolocationLoading || isLoading ? (
@@ -155,6 +159,11 @@ export default function ViewTravelMap() {
           id={markerClickedId}
         />
       )}
+
+      {!allPlaces.length && !isLoading && (
+        <ToastMsg title="주변 장소가 없습니다" timer={2000} />
+      )}
+
       {totalPages && (
         <MapPagination
           currentPage={currentPage}
