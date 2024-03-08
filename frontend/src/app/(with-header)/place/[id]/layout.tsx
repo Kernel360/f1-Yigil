@@ -1,4 +1,5 @@
 import BackButton from '@/app/_components/place/BackButton';
+import TabGroup from '@/app/_components/place/TabGroup';
 
 import type { ReactElement } from 'react';
 
@@ -17,7 +18,7 @@ export default function PlaceDetailLayout({
       </nav>
       {children}
       <hr className="border-8" />
-      {/* {reviews} */}
+      {reviews}
     </main>
   );
 }

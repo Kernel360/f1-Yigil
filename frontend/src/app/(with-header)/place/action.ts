@@ -1,16 +1,15 @@
 'use server';
 
-import { mySpotForPlaceSchema, placeDetailSchema } from '@/types/response';
 import { cookies } from 'next/headers';
+import { getBaseUrl } from '@/app/utilActions';
+import { mySpotForPlaceSchema, placeDetailSchema } from '@/types/response';
 
 async function fetchPlaceDetail(id: number) {
   const session = cookies().get('SESSION')?.value;
 
-  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+  const BASE_URL = await getBaseUrl();
 
-  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
-
-  const response = await fetch(`${baseUrl}/v1/places/${id}`, {
+  const response = await fetch(`${BASE_URL}/v1/places/${id}`, {
     headers: {
       Cookies: `SESSION=${session}`,
     },
@@ -29,11 +28,9 @@ async function fetchPlaceDetail(id: number) {
 async function fetchMySpotForPlace(id: number) {
   const session = cookies().get('SESSION')?.value;
 
-  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+  const BASE_URL = await getBaseUrl();
 
-  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
-
-  const response = await fetch(`${baseUrl}/v1/spots/place/${id}/me`, {
+  const response = await fetch(`${BASE_URL}/v1/spots/place/${id}/me`, {
     headers: {
       Cookie: `SESSION=${session}`,
     },
@@ -42,9 +39,7 @@ async function fetchMySpotForPlace(id: number) {
   return await response.json();
 }
 
-export async function getPlaceDetail(idString: string) {
-  const id = Number.parseInt(idString, 10);
-
+export async function getPlaceDetail(id: number) {
   const json = await fetchPlaceDetail(id);
 
   const result = placeDetailSchema.safeParse(json);
@@ -52,9 +47,7 @@ export async function getPlaceDetail(idString: string) {
   return result;
 }
 
-export async function getMySpotForPlace(idString: string) {
-  const id = Number.parseInt(idString, 10);
-
+export async function getMySpotForPlace(id: number) {
   const json = await fetchMySpotForPlace(id);
 
   const result = mySpotForPlaceSchema.safeParse(json);

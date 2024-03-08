@@ -133,7 +133,7 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null, null);
         Spot spot = mock(Spot.class);
         AttachFiles mockAttachFiles = mock(AttachFiles.class);
 
@@ -161,7 +161,7 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null, null);
         Spot spot = mock(Spot.class);
         RegisterPlaceRequest placeCommand = mock(RegisterPlaceRequest.class);
         AttachFiles mockAttachFiles = mock(AttachFiles.class);
@@ -301,4 +301,6 @@ public class SpotServiceImplTest {
         assertThat(result).isNotNull().isInstanceOf(SpotInfo.MySpotsResponse.class);
         assertThat(result.getContent().getFirst()).isInstanceOf(SpotInfo.SpotListInfo.class);
     }
+
+
 }

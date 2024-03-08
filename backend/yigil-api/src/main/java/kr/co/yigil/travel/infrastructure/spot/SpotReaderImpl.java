@@ -32,7 +32,7 @@ public class SpotReaderImpl implements SpotReader {
 
     @Override
     public Optional<Spot> findSpotByPlaceIdAndMemberId(Long placeId, Long memberId) {
-        return spotRepository.findByPlaceIdAndMemberId(placeId, memberId);
+        return spotRepository.findTopByPlaceIdAndMemberId(placeId, memberId);
     }
 
     @Override

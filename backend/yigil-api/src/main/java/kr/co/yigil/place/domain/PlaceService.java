@@ -5,6 +5,8 @@ import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.domain.PlaceInfo.Keyword;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface PlaceService {
     public List<Main> getPopularPlace(Accessor accessor);
@@ -19,4 +21,6 @@ public interface PlaceService {
     List<Main> getPopularPlaceByDemographics(Long memberId);
 
     List<Main> getPopularPlaceByDemographicsMore(Long memberId);
+
+    Slice<Main> searchPlace(String keyword, Pageable pageable, Accessor accessor);
 }

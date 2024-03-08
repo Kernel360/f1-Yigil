@@ -10,6 +10,6 @@ public interface CourseReader {
     Course getCourse(Long courseId);
     Slice<Course> getCoursesSliceInPlace(Long placeId, Pageable pageable);
     Page<Course> getMemberCourseList(Long memberId, Pageable pageable, Selected selectInfo);
-
+    Slice<Course> searchCourseByPlaceName(String keyword, Pageable pageable);
 }
 

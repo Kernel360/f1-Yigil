@@ -3,6 +3,8 @@ package kr.co.yigil.place.interfaces.controller;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.place.application.PlaceFacade;
 import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
@@ -13,7 +15,12 @@ import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceSearchResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -114,10 +121,28 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<PlaceSearchResponse> searchPlace(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @PageableDefault(size = 5, page = 1) Pageable pageable,
+            @RequestParam(name = "sortBy", defaultValue = "latest_uploaded_time", required = false) SortBy sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder,
+            @Auth Accessor accessor
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+                pageable.getPageSize(),
+                Sort.by(direction, sortBy.getValue()));
+        var placeInfo = placeFacade.searchPlace(keyword, pageRequest, accessor);
+        var response = placeMapper.toPlaceSearchResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping("/keyword")
     public ResponseEntity<PlaceKeywordResponse> getPlaceKeyword(@RequestParam String keyword) {
         var keywordsInfo = placeFacade.getPlaceKeywords(keyword);
         var response = placeMapper.toPlaceKeywordResponse(keywordsInfo);
         return ResponseEntity.ok().body(response);
     }
+
 }
