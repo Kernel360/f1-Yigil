@@ -1,4 +1,3 @@
-'use server';
 import { getBaseUrl } from '@/app/utilActions';
 import { TMapPlacesSchema } from '@/types/response';
 
