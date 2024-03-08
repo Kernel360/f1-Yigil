@@ -43,7 +43,7 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
       # Docker 이미지 빌드
       - name: Docker image build
         run : |
