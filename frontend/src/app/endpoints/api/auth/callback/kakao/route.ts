@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const { KAKAO_ID, KAKAO_SECRET, NODE_ENV } = process.env;
+  const { KAKAO_ID, KAKAO_SECRET, ENVIRONMENT } = process.env;
 
   const redirectUri = await kakaoRedrectUri();
 
@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
   response.cookies.set({
     name: key,
     value,
-    secure: NODE_ENV === 'production',
+    secure: ENVIRONMENT === 'production',
   });
 
   return response;
