@@ -130,7 +130,7 @@ class BookmarkApiControllerTest {
                         queryParameters(
                                 parameterWithName("page").description("현재 페이지 - default:1").optional(),
                                 parameterWithName("size").description("페이지 크기 - default:5").optional(),
-                                parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
+                                parameterWithName("sortBy").description("정렬 옵션 - created_at(디폴트값) / rate").optional(),
                                 parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
                         ),
                         responseFields(

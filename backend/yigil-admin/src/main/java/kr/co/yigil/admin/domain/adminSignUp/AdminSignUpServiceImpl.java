@@ -67,15 +67,15 @@ public class AdminSignUpServiceImpl implements AdminSignUpService {
     @Override
     @Transactional
     public void acceptAdminSignUp(SignUpAcceptRequest request) {
-        List<String> acceptedAdminIds = request.getIds();
+        List<Long> acceptedAdminIds = request.getIds();
         signUpNewAdmins(acceptedAdminIds);
     }
 
-    private void signUpNewAdmins(List<String> ids) {
+    private void signUpNewAdmins(List<Long> ids) {
         List<String> roles = new ArrayList<>();
         roles.add("USER");
-        for (String id : ids) {
-            signUpNewAdmin(Long.parseLong(id), roles);
+        for (Long id : ids) {
+            signUpNewAdmin(id, roles);
         }
     }
 
@@ -101,16 +101,16 @@ public class AdminSignUpServiceImpl implements AdminSignUpService {
         adminSignUpStore.remove(signUp);
     }
 
-    private void deleteAdminSignUpRequests(List<String> ids) {
-        for (String id : ids) {
-            deleteAdminSignUpRequest(Long.parseLong(id));
+    private void deleteAdminSignUpRequests(List<Long> ids) {
+        for (Long id : ids) {
+            deleteAdminSignUpRequest(id);
         }
     }
 
     @Override
     @Transactional
     public void rejectAdminSignUp(SignUpRejectRequest request) {
-        List<String> rejectedAdminIds = request.getIds();
+        List<Long> rejectedAdminIds = request.getIds();
         deleteAdminSignUpRequests(rejectedAdminIds);
     }
 

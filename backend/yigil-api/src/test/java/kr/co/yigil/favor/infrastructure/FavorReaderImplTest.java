@@ -43,14 +43,4 @@ class FavorReaderImplTest {
         assertThat(result).isFalse();
     }
 
-    @DisplayName("유효한 파라미터를 전달했을 때 getFavorIdByMemberIdAndTravelId 메서드가 올바른 결과를 반환하는지")
-    @Test
-    void WhenCallGetFavorIdByMemberIdAndTravelId_ThenShouldreturnFavorId() {
-        when(favorRepository.getFavorIdByMemberIdAndTravelId(anyLong(), anyLong())).thenReturn(
-            Optional.of(1L));
-
-        var result = favorReader.getFavorIdByMemberIdAndTravelId(1L, 1L);
-
-        assertThat(result).isEqualTo(1L);
-    }
 }

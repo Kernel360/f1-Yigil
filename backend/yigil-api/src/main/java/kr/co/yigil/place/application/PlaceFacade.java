@@ -5,6 +5,7 @@ import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo;
+import kr.co.yigil.place.domain.PlaceInfo.Keyword;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.place.domain.PlaceService;
@@ -52,4 +53,9 @@ public class PlaceFacade {
     public List<Main> getPopularPlaceByDemographicsMore(final Long memberId) {
         return placeService.getPopularPlaceByDemographicsMore(memberId);
     }
+
+    public List<Keyword> getPlaceKeywords(final String keyword) {
+        return placeService.getPlaceKeywords(keyword);
+    }
+
 }

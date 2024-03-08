@@ -1,6 +1,5 @@
 package kr.co.yigil.notice.application;
 
-import kr.co.yigil.admin.domain.admin.AdminService;
 import kr.co.yigil.notice.domain.NoticeCommand.NoticeCreateRequest;
 import kr.co.yigil.notice.domain.NoticeCommand.NoticeUpdateRequest;
 import kr.co.yigil.notice.domain.NoticeInfo.NoticeDetail;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Service;
 public class NoticeFacade {
 
     private final NoticeService noticeService;
-    private final AdminService adminService;
-
 
     public NoticeListInfo getNoticeList(PageRequest pageRequest) {
         return noticeService.getNoticeList(pageRequest);

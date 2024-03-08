@@ -74,57 +74,57 @@ public class CourseApiControllerTest {
             .apply(documentationConfiguration(restDocumentation)).build();
     }
 
-    @DisplayName("getCoursesInPLace 메서드가 잘 동작하는지")
+    @DisplayName("getCoursesInPlace 메서드가 잘 동작하는지")
     @Test
     void getCoursesInPlace_ShouldReturnOk() throws Exception {
         Slice<Course> mockSlice = mock(Slice.class);
         CourseInfoDto courseInfo = new CourseInfoDto("images/static.img", "코스이름", "5.0", "3",
-            "2024-02-01", "images/owner.jpg", "코스 작성자");
+                "2024-02-01", "images/owner.jpg", "코스 작성자");
         CoursesInPlaceResponse response = new CoursesInPlaceResponse(List.of(courseInfo), false);
 
         when(courseFacade.getCourseSliceInPlace(anyLong(), any(Pageable.class))).thenReturn(
-            mockSlice);
+                mockSlice);
         when(courseMapper.courseSliceToCourseInPlaceResponse(mockSlice)).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/courses/place/{placeId}", 1L)
-                .param("page", "1")
-                .param("size", "5")
-                .param("sortBy", "created_at")
-                .param("sortOrder", "desc"))
-            .andExpect(status().isOk())
-            .andDo(document(
-                "courses/get-courses-in-place",
-                getDocumentRequest(),
-                getDocumentResponse(),
-                pathParameters(
-                    parameterWithName("placeId").description("장소 아이디")
-                ),
-                queryParameters(
-                        parameterWithName("page").description("현재 페이지 - default:1").optional(),
-                        parameterWithName("size").description("페이지 크기 - default:5").optional(),
-                        parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
-                        parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
-                ),
-                responseFields(
-                    fieldWithPath("has_next").type(JsonFieldType.BOOLEAN)
-                        .description("다음 페이지가 있는지 여부"),
-                    subsectionWithPath("courses").description("course의 정보"),
-                    fieldWithPath("courses[].map_static_image_file_url").type(JsonFieldType.STRING)
-                        .description("코스의 지도 정보를 나타내는 이미지 파일 경로"),
-                    fieldWithPath("courses[].title").type(JsonFieldType.STRING)
-                        .description("코스의 제목"),
-                    fieldWithPath("courses[].rate").type(JsonFieldType.STRING)
-                        .description("코스의 평점 정보"),
-                    fieldWithPath("courses[].spot_count").type(JsonFieldType.STRING)
-                        .description("코스 내부 장소의 개수"),
-                    fieldWithPath("courses[].create_date").type(JsonFieldType.STRING)
-                        .description("코스의 생성 일자"),
-                    fieldWithPath("courses[].owner_profile_image_url").type(JsonFieldType.STRING)
-                        .description("코스 생성자의 프로필 이미지 경로"),
-                    fieldWithPath("courses[].owner_nickname").type(JsonFieldType.STRING)
-                        .description("코스 생성자의 닉네임 정보")
-                )
-            ));
+                        .param("page", "1")
+                        .param("size", "5")
+                        .param("sortBy", "created_at")
+                        .param("sortOrder", "desc"))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "courses/get-courses-in-place",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("placeId").description("장소 아이디")
+                        ),
+                        queryParameters(
+                                parameterWithName("page").description("현재 페이지 - default:1").optional(),
+                                parameterWithName("size").description("페이지 크기 - default:5").optional(),
+                                parameterWithName("sortBy").description("정렬 옵션 - created_at(디폴트값) / rate").optional(),
+                                parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지가 있는지 여부"),
+                                subsectionWithPath("courses").description("course의 정보"),
+                                fieldWithPath("courses[].map_static_image_file_url").type(JsonFieldType.STRING)
+                                        .description("코스의 지도 정보를 나타내는 이미지 파일 경로"),
+                                fieldWithPath("courses[].title").type(JsonFieldType.STRING)
+                                        .description("코스의 제목"),
+                                fieldWithPath("courses[].rate").type(JsonFieldType.STRING)
+                                        .description("코스의 평점 정보"),
+                                fieldWithPath("courses[].spot_count").type(JsonFieldType.STRING)
+                                        .description("코스 내부 장소의 개수"),
+                                fieldWithPath("courses[].create_date").type(JsonFieldType.STRING)
+                                        .description("코스의 생성 일자"),
+                                fieldWithPath("courses[].owner_profile_image_url").type(JsonFieldType.STRING)
+                                        .description("코스 생성자의 프로필 이미지 경로"),
+                                fieldWithPath("courses[].owner_nickname").type(JsonFieldType.STRING)
+                                        .description("코스 생성자의 닉네임 정보")
+                        )
+                ));
 
         verify(courseFacade).getCourseSliceInPlace(anyLong(), any(Pageable.class));
     }

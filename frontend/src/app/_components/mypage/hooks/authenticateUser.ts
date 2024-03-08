@@ -1,14 +1,17 @@
 'use server';
+
 import { cookies } from 'next/headers';
-const { ENVIRONMENT, BASE_URL, DEV_BASE_URL } = process.env;
-const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+import { getBaseUrl } from '@/app/utilActions';
 
 export const authenticateUser = async () => {
+  const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
-  const res = await fetch(`${baseUrl}/v1/members`, {
+
+  const res = await fetch(`${BASE_URL}/v1/members`, {
     headers: {
       Cookie: `SESSION=${cookie}`,
     },
   });
+
   return res.json();
 };

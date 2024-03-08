@@ -1,16 +1,16 @@
 package kr.co.yigil.travel.domain.spot;
 
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
-import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
+import kr.co.yigil.travel.domain.spot.SpotInfo.Slice;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 public interface SpotService {
 
-    Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable);
+    Slice getSpotSliceInPlace(Long placeId, Accessor accessor, Pageable pageable);
 
     public SpotInfo.MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId);
 

@@ -187,4 +187,17 @@ public class PlaceReaderImplTest {
         assertTrue(result.containsAll(Arrays.asList(place1)));
     }
 
+    @DisplayName("getPlaceKeywords 메서드가 Place의 이름 리스트를 잘 반환하는지")
+    @Test
+    void getPlaceKeywords_ReturnsListOfString() {
+        String keyword = "keyword";
+        Place place1 = mock(Place.class);
+        Place place2 = mock(Place.class);
+        when(placeRepository.findTop10ByNameStartingWith(keyword)).thenReturn(
+                Arrays.asList(place1, place2));
+
+        List<String> result = placeReader.getPlaceKeywords(keyword);
+
+        assertEquals(result.size(), 2);
+    }
 }

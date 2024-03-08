@@ -9,6 +9,7 @@ import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
 import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
 import kr.co.yigil.place.interfaces.dto.request.PlaceImageRequest;
 import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -109,6 +111,13 @@ public class PlaceApiController {
         var nearPlaceCommand = placeMapper.toNearPlaceCommand(request);
         var placeInfo = placeFacade.getNearPlace(nearPlaceCommand);
         var response = placeMapper.toNearPlaceResponse(placeInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/keyword")
+    public ResponseEntity<PlaceKeywordResponse> getPlaceKeyword(@RequestParam String keyword) {
+        var keywordsInfo = placeFacade.getPlaceKeywords(keyword);
+        var response = placeMapper.toPlaceKeywordResponse(keywordsInfo);
         return ResponseEntity.ok().body(response);
     }
 }

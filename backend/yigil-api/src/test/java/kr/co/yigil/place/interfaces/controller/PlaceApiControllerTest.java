@@ -28,6 +28,7 @@ import kr.co.yigil.place.domain.PlaceCommand;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceInfo;
 import kr.co.yigil.place.domain.PlaceInfo.Detail;
+import kr.co.yigil.place.domain.PlaceInfo.Keyword;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.place.interfaces.dto.PlaceCoordinateDto;
@@ -35,6 +36,7 @@ import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
 import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
@@ -254,6 +256,38 @@ public class PlaceApiControllerTest {
                 ));
     }
 
+    @DisplayName("getRegionPlaceMore 메서드가 잘 동작하는지")
+    @Test
+    void getRegionPlaceMore_ShouldReturnOk() throws Exception {
+        Main placeInfo = mock(Main.class);
+        List<Main> mockInfo = List.of(placeInfo);
+        PlaceInfoDto mockDto = new PlaceInfoDto(1L, "장소명", "10", "http://image.com", "3.5", true);
+        RegionPlaceResponse mockResponse = new RegionPlaceResponse(List.of(mockDto));
+
+        when(placeFacade.getPlaceInRegionMore(anyLong(), any(Accessor.class))).thenReturn(mockInfo);
+        when(placeMapper.toRegionPlaceResponse(mockInfo)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/places/region/{regionId}/more", 1L))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "places/get-region-place-more",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("regionId").description("지역의 고유 아이디")
+                        ),
+                        responseFields(
+                                subsectionWithPath("places").description("place의 정보"),
+                                fieldWithPath("places[].id").type(JsonFieldType.NUMBER).description("place의 고유 Id"),
+                                fieldWithPath("places[].place_name").type(JsonFieldType.STRING).description("장소의 장소명"),
+                                fieldWithPath("places[].review_count").type(JsonFieldType.STRING).description("리뷰의 개수"),
+                                fieldWithPath("places[].thumbnail_image_url").type(JsonFieldType.STRING).description("장소의 대표 이미지의 Url"),
+                                fieldWithPath("places[].rate").type(JsonFieldType.STRING).description("장소의 평점 정보"),
+                                fieldWithPath("places[].bookmarked").type(JsonFieldType.BOOLEAN).description("해당 장소의 북마크 여부")
+                        )
+                ));
+    }
+
     @DisplayName("getRegionPlace 메서드가 잘 동작하는지")
     @Test
     void getRegionPlace_ShouldReturnOk() throws Exception {
@@ -327,6 +361,32 @@ public class PlaceApiControllerTest {
                                 fieldWithPath("places[].y").type(JsonFieldType.NUMBER).description("장소의 y 좌표"),
                                 fieldWithPath("current_page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
                                 fieldWithPath("total_pages").type(JsonFieldType.NUMBER).description("총 페이지의 개수")
+                        )
+                ));
+    }
+
+    @DisplayName("getPlaceKeyword 메서드가 잘 동작하는지")
+    @Test
+    void getPlaceKeyword_ShouldReturnOk() throws Exception {
+        String keyword = "키워드";
+        Keyword mockKeyword = mock(Keyword.class);
+        when(placeFacade.getPlaceKeywords(keyword)).thenReturn(List.of(mockKeyword));
+
+        PlaceKeywordResponse mockResponse = new PlaceKeywordResponse(List.of("키워드"));
+        when(placeMapper.toPlaceKeywordResponse(List.of(mockKeyword))).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/api/v1/places/keyword")
+                        .param("keyword", keyword))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "places/get-place-keyword",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        queryParameters(
+                                parameterWithName("keyword").description("검색하고자 하는 키워드")
+                        ),
+                        responseFields(
+                                fieldWithPath("keywords[]").type(JsonFieldType.ARRAY).description("추천 키워드의 이름")
                         )
                 ));
     }

@@ -64,6 +64,12 @@ public class PlaceReaderImpl implements PlaceReader {
     }
 
     @Override
+    public List<String> getPlaceKeywords(String keyword) {
+        return placeRepository.findTop10ByNameStartingWith(keyword)
+                .stream().map(Place::getName).toList();
+    }
+
+    @Override
     public List<Place> getPopularPlaceByDemographics(Ages ages, Gender gender) {
         return demographicPlaceRepository.findTop5ByAgesAndGenderOrderByReferenceCountDesc(ages, gender)
                 .stream().map(DemographicPlace::getPlace).toList();
