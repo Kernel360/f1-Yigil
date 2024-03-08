@@ -1,6 +1,7 @@
 spring:
   batch:
     job:
+      names: ${job.names:NONE}
       enabled: true
   jpa:
     database: postgresql
