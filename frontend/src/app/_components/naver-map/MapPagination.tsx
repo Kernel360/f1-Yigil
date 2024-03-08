@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import LeftIcon from '/public/icons/chevron-left.svg';
 import RightIcon from '/public/icons/chevron-right.svg';
 
@@ -8,19 +8,23 @@ interface TProps {
   totalPage: number;
 }
 
-function Pagination({ currentPage, setCurrentPage, totalPage }: TProps) {
+export default function MapPagination({
+  currentPage,
+  setCurrentPage,
+  totalPage,
+}: TProps) {
   const renderPage = useMemo(() => {
     const start = Math.floor((currentPage - 1) / 5) * 5 + 1;
     const end = Math.min(start + 5 - 1, totalPage);
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }, [currentPage, totalPage]);
 
-  const addPage = () => {
+  const toNextPage = () => {
     if (currentPage >= totalPage) return;
     setCurrentPage(currentPage + 1);
   };
 
-  const minusPage = () => {
+  const toPrevPage = () => {
     if (currentPage <= 1) return;
     setCurrentPage(currentPage - 1);
   };
@@ -28,17 +32,17 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: TProps) {
     setCurrentPage(page);
   };
   return (
-    <nav className={`my-4 pb-[50px] flex justify-center items-center gap-x-6`}>
+    <nav
+      className={`absolute bottom-1 left-[50%] -translate-x-1/2 bg-white bg-opacity-90 rounded-3xl my-4 mb-6 flex justify-center items-center gap-x-6`}
+    >
       <span
-        className={`w-[9px] h-[16px] px-1 ${
-          currentPage !== 1 && 'cursor-pointer'
-        }`}
-        onClick={minusPage}
-        onKeyDown={(e) => e.key === 'Enter' && minusPage()}
+        className={` ${currentPage !== 1 && 'cursor-pointer'}`}
+        onClick={toPrevPage}
+        onKeyDown={(e) => e.key === 'Enter' && toPrevPage()}
         tabIndex={currentPage !== 1 ? 0 : -1}
       >
         {currentPage !== 1 && (
-          <LeftIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
+          <LeftIcon className="w-[9px] h-[16px] ml-4 stroke-gray-300 hover:stroke-gray-500" />
         )}
       </span>
 
@@ -57,21 +61,17 @@ function Pagination({ currentPage, setCurrentPage, totalPage }: TProps) {
           </button>
         ))}
       <span
-        className={`w-[9px] h-[16px] px-1 ${
-          currentPage !== 1 && 'cursor-pointer'
-        }`}
-        onClick={addPage}
-        onKeyDown={(e) => e.key === 'Enter' && addPage()}
+        className={`${currentPage !== totalPage && 'cursor-pointer'}`}
+        onClick={toNextPage}
+        onKeyDown={(e) => e.key === 'Enter' && toNextPage()}
         tabIndex={
           !renderPage.includes(totalPage) && currentPage !== totalPage ? 0 : -1
         }
       >
-        {!renderPage.includes(totalPage) && currentPage !== totalPage && (
-          <RightIcon className="w-[9px] h-[16px] stroke-gray-300 hover:stroke-gray-500" />
+        {currentPage !== totalPage && (
+          <RightIcon className="w-[9px] h-[16px] mr-4 stroke-gray-300 hover:stroke-gray-500" />
         )}
       </span>
     </nav>
   );
 }
-
-export default Pagination;
