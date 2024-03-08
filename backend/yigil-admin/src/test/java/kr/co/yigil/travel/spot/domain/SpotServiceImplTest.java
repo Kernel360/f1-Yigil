@@ -71,7 +71,7 @@ class SpotServiceImplTest {
         Long spotId = 1L;
         AttachFile mockAttachFile = new AttachFile(null, "url", "filename", 4L);
         Place mockPlace = new Place(1L, "name", "address", 4.0, null, mockAttachFile,
-            mockAttachFile);
+            mockAttachFile, null);
         AttachFiles attachFiles = new AttachFiles(List.of(mockAttachFile, mockAttachFile));
         Spot spot = new Spot(1L, mock(Member.class), null, false, null, null, attachFiles,
             mockPlace, 5.0);
