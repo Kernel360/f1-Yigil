@@ -26,8 +26,6 @@ spring:
         password: @SLAVE_DB_PASSWORD@
   data:
     redis:
-      host: localhost
-      port: 6379
       host: @REDIS_HOST@
       port: @REDIS_PORT@
   jackson:
