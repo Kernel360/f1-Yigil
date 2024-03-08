@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import kr.co.yigil.comment.domain.CommentInfo.ChildrenPageComments;
+import kr.co.yigil.comment.domain.CommentInfo.CommentList;
 import kr.co.yigil.comment.domain.CommentInfo.ParentPageComments;
 import kr.co.yigil.member.Member;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +76,8 @@ class CommentServiceImplTest {
         when(commentReader.getChildrenComments(parentId, pageRequest)).thenReturn(pageComments);
 
         // When
-        CommentInfo.ChildrenPageComments response = commentServiceImpl.getChildrenComments(parentId, pageRequest);
+        CommentInfo.ChildrenPageComments response = commentServiceImpl.getChildrenComments(parentId,
+            pageRequest);
 
         // Then
         assertThat(response).isInstanceOf(ChildrenPageComments.class);
@@ -100,4 +102,29 @@ class CommentServiceImplTest {
         assertThat(response).isEqualTo(1L);
 
     }
+
+    @DisplayName("getComments 메서드가 CommentReader를 잘 호출하고 CommentList를 반환하는지")
+    @Test
+    void whenGetComments_thenShouldReturnCommentList() {
+
+        Long travelId = 1L;
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Member mockMember = mock(Member.class);
+        Comment mockComment = mock(Comment.class);
+        when(mockComment.getId()).thenReturn(1L);
+        when(mockComment.getMember()).thenReturn(mockMember);
+        when(mockComment.getContent()).thenReturn("content");
+        when(mockComment.getCreatedAt()).thenReturn(null);
+        when(mockMember.getId()).thenReturn(1L);
+        List<Comment> comments = List.of(mockComment);
+        Page<Comment> pageComments = new PageImpl<>(comments, pageRequest, comments.size());
+
+        when(commentReader.getParentComments(travelId, pageRequest)).thenReturn(pageComments);
+        when(commentReader.getChildrenComments(1L)).thenReturn(List.of(mockComment));
+
+        CommentList response = commentServiceImpl.getComments(travelId, pageRequest);
+
+        assertThat(response).isInstanceOf(CommentList.class);
+    }
+
 }

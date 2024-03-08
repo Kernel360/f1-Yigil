@@ -10,6 +10,56 @@ import org.springframework.data.domain.Pageable;
 
 public class CommentInfo {
 
+
+    @Data
+    @AllArgsConstructor
+    public static class CommentList {
+
+        private Page<CommentListUnit> parents;
+
+        public CommentList(List<CommentListUnit> parents, Pageable pageable, long total) {
+            this.parents = new PageImpl<>(parents, pageable, total);
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CommentListUnit {
+        private Long id;
+        private String memberNickname;
+        private Long memberId;
+        private String content;
+        private LocalDateTime createdAt;
+        private List<ReplyListUnit> children;
+
+        public CommentListUnit(Comment comment, List<ReplyListUnit> children) {
+            this.id = comment.getId();
+            this.memberNickname = comment.getMember().getNickname();
+            this.memberId = comment.getMember().getId();
+            this.content = comment.getContent();
+            this.createdAt = comment.getCreatedAt();
+            this.children = children;
+        }
+    }
+    @Data
+    @AllArgsConstructor
+    public static class ReplyListUnit {
+        private Long id;
+        private String memberNickname;
+        private Long memberId;
+        private String content;
+        private LocalDateTime createdAt;
+
+        public ReplyListUnit(Comment comment) {
+            this.id = comment.getId();
+            this.memberNickname = comment.getMember().getNickname();
+            this.memberId = comment.getMember().getId();
+            this.content = comment.getContent();
+            this.createdAt = comment.getCreatedAt();
+        }
+    }
+
+
     @Data
     @AllArgsConstructor
     public static class ParentPageComments {

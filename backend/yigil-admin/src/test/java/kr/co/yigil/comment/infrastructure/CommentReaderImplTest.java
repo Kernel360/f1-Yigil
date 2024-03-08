@@ -98,4 +98,18 @@ class CommentReaderImplTest {
 
         assertThat(result).isEqualTo(comment);
     }
+
+    @DisplayName("대댓글을 조회할 때 대댓글을 잘 반환하는지")
+    @Test
+    void whenGetChildrenComments_thenShouldReturnListComment() {
+        Comment comment1 = mock(Comment.class);
+        Comment comment2 = mock(Comment.class);
+        List<Comment> comments = List.of(comment1, comment2);
+
+        when(commentRepository.findAllByParentIdAndIsDeletedFalse(1L)).thenReturn(comments);
+
+        var result = commentReader.getChildrenComments(1L);
+
+        assertThat(result).isEqualTo(comments);
+    }
 }

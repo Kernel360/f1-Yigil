@@ -48,31 +48,34 @@ class CommentApiControllerTest {
     @Test
     void whenGetParentCommentList_thenShouldReturn200AndParentCommentsResponse() throws Exception {
 
-        when(commentFacade.getParentComments(1L, PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, SortBy.CREATED_AT.getValue()))))
+        when(commentFacade.getParentComments(1L,
+            PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, SortBy.CREATED_AT.getValue()))))
             .thenReturn(mock(CommentInfo.ParentPageComments.class));
         when(commentMapper.of(any(CommentInfo.ParentPageComments.class)))
             .thenReturn(mock(CommentDto.ParentCommentsResponse.class));
 
         mockMvc.perform(get("/api/v1/comments/{travel_id}/parents", 1L)
-            .param("travel_id", "1")
-            .param("size", "5")
-            .param("page", "1"))
+                .param("travel_id", "1")
+                .param("size", "5")
+                .param("page", "1"))
             .andExpect(status().isOk());
     }
 
     @DisplayName("대댓글 목록을 조회했을 때 200 응답과 response가 잘 반환되는지")
     @Test
-    void whenGetChildrenCommentList_thenShouldReturn200AndChildrenCommentsResponse() throws Exception{
+    void whenGetChildrenCommentList_thenShouldReturn200AndChildrenCommentsResponse()
+        throws Exception {
 
-        when(commentFacade.getChildrenComments(1L, PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, SortBy.CREATED_AT.getValue())))
+        when(commentFacade.getChildrenComments(1L,
+            PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, SortBy.CREATED_AT.getValue())))
         ).thenReturn(mock(CommentInfo.ChildrenPageComments.class));
         when(commentMapper.of(any(CommentInfo.ChildrenPageComments.class))
         ).thenReturn(mock(CommentDto.ChildrenCommentsResponse.class));
 
         mockMvc.perform(get("/api/v1/comments/{parent_id}/children", 1L)
-            .param("parent_id", "1")
-            .param("size", "5")
-            .param("page", "1"))
+                .param("parent_id", "1")
+                .param("size", "5")
+                .param("page", "1"))
             .andExpect(status().isOk());
     }
 
@@ -87,5 +90,26 @@ class CommentApiControllerTest {
             .andExpect(status().isOk());
 
         verify(commentFacade).deleteComment(commentId);
+    }
+
+    @DisplayName("댓글 목록을 조회했을 때 200 응답과 CommentResponse가 잘 조회 되는지")
+    @Test
+    void whenGetCommentList_thenReturnOkAndCommentsResponse() throws Exception {
+        // given
+        Long travelId = 1L;
+
+        // when
+        when(commentFacade.getComments(travelId,
+            PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, SortBy.CREATED_AT.getValue())))
+        ).thenReturn(mock(CommentInfo.CommentList.class));
+        when(commentMapper.of(any(CommentInfo.CommentList.class))
+        ).thenReturn(mock(CommentDto.CommentsResponse.class));
+
+        // then
+        mockMvc.perform(get("/api/v1/comments/{travel_id}", travelId)
+                .param("travel_id", "1")
+                .param("size", "5")
+                .param("page", "1"))
+            .andExpect(status().isOk());
     }
 }

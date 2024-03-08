@@ -1,5 +1,6 @@
 package kr.co.yigil.comment.infrastructure;
 
+import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.comment.domain.Comment;
 import org.springframework.data.domain.Page;
@@ -49,4 +50,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findAllAsPageImplByTravelIdAndParentIdIsNull(Long travelId, Pageable pageable);
 
     Page<Comment> findAllByParentIdAndIsDeletedFalse(Long parentId, PageRequest pageRequest);
+    List<Comment> findAllByParentIdAndIsDeletedFalse(Long parentId);
 }
