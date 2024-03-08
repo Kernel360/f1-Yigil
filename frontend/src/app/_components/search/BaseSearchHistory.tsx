@@ -39,7 +39,7 @@ export default function BaseSearchHistory() {
       ) : (
         <ul className="pl-8 pr-3 py-4 flex flex-col gap-4 grow">
           {histories.map((item) => (
-            <SearchItem key={item} item={item} href="#" erasable />
+            <SearchItem key={item} item={item} erasable />
           ))}
         </ul>
       )}
