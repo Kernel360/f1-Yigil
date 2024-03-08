@@ -16,7 +16,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     Slice<Spot> findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(Long placeId, Pageable pageable);
 
-    Optional<Spot> findByPlaceIdAndMemberId(Long placeId, Long memberId);
+    Optional<Spot> findTopByPlaceIdAndMemberId(Long placeId, Long memberId);
 
     @Query("SELECT count(s) FROM Spot s WHERE s.place.id = :placeId AND s.isDeleted = false")
     int countByPlaceId(@Param("placeId") Long placeId);

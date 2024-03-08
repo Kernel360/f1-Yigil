@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
@@ -189,5 +190,20 @@ public class CourseServiceImplTest {
 
         assertThat(result).isNotNull().isInstanceOf(CourseInfo.MyCoursesResponse.class);
         assertThat(result.getContent().getFirst()).isInstanceOf(CourseInfo.CourseListInfo.class);
+    }
+
+    @DisplayName("searchCourseByPlaceName 메서드가 잘 동작하는지")
+    @Test
+    void WhenSearchCourseByPlaceName_ThenShouldReturnValidSlice() {
+        String keyword = "test";
+        Pageable pageable = PageRequest.of(0, 10);
+        Accessor mockAccessor = mock(Accessor.class);
+        Slice<Course> mockSlice = mock(Slice.class);
+
+        when(courseReader.searchCourseByPlaceName(keyword, pageable)).thenReturn(mockSlice);
+
+        var result = courseService.searchCourseByPlaceName(keyword, mockAccessor, pageable);
+
+        assertThat(result).isNotNull().isInstanceOf(CourseInfo.Slice.class);
     }
 }
