@@ -36,8 +36,8 @@ cloud:
     s3:
     bucket: @S3_BUCKET@
     credentials:
-      access-key: AKIA57RFG4SU5VO6U3PQ
-      secret-key: 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
+      access-key: @AWS_ACCESS_KEY@
+      secret-key: @AWS_SECRET_KEY@
     region:
       static: ap-northeast-2
       auto: false
