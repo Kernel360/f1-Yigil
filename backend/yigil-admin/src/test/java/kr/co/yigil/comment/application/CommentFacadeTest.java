@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import kr.co.yigil.admin.domain.admin.AdminService;
 import kr.co.yigil.comment.domain.CommentInfo.ChildrenPageComments;
+import kr.co.yigil.comment.domain.CommentInfo.CommentList;
 import kr.co.yigil.comment.domain.CommentInfo.ParentPageComments;
 import kr.co.yigil.comment.domain.CommentService;
 import kr.co.yigil.notification.domain.NotificationService;
@@ -70,5 +71,15 @@ class CommentFacadeTest {
         commentFacade.deleteComment(commentId);
 
         verify(notificationService).sendNotification(NotificationType.COMMENT_DELETE, adminId, memberId);
+    }
+
+    @DisplayName("getComments 메서드가 잘 호출되는지")
+    @Test
+    void whenGetComments_thenShouldReturnCommentList() {
+        when(commentService.getComments(anyLong(), any(PageRequest.class))).thenReturn(mock(CommentList.class));
+
+        var response = commentFacade.getComments(1L, PageRequest.of(0, 10));
+
+        assertThat(response).isInstanceOf(CommentList.class);
     }
 }

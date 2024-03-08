@@ -1,5 +1,6 @@
 package kr.co.yigil.comment.infrastructure;
 
+import java.util.List;
 import kr.co.yigil.comment.domain.Comment;
 import kr.co.yigil.comment.domain.CommentReader;
 import kr.co.yigil.global.exception.BadRequestException;
@@ -29,6 +30,11 @@ public class CommentReaderImpl implements CommentReader {
     @Override
     public Page<Comment> getChildrenComments(Long travelId, PageRequest pageRequest) {
         return commentRepository.findAllByParentIdAndIsDeletedFalse(travelId, pageRequest);
+    }
+
+    @Override
+    public List<Comment> getChildrenComments(Long travelId) {
+        return commentRepository.findAllByParentIdAndIsDeletedFalse(travelId);
     }
 
     @Override

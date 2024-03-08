@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.yigil.notice.application.NoticeFacade;
 import kr.co.yigil.notice.domain.NoticeCommand;
 import kr.co.yigil.notice.domain.NoticeInfo;
@@ -49,8 +50,8 @@ class NoticeApiControllerTest {
     @Test
     void whenGetNoticeList_thenShouldReturnOKstatus() throws Exception {
 
-
-        when(noticeFacade.getNoticeList(any(PageRequest.class))).thenReturn(mock(NoticeListInfo.class));
+        when(noticeFacade.getNoticeList(any(PageRequest.class))).thenReturn(
+            mock(NoticeListInfo.class));
         when(noticeMapper.toDto(any(NoticeListInfo.class))).thenReturn(mock(
             NoticeDto.NoticeListResponse.class));
 
@@ -67,7 +68,14 @@ class NoticeApiControllerTest {
         when(noticeMapper.toCommand(any(NoticeCreateRequest.class))).thenReturn(command);
         doNothing().when(noticeFacade).createNotice(command);
 
-        mockMvc.perform(post("/api/v1/notices"))
+        ObjectMapper objectMapper = new ObjectMapper();
+        NoticeDto.NoticeCreateRequest noticeCommand = new NoticeDto.NoticeCreateRequest("title",
+            "content");
+        String requestJson = objectMapper.writeValueAsString(noticeCommand);
+
+        mockMvc.perform(post("/api/v1/notices")
+                .contentType("application/json")
+                .content(requestJson))
             .andExpect(status().isOk());
         verify(noticeFacade).createNotice(command);
     }

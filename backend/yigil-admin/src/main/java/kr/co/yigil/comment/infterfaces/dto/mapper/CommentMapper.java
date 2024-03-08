@@ -8,6 +8,7 @@ import kr.co.yigil.comment.infterfaces.dto.CommentDto.ChildrenCommentsResponse;
 import kr.co.yigil.comment.infterfaces.dto.CommentDto.ParentCommentsResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
@@ -16,6 +17,16 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface CommentMapper {
+
+    default CommentDto.CommentsResponse of(CommentInfo.CommentList info){
+        return new CommentDto.CommentsResponse(
+            info.getParents().map(this::of)
+        );
+    }
+
+    @Mapping(target = "children", source= "children")
+    CommentDto.CommentUnitDto of (CommentInfo.CommentListUnit info);
+    CommentDto.ReplyUnitDto of (CommentInfo.ReplyListUnit info);
 
     default ParentCommentsResponse of(ParentPageComments info){
         return new ParentCommentsResponse(
@@ -49,4 +60,6 @@ public interface CommentMapper {
             info.getCreatedAt()
         );
     }
+
+
 }
