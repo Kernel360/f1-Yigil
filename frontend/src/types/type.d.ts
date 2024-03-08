@@ -26,7 +26,7 @@ declare global {
       PRODUCTION_FRONTEND_URL: string;
       DEV_FRONTEND_URL: string;
 
-      ENVIRONMENT: string;
+      ENVIRONMENT: 'production' | 'development' | 'local';
     }
   }
 }

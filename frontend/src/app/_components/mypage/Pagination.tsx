@@ -2,13 +2,13 @@ import { useMemo } from 'react';
 import LeftIcon from '/public/icons/chevron-left.svg';
 import RightIcon from '/public/icons/chevron-right.svg';
 
-interface PropsType {
+interface TProps {
   currentPage: number;
   setCurrentPage: (currentPage: number) => void;
   totalPage: number;
 }
 
-function Pagination({ currentPage, setCurrentPage, totalPage }: PropsType) {
+function Pagination({ currentPage, setCurrentPage, totalPage }: TProps) {
   const renderPage = useMemo(() => {
     const start = Math.floor((currentPage - 1) / 5) * 5 + 1;
     const end = Math.min(start + 5 - 1, totalPage);

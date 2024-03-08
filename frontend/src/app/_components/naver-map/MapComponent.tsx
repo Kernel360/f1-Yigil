@@ -16,6 +16,7 @@ export default function MapComponent({
       style={{
         width,
         height,
+        position: 'relative',
       }}
     >
       {children}

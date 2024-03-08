@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.domain.course;
 
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
@@ -19,4 +20,5 @@ public interface CourseService {
     void deleteCourse(Long courseId, Long memberId);
 
     CourseInfo.MyCoursesResponse retrieveCourseList(Long memberId, Pageable pageable, Selected selected);
+    CourseInfo.Slice searchCourseByPlaceName(String keyword, Accessor accessor, Pageable pageable);
 }

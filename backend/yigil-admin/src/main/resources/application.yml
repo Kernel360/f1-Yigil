@@ -60,10 +60,10 @@ cloud:
 server:
   port: @YIGIL_ADMIN_PORT@
   servlet:
-      session:
-        cookie:
-          http-only: true
-          secure: false
+    session:
+      cookie:
+        http-only: true
+        secure: false
 
 jasypt:
   encryptor:

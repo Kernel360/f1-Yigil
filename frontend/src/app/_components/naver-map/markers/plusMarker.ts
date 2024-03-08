@@ -1,6 +1,6 @@
 export const plusMarker = (place: { name: string }) => {
   return {
-    content: `<div style=" border: 1px #60a5fa solid; border-radius: 5px; background-color: #fff; word-break:keep-all;">
+    content: `<div style=" border: 1px #60a5fa solid; border-radius: 5px; background-color: #fff; word-break:keep-all; z-index: 9999;">
   <div style="display: flex; padding: 8px 10px">
   <div style="padding:0px 8px 0px 0px; color:#374151; font-size: 18px; font-weight: 600; text-align: center;">${place.name}</div>
   <div style="display:flex; justify-content: center; align-items: center;">
@@ -11,7 +11,7 @@ export const plusMarker = (place: { name: string }) => {
   </svg>
   </div>
   </div>
-  <div style="position:absolute; bottom:-5px; left:50px; width: 12px; height:12px;background-color:#fff; border-bottom: 1px #60a5fa solid; border-right:1px #60a5fa solid; transform: rotate(45deg);"></div>
+  <div style="position:absolute; bottom:-6.3px; left:45%; width: 12px; height:12px;background-color:#fff; border-bottom: 1px #60a5fa solid; border-right:1px #60a5fa solid; border-bottom-right-radius: 3px; transform: rotate(45deg);"></div>
   </div>`,
     anchor: new naver.maps.Point(50, 50),
   };

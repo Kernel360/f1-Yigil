@@ -1,5 +1,7 @@
 package kr.co.yigil.notice.interfaces.controller;
 
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.notice.application.NoticeFacade;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeCreateRequest;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeCreateResponse;
@@ -13,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,11 +37,13 @@ public class NoticeApiController {
     @GetMapping
     public ResponseEntity<NoticeListResponse> geNoticeList(
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) String sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ){
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(
-            Direction.fromString(sortOrder), sortBy));
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+            pageable.getPageSize(),
+            Sort.by(direction, sortBy.getValue()));
         var notice = noticeFacade.getNoticeList(pageRequest);
         var response = noticeMapper.toDto(notice);
         return ResponseEntity.ok().body(response);
