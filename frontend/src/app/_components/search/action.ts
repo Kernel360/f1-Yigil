@@ -1,6 +1,14 @@
 'use server';
 
-import { dataWithAddressSchema, searchItemsSchema } from '@/types/response';
+import { getBaseUrl } from '@/app/utilActions';
+import {
+  TPlace,
+  dataWithAddressSchema,
+  fetchableSchema,
+  placeSchema,
+  searchItemsSchema,
+} from '@/types/response';
+import { cookies } from 'next/headers';
 
 function searchUrl(keyword: string) {
   const endpoint = 'https://openapi.naver.com/v1/search/local.json';
@@ -80,4 +88,29 @@ export async function getCoords(
   const lng = Number.parseFloat(coords.data[0].x);
 
   return { lat, lng };
+}
+
+export async function searchPlaces(
+  keyword: string,
+  page: number = 1,
+  size: number = 5,
+  sortBy: 'latest_uploaded_time' | 'rate' = 'latest_uploaded_time',
+  sortOrder: 'desc' | 'asc' = 'desc',
+) {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const endpoint = `${BASE_URL}/v1/places/search`;
+  const queryParams = Object.entries({ page, size, sortBy, sortOrder })
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+
+  const response = await fetch(`${endpoint}?${queryParams}`, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+    next: { tags: [`search/places/${keyword}`] },
+  });
+
+  return await response.json();
 }

@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export function dataUrlToBlob(dataURI: string) {
   const byteString = atob(dataURI.split(',')[1]);
 
@@ -32,4 +34,44 @@ export function coordsToGeoJSONPoint(coords: { lat: number; lng: number }) {
     type: 'Point',
     coordinates: [coords.lng, coords.lat],
   });
+}
+
+export function debounce<TArgs = unknown, TReturn = void>(
+  fn: (args: TArgs) => TReturn,
+  ms: number = 300,
+) {
+  let timer: ReturnType<typeof setTimeout>;
+
+  const debouncedFunction = (args: TArgs): Promise<TReturn> =>
+    new Promise((resolve) => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      timer = setTimeout(() => {
+        resolve(fn(args));
+      }, ms);
+    });
+
+  const teardown = () => clearTimeout(timer);
+
+  return [debouncedFunction, teardown];
+}
+
+export function parseSearchHistory(historyStr: string | null) {
+  const historiesSchema = z.array(z.string());
+
+  if (historyStr === null) {
+    return [];
+  }
+
+  const json = JSON.parse(historyStr);
+
+  const result = historiesSchema.safeParse(json);
+
+  if (!result.success) {
+    return [];
+  }
+
+  return result.data;
 }

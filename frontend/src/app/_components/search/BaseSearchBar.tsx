@@ -1,12 +1,15 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useContext, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
+import { SearchContext } from '@/context/search/SearchContext';
 
 import SearchIcon from '/public/icons/search.svg';
 import XMarkIcon from '/public/icons/x-mark.svg';
 
 import type { EventFor } from '@/types/type';
+import { searchPlaces } from './action';
 
 export default function BaseSearchBar({
   cancellable,
@@ -15,16 +18,14 @@ export default function BaseSearchBar({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { state, dispatch } = useContext(SearchContext);
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { back, replace } = useRouter();
-
-  const initialSearchValue = searchParams.get('keyword') || '';
-
-  const [searchValue, setSearchValue] = useState(initialSearchValue);
+  const { push, replace } = useRouter();
 
   function handleChange(term: string) {
-    setSearchValue(term);
+    dispatch({ type: 'SET_KEYWORD', payload: term });
 
     const params = new URLSearchParams(searchParams);
 
@@ -35,26 +36,42 @@ export default function BaseSearchBar({
     }
 
     replace(`${pathname}?${params.toString()}`);
+
+    /* 추천 검색어 */
   }
 
-  async function handleSearch() {
-    if (searchValue === '') {
-      return;
-    }
+  function handleErase() {
+    dispatch({ type: 'SET_KEYWORD', payload: '' });
+    replace(`${pathname}`);
+    inputRef.current?.focus();
   }
 
   function handleCancel() {
     if (pathname === '/search') {
-      back();
+      push('/');
     } else {
       handleErase();
     }
   }
 
-  function handleErase() {
-    setSearchValue('');
-    replace(`${pathname}`);
-    inputRef.current?.focus();
+  async function handleSearch() {
+    if (state.keyword === '') {
+      return;
+    }
+
+    dispatch({ type: 'ADD_HISTORY' });
+
+    const result = await searchPlaces(state.keyword);
+
+    // console.log(result);
+
+    // if (!result.success) {
+    //   console.log(result.error.message);
+    //   return;
+    // }
+
+    dispatch({ type: 'SEARCH_PLACE' });
+    // dispatch({ type: 'SEARCH_PLACE', payload: result.data });
   }
 
   async function handleEnter(event: EventFor<'input', 'onKeyDown'>) {
@@ -73,7 +90,7 @@ export default function BaseSearchBar({
           ref={inputRef}
           type="text"
           placeholder="검색어를 입력하세요."
-          value={searchValue}
+          value={state.keyword}
           onChange={(event) => handleChange(event.target.value)}
           onKeyDown={handleEnter}
         />
