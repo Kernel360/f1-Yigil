@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.yigil.notice.application.NoticeFacade;
 import kr.co.yigil.notice.domain.NoticeCommand;
 import kr.co.yigil.notice.domain.NoticeInfo;
@@ -51,9 +52,9 @@ class NoticeApiControllerTest {
     @Test
     void whenGetNoticeList_thenShouldReturnOKstatus() throws Exception {
 
-        PageRequest pageRequest = PageRequest.of(0, 5);
-        when(noticeFacade.getNoticeList(pageRequest)).thenReturn(mock(NoticeListInfo.class));
-        when(noticeMapper.toDto(mock(NoticeListInfo.class))).thenReturn(mock(
+        when(noticeFacade.getNoticeList(any(PageRequest.class))).thenReturn(
+            mock(NoticeListInfo.class));
+        when(noticeMapper.toDto(any(NoticeListInfo.class))).thenReturn(mock(
             NoticeDto.NoticeListResponse.class));
 
         mockMvc.perform(get("/api/v1/notices"))
@@ -68,7 +69,6 @@ class NoticeApiControllerTest {
 
         when(noticeMapper.toCommand(any(NoticeCreateRequest.class))).thenReturn(command);
         doNothing().when(noticeFacade).createNotice(command);
-
         mockMvc.perform(post("/api/v1/notices")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"title\": \"title\", \"content\": \"content\"}"))
