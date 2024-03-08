@@ -41,10 +41,8 @@ public class NoticeApiController {
         @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ){
-        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
-            pageable.getPageSize(),
-            Sort.by(direction, sortBy.getValue()));
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(
+            Direction.fromString(sortOrder.getValue()), sortBy.getValue()));
         var notice = noticeFacade.getNoticeList(pageRequest);
         var response = noticeMapper.toDto(notice);
         return ResponseEntity.ok().body(response);
@@ -59,7 +57,7 @@ public class NoticeApiController {
         return ResponseEntity.ok().body(new NoticeCreateResponse("공지사항 등록 완료"));
     }
 
-    @PostMapping("/{noticeId}")
+    @GetMapping("/{noticeId}")
     public ResponseEntity<NoticeDetailResponse> readNotice(
         @PathVariable("noticeId") Long noticeId
     ){
@@ -68,10 +66,10 @@ public class NoticeApiController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/{noticeId}/update")
+    @PostMapping("/{noticeId}")
     public ResponseEntity<NoticeUpdateResponse> updateNotice(
         @PathVariable("noticeId") Long noticeId,
-        @ModelAttribute NoticeUpdateRequest request
+        @RequestBody NoticeUpdateRequest request
     ){
         // 관리자 권한 필요
         var noticeCommand = noticeMapper.toCommand(request);
