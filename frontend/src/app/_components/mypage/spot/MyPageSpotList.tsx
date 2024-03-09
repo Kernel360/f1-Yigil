@@ -13,8 +13,19 @@ import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import Dialog from '../../ui/dialog/Dialog';
-import { getMyPageSpots } from '../hooks/myPageActions';
+import {
+  changeOnPrivateMyTravel,
+  changeOnPublicMyTravel,
+  changeTravelsVisibility,
+  deleteMySpot,
+  getMyPageSpots,
+} from '../hooks/myPageActions';
 import { TMyPageSpot } from '@/types/myPageResponse';
+
+/**
+ *
+ * TODO: 로딩 처리 및 다이얼로그에 로딩 텍스트 수정되면 추가
+ */
 
 export default function MyPageSpotList({
   placeList,
@@ -36,11 +47,13 @@ export default function MyPageSpotList({
   const [sortOption, setSortOption] = useState<string>('desc');
 
   const [isDialogOpened, setIsDialogOpened] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
 
   // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
     getSpots(currentPage, divideCount, sortOption, selectOption);
-  }, [currentPage, sortOption, selectOption]);
+  }, [currentPage, sortOption, selectOption, placeList]);
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
@@ -53,11 +66,11 @@ export default function MyPageSpotList({
       icon: <TrashIcon className="w-6 h-6" />,
       onClick: () => setIsDialogOpened(true),
     },
-    {
-      href: '/add/course',
-      label: '일정 기록하기',
-      icon: <CalendarIcon className="w-6 h-6" />,
-    },
+    // {
+    //   href: '/add/course',
+    //   label: '일정 기록하기',
+    //   icon: <CalendarIcon className="w-6 h-6" />,
+    // },
   ]);
 
   const getSpots = async (
@@ -91,13 +104,13 @@ export default function MyPageSpotList({
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => setIsDialogOpened(true),
         },
-        {
-          label: '일정 기록하기',
-          href: '/add/course',
-          icon: <CalendarIcon className="w-6 h-6" />,
-        },
+        // {
+        //   label: '일정 기록하기',
+        //   href: '/add/course',
+        //   icon: <CalendarIcon className="w-6 h-6" />,
+        // },
       ]);
     } else if (selectOption === 'public') {
       setPopOverData([
@@ -109,13 +122,13 @@ export default function MyPageSpotList({
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => setIsDialogOpened(true),
         },
-        {
-          label: '일정 기록하기',
-          href: '/add/course',
-          icon: <CalendarIcon className="w-6 h-6" />,
-        },
+        // {
+        //   label: '일정 기록하기',
+        //   href: '/add/course',
+        //   icon: <CalendarIcon className="w-6 h-6" />,
+        // },
       ]);
     } else {
       setPopOverData([
@@ -127,7 +140,7 @@ export default function MyPageSpotList({
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => setIsDialogOpened(true),
         },
       ]);
     }
@@ -139,18 +152,59 @@ export default function MyPageSpotList({
     getSpots(1, divideCount, sortOption, selectOption);
   }, [selectOption, sortOption]);
 
-  // 함수 분리 예정
-  const onClickDelete = () => {
-    setIsDialogOpened(true);
-    // delete 로직
-    // delete(checkedList)
+  const onClickDelete = async (checkedIds: number[]) => {
+    try {
+      setIsLoading(true);
+      const promises = checkedIds.map((checkedId) => deleteMySpot(checkedId));
+      await Promise.all(promises);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+      setIsDialogOpened(false);
+    }
   };
 
-  const onClickUnLock = () => {
-    // unLock or lock
+  // 공개 비공개 처리 시 Dialog에 로딩 텍스트 전달하기
+  const onClickUnLock = async () => {
+    try {
+      setIsLoading(true);
+      const promises = checkedList.map((checked) =>
+        changeOnPublicMyTravel(checked.spot_id),
+      );
+      await Promise.all(promises);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const onClickLock = () => {};
+  const onClickLock = async () => {
+    try {
+      setIsLoading(true);
+      const promises = checkedList.map((checked) =>
+        changeOnPrivateMyTravel(checked.spot_id),
+      );
+      await Promise.all(promises);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // const onClickChangeVisibility = async () => {
+  //   if (checkedList[0].is_private) {
+  //     const ids = checkedList.map((checked) => checked.spot_id);
+  //     const res = await changeTravelsVisibility(ids, true);
+  //     console.log(res);
+  //   } else {
+  //     const ids = checkedList.map((checked) => checked.spot_id);
+  //     const res = await changeTravelsVisibility(ids, false);
+  //     console.log(res);
+  //   }
+  // };
 
   const closeDialog = () => {
     setIsDialogOpened(false);
@@ -161,11 +215,21 @@ export default function MyPageSpotList({
     setIsChecked: Dispatch<SetStateAction<boolean>>,
   ) => {
     if (e.currentTarget.checked) {
-      const allSpots = allSpotList.map((spot) => {
-        return { spot_id: spot.spot_id, is_private: spot.is_private };
-      });
-      setCheckedList(allSpots);
-      setIsChecked(true);
+      if (selectOption === 'all') {
+        const allSpots = allSpotList
+          .map((spot) => {
+            return { spot_id: spot.spot_id, is_private: spot.is_private };
+          })
+          .filter((spot) => !spot.is_private);
+        setCheckedList(allSpots);
+        setIsChecked(true);
+      } else {
+        const allSpots = allSpotList.map((spot) => {
+          return { spot_id: spot.spot_id, is_private: spot.is_private };
+        });
+        setCheckedList(allSpots);
+        setIsChecked(true);
+      }
     } else {
       setCheckedList([]);
       setIsChecked(false);
@@ -207,7 +271,7 @@ export default function MyPageSpotList({
     }
   };
 
-  return !!allSpotList.length ? (
+  return (
     <>
       <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
@@ -225,7 +289,9 @@ export default function MyPageSpotList({
             <Dialog
               text="기록을 삭제하시겠나요?"
               closeModal={closeDialog}
-              handleConfirm={async () => onClickDelete()}
+              handleConfirm={async () =>
+                onClickDelete(checkedList.map((checked) => checked.spot_id))
+              }
             />
           )}
           <FloatingActionButton
@@ -256,9 +322,5 @@ export default function MyPageSpotList({
         />
       )}
     </>
-  ) : (
-    <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-      장소를 추가해주세요.
-    </div>
   );
 }
