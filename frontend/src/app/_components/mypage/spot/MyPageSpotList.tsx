@@ -4,7 +4,6 @@ import FloatingActionButton from '../../FloatingActionButton';
 import MyPageSpotItem from './MyPageSpotItem';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
-import CalendarIcon from '/public/icons/calendar.svg';
 import UnLockIcon from '/public/icons/unlock.svg';
 import TrashIcon from '/public/icons/trash.svg';
 import LockIcon from '/public/icons/lock.svg';
@@ -21,6 +20,7 @@ import {
   getMyPageSpots,
 } from '../hooks/myPageActions';
 import { TMyPageSpot } from '@/types/myPageResponse';
+import LoadingIndicator from '../../LoadingIndicator';
 
 /**
  *
@@ -47,8 +47,10 @@ export default function MyPageSpotList({
   const [sortOption, setSortOption] = useState<string>('desc');
 
   const [isDialogOpened, setIsDialogOpened] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
   const [loadingText, setLoadingText] = useState('');
+  const [dialogText, setDialogText] = useState('');
+  const [dialogState, setDialogState] = useState('');
 
   // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
@@ -59,12 +61,20 @@ export default function MyPageSpotList({
     {
       label: '기록 공개하기',
       icon: <UnLockIcon className="w-6 h-6" />,
-      onClick: () => onClickUnLock(),
+      onClick: () => {
+        setDialogText('기록을 공개하시겠나요?');
+        setDialogState('unlock');
+        setIsDialogOpened(true);
+      },
     },
     {
       label: '기록 삭제하기',
       icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => setIsDialogOpened(true),
+      onClick: () => {
+        setDialogText('기록을 삭제하시겠나요?');
+        setDialogState('delete');
+        setIsDialogOpened(true);
+      },
     },
     // {
     //   href: '/add/course',
@@ -99,12 +109,20 @@ export default function MyPageSpotList({
         {
           label: '기록 나만보기',
           icon: <LockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickLock(),
+          onClick: () => {
+            setDialogText('기록을 잠금 설정하시겠나요?');
+            setDialogState('lock');
+            setIsDialogOpened(true);
+          },
         },
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => setIsDialogOpened(true),
+          onClick: () => {
+            setDialogText('기록을 삭제하시겠나요?');
+            setDialogState('delete');
+            setIsDialogOpened(true);
+          },
         },
         // {
         //   label: '일정 기록하기',
@@ -117,12 +135,20 @@ export default function MyPageSpotList({
         {
           label: '기록 나만보기',
           icon: <LockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickLock(),
+          onClick: () => {
+            setDialogText('기록을 잠금 설정하시겠나요?');
+            setDialogState('lock');
+            setIsDialogOpened(true);
+          },
         },
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => setIsDialogOpened(true),
+          onClick: () => {
+            setDialogText('기록을 삭제하시겠나요?');
+            setDialogState('delete');
+            setIsDialogOpened(true);
+          },
         },
         // {
         //   label: '일정 기록하기',
@@ -135,12 +161,20 @@ export default function MyPageSpotList({
         {
           label: '기록 공개하기',
           icon: <UnLockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickUnLock(),
+          onClick: () => {
+            setDialogText('기록을 잠금 해제하시겠나요?');
+            setDialogState('unlock');
+            setIsDialogOpened(true);
+          },
         },
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => setIsDialogOpened(true),
+          onClick: () => {
+            setDialogText('기록을 삭제하시겠나요?');
+            setDialogState('delete');
+            setIsDialogOpened(true);
+          },
         },
       ]);
     }
@@ -154,21 +188,20 @@ export default function MyPageSpotList({
 
   const onClickDelete = async (checkedIds: number[]) => {
     try {
-      setIsLoading(true);
+      setLoadingText('삭제중 입니다');
       const promises = checkedIds.map((checkedId) => deleteMySpot(checkedId));
       await Promise.all(promises);
     } catch (error) {
       console.error(error);
     } finally {
-      setIsLoading(false);
-      setIsDialogOpened(false);
+      closeDialog();
     }
   };
 
   // 공개 비공개 처리 시 Dialog에 로딩 텍스트 전달하기
   const onClickUnLock = async () => {
     try {
-      setIsLoading(true);
+      setLoadingText('잠금 해제중 입니다');
       const promises = checkedList.map((checked) =>
         changeOnPublicMyTravel(checked.spot_id),
       );
@@ -176,13 +209,13 @@ export default function MyPageSpotList({
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false);
+      closeDialog();
     }
   };
 
   const onClickLock = async () => {
     try {
-      setIsLoading(true);
+      setLoadingText('잠금 처리중 입니다');
       const promises = checkedList.map((checked) =>
         changeOnPrivateMyTravel(checked.spot_id),
       );
@@ -190,8 +223,19 @@ export default function MyPageSpotList({
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false);
+      closeDialog();
     }
+  };
+
+  const handleDialogFunc = async () => {
+    if (dialogState === 'delete') {
+      onClickDelete(checkedList.map((checked) => checked.spot_id));
+    } else if (dialogState === 'unlock') {
+      onClickUnLock();
+    } else {
+      onClickLock();
+    }
+    setCheckedList([]);
   };
 
   // const onClickChangeVisibility = async () => {
@@ -287,11 +331,10 @@ export default function MyPageSpotList({
         <div className="relative">
           {isDialogOpened && (
             <Dialog
-              text="기록을 삭제하시겠나요?"
+              text={dialogText}
               closeModal={closeDialog}
-              handleConfirm={async () =>
-                onClickDelete(checkedList.map((checked) => checked.spot_id))
-              }
+              handleConfirm={async () => handleDialogFunc()}
+              loadingText={loadingText}
             />
           )}
           <FloatingActionButton
