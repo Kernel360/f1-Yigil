@@ -30,9 +30,9 @@ export const homePopOverData: TPopOverData[] = [
     label: '장소 추가하기',
     icon: <LocationIcon className="w-6 h-6" />,
   },
-  {
-    href: '/add/course',
-    label: '일정 추가하기',
-    icon: <CalendarIcon className="w-6 h-6" />,
-  },
+  // {
+  //   href: '/add/course',
+  //   label: '일정 추가하기',
+  //   icon: <CalendarIcon className="w-6 h-6" />,
+  // },
 ];

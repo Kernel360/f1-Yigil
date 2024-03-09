@@ -42,7 +42,7 @@ export default function Place({
     >
       <div className="relative w-full">
         <Link
-          className="w-full relative aspect-square inline-block w-fit h-fit"
+          className="w-full relative aspect-square inline-block"
           href={`../place/${id}`}
         >
           <Image
@@ -53,12 +53,12 @@ export default function Place({
             sizes="33vw"
           />
         </Link>
-        <BookmarkButton
+        {/* <BookmarkButton
           className="absolute top-4 right-4"
           placeId={id}
           bookmarked={bookmarked}
           isLoggedIn={isLoggedIn}
-        />
+        /> */}
         {variant === 'primary' && (
           <Link tabIndex={-1} href={`place/${id}`}>
             <span className="absolute left-6 bottom-2 select-none text-white text-8xl font-semibold">

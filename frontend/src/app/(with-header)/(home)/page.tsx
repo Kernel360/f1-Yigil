@@ -45,7 +45,7 @@ export default async function HomePage({
     return (
       <main className="max-w-full flex flex-col gap-4 relative">
         <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
-        <DummyPlaces title="관심 지역" variant="secondary" />
+        {/* <DummyPlaces title="관심 지역" variant="secondary" /> */}
         <FloatingActionButton
           popOverData={homePopOverData}
           backdropStyle="bg-black bg-opacity-10"
@@ -55,55 +55,10 @@ export default async function HomePage({
       </main>
     );
   }
-
-  const interestedRegions = await getInterestedRegions();
-
-  if (!interestedRegions.success) {
-    return <main>Failed to get regions</main>;
-  }
-
-  const regions = interestedRegions.data.regions;
-
-  if (regions.length === 0) {
-    return (
-      <main className="max-w-full flex flex-col gap-4 relative">
-        <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
-        <RegionPlaces
-          regions={regions}
-          initialRegionPlaces={[]}
-          isLoggedIn={memberInfo.success}
-          variant="secondary"
-          carousel
-        />
-        <FloatingActionButton
-          popOverData={homePopOverData}
-          backdropStyle="bg-black bg-opacity-10"
-          openedIcon={<OpenedFABIcon />}
-          closedIcon={<ClosedFABIcon />}
-        />
-      </main>
-    );
-  }
-
-  const regionPlacesResult = await getRegionPlaces(regions[0].id);
-
-  if (!regionPlacesResult.success) {
-    return <main>Failed to get region places</main>;
-  }
-
-  const regionPlaces = regionPlacesResult.data.places;
 
   return (
     <main className="max-w-full flex flex-col gap-4 relative">
       <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
-      <RegionPlaces
-        regions={regions}
-        initialRegion={regions[0]}
-        initialRegionPlaces={regionPlaces}
-        isLoggedIn={memberInfo.success}
-        variant="secondary"
-        carousel
-      />
       <FloatingActionButton
         popOverData={homePopOverData}
         backdropStyle="bg-black bg-opacity-10"
@@ -112,4 +67,61 @@ export default async function HomePage({
       />
     </main>
   );
+
+  // const interestedRegions = await getInterestedRegions();
+
+  // if (!interestedRegions.success) {
+  //   return <main>Failed to get regions</main>;
+  // }
+
+  // const regions = interestedRegions.data.regions;
+
+  // if (regions.length === 0) {
+  //   return (
+  //     <main className="max-w-full flex flex-col gap-4 relative">
+  //       <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
+  //       <RegionPlaces
+  //         regions={regions}
+  //         initialRegionPlaces={[]}
+  //         isLoggedIn={memberInfo.success}
+  //         variant="secondary"
+  //         carousel
+  //       />
+  //       <FloatingActionButton
+  //         popOverData={homePopOverData}
+  //         backdropStyle="bg-black bg-opacity-10"
+  //         openedIcon={<OpenedFABIcon />}
+  //         closedIcon={<ClosedFABIcon />}
+  //       />
+  //     </main>
+  //   );
+  // }
+
+  // const regionPlacesResult = await getRegionPlaces(regions[0].id);
+
+  // if (!regionPlacesResult.success) {
+  //   return <main>Failed to get region places</main>;
+  // }
+
+  // const regionPlaces = regionPlacesResult.data.places;
+
+  // return (
+  //   <main className="max-w-full flex flex-col gap-4 relative">
+  //     <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
+  //     <RegionPlaces
+  //       regions={regions}
+  //       initialRegion={regions[0]}
+  //       initialRegionPlaces={regionPlaces}
+  //       isLoggedIn={memberInfo.success}
+  //       variant="secondary"
+  //       carousel
+  //     />
+  //     <FloatingActionButton
+  //       popOverData={homePopOverData}
+  //       backdropStyle="bg-black bg-opacity-10"
+  //       openedIcon={<OpenedFABIcon />}
+  //       closedIcon={<ClosedFABIcon />}
+  //     />
+  //   </main>
+  // );
 }
