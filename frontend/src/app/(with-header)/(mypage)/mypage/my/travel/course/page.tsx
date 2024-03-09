@@ -13,9 +13,11 @@ export default async function MyPageMyCourse() {
           totalPage={courseList.data.total_pages}
         />
       ) : (
-        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-          장소를 추가해주세요.
-        </div>
+        <section className="grow flex flex-col justify-center items-center gap-8">
+          <span className="text-6xl">🚧</span>
+          <br />
+          <span className="text-5xl">준비 중입니다!</span>
+        </section>
       )}
     </>
   );

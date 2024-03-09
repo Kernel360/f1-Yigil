@@ -142,3 +142,7 @@ export const commentSchema = z.object({
 });
 
 export type TComment = z.infer<typeof commentSchema>;
+
+export const keywordsSchema = z.object({
+  keywords: z.array(z.string()),
+});
