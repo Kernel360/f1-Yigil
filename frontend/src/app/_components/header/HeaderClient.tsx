@@ -7,15 +7,14 @@ import Link from 'next/link';
 import { EventFor } from '@/types/type';
 import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
-import AddIcon from '/public/icons/add.svg'; // 지울것
-import { TUserInfo } from '../mypage/types';
-import { authenticateUser } from '../mypage/hooks/myPageActions';
+import { TMyInfo } from '@/types/response';
+import { authenticateUser } from '../mypage/hooks/authenticateUser';
 
 export default function HeaderClient() {
   const router = useRouter();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [user, setUser] = useState<TUserInfo | null>(null);
+  const [user, setUser] = useState<TMyInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -56,12 +55,6 @@ export default function HeaderClient() {
       <div className="ml-4 cursor-pointer" onClick={() => router.push('/')}>
         <HeaderLogo className="w-[145px] h-[48px]" />
       </div>
-      <Link
-        href="https://docs.google.com/forms/d/e/1FAIpQLSfsbhvjAjiY_KSTTUrWNcGB8A7gXshwRW0Or7e_vvAbpGBVgg/viewform"
-        className="absolute right-24"
-      >
-        <AddIcon className="w-6 stroke-white fill-white ml-40" />
-      </Link>
 
       {isLoading ? (
         <div className="flex space-x-2 justify-center items-center mr-4">

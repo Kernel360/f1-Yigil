@@ -13,9 +13,8 @@ import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import Dialog from '../../ui/dialog/Dialog';
-import { TMyPageSpot } from '../types';
 import { getMyPageSpots } from '../hooks/myPageActions';
-import { myPageSpotListSchema } from '@/types/myPageResponse';
+import { TMyPageSpot } from '@/types/myPageResponse';
 
 export default function MyPageSpotList({
   placeList,
@@ -41,7 +40,7 @@ export default function MyPageSpotList({
   // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
     getSpots(currentPage, divideCount, sortOption, selectOption);
-  }, [currentPage]);
+  }, [currentPage, sortOption, selectOption]);
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
@@ -67,28 +66,18 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const { content, total_page } = await getMyPageSpots(
+    const spotList = await getMyPageSpots(
       pageNum,
       size,
       sortOption,
       selectOption,
     );
-
-    const parsedSpotList = await myPageSpotListSchema.safeParse(content);
-    if (!parsedSpotList.success) {
+    if (!spotList.success) {
       setAllSpotList([]);
       return;
     }
-
-    const addCdnContent: TMyPageSpot[] = await new Promise((resolve) => {
-      return content.map((item) => ({
-        ...item,
-        image_url: `${process.env.CDN_URL}/${item.image_url}`,
-      }));
-    });
-
-    setTotalPageCount(total_page);
-    setAllSpotList([...addCdnContent]);
+    setTotalPageCount(spotList.data.total_pages);
+    setAllSpotList([...spotList.data.content]);
   };
 
   useEffect(() => {
@@ -236,7 +225,7 @@ export default function MyPageSpotList({
             <Dialog
               text="기록을 삭제하시겠나요?"
               closeModal={closeDialog}
-              handleConfirm={onClickDelete}
+              handleConfirm={async () => onClickDelete()}
             />
           )}
           <FloatingActionButton
@@ -259,11 +248,13 @@ export default function MyPageSpotList({
           selectOption={selectOption}
         />
       ))}
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPage={totalPageCount}
-      />
+      {!!allSpotList.length && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPage={totalPageCount}
+        />
+      )}
     </>
   ) : (
     <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">

@@ -1,59 +1,44 @@
-import { z } from 'zod';
+import { ZodType, ZodTypeDef, z } from 'zod';
 
-const { CDN_URL } = process.env;
+export const postResponseSchema = z.object({
+  message: z.string(),
+});
 
 export const backendErrorSchema = z.object({
   code: z.number(),
   message: z.string(),
 });
 
+export const fetchableSchema = <TOutput, TInput>(
+  schema: ZodType<TOutput, ZodTypeDef, TInput>,
+) =>
+  z.object({
+    content: z.array(schema),
+    has_next: z.boolean(),
+  });
+
 export type TBackendError = z.infer<typeof backendErrorSchema>;
-
-const REGION_VALUES = [
-  '서울',
-  '경기',
-  '인천',
-  '강원',
-  '대전',
-  '충남',
-  '충북',
-  '세종',
-  '광주',
-  '전남',
-  '전북',
-  '부산',
-  '대구',
-  '울산',
-  '경남',
-  '경북',
-  '제주',
-] as const;
-
-export const regionSchema = z.enum(REGION_VALUES);
 
 export const placeSchema = z.object({
   id: z.number().int(),
   place_name: z.string(),
   review_count: z.string(),
-  thumbnail_image_url: z.string().transform((url) => `${CDN_URL}/${url}`),
+  thumbnail_image_url: z.string(),
   rate: z.string(),
   bookmarked: z.boolean(),
 });
 
 export type TPlace = z.infer<typeof placeSchema>;
 
-export const placesSchema = z.array(placeSchema);
-
 export const placeDetailSchema = z.object({
   id: z.number().int(),
-  name: z.string(),
+  place_name: z.string(),
   address: z.string(),
-  image_url: z.string(),
-  map_image_url: z.string(),
-  liked: z.boolean().optional(),
+  thumbnail_image_url: z.string(),
+  map_static_image_url: z.string(),
+  bookmarked: z.boolean(),
   review_count: z.number().int(),
-  liked_count: z.number().int(),
-  rating: z.number(),
+  rate: z.number(),
 });
 
 export type TPlaceDetail = z.infer<typeof placeDetailSchema>;
@@ -89,3 +74,71 @@ export const postSpotResponseSchema = z.object({
 });
 
 export type TPostSpotSuccess = z.infer<typeof postSpotResponseSchema>;
+
+export const myInfoSchema = z.object({
+  member_id: z.number().int(),
+  email: z.string().email(),
+  nickname: z.string(),
+  profile_image_url: z.string().url(),
+  following_count: z.number().int(),
+  follower_count: z.number().int(),
+});
+
+export const mySpotForPlaceSchema = z.object({
+  exists: z.boolean(),
+  rate: z.string(),
+  image_urls: z.array(z.string()),
+  create_date: z.coerce.date(),
+  description: z.string(),
+});
+
+export type TMySpotForPlace = z.infer<typeof mySpotForPlaceSchema>;
+
+export type TMyInfo = z.infer<typeof myInfoSchema>;
+
+export const TMapPlaceSchema = z.object({
+  id: z.number().int(),
+  place_name: z.string(),
+  x: z.number(),
+  y: z.number(),
+});
+
+export const TMapPlacesSchema = z.object({
+  places: z.array(TMapPlaceSchema),
+  total_pages: z.number(),
+  current_page: z.number(),
+});
+
+export type TMapPlace = z.infer<typeof TMapPlaceSchema>;
+
+export const regionSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+});
+
+export type TRegion = z.infer<typeof regionSchema>;
+
+export const spotSchema = z.object({
+  id: z.number().int(),
+  image_url_list: z.array(z.string()),
+  description: z.string(),
+  owner_profile_image_url: z.string(),
+  owner_nickname: z.string(),
+  liked: z.boolean(),
+  rate: z.string(),
+  create_date: z.coerce.date(),
+});
+
+export type TSpot = z.infer<typeof spotSchema>;
+
+export const commentSchema = z.object({
+  id: z.number().int(),
+  content: z.string(),
+  member_id: z.number().int(),
+  member_nickname: z.string(),
+  member_image_url: z.string(),
+  child_count: z.number().int(),
+  created_at: z.coerce.date(),
+});
+
+export type TComment = z.infer<typeof commentSchema>;

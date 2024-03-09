@@ -9,10 +9,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
@@ -24,7 +24,8 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"name", "address"})})
+    @UniqueConstraint(columnNames = {"name", "address"})}
+)
 public class Place {
 
     @Id
@@ -35,16 +36,19 @@ public class Place {
 
     private String address;
 
+    private LocalDateTime latestUploadedTime;
+
+    @Column(columnDefinition = "double precision default 0")
     private double rate;
 
-    @Column(columnDefinition = "geometry(Point,5186)")
+    @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "map_static_image_file_id")
     private AttachFile mapStaticImageFile;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_file_id")
     private AttachFile imageFile;
 
@@ -53,17 +57,18 @@ public class Place {
     private Region region;
 
     public Place(final String name, final String address, final double rate,
-        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
+        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile, final LocalDateTime latestUploadedTime) {
         this.name = name;
         this.address = address;
         this.rate = rate;
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
+        this.latestUploadedTime = latestUploadedTime;
     }
 
     public Place(Long id, final String name, final String address, final double rate,
-        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile) {
+        final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile, final LocalDateTime latestUploadedTime) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -71,9 +76,22 @@ public class Place {
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
+        this.latestUploadedTime = latestUploadedTime;
+    }
+
+    public String getImageFileUrl() {
+        return imageFile.getFileUrl();
+    }
+
+    public String getMapStaticImageFileUrl() {
+        return mapStaticImageFile.getFileUrl();
     }
 
     public void updateRegion(Region region) {
         this.region = region;
+    }
+
+    public void updateLatestUploadedTime(LocalDateTime latestUploadedTime) {
+        this.latestUploadedTime = latestUploadedTime;
     }
 }

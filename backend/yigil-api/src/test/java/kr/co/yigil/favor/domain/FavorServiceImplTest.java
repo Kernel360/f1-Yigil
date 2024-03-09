@@ -1,6 +1,7 @@
 package kr.co.yigil.favor.domain;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -55,15 +56,17 @@ class FavorServiceImplTest {
     @DisplayName("deleteFavor 를 호출했을 때 좋아요가 잘 삭제되는지 확인")
     @Test
     void WhenDeleteFavor_ThenShouldNotThrowError() {
-        Long memberId = 1L;
-        Long travelId = 1L;
+        Member member = mock(Member.class);
+        when(memberReader.getMember(1L)).thenReturn(member);
+        Travel travel = mock(Travel.class);
+        when(travelReader.getTravel(1L)).thenReturn(travel);
 
-        when(favorReader.getFavorIdByMemberIdAndTravelId(memberId, travelId)).thenReturn(1L);
+        when(favorReader.getFavorIdByMemberAndTravel(member, travel)).thenReturn(1L);
 
-        favorService.deleteFavor(memberId, travelId);
+        favorService.deleteFavor(1L, 1L);
 
         verify(favorStore).deleteFavorById(1L);
-        verify(favorCountCacheStore).decrementFavorCount(travelId);
+        verify(favorCountCacheStore).decrementFavorCount(1L);
 
     }
 }

@@ -1,9 +1,12 @@
+import { logout } from '../../api/action';
+
 import MapPin from '/public/icons/map-pin.svg';
 import Bell from '/public/icons/bell.svg';
-import { signOut } from 'next-auth/react';
-import { TPopOverData } from './types';
 import LocationIcon from '/public/icons/location.svg';
 import CalendarIcon from '/public/icons/calendar.svg';
+
+import type { TPopOverData } from './types';
+
 export const headerPopOverData: TPopOverData[] = [
   {
     href: '/mypage/my/travel/spot',
@@ -14,7 +17,10 @@ export const headerPopOverData: TPopOverData[] = [
     href: '/',
     label: '로그아웃',
     icon: <Bell className="w-6 h-6" />,
-    onClick: () => signOut(),
+    onClick: async () => {
+      await logout();
+      location.reload();
+    },
   },
 ];
 

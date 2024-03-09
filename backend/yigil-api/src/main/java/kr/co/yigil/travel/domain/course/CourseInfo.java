@@ -23,7 +23,7 @@ public class CourseInfo {
         public Main(Course course) {
             this.title = course.getTitle();
             this.rate = course.getRate();
-            this.mapStaticImageUrl = course.getMapStaticImageFile().getFileUrl();
+            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
             this.description = course.getDescription();
             AtomicInteger index = new AtomicInteger(1);
             this.courseSpotList = course.getSpots().stream()
@@ -83,7 +83,45 @@ public class CourseInfo {
             this.spotCount = course.getSpots().size();
             this.createdDate = course.getCreatedAt();
             this.isPrivate = course.isPrivate();
-            this.mapStaticImageUrl = course.getMapStaticImageFile().getFileUrl();
+            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class Slice {
+        private final List<CourseSearchInfo> courses;
+        private final boolean hasNext;
+
+        public Slice(List<CourseSearchInfo> courses, boolean hasNext) {
+            this.courses = courses;
+            this.hasNext = hasNext;
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class CourseSearchInfo {
+        private final Long id;
+        private final String title;
+        private final String mapStaticImageUrl;
+        private final String ownerProfileImageUrl;
+        private final String ownerNickname;
+        private final int spotCount;
+        private final double rate;
+        private final LocalDateTime createDate;
+        private final boolean liked;
+
+        public CourseSearchInfo(Course course, boolean isLiked) {
+            this.id = course.getId();
+            this.title = course.getTitle();
+            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
+            this.ownerProfileImageUrl = course.getMember().getProfileImageUrl();
+            this.ownerNickname = course.getMember().getNickname();
+            this.spotCount = course.getSpots().size();
+            this.rate = course.getRate();
+            this.createDate = course.getCreatedAt();
+            this.liked = isLiked;
         }
     }
 

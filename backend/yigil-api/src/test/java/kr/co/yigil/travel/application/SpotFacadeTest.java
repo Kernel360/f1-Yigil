@@ -4,7 +4,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -13,21 +12,20 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
-import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.AttachFiles;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
-import kr.co.yigil.travel.domain.spot.SpotCommand.UpdateSpotImage;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
@@ -42,7 +40,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class SpotFacadeTest {
@@ -59,28 +56,16 @@ public class SpotFacadeTest {
     @DisplayName("getSpotSliceInPlace 메서드가 Spot Slice를 잘 반환하는지")
     @Test
     void getSpotSliceInPlace_ShouldReturnSlice() {
-        Long id = 1L;
-        String email = "test@test.com";
-        String socialLoginId = "12345";
-        String nickname = "tester";
-        String profileImageUrl = "test.jpg";
-        Member member = new Member(id, email, socialLoginId, nickname, profileImageUrl,
-                SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
-
-        String title = "Test Spot Title";
-        String description = "Test Course Description";
-        double rate = 5.0;
-        Spot spot = new Spot(id, member, null, false, title, description, null, null, rate);
-
         Long placeId = 1L;
-        Pageable pageable = PageRequest.of(0, 10);
-        Slice<Spot> expectedSlice = new PageImpl<>(Collections.singletonList(spot), pageable, 1);
-        when(spotService.getSpotSliceInPlace(eq(placeId), any(Pageable.class))).thenReturn(expectedSlice);
+        Accessor mockAccessor = mock(Accessor.class);
+        SpotInfo.Slice mockSlice = mock(SpotInfo.Slice.class);
+        Pageable pageable = PageRequest.of(0, 5);
+        when(spotService.getSpotSliceInPlace(eq(placeId), any(Accessor.class), any(Pageable.class))).thenReturn(mockSlice);
 
-        Slice<Spot> result = spotFacade.getSpotSliceInPlace(placeId, pageable);
+        SpotInfo.Slice result = spotFacade.getSpotSliceInPlace(placeId, mockAccessor, pageable);
 
-        assertEquals(expectedSlice, result);
-        verify(spotService).getSpotSliceInPlace(placeId, pageable);
+        assertEquals(mockSlice, result);
+        verify(spotService).getSpotSliceInPlace(placeId, mockAccessor, pageable);
     }
 
     @DisplayName("getMySpotInPlace 메서드가 응답을 잘 반환하는지")
@@ -170,7 +155,9 @@ public class SpotFacadeTest {
         AttachFile imageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
         AttachFiles imageFiles = new AttachFiles(Collections.singletonList(imageFile));
 
-        Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, null, rate);
+        Place mockPlace = mock(Place.class);
+        when(mockPlace.getName()).thenReturn("장소명");
+        Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, mockPlace, rate);
 
         SpotInfo.SpotListInfo spotInfo = new SpotInfo.SpotListInfo(spot);
         List<SpotInfo.SpotListInfo> spotList = Collections.singletonList(spotInfo);
@@ -180,11 +167,11 @@ public class SpotFacadeTest {
             totalPages
         );
 
-        when(spotService.retrieveSpotList(anyLong(), any(Pageable.class), anyString())).thenReturn(
+        when(spotService.retrieveSpotList(anyLong(), any(Selected.class), any(Pageable.class))).thenReturn(
             mockSpotListResponse);
 
         // When
-        var result = spotFacade.getMemberSpotsInfo(memberId, pageable, "private");
+        var result = spotFacade.getMemberSpotsInfo(memberId, Selected.PRIVATE, pageable);
 
         // Then
         assertThat(result).isNotNull()

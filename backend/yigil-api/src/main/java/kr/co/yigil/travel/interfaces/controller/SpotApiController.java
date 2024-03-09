@@ -3,6 +3,9 @@ package kr.co.yigil.travel.interfaces.controller;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.global.Selected;
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.travel.application.SpotFacade;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
 import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
@@ -34,31 +37,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/spots")
 public class SpotApiController {
+
     private final SpotFacade spotFacade;
 
     private final SpotMapper spotMapper;
 
     @GetMapping("/place/{placeId}")
     public ResponseEntity<SpotsInPlaceResponse> getSpotsInPlace(
-            @PathVariable("placeId") Long placeId,
-            @PageableDefault(size = 5)Pageable pageable,
-            @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder
+        @PathVariable("placeId") Long placeId,
+        @Auth Accessor accessor,
+        @PageableDefault(size = 5, page = 1) Pageable pageable,
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
-        var result = spotFacade.getSpotSliceInPlace(placeId, pageRequest);
-        SpotsInPlaceResponse response = spotMapper.spotsSliceToSpotInPlaceResponse(result);
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+            pageable.getPageSize(),
+            Sort.by(direction, sortBy.getValue()));
+        var result = spotFacade.getSpotSliceInPlace(placeId, accessor, pageRequest);
+        SpotsInPlaceResponse response = spotMapper.toSpotsInPlaceResponse(result);
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/place/{placeId}/me")
     @MemberOnly
     public ResponseEntity<MySpotInPlaceResponse> getMySpotInPlace(
-            @PathVariable("placeId") Long placeId,
-            @Auth Accessor accessor
+        @PathVariable("placeId") Long placeId,
+        @Auth Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
-        var spotInfo = spotFacade.retrieveMySpotInfoInPlace(placeId,memberId);
+        var spotInfo = spotFacade.retrieveMySpotInfoInPlace(placeId, memberId);
         var response = spotMapper.toMySpotInPlaceResponse(spotInfo);
         return ResponseEntity.ok().body(response);
     }
@@ -66,8 +74,8 @@ public class SpotApiController {
     @PostMapping
     @MemberOnly
     public ResponseEntity<SpotRegisterResponse> registerSpot(
-            @ModelAttribute SpotRegisterRequest request,
-            @Auth final Accessor accessor
+        @ModelAttribute SpotRegisterRequest request,
+        @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
         var spotCommand = spotMapper.toRegisterSpotRequest(request);
@@ -85,9 +93,9 @@ public class SpotApiController {
     @PostMapping("/{spotId}")
     @MemberOnly
     public ResponseEntity<SpotUpdateResponse> updateSpot(
-            @PathVariable("spotId") Long spotId,
-            @ModelAttribute SpotUpdateRequest request,
-            @Auth final Accessor accessor
+        @PathVariable("spotId") Long spotId,
+        @ModelAttribute SpotUpdateRequest request,
+        @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
         var spotCommand = spotMapper.toModifySpotRequest(request);
@@ -98,8 +106,8 @@ public class SpotApiController {
     @DeleteMapping("/{spotId}")
     @MemberOnly
     public ResponseEntity<SpotDeleteResponse> deleteSpot(
-            @PathVariable("spotId") Long spotId,
-            @Auth final Accessor accessor
+        @PathVariable("spotId") Long spotId,
+        @Auth final Accessor accessor
     ) {
         Long memberId = accessor.getMemberId();
         spotFacade.deleteSpot(spotId, memberId);
@@ -111,14 +119,16 @@ public class SpotApiController {
     public ResponseEntity<MySpotsResponseDto> getMySpotList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "createdAt", required = false) String sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) String sortOrder,
-        @RequestParam(name = "selected", defaultValue = "all", required = false) String visibility
+        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder,
+        @RequestParam(name = "selected", defaultValue = "all", required = false) Selected visibility
     ) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, pageable.getPageSize(),
-            Sort.by(Sort.Direction.fromString(sortOrder), sortBy));
+        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
+            pageable.getPageSize(),
+            Sort.by(direction, sortBy.getValue()));
         final MySpotsResponse mySpotsResponse = spotFacade.getMemberSpotsInfo(
-            accessor.getMemberId(), pageRequest, visibility);
+            accessor.getMemberId(), visibility, pageRequest);
         var response = spotMapper.of(mySpotsResponse);
         return ResponseEntity.ok().body(response);
     }

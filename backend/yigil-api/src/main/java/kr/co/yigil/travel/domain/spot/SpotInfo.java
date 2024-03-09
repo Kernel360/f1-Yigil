@@ -12,6 +12,7 @@ public class SpotInfo {
     @Getter
     @ToString
     public static class Main {
+        private final Long id;
         private final String placeName;
         private final double rate;
         private final String placeAddress;
@@ -19,15 +20,36 @@ public class SpotInfo {
         private final List<String> imageUrls;
         private final LocalDateTime createDate;
         private final String description;
+        private final String ownerProfileImageUrl;
+        private final String ownerNickname;
+        private final boolean liked;
 
         public Main(Spot spot) {
+            id = spot.getId();
             placeName = spot.getPlace().getName();
             placeAddress = spot.getPlace().getAddress();
             rate = spot.getRate();
-            mapStaticImageFileUrl = spot.getPlace().getMapStaticImageFile().getFileUrl();
+            mapStaticImageFileUrl = spot.getPlace().getMapStaticImageFileUrl();
             imageUrls = spot.getAttachFiles().getUrls();
             createDate = spot.getCreatedAt();
             description = spot.getDescription();
+            ownerProfileImageUrl = spot.getMember().getProfileImageUrl();
+            ownerNickname = spot.getMember().getNickname();
+            this.liked = false;
+        }
+
+        public Main(Spot spot, boolean liked) {
+            id = spot.getId();
+            placeName = spot.getPlace().getName();
+            placeAddress = spot.getPlace().getAddress();
+            rate = spot.getRate();
+            mapStaticImageFileUrl = spot.getPlace().getMapStaticImageFileUrl();
+            imageUrls = spot.getAttachFiles().getUrls();
+            createDate = spot.getCreatedAt();
+            description = spot.getDescription();
+            ownerProfileImageUrl = spot.getMember().getProfileImageUrl();
+            ownerNickname = spot.getMember().getNickname();
+            this.liked = liked;
         }
     }
 
@@ -57,7 +79,7 @@ public class SpotInfo {
 
         public SpotListInfo(Spot spot) {
             this.spotId = spot.getId();
-            this.title = spot.getTitle();
+            this.title = spot.getPlace().getName();
             this.rate = spot.getRate();
             this.imageUrl = spot.getAttachFiles().getUrls().getFirst();
             this.createdDate = spot.getCreatedAt();
@@ -91,6 +113,18 @@ public class SpotInfo {
                 createDate = spot.getCreatedAt();
                 description = spot.getDescription();
             }
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class Slice {
+        private final List<Main> mains;
+        private final boolean hasNext;
+
+        public Slice(List<Main> mains, boolean hasNext) {
+            this.mains = mains;
+            this.hasNext = hasNext;
         }
     }
 }

@@ -1,7 +1,5 @@
 import React from 'react';
 import HeaderClient from './HeaderClient';
-import { Session } from 'next-auth';
-import { TUserInfo } from '../mypage/types';
 
 export default function Header() {
   return (

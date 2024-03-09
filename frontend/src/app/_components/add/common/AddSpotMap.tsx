@@ -1,10 +1,17 @@
 'use client';
-import React, { Dispatch, useEffect, useRef, useState } from 'react';
+import React, {
+  Dispatch,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Marker, NaverMap, useNavermaps } from 'react-naver-maps';
-import { plusMarker } from '../../naver-map/plusMarker';
+import { plusMarker } from '../../naver-map/markers/plusMarker';
 
 import type { TAddSpotAction } from '../spot/SpotContext';
 import { getMap } from '../common/action';
+import { useGeolocation } from '../../naver-map/hooks/useGeolocation';
 
 export default function AddSpotMap({
   place,
@@ -26,37 +33,13 @@ export default function AddSpotMap({
     lat: 37.5135869,
     lng: 127.0621708,
   });
+  const [isGeolocationLoading, setIsGeolocationLoading] = useState(false);
 
-  function onSuccessGeolocation(position: {
-    coords: { latitude: number; longitude: number };
-  }) {
-    if (!mapRef.current) return;
-
-    const location = new navermaps.LatLng(
-      position.coords.latitude,
-      position.coords.longitude,
-    );
-    mapRef.current.setCenter(location);
-    mapRef.current.setZoom(15);
-
-    setCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    });
-  }
-
-  function onErrorGeolocation() {
-    if (!mapRef.current) return;
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        onSuccessGeolocation,
-        onErrorGeolocation,
-      );
-    } else {
-      setCenter({ lat: 37.5452605, lng: 127.0526252 });
-    }
-  }
+  const { onSuccessGeolocation, onErrorGeolocation } = useGeolocation(
+    mapRef,
+    setCenter,
+    setIsGeolocationLoading,
+  );
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -69,16 +52,16 @@ export default function AddSpotMap({
         onErrorGeolocation,
       );
     } else {
-      setCenter({ lat: 37.5452605, lng: 127.0526252 });
+      setCenter({ lat: 37.5135869, lng: 127.0621708 });
     }
-  }, [mapRef]);
+  }, [mapRef, onSuccessGeolocation, onErrorGeolocation]);
 
   useEffect(() => {
     if (mapRef.current && place) {
       const coord = { ...place.coords };
       mapRef.current.panTo(coord);
     }
-  }, []);
+  }, [place]);
 
   async function handleClick(place: {
     name: string;

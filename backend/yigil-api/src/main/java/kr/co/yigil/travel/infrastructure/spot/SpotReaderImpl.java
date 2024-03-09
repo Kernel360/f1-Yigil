@@ -5,9 +5,11 @@ import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_SPOT_ID;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotReader;
+import kr.co.yigil.travel.infrastructure.SpotQueryDslRepository;
 import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class SpotReaderImpl implements SpotReader {
 
     private final SpotRepository spotRepository;
+    private final SpotQueryDslRepository spotQueryDslRepository;
 
     @Override
     public Spot getSpot(Long spotId) {
@@ -29,7 +32,7 @@ public class SpotReaderImpl implements SpotReader {
 
     @Override
     public Optional<Spot> findSpotByPlaceIdAndMemberId(Long placeId, Long memberId) {
-        return spotRepository.findByPlaceIdAndMemberId(placeId, memberId);
+        return spotRepository.findTopByPlaceIdAndMemberId(placeId, memberId);
     }
 
     @Override
@@ -56,11 +59,8 @@ public class SpotReaderImpl implements SpotReader {
     }
 
     @Override
-    public Page<Spot> getMemberSpotList(Long memberId, Pageable pageable,
-        String visibility) {
-        if (visibility.equals("all")) {
-            return spotRepository.findAllByMemberId(memberId, pageable);
-        }
-        return spotRepository.findAllByMemberIdAndIsPrivate(memberId, visibility.equals("private"), pageable);
+    public Page<Spot> getMemberSpotList(Long memberId, Selected visibility, Pageable pageable
+    ) {
+        return spotQueryDslRepository.findAllByMemberIdAndIsPrivate(memberId, visibility, pageable);
     }
 }

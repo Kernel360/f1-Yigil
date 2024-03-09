@@ -3,7 +3,11 @@ package kr.co.yigil.travel.domain.spot;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
@@ -12,16 +16,15 @@ import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
-import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Main;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
+import kr.co.yigil.travel.domain.spot.SpotInfo.Slice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,7 @@ public class SpotServiceImpl implements SpotService {
     private final MemberReader memberReader;
     private final SpotReader spotReader;
     private final PlaceReader placeReader;
+    private final FavorReader favorReader;
 
     private final SpotStore spotStore;
     private final PlaceStore placeStore;
@@ -42,8 +46,15 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable) {
-        return spotReader.getSpotSliceInPlace(placeId, pageable);
+    public Slice getSpotSliceInPlace(final Long placeId, final Accessor accessor, final Pageable pageable) {
+        var slice = spotReader.getSpotSliceInPlace(placeId, pageable);
+        var mains = slice.getContent()
+                .stream()
+                .map(spot -> {
+                    boolean isLiked = accessor.isMember() && favorReader.existsByMemberIdAndTravelId(accessor.getMemberId(), spot.getId());
+                    return new Main(spot, isLiked);
+                }).collect(Collectors.toList());
+        return new Slice(mains, slice.hasNext());
     }
 
     @Override
@@ -97,8 +108,8 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     @Transactional
-    public MySpotsResponse retrieveSpotList(Long memberId, Pageable pageable, String visibility) {
-        var pageSpot = spotReader.getMemberSpotList(memberId, pageable, visibility);
+    public MySpotsResponse retrieveSpotList(Long memberId, Selected visibility, Pageable pageable) {
+        var pageSpot = spotReader.getMemberSpotList(memberId, visibility, pageable);
         List<SpotInfo.SpotListInfo> spotInfoList = pageSpot.getContent().stream()
             .map(SpotInfo.SpotListInfo::new)
             .toList();

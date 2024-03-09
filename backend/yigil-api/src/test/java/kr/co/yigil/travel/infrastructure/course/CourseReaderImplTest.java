@@ -59,4 +59,17 @@ public class CourseReaderImplTest {
 
         assertEquals(expectedSlice, result);
     }
+
+    @DisplayName("searchCourseByPlaceName 메서드가 Course의 Slice를 잘 반환하는지")
+    @Test
+    void searchCourseByPlaceName_ReturnsSliceOfCourses() {
+        String keyword = "keyword";
+        Pageable pageable = mock(Pageable.class);
+        Slice<Course> expectedSlice = mock(Slice.class);
+        when(courseRepository.findByPlaceNameContaining(keyword, pageable)).thenReturn(expectedSlice);
+
+        Slice<Course> result = courseReader.searchCourseByPlaceName(keyword, pageable);
+
+        assertEquals(expectedSlice, result);
+    }
 }

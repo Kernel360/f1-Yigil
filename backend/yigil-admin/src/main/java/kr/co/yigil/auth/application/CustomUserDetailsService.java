@@ -3,11 +3,9 @@ package kr.co.yigil.auth.application;
 import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_NOT_FOUND;
 
 import kr.co.yigil.admin.domain.Admin;
-import kr.co.yigil.admin.domain.repository.AdminRepository;
+import kr.co.yigil.admin.infrastructure.AdminRepository;
 import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

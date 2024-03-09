@@ -1,4 +1,5 @@
 import BackButton from '@/app/_components/place/BackButton';
+import TabGroup from '@/app/_components/place/TabGroup';
 
 import type { ReactElement } from 'react';
 

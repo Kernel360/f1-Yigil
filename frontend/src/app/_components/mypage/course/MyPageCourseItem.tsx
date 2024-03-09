@@ -3,13 +3,13 @@ import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
 import Image from 'next/image';
 import MapPinIcon from '/public/icons/filled-map-pin.svg';
-import { TMyPageCourse } from '../types';
 import IconWithCounts from '../../IconWithCounts';
+import { TMyPageCourse } from '@/types/myPageResponse';
 
 interface TMyPageCourseItem extends TMyPageCourse {
   idx: number;
   checkedList: { course_id: number; is_private: boolean }[];
-  onChangeCheckedList: (id: number, is_private: boolean) => void;
+  onChangeCheckedList: (course_id: number, is_private: boolean) => void;
   selectOption: string;
 }
 
@@ -36,14 +36,14 @@ export default function MyPageCourseItem({
 
     if (found) setIsChecked(true);
     else setIsChecked(false);
-  }, [checkedList.length]);
+  }, [checkedList, course_id]);
 
   useEffect(() => {
     if (selectOption === 'all' && is_private) {
       setIsCheckDisabled(true);
       setIsChecked(false);
     }
-  }, [selectOption, checkedList.length]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
+  }, [selectOption, checkedList.length, is_private]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
   return (
     <div
       className={`flex items-center px-5 py-4 border-b-2 gap-x-4 ${

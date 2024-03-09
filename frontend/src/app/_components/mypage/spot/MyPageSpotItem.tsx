@@ -2,8 +2,8 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
-import { TMyPageSpot } from '../types';
 import IconWithCounts from '../../IconWithCounts';
+import { TMyPageSpot } from '@/types/myPageResponse';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[];
@@ -35,14 +35,14 @@ const MyPageSpotItem = ({
 
     if (found) setIsChecked(true);
     else setIsChecked(false);
-  }, [checkedList.length]);
+  }, [checkedList, spot_id]);
 
   useEffect(() => {
     if (selectOption === 'all' && is_private) {
       setIsCheckDisabled(true);
       setIsChecked(false);
     }
-  }, [selectOption, checkedList.length]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
+  }, [selectOption, checkedList, is_private]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
 
   return (
     <div
