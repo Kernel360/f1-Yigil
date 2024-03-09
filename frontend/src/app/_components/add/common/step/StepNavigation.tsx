@@ -91,6 +91,7 @@ export default function StepNavigation({
           {isOpen && (
             <Dialog
               text="장소를 확정하시겠나요?"
+              loadingText="장소 기록 중..."
               handleConfirm={handleConfirm}
               closeModal={closeModal}
             />

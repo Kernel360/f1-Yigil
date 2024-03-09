@@ -29,7 +29,7 @@ export default function SearchItem({
   }
 
   return (
-    <div className="flex justify-between">
+    <div className={`${!erasable && 'py-3'} flex justify-between`}>
       <button className="flex gap-1 items-center grow" onClick={handleClick}>
         <SearchIcon className="w-6 h-6 mr-4" />
         <span className="text-xl font-light">{item}</span>

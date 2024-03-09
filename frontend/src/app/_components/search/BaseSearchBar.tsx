@@ -58,7 +58,7 @@ export default function BaseSearchBar({
   }
 
   async function handleSearch() {
-    if (state.keyword === '') {
+    if (state.keyword === '' || state.keyword.trim() === '') {
       return;
     }
 

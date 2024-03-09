@@ -7,10 +7,12 @@ import LoadingIndicator from '../../LoadingIndicator';
 
 export default function Dialog({
   text,
+  loadingText,
   closeModal,
   handleConfirm,
 }: {
   text: string;
+  loadingText?: string;
   closeModal: () => void;
   handleConfirm: () => Promise<void>;
 }) {
@@ -71,13 +73,11 @@ export default function Dialog({
               </button>
             </div>
           </div>
-
-          {/* 로딩 상태 표현을 위한 UI 필요 */}
           {isLoading && (
             <div className="absolute top-0 rounded-xl w-full h-full bg-black/25 z-30 flex justify-center items-center">
               <div className="bg-white rounded-lg w-2/3 h-2/3 flex justify-center items-center">
                 <LoadingIndicator
-                  loadingText="장소 기록 중..."
+                  loadingText={loadingText || ''}
                   style="rounded-xl"
                 />
               </div>

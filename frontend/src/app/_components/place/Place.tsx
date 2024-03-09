@@ -42,7 +42,7 @@ export default function Place({
     >
       <div className="relative w-full">
         <Link
-          className="w-full relative aspect-square inline-block w-fit h-fit"
+          className="w-full relative aspect-square inline-block"
           href={`../place/${id}`}
         >
           <Image

@@ -15,7 +15,6 @@ export default function KeywordSuggestion() {
     const result = keywordsSchema.safeParse(json);
 
     if (result.success) {
-      console.log(result.data.keywords);
       setSuggestions(result.data.keywords);
     }
   }
@@ -25,7 +24,7 @@ export default function KeywordSuggestion() {
 
     const delayDebounceTimer = setTimeout(() => {
       suggest(state.keyword);
-    }, 1000);
+    }, 500);
 
     dispatch({ type: 'SET_LOADING', payload: false });
 
@@ -33,7 +32,7 @@ export default function KeywordSuggestion() {
   }, [dispatch, state.keyword]);
 
   return (
-    <section className="px-7 flex flex-col grow">
+    <section className="px-7 flex flex-col grow gap-2">
       {suggestions.map((suggestion, index) => (
         <SearchItem key={`${suggestion}-${index}`} item={suggestion} />
       ))}

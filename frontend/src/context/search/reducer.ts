@@ -104,7 +104,7 @@ export function searchReducer(
         return { ...state };
       }
 
-      return { ...state, histories: [...histories, keyword] };
+      return { ...state, histories: [keyword, ...histories] };
     }
 
     case 'DELETE_HISTORY': {
