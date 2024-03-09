@@ -23,7 +23,7 @@ export const getMyPageSpots = async (
   const spotList = await myPageSpotRequest(
     `?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'
-        ? `createdAt&sortOrder=${sortOrder}`
+        ? `created_at&sortOrder=${sortOrder}`
         : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
   )()()();

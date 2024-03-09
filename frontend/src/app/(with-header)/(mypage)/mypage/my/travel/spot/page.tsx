@@ -5,6 +5,7 @@ import React from 'react';
 
 export default async function MyPageMySpot() {
   const spotList = await getMyPageSpots();
+  console.log(spotList);
   if (!spotList.success) return <div>failed</div>;
 
   return (
