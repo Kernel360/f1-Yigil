@@ -1,7 +1,10 @@
 package kr.co.yigil.comment.infrastructure;
 
+import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.comment.domain.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,8 +22,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.travel.id = :travelId AND c.parent IS NULL "
         + "ORDER BY c.createdAt ASC "
     )
-    Slice<Comment> findParentCommentsByTravelId(@Param("travelId") Long travelId,
+    Page<Comment> findParentCommentsByTravelId(@Param("travelId") Long travelId,
         Pageable pageable);
+
 
     Slice<Comment> findAllByTravelIdAndParentIsNull(Long travelId, Pageable pageable);
 
@@ -40,7 +44,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c.travel.id FROM Comment c WHERE c.id = :commentId")
     Optional<Long> findTravelIdByCommentId(@Param("commentId") Long commentId);
 
-    @Query("SELECT COUNT(c) FROM Comment c WHERE c.parent.id = :parentId")
+    @Query("SELECT COUNT(c) FROM Comment c WHERE c.parent.id = :parentId AND c.isDeleted = false")
     int countByParentId(@Param("parentId") Long parentId);
 
+    Page<Comment> findAllAsPageImplByTravelIdAndParentIdIsNull(Long travelId, Pageable pageable);
+
+    Page<Comment> findAllByParentIdAndIsDeletedFalse(Long parentId, PageRequest pageRequest);
+    List<Comment> findAllByParentIdAndIsDeletedFalse(Long parentId);
 }

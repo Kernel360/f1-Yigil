@@ -6,11 +6,11 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 name: Java CD with Gradle
 on:
-  pull_request:
-    types: [ "closed" ]
+  push:
     branches: [ "main" ]
 permissions:
   contents: read
+  id-token: write
 defaults:
   run:
     working-directory: ./backend
@@ -66,12 +66,19 @@ jobs:
         sed -i "s|@MAIL_USERNAME@|${{ secrets.MAIL_USERNAME }}|g" ./yigil-admin/src/main/resources/application.yml
         sed -i "s|@MAIL_PASSWORD@|${{ secrets.MAIL_PASSWORD }}|g" ./yigil-admin/src/main/resources/application.yml
     # cat ./yigil-admin/src/main/resources/*
-
+    - name: Set admin application.yml
+      run: |
+        sed -i "s|@MASTER_DB_URL@|${{ secrets.MASTER_DB_URL_PROD }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_USERNAME@|${{ secrets.MASTER_DB_USERNAME }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@MASTER_DB_PASSWORD@|${{ secrets.MASTER_DB_PASSWORD }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@SLACK_WEBHOOK_URI@|${{ secrets.SLACK_WEBHOOK_URI }}|g" ./place-region-batch/src/main/resources/application.yml
+        sed -i "s|@PLACE_REGION_BATCH_PORT@|${{ secrets.PLACE_REGION_BATCH_PORT }}|g" ./place-region-batch/src/main/resources/application.yml
     ## Dockerfile secrets 값 주입
     - name: Set Dockerfile
       run: |
         sed -i "s|@YIGIL_API_PORT@|${{ secrets.YIGIL_API_PORT }}|g" ./yigil-api/Dockerfile
         sed -i "s|@YIGIL_ADMIN_PORT@|${{ secrets.YIGIL_ADMIN_PORT }}|g" ./yigil-admin/Dockerfile
+        sed -i "s|@PLACE_REGION_BATCH_PORT@|${{ secrets.PLACE_REGION_BATCH_PORT }}|g" ./yigil-admin/Dockerfile
     # Gradle Build를 위한 권한 부여
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -80,7 +87,7 @@ jobs:
       run: ./gradlew clean build
     ## AWS에 로그인합니다. aws-region은 서울로 설정(ap-northeast-2)했습니다
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v3
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
@@ -88,7 +95,7 @@ jobs:
       ## ECR에 로그인합니다
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      uses: aws-actions/amazon-ecr-login@v2
     # Docker 이미지 빌드
     - name: Docker image build
       run : |
@@ -100,20 +107,28 @@ jobs:
         docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK_PROD }} . --platform=linux/amd64
     - name: Docker image build
       run : |
-        cd yigil-api
+        cd support
         docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT_PROD }} . --platform=linux/amd64
+    - name: Docker image build
+      run : |
+        cd place-region-batch
+        docker build -t ${{ secrets.AWS_ECR }}/${{ secrets.PLACE_REGION_BATCH_PROD }} . --platform=linux/amd64
     - name: Docker image push
       run : |
         cd yigil-api
         docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_API_BACK_PROD }}
     - name: Docker image push
       run : |
-        cd yigil-api
+        cd yigil-admin
         docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_ADMIN_BACK_PROD }}
     - name: Docker image push
       run : |
-        cd yigil-api
+        cd support
         docker push ${{ secrets.AWS_ECR }}/${{ secrets.YIGIL_SUPPORT_PROD }}
+    - name: Docker image push
+      run : |
+        cd place-region-batch
+        docker push ${{ secrets.AWS_ECR }}/${{ secrets.PLACE_REGION_BATCH_PROD }}
 
     # EC2 인스턴스 접속 및 애플리케이션 실행
     - name: Application Run

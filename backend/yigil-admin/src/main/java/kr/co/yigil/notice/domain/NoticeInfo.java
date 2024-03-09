@@ -36,6 +36,8 @@ public class NoticeInfo {
         private final String title;
         private final Long authorId;
         private final String author;
+        private final String authorEmail;
+        private final String authorProfileImageUrl;
         private final LocalDateTime createdAt;
 
         public NoticeItem(Notice notice) {
@@ -43,6 +45,8 @@ public class NoticeInfo {
             title = notice.getTitle();
             author = notice.getAuthor().getNickname();
             authorId = notice.getAuthor().getId();
+            authorEmail = notice.getAuthor().getEmail();
+            authorProfileImageUrl = notice.getAuthorProfileImage();
             createdAt = notice.getCreatedAt();
         }
     }

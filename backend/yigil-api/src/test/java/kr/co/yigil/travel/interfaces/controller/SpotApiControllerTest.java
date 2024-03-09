@@ -27,7 +27,6 @@ import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.application.SpotFacade;
-import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;

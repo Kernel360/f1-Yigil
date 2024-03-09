@@ -66,8 +66,7 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Ages ages = Ages.NONE;
 
-    @Column
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private final List<MemberRegion> favoriteRegions = new ArrayList<>();
 
     @CreatedDate
@@ -162,5 +161,9 @@ public class Member {
     public boolean isFavoriteRegion(Region region) {
         return favoriteRegions.stream()
             .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
+    }
+
+    public List<Region> getFavoriteRegions() {
+        return favoriteRegions.stream().map(MemberRegion::getRegion).toList();
     }
 }

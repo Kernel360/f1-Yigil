@@ -11,8 +11,9 @@ async function fetchPlaceDetail(id: number) {
 
   const response = await fetch(`${BASE_URL}/v1/places/${id}`, {
     headers: {
-      Cookies: `SESSION=${session}`,
+      Cookie: `SESSION=${session}`,
     },
+    next: { tags: [`placeDetail/${id}`] },
   });
 
   return await response.json();

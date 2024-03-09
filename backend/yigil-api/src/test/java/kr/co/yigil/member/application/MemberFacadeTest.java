@@ -1,11 +1,17 @@
 package kr.co.yigil.member.application;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
@@ -13,12 +19,6 @@ import kr.co.yigil.member.domain.MemberCommand;
 import kr.co.yigil.member.domain.MemberInfo;
 import kr.co.yigil.member.domain.MemberService;
 import kr.co.yigil.region.domain.Region;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class MemberFacadeTest {
@@ -100,4 +100,23 @@ class MemberFacadeTest {
             .isInstanceOf(MemberInfo.MemberDeleteResponse.class)
             .usingRecursiveComparison().isEqualTo(new MemberInfo.MemberDeleteResponse("회원 탈퇴 성공"));
     }
+
+
+    @DisplayName("nicknameDuplicateCheck 메서드가 유효한 요청이 들어왔을 때 MemberService의 nicknameDuplicateCheck 메서드를 잘 호출하는지")
+	@Test
+	void nicknameDuplicateCheck() {
+        // Given
+        String nickname = "nickname";
+        MemberInfo.NicknameCheckInfo mockNicknameCheckInfo = new MemberInfo.NicknameCheckInfo(true);
+
+        when(memberService.nicknameDuplicateCheck(nickname)).thenReturn(mockNicknameCheckInfo);
+
+        // When
+        var result = memberFacade.nicknameDuplicateCheck(nickname);
+
+        // Then
+        assertThat(result).isNotNull()
+            .isInstanceOf(MemberInfo.NicknameCheckInfo.class)
+            .usingRecursiveComparison().isEqualTo(mockNicknameCheckInfo);
+	}
 }

@@ -6,10 +6,12 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.yigil.notice.application.NoticeFacade;
 import kr.co.yigil.notice.domain.NoticeCommand;
 import kr.co.yigil.notice.domain.NoticeInfo;
@@ -24,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -49,9 +52,9 @@ class NoticeApiControllerTest {
     @Test
     void whenGetNoticeList_thenShouldReturnOKstatus() throws Exception {
 
-        PageRequest pageRequest = PageRequest.of(0, 5);
-        when(noticeFacade.getNoticeList(pageRequest)).thenReturn(mock(NoticeListInfo.class));
-        when(noticeMapper.toDto(mock(NoticeListInfo.class))).thenReturn(mock(
+        when(noticeFacade.getNoticeList(any(PageRequest.class))).thenReturn(
+            mock(NoticeListInfo.class));
+        when(noticeMapper.toDto(any(NoticeListInfo.class))).thenReturn(mock(
             NoticeDto.NoticeListResponse.class));
 
         mockMvc.perform(get("/api/v1/notices"))
@@ -66,8 +69,9 @@ class NoticeApiControllerTest {
 
         when(noticeMapper.toCommand(any(NoticeCreateRequest.class))).thenReturn(command);
         doNothing().when(noticeFacade).createNotice(command);
-
-        mockMvc.perform(post("/api/v1/notices"))
+        mockMvc.perform(post("/api/v1/notices")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": \"title\", \"content\": \"content\"}"))
             .andExpect(status().isOk());
         verify(noticeFacade).createNotice(command);
     }
@@ -81,7 +85,8 @@ class NoticeApiControllerTest {
         when(noticeFacade.readNotice(anyLong())).thenReturn(mock(NoticeInfo.NoticeDetail.class));
         when(noticeMapper.toDto(any(NoticeInfo.NoticeDetail.class))).thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/notices/{noticeId}", noticeId))
+        mockMvc.perform(get("/api/v1/notices/{noticeId}", noticeId)
+                        .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
     }
 
@@ -95,7 +100,9 @@ class NoticeApiControllerTest {
         when(noticeMapper.toCommand(request)).thenReturn(command);
         doNothing().when(noticeFacade).updateNotice(noticeId, command);
 
-        mockMvc.perform(post("/api/v1/notices/{noticeId}/update", noticeId))
+        mockMvc.perform(post("/api/v1/notices/{noticeId}", noticeId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": \"title\", \"content\": \"content\"}"))
             .andExpect(status().isOk());
     }
 
@@ -106,7 +113,7 @@ class NoticeApiControllerTest {
 
         doNothing().when(noticeFacade).deleteNotice(noticeId);
 
-        mockMvc.perform(post("/api/v1/notices/{noticeId}", noticeId))
+        mockMvc.perform(delete("/api/v1/notices/{noticeId}", noticeId))
             .andExpect(status().isOk());
     }
 }
