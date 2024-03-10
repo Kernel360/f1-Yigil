@@ -131,14 +131,17 @@ public class Member {
 
     public void updateMemberInfo(final String nickname, final String age, final String gender,
         final AttachFile profileImageFile, final List<MemberRegion> favoriteRegions) {
-        this.nickname = nickname;
-        this.ages = Ages.from(age);
-        this.gender = Gender.from(gender);
+
+        if (nickname != null) this.nickname = nickname;
+        if(age != null) this.ages = Ages.from(age);
+        if(gender != null) this.gender = Gender.from(gender);
         if (profileImageFile != null) {
             this.profileImageUrl = profileImageFile.getFileUrl();
         }
-        this.favoriteRegions.clear();
-        this.favoriteRegions.addAll(favoriteRegions);
+        if(favoriteRegions != null) {
+            this.favoriteRegions.clear();
+            this.favoriteRegions.addAll(favoriteRegions);
+        }
     }
 
     public String getProfileImageUrl() {
