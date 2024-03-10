@@ -113,30 +113,30 @@ export const changeOnPrivateMyTravel = async (travel_id: number) => {
   }
 };
 
-export const changeTravelsVisibility = async (
-  travel_ids: number[],
-  is_private: boolean,
-) => {
-  const BASE_URL = await getBaseUrl();
-  const cookie = cookies().get('SESSION')?.value;
-  const data = {
-    travel_ids,
-    is_private,
-  };
+// export const changeTravelsVisibility = async (
+//   travel_ids: number[],
+//   is_private: boolean,
+// ) => {
+//   const BASE_URL = await getBaseUrl();
+//   const cookie = cookies().get('SESSION')?.value;
+//   const data = {
+//     travel_ids,
+//     is_private,
+//   };
 
-  const res = await fetch(`${BASE_URL}/v1/travels/change-visibility`, {
-    method: 'POST',
-    headers: {
-      Cookie: `SESSION=${cookie}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  console.log(await res.json());
-  if (res.ok) {
-    revalidatePath('/mypage/my/travel', 'layout');
-  }
-};
+//   const res = await fetch(`${BASE_URL}/v1/travels/change-visibility`, {
+//     method: 'POST',
+//     headers: {
+//       Cookie: `SESSION=${cookie}`,
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(data),
+//   });
+//   console.log(await res.json());
+//   if (res.ok) {
+//     revalidatePath('/mypage/my/travel', 'layout');
+//   }
+// };
 
 export const getMyPageFollwers = async (
   pageNo: number = 1,

@@ -15,17 +15,11 @@ import Dialog from '../../ui/dialog/Dialog';
 import {
   changeOnPrivateMyTravel,
   changeOnPublicMyTravel,
-  changeTravelsVisibility,
   deleteMySpot,
   getMyPageSpots,
 } from '../hooks/myPageActions';
 import { TMyPageSpot } from '@/types/myPageResponse';
 import LoadingIndicator from '../../LoadingIndicator';
-
-/**
- *
- * TODO: 로딩 처리 및 다이얼로그에 로딩 텍스트 수정되면 추가
- */
 
 export default function MyPageSpotList({
   placeList,
@@ -47,12 +41,11 @@ export default function MyPageSpotList({
   const [sortOption, setSortOption] = useState<string>('desc');
 
   const [isDialogOpened, setIsDialogOpened] = useState(false);
-
   const [loadingText, setLoadingText] = useState('');
   const [dialogText, setDialogText] = useState('');
   const [dialogState, setDialogState] = useState('');
+  const [isBackendDataLoading, setIsBackendDataLoading] = useState(false);
 
-  // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
     getSpots(currentPage, divideCount, sortOption, selectOption);
   }, [currentPage, sortOption, selectOption, placeList]);
@@ -89,18 +82,25 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const spotList = await getMyPageSpots(
-      pageNum,
-      size,
-      sortOption,
-      selectOption,
-    );
-    if (!spotList.success) {
-      setAllSpotList([]);
-      return;
+    try {
+      setIsBackendDataLoading(true);
+      const spotList = await getMyPageSpots(
+        pageNum,
+        size,
+        sortOption,
+        selectOption,
+      );
+      if (!spotList.success) {
+        setAllSpotList([]);
+        return;
+      }
+      setTotalPageCount(spotList.data.total_pages);
+      setAllSpotList([...spotList.data.content]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsBackendDataLoading(false);
     }
-    setTotalPageCount(spotList.data.total_pages);
-    setAllSpotList([...spotList.data.content]);
   };
 
   useEffect(() => {
@@ -180,7 +180,6 @@ export default function MyPageSpotList({
     }
   }, [selectOption, checkedList]);
 
-  // 공개 여부에 따라 렌더링 할 spot list 정렬
   useEffect(() => {
     setCurrentPage(1);
     getSpots(1, divideCount, sortOption, selectOption);
@@ -198,7 +197,6 @@ export default function MyPageSpotList({
     }
   };
 
-  // 공개 비공개 처리 시 Dialog에 로딩 텍스트 전달하기
   const onClickUnLock = async () => {
     try {
       setLoadingText('잠금 해제중 입니다');
@@ -301,7 +299,6 @@ export default function MyPageSpotList({
   ) => {
     if (!checkedList.length) setCheckedList([{ spot_id, is_private }]);
     else {
-      // checkList 배열의 각 값을 확인 후 값이 없으면 체크 리스트 추가 값이 있으면 filter로 제거
       const found = checkedList.find((checked) => checked.spot_id === spot_id);
 
       if (!found) {
@@ -315,7 +312,11 @@ export default function MyPageSpotList({
     }
   };
 
-  return (
+  return isBackendDataLoading ? (
+    <div className="max-w-[430px] mx-auto mt-10">
+      <LoadingIndicator loadingText="데이터 로딩중입니다" />
+    </div>
+  ) : (
     <>
       <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
@@ -344,13 +345,23 @@ export default function MyPageSpotList({
           />
         </div>
       )}
-
-      {allSpotList.map(({ spot_id, image_url, ...data }, idx) => (
+      {!allSpotList.length && selectOption === 'public' ? (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          공개 데이터가 없습니다.
+        </div>
+      ) : (
+        !allSpotList.length &&
+        selectOption === 'private' && (
+          <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+            비공개 데이터가 없습니다.
+          </div>
+        )
+      )}
+      {allSpotList.map(({ spot_id, ...data }, idx) => (
         <MyPageSpotItem
           idx={idx}
           key={spot_id}
           spot_id={spot_id}
-          image_url={image_url}
           {...data}
           checkedList={checkedList}
           onChangeCheckedList={onChangeCheckedList}
