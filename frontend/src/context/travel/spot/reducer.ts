@@ -1,30 +1,6 @@
-import { z } from 'zod';
+import { choosePlaceSchema, inputImagesSchema, reviewSchema } from '../schema';
 
-import { inputImageSchema } from '@/app/_components/images';
-
-import type { TInputImage } from '@/app/_components/images';
-
-const choosePlaceSchema = z.object({
-  name: z.string(),
-  address: z.string(),
-  mapImageUrl: z.string(),
-  coords: z.object({ lng: z.number(), lat: z.number() }),
-});
-
-export type TChoosePlace = z.infer<typeof choosePlaceSchema>;
-
-const reviewSchema = z.object({
-  rate: z.number().int().gte(1).lte(5),
-  content: z.string().max(30),
-});
-
-export type TSpotReview = z.infer<typeof reviewSchema>;
-
-export interface TSpotState {
-  place: TChoosePlace;
-  images: TInputImage[];
-  review: TSpotReview;
-}
+import type { TSpotState } from '../schema';
 
 export interface TSpotAction {
   type: 'SET_PLACE' | 'SET_IMAGES' | 'SET_REVIEW';
@@ -53,7 +29,7 @@ export function reducer(state: TSpotState, action: TSpotAction): TSpotState {
       return { ...state, place: result.data };
     }
     case 'SET_IMAGES': {
-      const result = z.array(inputImageSchema).safeParse(action.payload);
+      const result = inputImagesSchema.safeParse(action.payload);
 
       /**
        * @todo SET_ERROR for Toast

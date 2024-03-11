@@ -4,7 +4,8 @@ import { createContext, useReducer } from 'react';
 import { initialSpotState, reducer } from './reducer';
 
 import type { Dispatch, ReactNode } from 'react';
-import type { TSpotAction, TSpotState } from './reducer';
+import type { TSpotState } from '../schema';
+import type { TSpotAction } from './reducer';
 
 export const SpotContext = createContext<[TSpotState, Dispatch<TSpotAction>]>([
   initialSpotState,
