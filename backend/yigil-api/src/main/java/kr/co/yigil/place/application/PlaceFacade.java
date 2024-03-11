@@ -1,6 +1,12 @@
 package kr.co.yigil.place.application;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
@@ -10,18 +16,14 @@ import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.place.domain.PlaceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class PlaceFacade {
     private final PlaceService placeService;
 
-    public MapStaticImageInfo findPlaceStaticImage(final String placeName, final String address) {
-        return placeService.findPlaceStaticImage(placeName, address);
+    public MapStaticImageInfo findPlaceStaticImage(final Long memberId, final String placeName, final String address) {
+        return placeService.findPlaceStaticImage(memberId, placeName, address);
     }
 
     public List<Main> getPopularPlace(final Accessor accessor) {
