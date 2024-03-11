@@ -6,6 +6,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +51,10 @@ class MemberServiceImplTest {
         FollowCount followCount = mock(FollowCount.class);
 
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
+
         when(followReader.getFollowCount(anyLong())).thenReturn(followCount);
+        when(mockMember.getAges()).thenReturn(Ages.TEENAGERS);
+        when(mockMember.getGender()).thenReturn(Gender.MALE);
 
         var result = memberService.retrieveMemberInfo(memberId);
 

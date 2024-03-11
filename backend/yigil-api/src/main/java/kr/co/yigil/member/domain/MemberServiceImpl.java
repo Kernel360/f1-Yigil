@@ -1,17 +1,18 @@
 package kr.co.yigil.member.domain;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileReader;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
+import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
 import kr.co.yigil.member.domain.MemberInfo.Main;
 import kr.co.yigil.region.domain.MemberRegion;
 import kr.co.yigil.region.domain.RegionReader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,13 +46,21 @@ public class MemberServiceImpl implements MemberService {
 		var member = memberReader.getMember(memberId);
 		AttachFile updatedProfile = getAttachFile(request);
 
-		var memberRegions = regionReader.getRegions(request.getFavoriteRegionIds())
-			.stream().map(region -> new MemberRegion(member, region))
-			.toList();
+		var memberRegions = getMemberRegions(request, member);
 
 		member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
 			updatedProfile, memberRegions);
 
+	}
+
+	private List<MemberRegion> getMemberRegions(MemberUpdateRequest request, Member member) {
+		if(request.getFavoriteRegionIds() == null) {
+			return null;
+		}
+
+		return regionReader.getRegions(request.getFavoriteRegionIds())
+			.stream().map(region -> new MemberRegion(member, region))
+			.toList();
 	}
 
 	@Override

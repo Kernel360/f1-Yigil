@@ -17,10 +17,9 @@ public enum ExceptionCode {
     NOT_FOUND_FAVOR_COUNT(1071, "해당하는 favor count가 없습니다"),
     NOT_FOUND_REGION_ID(1081, "해당하는 region이 없습니다"),
 
-
-    INVALID_VISIBILITY_REQUEST(3001, "올바르지 않은 visibility 요청입니다."),
-
     ALREADY_EXIST_SPOT(3001, "이미 등록된 spot입니다."),
+    INVALID_VISIBILITY_REQUEST(3011, "올바르지 않은 visibility 요청입니다."),
+    SPOT_ALREADY_EXIST_IN_PLACE(3101,"해당 장소에 이미 스팟을 등록하였습니다."),
 
 
     FOLLOW_MYSELF(4001, "자신을 follow 할 수 없습니다."),
