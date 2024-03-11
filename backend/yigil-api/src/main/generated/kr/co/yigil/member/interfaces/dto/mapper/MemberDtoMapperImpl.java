@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-08T23:30:40+0900",
+    date = "2024-03-11T22:46:01+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -48,6 +48,8 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         main1.email( main.getEmail() );
         main1.nickname( main.getNickname() );
         main1.profileImageUrl( main.getProfileImageUrl() );
+        main1.age( main.getAge() );
+        main1.gender( main.getGender() );
         main1.favoriteRegions( favoriteRegionInfoListToFavoriteRegionList( main.getFavoriteRegions() ) );
         main1.followingCount( main.getFollowingCount() );
         main1.followerCount( main.getFollowerCount() );

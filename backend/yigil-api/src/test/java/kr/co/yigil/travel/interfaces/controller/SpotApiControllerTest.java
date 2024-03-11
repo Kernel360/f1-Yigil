@@ -364,6 +364,7 @@ class SpotApiControllerTest {
                 ),
                 responseFields(
                     fieldWithPath("content[].spot_id").description("장소 ID"),
+                    fieldWithPath("content[].place_id").description("장소 ID"),
                     fieldWithPath("content[].title").description("장소 제목"),
                     fieldWithPath("content[].rate").description("장소 평점"),
                     fieldWithPath("content[].image_url").description("장소 이미지 URL"),
