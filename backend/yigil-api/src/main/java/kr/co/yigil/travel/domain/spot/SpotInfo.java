@@ -71,6 +71,7 @@ public class SpotInfo {
     public static class SpotListInfo {
 
         private final Long spotId;
+        private final Long placeId;
         private final String title;
         private final double rate;
         private final String imageUrl;
@@ -79,6 +80,7 @@ public class SpotInfo {
 
         public SpotListInfo(Spot spot) {
             this.spotId = spot.getId();
+            this.placeId = spot.getPlace().getId();
             this.title = spot.getPlace().getName();
             this.rate = spot.getRate();
             this.imageUrl = spot.getAttachFiles().getUrls().getFirst();
