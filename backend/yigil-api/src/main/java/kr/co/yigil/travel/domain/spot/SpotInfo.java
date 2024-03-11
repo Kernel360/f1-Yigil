@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.SpotListDto;
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -89,7 +89,6 @@ public class SpotInfo {
             this.isPrivate = spot.getIsPrivate();
         }
     }
-
 
 
     @Getter

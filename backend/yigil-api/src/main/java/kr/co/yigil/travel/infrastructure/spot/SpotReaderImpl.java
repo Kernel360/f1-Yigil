@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.SpotListDto;
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import kr.co.yigil.travel.infrastructure.SpotQueryDslRepository;
 import kr.co.yigil.travel.infrastructure.SpotRepository;

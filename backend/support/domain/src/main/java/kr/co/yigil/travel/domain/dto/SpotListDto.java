@@ -1,4 +1,4 @@
-package kr.co.yigil.travel.domain;
+package kr.co.yigil.travel.domain.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class SpotListDto {
+
     private final Long spotId;
     private final Long placeId;
     private final String title;
@@ -15,7 +16,8 @@ public class SpotListDto {
     private final Boolean isPrivate;
 
     @QueryProjection
-    public SpotListDto(Long spotId, Long placeId, String title, double rate, String imageUrl, LocalDateTime createdDate, Boolean isPrivate) {
+    public SpotListDto(Long spotId, Long placeId, String title, double rate, String imageUrl,
+        LocalDateTime createdDate, Boolean isPrivate) {
         this.spotId = spotId;
         this.placeId = placeId;
         this.title = title;
