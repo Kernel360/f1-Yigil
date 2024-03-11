@@ -10,20 +10,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.AttachFiles;
-import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
-import kr.co.yigil.member.Ages;
-import kr.co.yigil.member.Gender;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.SocialLoginType;
-import kr.co.yigil.place.domain.Place;
-import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
@@ -36,10 +29,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 @ExtendWith(MockitoExtension.class)
 public class SpotFacadeTest {
@@ -142,22 +133,15 @@ public class SpotFacadeTest {
         int totalPages = 1;
         PageRequest pageable = PageRequest.of(0, 5);
 
-        String email = "test@test.com";
-        String socialLoginId = "12345";
-        String nickname = "tester";
-        String profileImageUrl = "test.jpg";
-        Member member = new Member(memberId, email, socialLoginId, nickname, profileImageUrl,
-            SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
-
         Long spotId = 1L;
         String title = "Test Spot Title";
         double rate = 5.0;
-        AttachFile imageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
-        AttachFiles imageFiles = new AttachFiles(Collections.singletonList(imageFile));
+        Long placeId = 1L;
+        String imageUrl = "test.jpg";
 
-        Place mockPlace = mock(Place.class);
-        when(mockPlace.getName()).thenReturn("장소명");
-        Spot spot = new Spot(spotId, member, null, false, title, null, imageFiles, mockPlace, rate);
+
+        SpotListDto spot = new SpotListDto(spotId, placeId, title, rate, imageUrl,
+            LocalDateTime.now(), false);
 
         SpotInfo.SpotListInfo spotInfo = new SpotInfo.SpotListInfo(spot);
         List<SpotInfo.SpotListInfo> spotList = Collections.singletonList(spotInfo);
