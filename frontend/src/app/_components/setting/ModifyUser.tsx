@@ -1,43 +1,31 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SettingProfile from './SettingProfile';
 import SettingUserForm from './SettingUserForm';
 import { TMyInfo } from '@/types/response';
-import { dataUrlToBlob } from '@/utils';
 import { patchUserInfo } from './actions';
-import LoadingIndicator from '../LoadingIndicator';
-import ViewPortal from '../Portal';
 import Dialog from '../ui/dialog/Dialog';
-
-export interface TModifyUser {
-  nickname: string;
-  profile_image_url: string;
-  favorite_regions: { id: number; name: string }[];
-  gender: string;
-  age: string;
-  a?: string[];
-}
+import ToastMsg from '../ui/toast/ToastMsg';
 
 export default function UserModifyForm(userData: TMyInfo) {
-  const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpened, setIsDialogOpened] = useState(false);
-  const [userForm, setUserForm] = useState<TModifyUser>({
+  const [errorText, setErrorText] = useState('');
+  const [userForm, setUserForm] = useState<TMyInfo>({
     ...userData,
-    // 타입 수정 되어야 함
-    favorite_regions: userData.favorite_regions_ids,
-    gender: '',
-    age: '',
+    email: '',
+    member_id: 0,
   });
-  // 디자인 나오면 api 요청 보내는 로직
-  const onClickComplete = async () => {
+
+  const patchUserForm = async () => {
     try {
-      setIsLoading(true);
-      // await patchUserInfo(userForm);
+      const patchData = checkDifference(userForm, userData);
+      await patchUserInfo(patchData);
     } catch (error) {
+      setErrorText('수정에 실패했습니다.');
       console.log(error);
     } finally {
-      setIsLoading(false);
+      setIsDialogOpened(false);
     }
   };
 
@@ -49,6 +37,10 @@ export default function UserModifyForm(userData: TMyInfo) {
     setIsDialogOpened(true);
   };
 
+  useEffect(() => {
+    setUserForm({ ...userData, email: '', member_id: 0 });
+  }, [userData]);
+
   return (
     <>
       <div className="my-2">
@@ -56,6 +48,7 @@ export default function UserModifyForm(userData: TMyInfo) {
       </div>
       <div className="mt-7">
         <SettingUserForm
+          fetchUserData={userData}
           userForm={userForm}
           setUserForm={setUserForm}
           openModal={openModal}
@@ -65,9 +58,35 @@ export default function UserModifyForm(userData: TMyInfo) {
         <Dialog
           text="수정하시겠습니까?"
           closeModal={closeModal}
-          handleConfirm={async () => await onClickComplete()}
+          handleConfirm={async () => await patchUserForm()}
+          loadingText="수정중 입니다."
         />
       )}
+      {errorText && <ToastMsg title={errorText} timer={2000} />}
     </>
   );
+}
+
+function checkDifference(userForm: TMyInfo, userData: TMyInfo) {
+  const patchData: { [key: string]: {} } = {
+    ...userForm,
+    nickname: userForm.nickname !== userData.nickname ? userForm.nickname : '',
+    profile_image_url:
+      userForm.profile_image_url !== userData.profile_image_url
+        ? userForm.profile_image_url
+        : '',
+    age: userForm.age === '없음' ? '' : userForm.age,
+    gender: userForm.gender === '없음' ? '' : userForm.gender,
+    favorite_regions: '',
+  };
+  for (let key in patchData) {
+    if (
+      !patchData[key] ||
+      patchData[key] === '없음' ||
+      key === 'favorite_regions'
+    ) {
+      delete patchData[key];
+    }
+  }
+  return patchData;
 }

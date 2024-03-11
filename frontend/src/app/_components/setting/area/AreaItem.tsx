@@ -1,7 +1,9 @@
 import { TMyPageRegions } from '@/types/myPageResponse';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import { EventFor } from '@/types/type';
+import ToastMsg from '../../ui/toast/ToastMsg';
+import { patchFavoriteRegion } from '../actions';
 
 export default function AreaItem({
   regions,
@@ -17,8 +19,13 @@ export default function AreaItem({
     if (selectedRegions.includes(id)) {
       const deleteRegion = selectedRegions.filter((region) => region !== id);
       setSelectedRegions(deleteRegion);
+      patchFavoriteRegion(deleteRegion);
     } else {
+      if (selectedRegions.length === 5) {
+        return;
+      }
       setSelectedRegions((prev) => [...prev, id]);
+      patchFavoriteRegion([...selectedRegions, id]);
     }
   };
 
@@ -52,6 +59,9 @@ export default function AreaItem({
           />
         </li>
       ))}
+      {selectedRegions.length === 5 && (
+        <ToastMsg title="5개 이상은 등록하실 수 없습니다." timer={1500} />
+      )}
     </ul>
   );
 }

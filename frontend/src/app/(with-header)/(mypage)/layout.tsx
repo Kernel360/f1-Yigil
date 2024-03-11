@@ -1,6 +1,4 @@
 import MyPageRoutes from '@/app/_components/mypage/routeTabs/MyPageRoutes';
-import { MemberContext } from '@/context/MemberContext';
-import { useContext } from 'react';
 
 export default function MyPageLayout({
   children,

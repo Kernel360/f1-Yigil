@@ -80,9 +80,11 @@ export const myInfoSchema = z.object({
   email: z.string().email(),
   nickname: z.string(),
   profile_image_url: z.string().url(),
-  // favorite_regions_ids: z.array(z.object({ id: z.number(), name: z.string() })),
+  favorite_regions: z.array(z.object({ id: z.number(), name: z.string() })),
   following_count: z.number().int(),
   follower_count: z.number().int(),
+  age: z.string(),
+  gender: z.string(),
 });
 
 export const mySpotForPlaceSchema = z.object({

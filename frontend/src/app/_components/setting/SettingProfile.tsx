@@ -1,16 +1,16 @@
 'use client';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import RoundProfile from '../ui/profile/RoundProfile';
-import { TModifyUser } from './ModifyUser';
 import { EventFor } from '@/types/type';
 import { blobTodataUrl } from '@/utils';
+import { TMyInfo } from '@/types/response';
 
 export default function SettingProfile({
   userForm,
   setUserForm,
 }: {
-  userForm: TModifyUser;
-  setUserForm: Dispatch<SetStateAction<TModifyUser>>;
+  userForm: TMyInfo;
+  setUserForm: Dispatch<SetStateAction<TMyInfo>>;
 }) {
   const onChangeImg = async (e: EventFor<'input', 'onChange'>) => {
     if (!e.target.files?.length) return;

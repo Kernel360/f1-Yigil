@@ -1,38 +1,60 @@
 'use server';
 
 import { getBaseUrl } from '@/app/utilActions';
-import { TMyInfo } from '@/types/response';
+import { TMyInfo, myInfoSchema } from '@/types/response';
 import { cookies } from 'next/headers';
-import { TModifyUser } from './ModifyUser';
 import { dataUrlToBlob } from '@/utils';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import z from 'zod';
 
 export async function checkIsExistNickname(nickname: string) {
   const BASE_URL = await getBaseUrl();
   const res = await fetch(`${BASE_URL}/v1/members/nickname_duplicate_check`, {
     method: 'POST',
     body: JSON.stringify(nickname),
+    headers: { 'Content-Type': 'application/json' },
   });
-  console.log(await res.json());
+  return res.json();
 }
 
-export async function patchUserInfo(infoData: TModifyUser) {
+export async function patchFavoriteRegion(ids: number[]) {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
   const formData = new FormData();
-  infoData.favorite_regions.forEach((region) =>
-    formData.append('favoriteRegionIds', region.id.toString()),
-  );
-  formData.append('nickname', infoData.nickname);
-  formData.append('age', infoData.age);
-  formData.append('gender', infoData.gender);
-  formData.append(
-    'profileImageUrl',
-    new File(
-      [dataUrlToBlob(infoData.profile_image_url)],
-      `${infoData.nickname} 프로필 이미지.webp`,
-      {
-        type: 'image/webp',
-      },
-    ),
-  );
+  ids.forEach((id) => formData.append('favoriteRegionIds', id.toString()));
+
+  const res = await fetch(`${BASE_URL}/v1/members`, {
+    method: 'POST',
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+    },
+    body: formData,
+  });
+  if (res.ok) {
+    revalidateTag('user');
+    return res.json();
+  }
+}
+
+export async function patchUserInfo(infoData: { [key: string]: any }) {
+  const formData = new FormData();
+
+  for (let key in infoData) {
+    if (key === 'profile_image_url') {
+      formData.append(
+        'profileImageUrl',
+        new File(
+          [dataUrlToBlob(infoData[key])],
+          `${infoData.nickname} 프로필 이미지.png`,
+          {
+            type: 'image/png',
+          },
+        ),
+      );
+    }
+    formData.append(key, infoData[key]);
+  }
+
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
 
@@ -43,5 +65,8 @@ export async function patchUserInfo(infoData: TModifyUser) {
     },
     body: formData,
   });
-  return res.json();
+  if (res.ok) {
+    revalidatePath('/settings', 'layout');
+    return res.json();
+  }
 }
