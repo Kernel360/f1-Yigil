@@ -1,4 +1,8 @@
-import { choosePlaceSchema, inputImagesSchema, reviewSchema } from '../schema';
+import {
+  choosePlaceSchema,
+  manyInputImageSchema,
+  reviewSchema,
+} from '../schema';
 
 import type { TSpotState } from '../schema';
 
@@ -13,7 +17,10 @@ export const initialSpotState: TSpotState = {
   review: { rate: 1, content: '' },
 };
 
-export function reducer(state: TSpotState, action: TSpotAction): TSpotState {
+export default function reducer(
+  state: TSpotState,
+  action: TSpotAction,
+): TSpotState {
   switch (action.type) {
     case 'SET_PLACE': {
       const result = choosePlaceSchema.safeParse(action.payload);
@@ -29,7 +36,7 @@ export function reducer(state: TSpotState, action: TSpotAction): TSpotState {
       return { ...state, place: result.data };
     }
     case 'SET_IMAGES': {
-      const result = inputImagesSchema.safeParse(action.payload);
+      const result = manyInputImageSchema.safeParse(action.payload);
 
       /**
        * @todo SET_ERROR for Toast

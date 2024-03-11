@@ -1,11 +1,9 @@
 import { describe, expect, test } from 'vitest';
 
-import { initialSpotState, reducer } from '@/context/travel/spot/reducer';
-import type {
-  TChoosePlace,
-  TSpotAction,
-  TSpotReview,
-} from '@/context/travel/spot/reducer';
+import reducer, { initialSpotState } from '@/context/travel/spot/reducer';
+
+import type { TSpotAction } from '@/context/travel/spot/reducer';
+import type { TChoosePlace, TReview } from '@/context/travel/schema';
 import type { TInputImage } from '@/app/_components/images';
 
 const place: TChoosePlace = {
@@ -20,12 +18,12 @@ const images: TInputImage[] = [
   { filename: '파일명2.jpg', uri: '파일내용2' },
 ];
 
-const review: TSpotReview = {
+const review: TReview = {
   rate: 4,
   content: '리뷰 내용',
 };
 
-describe('Reducer success test', () => {
+describe('Spot reducer success test', () => {
   const actions: TSpotAction[] = [
     { type: 'SET_PLACE', payload: place },
     { type: 'SET_IMAGES', payload: images },
