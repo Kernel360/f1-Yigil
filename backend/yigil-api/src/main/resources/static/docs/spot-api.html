@@ -1323,6 +1323,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">장소 ID</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].place_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소 ID</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">장소 제목</p></td>
@@ -1360,11 +1365,12 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 210
+Content-Length: 233
 
 {
   "content" : [ {
     "spot_id" : 1,
+    "place_id" : null,
     "title" : "test course",
     "rate" : 4.5,
     "image_url" : "images/map.jpg",
