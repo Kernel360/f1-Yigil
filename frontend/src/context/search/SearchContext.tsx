@@ -11,13 +11,9 @@ import type { Dispatch, ReactNode } from 'react';
 import type { TSearchAction, TSearchState } from './reducer';
 import { parseSearchHistory } from '@/utils';
 
-export const SearchContext = createContext<{
-  state: TSearchState;
-  dispatch: Dispatch<TSearchAction>;
-}>({
-  state: defaultSearchState,
-  dispatch: () => {},
-});
+export const SearchContext = createContext<
+  [TSearchState, Dispatch<TSearchAction>]
+>([defaultSearchState, () => {}]);
 
 const searchKey = 'search-history';
 
@@ -54,7 +50,7 @@ export default function SearchProvider({
   }, [state.histories]);
 
   return (
-    <SearchContext.Provider value={{ state, dispatch }}>
+    <SearchContext.Provider value={[state, dispatch]}>
       {children}
     </SearchContext.Provider>
   );

@@ -7,7 +7,7 @@ import { keywordsSchema } from '@/types/response';
 import SearchItem from './SearchItem';
 
 export default function KeywordSuggestion() {
-  const { state, dispatch } = useContext(SearchContext);
+  const [state, dispatch] = useContext(SearchContext);
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   async function suggest(keyword: string) {
