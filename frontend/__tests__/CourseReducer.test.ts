@@ -9,6 +9,7 @@ import type {
   TSpotState,
 } from '@/context/travel/schema';
 import type { TInputImage } from '@/app/_components/images';
+import { isEqualSpot } from '@/context/travel/utils';
 
 const place: TChoosePlace = {
   name: '장소',
@@ -34,7 +35,28 @@ const spot: TSpotState = {
 };
 
 describe('Course reducer success test', () => {
-  const actions: TCourseAction[] = [{ type: 'ADD_SPOT', payload: spot }];
+  const actions: TCourseAction[] = [];
+
+  test('ADD_SPOT', () => {
+    const nextState = reducer(initialCourseState, {
+      type: 'ADD_SPOT',
+      payload: spot,
+    });
+
+    expect(nextState.spots[0]).toEqual(spot);
+  });
+
+  test('REMOVE_SPOT', () => {
+    const currentCourseState = initialCourseState;
+    currentCourseState.spots.push(spot);
+
+    const nextState = reducer(currentCourseState, {
+      type: 'REMOVE_SPOT',
+      payload: spot,
+    });
+
+    expect(nextState.spots).toEqual([]);
+  });
 
   test.each(actions)('$type', (action) => {
     const nextState = reducer(initialCourseState, action);

@@ -29,7 +29,7 @@ export function isEqualCoords(first: TCoords, second: TCoords) {
 export function isEqualPlace(first: TChoosePlace, second: TChoosePlace) {
   const results = [
     first.name === second.name,
-    first.address === second.name,
+    first.address === second.address,
     first.mapImageUrl === second.mapImageUrl,
     isEqualCoords(first.coords, second.coords),
   ];
