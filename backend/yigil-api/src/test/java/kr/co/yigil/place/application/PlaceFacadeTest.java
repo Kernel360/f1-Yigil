@@ -1,22 +1,11 @@
 package kr.co.yigil.place.application;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
-import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.place.domain.Place;
-import kr.co.yigil.place.domain.PlaceCommand;
-import kr.co.yigil.place.domain.PlaceInfo;
-import kr.co.yigil.place.domain.PlaceInfo.Detail;
-import kr.co.yigil.place.domain.PlaceInfo.Main;
-import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
-import kr.co.yigil.place.domain.PlaceService;
-import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +15,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+
+import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceInfo;
+import kr.co.yigil.place.domain.PlaceInfo.Detail;
+import kr.co.yigil.place.domain.PlaceInfo.Main;
+import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
+import kr.co.yigil.place.domain.PlaceService;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceFacadeTest {
@@ -42,13 +40,14 @@ public class PlaceFacadeTest {
         MapStaticImageInfo mockResponse = mock(MapStaticImageInfo.class);
         String placeName = "장소";
         String address = "장소구 장소면 장소리";
+        Long memberId = 1L;
 
-        when(placeService.findPlaceStaticImage(placeName, address)).thenReturn(mockResponse);
+        when(placeService.findPlaceStaticImage(anyLong(), anyString(), anyString())).thenReturn(mockResponse);
 
-        var result = placeFacade.findPlaceStaticImage(placeName, address);
+        var result = placeFacade.findPlaceStaticImage(memberId, placeName, address);
 
         assertEquals(result, mockResponse);
-        verify(placeService).findPlaceStaticImage(placeName, address);
+        verify(placeService).findPlaceStaticImage(memberId, placeName, address);
     }
 
     @DisplayName("getPopularPlace 메서드가 Response를 잘 반환하는지")

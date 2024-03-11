@@ -6,6 +6,8 @@ import {
 } from '@/types/myPageResponse';
 import { revalidatePath } from 'next/cache';
 import { requestWithCookie } from '../../api/httpRequest';
+import { getBaseUrl } from '@/app/utilActions';
+import { cookies } from 'next/headers';
 
 export const myPageSpotRequest = requestWithCookie('spots/my');
 export const spotRequest = requestWithCookie('spots');
@@ -20,22 +22,37 @@ export const getMyPageSpots = async (
   sortOrder: string = 'desc',
   selectOption: string = 'all',
 ) => {
-  const spotList = await myPageSpotRequest(
-    `?page=${pageNo}&size=${size}&sortBy=${
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+  const res = await fetch(
+    `${BASE_URL}/v1/spots/my?page=${pageNo}&size=${size}&sortBy=${
       sortOrder !== 'rate'
         ? `created_at&sortOrder=${sortOrder}`
         : `rate&sortOrder=desc`
     }&selected=${selectOption}`,
-  )()()();
+    {
+      headers: {
+        Cookie: `SESSION=${cookie}`,
+      },
+    },
+  );
+  const spotList = await res.json();
   const parsedSpotList = myPageSpotListSchema.safeParse(spotList);
   return parsedSpotList;
 };
 
 export const deleteMySpot = async (spotId: number) => {
-  const res = await spotRequest(`/${spotId}`)('DELETE')()();
-  if (res) {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+  const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
+    method: 'DELETE',
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+    },
+  });
+
+  if (res.ok) {
     revalidatePath('/mypage/my/travel/spot');
-    return res;
   }
 };
 
@@ -65,40 +82,61 @@ export const deleteMyCourse = async (courseId: number) => {
 };
 
 export const changeOnPublicMyTravel = async (travel_id: number) => {
-  const res = await requestWithCookie('travel/change-on-public')()(
-    'POST',
-    travel_id,
-  )()();
-  if (res) {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+  const res = await fetch(`${BASE_URL}/v1/travels/change-on-public`, {
+    method: 'POST',
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(travel_id),
+  });
+  if (res.ok) {
     revalidatePath('/mypage/my/travel', 'layout');
-    return res;
   }
 };
 
-export const changeOnPriavateMyTravel = async (travel_id: number) => {
-  const res = await requestWithCookie('travel/change-on-private')()(
-    'POST',
-    travel_id,
-  )()();
-  if (res) {
+export const changeOnPrivateMyTravel = async (travel_id: number) => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+  const res = await fetch(`${BASE_URL}/v1/travels/change-on-private`, {
+    method: 'POST',
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(travel_id),
+  });
+  if (res.ok) {
     revalidatePath('/mypage/my/travel', 'layout');
-    return res;
   }
 };
 
-export const changeTravelsVisibility = async (
-  travel_ids: number[],
-  is_private: boolean,
-) => {
-  const res = await requestWithCookie('travel/change-visibility')()('POST', {
-    travel_ids,
-    is_private,
-  })()();
-  if (res) {
-    revalidatePath('/mypage/my/travel', 'layout');
-    return res;
-  }
-};
+// export const changeTravelsVisibility = async (
+//   travel_ids: number[],
+//   is_private: boolean,
+// ) => {
+//   const BASE_URL = await getBaseUrl();
+//   const cookie = cookies().get('SESSION')?.value;
+//   const data = {
+//     travel_ids,
+//     is_private,
+//   };
+
+//   const res = await fetch(`${BASE_URL}/v1/travels/change-visibility`, {
+//     method: 'POST',
+//     headers: {
+//       Cookie: `SESSION=${cookie}`,
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(data),
+//   });
+//   console.log(await res.json());
+//   if (res.ok) {
+//     revalidatePath('/mypage/my/travel', 'layout');
+//   }
+// };
 
 export const getMyPageFollwers = async (
   pageNo: number = 1,

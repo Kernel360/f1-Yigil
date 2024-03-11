@@ -1,21 +1,11 @@
 package kr.co.yigil.place.domain;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
-import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.bookmark.domain.BookmarkReader;
-import kr.co.yigil.member.Ages;
-import kr.co.yigil.member.Gender;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.place.domain.PlaceInfo.Main;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +15,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.transaction.annotation.Transactional;
+
+import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.bookmark.domain.BookmarkReader;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.domain.MemberReader;
+import kr.co.yigil.travel.domain.spot.SpotReader;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceServiceImplTest {
@@ -44,6 +41,9 @@ public class PlaceServiceImplTest {
 
     @Mock
     private MemberReader memberReader;
+
+    @Mock
+    private SpotReader spotReader;
 
     @InjectMocks
     private PlaceServiceImpl placeService;
@@ -195,9 +195,12 @@ public class PlaceServiceImplTest {
     @Test
     void findPlaceStaticImage_ShouldReturnMapStaticImageInfo() {
         Place mockPlace = mock(Place.class);
+        Long memberId = 1L;
         when(placeReader.findPlaceByNameAndAddress("장소", "장소구 장소면 장소리")).thenReturn(java.util.Optional.of(mockPlace));
+        when(mockPlace.getId()).thenReturn(1L);
+        when(spotReader.isExistSpot(mockPlace.getId(), memberId)).thenReturn(true);
 
-        PlaceInfo.MapStaticImageInfo mapStaticImageInfo = placeService.findPlaceStaticImage("장소", "장소구 장소면 장소리");
+        PlaceInfo.MapStaticImageInfo mapStaticImageInfo = placeService.findPlaceStaticImage(memberId, "장소", "장소구 장소면 장소리");
 
         assertNotNull(mapStaticImageInfo);
     }
