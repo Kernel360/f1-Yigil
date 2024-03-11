@@ -497,6 +497,16 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">연령대</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gender</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성별</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역리스트</p></td>
@@ -529,13 +539,15 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 314
+Content-Length: 356
 
 {
   "member_id" : 1,
   "email" : "test@yigil.co.kr",
   "nickname" : "test user",
   "profile_image_url" : "https://cdn.igil.co.kr/images/profile.jpg",
+  "age" : "10대",
+  "gender" : "남성",
   "favorite_regions" : [ {
     "id" : 1,
     "name" : "서울"
@@ -753,6 +765,16 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">연령대</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gender</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성별</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>favorite_regions</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">좋아하는 지역리스트</p></td>
@@ -785,13 +807,15 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 315
+Content-Length: 357
 
 {
   "member_id" : 1,
   "email" : "test@yigil.co.kr",
   "nickname" : "test user",
   "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
+  "age" : "10대",
+  "gender" : "남성",
   "favorite_regions" : [ {
     "id" : 1,
     "name" : "서울"
