@@ -1,7 +1,15 @@
 package kr.co.yigil.place.domain;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
 import kr.co.yigil.member.Ages;
@@ -12,12 +20,8 @@ import kr.co.yigil.place.domain.PlaceInfo.Detail;
 import kr.co.yigil.place.domain.PlaceInfo.Keyword;
 import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
+import kr.co.yigil.travel.domain.spot.SpotReader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceCacheReader placeCacheReader;
     private final BookmarkReader bookmarkReader;
     private final MemberReader memberReader;
+    private final SpotReader spotReader;
 
     @Override
     @Transactional(readOnly = true)
@@ -100,11 +105,22 @@ public class PlaceServiceImpl implements PlaceService {
                 : new Detail(place, spotCount);
     }
 
+
     @Override
     @Transactional(readOnly = true)
-    public MapStaticImageInfo findPlaceStaticImage(final String placeName, final String address) {
+    public MapStaticImageInfo findPlaceStaticImage(final Long memberId, final String placeName, final String address) {
         var placeOptional = placeReader.findPlaceByNameAndAddress(placeName, address);
-        return new MapStaticImageInfo(placeOptional);
+
+        boolean exist = checkExistSpot(placeOptional, memberId);
+        return new MapStaticImageInfo(placeOptional, exist);
+    }
+
+    private boolean checkExistSpot(Optional<Place> placeOptional, Long memberId) {
+        if (placeOptional.isPresent()) {
+            var placeId = placeOptional.get().getId();
+            return spotReader.isExistSpot(placeId, memberId);
+        }
+        return false;
     }
 
     @Override

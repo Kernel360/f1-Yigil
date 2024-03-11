@@ -8,4 +8,5 @@ import lombok.Data;
 public class PlaceStaticImageResponse {
     private boolean exists;
     private String mapStaticImageUrl;
+    private boolean registeredPlace;
 }
