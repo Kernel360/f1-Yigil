@@ -7,15 +7,16 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Gender {
-    MALE("남성"),
-    FEMALE("여성"),
-    NONE("없음");
+    MALE("남성", "male"),
+    FEMALE("여성", "female"),
+    NONE("없음", "none");
 
     private final String viewName;
+    private final String input;
     @JsonCreator
     public static Gender from(String s) {
         for (Gender gender : Gender.values()) {
-            if (gender.getViewName().equals(s)) {
+            if (gender.getInput().equals(s)) {
                 return gender;
             }
         }
