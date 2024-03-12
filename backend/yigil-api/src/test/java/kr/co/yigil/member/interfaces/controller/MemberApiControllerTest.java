@@ -1,31 +1,16 @@
 package kr.co.yigil.member.interfaces.controller;
 
-import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
-import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static kr.co.yigil.RestDocumentUtils.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.List;
 
-import kr.co.yigil.member.application.MemberFacade;
-import kr.co.yigil.member.domain.MemberInfo;
-import kr.co.yigil.member.interfaces.dto.MemberDto;
-import kr.co.yigil.member.interfaces.dto.MemberDto.Main;
-import kr.co.yigil.member.interfaces.dto.mapper.MemberDtoMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+
+import kr.co.yigil.member.application.MemberFacade;
+import kr.co.yigil.member.domain.MemberInfo;
+import kr.co.yigil.member.interfaces.dto.MemberDto;
+import kr.co.yigil.member.interfaces.dto.MemberDto.Main;
+import kr.co.yigil.member.interfaces.dto.mapper.MemberDtoMapper;
 
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(MemberApiController.class)
@@ -60,12 +51,7 @@ class MemberApiControllerTest {
     void setUp(WebApplicationContext webApplicationContext,
         RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-            .apply(documentationConfiguration(restDocumentation)
-                .uris()
-                .withScheme("https")
-                .withHost("yigil.co.kr")
-                .withPort(80)
-            )
+            .apply(documentationConfiguration(restDocumentation))
             .build();
     }
 
@@ -73,11 +59,23 @@ class MemberApiControllerTest {
     @Test
     void getMyInfo_ShouldReturnOk() throws Exception {
 
+        MemberDto.FavoriteRegion favoriteRegion1 = MemberDto.FavoriteRegion.builder()
+            .id(1L)
+            .name("서울")
+            .build();
+        MemberDto.FavoriteRegion favoriteRegion2 = MemberDto.FavoriteRegion.builder()
+            .id(2L)
+            .name("경기")
+            .build();
+
         MemberDto.Main response = Main.builder()
             .memberId(1L)
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.igil.co.kr/images/profile.jpg")
+            .age("10대")
+            .gender("남성")
+            .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -96,6 +94,11 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("age").description("연령대"),
+                    fieldWithPath("gender").description("성별"),
+                    fieldWithPath("favorite_regions").description("좋아하는 지역리스트"),
+                    fieldWithPath("favorite_regions[].id").description("좋아하는 지역 ID"),
+                    fieldWithPath("favorite_regions[].name").description("좋아하는 지역 이름"),
                     fieldWithPath("following_count").description("팔로잉 수"),
                     fieldWithPath("follower_count").description("팔로워 수")
                 )
@@ -122,12 +125,20 @@ class MemberApiControllerTest {
                 .message("회원 정보 업데이트 성공")
                 .build()
         );
+        String requestJson = "{\n"
+            + "  \"nickname\": \"nickname\",\n"
+            + "  \"age\": \"10대\",\n"
+            + "  \"gender\": \"남성\",\n"
+            + "  \"favoriteRegionIds\": [1, 2, 3]\n"
+            + "}";
 
         mockMvc.perform(multipart("/api/v1/members")
                 .file("profileImageFile", multipartFile.getBytes())
-                .param("nickname", "nickname")
-                .param("age", "10대")
-                .param("gender", "남성")
+//                .param("nickname", "nickname")
+//                .param("age", "10대")
+//                .param("gender", "남성")
+//                .param("favoriteRegionIds", "1", "2", "3")
+                .content(requestJson)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
             )
             .andExpect(status().isOk())
@@ -172,12 +183,24 @@ class MemberApiControllerTest {
     @DisplayName("회원 정보 조회가 잘 되는지")
     @Test
     void WhenGetMemberInfo_ThenShouldReturnOk() throws Exception {
+        MemberDto.FavoriteRegion favoriteRegion1 = MemberDto.FavoriteRegion.builder()
+            .id(1L)
+            .name("서울")
+            .build();
+        MemberDto.FavoriteRegion favoriteRegion2 = MemberDto.FavoriteRegion.builder()
+            .id(2L)
+            .name("경기")
+            .build();
+
         Long memberId = 1L;
         MemberDto.Main response = Main.builder()
             .memberId(1L)
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
+            .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
+            .age("10대")
+            .gender("남성")
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -199,6 +222,11 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("age").description("연령대"),
+                    fieldWithPath("gender").description("성별"),
+                    fieldWithPath("favorite_regions").description("좋아하는 지역리스트"),
+                    fieldWithPath("favorite_regions[].id").description("좋아하는 지역 ID"),
+                    fieldWithPath("favorite_regions[].name").description("좋아하는 지역 이름"),
                     fieldWithPath("following_count").description("팔로잉 수"),
                     fieldWithPath("follower_count").description("팔로워 수")
                 )
@@ -206,4 +234,36 @@ class MemberApiControllerTest {
 
         verify(memberFacade).getMemberInfo(anyLong());
     }
+
+    @DisplayName("닉네임 중복 체크가 잘 되는지")
+	@Test
+	void whenNicknameDuplicateCheck_thenShouldReturn200AndResponse() throws Exception{
+
+
+        MemberInfo.NicknameCheckInfo checkInfo = new MemberInfo.NicknameCheckInfo(true);
+        MemberDto.NicknameCheckResponse response = MemberDto.NicknameCheckResponse.builder()
+            .available(true)
+            .build();
+
+        when(memberFacade.nicknameDuplicateCheck(anyString())).thenReturn(checkInfo);
+        when(memberDtoMapper.of(any(MemberInfo.NicknameCheckInfo.class))).thenReturn(response);
+
+        mockMvc.perform(post("/api/v1/members/nickname_duplicate_check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"nickname\": \"nickname\"}"))
+            .andExpect(status().isOk())
+            .andDo(document(
+                "members/nickname-duplicate-check",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                requestFields(
+                    fieldWithPath("nickname").description("닉네임")
+                ),
+                responseFields(
+                    fieldWithPath("available").description("사용 가능 여부")
+                )
+            ));
+
+        verify(memberFacade).nicknameDuplicateCheck(anyString());
+	}
 }

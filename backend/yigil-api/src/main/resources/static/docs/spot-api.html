@@ -493,19 +493,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 - default:1</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기 - default:5</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - created_at(디폴트값) / rate</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순</p></td>
 </tr>
 </tbody>
 </table>
@@ -514,7 +514,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h5 id="_http_request_예시">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/spots/place/1?page=0&amp;size=5&amp;sortBy=createdAt&amp;sortOrder=desc HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/spots/place/1?page=1&amp;size=5&amp;sortBy=created_at&amp;sortOrder=desc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -547,9 +547,19 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">spot의 정보</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 고유 아이디</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].image_url_list</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">imageUrl의 List</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 설명</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].owner_profile_image_url</code></p></td>
@@ -571,6 +581,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 생성일시</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].liked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자의 좋아요 여부</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -579,17 +594,20 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 265
+Content-Length: 328
 
 {
   "spots" : [ {
+    "id" : 1,
     "image_url_list" : [ "images/image.png", "images/photo.jpeg" ],
+    "description" : "설명",
     "owner_profile_image_url" : "images/profile.jpg",
     "owner_nickname" : "오너 닉네임",
     "rate" : "4.5",
-    "create_date" : "2024-02-01"
+    "create_date" : "2024-02-01",
+    "liked" : true
   } ],
-  "has_next" : false
+  "has_next" : true
 }</code></pre>
 </div>
 </div>
@@ -1252,23 +1270,23 @@ Content-Length: 38
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 - default:1</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기 - default:5</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - createdAt(디폴트값) / rate</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>selected</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필터 기능(전체 공개 비공개)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필터 기능 - all(디폴트값) 전체공개 / private 비공개</p></td>
 </tr>
 </tbody>
 </table>
@@ -1277,7 +1295,7 @@ Content-Length: 38
 <h5 id="_http_request_예시_7">HTTP Request 예시</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/spots/my?page=1&amp;size=5&amp;sortBy=createdAt&amp;sortOrder=desc&amp;selected=public HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/spots/my?page=1&amp;size=5&amp;sortBy=created_at&amp;sortOrder=desc&amp;selected=public HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -1367,7 +1385,7 @@ Content-Length: 210
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-02-29 18:14:36 +0900
+Last updated 2024-03-04 19:40:54 +0900
 </div>
 </div>
 </body>

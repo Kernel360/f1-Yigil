@@ -1,21 +1,18 @@
 package kr.co.yigil.auth.application;
 
 import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_NOT_FOUND;
-import static kr.co.yigil.global.exception.ExceptionCode.ADMIN_PASSWORD_DOES_NOT_MATCH;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.yigil.admin.domain.Admin;
-import kr.co.yigil.admin.domain.repository.AdminRepository;
+import kr.co.yigil.admin.infrastructure.AdminRepository;
 import kr.co.yigil.global.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,7 +31,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                .orElseThrow(() -> new AuthException(ADMIN_NOT_FOUND));
 
        if (!passwordService.matches(password, admin.getPassword())) {
-           throw new AuthException(ADMIN_PASSWORD_DOES_NOT_MATCH);
        }
 
         List<GrantedAuthority> authorities = admin.getRoles().stream()

@@ -1,18 +1,13 @@
 package kr.co.yigil.member.domain;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
-import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.FileUploader;
-import kr.co.yigil.follow.domain.FollowCount;
-import kr.co.yigil.follow.domain.FollowReader;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
+import java.util.List;
+
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +16,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+
+import kr.co.yigil.file.AttachFile;
+import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.follow.domain.FollowCount;
+import kr.co.yigil.follow.domain.FollowReader;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
+import kr.co.yigil.region.domain.RegionReader;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceImplTest {
@@ -37,6 +40,9 @@ class MemberServiceImplTest {
     @Mock
     private FileUploader fileUploader;
 
+    @Mock
+    private RegionReader regionReader;
+
     @DisplayName("retrieveMemberInfo 를 호출했을 때 멤버 정보 조회가 잘 되는지 확인")
     @Test
     void WhenRetrieveMemberInfo_ThenReturnMemberInfoMain() {
@@ -45,7 +51,10 @@ class MemberServiceImplTest {
         FollowCount followCount = mock(FollowCount.class);
 
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
+
         when(followReader.getFollowCount(anyLong())).thenReturn(followCount);
+        when(mockMember.getAges()).thenReturn(Ages.TEENAGERS);
+        when(mockMember.getGender()).thenReturn(Gender.MALE);
 
         var result = memberService.retrieveMemberInfo(memberId);
 
@@ -69,7 +78,7 @@ class MemberServiceImplTest {
             "image/jpeg",
             "test".getBytes());
         MemberCommand.MemberUpdateRequest request = new MemberUpdateRequest("nickname", "10대", "여성",
-            mockFile);
+            mockFile, List.of(1L, 2L, 3L));
 
         Member mockMember = mock(Member.class);
 
@@ -77,9 +86,18 @@ class MemberServiceImplTest {
 
         when(memberReader.getMember(anyLong())).thenReturn(mockMember);
         when(fileUploader.upload(mockFile)).thenReturn(mockAttachFile);
-        when(mockAttachFile.getFileUrl()).thenReturn("images/image.jpg");
 
         memberService.updateMemberInfo(memberId, request);
-        verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), anyString());
+        verify(mockMember).updateMemberInfo(anyString(), anyString(), anyString(), any(AttachFile.class), anyList());
     }
+
+    @DisplayName("nicknameDuplicateCheck 를 호출했을 때 닉네임 중복 체크가 잘 되는지 확인")
+	@Test
+	void whenNicknameDuplicateCheck() {
+        String nickname = "nickname";
+        when(memberReader.existsByNickname(nickname)).thenReturn(false);
+        MemberInfo.NicknameCheckInfo result = memberService.nicknameDuplicateCheck(nickname);
+        assertThat(result).isNotNull().isInstanceOf(MemberInfo.NicknameCheckInfo.class);
+        assertThat(result.isAvailable()).isTrue();
+	}
 }

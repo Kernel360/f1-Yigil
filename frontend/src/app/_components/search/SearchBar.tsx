@@ -48,7 +48,7 @@ export default function SearchBar({
 
   // 리팩토링 필요
   async function handleSearch() {
-    if (searchValue === '') {
+    if (searchValue === '' || searchValue.trim() === '') {
       return;
     }
 

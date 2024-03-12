@@ -18,6 +18,7 @@ import {
 
 import type { TAddSpotProps } from '../spot/SpotContext';
 import { revalidateTag } from 'next/cache';
+import { getBaseUrl } from '@/app/utilActions';
 
 function staticMapUrl(
   width: number,
@@ -38,13 +39,12 @@ function staticMapUrl(
 async function getStaticMapUrlFromBackend(name: string, address: string) {
   const cookie = cookies().get('SESSION')?.value;
 
-  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
-  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+  const BASE_URL = await getBaseUrl();
 
   const queryParams = `name=${name}&address=${address}`;
 
   const response = await fetch(
-    `${baseUrl}/v1/places/static-image?${queryParams}`,
+    `${BASE_URL}/v1/places/static-image?${queryParams}`,
     {
       headers: {
         Cookie: `SESSION=${cookie}`,
@@ -64,12 +64,7 @@ export async function getMap(
   const backend = staticMapUrlSchema.safeParse(backendResponse);
 
   if (backend.success && backend.data.exists) {
-    const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
-    const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
-
-    const imageUrl = `${baseUrl}/${backend.data.map_static_image_url}`;
-
-    return { status: 'backend', data: imageUrl };
+    return { status: 'backend', data: backend.data.map_static_image_url };
   }
 
   const url = staticMapUrl(300, 200, coords);
@@ -150,13 +145,11 @@ export async function postSpotData(state: TAddSpotProps) {
 
   const formData = await parseAddSpotProps(state);
 
-  const { ENVIRONMENT, BASE_URL, DEV_BASE_URL } = process.env;
-
-  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+  const BASE_URL = await getBaseUrl();
 
   // Next.js fetch form은 'Content-Type': 'multipart/form-data를
   // 직접 명시하면 Boundary 설정이 어긋나 제대로 동작하지 않음
-  const response = await fetch(`${baseUrl}/v1/spots`, {
+  const response = await fetch(`${BASE_URL}/v1/spots`, {
     method: 'POST',
     body: formData,
     headers: {

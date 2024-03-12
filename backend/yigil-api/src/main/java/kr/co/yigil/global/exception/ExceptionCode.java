@@ -15,20 +15,19 @@ public enum ExceptionCode {
     NOT_FOUND_COMMENT_ID(1051, "해당하는 comment가 없습니다"),
     NOT_FOUND_PLACE_ID(1061, "해당하는 place가 없습니다"),
     NOT_FOUND_FAVOR_COUNT(1071, "해당하는 favor count가 없습니다"),
+    NOT_FOUND_REGION_ID(1081, "해당하는 region이 없습니다"),
 
-
-    // travel 3000
-    INVALID_VISIBILITY_REQUEST(3001, "올바르지 않은 visibility 요청입니다."),
-
-    // spot 3100
     ALREADY_EXIST_SPOT(3001, "이미 등록된 spot입니다."),
+    INVALID_VISIBILITY_REQUEST(3011, "올바르지 않은 visibility 요청입니다."),
+    SPOT_ALREADY_EXIST_IN_PLACE(3101,"해당 장소에 이미 스팟을 등록하였습니다."),
 
-    // course 3200
 
     FOLLOW_MYSELF(4001, "자신을 follow 할 수 없습니다."),
     ALREADY_FOLLOWING(4002, "이미 follow 중인 사용자입니다."),
     UNFOLLOW_MYSELF(4003, "자신을 unfollow 할 수 없습니다."),
     NOT_FOLLOWING(4004, "팔로우 중이 아닌 사용자입니다."),
+
+    ALREADY_REMOVED_COMMENT(3301, "이미 삭제된 댓글입니다."),
 
     EMPTY_FILE(5001, "업로드한 파일이 비어있습니다."), // todo 현재  모듈 구조상 AttachFiles에서  사용 불가
     INVALID_FILE_TYPE(5002, "지원하지 않는 형식의 파일입니다."),

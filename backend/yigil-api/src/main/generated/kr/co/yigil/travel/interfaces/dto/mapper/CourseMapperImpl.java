@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.interfaces.dto.mapper;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -14,13 +15,14 @@ import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequ
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-25T01:16:31+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2024-03-04T18:48:06+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
 public class CourseMapperImpl implements CourseMapper {
@@ -147,6 +149,41 @@ public class CourseMapperImpl implements CourseMapper {
         return courseSpotInfoDto;
     }
 
+    @Override
+    public MyCoursesResponse of(CourseInfo.MyCoursesResponse myCoursesResponse) {
+        if ( myCoursesResponse == null ) {
+            return null;
+        }
+
+        MyCoursesResponse.MyCoursesResponseBuilder myCoursesResponse1 = MyCoursesResponse.builder();
+
+        myCoursesResponse1.content( courseListInfoListToCourseInfoList( myCoursesResponse.getContent() ) );
+        myCoursesResponse1.totalPages( myCoursesResponse.getTotalPages() );
+
+        return myCoursesResponse1.build();
+    }
+
+    @Override
+    public MyCoursesResponse.CourseInfo of(CourseInfo.CourseListInfo courseListInfo) {
+        if ( courseListInfo == null ) {
+            return null;
+        }
+
+        MyCoursesResponse.CourseInfo.CourseInfoBuilder courseInfo = MyCoursesResponse.CourseInfo.builder();
+
+        courseInfo.courseId( courseListInfo.getCourseId() );
+        courseInfo.title( courseListInfo.getTitle() );
+        courseInfo.rate( courseListInfo.getRate() );
+        courseInfo.spotCount( courseListInfo.getSpotCount() );
+        if ( courseListInfo.getCreatedDate() != null ) {
+            courseInfo.createdDate( DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( courseListInfo.getCreatedDate() ) );
+        }
+        courseInfo.mapStaticImageUrl( courseListInfo.getMapStaticImageUrl() );
+        courseInfo.isPrivate( courseListInfo.getIsPrivate() );
+
+        return courseInfo.build();
+    }
+
     protected List<SpotCommand.RegisterSpotRequest> spotRegisterRequestListToRegisterSpotRequestList(List<SpotRegisterRequest> list) {
         if ( list == null ) {
             return null;
@@ -181,6 +218,19 @@ public class CourseMapperImpl implements CourseMapper {
         List<CourseDetailInfoDto.CourseSpotInfoDto> list1 = new ArrayList<CourseDetailInfoDto.CourseSpotInfoDto>( list.size() );
         for ( CourseInfo.CourseSpotInfo courseSpotInfo : list ) {
             list1.add( toCourseSpotInfoDto( courseSpotInfo ) );
+        }
+
+        return list1;
+    }
+
+    protected List<MyCoursesResponse.CourseInfo> courseListInfoListToCourseInfoList(List<CourseInfo.CourseListInfo> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<MyCoursesResponse.CourseInfo> list1 = new ArrayList<MyCoursesResponse.CourseInfo>( list.size() );
+        for ( CourseInfo.CourseListInfo courseListInfo : list ) {
+            list1.add( of( courseListInfo ) );
         }
 
         return list1;

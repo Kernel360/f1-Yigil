@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SpotInfoDto {
+    private Long id;
+
     private List<String> imageUrlList;
+
+    private String description;
 
     private String ownerProfileImageUrl;
 
@@ -20,4 +24,5 @@ public class SpotInfoDto {
 
     private String createDate;
 
+    private boolean liked;
 }

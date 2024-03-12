@@ -1,21 +1,24 @@
 package kr.co.yigil.member.interfaces.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import kr.co.yigil.auth.Auth;
-import kr.co.yigil.auth.MemberOnly;
-import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.member.application.MemberFacade;
-import kr.co.yigil.member.interfaces.dto.MemberDto;
-import kr.co.yigil.member.interfaces.dto.mapper.MemberDtoMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletRequest;
+import kr.co.yigil.auth.Auth;
+import kr.co.yigil.auth.MemberOnly;
+import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.member.application.MemberFacade;
+import kr.co.yigil.member.domain.MemberInfo;
+import kr.co.yigil.member.interfaces.dto.MemberDto;
+import kr.co.yigil.member.interfaces.dto.mapper.MemberDtoMapper;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,5 +65,13 @@ public class MemberApiController {
         var memberInfo = memberFacade.getMemberInfo(memberId);
         var response = memberDtoMapper.of(memberInfo);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/nickname_duplicate_check")
+    public ResponseEntity<MemberDto.NicknameCheckResponse> nicknameDuplicateCheck(
+        @RequestBody MemberDto.NicknameCheckRequest request) {
+        MemberInfo.NicknameCheckInfo checkInfo = memberFacade.nicknameDuplicateCheck(request.getNickname());
+        MemberDto.NicknameCheckResponse response = memberDtoMapper.of(checkInfo);
+        return ResponseEntity.ok().body(response);
     }
 }

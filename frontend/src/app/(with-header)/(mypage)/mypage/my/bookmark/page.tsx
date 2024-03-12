@@ -10,7 +10,13 @@ export default async function MyPageBookmarkPage() {
 
   return (
     <>
-      <MyPageBookmarkList bookmarkList={bookmarkList.data.content} />
+      {!!bookmarkList.data.bookmarks.length ? (
+        <MyPageBookmarkList bookmarkList={bookmarkList.data.bookmarks} />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          북마크를 추가해주세요.
+        </div>
+      )}
     </>
   );
 }

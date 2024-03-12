@@ -26,6 +26,7 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     implementation project(':support:log')
     implementation project(':support:domain')
@@ -70,7 +71,8 @@ dependencies {
 
     implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
-    }
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
+}
 
 test {
     outputs.dir snippetsDir

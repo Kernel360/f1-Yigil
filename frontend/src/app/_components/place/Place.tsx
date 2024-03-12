@@ -17,7 +17,7 @@ export default function Place({
 }: {
   data: TPlace;
   order: number;
-  variant: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary';
   isLoggedIn: boolean;
 }) {
   const {
@@ -29,7 +29,12 @@ export default function Place({
     bookmarked,
   } = data;
 
-  const postSize = variant === 'primary' ? 'w-[350px]' : 'w-[300px]';
+  const postSize =
+    variant === 'primary'
+      ? 'w-[350px]'
+      : variant === 'secondary'
+      ? 'w-[300px]'
+      : 'w-full';
 
   return (
     <article
@@ -37,8 +42,8 @@ export default function Place({
     >
       <div className="relative w-full">
         <Link
-          className="w-full relative aspect-square inline-block w-fit h-fit"
-          href={`/place/${id}`}
+          className="w-full relative aspect-square inline-block"
+          href={`../place/${id}`}
         >
           <Image
             className="rounded-lg select-none"
@@ -48,11 +53,12 @@ export default function Place({
             sizes="33vw"
           />
         </Link>
-        <BookmarkButton
+        {/* <BookmarkButton
           className="absolute top-4 right-4"
+          placeId={id}
           bookmarked={bookmarked}
           isLoggedIn={isLoggedIn}
-        />
+        /> */}
         {variant === 'primary' && (
           <Link tabIndex={-1} href={`place/${id}`}>
             <span className="absolute left-6 bottom-2 select-none text-white text-8xl font-semibold">

@@ -71,10 +71,11 @@ public class PlaceInfo {
     @Getter
     @ToString
     public static class MapStaticImageInfo {
-        private final String imageUrl;
         private final boolean exists;
+        private final String imageUrl;
+        private final boolean registeredPlace;
 
-        public MapStaticImageInfo(Optional<Place> placeOptional) {
+        public MapStaticImageInfo(Optional<Place> placeOptional, boolean isRegisteredPlace) {
             if(placeOptional.isEmpty()) {
                 exists = false;
                 imageUrl = "";
@@ -83,6 +84,17 @@ public class PlaceInfo {
                 imageUrl = placeOptional.get()
                         .getMapStaticImageFileUrl();
             }
+            this.registeredPlace = isRegisteredPlace;
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class Keyword {
+        private final String keyword;
+
+        public Keyword(String keyword) {
+            this.keyword = keyword;
         }
     }
 }

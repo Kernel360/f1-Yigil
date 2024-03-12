@@ -51,7 +51,10 @@ function canGoNext(
 ) {
   const label = step.data.label;
 
-  if (label === '시작' && currentFoundPlace === undefined) {
+  if (
+    label === '시작' &&
+    (currentFoundPlace === undefined || addSpotState.name === '')
+  ) {
     return false;
   }
 

@@ -1,3 +1,4 @@
+import { backendLoginRequest } from '@/app/_components/api/action';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   KAKAO_AUTH_BASE_URL,
@@ -142,36 +143,5 @@ function userInfoRequest(accessToken: string) {
       Authorization: `Bearer ${accessToken}`,
     },
     cache: 'no-store',
-  });
-}
-
-function backendLoginRequest(data: {
-  id: string;
-  nickname: string;
-  profile_image_url: string;
-  email: string;
-  provider: string;
-  accessToken: string;
-}) {
-  const { ENVIRONMENT, BASE_URL, DEV_BASE_URL } = process.env;
-
-  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
-
-  const { id, nickname, profile_image_url, email, provider, accessToken } =
-    data;
-
-  return fetch(`${baseUrl}/v1/login`, {
-    method: 'POST',
-    body: JSON.stringify({
-      id,
-      nickname,
-      profile_image_url,
-      email,
-      provider,
-    }),
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
   });
 }

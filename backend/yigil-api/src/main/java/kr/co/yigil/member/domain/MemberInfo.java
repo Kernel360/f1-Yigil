@@ -1,8 +1,10 @@
 package kr.co.yigil.member.domain;
 
+import java.util.List;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.region.domain.Region;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -18,6 +20,9 @@ public class MemberInfo {
         private final String email;
         private final String nickname;
         private final String profileImageUrl;
+        private final String age;
+        private final String gender;
+        private final List<FavoriteRegionInfo> favoriteRegions;
         private final int followingCount;
         private final int followerCount;
 
@@ -26,8 +31,25 @@ public class MemberInfo {
             this.email = member.getEmail();
             this.nickname = member.getNickname();
             this.profileImageUrl = member.getProfileImageUrl();
+            this.age = member.getAges().getViewName();
+            this.gender = member.getGender().getViewName();
             this.followingCount = followCount.getFollowingCount();
             this.followerCount = followCount.getFollowerCount();
+            this.favoriteRegions = member.getFavoriteRegions().stream().
+                map(MemberInfo.FavoriteRegionInfo::new)
+                .toList();
+        }
+    }
+
+    @Getter
+    public static class FavoriteRegionInfo {
+
+        private final Long id;
+        private final String name;
+
+        public FavoriteRegionInfo(Region region) {
+            this.id = region.getId();
+            this.name = region.getName1() + " " + region.getName2();
         }
     }
 
@@ -65,6 +87,15 @@ public class MemberInfo {
         private final String message;
         public MemberDeleteResponse(String message) {
             this.message = message;
+        }
+    }
+
+    @Getter
+    public static class NicknameCheckInfo {
+        private final boolean available;
+
+        public NicknameCheckInfo(boolean isAvailable) {
+            this.available = isAvailable;
         }
     }
 }

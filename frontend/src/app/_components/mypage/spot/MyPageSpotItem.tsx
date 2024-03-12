@@ -2,8 +2,8 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
-import { TMyPageSpot } from '../types';
 import IconWithCounts from '../../IconWithCounts';
+import { TMyPageSpot } from '@/types/myPageResponse';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[];
@@ -14,12 +14,10 @@ interface TMyPageSpotItem extends TMyPageSpot {
 
 const MyPageSpotItem = ({
   spot_id,
-
   image_url,
   rate,
   created_date,
   title,
-
   is_private,
   checkedList,
   onChangeCheckedList,
@@ -29,10 +27,8 @@ const MyPageSpotItem = ({
   const [isCheckDisabled, setIsCheckDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  // TODO: 전체 선택 했을 때 isChecked가 true 로 바뀌어야 한다.
   useEffect(() => {
     const found = checkedList.find((checked) => checked.spot_id === spot_id);
-
     if (found) setIsChecked(true);
     else setIsChecked(false);
   }, [checkedList, spot_id]);
@@ -41,8 +37,11 @@ const MyPageSpotItem = ({
     if (selectOption === 'all' && is_private) {
       setIsCheckDisabled(true);
       setIsChecked(false);
+    } else if (selectOption === 'private') {
+      setIsCheckDisabled(false);
+      setIsChecked(false);
     }
-  }, [selectOption, checkedList, is_private]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
+  }, [selectOption, is_private]);
 
   return (
     <div
@@ -87,9 +86,7 @@ const MyPageSpotItem = ({
             count={rate}
             rating
           />
-          <div className="text-gray-300 font-bold">
-            {new Date(created_date).toLocaleDateString()}
-          </div>
+          <div className="text-gray-300 font-bold">{created_date}</div>
         </div>
       </div>
     </div>

@@ -54,8 +54,7 @@ public class GoogleLoginStrategyTest {
     @DisplayName("토큰이 유효하고 멤버가 존재하면 로그인이 잘 되는지")
     @Test
     void whenTokenIsValid_andMemberExists_thenLoginSuccessful() {
-        GoogleTokenInfoResponse mockResponse = new GoogleTokenInfoResponse();
-        mockResponse.setUserId(12345678L);
+        GoogleTokenInfoResponse mockResponse = new GoogleTokenInfoResponse("email@example.com", 50000);
 
         String accessToken = "mockAccessToken";
 
@@ -70,11 +69,12 @@ public class GoogleLoginStrategyTest {
         Long memberId = 1L;
         Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.GOOGLE);
 
-        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(
+        when(memberReader.findMemberByEmailAndSocialLoginType("email@example.com", SocialLoginType.GOOGLE)).thenReturn(
                 Optional.of(mockMember));
 
         LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
-        when(loginCommand.getId()).thenReturn(12345678L);
+        when(loginCommand.getEmail()).thenReturn("email@example.com");
+        when(loginCommand.getId()).thenReturn("12345678");
 
         Long response = googleLoginStrategy.processLogin(loginCommand, accessToken);
 
@@ -105,7 +105,7 @@ public class GoogleLoginStrategyTest {
     @Test
     void whenMemberIsNew_thenRegisterNewMember() {
         GoogleTokenInfoResponse mockResponse = new GoogleTokenInfoResponse();
-        mockResponse.setUserId(12345678L);
+        mockResponse.setEmail("test@test.com");
         String accessToken = "mockAccessToken";
 
         when(restTemplate.exchange(
@@ -117,9 +117,10 @@ public class GoogleLoginStrategyTest {
         )).thenReturn(ResponseEntity.ok(mockResponse));
 
         LoginCommand.LoginRequest loginCommand = mock(LoginCommand.LoginRequest.class);
-        when(loginCommand.getId()).thenReturn(12345678L);
+        when(loginCommand.getId()).thenReturn("12345678");
+        when(loginCommand.getEmail()).thenReturn("test@test.com");
 
-        when(memberReader.findMemberBySocialLoginIdAndSocialLoginType("12345678", SocialLoginType.GOOGLE)).thenReturn(Optional.empty());
+        when(memberReader.findMemberByEmailAndSocialLoginType("test@test.com", SocialLoginType.GOOGLE)).thenReturn(Optional.empty());
         Long memberId = 1L;
         Member mockMember = new Member(memberId,"email@example.com", "12345678", "user", "image_url", SocialLoginType.GOOGLE);
         when(loginCommand.toEntity(anyString())).thenReturn(mockMember);

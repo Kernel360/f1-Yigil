@@ -20,9 +20,8 @@ export default function MyPageBookmarkList({
   const [sortOption, setSortOption] = useState('desc');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const divideCount = 5;
-
   const [allBookmarkList, setAllBookmarkList] = useState(bookmarkList);
-
+  const [isLoading, setIsLoading] = useState(false);
   const onChangeSortOption = (option: string | number) => {
     if (typeof option === 'number') return;
     setSortOption(option);
@@ -39,17 +38,21 @@ export default function MyPageBookmarkList({
       return;
     }
 
-    setAllBookmarkList([...bookmarkList.data.content]);
+    setAllBookmarkList([...bookmarkList.data.bookmarks]);
   };
 
   useEffect(() => {
     getBookmarks(currentPage, divideCount, sortOption);
-  }, [currentPage]);
+  }, [currentPage, divideCount, sortOption]);
 
   useEffect(() => {
     setCurrentPage(1);
     getBookmarks(1, divideCount, sortOption);
   }, [sortOption]);
+
+  useEffect(() => {
+    setAllBookmarkList(bookmarkList);
+  }, [bookmarkList]);
 
   return (
     <div className="px-4">
@@ -62,22 +65,15 @@ export default function MyPageBookmarkList({
           defaultValue="desc"
         />
       </div>
-      {!!allBookmarkList.length ? (
-        <>
-          {allBookmarkList.map(({ place_id, ...bookmark }, idx) => (
-            <MyPageBookmarkItem
-              key={place_id}
-              idx={idx}
-              place_id={place_id}
-              {...bookmark}
-            />
-          ))}
-        </>
-      ) : (
-        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
-          북마크를 추가해주세요.
-        </div>
-      )}
+
+      {allBookmarkList.map(({ place_id, ...bookmark }, idx) => (
+        <MyPageBookmarkItem
+          key={place_id}
+          idx={idx}
+          place_id={place_id}
+          {...bookmark}
+        />
+      ))}
     </div>
   );
 }

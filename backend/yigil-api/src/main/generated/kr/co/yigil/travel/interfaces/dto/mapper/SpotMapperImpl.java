@@ -1,41 +1,49 @@
 package kr.co.yigil.travel.interfaces.dto.mapper;
 
+import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
-import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.domain.spot.SpotInfo;
 import kr.co.yigil.travel.interfaces.dto.SpotDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.SpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotInPlaceResponse;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotsResponseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-02-25T01:16:31+0900",
+    date = "2024-03-07T21:27:34+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class SpotMapperImpl implements SpotMapper {
 
+    private final DateTimeFormatter dateTimeFormatter_yyyy_MM_dd_0159776256 = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
+
     @Override
-    public SpotInfoDto spotToSpotInfoDto(Spot spot) {
-        if ( spot == null ) {
+    public MySpotInPlaceResponse toMySpotInPlaceResponse(SpotInfo.MySpot mySpot) {
+        if ( mySpot == null ) {
             return null;
         }
 
-        SpotInfoDto spotInfoDto = new SpotInfoDto();
+        MySpotInPlaceResponse mySpotInPlaceResponse = new MySpotInPlaceResponse();
 
-        spotInfoDto.setImageUrlList( spot.getAttachFiles().getUrls() );
-        spotInfoDto.setOwnerProfileImageUrl( spot.getMember().getProfileImageUrl() );
-        spotInfoDto.setOwnerNickname( spot.getMember().getNickname() );
-        spotInfoDto.setRate( String.valueOf(spot.getRate()) );
-        spotInfoDto.setCreateDate( spot.getCreatedAt().toString() );
+        mySpotInPlaceResponse.setExists( mySpot.isExists() );
+        mySpotInPlaceResponse.setRate( doubleToString( mySpot.getRate() ) );
+        List<String> list = mySpot.getImageUrls();
+        if ( list != null ) {
+            mySpotInPlaceResponse.setImageUrls( new ArrayList<String>( list ) );
+        }
+        mySpotInPlaceResponse.setCreateDate( localDateTimeToString( mySpot.getCreateDate() ) );
+        mySpotInPlaceResponse.setDescription( mySpot.getDescription() );
 
-        return spotInfoDto;
+        return mySpotInPlaceResponse;
     }
 
     @Override
@@ -96,6 +104,65 @@ public class SpotMapperImpl implements SpotMapper {
         registerSpotRequest.rate( request.getRate() );
 
         return registerSpotRequest.build();
+    }
+
+    @Override
+    public MySpotsResponseDto of(SpotInfo.MySpotsResponse mySpotsResponse) {
+        if ( mySpotsResponse == null ) {
+            return null;
+        }
+
+        MySpotsResponseDto.MySpotsResponseDtoBuilder mySpotsResponseDto = MySpotsResponseDto.builder();
+
+        mySpotsResponseDto.content( spotListInfoListToSpotInfoList( mySpotsResponse.getContent() ) );
+        mySpotsResponseDto.totalPages( mySpotsResponse.getTotalPages() );
+
+        return mySpotsResponseDto.build();
+    }
+
+    @Override
+    public MySpotsResponseDto.SpotInfo of(SpotInfo.SpotListInfo spotInfo) {
+        if ( spotInfo == null ) {
+            return null;
+        }
+
+        MySpotsResponseDto.SpotInfo.SpotInfoBuilder spotInfo1 = MySpotsResponseDto.SpotInfo.builder();
+
+        spotInfo1.spotId( spotInfo.getSpotId() );
+        spotInfo1.title( spotInfo.getTitle() );
+        spotInfo1.rate( spotInfo.getRate() );
+        spotInfo1.imageUrl( spotInfo.getImageUrl() );
+        if ( spotInfo.getCreatedDate() != null ) {
+            spotInfo1.createdDate( DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( spotInfo.getCreatedDate() ) );
+        }
+        spotInfo1.isPrivate( spotInfo.getIsPrivate() );
+
+        return spotInfo1.build();
+    }
+
+    @Override
+    public SpotInfoDto toSpotInfoDto(SpotInfo.Main spotInfoMain) {
+        if ( spotInfoMain == null ) {
+            return null;
+        }
+
+        SpotInfoDto spotInfoDto = new SpotInfoDto();
+
+        spotInfoDto.setId( spotInfoMain.getId() );
+        List<String> list = spotInfoMain.getImageUrls();
+        if ( list != null ) {
+            spotInfoDto.setImageUrlList( new ArrayList<String>( list ) );
+        }
+        spotInfoDto.setDescription( spotInfoMain.getDescription() );
+        spotInfoDto.setOwnerProfileImageUrl( spotInfoMain.getOwnerProfileImageUrl() );
+        spotInfoDto.setOwnerNickname( spotInfoMain.getOwnerNickname() );
+        spotInfoDto.setRate( new DecimalFormat( "#.#" ).format( spotInfoMain.getRate() ) );
+        if ( spotInfoMain.getCreateDate() != null ) {
+            spotInfoDto.setCreateDate( dateTimeFormatter_yyyy_MM_dd_0159776256.format( spotInfoMain.getCreateDate() ) );
+        }
+        spotInfoDto.setLiked( spotInfoMain.isLiked() );
+
+        return spotInfoDto;
     }
 
     protected SpotCommand.OriginalSpotImage originalSpotImageToOriginalSpotImage(SpotUpdateRequest.OriginalSpotImage originalSpotImage) {
@@ -164,5 +231,18 @@ public class SpotMapperImpl implements SpotMapper {
         registerPlaceRequest.placePointJson( spotRegisterRequest.getPlacePointJson() );
 
         return registerPlaceRequest.build();
+    }
+
+    protected List<MySpotsResponseDto.SpotInfo> spotListInfoListToSpotInfoList(List<SpotInfo.SpotListInfo> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<MySpotsResponseDto.SpotInfo> list1 = new ArrayList<MySpotsResponseDto.SpotInfo>( list.size() );
+        for ( SpotInfo.SpotListInfo spotListInfo : list ) {
+            list1.add( of( spotListInfo ) );
+        }
+
+        return list1;
     }
 }
