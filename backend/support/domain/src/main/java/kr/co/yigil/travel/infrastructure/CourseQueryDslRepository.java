@@ -12,8 +12,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.global.Selected;
-import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.QCourse;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
+import kr.co.yigil.travel.domain.dto.QCourseListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,7 +28,7 @@ public class CourseQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Page<Course> findAllByMemberIdAndIsPrivate(Long memberId, Selected visibility,
+    public Page<CourseListDto> findAllByMemberIdAndIsPrivate(Long memberId, Selected visibility,
         Pageable pageable) {
         QCourse course = QCourse.course;
         BooleanBuilder builder = new BooleanBuilder();
@@ -48,7 +49,18 @@ public class CourseQueryDslRepository {
         Predicate predicate = builder.getValue();
         List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(pageable.getSort());
 
-        List<Course> courses = jpaQueryFactory.select(course)
+        List<CourseListDto> courses = jpaQueryFactory
+            .select(
+                new QCourseListDto(
+                    course.id,
+                    course.title,
+                    course.rate,
+                    course.mapStaticImageFile.fileUrl,
+                    course.spots.size(),
+                    course.createdAt,
+                    course.isPrivate
+                )
+            )
             .from(course)
             .where(predicate)
             .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))

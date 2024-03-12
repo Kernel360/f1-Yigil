@@ -5,6 +5,7 @@ import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseReader;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
 import kr.co.yigil.travel.infrastructure.CourseQueryDslRepository;
 import kr.co.yigil.travel.infrastructure.CourseRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class CourseReaderImpl implements CourseReader {
     }
 
     @Override
-    public Page<Course> getMemberCourseList(final Long memberId, final Pageable pageable,
+    public Page<CourseListDto> getMemberCourseList(final Long memberId, final Pageable pageable,
         final Selected visibility) {
         return courseQueryDslRepository.findAllByMemberIdAndIsPrivate(memberId, visibility, pageable);
     }

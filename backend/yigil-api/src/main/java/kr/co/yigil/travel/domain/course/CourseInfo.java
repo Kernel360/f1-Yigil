@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -76,14 +77,14 @@ public class CourseInfo {
         private final String mapStaticImageUrl;
         private final Boolean isPrivate;
 
-        public CourseListInfo(Course course) {
-            this.courseId = course.getId();
+        public CourseListInfo(CourseListDto course) {
+            this.courseId = course.getCourseId();
             this.title = course.getTitle();
             this.rate = course.getRate();
-            this.spotCount = course.getSpots().size();
-            this.createdDate = course.getCreatedAt();
-            this.isPrivate = course.isPrivate();
-            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
+            this.spotCount = course.getSpotCount();
+            this.createdDate = course.getCreatedDate();
+            this.isPrivate = course.getIsPrivate();
+            this.mapStaticImageUrl = course.getMapStaticImageUrl();
         }
     }
 

@@ -20,6 +20,7 @@ import {
 } from '../hooks/myPageActions';
 import { TMyPageSpot } from '@/types/myPageResponse';
 import LoadingIndicator from '../../LoadingIndicator';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 export default function MyPageSpotList({
   placeList,
@@ -45,6 +46,7 @@ export default function MyPageSpotList({
   const [dialogText, setDialogText] = useState('');
   const [dialogState, setDialogState] = useState('');
   const [isBackendDataLoading, setIsBackendDataLoading] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   useEffect(() => {
     getSpots(currentPage, divideCount, sortOption, selectOption);
@@ -97,7 +99,7 @@ export default function MyPageSpotList({
       setTotalPageCount(spotList.data.total_pages);
       setAllSpotList([...spotList.data.content]);
     } catch (error) {
-      console.log(error);
+      setErrorText('데이터를 불러오는데 실패했습니다');
     } finally {
       setIsBackendDataLoading(false);
     }
@@ -191,7 +193,7 @@ export default function MyPageSpotList({
       const promises = checkedIds.map((checkedId) => deleteMySpot(checkedId));
       await Promise.all(promises);
     } catch (error) {
-      console.error(error);
+      setErrorText('삭제에 실패했습니다');
     } finally {
       closeDialog();
     }
@@ -205,7 +207,7 @@ export default function MyPageSpotList({
       );
       await Promise.all(promises);
     } catch (error) {
-      console.log(error);
+      setErrorText('잠금 해제에 실패했습니다');
     } finally {
       closeDialog();
     }
@@ -219,7 +221,7 @@ export default function MyPageSpotList({
       );
       await Promise.all(promises);
     } catch (error) {
-      console.log(error);
+      setErrorText('잠금 처리에 실패했습니다');
     } finally {
       closeDialog();
     }
@@ -375,6 +377,7 @@ export default function MyPageSpotList({
           totalPage={totalPageCount}
         />
       )}
+      {errorText && <ToastMsg title={errorText} timer={2000} />}
     </>
   );
 }

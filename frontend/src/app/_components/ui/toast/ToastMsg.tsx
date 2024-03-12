@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect } from 'react';
 import * as Toast from '@radix-ui/react-toast';
 

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -71,22 +72,23 @@ public class SpotInfo {
     public static class SpotListInfo {
 
         private final Long spotId;
+        private final Long placeId;
         private final String title;
         private final double rate;
         private final String imageUrl;
         private final LocalDateTime createdDate;
         private final Boolean isPrivate;
 
-        public SpotListInfo(Spot spot) {
-            this.spotId = spot.getId();
-            this.title = spot.getPlace().getName();
+        public SpotListInfo(SpotListDto spot) {
+            this.spotId = spot.getSpotId();
+            this.placeId = spot.getPlaceId();
+            this.title = spot.getTitle();
             this.rate = spot.getRate();
-            this.imageUrl = spot.getAttachFiles().getUrls().getFirst();
-            this.createdDate = spot.getCreatedAt();
-            this.isPrivate = spot.isPrivate();
+            this.imageUrl = spot.getImageUrl();
+            this.createdDate = spot.getCreatedDate();
+            this.isPrivate = spot.getIsPrivate();
         }
     }
-
 
 
     @Getter
