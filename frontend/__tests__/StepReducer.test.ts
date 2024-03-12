@@ -13,7 +13,7 @@ const place: TChoosePlace = {
 describe('Step reducer NEXT success test', () => {
   test('spot', () => {
     let spotStep = createInitialStep();
-    expect(spotStep.data.label).toEqual('장소 선택');
+    expect(spotStep.data.label).toEqual('장소 입력');
 
     spotStep = reducer(spotStep, { type: 'NEXT' });
     expect(spotStep.data.label).toEqual('사진 업로드');
@@ -32,7 +32,7 @@ describe('Step reducer NEXT success test', () => {
 
   test('course', () => {
     courseStep = reducer(courseStep, { type: 'NEXT' });
-    expect(courseStep.data.label).toEqual('장소 선택');
+    expect(courseStep.data.label).toEqual('장소 입력');
 
     courseStep = reducer(courseStep, { type: 'NEXT' });
     expect(courseStep.data.label).toEqual('사진 업로드');
@@ -69,10 +69,10 @@ describe('Step reducer PREVIOUS success test', () => {
     expect(spotStep.data.label).toEqual('사진 업로드');
 
     spotStep = reducer(spotStep, { type: 'PREVIOUS' });
-    expect(spotStep.data.label).toEqual('장소 선택');
+    expect(spotStep.data.label).toEqual('장소 입력');
 
     spotStep = reducer(spotStep, { type: 'PREVIOUS' });
-    expect(spotStep.data.label).toEqual('장소 선택');
+    expect(spotStep.data.label).toEqual('장소 입력');
   });
 
   test('course', () => {
@@ -85,7 +85,7 @@ describe('Step reducer PREVIOUS success test', () => {
     expect(courseStep.data.label).toEqual('사진 업로드');
 
     courseStep = reducer(courseStep, { type: 'PREVIOUS' });
-    expect(courseStep.data.label).toEqual('장소 선택');
+    expect(courseStep.data.label).toEqual('장소 입력');
 
     courseStep = reducer(courseStep, { type: 'PREVIOUS' });
     expect(courseStep.data.label).toEqual('방식 선택');
