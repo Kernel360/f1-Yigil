@@ -1,9 +1,7 @@
 import { logout } from '../../api/action';
-
 import MapPin from '/public/icons/map-pin.svg';
 import Bell from '/public/icons/bell.svg';
 import LocationIcon from '/public/icons/location.svg';
-import CalendarIcon from '/public/icons/calendar.svg';
 
 import type { TPopOverData } from './types';
 
