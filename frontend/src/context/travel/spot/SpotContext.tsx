@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useReducer } from 'react';
-import { initialSpotState, reducer } from './reducer';
+import reducer, { initialSpotState } from './reducer';
 
 import type { Dispatch, ReactNode } from 'react';
 import type { TSpotState } from '../schema';
