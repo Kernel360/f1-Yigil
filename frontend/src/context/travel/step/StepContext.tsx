@@ -14,15 +14,13 @@ export const StepContext = createContext<[TStepState, Dispatch<TStepAction>]>([
 ]);
 
 export default function StepProvider({
-  place,
   course,
   children,
 }: {
-  place?: TChoosePlace;
   course?: boolean;
   children: ReactNode;
 }) {
-  const initialState = createInitialStep(place, course);
+  const initialState = createInitialStep(course);
 
   const [state, dispatch] = useReducer(reducer, initialState);
 

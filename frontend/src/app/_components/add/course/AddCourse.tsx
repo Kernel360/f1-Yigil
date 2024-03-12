@@ -1,21 +1,21 @@
 'use client';
 
 import StepProvider from '@/context/travel/step/StepContext';
-import SpotProvider from '@/context/travel/spot/SpotContext';
+import CourseProvider from '@/context/travel/course/CourseContext';
 
 import Navigation from '../Navigation';
 import Progress from '../Progress';
-import AddSpotContent from './AddSpotContent';
+import AddCourseContent from './AddCourseContent';
 
-export default function AddSpot() {
+export default function AddCourse() {
   return (
     <section className="flex flex-col grow">
-      <StepProvider>
+      <StepProvider course>
         <Progress />
         <Navigation />
-        <SpotProvider>
-          <AddSpotContent />
-        </SpotProvider>
+        <CourseProvider>
+          <AddCourseContent />
+        </CourseProvider>
       </StepProvider>
     </section>
   );

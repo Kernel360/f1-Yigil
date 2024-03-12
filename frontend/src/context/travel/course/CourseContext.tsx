@@ -11,7 +11,7 @@ export const CourseContext = createContext<
   [TCourseState, Dispatch<TCourseAction>]
 >([initialCourseState, () => {}]);
 
-export default function SpotProvider({ children }: { children: ReactNode }) {
+export default function CourseProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialCourseState);
 
   return (
