@@ -2,7 +2,7 @@ export type TStepState =
   | {
       type: 'spot';
       data:
-        | { label: '장소 선택'; value: 1 }
+        | { label: '장소 입력'; value: 1 }
         | { label: '사진 업로드'; value: 2 }
         | { label: '리뷰 입력'; value: 3 }
         | { label: '기록 확정'; value: 4 };
@@ -11,7 +11,7 @@ export type TStepState =
       type: 'course';
       data:
         | { label: '방식 선택'; value: 0 }
-        | { label: '장소 선택'; value: 1 }
+        | { label: '장소 입력'; value: 1 }
         | { label: '사진 업로드'; value: 2 }
         | { label: '리뷰 입력'; value: 3 }
         | { label: '기록 확정'; value: 4 };
@@ -20,7 +20,7 @@ export type TStepState =
 export const defaultStepState: TStepState = {
   type: 'spot',
   data: {
-    label: '장소 선택',
+    label: '장소 입력',
     value: 1,
   },
 };
@@ -34,7 +34,7 @@ export function createInitialStep(course?: boolean): TStepState {
     return { type: 'course', data: { label: '방식 선택', value: 0 } };
   }
 
-  return { type: 'spot', data: { label: '장소 선택', value: 1 } };
+  return { type: 'spot', data: { label: '장소 입력', value: 1 } };
 }
 
 export default function reducer(
@@ -76,7 +76,7 @@ function spotReducer(state: TStepState, action: TStepAction): TStepState {
           return { ...state };
         }
         case 2: {
-          return { ...state, data: { label: '장소 선택', value: 1 } };
+          return { ...state, data: { label: '장소 입력', value: 1 } };
         }
         case 3: {
           return { ...state, data: { label: '사진 업로드', value: 2 } };
@@ -98,7 +98,7 @@ function courseReducer(state: TStepState, action: TStepAction): TStepState {
     case 'NEXT': {
       switch (state.data.value) {
         case 0: {
-          return { ...state, data: { label: '장소 선택', value: 1 } };
+          return { ...state, data: { label: '장소 입력', value: 1 } };
         }
         case 1: {
           return { ...state, data: { label: '사진 업로드', value: 2 } };
@@ -123,7 +123,7 @@ function courseReducer(state: TStepState, action: TStepAction): TStepState {
           return { ...state, data: { label: '방식 선택', value: 0 } };
         }
         case 2: {
-          return { ...state, data: { label: '장소 선택', value: 1 } };
+          return { ...state, data: { label: '장소 입력', value: 1 } };
         }
         case 3: {
           return { ...state, data: { label: '사진 업로드', value: 2 } };

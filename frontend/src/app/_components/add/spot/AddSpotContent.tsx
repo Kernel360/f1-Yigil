@@ -1,17 +1,36 @@
 'use client';
 
-import { useContext } from 'react';
+import { useState } from 'react';
 
-import { StepContext } from '@/context/travel/step/StepContext';
-import { SpotContext } from '@/context/travel/spot/SpotContext';
+import Progress from '../Progress';
+import Navigation from '../Navigation';
+import SelectPlaceNavigation from '../SelectPlaceNavigation';
+import AddSpotData from './AddSpotData';
 
 export default function AddSpotContent() {
-  const [step, dispatchStep] = useContext(StepContext);
-  const [spot, dispatchSpot] = useContext(SpotContext);
+  const [isSelecting, setIsSelecting] = useState(false);
+
+  function startSelect() {
+    setIsSelecting(true);
+  }
+
+  function endSelect() {
+    setIsSelecting(false);
+  }
 
   return (
-    <section>
-      {step.data.value === 1 ? <>{step.data.label}</> : <>{step.data.label}</>}
+    <section className="relative flex flex-col grow">
+      <div className="h-16 flex flex-col justify-center">
+        {!isSelecting && <Progress />}
+        {isSelecting ? (
+          <SelectPlaceNavigation endSelect={endSelect} />
+        ) : (
+          <Navigation />
+        )}
+      </div>
+      <div className="flex flex-col grow">
+        <AddSpotData />
+      </div>
     </section>
   );
 }

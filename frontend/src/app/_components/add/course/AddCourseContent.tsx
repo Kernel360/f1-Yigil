@@ -1,17 +1,36 @@
 'use client';
 
-import { useContext } from 'react';
+import { useState } from 'react';
 
-import { StepContext } from '@/context/travel/step/StepContext';
-import { CourseContext } from '@/context/travel/course/CourseContext';
+import Progress from '../Progress';
+import SelectPlaceNavigation from '../SelectPlaceNavigation';
+import Navigation from '../Navigation';
+import AddCourseData from './AddCourseData';
 
 export default function AddCourseContent() {
-  const [step, dispatchStep] = useContext(StepContext);
-  const [spot, dispatchCourse] = useContext(CourseContext);
+  const [isSelecting, setIsSelecting] = useState(false);
+
+  function startSelect() {
+    setIsSelecting(true);
+  }
+
+  function endSelect() {
+    setIsSelecting(false);
+  }
 
   return (
-    <section>
-      {step.data.value === 1 ? <>{step.data.label}</> : <>{step.data.label}</>}
+    <section className="relative flex flex-col grow">
+      <div className="h-16 flex flex-col justify-center">
+        {!isSelecting && <Progress />}
+        {isSelecting ? (
+          <SelectPlaceNavigation endSelect={endSelect} />
+        ) : (
+          <Navigation />
+        )}
+      </div>
+      <div className="flex flex-col grow">
+        <AddCourseData />
+      </div>
     </section>
   );
 }

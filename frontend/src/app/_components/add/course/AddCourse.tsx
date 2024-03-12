@@ -10,10 +10,8 @@ import AddCourseContent from './AddCourseContent';
 
 export default function AddCourse() {
   return (
-    <section className="flex flex-col grow">
+    <section className="h-full flex flex-col grow">
       <StepProvider course>
-        <Progress />
-        <Navigation />
         <PlaceProvider course>
           <CourseProvider>
             <AddCourseContent />

@@ -1,4 +1,4 @@
-import { isEqualPlace } from '../utils';
+import { isEqualArray, isEqualPlace } from '../utils';
 import { choosePlaceSchema, manyChoosePlaceSchema } from '../schema';
 
 import type { TChoosePlace } from '../schema';
@@ -16,6 +16,29 @@ export const defaultPlace: TPlaceState = {
     coords: { lng: 0, lat: 0 },
   },
 };
+
+/**
+ * @impure
+ */
+export function isDefaultPlace(state: TPlaceState) {
+  if (state.type !== defaultPlace.type) {
+    throw new Error('올바르지 않은 사용입니다!');
+  }
+
+  if (state.type === 'spot' && defaultPlace.type === 'spot') {
+    if (isEqualPlace(state.data, defaultPlace.data)) {
+      return true;
+    }
+  }
+
+  if (state.type === 'course' && defaultPlace.type === 'course') {
+    if (isEqualArray(state.data, defaultPlace.data, isEqualPlace)) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 export function createInitialPlace(
   course?: boolean,

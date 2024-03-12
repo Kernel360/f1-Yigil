@@ -6,7 +6,7 @@ export default function Progress() {
 
   return (
     <div
-      className="h-1 bg-black transition-all ease-in-out duration-300"
+      className="absolute top-0 h-1 bg-black transition-all ease-in-out duration-300"
       style={{
         width: `${Math.floor((step.data.value / 4) * 100)}%`,
       }}
