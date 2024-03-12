@@ -32,6 +32,7 @@ import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
@@ -40,7 +41,6 @@ import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -287,13 +287,11 @@ public class SpotServiceImplTest {
         PageRequest pageable = PageRequest.of(0, 10);
         AttachFile mockAttachFile = new AttachFile(mock(FileType.class), "fileUrl",
             "originalFileName", 100L);
-        AttachFiles mockAttachFiles = new AttachFiles(List.of(mockAttachFile));
-        Member mockMember = mock(Member.class);
-        Place mockPlace = mock(Place.class);
-        Spot mockSpot = new Spot(spotId, mockMember, mock(Point.class), false, "title",
-            "description", mockAttachFiles, mockPlace, 3.5);
-        PageImpl<Spot> mockSpotList = new PageImpl<>(List.of(mockSpot));
-        when(mockPlace.getName()).thenReturn("장소장소");
+
+        SpotListDto mockSpotListDto = new SpotListDto(spotId, 1L, "title", 3.5, "fileUrl",
+            LocalDateTime.now(), false);
+        PageImpl<SpotListDto> mockSpotList = new PageImpl<>(List.of(mockSpotListDto));
+
         when(spotReader.getMemberSpotList(anyLong(), any(Selected.class), any())).thenReturn(mockSpotList);
 
         var result = spotService.retrieveSpotList(memberId, Selected.PRIVATE, pageable);
@@ -301,6 +299,5 @@ public class SpotServiceImplTest {
         assertThat(result).isNotNull().isInstanceOf(SpotInfo.MySpotsResponse.class);
         assertThat(result.getContent().getFirst()).isInstanceOf(SpotInfo.SpotListInfo.class);
     }
-
 
 }

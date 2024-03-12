@@ -3,6 +3,7 @@ package kr.co.yigil.travel.domain.spot;
 import java.util.List;
 import java.util.Optional;
 
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -23,7 +24,7 @@ public interface SpotReader {
 
     Page<Spot> getSpotSliceByMemberId(Long memberId, Pageable pageable);
 
-    Page<Spot> getMemberSpotList(Long memberId, Selected selected, Pageable pageable);
+    Page<SpotListDto> getMemberSpotList(Long memberId, Selected selected, Pageable pageable);
 
     boolean isExistSpot(Long placeId, Long memberId);
 }

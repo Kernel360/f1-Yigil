@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.domain.QSpot;
-import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.dto.QSpotListDto;
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,7 +27,7 @@ import org.springframework.stereotype.Repository;
 public class SpotQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
-    public Page<Spot> findAllByMemberIdAndIsPrivate(Long memberId, Selected visibility, Pageable pageable) {
+    public Page<SpotListDto> findAllByMemberIdAndIsPrivate(Long memberId, Selected visibility, Pageable pageable) {
         QSpot spot = QSpot.spot;
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -47,7 +48,18 @@ public class SpotQueryDslRepository {
         Predicate predicate = builder.getValue();
         List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(pageable.getSort());
 
-        List<Spot> spots = jpaQueryFactory.select(spot)
+        List<SpotListDto> spots = jpaQueryFactory
+            .select(
+                new QSpotListDto(
+                    spot.id,
+                    spot.place.id,
+                    spot.title,
+                    spot.rate,
+                    spot.place.imageFile.fileUrl,
+                    spot.createdAt,
+                    spot.isPrivate
+                )
+            )
             .from(spot)
             .where(predicate)
             .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
@@ -60,7 +72,6 @@ public class SpotQueryDslRepository {
             .fetchCount();
 
         return new PageImpl<>(spots, pageable, total);
-
     }
 
     private List<OrderSpecifier<?>> getOrderSpecifiers(Sort sort){

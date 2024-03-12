@@ -4,7 +4,6 @@ import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.FileUploader;
@@ -19,7 +18,9 @@ import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
 import kr.co.yigil.travel.domain.course.CourseInfo.CourseSearchInfo;
 import kr.co.yigil.travel.domain.course.CourseInfo.Main;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -95,7 +96,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional(readOnly = true)
     public CourseInfo.MyCoursesResponse retrieveCourseList(final Long memberId, final Pageable pageable,
         Selected visibility) {
-        var pageCourse = courseReader.getMemberCourseList(memberId, pageable, visibility);
+        Page<CourseListDto> pageCourse = courseReader.getMemberCourseList(memberId, pageable, visibility);
         List<CourseInfo.CourseListInfo> courseInfoList = pageCourse.getContent().stream()
             .map(CourseInfo.CourseListInfo::new)
             .toList();
