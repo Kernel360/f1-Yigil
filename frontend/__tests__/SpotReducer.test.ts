@@ -2,9 +2,9 @@ import { describe, expect, test } from 'vitest';
 
 import reducer, { initialSpotState } from '@/context/travel/spot/reducer';
 
+import type { TInputImage } from '@/app/_components/images';
 import type { TSpotAction } from '@/context/travel/spot/reducer';
 import type { TChoosePlace, TReview } from '@/context/travel/schema';
-import type { TInputImage } from '@/app/_components/images';
 
 const place: TChoosePlace = {
   name: '장소',

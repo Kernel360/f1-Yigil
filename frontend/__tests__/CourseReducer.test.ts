@@ -2,14 +2,13 @@ import { describe, expect, test } from 'vitest';
 
 import reducer, { initialCourseState } from '@/context/travel/course/reducer';
 
+import type { TInputImage } from '@/app/_components/images';
 import type { TCourseAction } from '@/context/travel/course/reducer';
 import type {
   TChoosePlace,
   TReview,
   TSpotState,
 } from '@/context/travel/schema';
-import type { TInputImage } from '@/app/_components/images';
-import { isEqualSpot } from '@/context/travel/utils';
 
 const place: TChoosePlace = {
   name: '장소',
@@ -35,8 +34,6 @@ const spot: TSpotState = {
 };
 
 describe('Course reducer success test', () => {
-  const actions: TCourseAction[] = [];
-
   test('ADD_SPOT', () => {
     const nextState = reducer(initialCourseState, {
       type: 'ADD_SPOT',
@@ -57,15 +54,9 @@ describe('Course reducer success test', () => {
 
     expect(nextState.spots).toEqual([]);
   });
-
-  test.each(actions)('$type', (action) => {
-    const nextState = reducer(initialCourseState, action);
-
-    expect(nextState.spots[0]).toEqual(spot);
-  });
 });
 
-describe('Reducer fail test', () => {
+describe('Course reducer fail test', () => {
   const actions: TCourseAction[] = [
     { type: 'CHANGE_SPOT_ORDER', payload: {} },
     { type: 'ADD_SPOT', payload: {} },

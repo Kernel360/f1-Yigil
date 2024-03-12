@@ -1,6 +1,7 @@
 'use client';
 
 import StepProvider from '@/context/travel/step/StepContext';
+import PlaceProvider from '@/context/travel/place/PlaceContext';
 import CourseProvider from '@/context/travel/course/CourseContext';
 
 import Navigation from '../Navigation';
@@ -13,9 +14,11 @@ export default function AddCourse() {
       <StepProvider course>
         <Progress />
         <Navigation />
-        <CourseProvider>
-          <AddCourseContent />
-        </CourseProvider>
+        <PlaceProvider>
+          <CourseProvider>
+            <AddCourseContent />
+          </CourseProvider>
+        </PlaceProvider>
       </StepProvider>
     </section>
   );

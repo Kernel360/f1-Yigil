@@ -1,6 +1,7 @@
 'use client';
 
 import StepProvider from '@/context/travel/step/StepContext';
+import PlaceProvider from '@/context/travel/place/PlaceContext';
 import SpotProvider from '@/context/travel/spot/SpotContext';
 
 import Navigation from '../Navigation';
@@ -13,9 +14,11 @@ export default function AddSpot() {
       <StepProvider>
         <Progress />
         <Navigation />
-        <SpotProvider>
-          <AddSpotContent />
-        </SpotProvider>
+        <PlaceProvider>
+          <SpotProvider>
+            <AddSpotContent />
+          </SpotProvider>
+        </PlaceProvider>
       </StepProvider>
     </section>
   );

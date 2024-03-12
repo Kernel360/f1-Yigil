@@ -3,6 +3,7 @@ import { ZodTypeAny, z } from 'zod';
 import { inputImageSchema } from '@/app/_components/images';
 
 const IMAGES_COUNT = 5;
+const PLACES_COUNT = 5;
 const SPOTS_COUNT = 5;
 
 export const coordsSchema = z.object({ lng: z.number(), lat: z.number() });
@@ -15,6 +16,11 @@ export const choosePlaceSchema = z.object({
   coords: coordsSchema,
 });
 export type TChoosePlace = z.infer<typeof choosePlaceSchema>;
+
+export const manyChoosePlaceSchema = z
+  .array(choosePlaceSchema)
+  .min(0)
+  .max(PLACES_COUNT);
 
 export const reviewSchema = z.object({
   rate: z.number().int().gte(1).lte(5),

@@ -1,5 +1,3 @@
-import type { TChoosePlace } from '../schema';
-
 export type TStepState =
   | {
       type: 'spot';
