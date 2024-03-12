@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -58,7 +58,7 @@ public class TravelApiControllerTest {
     @Test
     void changeOnPublicTravel_ReturnsOk() throws Exception {
 
-        mockMvc.perform(post("/api/v1/travels/change-on-public")
+        mockMvc.perform(put("/api/v1/travels/change-on-public")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"travel_id\":1}"))
             .andExpect(status().isOk())
@@ -81,7 +81,7 @@ public class TravelApiControllerTest {
     @Test
     void changeOnPrivateTravel_ReturnsOk() throws Exception {
 
-        mockMvc.perform(post("/api/v1/travels/change-on-private")
+        mockMvc.perform(put("/api/v1/travels/change-on-private")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"travel_id\":2}"))
             .andExpect(status().isOk())
@@ -110,7 +110,7 @@ public class TravelApiControllerTest {
 
         when(travelMapper.of(anyString())).thenReturn(response);
 
-        mockMvc.perform(post("/api/v1/travels/change-visibility")
+        mockMvc.perform(put("/api/v1/travels/change-visibility")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"visibility\": \"public\"}")
                 .content("{\"travel_ids\": [1], \"is_private\": false}")
@@ -120,6 +120,10 @@ public class TravelApiControllerTest {
                 "travels/set-travels-visibility",
                 getDocumentRequest(),
                 getDocumentResponse(),
+                requestFields(
+                    fieldWithPath("travel_ids").description("travel의 id"),
+                    fieldWithPath("is_private").description("공개 여부")
+                ),
                 responseFields(
                     fieldWithPath("message").description("메시지")
                 )

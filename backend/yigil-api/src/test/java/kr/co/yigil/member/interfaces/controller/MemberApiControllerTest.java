@@ -134,10 +134,6 @@ class MemberApiControllerTest {
 
         mockMvc.perform(multipart("/api/v1/members")
                 .file("profileImageFile", multipartFile.getBytes())
-//                .param("nickname", "nickname")
-//                .param("age", "10대")
-//                .param("gender", "남성")
-//                .param("favoriteRegionIds", "1", "2", "3")
                 .content(requestJson)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -148,6 +144,12 @@ class MemberApiControllerTest {
                 getDocumentResponse(),
                 requestParts(
                     partWithName("profileImageFile").description("프로필 이미지 파일")
+                ),
+                requestFields(
+                    fieldWithPath("nickname").description("닉네임"),
+                    fieldWithPath("age").description("연령대"),
+                    fieldWithPath("gender").description("성별"),
+                    fieldWithPath("favoriteRegionIds").description("좋아하는 지역 ID 리스트")
                 ),
                 responseFields(
                     fieldWithPath("message").description("메시지")
@@ -236,9 +238,8 @@ class MemberApiControllerTest {
     }
 
     @DisplayName("닉네임 중복 체크가 잘 되는지")
-	@Test
-	void whenNicknameDuplicateCheck_thenShouldReturn200AndResponse() throws Exception{
-
+    @Test
+    void whenNicknameDuplicateCheck_thenShouldReturn200AndResponse() throws Exception {
 
         MemberInfo.NicknameCheckInfo checkInfo = new MemberInfo.NicknameCheckInfo(true);
         MemberDto.NicknameCheckResponse response = MemberDto.NicknameCheckResponse.builder()
@@ -265,5 +266,5 @@ class MemberApiControllerTest {
             ));
 
         verify(memberFacade).nicknameDuplicateCheck(anyString());
-	}
+    }
 }

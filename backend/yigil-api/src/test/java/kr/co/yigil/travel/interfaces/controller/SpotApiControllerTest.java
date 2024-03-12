@@ -363,7 +363,7 @@ class SpotApiControllerTest {
                         "필터 기능 - all(디폴트값) 전체공개 / private 비공개").optional()
                 ),
                 responseFields(
-                    fieldWithPath("content[].spot_id").description("장소 ID"),
+                    fieldWithPath("content[].spot_id").description("게시글(리뷰) ID"),
                     fieldWithPath("content[].place_id").description("장소 ID"),
                     fieldWithPath("content[].title").description("장소 제목"),
                     fieldWithPath("content[].rate").description("장소 평점"),
