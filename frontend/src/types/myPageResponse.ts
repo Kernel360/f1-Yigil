@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const myPageSpotItemSchema = z.object({
   spot_id: z.number().int(),
+  place_id: z.number().int(),
   title: z.string(),
   is_private: z.boolean(),
   image_url: z.string(),
@@ -23,7 +24,9 @@ export const myPageCourseItemSchema = z.object({
   title: z.string(),
   map_static_image_url: z.string(),
   is_private: z.boolean(),
-  created_date: z.coerce.date().transform((date) => date.toLocaleDateString()),
+  created_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
   rate: z.number(),
   spot_count: z.number(),
 });
