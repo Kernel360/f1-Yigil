@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.interfaces.dto.mapper;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,20 +10,22 @@ import kr.co.yigil.travel.domain.course.CourseCommand;
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.spot.SpotCommand;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
+import kr.co.yigil.travel.interfaces.dto.CourseDto;
 import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
+import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-04T18:48:06+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
+    date = "2024-03-11T15:27:23+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class CourseMapperImpl implements CourseMapper {
@@ -184,6 +187,54 @@ public class CourseMapperImpl implements CourseMapper {
         return courseInfo.build();
     }
 
+    @Override
+    public CourseSearchResponse toCourseSearchResponse(CourseInfo.Slice slice) {
+        if ( slice == null ) {
+            return null;
+        }
+
+        List<CourseDto> courses = null;
+        boolean hasNext = false;
+
+        courses = courseSearchInfoListToCourseDtoList( slice.getCourses() );
+        hasNext = slice.isHasNext();
+
+        CourseSearchResponse courseSearchResponse = new CourseSearchResponse( courses, hasNext );
+
+        return courseSearchResponse;
+    }
+
+    @Override
+    public CourseDto toCourseDto(CourseInfo.CourseSearchInfo courseSearchInfo) {
+        if ( courseSearchInfo == null ) {
+            return null;
+        }
+
+        LocalDateTime createDate = null;
+        Long id = null;
+        String title = null;
+        String mapStaticImageUrl = null;
+        String ownerProfileImageUrl = null;
+        String ownerNickname = null;
+        int spotCount = 0;
+        double rate = 0.0d;
+        boolean liked = false;
+
+        createDate = courseSearchInfo.getCreateDate();
+        id = courseSearchInfo.getId();
+        title = courseSearchInfo.getTitle();
+        mapStaticImageUrl = courseSearchInfo.getMapStaticImageUrl();
+        ownerProfileImageUrl = courseSearchInfo.getOwnerProfileImageUrl();
+        ownerNickname = courseSearchInfo.getOwnerNickname();
+        spotCount = courseSearchInfo.getSpotCount();
+        rate = courseSearchInfo.getRate();
+        liked = courseSearchInfo.isLiked();
+
+        CourseDto courseDto = new CourseDto( id, title, mapStaticImageUrl, ownerProfileImageUrl, ownerNickname, spotCount, rate, liked, createDate );
+
+        return courseDto;
+    }
+
     protected List<SpotCommand.RegisterSpotRequest> spotRegisterRequestListToRegisterSpotRequestList(List<SpotRegisterRequest> list) {
         if ( list == null ) {
             return null;
@@ -231,6 +282,19 @@ public class CourseMapperImpl implements CourseMapper {
         List<MyCoursesResponse.CourseInfo> list1 = new ArrayList<MyCoursesResponse.CourseInfo>( list.size() );
         for ( CourseInfo.CourseListInfo courseListInfo : list ) {
             list1.add( of( courseListInfo ) );
+        }
+
+        return list1;
+    }
+
+    protected List<CourseDto> courseSearchInfoListToCourseDtoList(List<CourseInfo.CourseSearchInfo> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<CourseDto> list1 = new ArrayList<CourseDto>( list.size() );
+        for ( CourseInfo.CourseSearchInfo courseSearchInfo : list ) {
+            list1.add( toCourseDto( courseSearchInfo ) );
         }
 
         return list1;
