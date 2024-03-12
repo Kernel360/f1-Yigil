@@ -31,10 +31,7 @@ export default function HomeNavigation() {
         >
           주변
         </Link>
-        <Link
-          href="https://docs.google.com/forms/d/e/1FAIpQLSfsbhvjAjiY_KSTTUrWNcGB8A7gXshwRW0Or7e_vvAbpGBVgg/viewform"
-          className="self-center ml-4"
-        >
+        <Link href="/privacy-policy" className="self-center ml-4">
           <InfoIcon />
         </Link>
       </div>
