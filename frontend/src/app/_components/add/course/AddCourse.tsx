@@ -14,7 +14,7 @@ export default function AddCourse() {
       <StepProvider course>
         <Progress />
         <Navigation />
-        <PlaceProvider>
+        <PlaceProvider course>
           <CourseProvider>
             <AddCourseContent />
           </CourseProvider>
