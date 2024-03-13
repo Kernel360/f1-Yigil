@@ -6,6 +6,7 @@ import { StepContext } from '@/context/travel/step/StepContext';
 import AddCoursePlace from './AddCoursePlace';
 import AddCourseImages from './AddCourseImages';
 import AddCourseReview from './AddCourseReviews';
+import AddCourseConfirm from './AddCourseConfirm';
 
 export default function AddCourseData() {
   const [step] = useContext(StepContext);
@@ -22,6 +23,6 @@ export default function AddCourseData() {
     case 3:
       return <AddCourseReview />;
     case 4:
-      return <>{label}</>;
+      return <AddCourseConfirm />;
   }
 }
