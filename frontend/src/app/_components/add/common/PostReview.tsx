@@ -67,7 +67,7 @@ export default function PostReview({
   };
 
   return (
-    <section className="px-4 flex flex-col items-center gap-8">
+    <section className="p-4 flex flex-col items-center gap-8">
       <div className="flex justify-center items-center text-2xl gap-x-6">
         {[...Array(5)].map((_, i) => (
           <div

@@ -1,32 +1,30 @@
 'use client';
 
 import { useContext, useState } from 'react';
-import CourseImageHandler from '../../images/CourseImageHandler';
-import { InfoTitle } from '../common';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 
-export default function AddCourseImages({
-  index,
-  selectIndex,
-}: {
-  index: number;
-  selectIndex: (nextOrder: number) => void;
-}) {
+import { InfoTitle } from '../common';
+import CourseImageHandler from '../../images/CourseImageHandler';
+import SelectSpot from './SelectSpot';
+
+export default function AddCourseImages() {
   const [state] = useContext(CourseContext);
+  const [index, setIndex] = useState(0);
+
+  function selectIndex(nextIndex: number) {
+    setIndex(nextIndex);
+  }
 
   return (
-    <section className="flex flex-col grow">
+    <section className="flex flex-col justify-center grow">
       <InfoTitle label="사진" additionalLabel="을 업로드하세요." />
-      {/* 특정 장소 선택 UI */}
-      <div className="flex flex-col">
-        <button onClick={() => selectIndex(index - 1)}>Previous</button>
-        <button onClick={() => selectIndex(index + 1)}>Next</button>
-        <span>{`${index + 1} / ${state.spots.length}`}</span>
-      </div>
-      <div className="px-4 pb-4 flex justify-between items-center">
-        <span className="text-gray-400">이름</span>
-        <span className="text-xl">{state.spots[index].place.name}</span>
-      </div>
+      <SelectSpot key="images" index={index} selectIndex={selectIndex} />
+      {index !== -1 && (
+        <div className="p-4 flex justify-between items-center">
+          <span className="text-gray-400">이름</span>
+          <span className="text-xl">{state.spots[index].place.name}</span>
+        </div>
+      )}
       <CourseImageHandler order={index} />
     </section>
   );

@@ -1,8 +1,7 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { StepContext } from '@/context/travel/step/StepContext';
-import { CourseContext } from '@/context/travel/course/CourseContext';
 
 import AddCoursePlace from './AddCoursePlace';
 import AddCourseImages from './AddCourseImages';
@@ -10,17 +9,6 @@ import AddCourseReview from './AddCourseReviews';
 
 export default function AddCourseData() {
   const [step] = useContext(StepContext);
-  const [course] = useContext(CourseContext);
-
-  const [index, setIndex] = useState(0);
-
-  function selectIndex(nextIndex: number) {
-    if (nextIndex < 0 || nextIndex >= course.spots.length) {
-      return;
-    }
-
-    setIndex(nextIndex);
-  }
 
   const { label, value } = step.data;
 
@@ -30,9 +18,9 @@ export default function AddCourseData() {
     case 1:
       return <AddCoursePlace />;
     case 2:
-      return <AddCourseImages index={index} selectIndex={selectIndex} />;
+      return <AddCourseImages />;
     case 3:
-      return <AddCourseReview index={index} selectIndex={selectIndex} />;
+      return <AddCourseReview />;
     case 4:
       return <>{label}</>;
   }
