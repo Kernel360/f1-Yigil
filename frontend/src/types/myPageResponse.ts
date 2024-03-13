@@ -6,7 +6,9 @@ export const myPageSpotItemSchema = z.object({
   title: z.string(),
   is_private: z.boolean(),
   image_url: z.string(),
-  created_date: z.coerce.date().transform((date) => date.toLocaleDateString()),
+  created_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
   rate: z.number(),
 });
 

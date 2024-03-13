@@ -37,7 +37,7 @@ public class MemberDto {
         private final String email;
         private final String nickname;
         private final String profileImageUrl;
-        private final String age;
+        private final String ages;
         private final String gender;
         private final List<FavoriteRegion> favoriteRegions;
         private final int followingCount;

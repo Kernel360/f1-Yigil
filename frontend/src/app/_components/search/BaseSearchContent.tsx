@@ -9,7 +9,7 @@ import LoadingIndicator from '../LoadingIndicator';
 import KeywordSuggestion from './KeywordSuggestion';
 
 export default function BaseSearchContent() {
-  const { state } = useContext(SearchContext);
+  const [state] = useContext(SearchContext);
   const { keyword, result } = state;
 
   if (result.status === 'start') {

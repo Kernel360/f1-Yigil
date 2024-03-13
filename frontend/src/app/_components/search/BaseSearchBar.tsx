@@ -20,7 +20,7 @@ export default function BaseSearchBar({
   cancellable?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { state, dispatch } = useContext(SearchContext);
+  const [state, dispatch] = useContext(SearchContext);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
