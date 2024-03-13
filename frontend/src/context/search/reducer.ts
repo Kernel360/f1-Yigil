@@ -67,11 +67,10 @@ export function createInitialState(
   histories: string[],
   initialKeyword: string = '',
   showHistory: boolean = false,
-  loading: boolean = false,
 ): TSearchState {
   return {
     histories,
-    loading,
+    loading: false,
     showHistory: showHistory,
     keyword: initialKeyword,
     result: { status: 'start' },
@@ -84,7 +83,7 @@ export function searchReducer(
 ): TSearchState {
   const { histories, keyword, result } = state;
 
-  switch (action?.type) {
+  switch (action.type) {
     case 'SET_KEYWORD': {
       const result = keywordSchema.safeParse(action.payload);
 

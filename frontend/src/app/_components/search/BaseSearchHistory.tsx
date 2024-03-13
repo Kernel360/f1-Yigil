@@ -4,7 +4,7 @@ import { SearchContext } from '@/context/search/SearchContext';
 import SearchItem from './SearchItem';
 
 export default function BaseSearchHistory() {
-  const { state, dispatch } = useContext(SearchContext);
+  const [state, dispatch] = useContext(SearchContext);
 
   // For two-pass rendering
   const [hasMounted, setHasMounted] = useState(false);
