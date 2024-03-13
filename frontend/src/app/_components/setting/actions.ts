@@ -31,14 +31,13 @@ export async function patchFavoriteRegion(ids: number[]) {
     body: formData,
   });
   if (res.ok) {
-    revalidateTag('user');
+    // revalidateTag('user');
     return res.json();
   }
 }
 
 export async function patchUserInfo(infoData: { [key: string]: any }) {
   const formData = new FormData();
-
   for (let key in infoData) {
     if (key === 'profile_image_url') {
       if (!infoData[key]) {
@@ -55,8 +54,9 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
           ),
         );
       }
-      formData.append(key, infoData[key]);
+      continue;
     }
+    formData.append(key, infoData[key]);
   }
 
   const BASE_URL = await getBaseUrl();
@@ -70,7 +70,7 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
   });
 
   if (res.ok) {
-    revalidatePath('/settings', 'layout');
+    // revalidatePath('/settings', 'layout');
     return res.json();
   }
 }

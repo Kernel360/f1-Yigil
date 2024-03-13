@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const myPageSpotItemSchema = z.object({
   spot_id: z.number().int(),
   place_id: z.number().int(),
-  title: z.string(),
+  place_name: z.string(),
   is_private: z.boolean(),
   image_url: z.string(),
   created_date: z.coerce

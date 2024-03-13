@@ -21,6 +21,7 @@ export default function UserModifyForm(userData: TMyInfo) {
     setErrorText('');
     try {
       const patchData = checkDifference(userForm, userData);
+
       await patchUserInfo(patchData);
     } catch (error) {
       setErrorText('수정에 실패했습니다.');
@@ -76,11 +77,17 @@ function checkDifference(userForm: TMyInfo, userData: TMyInfo) {
       userForm.profile_image_url !== userData.profile_image_url
         ? userForm.profile_image_url
         : '',
-    age: userForm.ages === '없음' ? '' : userForm.ages,
-    gender: userForm.gender === '없음' ? '' : userForm.gender,
+    ages:
+      userForm.ages === userData.ages || userForm.ages === '없음'
+        ? ''
+        : userForm.ages,
+    gender:
+      userForm.gender === userData.gender || userForm.gender === '없음'
+        ? ''
+        : userForm.gender,
     favorite_regions: '',
   };
-  for (let key in patchData) {
+  for (const key in patchData) {
     if (
       !patchData[key] ||
       patchData[key] === '없음' ||
@@ -88,6 +95,8 @@ function checkDifference(userForm: TMyInfo, userData: TMyInfo) {
     ) {
       delete patchData[key];
     }
+    if (key === 'profile_image_url' && !patchData[key]) patchData[key] = '';
   }
+
   return patchData;
 }

@@ -16,7 +16,6 @@ export default function RoundProfile({ img, size, style, height }: PropsType) {
       alt="profile"
       width={size}
       height={size}
-      objectFit="cover"
     />
   );
 }
