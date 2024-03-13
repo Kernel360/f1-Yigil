@@ -1,10 +1,11 @@
 package kr.co.yigil.member.domain;
 
 import java.util.List;
-import java.util.Objects;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberCommand.MemberUpdateRequest;
 import kr.co.yigil.member.domain.MemberInfo.Main;
@@ -74,11 +75,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private AttachFile getAttachFile(final MemberUpdateRequest request) {
-        if (request.getProfileImageFile() == null) {
+        if (request.getProfileImageFile() == null && Boolean.FALSE.equals(request.getIsProfileEmpty())) {
             return null;
         }
-        if(Objects.requireNonNull(request.getProfileImageFile().getOriginalFilename()).isEmpty())
+
+        if (request.getProfileImageFile() == null && Boolean.TRUE.equals(request.getIsProfileEmpty())) {
             return AttachFile.of("");
+        }
+
+        if (request.getProfileImageFile() != null && Boolean.TRUE.equals(request.getIsProfileEmpty())) {
+            throw new BadRequestException(ExceptionCode.INVALID_REQUEST);
+        }
 
         return fileUploader.upload(request.getProfileImageFile());
     }
