@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class CourseListDto {
+public class CourseListDto extends ImageFileDto{
 
     private final Long courseId;
     private final String title;
@@ -21,7 +21,7 @@ public class CourseListDto {
         this.courseId = courseId;
         this.title = title;
         this.rate = rate;
-        this.mapStaticImageUrl = mapStaticImageUrl;
+        this.mapStaticImageUrl = getImageUrl(mapStaticImageUrl);
         this.spotCount = spotCount;
         this.createdDate = createdDate;
         this.isPrivate = isPrivate;
