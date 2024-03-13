@@ -11,7 +11,7 @@ import kr.co.yigil.travel.interfaces.dto.response.ChangeStatusTravelResponse;
 import kr.co.yigil.travel.interfaces.dto.response.TravelsVisibilityChangeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +23,7 @@ public class TravelApiController {
     private final TravelFacade travelFacade;
     private final TravelMapper travelMapper;
 
-    @PostMapping("/change-on-public")
+    @PutMapping("/change-on-public")
     @MemberOnly
     public ResponseEntity<ChangeStatusTravelResponse> changeOnPublicTravel(
             @RequestBody ChangeStatusTravelRequest request,
@@ -33,7 +33,7 @@ public class TravelApiController {
         return ResponseEntity.ok().body(new ChangeStatusTravelResponse("리뷰 공개 상태 변경 완료"));
     }
 
-    @PostMapping("/change-on-private")
+    @PutMapping("/change-on-private")
     @MemberOnly
     public ResponseEntity<ChangeStatusTravelResponse> changeOnPrivateTravel(
             @RequestBody ChangeStatusTravelRequest request,
@@ -43,7 +43,7 @@ public class TravelApiController {
         return ResponseEntity.ok().body(new ChangeStatusTravelResponse("리뷰 공개 상태 변경 완료"));
     }
 
-    @PostMapping("/change-visibility")
+    @PutMapping("/change-visibility")
     @MemberOnly
     public ResponseEntity<TravelsVisibilityChangeResponse> setTravelsVisibility(
         @Auth final Accessor accessor,

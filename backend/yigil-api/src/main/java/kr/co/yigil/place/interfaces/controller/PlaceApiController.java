@@ -1,5 +1,16 @@
 package kr.co.yigil.place.interfaces.controller;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
@@ -12,21 +23,11 @@ import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
 import kr.co.yigil.place.interfaces.dto.request.PlaceImageRequest;
 import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceSearchResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
-import kr.co.yigil.place.interfaces.dto.response.PlaceSearchResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,7 +41,8 @@ public class PlaceApiController {
             PlaceImageRequest request,
             @Auth Accessor accessor
     ) {
-        var placeInfo = placeFacade.findPlaceStaticImage(request.getName(), request.getAddress());
+
+        var placeInfo = placeFacade.findPlaceStaticImage(accessor.getMemberId(), request.getName(), request.getAddress());
         var response = placeMapper.toPlaceStaticImageResponse(placeInfo);
         return ResponseEntity.ok().body(response);
     }

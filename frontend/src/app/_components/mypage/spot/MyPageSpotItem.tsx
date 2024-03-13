@@ -4,6 +4,8 @@ import StarIcon from '/public/icons/star.svg';
 import LockIcon from '/public/icons/lock-white.svg';
 import IconWithCounts from '../../IconWithCounts';
 import { TMyPageSpot } from '@/types/myPageResponse';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface TMyPageSpotItem extends TMyPageSpot {
   checkedList: { spot_id: TMyPageSpot['spot_id']; is_private: boolean }[];
@@ -14,13 +16,12 @@ interface TMyPageSpotItem extends TMyPageSpot {
 
 const MyPageSpotItem = ({
   spot_id,
-
   image_url,
   rate,
   created_date,
   title,
-
   is_private,
+  place_id,
   checkedList,
   onChangeCheckedList,
   idx,
@@ -28,11 +29,10 @@ const MyPageSpotItem = ({
 }: TMyPageSpotItem) => {
   const [isCheckDisabled, setIsCheckDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const { push } = useRouter();
 
-  // TODO: 전체 선택 했을 때 isChecked가 true 로 바뀌어야 한다.
   useEffect(() => {
     const found = checkedList.find((checked) => checked.spot_id === spot_id);
-
     if (found) setIsChecked(true);
     else setIsChecked(false);
   }, [checkedList, spot_id]);
@@ -41,8 +41,11 @@ const MyPageSpotItem = ({
     if (selectOption === 'all' && is_private) {
       setIsCheckDisabled(true);
       setIsChecked(false);
+    } else if (selectOption === 'private') {
+      setIsCheckDisabled(false);
+      setIsChecked(false);
     }
-  }, [selectOption, checkedList, is_private]); // 전체 선택 및 해제 시에 disabled 풀리는 현상
+  }, [selectOption, is_private]);
 
   return (
     <div
@@ -60,7 +63,7 @@ const MyPageSpotItem = ({
           onChangeCheckedList(spot_id, is_private);
         }}
       />
-      <div className="relative">
+      <Link href={`/place/${place_id}`} className="relative">
         <Image
           src={image_url || ''}
           alt="spot-image"
@@ -73,12 +76,15 @@ const MyPageSpotItem = ({
             <LockIcon className="w-4 h-4" />
           </div>
         )}
-      </div>
+      </Link>
 
-      <div className="flex flex-col gap-y-2 grow">
-        <div className="text-2xl leading-7 text-gray-900 font-semibold">
+      <div className="flex flex-col items-start gap-y-2 grow">
+        <button
+          className="text-2xl leading-7 text-gray-900 font-semibold cursor-pointer hover:underline"
+          onClick={() => push(`/place/${place_id}`)}
+        >
           {title}
-        </div>
+        </button>
         <div className="flex gap-x-2 items-center justify-between ml-1 text-xl leading-6 text-gray-500 font-semibold">
           <IconWithCounts
             icon={

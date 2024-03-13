@@ -2,6 +2,14 @@ package kr.co.yigil.place.interfaces.dto.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
+
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
 import kr.co.yigil.place.domain.PlaceInfo;
@@ -18,12 +26,6 @@ import kr.co.yigil.place.interfaces.dto.response.PlaceSearchResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
 import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
 import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Slice;
 
 @Mapper(componentModel = "spring")
 public interface PlaceMapper {
@@ -32,7 +34,8 @@ public interface PlaceMapper {
 
     @Mappings({
             @Mapping(target = "mapStaticImageUrl", source = "imageUrl"),
-            @Mapping(target = "exists", source = "exists")
+            @Mapping(target = "exists", source = "exists"),
+            @Mapping(target = "registeredPlace", source = "registeredPlace")
     })
     PlaceStaticImageResponse toPlaceStaticImageResponse(MapStaticImageInfo info);
 

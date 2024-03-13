@@ -73,6 +73,8 @@ class MemberApiControllerTest {
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.igil.co.kr/images/profile.jpg")
+            .age("10대")
+            .gender("남성")
             .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
             .followerCount(10)
             .followingCount(20)
@@ -92,6 +94,8 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("age").description("연령대"),
+                    fieldWithPath("gender").description("성별"),
                     fieldWithPath("favorite_regions").description("좋아하는 지역리스트"),
                     fieldWithPath("favorite_regions[].id").description("좋아하는 지역 ID"),
                     fieldWithPath("favorite_regions[].name").description("좋아하는 지역 이름"),
@@ -130,10 +134,6 @@ class MemberApiControllerTest {
 
         mockMvc.perform(multipart("/api/v1/members")
                 .file("profileImageFile", multipartFile.getBytes())
-//                .param("nickname", "nickname")
-//                .param("age", "10대")
-//                .param("gender", "남성")
-//                .param("favoriteRegionIds", "1", "2", "3")
                 .content(requestJson)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
             )
@@ -144,6 +144,12 @@ class MemberApiControllerTest {
                 getDocumentResponse(),
                 requestParts(
                     partWithName("profileImageFile").description("프로필 이미지 파일")
+                ),
+                requestFields(
+                    fieldWithPath("nickname").description("닉네임"),
+                    fieldWithPath("age").description("연령대"),
+                    fieldWithPath("gender").description("성별"),
+                    fieldWithPath("favoriteRegionIds").description("좋아하는 지역 ID 리스트")
                 ),
                 responseFields(
                     fieldWithPath("message").description("메시지")
@@ -195,6 +201,8 @@ class MemberApiControllerTest {
             .nickname("test user")
             .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
             .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
+            .age("10대")
+            .gender("남성")
             .followerCount(10)
             .followingCount(20)
             .build();
@@ -216,6 +224,8 @@ class MemberApiControllerTest {
                     fieldWithPath("email").description("이메일"),
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("profile_image_url").description("프로필 이미지 URL"),
+                    fieldWithPath("age").description("연령대"),
+                    fieldWithPath("gender").description("성별"),
                     fieldWithPath("favorite_regions").description("좋아하는 지역리스트"),
                     fieldWithPath("favorite_regions[].id").description("좋아하는 지역 ID"),
                     fieldWithPath("favorite_regions[].name").description("좋아하는 지역 이름"),
@@ -228,9 +238,8 @@ class MemberApiControllerTest {
     }
 
     @DisplayName("닉네임 중복 체크가 잘 되는지")
-	@Test
-	void whenNicknameDuplicateCheck_thenShouldReturn200AndResponse() throws Exception{
-
+    @Test
+    void whenNicknameDuplicateCheck_thenShouldReturn200AndResponse() throws Exception {
 
         MemberInfo.NicknameCheckInfo checkInfo = new MemberInfo.NicknameCheckInfo(true);
         MemberDto.NicknameCheckResponse response = MemberDto.NicknameCheckResponse.builder()
@@ -257,5 +266,5 @@ class MemberApiControllerTest {
             ));
 
         verify(memberFacade).nicknameDuplicateCheck(anyString());
-	}
+    }
 }

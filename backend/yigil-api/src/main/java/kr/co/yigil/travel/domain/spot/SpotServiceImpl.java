@@ -4,11 +4,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
+import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -32,48 +38,54 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SpotServiceImpl implements SpotService {
 
-    private final MemberReader memberReader;
-    private final SpotReader spotReader;
-    private final PlaceReader placeReader;
-    private final FavorReader favorReader;
+	private final MemberReader memberReader;
+	private final SpotReader spotReader;
+	private final PlaceReader placeReader;
+	private final FavorReader favorReader;
 
-    private final SpotStore spotStore;
-    private final PlaceStore placeStore;
-    private final PlaceCacheStore placeCacheStore;
+	private final SpotStore spotStore;
+	private final PlaceStore placeStore;
+	private final PlaceCacheStore placeCacheStore;
 
-    private final SpotSeriesFactory spotSeriesFactory;
-    private final FileUploader fileUploader;
+	private final SpotSeriesFactory spotSeriesFactory;
+	private final FileUploader fileUploader;
 
-    @Override
-    @Transactional(readOnly = true)
-    public Slice getSpotSliceInPlace(final Long placeId, final Accessor accessor, final Pageable pageable) {
-        var slice = spotReader.getSpotSliceInPlace(placeId, pageable);
-        var mains = slice.getContent()
-                .stream()
-                .map(spot -> {
-                    boolean isLiked = accessor.isMember() && favorReader.existsByMemberIdAndTravelId(accessor.getMemberId(), spot.getId());
-                    return new Main(spot, isLiked);
-                }).collect(Collectors.toList());
-        return new Slice(mains, slice.hasNext());
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public Slice getSpotSliceInPlace(final Long placeId, final Accessor accessor, final Pageable pageable) {
+		var slice = spotReader.getSpotSliceInPlace(placeId, pageable);
+		var mains = slice.getContent()
+			.stream()
+			.map(spot -> {
+				boolean isLiked = accessor.isMember() && favorReader.existsByMemberIdAndTravelId(accessor.getMemberId(),
+					spot.getId());
+				return new Main(spot, isLiked);
+			}).collect(Collectors.toList());
+		return new Slice(mains, slice.hasNext());
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId) {
-        var spotOptional = spotReader.findSpotByPlaceIdAndMemberId(placeId, memberId);
-        return new MySpot(spotOptional);
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public MySpot retrieveMySpotInfoInPlace(Long placeId, Long memberId) {
+		var spotOptional = spotReader.findSpotByPlaceIdAndMemberId(placeId, memberId);
+		return new MySpot(spotOptional);
+	}
 
-    @Override
-    @Transactional
-    public void registerSpot(RegisterSpotRequest command, Long memberId) {
-        Member member = memberReader.getMember(memberId);
-        Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(command.getRegisterPlaceRequest().getPlaceName(), command.getRegisterPlaceRequest().getPlaceAddress());
-        Place place = optionalPlace.orElseGet(()-> registerNewPlace(command.getRegisterPlaceRequest()));
-        var attachFiles = spotSeriesFactory.initAttachFiles(command);
-        var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
-        var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
-    }
+	@Override
+	@Transactional
+	public void registerSpot(RegisterSpotRequest command, Long memberId) {
+		Member member = memberReader.getMember(memberId);
+		Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(
+			command.getRegisterPlaceRequest().getPlaceName(), command.getRegisterPlaceRequest().getPlaceAddress());
+		if (optionalPlace.isPresent() && spotReader.isExistSpot(memberId, optionalPlace.get().getId())) {
+			throw new BadRequestException(ExceptionCode.SPOT_ALREADY_EXIST_IN_PLACE);
+		}
+
+		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
+		var attachFiles = spotSeriesFactory.initAttachFiles(command);
+		var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
+		var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
+	}
 
     @Override
     @Transactional(readOnly = true)

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.dto.SpotListDto;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import kr.co.yigil.travel.infrastructure.SpotQueryDslRepository;
 import kr.co.yigil.travel.infrastructure.SpotRepository;
@@ -59,8 +60,13 @@ public class SpotReaderImpl implements SpotReader {
     }
 
     @Override
-    public Page<Spot> getMemberSpotList(Long memberId, Selected visibility, Pageable pageable
+    public Page<SpotListDto> getMemberSpotList(Long memberId, Selected visibility, Pageable pageable
     ) {
         return spotQueryDslRepository.findAllByMemberIdAndIsPrivate(memberId, visibility, pageable);
+    }
+
+    @Override
+    public boolean isExistSpot(Long placeId, Long memberId) {
+        return spotRepository.existsByPlaceIdAndMemberId(placeId, memberId);
     }
 }

@@ -21,6 +21,7 @@ jobs:
     if: >
       github.event.pull_request.merged == true &&
       contains(join(github.event.pull_request.labels.*.name, ','), '💻Frontend')
+
     steps:
     ## jdk setting
     - uses: actions/checkout@v3
