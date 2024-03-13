@@ -28,7 +28,7 @@ export default async function HomePage({
 }: {
   searchParams: { name: string };
 }) {
-  const popularPlacesResult = await getPopularPlaces(undefined);
+  const popularPlacesResult = await getPopularPlaces();
 
   if (!popularPlacesResult.success) {
     console.log(popularPlacesResult.error.errors);
