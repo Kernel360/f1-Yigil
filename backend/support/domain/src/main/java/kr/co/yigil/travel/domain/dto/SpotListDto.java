@@ -5,26 +5,27 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class SpotListDto {
+public class SpotListDto extends ImageFileDto {
 
     private final Long spotId;
     private final Long placeId;
-    private final String title;
+    private final String placeName;
     private final double rate;
     private final String imageUrl;
     private final LocalDateTime createdDate;
     private final Boolean isPrivate;
 
     @QueryProjection
-    public SpotListDto(Long spotId, Long placeId, String title, double rate, String imageUrl,
+    public SpotListDto(Long spotId, Long placeId, String placeName, double rate, String imageUrl,
         LocalDateTime createdDate, Boolean isPrivate) {
         this.spotId = spotId;
         this.placeId = placeId;
-        this.title = title;
+        this.placeName = placeName;
         this.rate = rate;
-        this.imageUrl = imageUrl;
+        this.imageUrl = getImageUrl(imageUrl);
         this.createdDate = createdDate;
         this.isPrivate = isPrivate;
     }
+
 
 }

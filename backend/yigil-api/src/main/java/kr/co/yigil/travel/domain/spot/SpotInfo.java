@@ -73,7 +73,7 @@ public class SpotInfo {
 
         private final Long spotId;
         private final Long placeId;
-        private final String title;
+        private final String placeName;
         private final double rate;
         private final String imageUrl;
         private final LocalDateTime createdDate;
@@ -82,7 +82,7 @@ public class SpotInfo {
         public SpotListInfo(SpotListDto spot) {
             this.spotId = spot.getSpotId();
             this.placeId = spot.getPlaceId();
-            this.title = spot.getTitle();
+            this.placeName = spot.getPlaceName();
             this.rate = spot.getRate();
             this.imageUrl = spot.getImageUrl();
             this.createdDate = spot.getCreatedDate();
