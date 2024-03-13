@@ -59,8 +59,6 @@ jasypt:
 logging:
   level:
     root: DEBUG
-  file:
-    name: logs/myapp.log
   slack:
     webhook-uri: @SLACK_WEBHOOK_URI@
 
