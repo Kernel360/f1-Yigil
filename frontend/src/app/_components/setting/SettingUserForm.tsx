@@ -13,6 +13,8 @@ import { checkIsExistNickname, patchFavoriteRegion } from './actions';
 import { TMyInfo } from '@/types/response';
 import SettingUserArea from './SettingUserArea';
 import ToastMsg from '../ui/toast/ToastMsg';
+import { useRouter } from 'next/navigation';
+import Dialog from '../ui/dialog/Dialog';
 
 export interface TProps {
   userForm: TMyInfo;
@@ -33,7 +35,9 @@ export default function SettingUserForm({
     fetchUserData.favorite_regions,
   );
   const [errorText, setErrorText] = useState('');
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
   const nicknameRef = useRef<HTMLInputElement>(null);
+  const { push } = useRouter();
 
   useEffect(() => {
     setUserRegions(fetchUserData.favorite_regions);
@@ -81,6 +85,9 @@ export default function SettingUserForm({
       setErrorText('관심 지역 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.');
   };
 
+  const closeModal = () => {
+    setIsDialogOpened(false);
+  };
   useEffect(() => {
     if (
       userForm.ages !== fetchUserData.ages ||
@@ -200,13 +207,20 @@ export default function SettingUserForm({
                 deleteInterestedArea={deleteInterestedArea}
               />
             ))}
-            <Link
-              href="/area"
-              className="flex justify-center items-center gap-x-2 text-xl text-gray-500 bg-gray-200 font-semibold border-[1px] border-gray-300 py-4 leading-5 rounded-md"
+            <div
+              className="flex justify-center items-center gap-x-2 text-xl text-gray-500 bg-gray-200 font-semibold border-[1px] border-gray-300 py-4 leading-5 rounded-md cursor-pointer"
+              onClick={() => setIsDialogOpened(true)}
             >
               지역 선택
-            </Link>
+            </div>
           </ul>
+          {isDialogOpened && (
+            <Dialog
+              text="이동하시면 입력하신 정보가 사라집니다."
+              handleConfirm={async () => push('/area')}
+              closeModal={closeModal}
+            />
+          )}
         </section>
         <div className="pb-8 mt-[60px] mx-4 flex justify-center items-center text-white text-2xl leading-7 font-semibold">
           <button
