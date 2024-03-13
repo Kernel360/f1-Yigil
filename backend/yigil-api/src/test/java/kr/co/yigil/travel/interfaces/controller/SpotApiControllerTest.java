@@ -324,7 +324,8 @@ class SpotApiControllerTest {
 
         MySpotsResponseDto.SpotInfo spotInfo = MySpotsResponseDto.SpotInfo.builder()
             .spotId(1L)
-            .title("test course")
+            .placeId(1L)
+            .placeName("test course")
             .rate(4.5)
             .imageUrl("images/map.jpg")
             .createdDate("2024-01-01")
@@ -365,7 +366,7 @@ class SpotApiControllerTest {
                 responseFields(
                     fieldWithPath("content[].spot_id").description("게시글(리뷰) ID"),
                     fieldWithPath("content[].place_id").description("장소 ID"),
-                    fieldWithPath("content[].title").description("장소 제목"),
+                    fieldWithPath("content[].place_name").description("장소 제목"),
                     fieldWithPath("content[].rate").description("장소 평점"),
                     fieldWithPath("content[].image_url").description("장소 이미지 URL"),
                     fieldWithPath("content[].created_date").description("장소 생성일"),
