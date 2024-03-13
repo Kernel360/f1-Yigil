@@ -11,7 +11,7 @@
 
 ## 배포 주소
   
-[이길 로그](https://yigil.co.kr)
+[이길 로그](https://yigil.co.kr) 
 
 ## 주요 기능
 
