@@ -2,13 +2,17 @@
 
 import { z } from 'zod';
 import { cookies } from 'next/headers';
-import { requestWithCookie } from './httpRequest';
 import { getBaseUrl } from '@/app/utilActions';
 
 export async function logout() {
-  const response = await requestWithCookie('logout')()()()(
-    '로그아웃에 실패했습니다!',
-  );
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/logout`, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+  });
 
   const result = logoutSuccessResponse.safeParse(response);
 
