@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 import SettingProfile from './SettingProfile';
 import SettingUserForm from './SettingUserForm';
 import { TMyInfo } from '@/types/response';
-import { patchUserInfo } from './actions';
 import Dialog from '../ui/dialog/Dialog';
 import ToastMsg from '../ui/toast/ToastMsg';
+import { patchUserInfo } from './actions';
 
 export default function UserModifyForm(userData: TMyInfo) {
   const [isDialogOpened, setIsDialogOpened] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [toastMsg, setToastText] = useState('');
   const [userForm, setUserForm] = useState<TMyInfo>({
     ...userData,
     email: '',
@@ -18,13 +18,13 @@ export default function UserModifyForm(userData: TMyInfo) {
   });
 
   const patchUserForm = async () => {
-    setErrorText('');
+    setToastText('');
     try {
       const patchData = checkDifference(userForm, userData);
-
       await patchUserInfo(patchData);
+      setToastText('수정 완료되었습니다.');
     } catch (error) {
-      setErrorText('수정에 실패했습니다.');
+      setToastText('수정에 실패했습니다.');
       console.log(error);
     } finally {
       setIsDialogOpened(false);
@@ -64,7 +64,7 @@ export default function UserModifyForm(userData: TMyInfo) {
           loadingText="수정중 입니다."
         />
       )}
-      {errorText && <ToastMsg title={errorText} timer={2000} />}
+      {toastMsg && <ToastMsg title={toastMsg} timer={2000} />}
     </>
   );
 }
@@ -76,7 +76,7 @@ function checkDifference(userForm: TMyInfo, userData: TMyInfo) {
     profile_image_url:
       userForm.profile_image_url !== userData.profile_image_url
         ? userForm.profile_image_url
-        : '',
+        : '변경 없음',
     ages:
       userForm.ages === userData.ages || userForm.ages === '없음'
         ? ''
@@ -97,6 +97,5 @@ function checkDifference(userForm: TMyInfo, userData: TMyInfo) {
     }
     if (key === 'profile_image_url' && !patchData[key]) patchData[key] = '';
   }
-
   return patchData;
 }

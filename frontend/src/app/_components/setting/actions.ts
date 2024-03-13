@@ -37,22 +37,24 @@ export async function patchFavoriteRegion(ids: number[]) {
 }
 
 export async function patchUserInfo(infoData: { [key: string]: any }) {
+  console.log('info', infoData);
   const formData = new FormData();
   for (let key in infoData) {
     if (key === 'profile_image_url') {
       if (!infoData[key]) {
         formData.append('isProfileEmpty', 'true');
       } else {
-        formData.append(
-          'profileImageFile',
-          new File(
-            [dataUrlToBlob(infoData[key])],
-            `${infoData.nickname} 프로필 이미지.png`,
-            {
-              type: 'image/png',
-            },
-          ),
-        );
+        if (infoData[key] !== '변경 없음')
+          formData.append(
+            'profileImageFile',
+            new File(
+              [dataUrlToBlob(infoData[key])],
+              `${infoData.nickname} 프로필 이미지.png`,
+              {
+                type: 'image/png',
+              },
+            ),
+          );
       }
       continue;
     }
