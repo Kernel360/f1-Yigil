@@ -57,7 +57,7 @@ async function fetchRegionPlaces(id: number) {
   return await response.json();
 }
 
-export async function getPopularPlaces(more: 'more' | undefined = 'more') {
+export async function getPopularPlaces(more: 'more' | undefined) {
   const json = await fetchPopularPlaces(more);
 
   const result = placeResponseSchema.safeParse(json);
