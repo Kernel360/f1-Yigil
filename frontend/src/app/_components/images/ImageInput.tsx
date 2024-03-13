@@ -18,10 +18,12 @@ function toBase64(file: File) {
 
 export default function ImageInput({
   availableSpace,
-  addImages,
+  images,
+  setImages,
 }: {
   availableSpace: number;
-  addImages: (newImages: TImageData[]) => void;
+  images: TImageData[];
+  setImages: (newImages: TImageData[]) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,14 +37,22 @@ export default function ImageInput({
         throw Error(`${availableSpace}개 이상 추가할 수 없습니다!`);
       }
 
-      const images: TImageData[] = [];
+      const newImages: TImageData[] = [];
 
       for (let i = 0; i < fileList.length; i++) {
         const uri = await toBase64(fileList[i]);
-        images.push({ filename: fileList[i].name, uri });
+        newImages.push({ filename: fileList[i].name, uri });
       }
 
-      addImages(images);
+      const currentImageNames = images.map((image) => image.filename);
+
+      const deduplicated = newImages.filter(
+        (image) => !currentImageNames.includes(image.filename),
+      );
+
+      const nextImages = [...images, ...deduplicated];
+
+      setImages(nextImages);
     } catch (error) {
       alert(error);
     }

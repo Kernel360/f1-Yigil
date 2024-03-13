@@ -9,6 +9,8 @@ import { AddSpotContext } from '../add/spot/SpotContext';
 import type { Dispatch } from 'react';
 
 import type { TAddSpotAction } from '../add/spot/SpotContext';
+import { SpotContext } from '@/context/travel/spot/SpotContext';
+import { CourseContext } from '@/context/travel/course/CourseContext';
 
 export interface TImageData {
   filename: string;
@@ -16,39 +18,26 @@ export interface TImageData {
 }
 
 export default function ImageHandler({
-  dispatch,
-  size,
+  images,
+  setImages,
+  size = 5,
 }: {
-  dispatch: Dispatch<TAddSpotAction>;
-  size: number;
+  images: TImageData[];
+  setImages: (newImages: TImageData[]) => void;
+  size?: number;
 }) {
-  const addSpotState = useContext(AddSpotContext);
-  const images = addSpotState.images;
-
-  function addImages(newImages: TImageData[]) {
-    if (newImages.length === 0) {
-      return;
-    }
-
-    const currentImageNames = images.map((image) => image.filename);
-
-    const deduplicated = newImages.filter(
-      (image) => !currentImageNames.includes(image.filename),
-    );
-
-    const nextImages = [...images, ...deduplicated];
-
-    dispatch({ type: 'SET_IMAGES', payload: nextImages });
-  }
-
   const availableSpace = size - images.length;
 
   const blankSpaces = [...Array(availableSpace)];
 
   return (
     <section className="grid grid-rows-2 grid-cols-3 gap-2">
-      <ImageInput availableSpace={availableSpace} addImages={addImages} />
-      <ImagesContainer dispatch={dispatch} />
+      <ImageInput
+        availableSpace={availableSpace}
+        images={images}
+        setImages={setImages}
+      />
+      <ImagesContainer images={images} setImages={setImages} />
       {blankSpaces.map((_, i) => (
         <div
           key={i}
