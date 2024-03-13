@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useSelectedLayoutSegment } from 'next/navigation';
 import InfoIcon from '/public/icons/info.svg';
 import SearchIcon from '/public/icons/search.svg';
+import NotificationIcon from '@/app/_components/notification/NotificationIcon';
 
 export default function HomeNavigation() {
   const pathname = usePathname();
@@ -35,11 +36,15 @@ export default function HomeNavigation() {
           <InfoIcon />
         </Link>
       </div>
+      <div className="grow"></div>
       {pathname === '/' && (
         <Link className="h-min" href="/search">
           <SearchIcon />
         </Link>
       )}
+      <Link href="/notification" className="ml-4">
+        <NotificationIcon />
+      </Link>
     </nav>
   );
 }

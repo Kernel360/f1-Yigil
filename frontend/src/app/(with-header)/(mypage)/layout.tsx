@@ -9,7 +9,7 @@ export default function MyPageLayout({
 }) {
   return (
     <>
-      <div className="flex items-center gap-x-4 my-4 ml-4">
+      <div className="flex items-center gap-x-4 my-4 mx-4">
         <MyPageRoutes />
       </div>
 
