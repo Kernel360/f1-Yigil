@@ -516,6 +516,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">찾은 파일의 이미지 Url</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>registered_place</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버가 해당 장소의 스팟을 등록했는지 여부</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -524,11 +529,12 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 70
+Content-Length: 100
 
 {
   "exists" : true,
-  "map_static_image_url" : "http://yigil.co.kr"
+  "map_static_image_url" : "http://yigil.co.kr",
+  "registered_place" : false
 }</code></pre>
 </div>
 </div>

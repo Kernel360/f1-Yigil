@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useEffect, useReducer, useState } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import {
   createInitialState,
   defaultSearchState,
@@ -8,16 +8,12 @@ import {
 } from './reducer';
 
 import type { Dispatch, ReactNode } from 'react';
-import type { TSearchAction, TSearchState } from './reducer';
+import type { TSearchState, TSearchAction } from './reducer';
 import { parseSearchHistory } from '@/utils';
 
-export const SearchContext = createContext<{
-  state: TSearchState;
-  dispatch: Dispatch<TSearchAction>;
-}>({
-  state: defaultSearchState,
-  dispatch: () => {},
-});
+export const SearchContext = createContext<
+  [TSearchState, Dispatch<TSearchAction>]
+>([defaultSearchState, () => {}]);
 
 const searchKey = 'search-history';
 
@@ -30,10 +26,8 @@ function getSearchHistory(searchKey: string) {
 export default function SearchProvider({
   showHistory,
   initialKeyword,
-  loading,
   children,
 }: {
-  loading?: boolean;
   showHistory?: boolean;
   initialKeyword?: string;
   children: ReactNode;
@@ -44,7 +38,6 @@ export default function SearchProvider({
     histories,
     initialKeyword,
     showHistory,
-    loading,
   );
 
   const [state, dispatch] = useReducer(searchReducer, initialState);
@@ -54,7 +47,7 @@ export default function SearchProvider({
   }, [state.histories]);
 
   return (
-    <SearchContext.Provider value={{ state, dispatch }}>
+    <SearchContext.Provider value={[state, dispatch]}>
       {children}
     </SearchContext.Provider>
   );

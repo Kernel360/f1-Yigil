@@ -10,7 +10,7 @@ import InfinitePlaces from './InfinitePlaces';
 import type { EventFor } from '@/types/type';
 
 export default function TravelSearchResult() {
-  const { state, dispatch } = useContext(SearchContext);
+  const [state, dispatch] = useContext(SearchContext);
 
   const { status } = state.result;
 

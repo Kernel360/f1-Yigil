@@ -16,7 +16,7 @@ export default function SearchItem({
   item: string;
   erasable?: boolean;
 }) {
-  const { dispatch } = useContext(SearchContext);
+  const [, dispatch] = useContext(SearchContext);
 
   async function handleClick(event: EventFor<'button', 'onClick'>) {
     dispatch({ type: 'SET_LOADING', payload: true });

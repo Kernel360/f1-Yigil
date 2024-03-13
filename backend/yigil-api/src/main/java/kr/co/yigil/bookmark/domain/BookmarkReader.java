@@ -1,11 +1,11 @@
 package kr.co.yigil.bookmark.domain;
 
-import java.util.List;
+import kr.co.yigil.bookmark.domain.dto.BookmarkDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface BookmarkReader {
-    Slice<Bookmark> getBookmarkSlice(Long memberId, Pageable pageable);
+    Slice<BookmarkDto> getBookmarkSlice(Long memberId, Pageable pageable);
 
     boolean isBookmarked(Long memberId, Long placeId);
 }
