@@ -26,17 +26,23 @@ public class SpotInfoDto {
     public static class SpotListUnit {
 
         private final Long spotId;
-        private final String title;
+        private final String placeName;
+        private final String description;
         private final LocalDateTime createdAt;
+        private final String ownerNickname;
+        private final String ownerProfileImageUrl;
         private final int favorCount;
         private final int commentCount;
 
         public SpotListUnit(Spot spot, SpotAdditionalInfo additionalInfo) {
             this.spotId = spot.getId();
-            this.title = spot.getTitle();
+            this.placeName = spot.getPlace().getName();
+            this.description = spot.getDescription();
             this.favorCount = additionalInfo.getFavorCount();
             this.commentCount = additionalInfo.getCommentCount();
             this.createdAt = spot.getCreatedAt();
+            this.ownerNickname = spot.getMember().getNickname();
+            this.ownerProfileImageUrl = spot.getMember().getProfileImageUrl();
         }
     }
 

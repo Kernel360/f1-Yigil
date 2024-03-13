@@ -55,5 +55,5 @@ public class NotificationApiController {
         return ResponseEntity.ok().body(response);
     }
 
-    // todo : add notification read api
+    // ToDo: add notification read api
 }
