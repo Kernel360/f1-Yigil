@@ -12,6 +12,7 @@ import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateRequest;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateResponse;
 import kr.co.yigil.notice.interfaces.dto.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

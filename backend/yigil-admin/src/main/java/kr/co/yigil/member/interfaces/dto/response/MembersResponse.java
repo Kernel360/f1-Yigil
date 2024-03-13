@@ -10,5 +10,4 @@ import org.springframework.data.domain.Page;
 @AllArgsConstructor
 public class MembersResponse {
     private Page<MemberInfoDto> members;
-
 }
