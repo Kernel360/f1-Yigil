@@ -2,12 +2,12 @@ package kr.co.yigil.bookmark.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
-import kr.co.yigil.bookmark.domain.Bookmark;
-import kr.co.yigil.member.Member;
+import kr.co.yigil.bookmark.domain.dto.BookmarkDto;
 import kr.co.yigil.member.domain.MemberReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
@@ -23,6 +23,9 @@ public class BookmarkReaderImplTest {
 
     @Mock
     private BookmarkRepository bookmarkRepository;
+
+    @Mock
+    private BookmarkQueryRepository bookmarkQueryRepository;
 
     @Mock
     private MemberReader memberReader;
@@ -39,14 +42,14 @@ public class BookmarkReaderImplTest {
     @Test
     void whenGetBookmarkSlice_thenReturnsCorrectSlice() {
         Long memberId = 1L;
-        Member member = new Member("kiit0901@gmail.com", "123456", "stone", "profile.jpg", "kakao");
-        List<Bookmark> bookmarks = new ArrayList<>();
-        Slice<Bookmark> expectedSlice = new SliceImpl<>(bookmarks);
+        PageRequest pageable = PageRequest.of(0, 10);
 
-        when(memberReader.getMember(memberId)).thenReturn(member);
-        when(bookmarkRepository.findAllByMember(member, Pageable.unpaged())).thenReturn(expectedSlice);
+        BookmarkDto bookmarkDto = new BookmarkDto(1L, 2L, "placeName", "placeImage", 4.5);
+        Slice<BookmarkDto> expectedSlice = new SliceImpl<>(List.of(bookmarkDto));
 
-        Slice<Bookmark> actualSlice = bookmarkReader.getBookmarkSlice(memberId, Pageable.unpaged());
+        when(bookmarkQueryRepository.findAllByMemberId(anyLong(),  any(PageRequest.class))).thenReturn(expectedSlice);
+
+        Slice<BookmarkDto> actualSlice = bookmarkReader.getBookmarkSlice(memberId, pageable);
 
         assertEquals(expectedSlice, actualSlice);
     }
