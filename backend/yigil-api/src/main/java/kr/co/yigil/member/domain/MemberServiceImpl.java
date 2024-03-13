@@ -75,7 +75,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private AttachFile getAttachFile(final MemberUpdateRequest request) {
-        if (request.getProfileImageFile() == null && Boolean.FALSE.equals(request.getIsProfileEmpty())) {
+        if (request.getProfileImageFile() == null && request.getIsProfileEmpty() == null) {
+            return null;
+        }
+        if (request.getProfileImageFile() == null &&  Boolean.FALSE.equals(request.getIsProfileEmpty())) {
             return null;
         }
 
