@@ -41,7 +41,7 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
   for (let key in infoData) {
     if (key === 'profile_image_url') {
       if (!infoData[key]) {
-        formData.append('profileImageFile', '');
+        formData.append('isProfileEmpty', 'true');
       } else {
         formData.append(
           'profileImageFile',
