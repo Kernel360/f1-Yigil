@@ -41,23 +41,26 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
 
   for (let key in infoData) {
     if (key === 'profile_image_url') {
-      formData.append(
-        'profileImageUrl',
-        new File(
-          [dataUrlToBlob(infoData[key])],
-          `${infoData.nickname} 프로필 이미지.png`,
-          {
-            type: 'image/png',
-          },
-        ),
-      );
+      if (!infoData[key]) {
+        formData.append('profileImageUrl', '');
+      } else {
+        formData.append(
+          'profileImageUrl',
+          new File(
+            [dataUrlToBlob(infoData[key])],
+            `${infoData.nickname} 프로필 이미지.png`,
+            {
+              type: 'image/png',
+            },
+          ),
+        );
+      }
+      formData.append(key, infoData[key]);
     }
-    formData.append(key, infoData[key]);
   }
 
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
-
   const res = await fetch(`${BASE_URL}/v1/members`, {
     method: 'POST',
     headers: {
@@ -65,6 +68,7 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
     },
     body: formData,
   });
+
   if (res.ok) {
     revalidatePath('/settings', 'layout');
     return res.json();

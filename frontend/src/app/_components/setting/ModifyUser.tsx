@@ -18,6 +18,7 @@ export default function UserModifyForm(userData: TMyInfo) {
   });
 
   const patchUserForm = async () => {
+    setErrorText('');
     try {
       const patchData = checkDifference(userForm, userData);
       await patchUserInfo(patchData);
@@ -75,7 +76,7 @@ function checkDifference(userForm: TMyInfo, userData: TMyInfo) {
       userForm.profile_image_url !== userData.profile_image_url
         ? userForm.profile_image_url
         : '',
-    age: userForm.age === '없음' ? '' : userForm.age,
+    age: userForm.ages === '없음' ? '' : userForm.ages,
     gender: userForm.gender === '없음' ? '' : userForm.gender,
     favorite_regions: '',
   };

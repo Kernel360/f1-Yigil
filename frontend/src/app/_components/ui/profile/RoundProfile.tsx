@@ -12,7 +12,7 @@ export default function RoundProfile({ img, size, style, height }: PropsType) {
   return (
     <Image
       className={`rounded-full ${style} ${height}`}
-      src={img || '/icons/profile.svg'}
+      src={img || 'https://t1.kakaocdn.net/account_images/default_profile.jpeg'}
       alt="profile"
       width={size}
       height={size}

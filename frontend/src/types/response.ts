@@ -83,7 +83,7 @@ export const myInfoSchema = z.object({
   favorite_regions: z.array(z.object({ id: z.number(), name: z.string() })),
   following_count: z.number().int(),
   follower_count: z.number().int(),
-  age: z.string(),
+  ages: z.string(),
   gender: z.string(),
 });
 

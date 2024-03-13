@@ -54,6 +54,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 't1.kakaocdn.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'placehold.co',
         port: '',
         pathname: '/**',
