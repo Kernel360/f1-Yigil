@@ -1,6 +1,7 @@
 package kr.co.yigil.member.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -14,6 +15,8 @@ import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowCount;
 import kr.co.yigil.follow.domain.FollowReader;
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
@@ -83,7 +86,7 @@ class MemberServiceImplTest {
             "image/jpeg",
             "test".getBytes());
         MemberCommand.MemberUpdateRequest request = new MemberUpdateRequest("nickname", "10대", "여성",
-            mockFile, List.of(1L, 2L, 3L));
+            mockFile, List.of(1L, 2L, 3L), false);
 
         Member mockMember = mock(Member.class);
 
@@ -97,14 +100,14 @@ class MemberServiceImplTest {
             any(AttachFile.class), anyList());
     }
 
-    @DisplayName("imageFile 이 null 일 때 멤버의 프로필 이미지가 그대로인지 확인")
+    @DisplayName("imageFile 이 null이고 isProfileEmpty가 false일 때 멤버의 프로필 이미지가 그대로인지 확인")
     @Test
-    void GivenImageFileIsNull_WhenMemberUpdate_ThenShouldNotUpateProfileImage() {
+    void GivenImageFileIsNullAndIsProfileEmptyIsFalse_WhenMemberUpdate_ThenShouldNotUpateProfileImage() {
         Long memberId = 1L;
         Member member = new Member(memberId, "originalEmail", "socialLoginId", "originalNickname",
             "profileImageUrl", SocialLoginType.KAKAO, Ages.TEENAGERS, Gender.FEMALE);
         MemberUpdateRequest request = new MemberUpdateRequest("updatedNickname", "20", "male",
-            null, List.of(1L, 2L, 3L));
+            null, List.of(1L, 2L, 3L), false);
 
         when(memberReader.getMember(memberId)).thenReturn(member);
         when(regionReader.getRegions(request.getFavoriteRegionIds())).thenReturn(List.of(mock(
@@ -118,25 +121,22 @@ class MemberServiceImplTest {
         assertThat(member.getGender()).isEqualTo(Gender.MALE);
     }
 
-    @DisplayName("imageFile 이 null이 아니고 filename이 빈스트링 일 때 member의 profileImageUrl 이 빈스트링으로 업데이트 되는지 확인")
+    @DisplayName("imageFile 이 null이고 isEmptyProfile이 true일 때 member의 profileImageUrl 이 빈스트링으로 업데이트 되는지 확인")
     @Test
-    void GivenImageFileIsNull_WhenMemberUpdate_ThenProfileImageShouldEmptyString() {
+    void GivenImageFileIsNullAndIsProfileEmptyIsTrue_WhenMemberUpdate_ThenProfileImageShouldEmptyString() {
         Long memberId = 1L;
-        MultipartFile mockFile = new MockMultipartFile("file", "",
-            "image/jpeg",
-            "test".getBytes());
 
         Member member = new Member(memberId, "originalEmail", "socialLoginId", "originalNickname",
             "profileImageUrl", SocialLoginType.KAKAO, Ages.TEENAGERS, Gender.FEMALE);
         MemberUpdateRequest request = new MemberUpdateRequest(null, null, null,
-            mockFile, null);
+            null, null, true);
         when(memberReader.getMember(memberId)).thenReturn(member);
 
         memberService.updateMemberInfo(memberId, request);
 
-        assertThat(member.getProfileImageUrl()).isEqualTo("");
+        assertThat(member.getProfileImageUrl()).isEmpty();
     }
-    @DisplayName("imageFile 이 null이 아니고 filename이 빈스트링 일 때 member의 profileImageUrl 이 빈스트링으로 업데이트 되는지 확인")
+    @DisplayName("imageFile 이 null이 아니고 isProfileEmpty가 false일 때 멤버의 프로필 이미지가 업데이트 되는지 확인")
     @Test
     void GivenImageFileIsNotNull_WhenMemberUpdate_ThenProfileImageShouldNotEmptyString() {
         Long memberId = 1L;
@@ -147,13 +147,32 @@ class MemberServiceImplTest {
         Member member = new Member(memberId, "originalEmail", "socialLoginId", "originalNickname",
             "profileImageUrl", SocialLoginType.KAKAO, Ages.TEENAGERS, Gender.FEMALE);
         MemberUpdateRequest request = new MemberUpdateRequest(null, null, null,
-            mockFile, null);
+            mockFile, null, false);
         when(memberReader.getMember(memberId)).thenReturn(member);
         when(fileUploader.upload(mockFile)).thenReturn(AttachFile.of("differentProfileImageUrl"));
 
         memberService.updateMemberInfo(memberId, request);
 
         assertThat(member.getProfileImageUrl()).isNotEqualTo("profileImageUrl");
+    }
+
+    @DisplayName("imageFile 이 null이 아니고 isProfileEmpty가 true일 때 에러를 발생하는 지 ")
+    @Test
+    void GivenImageFileIsNotNullAndIsProfileEmptyTrue_WhenMemberUpdate_ThenThrowAnError() {
+        Long memberId = 1L;
+        MultipartFile mockFile = new MockMultipartFile("file", "test.jpg",
+            "image/jpeg",
+            "test".getBytes());
+
+        Member member = new Member(memberId, "originalEmail", "socialLoginId", "originalNickname",
+            "profileImageUrl", SocialLoginType.KAKAO, Ages.TEENAGERS, Gender.FEMALE);
+        MemberUpdateRequest request = new MemberUpdateRequest(null, null, null,
+            mockFile, null, true);
+        when(memberReader.getMember(memberId)).thenReturn(member);
+
+        assertThatThrownBy(() -> memberService.updateMemberInfo(memberId, request))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessageContaining(ExceptionCode.INVALID_REQUEST.getMessage());
     }
 
     @DisplayName("nicknameDuplicateCheck 를 호출했을 때 닉네임 중복 체크가 잘 되는지 확인")

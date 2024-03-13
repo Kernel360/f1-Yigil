@@ -131,7 +131,8 @@ class MemberApiControllerTest {
               "nickname": "nickname",
               "ages": "10대",
               "gender": "남성",
-              "favoriteRegionIds": [1, 2, 3]
+              "favoriteRegionIds": [1, 2, 3],
+              "isProfileEmpty": false
             }""";
 
         mockMvc.perform(multipart("/api/v1/members")
@@ -151,7 +152,8 @@ class MemberApiControllerTest {
                     fieldWithPath("nickname").description("닉네임"),
                     fieldWithPath("ages").description("연령대"),
                     fieldWithPath("gender").description("성별"),
-                    fieldWithPath("favoriteRegionIds").description("좋아하는 지역 ID 리스트")
+                    fieldWithPath("favoriteRegionIds").description("좋아하는 지역 ID 리스트"),
+                    fieldWithPath("isProfileEmpty").description("프로필 이미지를 삭제하는지 여부")
                 ),
                 responseFields(
                     fieldWithPath("message").description("메시지")

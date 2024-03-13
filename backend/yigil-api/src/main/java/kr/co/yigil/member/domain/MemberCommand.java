@@ -18,6 +18,7 @@ public class MemberCommand {
         private String gender;
         private MultipartFile profileImageFile;
         private List<Long> favoriteRegionIds;
+        private Boolean isProfileEmpty;
     }
 
 }
