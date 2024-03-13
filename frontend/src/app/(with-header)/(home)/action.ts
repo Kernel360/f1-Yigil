@@ -14,7 +14,7 @@ const regionResponseSchema = z.object({
   regions: z.array(regionSchema),
 });
 
-async function fetchPopularPlaces(more: 'more' | undefined) {
+async function fetchPopularPlaces(more?: 'more') {
   const BASE_URL = await getBaseUrl();
   const session = cookies().get('SESSION')?.value;
 
@@ -57,7 +57,7 @@ async function fetchRegionPlaces(id: number) {
   return await response.json();
 }
 
-export async function getPopularPlaces(more: 'more' | undefined = 'more') {
+export async function getPopularPlaces(more?: 'more') {
   const json = await fetchPopularPlaces(more);
 
   const result = placeResponseSchema.safeParse(json);

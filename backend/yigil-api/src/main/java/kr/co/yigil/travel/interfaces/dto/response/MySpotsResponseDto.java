@@ -20,7 +20,7 @@ public class MySpotsResponseDto {
 
         private final Long spotId;
         private final Long placeId;
-        private final String title;
+        private final String placeName;
         private final double rate;
         private final String imageUrl;
         private final String createdDate;

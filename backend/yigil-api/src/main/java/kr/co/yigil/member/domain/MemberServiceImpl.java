@@ -1,8 +1,8 @@
 package kr.co.yigil.member.domain;
 
 import java.util.List;
+import java.util.Objects;
 import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.FileReader;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.member.Member;
@@ -18,65 +18,68 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-	private final MemberReader memberReader;
-	private final MemberStore memberStore;
-	private final FollowReader followReader;
-	private final FileUploader fileUploader;
-	private final RegionReader regionReader;
-	private final FileReader fileReader;
+    private final MemberReader memberReader;
+    private final MemberStore memberStore;
+    private final FollowReader followReader;
+    private final FileUploader fileUploader;
+    private final RegionReader regionReader;
 
-	@Override
-	@Transactional
-	public Main retrieveMemberInfo(final Long memberId) {
-		var member = memberReader.getMember(memberId);
-		var followCount = followReader.getFollowCount(memberId);
-		return new Main(member, followCount);
-	}
+    @Override
+    @Transactional
+    public Main retrieveMemberInfo(final Long memberId) {
+        var member = memberReader.getMember(memberId);
+        var followCount = followReader.getFollowCount(memberId);
+        return new Main(member, followCount);
+    }
 
-	@Override
-	@Transactional
-	public void withdrawal(final Long memberId) {
-		memberStore.deleteMember(memberId);
-	}
+    @Override
+    @Transactional
+    public void withdrawal(final Long memberId) {
+        memberStore.deleteMember(memberId);
+    }
 
-	@Override
-	@Transactional
-	public void updateMemberInfo(final Long memberId, final MemberCommand.MemberUpdateRequest request) {
+    @Override
+    @Transactional
+    public void updateMemberInfo(final Long memberId,
+        final MemberCommand.MemberUpdateRequest request) {
 
-		var member = memberReader.getMember(memberId);
-		AttachFile updatedProfile = getAttachFile(request);
+        var member = memberReader.getMember(memberId);
 
-		var memberRegions = getMemberRegions(request, member);
+        AttachFile updatedProfile = getAttachFile(request);
 
-		member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
-			updatedProfile, memberRegions);
+        var memberRegions = getMemberRegions(request, member);
 
-	}
+        member.updateMemberInfo(request.getNickname(), request.getAges(), request.getGender(),
+            updatedProfile, memberRegions);
 
-	private List<MemberRegion> getMemberRegions(MemberUpdateRequest request, Member member) {
-		if(request.getFavoriteRegionIds() == null) {
-			return null;
-		}
+    }
 
-		return regionReader.getRegions(request.getFavoriteRegionIds())
-			.stream().map(region -> new MemberRegion(member, region))
-			.toList();
-	}
+    private List<MemberRegion> getMemberRegions(MemberUpdateRequest request, Member member) {
+        if (request.getFavoriteRegionIds() == null) {
+            return null;
+        }
 
-	@Override
-	public MemberInfo.NicknameCheckInfo nicknameDuplicateCheck(String nickname) {
+        return regionReader.getRegions(request.getFavoriteRegionIds())
+            .stream().map(region -> new MemberRegion(member, region))
+            .toList();
+    }
 
-		if (memberReader.existsByNickname(nickname.trim())) {
-			return new MemberInfo.NicknameCheckInfo(false);
-		}
-		return new MemberInfo.NicknameCheckInfo(true);
-	}
+    @Override
+    public MemberInfo.NicknameCheckInfo nicknameDuplicateCheck(String nickname) {
 
-	private AttachFile getAttachFile(final MemberUpdateRequest request) {
+        if (memberReader.existsByNickname(nickname.trim())) {
+            return new MemberInfo.NicknameCheckInfo(false);
+        }
+        return new MemberInfo.NicknameCheckInfo(true);
+    }
 
-		if (request.getProfileImageFile() != null) {
-			return fileUploader.upload(request.getProfileImageFile());
-		}
-		return null;
-	}
+    private AttachFile getAttachFile(final MemberUpdateRequest request) {
+        if (request.getProfileImageFile() == null) {
+            return null;
+        }
+        if(Objects.requireNonNull(request.getProfileImageFile().getOriginalFilename()).isEmpty())
+            return AttachFile.of("");
+
+        return fileUploader.upload(request.getProfileImageFile());
+    }
 }
