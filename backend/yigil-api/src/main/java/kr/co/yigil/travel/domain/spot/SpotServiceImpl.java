@@ -30,6 +30,9 @@ import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Slice;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -84,47 +87,44 @@ public class SpotServiceImpl implements SpotService {
 		var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
 	}
 
-	@Override
-	@Transactional(readOnly = true)
-	public Main retrieveSpotInfo(Long spotId) {
-		var spot = spotReader.getSpot(spotId);
-		return new Main(spot);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public Main retrieveSpotInfo(Long spotId) {
+        var spot = spotReader.getSpot(spotId);
+        return new Main(spot);
+    }
 
-	@Override
-	@Transactional
-	public void modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
-		var spot = spotReader.getSpot(spotId);
-		if (!Objects.equals(spot.getMember().getId(), memberId))
-			throw new AuthException(ExceptionCode.INVALID_AUTHORITY);
-		spotSeriesFactory.modify(command, spot);
-	}
+    @Override
+    @Transactional
+    public void modifySpot(ModifySpotRequest command, Long spotId, Long memberId) {
+        var spot = spotReader.getSpot(spotId);
+        if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(ExceptionCode.INVALID_AUTHORITY);
+        spotSeriesFactory.modify(command, spot);
+    }
 
-	@Override
-	@Transactional
-	public void deleteSpot(Long spotId, Long memberId) {
-		var spot = spotReader.getSpot(spotId);
-		if (!Objects.equals(spot.getMember().getId(), memberId))
-			throw new AuthException(
-				ExceptionCode.INVALID_AUTHORITY);
-		spotStore.remove(spot);
-		if (spot.getPlace() != null)
-			placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
-	}
+    @Override
+    @Transactional
+    public void deleteSpot(Long spotId, Long memberId) {
+        var spot = spotReader.getSpot(spotId);
+        if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(
+                ExceptionCode.INVALID_AUTHORITY);
+        spotStore.remove(spot);
+        if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
+    }
 
-	private Place registerNewPlace(RegisterPlaceRequest command) {
-		var placeImageFile = fileUploader.upload(command.getPlaceImageFile());
-		var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
-		return placeStore.store(command.toEntity(placeImageFile, mapStaticImage));
-	}
+    private Place registerNewPlace(RegisterPlaceRequest command) {
+        var placeImageFile = fileUploader.upload(command.getPlaceImageFile());
+        var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
+        return placeStore.store(command.toEntity(placeImageFile, mapStaticImage));
+    }
 
-	@Override
-	@Transactional
-	public MySpotsResponse retrieveSpotList(Long memberId, Selected visibility, Pageable pageable) {
-		var pageSpot = spotReader.getMemberSpotList(memberId, visibility, pageable);
-		List<SpotInfo.SpotListInfo> spotInfoList = pageSpot.getContent().stream()
-			.map(SpotInfo.SpotListInfo::new)
-			.toList();
-		return new MySpotsResponse(spotInfoList, pageSpot.getTotalPages());
-	}
+    @Override
+    @Transactional
+    public MySpotsResponse retrieveSpotList(Long memberId, Selected visibility, Pageable pageable) {
+        var pageSpot = spotReader.getMemberSpotList(memberId, visibility, pageable);
+        List<SpotInfo.SpotListInfo> spotInfoList = pageSpot.getContent().stream()
+            .map(SpotInfo.SpotListInfo::new)
+            .toList();
+        return new MySpotsResponse(spotInfoList, pageSpot.getTotalPages());
+    }
 }
