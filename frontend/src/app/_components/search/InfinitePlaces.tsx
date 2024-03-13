@@ -18,7 +18,7 @@ export default function InfinitePlaces({
   hasNext: boolean;
   currentPage: number;
 }) {
-  const { state, dispatch } = useContext(SearchContext);
+  const [state, dispatch] = useContext(SearchContext);
   const { isLoggedIn } = useContext(MemberContext);
 
   const [isLoading, setIsLoading] = useState(false);
