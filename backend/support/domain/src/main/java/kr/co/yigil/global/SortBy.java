@@ -9,6 +9,7 @@ public enum SortBy {
     CREATED_AT("createdAt"),
     RATE("rate"),
     ID("id"),
+    PLACE_NAME("place.name"),
     LATEST_UPLOADED_TIME("latestUploadedTime");
 
     private String value;

@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.member.Ages;
@@ -31,6 +30,7 @@ import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.course.CourseService;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -175,14 +175,12 @@ public class CourseFacadeTest {
         Long courseId = 1L;
         String title = "Test Course Title";
         double rate = 5.0;
-        LineString path = null;
         boolean isPrivate = false;
-        List<Spot> spots = Collections.emptyList();
-        int representativeSpotOrder = 0;
-        AttachFile mapStaticImageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
+        int numberOfSpots = 3;
+        String imageUrl = "test.jpg";
 
-        Course mockCourse = new Course(courseId, member, title, null, rate, path, isPrivate,
-                spots, representativeSpotOrder, mapStaticImageFile);
+        CourseListDto mockCourse = new CourseListDto(courseId, title, rate, imageUrl,
+                numberOfSpots, null, isPrivate);
 
         CourseInfo.CourseListInfo courseInfo = new CourseInfo.CourseListInfo(mockCourse);
         List<CourseInfo.CourseListInfo> courseList = Collections.singletonList(courseInfo);
