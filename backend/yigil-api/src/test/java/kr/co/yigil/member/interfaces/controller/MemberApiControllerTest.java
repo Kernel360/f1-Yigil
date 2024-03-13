@@ -73,8 +73,8 @@ class MemberApiControllerTest {
             .email("test@yigil.co.kr")
             .nickname("test user")
             .profileImageUrl("https://cdn.igil.co.kr/images/profile.jpg")
-            .ages("10대")
-            .gender("남성")
+            .ages("10")
+            .gender("female")
             .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
             .followerCount(10)
             .followingCount(20)
@@ -114,7 +114,7 @@ class MemberApiControllerTest {
         MultipartFile multipartFile = new MockMultipartFile(
             "profileImageFile",          // 필드 이름
             "hello.txt",                  // 원본 파일 이름
-            "image/jpeg",   // 컨텐츠 타입
+            MediaType.IMAGE_JPEG_VALUE,   // 컨텐츠 타입
             "Hello, World!".getBytes()    // 파일 내용
         );
 
@@ -125,12 +125,14 @@ class MemberApiControllerTest {
                 .message("회원 정보 업데이트 성공")
                 .build()
         );
-        String requestJson = "{\n"
-            + "  \"nickname\": \"nickname\",\n"
-            + "  \"ages\": \"10대\",\n"
-            + "  \"gender\": \"남성\",\n"
-            + "  \"favoriteRegionIds\": [1, 2, 3]\n"
-            + "}";
+
+        String requestJson = """
+              {
+              "nickname": "nickname",
+              "ages": "10대",
+              "gender": "남성",
+              "favoriteRegionIds": [1, 2, 3]
+            }""";
 
         mockMvc.perform(multipart("/api/v1/members")
                 .file("profileImageFile", multipartFile.getBytes())
@@ -201,8 +203,8 @@ class MemberApiControllerTest {
             .nickname("test user")
             .profileImageUrl("https://cdn.yigil.co.kr/images/profile.jpg")
             .favoriteRegions(List.of(favoriteRegion1, favoriteRegion2))
-            .ages("10대")
-            .gender("남성")
+            .ages("10")
+            .gender("male")
             .followerCount(10)
             .followingCount(20)
             .build();

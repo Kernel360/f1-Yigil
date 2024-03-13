@@ -16,7 +16,7 @@ public class RegionInfo {
 
         public Main(Region region) {
             id = region.getId();
-            name = StringUtils.isEmpty(region.getName2()) ? region.getName1() : region.getName1() + " | " + region.getName2();
+            name = region.getName();
         }
     }
 
