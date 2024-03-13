@@ -10,6 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
@@ -24,10 +25,10 @@ import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseInfo.Main;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.locationtech.jts.geom.LineString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -177,11 +178,11 @@ public class CourseServiceImplTest {
         PageRequest pageable = PageRequest.of(0, 10);
 
         // 필요 course 필드: id, title, rate, spotList, mapstaticImageUrl
+        String mapStaticImageUrl = "test.jpg";
 
-        Course mockCourse = new Course(
-            courseId, mock(Member.class), "title", null, 4.5, mock(LineString.class), false,
-            List.of(mock(Spot.class)), 1, mock(AttachFile.class));
-        PageImpl<Course> mockCourseList = new PageImpl<>(List.of(mockCourse));
+        CourseListDto mockCourse = new CourseListDto(courseId, "test", 5.0,
+            mapStaticImageUrl, 1, LocalDateTime.now(), false);
+        PageImpl<CourseListDto> mockCourseList = new PageImpl<>(List.of(mockCourse));
 
 
         when(courseReader.getMemberCourseList(anyLong(), any(), any())).thenReturn(mockCourseList);

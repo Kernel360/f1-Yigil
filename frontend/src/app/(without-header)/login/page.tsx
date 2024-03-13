@@ -3,18 +3,18 @@ export const dynamic = 'force-dynamic';
 import React from 'react';
 
 import KakaoBtn from '@/app/_components/ui/button/Kakao';
-import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
+// import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
 import LoginLogo from '/public/logo/yigil_logo.svg';
 import CloseButton from '@/app/_components/ui/button/CloseButton';
 
 import { kakaoOAuthEndpoint } from '@/app/endpoints/api/auth/callback/kakao/constants';
-import { googleOAuthEndPoint } from '@/app/endpoints/api/auth/callback/google/constants';
+// import { googleOAuthEndPoint } from '@/app/endpoints/api/auth/callback/google/constants';
 
 export default async function LoginPage() {
   const { KAKAO_ID, GOOGLE_CLIENT_ID } = process.env;
 
   const kakaoHref = await kakaoOAuthEndpoint(KAKAO_ID);
-  const googleHref = await googleOAuthEndPoint(GOOGLE_CLIENT_ID);
+  // const googleHref = await googleOAuthEndPoint(GOOGLE_CLIENT_ID);
 
   return (
     <div className="w-full h-full bg-main flex flex-col items-center">
@@ -34,7 +34,7 @@ export default async function LoginPage() {
         </div>
         <div className="w-full mt-10 px-7 flex flex-col items-center justify-center gap-4">
           <KakaoBtn href={kakaoHref} />
-          <GoogleLoginButton href={googleHref} />
+          {/* <GoogleLoginButton href={googleHref} /> */}
         </div>
       </div>
     </div>

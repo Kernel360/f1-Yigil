@@ -12,7 +12,6 @@ import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateRequest;
 import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateResponse;
 import kr.co.yigil.notice.interfaces.dto.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,6 +28,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.yigil.global.SortBy;
+import kr.co.yigil.global.SortOrder;
+import kr.co.yigil.notice.application.NoticeFacade;
+import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeCreateRequest;
+import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeCreateResponse;
+import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeDeleteResponse;
+import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeDetailResponse;
+import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeListResponse;
+import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateRequest;
+import kr.co.yigil.notice.interfaces.dto.NoticeDto.NoticeUpdateResponse;
+import kr.co.yigil.notice.interfaces.dto.mapper.NoticeMapper;
+import lombok.RequiredArgsConstructor;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/notices")
@@ -44,7 +56,7 @@ public class NoticeApiController {
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ){
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize(), Sort.by(
-            Direction.fromString(sortOrder.getValue()), sortBy.getValue()));
+            Sort.Direction.fromString(sortOrder.getValue()), sortBy.getValue()));
         var notice = noticeFacade.getNoticeList(pageRequest);
         var response = noticeMapper.toDto(notice);
         return ResponseEntity.ok().body(response);

@@ -1,14 +1,16 @@
 package kr.co.yigil.member.repository;
 
 import java.util.Optional;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.SocialLoginType;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
 
 public interface MemberRepository extends JpaRepository <Member, Long> {
 
@@ -28,4 +30,6 @@ public interface MemberRepository extends JpaRepository <Member, Long> {
     @Modifying
     @Query(value = "UPDATE member SET status = 'ACTIVE' WHERE id = :memberId", nativeQuery = true)
     void unbanMemberById(@Param("memberId") Long memberId);
+
+	boolean existsByNickname(String nickname);
 }

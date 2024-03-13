@@ -66,8 +66,7 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Ages ages = Ages.NONE;
 
-    @Column
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private final List<MemberRegion> favoriteRegions = new ArrayList<>();
 
     @CreatedDate
@@ -132,14 +131,17 @@ public class Member {
 
     public void updateMemberInfo(final String nickname, final String age, final String gender,
         final AttachFile profileImageFile, final List<MemberRegion> favoriteRegions) {
-        this.nickname = nickname;
-        this.ages = Ages.from(age);
-        this.gender = Gender.from(gender);
+
+        if (nickname != null) this.nickname = nickname;
+        if(age != null) this.ages = Ages.from(age);
+        if(gender != null) this.gender = Gender.from(gender);
         if (profileImageFile != null) {
             this.profileImageUrl = profileImageFile.getFileUrl();
         }
-        this.favoriteRegions.clear();
-        this.favoriteRegions.addAll(favoriteRegions);
+        if(favoriteRegions != null) {
+            this.favoriteRegions.clear();
+            this.favoriteRegions.addAll(favoriteRegions);
+        }
     }
 
     public String getProfileImageUrl() {
@@ -162,5 +164,9 @@ public class Member {
     public boolean isFavoriteRegion(Region region) {
         return favoriteRegions.stream()
             .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
+    }
+
+    public List<Region> getFavoriteRegions() {
+        return favoriteRegions.stream().map(MemberRegion::getRegion).toList();
     }
 }

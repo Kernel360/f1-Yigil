@@ -1320,6 +1320,11 @@ Host: spring.restdocs.test</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].spot_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글(리뷰) ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].place_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">장소 ID</p></td>
 </tr>
 <tr>
@@ -1360,11 +1365,12 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 210
+Content-Length: 233
 
 {
   "content" : [ {
     "spot_id" : 1,
+    "place_id" : null,
     "title" : "test course",
     "rate" : 4.5,
     "image_url" : "images/map.jpg",
@@ -1385,7 +1391,7 @@ Content-Length: 210
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-07 15:24:05 +0900
+Last updated 2024-03-04 19:40:54 +0900
 </div>
 </div>
 </body>

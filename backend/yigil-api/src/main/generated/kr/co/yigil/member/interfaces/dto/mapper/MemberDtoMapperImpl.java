@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-04T18:48:06+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
+    date = "2024-03-11T22:46:01+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class MemberDtoMapperImpl implements MemberDtoMapper {
@@ -48,10 +48,9 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         main1.email( main.getEmail() );
         main1.nickname( main.getNickname() );
         main1.profileImageUrl( main.getProfileImageUrl() );
-        List<Long> list = main.getFavoriteRegionIds();
-        if ( list != null ) {
-            main1.favoriteRegionIds( new ArrayList<Long>( list ) );
-        }
+        main1.age( main.getAge() );
+        main1.gender( main.getGender() );
+        main1.favoriteRegions( favoriteRegionInfoListToFavoriteRegionList( main.getFavoriteRegions() ) );
         main1.followingCount( main.getFollowingCount() );
         main1.followerCount( main.getFollowerCount() );
 
@@ -82,5 +81,44 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
         memberDeleteResponse.message( response.getMessage() );
 
         return memberDeleteResponse.build();
+    }
+
+    @Override
+    public MemberDto.NicknameCheckResponse of(MemberInfo.NicknameCheckInfo response) {
+        if ( response == null ) {
+            return null;
+        }
+
+        MemberDto.NicknameCheckResponse.NicknameCheckResponseBuilder nicknameCheckResponse = MemberDto.NicknameCheckResponse.builder();
+
+        nicknameCheckResponse.available( response.isAvailable() );
+
+        return nicknameCheckResponse.build();
+    }
+
+    protected MemberDto.FavoriteRegion favoriteRegionInfoToFavoriteRegion(MemberInfo.FavoriteRegionInfo favoriteRegionInfo) {
+        if ( favoriteRegionInfo == null ) {
+            return null;
+        }
+
+        MemberDto.FavoriteRegion.FavoriteRegionBuilder favoriteRegion = MemberDto.FavoriteRegion.builder();
+
+        favoriteRegion.id( favoriteRegionInfo.getId() );
+        favoriteRegion.name( favoriteRegionInfo.getName() );
+
+        return favoriteRegion.build();
+    }
+
+    protected List<MemberDto.FavoriteRegion> favoriteRegionInfoListToFavoriteRegionList(List<MemberInfo.FavoriteRegionInfo> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<MemberDto.FavoriteRegion> list1 = new ArrayList<MemberDto.FavoriteRegion>( list.size() );
+        for ( MemberInfo.FavoriteRegionInfo favoriteRegionInfo : list ) {
+            list1.add( favoriteRegionInfoToFavoriteRegion( favoriteRegionInfo ) );
+        }
+
+        return list1;
     }
 }
