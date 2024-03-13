@@ -19,7 +19,7 @@ const MyPageSpotItem = ({
   image_url,
   rate,
   created_date,
-  title,
+  place_name,
   is_private,
   place_id,
   checkedList,
@@ -83,9 +83,9 @@ const MyPageSpotItem = ({
           className="text-2xl leading-7 text-gray-900 font-semibold cursor-pointer hover:underline"
           onClick={() => push(`/place/${place_id}`)}
         >
-          {title}
+          {place_name}
         </button>
-        <div className="flex gap-x-2 items-center justify-between ml-1 text-xl leading-6 text-gray-500 font-semibold">
+        <div className="flex w-full items-center justify-between ml-1 text-xl leading-6 text-gray-500 font-semibold">
           <IconWithCounts
             icon={
               <StarIcon className="w-4 h-4 fill-[#FACC15] stroke-[#FACC15]" />

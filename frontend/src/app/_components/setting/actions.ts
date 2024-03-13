@@ -41,10 +41,10 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
   for (let key in infoData) {
     if (key === 'profile_image_url') {
       if (!infoData[key]) {
-        formData.append('profileImageUrl', '');
+        formData.append('profileImageFile', '');
       } else {
         formData.append(
-          'profileImageUrl',
+          'profileImageFile',
           new File(
             [dataUrlToBlob(infoData[key])],
             `${infoData.nickname} 프로필 이미지.png`,
@@ -70,7 +70,7 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
   });
 
   if (res.ok) {
-    // revalidatePath('/settings', 'layout');
+    revalidatePath('/settings', 'layout');
     return res.json();
   }
 }
