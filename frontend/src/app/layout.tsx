@@ -2,8 +2,6 @@ export const dynamic = 'force-dynamic';
 
 import localFont from 'next/font/local';
 
-import MSWComponent from '@/app/_components/MSWComponent';
-
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
@@ -27,8 +25,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="ko" className={Pretendard.className}>
       <body className="max-w-[430px] mx-auto">
         <div id="modal"></div>
-
-        <MSWComponent />
         <NaverContext ncpClientId={process.env.NAVER_MAPS_CLIENT_ID}>
           {children}
         </NaverContext>
