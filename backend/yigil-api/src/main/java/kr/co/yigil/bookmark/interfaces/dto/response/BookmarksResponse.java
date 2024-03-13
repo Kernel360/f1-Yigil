@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class BookmarksResponse {
+
     private List<BookmarkInfoDto> bookmarks;
     private boolean hasNext;
 
-public BookmarksResponse(List<BookmarkInfoDto> bookmarks, boolean hasNext) {
+    public BookmarksResponse(List<BookmarkInfoDto> bookmarks, boolean hasNext) {
         this.bookmarks = bookmarks;
         this.hasNext = hasNext;
     }

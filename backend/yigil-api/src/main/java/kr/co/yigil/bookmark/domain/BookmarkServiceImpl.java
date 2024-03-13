@@ -1,6 +1,5 @@
 package kr.co.yigil.bookmark.domain;
 
-import kr.co.yigil.bookmark.domain.dto.BookmarkDto;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
@@ -44,8 +43,9 @@ public class BookmarkServiceImpl implements BookmarkService{
 
     @Transactional(readOnly = true)
     @Override
-    public Slice<BookmarkDto> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
+    public Slice<BookmarkInfo> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
         memberReader.validateMember(memberId);
-        return bookmarkReader.getBookmarkSlice(memberId, pageRequest);
+        Slice<Bookmark> bookmarkSlice = bookmarkReader.getBookmarkSlice(memberId, pageRequest);
+        return bookmarkSlice.map(BookmarkInfo::new);
     }
 }
