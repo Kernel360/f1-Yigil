@@ -4,11 +4,13 @@ import Image from 'next/image';
 
 import { useContext } from 'react';
 import { SpotContext } from '@/context/travel/spot/SpotContext';
+import { blobTodataUrl } from '@/utils';
 
 import IconWithCounts from '../../IconWithCounts';
 import ImageCarousel from '../../ui/carousel/ImageCarousel';
 
 import StarIcon from '/public/icons/star.svg';
+import PlaceholderImage from '/public/images/placeholder.png';
 
 const tempImage =
   'http://cdn.yigil.co.kr/images/a188a3e6-6a33-4013-b97d-103d570f958a_%EC%86%94%ED%96%A5%EA%B8%B0%20%EC%A7%80%EB%8F%84%20%EC%9D%B4%EB%AF%B8%EC%A7%80.png';
@@ -42,6 +44,8 @@ export default function AddSpotConfirm() {
           className="rounded-xl object-cover"
           priority
           src={tempImage}
+          placeholder="blur"
+          blurDataURL={PlaceholderImage.blurDataURL}
           alt={`${place.name} 지도 이미지`}
           fill
         />

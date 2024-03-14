@@ -19,7 +19,11 @@ export default function Navigation() {
       <span className="text-xl text-semibold text-gray-900">
         {step.data.label}
       </span>
-      <button onClick={() => dispatch({ type: 'NEXT' })}>다음</button>
+      {step.data.value === 4 ? (
+        <button className="text-blue-500">확정</button>
+      ) : (
+        <button onClick={() => dispatch({ type: 'NEXT' })}>다음</button>
+      )}
     </nav>
   );
 }
