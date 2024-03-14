@@ -11,7 +11,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
 
     void deleteByMemberAndPlace(Member member, Place place);
 
-    Slice<Bookmark> findAllByMember(Member member, Pageable pageable);
+    Slice<Bookmark> findAllByMemberId(Long memberId, Pageable pageable);
 
     boolean existsByMemberIdAndPlaceId(Long memberId, Long placeId);
 }
