@@ -244,6 +244,6 @@ export default function SettingUserForm({
 }
 
 function validationNickname(nickname: string) {
-  const regExp = /^[a-zA-Z0-9ㄱ-힣][a-zA-Z0-9ㄱ-힣]{0,19}$/;
+  const regExp = /^[a-zA-Z0-9ㄱ-ㅣ가-힣][a-zA-Z0-9ㄱ-ㅣ가-힣]{0,19}$/;
   return regExp.test(nickname);
 }
