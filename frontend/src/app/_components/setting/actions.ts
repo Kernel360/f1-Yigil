@@ -31,13 +31,11 @@ export async function patchFavoriteRegion(ids: number[]) {
     body: formData,
   });
   if (res.ok) {
-    // revalidateTag('user');
     return res.json();
   }
 }
 
 export async function patchUserInfo(infoData: { [key: string]: any }) {
-  console.log('info', infoData);
   const formData = new FormData();
   for (let key in infoData) {
     if (key === 'profile_image_url') {

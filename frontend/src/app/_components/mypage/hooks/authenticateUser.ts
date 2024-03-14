@@ -11,6 +11,7 @@ export const authenticateUser = async () => {
     headers: {
       Cookie: `SESSION=${cookie}`,
     },
+    // next: { tags: ['user'] },
   });
   return res.json();
 };
