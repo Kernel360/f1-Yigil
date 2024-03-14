@@ -1,5 +1,6 @@
 package kr.co.yigil.region.domain;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,4 +34,8 @@ public class Region {
 
     @OneToMany(mappedBy = "region", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     private final List<MemberRegion> members = new ArrayList<>();
+
+    public String getName(){
+        return StringUtils.isEmpty(getName2()) ? getName1() : getName1() + " | " + getName2();
+    }
 }

@@ -1445,11 +1445,11 @@ Host: spring.restdocs.test</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].place_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">장소 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].place_name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">장소 제목</p></td>
 </tr>
@@ -1486,13 +1486,13 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 233
+Content-Length: 235
 
 {
   "content" : [ {
     "spot_id" : 1,
-    "place_id" : null,
-    "title" : "test course",
+    "place_id" : 1,
+    "place_name" : "test course",
     "rate" : 4.5,
     "image_url" : "images/map.jpg",
     "created_date" : "2024-01-01",
@@ -2734,8 +2734,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-12T11:44:20.005695"
-
+    "create_date" : "2024-03-14T07:21:08.986912"
   } ],
   "has_next" : false
 }</code></pre>
@@ -4581,14 +4580,14 @@ Host: spring.restdocs.test</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지가 있는지 여부</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarks</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Bookmark의 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarks[].bookmark_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bookmark 아이디</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarks[].place_id</code></p></td>
@@ -4610,6 +4609,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Bookmark한 장소 평점</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지가 있는지 여부</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -4618,16 +4622,17 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 153
+Content-Length: 185
 
 {
   "bookmarks" : [ {
+    "bookmark_id" : 1,
     "place_id" : 1,
-    "place_name" : "placeName",
-    "place_image" : "placeImage",
-    "rate" : 5.0
+    "place_name" : "장소이름",
+    "place_image" : "장소이미지",
+    "rate" : 4.5
   } ],
-  "has_next" : true
+  "has_next" : false
 }</code></pre>
 </div>
 </div>
@@ -6149,7 +6154,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ages</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">연령대</p></td>
 </tr>
@@ -6191,15 +6196,15 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 356
+Content-Length: 354
 
 {
   "member_id" : 1,
   "email" : "test@yigil.co.kr",
   "nickname" : "test user",
   "profile_image_url" : "https://cdn.igil.co.kr/images/profile.jpg",
-  "age" : "10대",
-  "gender" : "남성",
+  "ages" : "10",
+  "gender" : "female",
   "favorite_regions" : [ {
     "id" : 1,
     "name" : "서울"
@@ -6232,14 +6237,15 @@ Content-Length: 356
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/members HTTP/1.1
 Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Length: 108
+Content-Length: 137
 Host: spring.restdocs.test
 
 {
   "nickname" : "nickname",
-  "age" : "10대",
+  "ages" : "10대",
   "gender" : "남성",
-  "favoriteRegionIds" : [ 1, 2, 3 ]
+  "favoriteRegionIds" : [ 1, 2, 3 ],
+  "isProfileEmpty" : false
 }</code></pre>
 </div>
 </div>
@@ -6417,7 +6423,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>age</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ages</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">연령대</p></td>
 </tr>
@@ -6459,15 +6465,15 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 357
+Content-Length: 353
 
 {
   "member_id" : 1,
   "email" : "test@yigil.co.kr",
   "nickname" : "test user",
   "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
-  "age" : "10대",
-  "gender" : "남성",
+  "ages" : "10",
+  "gender" : "male",
   "favorite_regions" : [ {
     "id" : 1,
     "name" : "서울"
@@ -6685,12 +6691,11 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: text/event-stream
-Content-Length: 524
+Content-Length: 501
 
 id:1
 event:test event
-data:{"id":null,"member":{"id":1,"email":"email","social_login_id":"12345678","nickname":"nickname","profile_image_url":"http://cdn.yigil.co.kr/image.jpg","status":"ACTIVE","social_login_type":"KAKAO","gender":"NONE","ages":"NONE","favorite_regions":[],"joined_at":"2024-03-12T11:44:17.925652","modified_at":"2024-03-12T11:44:17.925654","favorite_region_ids":[]},"message":"새로운 알림입니다.","created_at":"2024-03-12T11:44:17.925655","modified_at":"2024-03-12T11:44:17.925656","read":false}</code></pre>
-
+data:{"id":null,"member":{"id":1,"email":"email","social_login_id":"12345678","nickname":"nickname","profile_image_url":"image.jpg","status":"ACTIVE","social_login_type":"KAKAO","gender":"NONE","ages":"NONE","favorite_regions":[],"joined_at":"2024-03-14T07:21:06.970021","modified_at":"2024-03-14T07:21:06.970023","favorite_region_ids":[]},"message":"새로운 알림입니다.","created_at":"2024-03-14T07:21:06.970024","modified_at":"2024-03-14T07:21:06.970025","read":false}</code></pre>
 </div>
 </div>
 </div>

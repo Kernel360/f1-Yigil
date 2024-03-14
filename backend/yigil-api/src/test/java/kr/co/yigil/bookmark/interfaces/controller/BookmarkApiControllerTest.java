@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import kr.co.yigil.bookmark.application.BookmarkFacade;
-import kr.co.yigil.bookmark.domain.dto.BookmarkDto;
+import kr.co.yigil.bookmark.domain.BookmarkInfo;
 import kr.co.yigil.bookmark.interfaces.dto.BookmarkInfoDto;
 import kr.co.yigil.bookmark.interfaces.dto.mapper.BookmarkMapper;
 import kr.co.yigil.bookmark.interfaces.dto.response.BookmarksResponse;
@@ -114,14 +114,15 @@ class BookmarkApiControllerTest {
         BookmarkInfoDto bookmarkInfoDto = new BookmarkInfoDto(1L, 1L, "장소이름", "장소이미지", 4.5);
         BookmarksResponse bookmarksResponse = new BookmarksResponse(List.of(bookmarkInfoDto), false);
 
-        BookmarkDto mockBookmarkDto1 =  mock(BookmarkDto.class);
-        BookmarkDto mockBookmarkDto2 =  mock(BookmarkDto.class);
-        BookmarkDto mockBookmarkDto3 =  mock(BookmarkDto.class);
-        Slice<BookmarkDto> bookmarkSlice = new SliceImpl(List.of(mockBookmarkDto1, mockBookmarkDto2, mockBookmarkDto3), PageRequest.of(0, 5), false);
+        BookmarkInfo mockBookmark1 = mock(BookmarkInfo.class);
+        BookmarkInfo mockBookmark2 = mock(BookmarkInfo.class);
+        BookmarkInfo mockBookmark3 = mock(BookmarkInfo.class);
+
+        Slice<BookmarkInfo> bookmarkSlice = new SliceImpl(List.of(mockBookmark1, mockBookmark2, mockBookmark3), PageRequest.of(0, 5), false);
 
         when(bookmarkFacade.getBookmarkSlice(anyLong(), any(PageRequest.class)))
                 .thenReturn(bookmarkSlice);
-        when(bookmarkMapper.bookmarkSliceToBookmarksResponse(any(Slice.class)))
+        when(bookmarkMapper.toDto(any(Slice.class)))
                 .thenReturn(bookmarksResponse);
 
 
@@ -148,6 +149,6 @@ class BookmarkApiControllerTest {
                         )
                 ));
         verify(bookmarkFacade).getBookmarkSlice(anyLong(), any(PageRequest.class));
-        verify(bookmarkMapper).bookmarkSliceToBookmarksResponse(bookmarkSlice);
+        verify(bookmarkMapper).toDto(bookmarkSlice);
     }
 }
