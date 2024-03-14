@@ -3,6 +3,8 @@
 import { StepContext } from '@/context/travel/step/StepContext';
 import { useContext } from 'react';
 
+import AddSpotMap from './AddSpotMap';
+
 export default function AddSpotData() {
   const [step] = useContext(StepContext);
 
@@ -13,7 +15,7 @@ export default function AddSpotData() {
     case 0:
       return <></>;
     case 1:
-      return <>{label}</>;
+      return <AddSpotMap />;
     case 2:
       return <>{label}</>;
     case 3:

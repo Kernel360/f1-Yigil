@@ -15,8 +15,12 @@ import type { EventFor } from '@/types/type';
  * 로딩 상태 UI 필요
  */
 export default function BaseSearchBar({
+  onFocus,
+  placeholder,
   cancellable,
 }: {
+  onFocus?: (event: EventFor<'input', 'onFocus'>) => void;
+  placeholder?: string;
   cancellable?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -114,10 +118,11 @@ export default function BaseSearchBar({
           className="w-full text-lg font-light bg-transparent outline-none focus:border-b-2 focus:border-black"
           ref={inputRef}
           type="text"
-          placeholder="검색어를 입력하세요."
+          placeholder={placeholder}
           value={state.keyword}
           onChange={(event) => handleChange(event.target.value)}
           onKeyDown={handleEnter}
+          onFocus={onFocus}
         />
         {searchParams.size !== 0 && (
           <button
