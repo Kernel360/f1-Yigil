@@ -12,9 +12,9 @@ export const getMyPageBookmarks = async (
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(
     `${BASE_URL}/v1/bookmarks?page=${pageNo}&size=${size}&sortBy=${
-      sortOrder !== 'rate'
+      sortOrder === 'desc' || sortOrder === 'asc'
         ? `created_at&sortOrder=${sortOrder}`
-        : `rate&sortOrder=desc`
+        : `${sortOrder}&sortOrder=desc`
     }`,
     {
       headers: {

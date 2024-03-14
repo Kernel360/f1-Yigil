@@ -12,7 +12,7 @@ import { scrollToTop } from '@/utils';
 const sortOptions = [
   { label: '최신순', value: 'desc' },
   { label: '오래된순', value: 'asc' },
-  { label: '이름순', value: 'name' },
+  { label: '이름순', value: 'place_name' },
   { label: '별점순', value: 'rate' },
 ];
 

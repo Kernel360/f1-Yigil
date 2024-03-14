@@ -37,15 +37,17 @@ export default function MyPageBookmarkItem({
         }`}
         aria-label="spot-item"
       >
-        <Image
-          src={place_image || ''}
-          alt="spot-image"
-          width={100}
-          height={100}
-          className="w-[100px] h-[100px] rounded-md"
-        />
-        <div className="flex flex-col gap-y-2 grow w-fit">
-          <div className="text-2xl leading-7 text-gray-900 w-fit font-semibold whitespace-wrap overflow-hidden text-ellipsis">
+        <div className="relative w-[100px] h-[100px] shrink-0">
+          <Image
+            src={place_image || ''}
+            alt="spot-image"
+            fill
+            sizes="100vw"
+            className="rounded-md"
+          />
+        </div>
+        <div className="flex flex-col gap-y-2 grow">
+          <div className="text-2xl leading-7 text-gray-900 font-semibold ">
             {place_name}
           </div>
           <div className="flex gap-x-2 ml-1 items-center text-xl leading-6 text-gray-500 font-semibold">
