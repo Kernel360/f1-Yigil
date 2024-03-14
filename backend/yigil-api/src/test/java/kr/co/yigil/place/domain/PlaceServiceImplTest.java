@@ -43,7 +43,11 @@ public class PlaceServiceImplTest {
     private MemberReader memberReader;
 
     @Mock
+    private PlaceRateCalculator placeRateCalculator;
+
+    @Mock
     private SpotReader spotReader;
+
 
     @InjectMocks
     private PlaceServiceImpl placeService;
@@ -59,6 +63,7 @@ public class PlaceServiceImplTest {
         when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(popularPlaceReader.getPopularPlace()).thenReturn(List.of(mockPlace));
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         List<PlaceInfo.Main> popularPlace = placeService.getPopularPlace(mockAccessor);
 
@@ -76,6 +81,7 @@ public class PlaceServiceImplTest {
         when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(popularPlaceReader.getPopularPlaceMore()).thenReturn(List.of(mockPlace));
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         List<PlaceInfo.Main> popularPlaceMore = placeService.getPopularPlaceMore(mockAccessor);
 
@@ -96,6 +102,7 @@ public class PlaceServiceImplTest {
         when(mockPlace.getId()).thenReturn(1L);
         when(placeCacheReader.getSpotCount(anyLong())).thenReturn(1);
         when(bookmarkReader.isBookmarked(anyLong(), anyLong())).thenReturn(true);
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         List<PlaceInfo.Main> popularPlaceByDemographics = placeService.getPopularPlaceByDemographics(1L);
 
@@ -116,6 +123,7 @@ public class PlaceServiceImplTest {
         when(mockPlace.getId()).thenReturn(1L);
         when(placeCacheReader.getSpotCount(anyLong())).thenReturn(1);
         when(bookmarkReader.isBookmarked(anyLong(), anyLong())).thenReturn(true);
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         List<PlaceInfo.Main> popularPlaceByDemographicsMore = placeService.getPopularPlaceByDemographicsMore(
                 1L);
@@ -134,6 +142,7 @@ public class PlaceServiceImplTest {
         when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(placeReader.getPlaceInRegion(1L)).thenReturn(List.of(mockPlace));
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         List<PlaceInfo.Main> placeInRegion = placeService.getPlaceInRegion(1L, mockAccessor);
 
@@ -151,6 +160,7 @@ public class PlaceServiceImplTest {
         when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(placeReader.getPlaceInRegionMore(1L)).thenReturn(List.of(mockPlace));
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         List<PlaceInfo.Main> placeInRegionMore = placeService.getPlaceInRegionMore(1L, mockAccessor);
 
@@ -168,6 +178,7 @@ public class PlaceServiceImplTest {
         when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(placeReader.getPlace(1L)).thenReturn(mockPlace);
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         PlaceInfo.Detail detail = placeService.retrievePlace(1L, mockAccessor);
 
@@ -185,6 +196,7 @@ public class PlaceServiceImplTest {
         when(placeCacheReader.getSpotCount(1L)).thenReturn(1);
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(placeReader.getPlace(1L)).thenReturn(mockPlace);
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         PlaceInfo.Detail detail = placeService.retrievePlace(1L, mockAccessor);
 
@@ -237,6 +249,7 @@ public class PlaceServiceImplTest {
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         Slice<Place> mockSlice = new SliceImpl<>(List.of(mockPlace));
         when(placeReader.getPlacesByKeyword(anyString(), any())).thenReturn(mockSlice);
+        when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
 
         var result = placeService.searchPlace("키워드", mock(Pageable.class), mockAccessor);
 

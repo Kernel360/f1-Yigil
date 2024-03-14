@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PlaceRateCaculatorImpl implements PlaceRateCalculator {
+public class PlaceRateCalculatorImpl implements PlaceRateCalculator {
     private final PlaceCacheReader placeCacheReader;
 
     @Override

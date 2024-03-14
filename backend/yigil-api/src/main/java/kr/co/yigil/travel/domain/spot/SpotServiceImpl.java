@@ -109,8 +109,11 @@ public class SpotServiceImpl implements SpotService {
         var spot = spotReader.getSpot(spotId);
         if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(
                 ExceptionCode.INVALID_AUTHORITY);
-        spotStore.remove(spot);
-        if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
+		if(spot.getPlace() != null){
+			placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
+			placeCacheStore.decrementSpotTotalRateInPlace(spot.getPlace().getId(), spot.getRate());
+		}
+		spotStore.remove(spot);
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {
