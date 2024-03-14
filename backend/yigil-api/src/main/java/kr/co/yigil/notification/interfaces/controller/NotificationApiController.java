@@ -1,10 +1,14 @@
 package kr.co.yigil.notification.interfaces.controller;
 
+import java.time.Duration;
+import java.util.concurrent.TimeoutException;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.SortBy;
 import kr.co.yigil.global.SortOrder;
+import kr.co.yigil.global.exception.ExceptionCode;
+import kr.co.yigil.global.exception.SSETimeoutException;
 import kr.co.yigil.notification.application.NotificationFacade;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.notification.interfaces.dto.mapper.NotificationMapper;
@@ -33,7 +37,14 @@ public class NotificationApiController {
     @GetMapping(path = "/api/v1/notifications/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @MemberOnly
     public Flux<ServerSentEvent<Notification>> streamNotifications(@Auth Accessor accessor) {
-        return notificationFacade.getNotificationStream(accessor.getMemberId());
+        return notificationFacade.getNotificationStream(accessor.getMemberId())
+                .timeout(Duration.ofSeconds(10))
+                .onErrorResume(e -> {
+                    if (e instanceof TimeoutException) {
+                        return Flux.error(new SSETimeoutException(ExceptionCode.SSE_TIMEOUT));
+                    }
+                    return Flux.error(e);
+                });
     }
 
     @GetMapping("/api/v1/notifications")
