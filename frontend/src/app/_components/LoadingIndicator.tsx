@@ -16,7 +16,7 @@ export default function LoadingIndicator({
   return (
     <div
       role="status"
-      className={`w-fit h-fit flex flex-col items-center justify-center px-2 py-1 ${style} ${backgroundColor}`}
+      className={`w-fit h-fit flex flex-col items-center justify-center px-2 py-1 rounded-md ${style} ${backgroundColor}`}
     >
       <svg
         aria-hidden="true"
