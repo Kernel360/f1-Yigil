@@ -57,13 +57,13 @@ const MyPageSpotItem = ({
       <input
         type="checkbox"
         disabled={isCheckDisabled}
-        className="w-[32px] h-[32px]"
+        className="w-[32px] h-[32px] shrink-0"
         checked={isChecked}
         onChange={() => {
           onChangeCheckedList(spot_id, is_private);
         }}
       />
-      <Link href={`/place/${place_id}`} className="relative">
+      <Link href={`/place/${place_id}`} className="relative shrink-0">
         <Image
           src={image_url || ''}
           alt="spot-image"

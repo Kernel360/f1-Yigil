@@ -4,7 +4,6 @@ import { authenticateUser } from '../mypage/hooks/authenticateUser';
 
 export default async function Header() {
   const user = await authenticateUser();
-  console.log(user);
 
   return (
     <div className="w-full py-4 flex justify-between items-center sticky top-0 bg-main z-10">
