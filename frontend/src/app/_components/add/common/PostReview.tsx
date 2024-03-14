@@ -60,8 +60,15 @@ export default function PostReview({
 
     const nextReview: TReview = {
       ...review,
-      content: value,
     };
+
+    if (e.currentTarget.type === 'text') {
+      nextReview.title = value;
+    }
+
+    if (e.currentTarget.type === 'textarea') {
+      nextReview.content = value;
+    }
 
     setReview(nextReview);
   };

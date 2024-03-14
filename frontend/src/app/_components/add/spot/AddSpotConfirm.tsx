@@ -4,7 +4,6 @@ import Image from 'next/image';
 
 import { useContext } from 'react';
 import { SpotContext } from '@/context/travel/spot/SpotContext';
-import { blobTodataUrl } from '@/utils';
 
 import IconWithCounts from '../../IconWithCounts';
 import ImageCarousel from '../../ui/carousel/ImageCarousel';
@@ -22,7 +21,7 @@ export default function AddSpotConfirm() {
 
   const uris = images.map((image) => image.uri);
 
-  const currentData = new Date(Date.now());
+  const currentDate = new Date(Date.now());
 
   return (
     <section className="flex flex-col justify-center grow">
@@ -54,7 +53,7 @@ export default function AddSpotConfirm() {
         <ImageCarousel images={uris} label="" variant="thumbnail" />
       </div>
       <span className="px-3 pb-2 self-end text-gray-400 font-medium">
-        {currentData.toLocaleDateString()}
+        {currentDate.toLocaleDateString()}
       </span>
       <div className="p-4 h-36">
         <div className="h-full p-4 rounded-xl bg-gray-100">
