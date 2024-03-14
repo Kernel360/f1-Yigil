@@ -3,6 +3,6 @@ import { ReactElement } from 'react';
 export interface TPopOverData {
   href?: string;
   label: string;
-  icon: ReactElement;
+  icon?: ReactElement;
   onClick?: () => void;
 }

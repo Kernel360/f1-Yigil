@@ -79,9 +79,12 @@ export const myInfoSchema = z.object({
   member_id: z.number().int(),
   email: z.string().email(),
   nickname: z.string(),
-  profile_image_url: z.string().url(),
+  profile_image_url: z.string(),
+  favorite_regions: z.array(z.object({ id: z.number(), name: z.string() })),
   following_count: z.number().int(),
   follower_count: z.number().int(),
+  ages: z.string(),
+  gender: z.string(),
 });
 
 export const mySpotForPlaceSchema = z.object({
