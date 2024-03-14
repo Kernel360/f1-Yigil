@@ -5,25 +5,24 @@ import StepProvider from '@/context/travel/step/StepContext';
 import PlaceProvider from '@/context/travel/place/PlaceContext';
 import SpotProvider from '@/context/travel/spot/SpotContext';
 import AddTravelMapProvider from '../AddTravelMapProvider';
-
-import AddSpotContent from './AddSpotContent';
 import SearchProvider from '@/context/search/SearchContext';
+import AddSpotContent from './AddSpotContent';
 
 export default function AddSpot({ ncpClientId }: { ncpClientId: string }) {
   return (
     <section className="h-full flex flex-col grow">
       <NaverContext ncpClientId={ncpClientId}>
-        <StepProvider>
-          <PlaceProvider>
-            <SpotProvider>
+        <PlaceProvider>
+          <SpotProvider>
+            <StepProvider>
               <AddTravelMapProvider>
                 <SearchProvider>
                   <AddSpotContent />
                 </SearchProvider>
               </AddTravelMapProvider>
-            </SpotProvider>
-          </PlaceProvider>
-        </StepProvider>
+            </StepProvider>
+          </SpotProvider>
+        </PlaceProvider>
       </NaverContext>
     </section>
   );

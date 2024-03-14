@@ -23,7 +23,8 @@ export interface TCourseAction {
     | 'SET_SPOT_PLACE'
     | 'SET_SPOT_IMAGES'
     | 'SET_SPOT_REVIEW'
-    | 'SET_COURSE_REVIEW';
+    | 'SET_COURSE_REVIEW'
+    | 'INIT_COURSE';
   payload?: unknown;
 }
 
@@ -141,6 +142,9 @@ export default function reducer(
       }
 
       return { ...state, review: result.data };
+    }
+    case 'INIT_COURSE': {
+      return initialCourseState;
     }
   }
 }
