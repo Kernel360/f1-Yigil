@@ -16,9 +16,9 @@ export default function AddSpotReview() {
   return (
     <section className="flex flex-col justify-center grow">
       <InfoTitle label="리뷰" additionalLabel="를 남기세요." />
-      <div className="px-4 pb-4 flex justify-between items-center">
-        <span className="text-gray-400">이름</span>
-        <span className="text-xl">{state.place.name}</span>
+      <div className="px-6 py-10 flex justify-between items-center">
+        <span className="pr-8 text-lg text-gray-400 shrink-0">이름</span>
+        <span className="text-2xl font-medium">{state.place.name}</span>
       </div>
       <PostReview review={state.review} setReview={setReview} />
     </section>
