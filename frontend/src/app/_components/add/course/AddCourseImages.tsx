@@ -21,8 +21,10 @@ export default function AddCourseImages() {
       <SelectSpot key="images" index={index} selectIndex={selectIndex} />
       {index !== -1 && (
         <div className="p-4 flex justify-between items-center">
-          <span className="text-gray-400">이름</span>
-          <span className="text-xl">{state.spots[index].place.name}</span>
+          <span className="pr-8 text-lg text-gray-400 shrink-0">이름</span>
+          <span className="text-2xl font-medium">
+            {state.spots[index].place.name}
+          </span>
         </div>
       )}
       <CourseImageHandler order={index} />
