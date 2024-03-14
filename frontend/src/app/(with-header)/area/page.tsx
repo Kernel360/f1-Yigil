@@ -11,8 +11,14 @@ export default async function SetAreaPage() {
   if (!categories.success)
     return (
       <>
-        <div></div>
-        <ToastMsg title="지역 정보를 불러오는데 실패했습니다." />
+        <nav className="relative py-4 flex justify-center items-center">
+          <BackButton className="absolute left-2" />
+          <span className="text-2xl font-light">지역 선택</span>
+        </nav>
+        <div className="w-full h-full flex flex-col break-keep justify-center items-center text-3xl text-center text-main">
+          지역 정보를 불러오는데 실패했습니다. <br />
+          다시 시도해주세요.
+        </div>
       </>
     );
 

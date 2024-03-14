@@ -1,11 +1,9 @@
 'use server';
 
 import { getBaseUrl } from '@/app/utilActions';
-import { TMyInfo, myInfoSchema } from '@/types/response';
 import { cookies } from 'next/headers';
 import { dataUrlToBlob } from '@/utils';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import z from 'zod';
+import { revalidatePath } from 'next/cache';
 
 export async function checkIsExistNickname(nickname: string) {
   const BASE_URL = await getBaseUrl();
@@ -31,6 +29,7 @@ export async function patchFavoriteRegion(ids: number[]) {
     body: formData,
   });
   if (res.ok) {
+    revalidatePath('/setting', 'layout');
     return res.json();
   }
 }

@@ -97,6 +97,8 @@ export default function SettingUserForm({
       nicknameValidation
     ) {
       setCompleteBtnValidation(true);
+    } else {
+      setCompleteBtnValidation(false);
     }
   }, [userForm, setCompleteBtnValidation, fetchUserData, nicknameValidation]);
 
@@ -209,14 +211,16 @@ export default function SettingUserForm({
             ))}
             <div
               className="flex justify-center items-center gap-x-2 text-xl text-gray-500 bg-gray-200 font-semibold border-[1px] border-gray-300 py-4 leading-5 rounded-md cursor-pointer"
-              onClick={() => setIsDialogOpened(true)}
+              onClick={() =>
+                completeBtnValidation ? setIsDialogOpened(true) : push('/area')
+              }
             >
               지역 선택
             </div>
           </ul>
           {isDialogOpened && (
             <Dialog
-              text="이동하시면 입력하신 정보가 사라집니다."
+              text="기존에 수정하신 정보가 사라집니다."
               handleConfirm={async () => push('/area')}
               closeModal={closeModal}
             />
@@ -240,6 +244,6 @@ export default function SettingUserForm({
 }
 
 function validationNickname(nickname: string) {
-  const regExp = /^[a-zA-Z0-9ㄱ-힣][a-zA-Z0-9ㄱ-힣 ]{0,19}$/;
+  const regExp = /^[a-zA-Z0-9ㄱ-힣][a-zA-Z0-9ㄱ-힣]{0,19}$/;
   return regExp.test(nickname);
 }

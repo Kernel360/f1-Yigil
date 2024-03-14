@@ -9,7 +9,7 @@ import PopOver from '../ui/popover/PopOver';
 import { headerPopOverData } from '../ui/popover/constants';
 import { TMyInfo } from '@/types/response';
 
-export default function HeaderClient({ user }: { user: TMyInfo }) {
+export default function HeaderClient({ user }: { user?: TMyInfo }) {
   const router = useRouter();
   const [isModalOpened, setIsModalOpened] = useState(false);
 

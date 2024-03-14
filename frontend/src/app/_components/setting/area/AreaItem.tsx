@@ -14,6 +14,7 @@ export default function AreaItem({
   selectedRegions: number[];
   setSelectedRegions: Dispatch<SetStateAction<number[]>>;
 }) {
+  const [toastMsg, setToastMsg] = useState('');
   const onClickStar = (e: EventFor<'li', 'onClick'>, id: number) => {
     e.stopPropagation();
     if (selectedRegions.includes(id)) {
@@ -22,6 +23,7 @@ export default function AreaItem({
       patchFavoriteRegion(deleteRegion);
     } else {
       if (selectedRegions.length === 5) {
+        setToastMsg('5개 이상은 등록할 수 없습니다.');
         return;
       }
       setSelectedRegions((prev) => [...prev, id]);
@@ -40,28 +42,28 @@ export default function AreaItem({
     }
   };
   return (
-    <ul className="grid grid-cols-2 bg-gray-100 py-4">
-      {regions.map(({ id, region_name, selected }) => (
-        <li
-          key={id}
-          tabIndex={0}
-          className="flex justify-center items-center gap-x-1 py-1 my-2 cursor-pointer"
-          onClick={(e) => onClickStar(e, id)}
-          onKeyDown={(e) => onKeyDownEnter(e, id)}
-        >
-          <div className={`text-gray-400 leading-none`}>{region_name}</div>
-          <StarIcon
-            className={`w-5 h-5 mb-[3px] ${
-              selectedRegions.includes(id)
-                ? 'fill-[#FACC15] stroke-[#FACC15]'
-                : 'stroke-gray-400'
-            } `}
-          />
-        </li>
-      ))}
-      {selectedRegions.length === 5 && (
-        <ToastMsg title="5개 이상은 등록하실 수 없습니다." timer={1500} />
-      )}
-    </ul>
+    <>
+      <ul className="grid grid-cols-2 bg-gray-100 py-4">
+        {regions.map(({ id, region_name, selected }) => (
+          <li
+            key={id}
+            tabIndex={0}
+            className="flex justify-center items-center gap-x-1 py-1 my-2 cursor-pointer"
+            onClick={(e) => onClickStar(e, id)}
+            onKeyDown={(e) => onKeyDownEnter(e, id)}
+          >
+            <div className={`text-gray-400 leading-none`}>{region_name}</div>
+            <StarIcon
+              className={`w-5 h-5 mb-[3px] ${
+                selectedRegions.includes(id)
+                  ? 'fill-[#FACC15] stroke-[#FACC15]'
+                  : 'stroke-gray-400'
+              } `}
+            />
+          </li>
+        ))}
+      </ul>
+      {toastMsg && <ToastMsg title={toastMsg} timer={1500} />}
+    </>
   );
 }

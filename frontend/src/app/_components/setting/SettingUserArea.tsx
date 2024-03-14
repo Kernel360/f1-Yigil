@@ -2,6 +2,7 @@ import { TMyInfo } from '@/types/response';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import XIcon from '/public/icons/x.svg';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 export default function SettingUserArea({
   userRegions,
@@ -12,32 +13,37 @@ export default function SettingUserArea({
   idx: number;
   deleteInterestedArea: (id: number) => void;
 }) {
-  const [isHover, setIsHover] = useState(false);
+  const onClickStar = (id: number) => {
+    deleteInterestedArea(id);
+  };
+  const onKeyDownEnter = (id: number) => {
+    deleteInterestedArea(id);
+  };
+
   return idx < userRegions.length ? (
     <li
       key={userRegions[idx].id}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      className="relative flex justify-center items-center gap-x-2 text-xl text-main font-semibold border-[1px] border-main py-4 leading-5 rounded-md"
+      className="relative flex justify-center items-center gap-x-2 text-xl text-main font-semibold border-[1px] border-main py-3 leading-5 rounded-md"
     >
-      <div>{userRegions[idx].name}</div>
-      <StarIcon className="w-4 h-4 fill-[#FACC15] stroke-[#FACC15]" />
-      {isHover && (
-        <span
-          className="absolute bg-white border-main border-[1px] rounded-full top-[-8px] right-[-8px] cursor-pointer"
-          onClick={() => deleteInterestedArea(userRegions[idx].id)}
-        >
-          <XIcon className="w-4 h-4 stroke-black stroke-2" />
-        </span>
-      )}
+      <div className="text-center pt-[1px]">{userRegions[idx].name}</div>
+      <span
+        tabIndex={0}
+        className="cursor-pointer"
+        onClick={() => onClickStar(userRegions[idx].id)}
+        onKeyDown={(e) =>
+          e.key === 'Enter' && onKeyDownEnter(userRegions[idx].id)
+        }
+      >
+        <StarIcon className="w-7 h-7 fill-[#FACC15] stroke-[#FACC15]" />
+      </span>
     </li>
   ) : (
     <li
       key={idx}
-      className="flex justify-center items-center gap-x-2 text-xl text-gray-300 font-semibold border-[1px] border-gray-300 py-4 leading-5 rounded-md"
+      className="flex justify-center items-center gap-x-2 text-xl text-gray-300 font-semibold border-[1px] border-gray-300 py-3 leading-5 rounded-md"
     >
       <div>지역</div>
-      <StarIcon className="w-4 h-4 stroke-gray-300" />
+      <StarIcon className="w-7 h-7 stroke-gray-300" />
     </li>
   );
 }
