@@ -4,6 +4,7 @@ import static kr.co.yigil.RestDocumentUtils.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -54,29 +55,31 @@ public class NotificationApiControllerTest {
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext,
-            RestDocumentationContextProvider restDocumentation) {
+        RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation)).build();
+            .apply(documentationConfiguration(restDocumentation)).build();
     }
 
     @DisplayName("Notificationstream이 올바르게 동작하는지 테스트")
     @Test
     void whenStreamNotification_thenReturns200() throws Exception {
-        Member member = new Member(1L, "email", "12345678", "nickname", "image.jpg", SocialLoginType.KAKAO);
+        Member member = new Member(1L, "email", "12345678", "nickname", "image.jpg",
+            SocialLoginType.KAKAO);
         Notification notification = new Notification(member, "새로운 알림입니다.");
-        ServerSentEvent<Notification> sse = ServerSentEvent.builder(notification).id("1").event("test event").build();
+        ServerSentEvent<Notification> sse = ServerSentEvent.builder(notification).id("1")
+            .event("test event").build();
 
         when(notificationFacade.getNotificationStream(anyLong())).thenReturn(Flux.just(sse));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/notifications/stream"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                // .andExpect(content().contentType(MediaType.TEXT_EVENT_STREAM_VALUE))
-                .andDo(document(
-                        "notifications/stream-notification",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        responseBody()
-                ));
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            // .andExpect(content().contentType(MediaType.TEXT_EVENT_STREAM_VALUE))
+            .andDo(document(
+                "notifications/stream-notification",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                responseBody()
+            ));
 
         verify(notificationFacade).getNotificationStream(anyLong());
     }
@@ -85,34 +88,66 @@ public class NotificationApiControllerTest {
     @Test
     void whenGetNotifications_thenReturns200AndNotificationsResponse() throws Exception {
         Member member = new Member(1L, "email", "12345678", "nickname", "image.jpg",
-                SocialLoginType.KAKAO);
+            SocialLoginType.KAKAO);
+        Long notificationId = 1L;
         Notification notification = new Notification(member, "새로운 알림입니다.");
-        when(notificationFacade.getNotificationSlice(anyLong(), any(PageRequest.class))).thenReturn(new SliceImpl<>(List.of(notification)));
-        NotificationInfoDto notificationInfoDto = new NotificationInfoDto("message", "createDate");
-        when(notificationMapper.notificationSliceToNotificationsResponse(new SliceImpl<>(List.of(notification)))).thenReturn(new NotificationsResponse(List.of(notificationInfoDto), false));
+        when(notificationFacade.getNotificationSlice(anyLong(), any(PageRequest.class))).thenReturn(
+            new SliceImpl<>(List.of(notification)));
+        NotificationInfoDto notificationInfoDto1 = new NotificationInfoDto(notificationId,
+            "message", "createDate", true);
+        NotificationInfoDto notificationInfoDto2 = new NotificationInfoDto(2L, "message",
+            "createDate", false);
+        when(notificationMapper.notificationSliceToNotificationsResponse(
+            any())).thenReturn(
+            new NotificationsResponse(List.of(notificationInfoDto1), false));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/notifications"))
-                .andExpect(status().isOk())
-                .andDo(document(
-                        "notifications/get-notifications",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        queryParameters(
-                                parameterWithName("page").description("현재 페이지").optional(),
-                                parameterWithName("size").description("페이지 크기").optional(),
-                                parameterWithName("sortBy").description("정렬 옵션").optional(),
-                                parameterWithName("sortOrder").description("정렬 순서").optional()
-                        ),
-                        responseFields(
-                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 여부"),
-                                subsectionWithPath("notifications").description("notification의 정보"),
-                                fieldWithPath("notifications[].message").description("Notification의 메시지"),
-                                fieldWithPath("notifications[].create_date").type(JsonFieldType.STRING).description("Notification의 생성일시")
-                        )
-                ));
+            .andExpect(status().isOk())
+            .andDo(document(
+                "notifications/get-notifications",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                queryParameters(
+                    parameterWithName("page").description("현재 페이지").optional(),
+                    parameterWithName("size").description("페이지 크기").optional()
+                ),
+                responseFields(
+                    fieldWithPath("has_next").type(JsonFieldType.BOOLEAN)
+                        .description("다음 페이지가 있는지 여부"),
+                    subsectionWithPath("notifications").description("notification의 정보"),
+                    fieldWithPath("notifications[].message").description("Notification의 메시지"),
+                    fieldWithPath("notifications[].create_date").type(JsonFieldType.STRING)
+                        .description("Notification의 생성일시")
+                )
+            ));
 
         verify(notificationFacade).getNotificationSlice(anyLong(), any(PageRequest.class));
-        verify(notificationMapper).notificationSliceToNotificationsResponse(new SliceImpl<>(List.of(notification)));
+        verify(notificationMapper).notificationSliceToNotificationsResponse(
+            new SliceImpl<>(List.of(notification)));
+    }
 
+    @DisplayName("ReadNotification이 올바르게 동작하는지 테스트")
+    @Test
+    void whenReadNotification_thenReturns200AndNotificationReadResponse() throws Exception {
+
+        Long notificationId = 1L;
+
+        mockMvc.perform(post("/api/v1/notifications/{notificationId}/read",
+                notificationId))
+            .andExpect(status().isOk())
+            .andDo(document(
+                "notifications/read-notification",
+                getDocumentRequest(),
+                getDocumentResponse(),
+                pathParameters(
+                    parameterWithName("notificationId").description("읽을 Notification의 ID")
+                ),
+                responseFields(
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("읽은 Notification의 메시지")
+                )
+            ));
+
+        verify(notificationFacade).readNotification(anyLong(), anyLong());
     }
 }

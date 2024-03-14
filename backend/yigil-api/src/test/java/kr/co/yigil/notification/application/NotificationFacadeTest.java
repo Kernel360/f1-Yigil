@@ -1,6 +1,12 @@
 package kr.co.yigil.notification.application;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import kr.co.yigil.notification.domain.Notification;
+import kr.co.yigil.notification.domain.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,9 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.codec.ServerSentEvent;
 import reactor.core.publisher.Flux;
-import kr.co.yigil.notification.domain.NotificationService;
-
-import static org.mockito.Mockito.*;
 
 class NotificationFacadeTest {
 
@@ -51,5 +54,16 @@ class NotificationFacadeTest {
         notificationFacade.getNotificationSlice(memberId, pageRequest);
 
         verify(notificationService, times(1)).getNotificationSlice(memberId, pageRequest);
+    }
+
+    @DisplayName("readNotification 메서드가 NotificationService의 메서드를 잘 호출하는지")
+    @Test
+    void readNotification() {
+        Long memberId = 1L;
+        Long notificationId = 1L;
+
+        notificationFacade.readNotification(memberId, notificationId);
+
+        verify(notificationService, times(1)).readNotification(memberId, notificationId);
     }
 }

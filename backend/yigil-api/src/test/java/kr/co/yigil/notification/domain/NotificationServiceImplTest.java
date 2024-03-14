@@ -1,8 +1,14 @@
 package kr.co.yigil.notification.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import kr.co.yigil.member.Member;
-import kr.co.yigil.member.SocialLoginType;
-import kr.co.yigil.member.domain.MemberReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,15 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Sinks;
-import reactor.core.publisher.Sinks.EmitResult;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
 
 class NotificationServiceImplTest {
 
@@ -73,4 +71,17 @@ class NotificationServiceImplTest {
         verify(notificationReader, times(1)).getNotificationSlice(anyLong(),
                 any(PageRequest.class));
     }
+
+    @DisplayName("When valid parameters, readNotification method should be called correctly")
+    @Test
+    void givenValidParameters_whenReadNotification_thenShouldBeCalledCorrectly() {
+        Notification notification = new Notification(mock(Member.class), "message");
+        when(notificationReader.getNotification(anyLong(), anyLong())).thenReturn(notification);
+
+        notificationService.readNotification(1L, 1L);
+
+        verify(notificationReader, times(1)).getNotification(1L, 1L);
+        assertThat(notification.isRead()).isTrue();
+    }
+
 }
