@@ -1,16 +1,9 @@
 'use client';
 
-import { useContext } from 'react';
-
+import { useState } from 'react';
 import ImageInput from './ImageInput';
 import ImagesContainer from './ImagesContainer';
-import { AddSpotContext } from '../add/spot/SpotContext';
-
-import type { Dispatch } from 'react';
-
-import type { TAddSpotAction } from '../add/spot/SpotContext';
-import { SpotContext } from '@/context/travel/spot/SpotContext';
-import { CourseContext } from '@/context/travel/course/CourseContext';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 export interface TImageData {
   filename: string;
@@ -26,6 +19,8 @@ export default function ImageHandler({
   setImages: (newImages: TImageData[]) => void;
   size?: number;
 }) {
+  const [error, setError] = useState('');
+
   const availableSpace = size - images.length;
 
   const blankSpaces = [...Array(availableSpace)];
@@ -36,6 +31,7 @@ export default function ImageHandler({
         availableSpace={availableSpace}
         images={images}
         setImages={setImages}
+        invokeError={(title: string) => setError(title)}
       />
       <ImagesContainer images={images} setImages={setImages} />
       {blankSpaces.map((_, i) => (
@@ -44,6 +40,8 @@ export default function ImageHandler({
           className="aspect-square border-2 rounded-2xl border-gray-200 shrink-0"
         />
       ))}
+      {/* 에러 토스트 */}
+      {error !== '' && <ToastMsg key={Date.now()} title={error} timer={2000} />}
     </section>
   );
 }
