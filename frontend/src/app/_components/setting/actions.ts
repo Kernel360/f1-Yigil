@@ -19,7 +19,8 @@ export async function patchFavoriteRegion(ids: number[]) {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const formData = new FormData();
-  ids.forEach((id) => formData.append('favoriteRegionIds', id.toString()));
+  if (!ids.length) formData.set('favoriteRegionIds', '');
+  else ids.forEach((id) => formData.append('favoriteRegionIds', id.toString()));
 
   const res = await fetch(`${BASE_URL}/v1/members`, {
     method: 'POST',
