@@ -49,6 +49,12 @@ class SpotServiceImplTest {
 
         Pageable pageable = PageRequest.of(0, 5);
         Spot spot = mock(Spot.class);
+        Place place = mock(Place.class);
+        Member member = mock(Member.class);
+        when(spot.getMember()).thenReturn(member);
+        when(spot.getPlace()).thenReturn(place);
+        when(member.getNickname()).thenReturn("name");
+        when(place.getName()).thenReturn("placeName");
         List<Spot> spots = List.of(spot);
         Page<Spot> pageSpots = new PageImpl<>(spots, pageable, spots.size());
         when(spotReader.getSpots(any(Pageable.class))).thenReturn(pageSpots);

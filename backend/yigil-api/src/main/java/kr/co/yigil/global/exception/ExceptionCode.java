@@ -54,6 +54,9 @@ public enum ExceptionCode {
     // Authorization & Authentication
     INVALID_ACCESS_TOKEN(9101, "올바르지 않은 형식의 Access Token입니다."),
     INVALID_AUTHORITY(9201, "해당 요청에 대한 접근 권한이 없습니다."),
+
+    SSE_TIMEOUT(9301, "SSE 요청 시간이 초과되었습니다."),
+
     INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생했습니다.");
 
     private final int code;

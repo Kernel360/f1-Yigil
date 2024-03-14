@@ -25,8 +25,11 @@ public class SpotDto {
     public static class SpotListInfo {
 
         private Long spotId;
-        private String title;
+        private String placeName;
+        private String description;
         private LocalDateTime createdAt;
+        private String ownerNickname;
+        private String ownerProfileImageUrl;
         private int favorCount;
         private int commentCount;
     }
