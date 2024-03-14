@@ -90,7 +90,7 @@ export default function SettingProfile({
                     <div
                       key={label}
                       onClick={onClick}
-                      className="text-nowrap py-2 px-4"
+                      className="break-keep whitespace-nowrap py-2 px-4"
                     >
                       {label}
                     </div>
