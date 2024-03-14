@@ -21,4 +21,8 @@ public class NotificationFacade {
     public Slice<Notification> getNotificationSlice(Long memberId, PageRequest pageRequest) {
         return notificationService.getNotificationSlice(memberId, pageRequest);
     }
+
+    public void readNotification(Long memberId, Long notificationId) {
+        notificationService.readNotification(memberId, notificationId);
+    }
 }
