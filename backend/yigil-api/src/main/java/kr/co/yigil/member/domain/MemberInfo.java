@@ -49,8 +49,7 @@ public class MemberInfo {
 
         public FavoriteRegionInfo(Region region) {
             this.id = region.getId();
-            String name2 = region.getName2()!=null? " "+ region.getName2() : "";
-            this.name = region.getName1() + name2;
+            this.name = region.getName();
         }
     }
 
