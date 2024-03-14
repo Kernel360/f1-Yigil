@@ -39,4 +39,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     Slice<Object[]> findPlaceReferenceCountGroupByDemographicBetweenDates(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
     boolean existsByPlaceIdAndMemberId(Long placeId, Long memberId);
+
+    @Query("SELECT SUM(s.rate) FROM Spot s WHERE s.place.id = :placeId")
+    Optional<Double> getRateTotalByPlaceId(Long placeId);
 }

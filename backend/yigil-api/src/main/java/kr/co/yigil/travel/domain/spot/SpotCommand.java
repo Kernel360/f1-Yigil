@@ -53,8 +53,8 @@ public class SpotCommand {
         private final String placeAddress;
         private final String placePointJson;
 
-        public Place toEntity(AttachFile placeImage, AttachFile mapStaticImage, double rate) {
-            return new Place(placeName, placeAddress, rate,
+        public Place toEntity(AttachFile placeImage, AttachFile mapStaticImage) {
+            return new Place(placeName, placeAddress,
                     GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage, LocalDateTime.now());
         }
     }

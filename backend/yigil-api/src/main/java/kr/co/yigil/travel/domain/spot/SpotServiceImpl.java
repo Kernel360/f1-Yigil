@@ -81,10 +81,11 @@ public class SpotServiceImpl implements SpotService {
 			throw new BadRequestException(ExceptionCode.SPOT_ALREADY_EXIST_IN_PLACE);
 		}
 
-		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest(), command.getRate()));
+		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
 		var attachFiles = spotSeriesFactory.initAttachFiles(command);
-		var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
-		var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
+		placeCacheStore.incrementSpotCountInPlace(place.getId());
+		placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), command.getRate());
+		spotStore.store(command.toEntity(member, place, false, attachFiles));
 	}
 
     @Override
@@ -112,10 +113,10 @@ public class SpotServiceImpl implements SpotService {
         if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
     }
 
-    private Place registerNewPlace(RegisterPlaceRequest command, double rate) {
+    private Place registerNewPlace(RegisterPlaceRequest command) {
         var placeImageFile = fileUploader.upload(command.getPlaceImageFile());
         var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
-        return placeStore.store(command.toEntity(placeImageFile, mapStaticImage, rate));
+        return placeStore.store(command.toEntity(placeImageFile, mapStaticImage));
     }
 
     @Override

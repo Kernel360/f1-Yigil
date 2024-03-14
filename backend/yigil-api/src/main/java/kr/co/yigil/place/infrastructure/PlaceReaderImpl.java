@@ -9,6 +9,7 @@ import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.place.domain.DemographicPlace;
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCacheReader;
 import kr.co.yigil.place.domain.PlaceCommand.Coordinate;
 import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
 import kr.co.yigil.place.domain.PlaceReader;
@@ -26,6 +27,7 @@ public class PlaceReaderImpl implements PlaceReader {
 
     private final PlaceRepository placeRepository;
     private final DemographicPlaceRepository demographicPlaceRepository;
+    private final PlaceCacheReader placeCacheReader;
 
     @Override
     public Optional<Place> findPlaceByNameAndAddress(String placeName, String placeAddress) {
