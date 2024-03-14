@@ -31,4 +31,10 @@ public class NotificationServiceImpl implements NotificationService{
         return notificationReader.getNotificationSlice(memberId, pageRequest);
     }
 
+    @Transactional
+    @Override
+    public void readNotification(Long memberId, Long notificationId) {
+        Notification notification = notificationReader.getNotification(memberId, notificationId);
+        notification.read();
+    }
 }
