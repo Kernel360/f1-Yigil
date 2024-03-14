@@ -64,7 +64,7 @@ public class BookmarkApiController {
         var bookmarkSlice = bookmarkFacade.getBookmarkSlice(accessor.getMemberId(),
             pageRequest);
 
-        BookmarksResponse response = bookmarkMapper.bookmarkSliceToBookmarksResponse(bookmarkSlice);
+        BookmarksResponse response = bookmarkMapper.toDto(bookmarkSlice);
         return ResponseEntity.ok(response);
     }
 
