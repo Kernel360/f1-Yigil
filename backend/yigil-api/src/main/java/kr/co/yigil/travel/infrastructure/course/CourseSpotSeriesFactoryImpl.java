@@ -45,7 +45,7 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                 .map(registerSpotRequest -> {
                     var registerPlaceRequest = registerSpotRequest.getRegisterPlaceRequest();
                     Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(registerPlaceRequest.getPlaceName(), registerPlaceRequest.getPlaceAddress());
-                    Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest));
+                    Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest, registerSpotRequest.getRate()));
 
                     var attachFiles = new AttachFiles(registerSpotRequest.getFiles().stream()
                             .map(fileUploader::upload)
@@ -65,9 +65,9 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
         return spots;
     }
 
-    private Place registerNewPlace(RegisterPlaceRequest command) {
+    private Place registerNewPlace(RegisterPlaceRequest command, double rate) {
         var placeImage = fileUploader.upload(command.getPlaceImageFile());
         var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
-        return placeStore.store(command.toEntity(placeImage, mapStaticImage));
+        return placeStore.store(command.toEntity(placeImage, mapStaticImage, rate));
     }
 }
