@@ -14,6 +14,8 @@ export const getMyPageBookmarks = async (
     `${BASE_URL}/v1/bookmarks?page=${pageNo}&size=${size}&sortBy=${
       sortOrder === 'desc' || sortOrder === 'asc'
         ? `created_at&sortOrder=${sortOrder}`
+        : sortOrder === 'place_name'
+        ? 'place_name&sortOrder=asc'
         : `${sortOrder}&sortOrder=desc`
     }`,
     {
