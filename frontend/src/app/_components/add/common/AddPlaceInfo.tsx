@@ -11,7 +11,7 @@ export default function AddPlaceInfo() {
   return (
     <section className="p-4 flex flex-col gap-8 grow">
       <div className="px-4 flex justify-between items-center">
-        <span className="text-gray-500">이름</span>
+        <span className="text-gray-500 shrink-0 pr-8">이름</span>
         <span className="font-medium text-2xl">{name}</span>
       </div>
       <div className="px-4 flex justify-between items-center">
