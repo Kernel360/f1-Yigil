@@ -1,6 +1,5 @@
 'use client';
 
-import NaverContext from '@/context/NaverContext';
 import { createContext, useState } from 'react';
 
 import type { ReactNode } from 'react';
