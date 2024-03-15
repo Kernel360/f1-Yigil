@@ -7,6 +7,7 @@ import { blobTodataUrl } from '@/utils';
 import type { TImageData } from './ImageHandler';
 
 import ImageIcon from '/public/icons/image.svg';
+import { EventFor } from '@/types/type';
 
 export default function ImageInput({
   availableSpace,
@@ -22,6 +23,10 @@ export default function ImageInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleUpload(fileList: FileList) {
+    // if (availableSpace === 0) {
+    //   throw Error('더 이상 추가할 수 없습니다!');
+    // }
+
     if (fileList.length > availableSpace) {
       throw Error(`${availableSpace}개 이상 추가할 수 없습니다!`);
     }
@@ -42,6 +47,15 @@ export default function ImageInput({
     const nextImages = [...images, ...deduplicated];
 
     setImages(nextImages);
+  }
+
+  function handleClick(event: EventFor<'input', 'onClick'>) {
+    if (availableSpace === 0) {
+      event.preventDefault();
+      invokeError('더 이상 추가할 수 없습니다!');
+    }
+
+    setTimeout(() => invokeError(''), 1000);
   }
 
   return (
@@ -66,16 +80,7 @@ export default function ImageInput({
         type="file"
         accept="image/*"
         multiple
-        onClick={(e) => {
-          invokeError('');
-
-          if (availableSpace === 0) {
-            e.preventDefault();
-            // 토스트 호출
-            invokeError('더 이상 추가할 수 없습니다!');
-            return;
-          }
-        }}
+        onClick={handleClick}
         onInput={async (event) => {
           invokeError('');
 

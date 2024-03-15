@@ -41,7 +41,16 @@ export default function ImageHandler({
         />
       ))}
       {/* 에러 토스트 */}
-      {error !== '' && <ToastMsg key={Date.now()} title={error} timer={2000} />}
+      {error && (
+        <div className="absolute">
+          <ToastMsg
+            id={Date.now()}
+            key={Date.now()}
+            title={error}
+            timer={1000}
+          />
+        </div>
+      )}
     </section>
   );
 }
