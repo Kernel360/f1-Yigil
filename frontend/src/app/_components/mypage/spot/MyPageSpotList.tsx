@@ -343,8 +343,10 @@ export default function MyPageSpotList({
           )}
           <FloatingActionButton
             popOverData={popOverData}
-            openedIcon={<PlusIcon className="rotate-45 duration-200 z-30" />}
-            closedIcon={<HamburgerIcon className="w-20 h-20" />}
+            openedIcon={
+              <PlusIcon className="w-9 h-9 rotate-45 duration-200 z-30" />
+            }
+            closedIcon={<HamburgerIcon className="w-12 h-12" />}
           />
         </div>
       )}
