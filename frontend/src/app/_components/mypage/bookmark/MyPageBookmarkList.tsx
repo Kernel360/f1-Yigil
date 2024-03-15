@@ -49,7 +49,7 @@ export default function MyPageBookmarkList({
     setAllBookmarkList((prev) => [...prev, ...bookmarkList.data.bookmarks]);
   };
 
-  useIntersectionObserver(ref, getMoreBookMarks);
+  useIntersectionObserver(ref, getMoreBookMarks,hasNext);
 
   const onChangeSortOption = (option: string | number) => {
     if (typeof option === 'number') return;
