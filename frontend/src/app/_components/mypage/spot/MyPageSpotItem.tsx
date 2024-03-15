@@ -80,7 +80,7 @@ const MyPageSpotItem = ({
 
       <div className="flex flex-col items-start gap-y-2 grow">
         <button
-          className="text-2xl leading-7 text-gray-900 font-semibold cursor-pointer hover:underline"
+          className="text-2xl leading-7 text-gray-900 font-semibold cursor-pointer hover:underline text-start"
           onClick={() => push(`/place/${place_id}`)}
         >
           {place_name}
