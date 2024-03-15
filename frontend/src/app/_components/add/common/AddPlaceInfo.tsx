@@ -15,7 +15,7 @@ export default function AddPlaceInfo() {
         <span className="font-medium text-2xl">{name}</span>
       </div>
       <div className="px-4 flex justify-between items-center">
-        <span className="text-gray-500">주소</span>
+        <span className="text-gray-500 shrink-0 pr-8">주소</span>
         <span className="font-medium">{address}</span>
       </div>
       <div className="h-3/5 p-4 relative aspect-video">
