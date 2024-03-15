@@ -5,8 +5,16 @@ import { placeSchema } from '@/types/response';
 import type { TPlace } from '@/types/response';
 
 const keywordSchema = z.string();
+const errorSchema = z.string();
 const searchHistorySchema = z.string();
 const loadingSchema = z.boolean();
+
+const engineSearchSchema = z.array(
+  z.object({
+    name: z.string(),
+    roadAddress: z.string(),
+  }),
+);
 
 const pageSchema = z.number().int();
 
@@ -23,6 +31,34 @@ export type TSearchState = {
   showHistory: boolean;
   keyword: string;
   histories: string[];
+  results:
+    | { status: 'start' }
+    | { status: 'failed'; message: string }
+    | {
+        status: 'success';
+        content:
+          | {
+              from: 'searchEngine';
+              places: { name: string; roadAddress: string }[];
+            }
+          | {
+              from: 'backend';
+              data: {
+                type: 'place';
+                hasNext: boolean;
+                currentPage: number;
+                places: TPlace[];
+              };
+            }
+          | {
+              from: 'backend';
+              data: {
+                type: 'course';
+                hasNext: boolean;
+                currentPage: number;
+              };
+            };
+      };
   result:
     | { status: 'start' }
     | { status: 'searchEngine'; content: string[] }
@@ -45,6 +81,7 @@ export const defaultSearchState: TSearchState = {
   showHistory: false,
   keyword: '',
   histories: [],
+  results: { status: 'start' },
   result: { status: 'start' },
 };
 
@@ -55,7 +92,9 @@ export type TSearchAction = {
     | 'ADD_HISTORY'
     | 'DELETE_HISTORY'
     | 'CLEAR_HISTORY'
+    | 'INIT_RESULT'
     | 'SET_LOADING'
+    | 'SET_ERROR'
     | 'SEARCH_PLACE'
     | 'MORE_PLACE'
     | 'SEARCH_COURSE'
@@ -73,6 +112,7 @@ export function createInitialState(
     loading: false,
     showHistory: showHistory,
     keyword: initialKeyword,
+    results: { status: 'start' },
     result: { status: 'start' },
   };
 }
@@ -124,6 +164,10 @@ export function searchReducer(
       return { ...state, histories: [] };
     }
 
+    case 'INIT_RESULT': {
+      return { ...state, results: { status: 'start' } };
+    }
+
     case 'SET_LOADING': {
       const result = loadingSchema.safeParse(action.payload);
 
@@ -132,6 +176,16 @@ export function searchReducer(
       }
 
       return { ...state, loading: result.data };
+    }
+
+    case 'SET_ERROR': {
+      const result = errorSchema.safeParse(action.payload);
+
+      if (!result.success) {
+        return { ...state };
+      }
+
+      return { ...state, results: { status: 'failed', message: result.data } };
     }
 
     case 'SEARCH_PLACE': {
@@ -205,7 +259,20 @@ export function searchReducer(
     }
 
     case 'SEARCH_NAVER': {
-      return { ...state };
+      const result = engineSearchSchema.safeParse(action.payload);
+
+      if (!result.success) {
+        console.log(result.error.message);
+        return { ...state };
+      }
+
+      return {
+        ...state,
+        results: {
+          status: 'success',
+          content: { from: 'searchEngine', places: result.data },
+        },
+      };
     }
   }
 }

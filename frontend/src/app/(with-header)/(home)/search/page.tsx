@@ -23,9 +23,10 @@ export default async function SearchPage({
     <main className="flex flex-col grow">
       <MemberProvider status={memberStatus}>
         <SearchProvider showHistory initialKeyword={searchParams.keyword}>
-          <BaseSearchBar cancellable />
+          <></>
+          {/* <BaseSearchBar cancellable />
           <hr className="my-4" />
-          <BaseSearchContent />
+          <BaseSearchContent /> */}
         </SearchProvider>
       </MemberProvider>
     </main>

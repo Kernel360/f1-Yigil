@@ -1,14 +1,14 @@
 import { useContext } from 'react';
 import { StepContext } from '@/context/travel/step/StepContext';
 import { PlaceContext } from '@/context/travel/place/PlaceContext';
+import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
 import { isDefaultPlace } from '@/context/travel/place/reducer';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
-import { AddTravelMapContext } from './AddTravelMapProvider';
 
 export default function SelectPlaceNavigation() {
-  const [, setIsOpen] = useContext(AddTravelMapContext);
+  const [, dispatchAddTravel] = useContext(AddTravelMapContext);
   const [, dispatchStep] = useContext(StepContext);
   const [placeState] = useContext(PlaceContext);
 
@@ -17,7 +17,8 @@ export default function SelectPlaceNavigation() {
       console.error('장소를 선택해주세요!');
     }
 
-    setIsOpen(false);
+    dispatchAddTravel({ type: 'CLOSE_RESULT' });
+    dispatchAddTravel({ type: 'CLOSE_MAP' });
     dispatchStep({ type: 'NEXT' });
   }
 
@@ -26,7 +27,13 @@ export default function SelectPlaceNavigation() {
       <span className="absolute left-0 right-0 text-center text-xl text-semibold text-gray-900">
         장소 선택
       </span>
-      <button className="relative" onClick={() => setIsOpen(false)}>
+      <button
+        className="relative"
+        onClick={() => {
+          dispatchAddTravel({ type: 'CLOSE_RESULT' });
+          dispatchAddTravel({ type: 'CLOSE_MAP' });
+        }}
+      >
         <XMarkIcon className="w-6 h-6 stroke-gray-500" />
       </button>
       {!isDefaultPlace(placeState) && (

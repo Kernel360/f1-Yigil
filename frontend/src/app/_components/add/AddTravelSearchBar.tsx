@@ -1,18 +1,48 @@
 'use client';
 
 import { useContext } from 'react';
-import { AddTravelMapContext } from './AddTravelMapProvider';
+import { SearchContext } from '@/context/search/SearchContext';
+import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
 import BaseSearchBar from '../search/BaseSearchBar';
+import { searchNaverAction } from '../search/action';
 
 import type { EventFor } from '@/types/type';
 
 export default function AddTravelSearchBar() {
-  const [, setIsOpen] = useContext(AddTravelMapContext);
+  const [travelMapState, dispatchTravelMap] = useContext(AddTravelMapContext);
+  const [, dispatch] = useContext(SearchContext);
+
+  const {} = travelMapState;
 
   function onFocus(event: EventFor<'input', 'onFocus'>) {
-    setIsOpen(true);
+    dispatchTravelMap({ type: 'OPEN_MAP' });
+    dispatchTravelMap({ type: 'OPEN_RESULT' });
   }
 
-  return <BaseSearchBar placeholder="장소를 입력하세요." onFocus={onFocus} />;
+  async function onSearch(term: string) {
+    const result = await searchNaverAction(term);
+
+    if (result.status === 'failed') {
+      console.error(result.message);
+      dispatch({ type: 'SET_ERROR', payload: result.message });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_NAVER', payload: result.data });
+  }
+
+  function onCancel() {
+    dispatch({ type: 'INIT_RESULT' });
+    dispatch({ type: 'EMPTY_KEYWORD' });
+  }
+
+  return (
+    <BaseSearchBar
+      placeholder="장소를 입력하세요."
+      onCancel={onCancel}
+      onFocus={onFocus}
+      onSearch={onSearch}
+    />
+  );
 }
