@@ -32,7 +32,12 @@ export default function AddTravelSearchItem({
         type: 'SET_CURRENT_PLACE',
         payload: {
           type: 'spot',
-          place: { name, roadAddress, coords: result.content },
+          data: {
+            name,
+            address: roadAddress,
+            coords: result.content,
+            mapImageUrl: '',
+          },
         },
       });
       dispatchAddTravelMap({ type: 'CLOSE_RESULT' });

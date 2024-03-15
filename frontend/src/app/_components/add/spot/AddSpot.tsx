@@ -8,7 +8,13 @@ import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
 import SearchProvider from '@/context/search/SearchContext';
 import AddSpotContent from './AddSpotContent';
 
-export default function AddSpot({ ncpClientId }: { ncpClientId: string }) {
+export default function AddSpot({
+  ncpClientId,
+  initialKeyword,
+}: {
+  ncpClientId: string;
+  initialKeyword: string;
+}) {
   return (
     <section className="h-full flex flex-col grow">
       <NaverContext ncpClientId={ncpClientId}>
@@ -16,7 +22,7 @@ export default function AddSpot({ ncpClientId }: { ncpClientId: string }) {
           <SpotProvider>
             <StepProvider>
               <AddTravelMapProvider>
-                <SearchProvider>
+                <SearchProvider initialKeyword={initialKeyword}>
                   <AddSpotContent />
                 </SearchProvider>
               </AddTravelMapProvider>

@@ -55,16 +55,29 @@ async function getStaticMapUrlFromBackend(name: string, address: string) {
   return await response.json();
 }
 
+type TMapImage =
+  | { status: 'succeed'; data: string }
+  | { status: 'failed'; error: string };
+
 export async function getMap(
   name: string,
   address: string,
   coords: { lat: number; lng: number },
-): Promise<{ status: 'backend' | 'naver' | 'failed'; data?: string }> {
+): Promise<TMapImage> {
   const backendResponse = await getStaticMapUrlFromBackend(name, address);
   const backend = staticMapUrlSchema.safeParse(backendResponse);
 
-  if (backend.success && backend.data.exists) {
-    return { status: 'backend', data: backend.data.map_static_image_url };
+  if (backend.success) {
+    if (backend.data.registered_place) {
+      return { status: 'failed', error: '이미 리뷰를 작성한 장소입니다!' };
+    }
+
+    if (backend.data.exists) {
+      if (!backend.data.map_static_image_url) {
+        return { status: 'failed', error: '알 수 없는 에러입니다!' };
+      }
+      return { status: 'succeed', data: backend.data.map_static_image_url };
+    }
   }
 
   const url = staticMapUrl(300, 200, coords);
@@ -87,7 +100,10 @@ export async function getMap(
       console.error(parsedError.data);
     }
 
-    return { status: 'failed' };
+    return {
+      status: 'failed',
+      error: '검색 엔진으로부터 지도를 받아올 수 없습니다!',
+    };
   }
 
   const image = await naverResponse.blob();
@@ -95,7 +111,7 @@ export async function getMap(
   // Server에서 Client로 넘겨줄 때 blob으로는 넘겨줄 수 없음
   const dataUrl = await blobTodataUrl(image);
 
-  return { status: 'naver', data: dataUrl };
+  return { status: 'succeed', data: dataUrl };
 }
 
 async function parseAddSpotProps(state: TAddSpotProps) {

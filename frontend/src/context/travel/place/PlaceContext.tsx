@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useReducer } from 'react';
-import reducer, { createInitialPlace, defaultPlace } from './reducer';
+import reducer, { createInitialPlace, defaultPlaceState } from './reducer';
 
 import type { Dispatch, ReactNode } from 'react';
 import type { TChoosePlace } from '../schema';
@@ -9,7 +9,7 @@ import type { TPlaceAction, TPlaceState } from './reducer';
 
 export const PlaceContext = createContext<
   [TPlaceState, Dispatch<TPlaceAction>]
->([defaultPlace, () => {}]);
+>([defaultPlaceState, () => {}]);
 
 export default function PlaceProvider({
   course,

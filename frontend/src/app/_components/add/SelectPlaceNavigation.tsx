@@ -3,19 +3,25 @@ import { StepContext } from '@/context/travel/step/StepContext';
 import { PlaceContext } from '@/context/travel/place/PlaceContext';
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
-import { isDefaultPlace } from '@/context/travel/place/reducer';
+import {
+  TPlaceState,
+  isDefaultChoosePlace,
+  isDefaultPlace,
+} from '@/context/travel/place/reducer';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
 
 export default function SelectPlaceNavigation() {
-  const [, dispatchAddTravel] = useContext(AddTravelMapContext);
+  const [addTravelMapState, dispatchAddTravel] =
+    useContext(AddTravelMapContext);
   const [, dispatchStep] = useContext(StepContext);
-  const [placeState] = useContext(PlaceContext);
+  const [placeState, dispatchPlaceState] = useContext(PlaceContext);
 
   function handleConfirm() {
-    if (isDefaultPlace(placeState)) {
-      console.error('장소를 선택해주세요!');
-    }
+    dispatchPlaceState({
+      type: 'SET_PLACE',
+      payload: addTravelMapState.current,
+    });
 
     dispatchAddTravel({ type: 'CLOSE_RESULT' });
     dispatchAddTravel({ type: 'CLOSE_MAP' });
@@ -36,7 +42,7 @@ export default function SelectPlaceNavigation() {
       >
         <XMarkIcon className="w-6 h-6 stroke-gray-500" />
       </button>
-      {!isDefaultPlace(placeState) && (
+      {!isDefaultChoosePlace(addTravelMapState.selectedPlace) && (
         <button className="relative text-lg text-main" onClick={handleConfirm}>
           완료
         </button>

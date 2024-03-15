@@ -1,42 +1,24 @@
-import { z } from 'zod';
+import {
+  TPlaceState,
+  defaultPlaceState,
+  placeStateSchema,
+} from '../travel/place/reducer';
+import { choosePlaceSchema, defaultChoosePlace } from '../travel/schema';
 
-const currentPlaceSchema = z.object({
-  name: z.string(),
-  roadAddress: z.string(),
-  coords: z.object({
-    lng: z.number(),
-    lat: z.number(),
-  }),
-});
-
-type TCurrentPlace = z.infer<typeof currentPlaceSchema>;
-
-const selectedPlaceSchema = z.discriminatedUnion('type', [
-  z.object({ type: z.literal('spot'), place: currentPlaceSchema }),
-  z.object({
-    type: z.literal('course'),
-    places: z.array(currentPlaceSchema),
-  }),
-]);
-
-const defaultCurrentPlace: TCurrentPlace = {
-  name: '',
-  roadAddress: '',
-  coords: { lng: 0, lat: 0 },
-};
+import type { TChoosePlace } from '../travel/schema';
 
 export const defaultAddTravelMapState: TAddTravelMapState = {
   isMapOpen: false,
   isSearchResultOpen: false,
-  current: { type: 'spot', place: defaultCurrentPlace },
+  selectedPlace: defaultChoosePlace,
+  current: defaultPlaceState,
 };
 
 export interface TAddTravelMapState {
   isMapOpen: boolean;
   isSearchResultOpen: boolean;
-  current:
-    | { type: 'spot'; place: TCurrentPlace }
-    | { type: 'course'; places: TCurrentPlace[] };
+  selectedPlace: TChoosePlace;
+  current: TPlaceState;
 }
 
 export type TAddTravelMapAction = {
@@ -45,6 +27,8 @@ export type TAddTravelMapAction = {
     | 'CLOSE_MAP'
     | 'OPEN_RESULT'
     | 'CLOSE_RESULT'
+    | 'SELECT_PLACE'
+    | 'UNSELECT_PLACE'
     | 'SET_CURRENT_PLACE';
   payload?: unknown;
 };
@@ -66,10 +50,21 @@ export default function reducer(
     case 'CLOSE_RESULT': {
       return { ...state, isSearchResultOpen: false };
     }
-    case 'SET_CURRENT_PLACE': {
-      const result = selectedPlaceSchema.safeParse(action.payload);
+    case 'SELECT_PLACE': {
+      const result = choosePlaceSchema.safeParse(action.payload);
 
-      console.log(action.payload);
+      if (!result.success) {
+        console.error(result.error.message);
+        return { ...state };
+      }
+
+      return { ...state, selectedPlace: result.data };
+    }
+    case 'UNSELECT_PLACE': {
+      return { ...state, selectedPlace: defaultChoosePlace };
+    }
+    case 'SET_CURRENT_PLACE': {
+      const result = placeStateSchema.safeParse(action.payload);
 
       if (!result.success) {
         console.error(result.error.message);

@@ -1,40 +1,44 @@
+import z from 'zod';
+
 import { isEqualArray, isEqualPlace } from '../utils';
-import { choosePlaceSchema, manyChoosePlaceSchema } from '../schema';
+import {
+  choosePlaceSchema,
+  defaultChoosePlace,
+  manyChoosePlaceSchema,
+} from '../schema';
 
 import type { TChoosePlace } from '../schema';
 
-export type TPlaceState =
-  | { type: 'spot'; data: TChoosePlace }
-  | { type: 'course'; data: TChoosePlace[] };
+export const placeStateSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('spot'), data: choosePlaceSchema }),
+  z.object({ type: z.literal('course'), data: z.array(choosePlaceSchema) }),
+]);
 
-export const defaultPlace: TPlaceState = {
+export type TPlaceState = z.infer<typeof placeStateSchema>;
+
+export const defaultPlaceState: TPlaceState = {
   type: 'spot',
-  data: {
-    name: '',
-    address: '',
-    mapImageUrl: '',
-    coords: { lng: 0, lat: 0 },
-  },
+  data: defaultChoosePlace,
 };
+
+export function isDefaultChoosePlace(choosePlace: TChoosePlace) {
+  return isEqualPlace(choosePlace, defaultChoosePlace);
+}
 
 /**
  * @impure
  */
 export function isDefaultPlace(state: TPlaceState) {
-  if (state.type !== defaultPlace.type) {
+  if (state.type !== defaultPlaceState.type) {
     throw new Error('올바르지 않은 사용입니다!');
   }
 
-  if (state.type === 'spot' && defaultPlace.type === 'spot') {
-    if (isEqualPlace(state.data, defaultPlace.data)) {
-      return true;
-    }
+  if (state.type === 'spot' && defaultPlaceState.type === 'spot') {
+    return isEqualPlace(state.data, defaultPlaceState.data);
   }
 
-  if (state.type === 'course' && defaultPlace.type === 'course') {
-    if (isEqualArray(state.data, defaultPlace.data, isEqualPlace)) {
-      return true;
-    }
+  if (state.type === 'course' && defaultPlaceState.type === 'course') {
+    return isEqualArray(state.data, defaultPlaceState.data, isEqualPlace);
   }
 
   return false;
@@ -52,7 +56,7 @@ export function createInitialPlace(
     return { type: 'spot', data: place };
   }
 
-  return defaultPlace;
+  return defaultPlaceState;
 }
 
 export interface TPlaceAction {
@@ -70,7 +74,7 @@ export default function reducer(
         return state;
       }
 
-      const result = choosePlaceSchema.safeParse(action.payload);
+      const result = placeStateSchema.safeParse(action.payload);
 
       /**
        * @todo SET_ERROR for Toast
@@ -80,7 +84,7 @@ export default function reducer(
         return state;
       }
 
-      return { ...state, data: result.data };
+      return result.data;
     }
     case 'CHANGE_PLACE_ORDER': {
       if (state.type === 'spot') {

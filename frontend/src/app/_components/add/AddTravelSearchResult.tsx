@@ -10,8 +10,10 @@ export default function AddTravelSearchResult() {
 
   if (state.results.status === 'start') {
     return (
-      <section className="absolute w-full h-full bg-white flex flex-col grow justify-center items-center">
-        장소를 검색해주세요.
+      <section className="absolute w-full h-full bg-white flex flex-col grow justify-center items-center gap-8">
+        <span className="text-6xl">🔍</span>
+        <br />
+        <span className="text-3xl">원하는 장소를 검색해보세요!</span>
       </section>
     );
   }
