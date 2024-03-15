@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Header from './_components/header/Header';
 import XIcon from '/public/icons/x.svg';
+import ToPreviousPage from './_components/ui/button/ToPreviousPage';
 
 export default function NotFound() {
   return (
@@ -26,12 +27,7 @@ export default function NotFound() {
           </p>
         </div>
         <ul className="flex flex-col items-center gap-y-4 ">
-          <Link
-            href={``}
-            className="w-full py-4 flex justify-center items-center bg-gray-100 text-gray-500 text-2xl leading-7 font-semibold rounded-xl hover:bg-gray-200 hover:text-gray-400 active:bg-gray-300 active:text-white"
-          >
-            마이페이지로 바로가기
-          </Link>
+          <ToPreviousPage style="w-full py-4 flex justify-center items-center bg-gray-100 text-gray-500 text-2xl leading-7 font-semibold rounded-xl hover:bg-gray-200 hover:text-gray-400 active:bg-gray-300 active:text-white" />
           <Link
             href="/"
             className="w-full py-4 flex justify-center items-center bg-gray-100 text-gray-500 text-2xl leading-7 font-semibold rounded-xl hover:bg-gray-200 hover:text-gray-400 active:bg-gray-300 active:text-white"
