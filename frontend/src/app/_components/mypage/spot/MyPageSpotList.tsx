@@ -94,6 +94,7 @@ export default function MyPageSpotList({
       );
       if (!spotList.success) {
         setAllSpotList([]);
+        setErrorText('데이터를 불러오는데 실패했습니다');
         return;
       }
       setTotalPageCount(spotList.data.total_pages);

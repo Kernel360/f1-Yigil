@@ -17,6 +17,19 @@ export const myPageSpotListSchema = z.object({
   total_pages: z.number(),
 });
 
+export type TMyPageBookmark = z.infer<typeof myPageBookmarkItemSchema>;
+export const myPageBookmarkItemSchema = z.object({
+  place_id: z.number().int(),
+  place_name: z.string(),
+  place_image: z.string(),
+  rate: z.number(),
+});
+
+export const myPageBookmarkListSchema = z.object({
+  bookmarks: z.array(myPageBookmarkItemSchema),
+  has_next: z.boolean(),
+});
+
 export type TMyPageCourse = z.infer<typeof myPageCourseItemSchema>;
 
 export const myPageCourseItemSchema = z.object({
