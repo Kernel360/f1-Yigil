@@ -5,8 +5,11 @@ import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
 import { getNotifications } from './notificationActions';
 
+import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+
 export default function Notification() {
   useEffect(() => {
+    const EventSource = EventSourcePolyfill || NativeEventSource;
     const eventSource = new EventSource(
       `http://localhost:3000/endpoints/api/notification`,
       // `http://3.34.236.45:8080/api/v1/notifications/stream`,
