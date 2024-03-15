@@ -53,7 +53,7 @@ public class SpotQueryDslRepository {
                 new QSpotListDto(
                     spot.id,
                     spot.place.id,
-                    spot.title,
+                    spot.place.name,
                     spot.rate,
                     spot.place.imageFile.fileUrl,
                     spot.createdAt,

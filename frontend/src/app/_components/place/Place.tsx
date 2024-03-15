@@ -53,12 +53,12 @@ export default function Place({
             sizes="33vw"
           />
         </Link>
-        {/* <BookmarkButton
+        <BookmarkButton
           className="absolute top-4 right-4"
           placeId={id}
           bookmarked={bookmarked}
           isLoggedIn={isLoggedIn}
-        /> */}
+        />
         {variant === 'primary' && (
           <Link tabIndex={-1} href={`place/${id}`}>
             <span className="absolute left-6 bottom-2 select-none text-white text-8xl font-semibold">
@@ -69,7 +69,7 @@ export default function Place({
       </div>
       <section className="flex flex-col gap-2 px-4">
         <Link
-          className="w-fit text-gray-500 text-xl font-medium truncate select-none hover:underline"
+          className="w-full text-gray-500 text-xl font-medium truncate select-none hover:underline text-ellipsis"
           href={`place/${id}`}
         >
           {place_name}

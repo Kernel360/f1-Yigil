@@ -20,7 +20,7 @@ public class MemberInfo {
         private final String email;
         private final String nickname;
         private final String profileImageUrl;
-        private final String age;
+        private final String ages;
         private final String gender;
         private final List<FavoriteRegionInfo> favoriteRegions;
         private final int followingCount;
@@ -31,7 +31,7 @@ public class MemberInfo {
             this.email = member.getEmail();
             this.nickname = member.getNickname();
             this.profileImageUrl = member.getProfileImageUrl();
-            this.age = member.getAges().getViewName();
+            this.ages = member.getAges().getViewName();
             this.gender = member.getGender().getViewName();
             this.followingCount = followCount.getFollowingCount();
             this.followerCount = followCount.getFollowerCount();
@@ -49,8 +49,7 @@ public class MemberInfo {
 
         public FavoriteRegionInfo(Region region) {
             this.id = region.getId();
-            String name2 = region.getName2()!=null? " "+ region.getName2() : "";
-            this.name = region.getName1() + name2;
+            this.name = region.getName();
         }
     }
 

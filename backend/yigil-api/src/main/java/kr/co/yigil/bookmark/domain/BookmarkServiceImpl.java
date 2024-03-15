@@ -43,7 +43,9 @@ public class BookmarkServiceImpl implements BookmarkService{
 
     @Transactional(readOnly = true)
     @Override
-    public Slice<Bookmark> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
-        return bookmarkReader.getBookmarkSlice(memberId, pageRequest);
+    public Slice<BookmarkInfo> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
+        memberReader.validateMember(memberId);
+        Slice<Bookmark> bookmarkSlice = bookmarkReader.getBookmarkSlice(memberId, pageRequest);
+        return bookmarkSlice.map(BookmarkInfo::new);
     }
 }

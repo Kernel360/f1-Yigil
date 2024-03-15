@@ -10,16 +10,32 @@
   <property name="logback" value="logback"/>
 
   <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){green} %clr(%-5level){yellow} %clr(%-40.40logger{39}){cyan} %clr([%X{REQUEST_METHOD} %X{REQUEST_URI}]){blue} %clr(%X{REQUEST_ID}){magenta} %clr(%X{REQUEST_IP}){yellow} %clr(%X{REQUEST_TIME}){blue} %m%n"/>
+  <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{39} - %msg%n"/>
+  <property name="LOG_FILE" value="logs/app.log"/>
   <property name="CONSOLE_LOG_CHARSET" value="${CONSOLE_LOG_CHARSET:-default}"/>
 
   <springProperty name="SLACK_WEBHOOK_URL" source="logging.slack.webhook-uri"/>
 
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>INFO</level>
+      <level>DEBUG</level>
     </filter>
     <encoder>
       <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+      <charset>${CONSOLE_LOG_CHARSET}</charset>
+    </encoder>
+  </appender>
+
+  <!-- File appender 추가 -->
+  <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_FILE}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- 매일 로그 파일 변경 및 7일간 보관 -->
+      <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${FILE_LOG_PATTERN}</pattern>
     </encoder>
   </appender>
 
@@ -51,6 +67,8 @@
 
   <root level="INFO">
     <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
     <appender-ref ref="ASYNC-SLACK"/>
   </root>
+
 </configuration>

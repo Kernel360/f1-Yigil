@@ -40,7 +40,7 @@ public class Travel {
 
     @Column(nullable = false, length = 20)
     private String title;
-
+  
     @Column(columnDefinition = "TEXT")
     private String description;
 

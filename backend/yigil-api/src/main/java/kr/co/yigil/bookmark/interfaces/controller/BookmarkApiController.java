@@ -4,7 +4,6 @@ import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.application.BookmarkFacade;
-import kr.co.yigil.bookmark.domain.Bookmark;
 import kr.co.yigil.bookmark.interfaces.dto.mapper.BookmarkMapper;
 import kr.co.yigil.bookmark.interfaces.dto.response.AddBookmarkResponse;
 import kr.co.yigil.bookmark.interfaces.dto.response.BookmarksResponse;
@@ -14,7 +13,6 @@ import kr.co.yigil.global.SortOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -63,11 +61,11 @@ public class BookmarkApiController {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
             pageable.getPageSize(),
             Sort.by(direction, sortBy.getValue()));
-        Slice<Bookmark> bookmarkSlice = bookmarkFacade.getBookmarkSlice(accessor.getMemberId(),
+        var bookmarkSlice = bookmarkFacade.getBookmarkSlice(accessor.getMemberId(),
             pageRequest);
-        BookmarksResponse response = bookmarkMapper.bookmarkSliceToBookmarksResponse(bookmarkSlice);
+
+        BookmarksResponse response = bookmarkMapper.toDto(bookmarkSlice);
         return ResponseEntity.ok(response);
     }
-
 
 }

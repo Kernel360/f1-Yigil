@@ -1,8 +1,10 @@
 package kr.co.yigil.batch.job;
 
 
+import jakarta.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PopularPlace;
@@ -23,6 +25,8 @@ import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +39,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class PopularPlaceJobConfig {
     private final SpotRepository spotRepository;
     private final PopularPlaceRepository popularPlaceRepository;
+    private final EntityManagerFactory entityManagerFactory;
     @Bean
     public Job popularPlaceJob(
             JobRepository jobRepository,
@@ -67,7 +72,7 @@ public class PopularPlaceJobConfig {
             ItemWriter<PopularPlace> popularPlaceItemWriter
     ) {
         return new StepBuilder("calculatePopularPlacesStep", jobRepository)
-                .<Object[], PopularPlace>chunk(10, platformTransactionManager)
+                .<Object[], PopularPlace>chunk(30, platformTransactionManager)
                 .reader(popularPlaceItemReader)
                 .processor(popularPlaceItemProcessor)
                 .writer(popularPlaceItemWriter)
@@ -75,17 +80,20 @@ public class PopularPlaceJobConfig {
     }
 
     @Bean
-    public RepositoryItemReader<Object[]> popularPlaceItemReader() {
+    public JpaPagingItemReader<Object[]> popularPlaceItemReader() {
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = endDate.minusWeeks(1);
 
-        return new RepositoryItemReaderBuilder<Object[]>()
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("startDate", startDate);
+        parameters.put("endDate", endDate);
+
+        return new JpaPagingItemReaderBuilder<Object[]>()
+                .queryString("SELECT s.place, COUNT(s) AS referenceCount FROM Spot s WHERE s.createdAt BETWEEN :startDate AND :endDate GROUP BY s.place ORDER BY referenceCount DESC")
+                .entityManagerFactory(entityManagerFactory)
                 .name("popularPlaceItemReader")
-                .repository(spotRepository)
-                .methodName("findPlaceReferenceCountBetweenDates")
-                .pageSize(10)
-                .arguments(List.of(startDate, endDate))
-                .sorts(Collections.singletonMap("referenceCount", Direction.DESC))
+                .parameterValues(parameters)
+                .pageSize(30)
                 .build();
     }
 

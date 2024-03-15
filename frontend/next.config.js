@@ -36,12 +36,6 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
         port: '',
         pathname: '/**',
@@ -54,7 +48,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'placehold.co',
+        hostname: 't1.kakaocdn.net',
         port: '',
         pathname: '/**',
       },
