@@ -1,7 +1,12 @@
 'use client';
 
-import { StepContext } from '@/context/travel/step/StepContext';
 import { useContext } from 'react';
+import { StepContext } from '@/context/travel/step/StepContext';
+
+import AddCoursePlace from './AddCoursePlace';
+import AddCourseImages from './AddCourseImages';
+import AddCourseReview from './AddCourseReviews';
+import AddCourseConfirm from './AddCourseConfirm';
 
 export default function AddCourseData() {
   const [step] = useContext(StepContext);
@@ -12,12 +17,12 @@ export default function AddCourseData() {
     case 0:
       return <>{label}</>;
     case 1:
-      return <>{label}</>;
+      return <AddCoursePlace />;
     case 2:
-      return <>{label}</>;
+      return <AddCourseImages />;
     case 3:
-      return <>{label}</>;
+      return <AddCourseReview />;
     case 4:
-      return <>{label}</>;
+      return <AddCourseConfirm />;
   }
 }

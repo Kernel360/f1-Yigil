@@ -90,6 +90,9 @@ export default function Navigation() {
       <span className="text-xl text-semibold text-gray-900">
         {step.data.label}
       </span>
+      {step.data.value === 4 ? (
+        <button className="text-blue-500">확정</button>
+      ) : (
       <button
         onClick={() => {
           const result = canGoNext(spot, course, step);
@@ -101,9 +104,10 @@ export default function Navigation() {
 
           dispatch({ type: 'NEXT' });
         }}
-      >
-        다음
-      </button>
+        >
+          다음
+        </button>
+      )}
       <div className="absolute">
         {error && <ToastMsg title={error} id={Date.now()} timer={2000} />}
       </div>

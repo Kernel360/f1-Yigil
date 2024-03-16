@@ -4,7 +4,7 @@ import { inputImageSchema } from '@/app/_components/images';
 
 const IMAGES_COUNT = 5;
 const PLACES_COUNT = 5;
-const SPOTS_COUNT = 5;
+export const SPOTS_COUNT = 5;
 
 export const coordsSchema = z.object({ lng: z.number(), lat: z.number() });
 export type TCoords = z.infer<typeof coordsSchema>;

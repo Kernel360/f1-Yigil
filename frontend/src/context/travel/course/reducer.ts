@@ -1,4 +1,5 @@
 import {
+  choosePlaceSchema,
   currentSpotImagesSchema,
   currentSpotPlaceSchema,
   currentSpotReviewSchema,
@@ -8,7 +9,7 @@ import {
 } from '../schema';
 import { isEqualSpot } from '../utils';
 
-import type { TCourseState } from '../schema';
+import type { TCourseState, TSpotState } from '../schema';
 
 export const initialCourseState: TCourseState = {
   review: { title: '', content: '', rate: 1 },
@@ -47,7 +48,7 @@ export default function reducer(
       return { ...state, spots: result.data };
     }
     case 'ADD_SPOT': {
-      const result = spotStateSchema.safeParse(action.payload);
+      const result = choosePlaceSchema.safeParse(action.payload);
 
       /**
        * @todo SET_ERROR for Toast
@@ -57,7 +58,16 @@ export default function reducer(
         return { ...state };
       }
 
-      return { ...state, spots: [...state.spots, result.data] };
+      const newSpot: TSpotState = {
+        place: result.data,
+        images: [],
+        review: {
+          rate: 1,
+          content: '',
+        },
+      };
+
+      return { ...state, spots: [...state.spots, newSpot] };
     }
     case 'REMOVE_SPOT': {
       const result = spotStateSchema.safeParse(action.payload);
