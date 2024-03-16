@@ -1,59 +1,66 @@
 'use client';
-import React, { useEffect } from 'react';
-import BackButton from '../place/BackButton';
-import { getBaseUrl } from '@/app/utilActions';
-import { cookies } from 'next/headers';
-import { getNotifications } from './notificationActions';
+import React, { useEffect, useState } from 'react';
+import { getNotificationList } from './notificationActions';
+import {
+  TNotification,
+  notificationResponseSchema,
+} from '@/types/notificationResponse';
+import Select from '../ui/select/Select';
 
-import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+const notificationSelect = [
+  { label: '최신순', value: 'desc' },
+  { label: '오래된순', value: 'asc' },
+];
 
-export default function Notification() {
+export default function Notification({
+  notifications,
+  has_next,
+}: {
+  notifications: TNotification['notifications'];
+  has_next: boolean;
+}) {
+  const [selectOption, setSelectOption] = useState<string>('desc');
+  const [hasNext, setHasNext] = useState(has_next);
+  const [currentPage, setCurrentPage] = useState(1);
+  const size = 5;
+  const [notificationList, setNotificationList] = useState(notifications);
+  const onChangeSelectOption = (option: number | string) => {
+    if (typeof option === 'number') return;
+    setSelectOption(option);
+  };
+
+  const getMoreNotifications = () => {};
+
+  const getNotifications = (page: number, selectOption: string) => {
+    return getNotificationList(page, size, selectOption);
+  };
   useEffect(() => {
-    const EventSource = EventSourcePolyfill || NativeEventSource;
-    const eventSource = new EventSource(
-      `http://localhost:3000/endpoints/api/notification`,
-      // `http://3.34.236.45:8080/api/v1/notifications/stream`,
-      {
-        withCredentials: true,
-      },
-    );
-    // console.log('eve', eventSource);
-    // console.log('ready', eventSource);
+    const list = getNotifications(currentPage, selectOption);
+    const parsed = notificationResponseSchema.safeParse(list);
+    if (!parsed.success) {
+      setNotificationList([]);
+      setHasNext(false);
+      return;
+    }
+    setNotificationList(parsed.data.notifications);
+    setHasNext(parsed.data.has_next);
+  }, [selectOption, currentPage]);
 
-    eventSource.onopen = (e) => {
-      console.log(e);
-      console.log('opened');
-    };
-
-    eventSource.onmessage = (e) => {
-      console.log(e.data);
-    };
-
-    return () => eventSource.close();
-  }, []);
-
-  // useEffect(() => {
-  //   getAlarms();
-  // }, []);
-
-  // const getAlarms = async () => {
-  //   const res = await getNotifications();
-  //   console.log(res);
-  // };
-
-  // eventSource.addEventListener('open', () => {
-  //   console.log('open');
-  // });
-  // eventSource.onerror = () => {
-  //   eventSource.close();
-  // };
+  useEffect(() => {
+    setCurrentPage(1);
+    getNotifications(1, selectOption);
+  }, [selectOption]);
 
   return (
-    <div>
-      <nav className="relative py-4 flex justify-center items-center">
-        <BackButton className="absolute left-2" />
-        <span className="text-2xl font-light">알림</span>
-      </nav>
-    </div>
+    <>
+      <div className="flex justify-end mx-4">
+        <Select
+          list={notificationSelect}
+          selectOption={selectOption}
+          onChangeSelectOption={onChangeSelectOption}
+          defaultValue="최신순"
+        />
+      </div>
+    </>
   );
 }

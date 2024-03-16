@@ -42,7 +42,7 @@ export default function HomeNavigation() {
           <SearchIcon />
         </Link>
       )}
-      <Link href="/notification" className="ml-4">
+      <Link className="ml-4 h-min" href="/notification">
         <NotificationIcon />
       </Link>
     </nav>

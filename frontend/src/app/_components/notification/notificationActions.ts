@@ -3,15 +3,22 @@
 import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
 
-export async function getNotifications() {
+export async function getNotificationList(
+  page: number = 1,
+  size: number = 5,
+  sortOption: string = 'desc',
+) {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get(`SESSION`)?.value;
 
-  const res = await fetch(`${BASE_URL}/v1/notifications`, {
-    headers: {
-      Cookie: `SESSION=${cookie}`,
+  const res = await fetch(
+    `${BASE_URL}/v1/notifications?page=${page}&size=${size}`,
+    {
+      headers: {
+        Cookie: `SESSION=${cookie}`,
+      },
     },
-  });
+  );
   const result = await res.json();
-  console.log(result);
+  return result;
 }
