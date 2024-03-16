@@ -17,6 +17,13 @@ export const choosePlaceSchema = z.object({
 });
 export type TChoosePlace = z.infer<typeof choosePlaceSchema>;
 
+export const defaultChoosePlace: TChoosePlace = {
+  name: '',
+  address: '',
+  mapImageUrl: '',
+  coords: { lng: 0, lat: 0 },
+};
+
 export const manyChoosePlaceSchema = z
   .array(choosePlaceSchema)
   .min(0)

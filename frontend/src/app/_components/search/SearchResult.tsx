@@ -26,13 +26,13 @@ export default function SearchResult({
   async function handleClick(name: string, roadAddress: string) {
     const coords = await getCoords(roadAddress);
 
-    if (!coords) {
+    if (coords.status === 'failed') {
       alert('좌표값을 얻어올 수 없습니다!');
       closeResults();
       return;
     }
 
-    setCurrentFoundPlace({ name, roadAddress, coords });
+    setCurrentFoundPlace({ name, roadAddress, coords: coords.content });
     closeResults();
   }
 

@@ -26,11 +26,11 @@ export function isEqualCoords(first: TCoords, second: TCoords) {
   return results.every((result) => result);
 }
 
+// 지도 이미지는 다를 수 있다고 생각(백엔드 / 네이버)
 export function isEqualPlace(first: TChoosePlace, second: TChoosePlace) {
   const results = [
     first.name === second.name,
     first.address === second.address,
-    first.mapImageUrl === second.mapImageUrl,
     isEqualCoords(first.coords, second.coords),
   ];
 

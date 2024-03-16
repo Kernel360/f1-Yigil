@@ -12,20 +12,20 @@ import { searchPlaces } from './action';
 export default function SearchItem({
   item,
   erasable,
+  onClick,
 }: {
   item: string;
   erasable?: boolean;
+  onClick?: (item: string) => void;
 }) {
   const [, dispatch] = useContext(SearchContext);
 
   async function handleClick(event: EventFor<'button', 'onClick'>) {
-    dispatch({ type: 'SET_LOADING', payload: true });
-    dispatch({ type: 'SET_KEYWORD', payload: item });
+    onClick && onClick(item);
 
-    const json = await searchPlaces(item);
-
-    dispatch({ type: 'SEARCH_PLACE', payload: json });
-    dispatch({ type: 'SET_LOADING', payload: false });
+    // dispatch({ type: 'SET_KEYWORD', payload: item });
+    // const json = await searchPlaces(item);
+    // dispatch({ type: 'SEARCH_PLACE', payload: json });
   }
 
   return (
