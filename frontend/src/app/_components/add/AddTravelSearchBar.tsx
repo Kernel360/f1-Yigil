@@ -10,10 +10,8 @@ import { searchNaverAction } from '../search/action';
 import type { EventFor } from '@/types/type';
 
 export default function AddTravelSearchBar() {
-  const [travelMapState, dispatchTravelMap] = useContext(AddTravelMapContext);
+  const [, dispatchTravelMap] = useContext(AddTravelMapContext);
   const [, dispatch] = useContext(SearchContext);
-
-  const {} = travelMapState;
 
   function onFocus(event: EventFor<'input', 'onFocus'>) {
     dispatchTravelMap({ type: 'OPEN_MAP' });
