@@ -1,31 +1,27 @@
 import { useContext } from 'react';
-import { StepContext } from '@/context/travel/step/StepContext';
-import { PlaceContext } from '@/context/travel/place/PlaceContext';
-import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
-import {
-  TPlaceState,
-  isDefaultChoosePlace,
-  isDefaultPlace,
-} from '@/context/travel/place/reducer';
+import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
+import { SpotContext } from '@/context/travel/spot/SpotContext';
+
+import { isDefaultChoosePlace } from '@/context/travel/place/reducer';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
 
 export default function SelectPlaceNavigation() {
   const [addTravelMapState, dispatchAddTravel] =
     useContext(AddTravelMapContext);
-  const [, dispatchStep] = useContext(StepContext);
-  const [placeState, dispatchPlaceState] = useContext(PlaceContext);
+  const [, dispatchSpot] = useContext(SpotContext);
 
   function handleConfirm() {
-    dispatchPlaceState({
-      type: 'SET_PLACE',
-      payload: addTravelMapState.current,
-    });
+    if (addTravelMapState.current.type === 'spot') {
+      dispatchSpot({
+        type: 'SET_PLACE',
+        payload: addTravelMapState.current.data,
+      });
+    }
 
     dispatchAddTravel({ type: 'CLOSE_RESULT' });
     dispatchAddTravel({ type: 'CLOSE_MAP' });
-    dispatchStep({ type: 'NEXT' });
   }
 
   return (

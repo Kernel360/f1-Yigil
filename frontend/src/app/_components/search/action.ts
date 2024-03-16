@@ -4,6 +4,8 @@ import { cookies } from 'next/headers';
 import { getBaseUrl } from '@/app/utilActions';
 import { dataWithAddressSchema, searchItemsSchema } from '@/types/response';
 
+import { searchPlaceSchema } from '@/context/search/reducer';
+
 function searchUrl(keyword: string) {
   const endpoint = 'https://openapi.naver.com/v1/search/local.json';
   const queryString = `query=${keyword}&display=10&sort=random`;

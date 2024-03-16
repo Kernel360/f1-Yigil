@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 

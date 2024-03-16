@@ -42,11 +42,15 @@ export default function AddSpotPlace() {
           <section className="p-4 flex flex-col gap-8">
             <div className="px-4 flex justify-between items-center">
               <span className="pr-8 text-lg text-gray-400 shrink-0">이름</span>
-              <span className="text-2xl font-medium">{place.name}</span>
+              <span className="text-2xl font-medium text-end">
+                {place.name}
+              </span>
             </div>
             <div className="px-4 flex justify-between items-center">
               <span className="pr-8 text-lg text-gray-400 shrink-0">주소</span>
-              <span className="text-xl font-medium">{place.address}</span>
+              <span className="text-xl font-medium text-end">
+                {place.address}
+              </span>
             </div>
             <div className="my-4 relative aspect-video">
               <Image

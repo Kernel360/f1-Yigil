@@ -4,7 +4,7 @@ import NaverContext from '@/context/NaverContext';
 import StepProvider from '@/context/travel/step/StepContext';
 import PlaceProvider from '@/context/travel/place/PlaceContext';
 import CourseProvider from '@/context/travel/course/CourseContext';
-import AddTravelMapProvider from '../AddTravelMapProvider';
+import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
 import SearchProvider from '@/context/search/SearchContext';
 import AddCourseContent from './AddCourseContent';
 

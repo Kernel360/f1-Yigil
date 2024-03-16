@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { StepContext } from '@/context/travel/step/StepContext';
@@ -8,10 +8,46 @@ import { SpotContext } from '@/context/travel/spot/SpotContext';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 import { isDefaultPlace } from '@/context/travel/place/reducer';
 
+import type { TCourseState, TSpotState } from '@/context/travel/schema';
+import type { TStepState } from '@/context/travel/step/reducer';
+import ToastMsg from '../ui/toast/ToastMsg';
+
+function canGoNext(
+  spot: TSpotState,
+  course: TCourseState,
+  step: TStepState,
+): true | string {
+  switch (step.data.value) {
+    case 0:
+      return true;
+    case 1: {
+      if (
+        step.type === 'spot' &&
+        isDefaultPlace({ type: 'spot', data: spot.place })
+      ) {
+        return '장소를 선택해주세요!';
+      }
+
+      if (step.type === 'course' && course.spots.length === 0) {
+        return '장소를 선택해주세요!';
+      }
+
+      return true;
+    }
+    case 2:
+      return true;
+    case 3:
+      return true;
+    case 4:
+      return true;
+  }
+}
+
 export default function Navigation() {
   const [step, dispatch] = useContext(StepContext);
   const [spot, dispatchSpot] = useContext(SpotContext);
   const [course, dispatchCourse] = useContext(CourseContext);
+  const [error, setError] = useState('');
 
   const { back } = useRouter();
 
@@ -54,7 +90,23 @@ export default function Navigation() {
       <span className="text-xl text-semibold text-gray-900">
         {step.data.label}
       </span>
-      <button onClick={() => dispatch({ type: 'NEXT' })}>다음</button>
+      <button
+        onClick={() => {
+          const result = canGoNext(spot, course, step);
+
+          if (result !== true) {
+            setError(result);
+            return;
+          }
+
+          dispatch({ type: 'NEXT' });
+        }}
+      >
+        다음
+      </button>
+      <div className="absolute">
+        {error && <ToastMsg title={error} id={Date.now()} timer={2000} />}
+      </div>
     </nav>
   );
 }

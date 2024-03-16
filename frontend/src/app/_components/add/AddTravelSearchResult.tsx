@@ -19,12 +19,24 @@ export default function AddTravelSearchResult() {
   }
 
   if (state.results.status === 'failed') {
-    return <>서버에서 값을 가져올 수 없습니다.</>;
+    return (
+      <section className="absolute w-full h-full bg-white flex flex-col grow justify-center items-center gap-8">
+        <span className="text-6xl">🔍</span>
+        <br />
+        <span className="text-3xl">서버에서 값을 가져올 수 없습니다.</span>
+      </section>
+    );
   }
 
   if (state.results.content.from === 'backend') {
     console.error('알 수 없는 오류입니다');
-    return <>알 수 없는 오류입니다.</>;
+    return (
+      <section className="absolute w-full h-full bg-white flex flex-col grow justify-center items-center gap-8">
+        <span className="text-6xl">🔍</span>
+        <br />
+        <span className="text-3xl">알 수 없는 오류입니다.</span>
+      </section>
+    );
   }
 
   const places = state.results.content.places;

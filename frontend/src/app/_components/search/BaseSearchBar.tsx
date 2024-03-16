@@ -4,7 +4,6 @@ import { useRef, useContext } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { SearchContext } from '@/context/search/SearchContext';
-import { searchPlaces } from './action';
 
 import SearchIcon from '/public/icons/search.svg';
 import XMarkIcon from '/public/icons/x-mark.svg';
@@ -77,7 +76,7 @@ export default function BaseSearchBar({
       // Toast
       console.error(error);
     } finally {
-      dispatch({ type: 'SET_LOADING', payload: true });
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
 
     // switch (state.result.status) {
