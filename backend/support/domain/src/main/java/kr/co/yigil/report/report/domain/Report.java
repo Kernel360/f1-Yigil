@@ -6,11 +6,13 @@ import kr.co.yigil.member.Member;
 import kr.co.yigil.report.type.domain.ReportType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Report {
@@ -19,35 +21,42 @@ public class Report {
     private Long id;
 
     @ManyToOne
+    @Enumerated(EnumType.STRING)
     private ReportType reportType;
-    private String Content;
-    private ProcessStatus processStatus;
+
+    private String content;
+
+    @Enumerated(EnumType.STRING)
+    private ProcessStatus status;
 
     @ManyToOne
-    private Member member;
+    private Member reporter;
+
+    private Long travelId;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Report(ReportType reportType, String content, Member member) {
+    public Report(ReportType reportType, String content, Long travelId,  Member reporter) {
         this.reportType = reportType;
-        this.Content = content;
-        this.member = member;
+        this.content = content;
+        this.travelId = travelId;
+        this.reporter = reporter;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
-        this.processStatus = ProcessStatus.NOT_PROCESSED;
+        this.status = ProcessStatus.NOT_PROCESSED;
     }
 
     public void completed() {
-        this.processStatus = ProcessStatus.PROCESSED;
+        this.status = ProcessStatus.PROCESSED;
     }
 
     public void rejected(){
-        this.processStatus = ProcessStatus.REJECTED;
+        this.status = ProcessStatus.REJECTED;
     }
 
     public void readByAdmin(){
-        this.processStatus = ProcessStatus.PROCESSING;
+        this.status = ProcessStatus.PROCESSING;
     }
 
 }
