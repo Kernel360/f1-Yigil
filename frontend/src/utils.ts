@@ -53,3 +53,7 @@ export function parseSearchHistory(historyStr: string | null) {
 
   return result.data;
 }
+
+export const scrollToTop = () => {
+  if (typeof window !== 'undefined') window.scrollTo(0, 0);
+};

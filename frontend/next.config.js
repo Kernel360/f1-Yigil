@@ -47,6 +47,12 @@ const nextConfig = {
         pathname: '/**',
       },
       {
+        protocol: 'https',
+        hostname: 't1.kakaocdn.net',
+        port: '',
+        pathname: '/**',
+      },
+      {
         protocol: 'http',
         hostname: 'cdn.yigil.co.kr',
         port: '',

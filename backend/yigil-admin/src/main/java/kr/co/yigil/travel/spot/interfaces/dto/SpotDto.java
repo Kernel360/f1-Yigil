@@ -3,6 +3,7 @@ package kr.co.yigil.travel.spot.interfaces.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import kr.co.yigil.member.SocialLoginType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,9 +44,13 @@ public class SpotDto {
         private Long spotId;
         private String title;
         private String content;
-        private String placeName;
 
+        private String placeName;
+        private String address;
         private String mapStaticImageUrl;
+        private double x;
+        private double y;
+
         private LocalDateTime createdAt;
         private double rate;
         private int favorCount;
@@ -54,6 +59,8 @@ public class SpotDto {
 
         private Long writerId;
         private String writerName;
+        private String writerProfileImageUrl;
+        private SocialLoginType writerSocialLoginType;
     }
 
 
