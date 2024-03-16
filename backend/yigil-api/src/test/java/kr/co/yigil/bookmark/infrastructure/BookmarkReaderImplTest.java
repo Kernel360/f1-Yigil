@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import kr.co.yigil.bookmark.domain.dto.BookmarkDto;
-import kr.co.yigil.member.domain.MemberReader;
+import kr.co.yigil.bookmark.domain.Bookmark;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,12 +24,6 @@ public class BookmarkReaderImplTest {
     @Mock
     private BookmarkRepository bookmarkRepository;
 
-    @Mock
-    private BookmarkQueryRepository bookmarkQueryRepository;
-
-    @Mock
-    private MemberReader memberReader;
-
     @InjectMocks
     private BookmarkReaderImpl bookmarkReader;
 
@@ -44,12 +38,12 @@ public class BookmarkReaderImplTest {
         Long memberId = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
 
-        BookmarkDto bookmarkDto = new BookmarkDto(1L, 2L, "placeName", "placeImage", 4.5);
-        Slice<BookmarkDto> expectedSlice = new SliceImpl<>(List.of(bookmarkDto));
+        Bookmark bookmarkDto = mock(Bookmark.class);
+        Slice<Bookmark> expectedSlice = new SliceImpl<>(List.of(bookmarkDto));
 
-        when(bookmarkQueryRepository.findAllByMemberId(anyLong(),  any(PageRequest.class))).thenReturn(expectedSlice);
+        when(bookmarkRepository.findAllByMemberId(anyLong(),  any(PageRequest.class))).thenReturn(expectedSlice);
 
-        Slice<BookmarkDto> actualSlice = bookmarkReader.getBookmarkSlice(memberId, pageable);
+        Slice<Bookmark> actualSlice = bookmarkReader.getBookmarkSlice(memberId, pageable);
 
         assertEquals(expectedSlice, actualSlice);
     }

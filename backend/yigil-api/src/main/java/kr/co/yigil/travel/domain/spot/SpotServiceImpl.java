@@ -83,8 +83,8 @@ public class SpotServiceImpl implements SpotService {
 
 		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
 		var attachFiles = spotSeriesFactory.initAttachFiles(command);
-		var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
 		var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
+		var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
 	}
 
     @Override
