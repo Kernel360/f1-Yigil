@@ -2,7 +2,11 @@ import React from 'react';
 import Header from '../_components/header/Header';
 import BackButton from '../_components/place/BackButton';
 
-export default function Notificationlayout() {
+export default function Notificationlayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <Header />
@@ -10,6 +14,7 @@ export default function Notificationlayout() {
         <BackButton className="absolute left-2" />
         <span className="text-2xl font-light">알림</span>
       </nav>
+      {children}
     </>
   );
 }

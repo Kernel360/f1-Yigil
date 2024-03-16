@@ -1,11 +1,15 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { getNotificationList } from './notificationActions';
-import {
-  TNotification,
-  notificationResponseSchema,
-} from '@/types/notificationResponse';
+import { TNotification } from '@/types/notificationResponse';
 import Select from '../ui/select/Select';
+import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import { scrollToTop } from '@/utils';
+import LoadingIndicator from '../LoadingIndicator';
+import NotificationItem from './NotificationItem';
+import { subtract } from '@dnd-kit/utilities';
+import NotificationList from './NotificationList';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 const notificationSelect = [
   { label: '최신순', value: 'desc' },
@@ -22,38 +26,74 @@ export default function Notification({
   const [selectOption, setSelectOption] = useState<string>('desc');
   const [hasNext, setHasNext] = useState(has_next);
   const [currentPage, setCurrentPage] = useState(1);
-  const size = 5;
-  const [notificationList, setNotificationList] = useState(notifications);
+  const [notificationList, setNotificationList] =
+    useState<TNotification['notifications']>(notifications);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState('');
+  const size = 15;
+  const ref = useRef(null);
   const onChangeSelectOption = (option: number | string) => {
     if (typeof option === 'number') return;
     setSelectOption(option);
   };
-
-  const getMoreNotifications = () => {};
-
-  const getNotifications = (page: number, selectOption: string) => {
-    return getNotificationList(page, size, selectOption);
-  };
-  useEffect(() => {
-    const list = getNotifications(currentPage, selectOption);
-    const parsed = notificationResponseSchema.safeParse(list);
-    if (!parsed.success) {
-      setNotificationList([]);
-      setHasNext(false);
+  const getMoreNotifications = async () => {
+    setCurrentPage((prev) => (prev += 1));
+    const notifications = await getNotificationList(
+      currentPage + 1,
+      size,
+      selectOption,
+    );
+    if (!notifications.success) {
+      setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
+      setIsLoading(false);
       return;
     }
-    setNotificationList(parsed.data.notifications);
-    setHasNext(parsed.data.has_next);
-  }, [selectOption, currentPage]);
+    setHasNext((prev) => (prev = notifications.data.has_next));
+    setNotificationList((prev) => [
+      ...prev,
+      ...notifications.data.notifications,
+    ]);
+  };
+
+  useIntersectionObserver(ref, getMoreNotifications, hasNext);
+
+  const getNotifications = async (
+    page: number,
+    size: number,
+    selectOption: string,
+  ) => {
+    try {
+      setIsLoading(true);
+      const notifications = await getNotificationList(
+        currentPage,
+        size,
+        selectOption,
+      );
+
+      if (!notifications.success) {
+        setNotificationList([]);
+        setErrorText('알림 데이터를 불러오는데 실패했습니다.');
+        setIsLoading(false);
+        return;
+      }
+      setHasNext((prev) => (prev = notifications.data.has_next));
+      setNotificationList(notifications.data.notifications);
+    } catch (error) {
+      setErrorText('알림 데이터를 불러오는데 실패했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     setCurrentPage(1);
-    getNotifications(1, selectOption);
+    scrollToTop();
+    getNotifications(1, size, selectOption);
   }, [selectOption]);
 
   return (
-    <>
-      <div className="flex justify-end mx-4">
+    <div className="w-full flex flex-col mx-4">
+      <div className="flex justify-end">
         <Select
           list={notificationSelect}
           selectOption={selectOption}
@@ -61,6 +101,18 @@ export default function Notification({
           defaultValue="최신순"
         />
       </div>
-    </>
+      <ul className="flex flex-col gap-y-3">
+        <NotificationList notifications={notificationList} />
+      </ul>
+      <div className="flex justify-center my-8" ref={ref}>
+        {hasNext &&
+          (isLoading ? (
+            <LoadingIndicator loadingText="데이터 로딩중" />
+          ) : (
+            <button className="py-1 px-8 bg-gray-200 rounded-lg">더보기</button>
+          ))}
+      </div>
+      {errorText && <ToastMsg title={errorText} timer={2000} id={Date.now()} />}
+    </div>
   );
 }

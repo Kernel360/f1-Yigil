@@ -5,6 +5,7 @@ const notificationSchema = z.object({
   create_date: z.coerce
     .date()
     .transform((date) => date.toLocaleDateString('ko-kr')),
+  // read: z.boolean(),
 });
 
 export const notificationResponseSchema = z.object({
