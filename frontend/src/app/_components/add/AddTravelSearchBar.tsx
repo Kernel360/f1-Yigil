@@ -3,6 +3,7 @@
 import { useContext } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
+import { defaultPlaceState } from '@/context/travel/place/reducer';
 
 import BaseSearchBar from '../search/BaseSearchBar';
 import { searchNaverAction } from '../search/action';
@@ -14,6 +15,11 @@ export default function AddTravelSearchBar() {
   const [, dispatch] = useContext(SearchContext);
 
   function onFocus(event: EventFor<'input', 'onFocus'>) {
+    dispatchTravelMap({
+      type: 'SET_CURRENT_PLACE',
+      payload: defaultPlaceState,
+    });
+    dispatchTravelMap({ type: 'UNSELECT_PLACE' });
     dispatchTravelMap({ type: 'OPEN_MAP' });
     dispatchTravelMap({ type: 'OPEN_RESULT' });
   }

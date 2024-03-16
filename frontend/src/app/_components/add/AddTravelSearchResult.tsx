@@ -1,12 +1,20 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
 
 import AddTravelSearchItem from './AddTravelSelectItem';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 export default function AddTravelSearchResult() {
   const [state] = useContext(SearchContext);
+  const [error, setError] = useState('');
+
+  function invokeError(err: string) {
+    setError(err);
+
+    setTimeout(() => setError(''), 2000);
+  }
 
   if (state.results.status === 'start') {
     return (
@@ -43,12 +51,14 @@ export default function AddTravelSearchResult() {
 
   return (
     <section className="absolute px-6 w-full h-full bg-white grow">
-      {places.map((place) => (
+      {places.map((place, index) => (
         <AddTravelSearchItem
-          key={`${place.name}-${place.roadAddress}`}
+          key={`${place.name}-${place.roadAddress}-${index}`}
           place={place}
+          setError={invokeError}
         />
       ))}
+      {error && <ToastMsg id={Date.now()} title={error} timer={2000} />}
     </section>
   );
 }

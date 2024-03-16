@@ -8,8 +8,6 @@ import AddSpotImages from './AddSpotImages';
 import AddSpotReview from './AddSpotReview';
 import AddSpotConfirm from './AddSpotConfirm';
 
-import AddSpotPlace from './AddSpotPlace';
-
 export default function AddSpotData() {
   const [step] = useContext(StepContext);
 

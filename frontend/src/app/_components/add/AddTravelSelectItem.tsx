@@ -10,8 +10,10 @@ import { getCoords } from '../search/action';
 
 export default function AddTravelSearchItem({
   place,
+  setError,
 }: {
   place: { name: string; roadAddress: string };
+  setError: (error: string) => void;
 }) {
   const [, dispatch] = useContext(SearchContext);
   const [, dispatchAddTravelMap] = useContext(AddTravelMapContext);
@@ -23,7 +25,7 @@ export default function AddTravelSearchItem({
       const result = await getCoords(place.roadAddress);
 
       if (result.status === 'failed') {
-        throw new Error(result.message);
+        throw new Error('위치를 얻어올 수 없습니다!');
       }
 
       const { name, roadAddress } = place;
@@ -43,10 +45,18 @@ export default function AddTravelSearchItem({
       dispatchAddTravelMap({ type: 'CLOSE_RESULT' });
     } catch (error) {
       console.error(error);
+      if (error instanceof Error) {
+        setError(error.message);
+      }
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
   }
 
-  return <BaseSearchItem label={place.name} onSelect={onSelect} />;
+  return (
+    <BaseSearchItem
+      label={place.name.replace('&amp;', '&')}
+      onSelect={onSelect}
+    />
+  );
 }
