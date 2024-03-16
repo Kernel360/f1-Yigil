@@ -1,19 +1,14 @@
 package kr.co.yigil.comment.domain;
 
-import java.util.List;
-import kr.co.yigil.comment.domain.CommentInfo.ChildrenListInfo;
-import kr.co.yigil.comment.domain.CommentInfo.ChildrenPageComments;
-import kr.co.yigil.comment.domain.CommentInfo.CommentList;
-import kr.co.yigil.comment.domain.CommentInfo.CommentListUnit;
-import kr.co.yigil.comment.domain.CommentInfo.ParentListInfo;
-import kr.co.yigil.comment.domain.CommentInfo.ParentPageComments;
-import kr.co.yigil.comment.domain.CommentInfo.ReplyListUnit;
+import kr.co.yigil.comment.domain.CommentInfo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> comments = commentReader.getParentComments(travelId, pageRequest);
 
         Pageable pageable = comments.getPageable();
-        Long total = comments.getTotalElements();
+        long total = comments.getTotalElements();
 
         List<CommentListUnit> commentListUnits = comments.getContent().stream().map(
             comment -> {

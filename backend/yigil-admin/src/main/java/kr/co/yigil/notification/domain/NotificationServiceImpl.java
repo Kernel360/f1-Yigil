@@ -18,8 +18,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public void saveNotification(NotificationType notificationType, Long adminId,
-                                 Long receiverId) {
+    public void saveNotification(NotificationType notificationType, Long adminId, Long receiverId) {
         Admin sender = adminReader.getAdmin(adminId);
         Member receiver = memberReader.getMember(receiverId);
         Notification notification = notificationFactory.createNotification(notificationType, sender, receiver);

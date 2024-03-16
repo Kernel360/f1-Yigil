@@ -7,8 +7,11 @@ public enum NotificationType {
     COURSE_DELETED((sender, receiver) -> sender + "님이 일정을 삭제하셨습니다"),
     COMMENT_DELETE((sender, receiver) -> sender + "님이 댓글을 삭제하셨습니다"),
 
-    REPORT_READ((sender, receiver) -> sender + "님이 리포트를 읽었습니다"),
-    REPORT_REJECTED((sender, receiver) -> sender + "님이 리포트를 거절하셨습니다");
+    REPORT_READ("관리자 %s님이 %s님의 신고를 접수하였습니다."::formatted),
+    REPORT_REJECTED((sender, receiver) -> sender + "님이 리포트를 거절하셨습니다"),
+    REPORT_REPLY("관리자 %s님이 %s님의 신고 내용에 대한 답변을 이메일로 보냈습니다."::formatted),
+    REPORT_DELETED("관리자 %s님이 %s님의 신고를 삭제하셨습니다"::formatted);
+    ;
 
     private final BinaryOperator<String> messageComposer;
 

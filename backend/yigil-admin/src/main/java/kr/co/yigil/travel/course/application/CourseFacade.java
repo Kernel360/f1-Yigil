@@ -29,7 +29,7 @@ public class CourseFacade {
     public void deleteCourse(Long courseId) {
         Long memberId = courseService.deleteCourse(courseId);
         Long adminId = adminService.getAdminId();
-        notificationService.sendNotification(NotificationType.COURSE_DELETED, adminId, memberId);
+        notificationService.saveNotification(NotificationType.COURSE_DELETED, adminId, memberId);
     }
 
 

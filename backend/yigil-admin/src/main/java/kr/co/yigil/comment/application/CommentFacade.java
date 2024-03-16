@@ -33,7 +33,7 @@ public class CommentFacade {
     public void deleteComment(Long commentId) {
         Long memberId = commentService.deleteComment(commentId);
         Long adminId = adminService.getAdminId();
-        notificationService.sendNotification(NotificationType.COMMENT_DELETE, adminId, memberId);
+        notificationService.saveNotification(NotificationType.COMMENT_DELETE, adminId, memberId);
     }
 
 }
