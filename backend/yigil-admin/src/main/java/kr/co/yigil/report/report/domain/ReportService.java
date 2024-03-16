@@ -1,13 +1,12 @@
 package kr.co.yigil.report.report.domain;
 
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ReportService {
 
-    Page<Report> getAllReports(int page, int size);
+    ReportInfo.ReportPageInfo getAllReports(Pageable pageable, Long memberId, Long typeId, String keyword);
 
-    Page<Report> getReportsByType(Long typeId, int page, int size);
+    Long processReport(ReportCommand.ReportReplyCommand command);
 
-    Report readReport(Long id);
-
+    void deleteReport(Long id);
 }

@@ -7,6 +7,7 @@ import kr.co.yigil.report.report.domain.ReportReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +31,8 @@ public class ReportReaderImpl implements ReportReader {
     }
 
     @Override
-    public Page<Report> getAllReports(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return reportRepository.findAll(pageRequest);
+    public Page<Report> getAllReports(Pageable pageable, Long memberId, Long typeId, String keyword) {
+
+        return reportRepository.findAllByMemberIdByReportTypeIdAndContentContains(memberId, typeId, keyword, pageable);
     }
 }
