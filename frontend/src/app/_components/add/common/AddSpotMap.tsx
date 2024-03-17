@@ -1,3 +1,5 @@
+// 삭제 예정
+
 'use client';
 import React, {
   Dispatch,

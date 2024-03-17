@@ -14,7 +14,6 @@ export default function AddSpotContent() {
   return (
     <section className="relative flex flex-col grow">
       <div className="h-16 flex flex-col justify-center">
-        {!state.isMapOpen && <SpotProgress />}
         {state.isMapOpen ? (
           <AddSpotSelectPlaceNavigation />
         ) : (
@@ -22,6 +21,7 @@ export default function AddSpotContent() {
         )}
       </div>
       <div className="flex flex-col grow">
+        {!state.isMapOpen && <SpotProgress />}
         <AddSpotData />
       </div>
     </section>

@@ -9,7 +9,13 @@ import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
 import SearchProvider from '@/context/search/SearchContext';
 import AddCourseContent from './AddCourseContent';
 
-export default function AddCourse({ ncpClientId }: { ncpClientId: string }) {
+export default function AddCourse({
+  ncpClientId,
+  initialKeyword,
+}: {
+  ncpClientId: string;
+  initialKeyword: string;
+}) {
   return (
     <section className="h-full flex flex-col grow">
       <NaverContext ncpClientId={ncpClientId}>
@@ -18,7 +24,7 @@ export default function AddCourse({ ncpClientId }: { ncpClientId: string }) {
             <CourseWithNewStepProvider>
               <CourseWithoutNewStepProvider>
                 <AddTravelMapProvider>
-                  <SearchProvider>
+                  <SearchProvider initialKeyword={initialKeyword}>
                     <AddCourseContent />
                   </SearchProvider>
                 </AddTravelMapProvider>

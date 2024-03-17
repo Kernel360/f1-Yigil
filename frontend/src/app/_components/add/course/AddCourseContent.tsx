@@ -26,13 +26,6 @@ export default function AddCourseContent() {
   return (
     <section className="relative flex flex-col grow">
       <div className="h-16 flex flex-col justify-center">
-        {!state.isMapOpen && (
-          <CourseProgress
-            currentValue={
-              method === 'with-new' ? withNew.value : withoutNew.value
-            }
-          />
-        )}
         {state.isMapOpen ? (
           <AddCourseSelectPlaceNavigation />
         ) : (
@@ -45,6 +38,13 @@ export default function AddCourseContent() {
         )}
       </div>
       <div className="flex flex-col grow">
+        {!state.isMapOpen && (
+          <CourseProgress
+            currentValue={
+              method === 'with-new' ? withNew.value : withoutNew.value
+            }
+          />
+        )}
         <AddCourseData method={method} onSelect={onSelectMethod} />
       </div>
     </section>

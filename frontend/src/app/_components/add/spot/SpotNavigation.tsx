@@ -7,7 +7,10 @@ import { SpotStepContext } from '@/context/travel/step/spot/SpotStepContext';
 import { SpotContext } from '@/context/travel/spot/SpotContext';
 import { isDefaultPlace } from '@/context/travel/place/reducer';
 
+import { postSpot } from './action';
+
 import ToastMsg from '@/app/_components/ui/toast/ToastMsg';
+import Dialog from '@/app/_components/ui/dialog/Dialog';
 
 import type { TSpotState } from '@/context/travel/schema';
 import type { TSpotStepState } from '@/context/travel/step/spot/reducer';
@@ -33,9 +36,29 @@ function canGoNext(spot: TSpotState, step: TSpotStepState): true | string {
 export default function SpotNavigation() {
   const [step, dispatch] = useContext(SpotStepContext);
   const [spot, dispatchSpot] = useContext(SpotContext);
+
+  const [isDialogOpen, setDialogIsOpen] = useState(false);
   const [error, setError] = useState('');
 
-  const { back } = useRouter();
+  const { push, back } = useRouter();
+
+  function closeModal() {
+    setDialogIsOpen(false);
+  }
+
+  async function handleConfirm() {
+    const result = await postSpot(spot);
+
+    if (result.status === 'succeed') {
+      setDialogIsOpen(false);
+      push('/add/spot/confirm');
+      return;
+    }
+
+    setDialogIsOpen(false);
+    setError(result.message);
+    setTimeout(() => setError(''), 2000);
+  }
 
   return (
     <nav className="mx-4 flex justify-between items-center">
@@ -59,7 +82,17 @@ export default function SpotNavigation() {
       </button>
       <span className="text-xl text-semibold text-gray-900">{step.label}</span>
       {step.value === 4 ? (
-        <button className="text-blue-500">확정</button>
+        <button className="text-blue-500" onClick={() => setDialogIsOpen(true)}>
+          확정
+          {isDialogOpen && (
+            <Dialog
+              text="장소를 확정하시겠나요?"
+              loadingText="장소 기록 중..."
+              handleConfirm={handleConfirm}
+              closeModal={closeModal}
+            />
+          )}
+        </button>
       ) : (
         <button
           onClick={() => {
