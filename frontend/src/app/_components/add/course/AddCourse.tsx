@@ -1,7 +1,8 @@
 'use client';
 
 import NaverContext from '@/context/NaverContext';
-import StepProvider from '@/context/travel/step/StepContext';
+import CourseWithNewStepProvider from '@/context/travel/step/course/CourseWithNewStepContext';
+import CourseWithoutNewStepProvider from '@/context/travel/step/course/CourseWithoutNewStepContext';
 import PlaceProvider from '@/context/travel/place/PlaceContext';
 import CourseProvider from '@/context/travel/course/CourseContext';
 import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
@@ -14,13 +15,15 @@ export default function AddCourse({ ncpClientId }: { ncpClientId: string }) {
       <NaverContext ncpClientId={ncpClientId}>
         <PlaceProvider course>
           <CourseProvider>
-            <StepProvider course>
-              <AddTravelMapProvider>
-                <SearchProvider>
-                  <AddCourseContent />
-                </SearchProvider>
-              </AddTravelMapProvider>
-            </StepProvider>
+            <CourseWithNewStepProvider>
+              <CourseWithoutNewStepProvider>
+                <AddTravelMapProvider>
+                  <SearchProvider>
+                    <AddCourseContent />
+                  </SearchProvider>
+                </AddTravelMapProvider>
+              </CourseWithoutNewStepProvider>
+            </CourseWithNewStepProvider>
           </CourseProvider>
         </PlaceProvider>
       </NaverContext>

@@ -1,7 +1,7 @@
 'use client';
 
 import NaverContext from '@/context/NaverContext';
-import StepProvider from '@/context/travel/step/StepContext';
+import SpotStepProvider from '@/context/travel/step/spot/SpotStepContext';
 import PlaceProvider from '@/context/travel/place/PlaceContext';
 import SpotProvider from '@/context/travel/spot/SpotContext';
 import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
@@ -20,13 +20,13 @@ export default function AddSpot({
       <NaverContext ncpClientId={ncpClientId}>
         <PlaceProvider>
           <SpotProvider>
-            <StepProvider>
+            <SpotStepProvider>
               <AddTravelMapProvider>
                 <SearchProvider initialKeyword={initialKeyword}>
                   <AddSpotContent />
                 </SearchProvider>
               </AddTravelMapProvider>
-            </StepProvider>
+            </SpotStepProvider>
           </SpotProvider>
         </PlaceProvider>
       </NaverContext>

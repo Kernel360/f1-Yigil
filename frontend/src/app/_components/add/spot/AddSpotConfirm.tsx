@@ -11,9 +11,6 @@ import ImageCarousel from '../../ui/carousel/ImageCarousel';
 import StarIcon from '/public/icons/star.svg';
 import PlaceholderImage from '/public/images/placeholder.png';
 
-const tempImage =
-  'http://cdn.yigil.co.kr/images/a188a3e6-6a33-4013-b97d-103d570f958a_%EC%86%94%ED%96%A5%EA%B8%B0%20%EC%A7%80%EB%8F%84%20%EC%9D%B4%EB%AF%B8%EC%A7%80.png';
-
 export default function AddSpotConfirm() {
   const [spot] = useContext(SpotContext);
 
@@ -42,7 +39,7 @@ export default function AddSpotConfirm() {
         <Image
           className="rounded-xl object-cover"
           priority
-          src={tempImage}
+          src={place.mapImageUrl}
           placeholder="blur"
           blurDataURL={PlaceholderImage.blurDataURL}
           alt={`${place.name} 지도 이미지`}
