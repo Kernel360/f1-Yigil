@@ -24,12 +24,12 @@ public class ReportApiController {
 
     @PostMapping
     @MemberOnly
-    public ResponseEntity<ReportDto.ReportResponse> report(
+    public ResponseEntity<ReportDto.ReportResponse> submitReport(
             @RequestBody ReportDto.TravelReportCreateRequest request,
             @Auth Accessor accessor
     ) {
         ReportCommand.CreateCommand command = requestMapper.toCommand(request, accessor.getMemberId());
-        reportFacade.report(command);
+        reportFacade.submitReport(command);
         return ResponseEntity.ok(new ReportDto.ReportResponse("신고글이 등록되었습니다."));
     }
 
@@ -68,7 +68,6 @@ public class ReportApiController {
         reportFacade.deleteReport(accessor.getMemberId(), id);
         return ResponseEntity.ok(new ReportDto.ReportResponse("신고글이 삭제되었습니다."));
     }
-
 
     @GetMapping("/types")
     @MemberOnly

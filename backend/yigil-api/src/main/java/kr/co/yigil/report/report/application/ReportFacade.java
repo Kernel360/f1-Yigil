@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class ReportFacade {
     private final ReportService reportService;
 
-    public void report(ReportCommand.CreateCommand command) {
+    public void submitReport(ReportCommand.CreateCommand command) {
         reportService.submitReport(command);
     }
 

@@ -33,7 +33,7 @@ public class ReportApiController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public ResponseEntity<ReportDto.ProcessResultResponse> replyToReport(
             @PathVariable Long id,
             @RequestBody ReportDto.ReportReplyRequest report

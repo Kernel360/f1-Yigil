@@ -30,16 +30,20 @@ public class ReportDto {
     }
 
     @Data
+    @AllArgsConstructor
     public static class MyReportsResponse {
         private List<MyReportDetail> myReports;
         int totalPage;
     }
 
     @Data
+    @AllArgsConstructor
+
     public static class MyReportDetail {
         private Long id;
         private ReportType reportType;
         private String createdAt;
+
     }
 
     @Data
