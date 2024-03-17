@@ -8,10 +8,13 @@ import kr.co.yigil.notification.domain.NotificationSender;
 import kr.co.yigil.notification.domain.NotificationStore;
 import kr.co.yigil.notification.domain.NotificationType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Sinks;
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationSenderImpl implements NotificationSender {
     private final MemberReader memberReader;
     private final Sinks.Many<Notification> sink = Sinks.many().multicast().onBackpressureBuffer();
@@ -27,6 +30,7 @@ public class NotificationSenderImpl implements NotificationSender {
         sendRealTimeNotification(notification);
     }
     private void sendRealTimeNotification(Notification notification) {
+        log.error(notification.getMember().getNickname() + "님에게 알림을 전송하였습니다.");
         sink.tryEmitNext(notification);
     }
 

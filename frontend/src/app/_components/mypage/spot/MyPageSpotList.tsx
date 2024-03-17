@@ -94,6 +94,7 @@ export default function MyPageSpotList({
       );
       if (!spotList.success) {
         setAllSpotList([]);
+        setErrorText('데이터를 불러오는데 실패했습니다');
         return;
       }
       setTotalPageCount(spotList.data.total_pages);
@@ -342,8 +343,10 @@ export default function MyPageSpotList({
           )}
           <FloatingActionButton
             popOverData={popOverData}
-            openedIcon={<PlusIcon className="rotate-45 duration-200 z-30" />}
-            closedIcon={<HamburgerIcon className="w-20 h-20" />}
+            openedIcon={
+              <PlusIcon className="w-9 h-9 rotate-45 duration-200 z-30" />
+            }
+            closedIcon={<HamburgerIcon className="w-12 h-12" />}
           />
         </div>
       )}
