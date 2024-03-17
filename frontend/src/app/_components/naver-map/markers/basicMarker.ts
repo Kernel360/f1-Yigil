@@ -1,4 +1,4 @@
-export const basicMarker = (name: string, selected: boolean) => {
+export const basicMarker = (name: string, selected?: boolean) => {
   return {
     content: `<div style="border: 1px #3B82F6 solid; border-radius: 5px; background-color: ${
       selected ? '#3B82F6' : '#FFFFFF'

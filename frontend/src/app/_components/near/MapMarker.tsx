@@ -32,7 +32,7 @@ export default function MapMarker({
 
   const markerType = (placeName: string) => {
     if (!isClickedMarker) {
-      return basicMarker(placeName, false);
+      return basicMarker(placeName);
     } else {
       return activateMarker(placeName);
     }

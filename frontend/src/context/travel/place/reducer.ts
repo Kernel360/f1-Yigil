@@ -29,16 +29,12 @@ export function isDefaultChoosePlace(choosePlace: TChoosePlace) {
  * @impure
  */
 export function isDefaultPlace(state: TPlaceState) {
-  if (state.type !== defaultPlaceState.type) {
-    throw new Error('올바르지 않은 사용입니다!');
-  }
-
   if (state.type === 'spot' && defaultPlaceState.type === 'spot') {
     return isEqualPlace(state.data, defaultPlaceState.data);
   }
 
-  if (state.type === 'course' && defaultPlaceState.type === 'course') {
-    return isEqualArray(state.data, defaultPlaceState.data, isEqualPlace);
+  if (state.type === 'course') {
+    return state.data.length === 0;
   }
 
   return false;

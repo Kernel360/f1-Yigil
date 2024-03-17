@@ -5,19 +5,20 @@ import { Container, Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import AddTravelSearchResult from '../AddTravelSearchResult';
 
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
+import { isEqualPlace } from '@/context/travel/utils';
 
 import ToastMsg from '../../ui/toast/ToastMsg';
 
 import { getMap } from '../common/action';
 import { basicMarker } from '../../naver-map/markers/basicMarker';
-import { isEqualPlace } from '@/context/travel/utils';
+import { plusMarker } from '../../naver-map/markers/plusMarker';
 
 const defaultCenter = {
   lat: 37.5135869,
   lng: 127.0621708,
 };
 
-export default function AddSpotMap() {
+export default function AddCourseMap() {
   const navermaps = useNavermaps();
   const mapRef = useRef<naver.maps.Map>(null);
   const markerRef = useRef<naver.maps.Marker | null>(null);
@@ -32,14 +33,13 @@ export default function AddSpotMap() {
 
   useEffect(() => {
     if (mapRef.current) {
-      mapRef.current.autoResize();
       mapRef.current.panTo(current.coords);
+      mapRef.current.autoResize();
     }
   }, [current]);
 
   async function handleClick() {
     setError('');
-    setInform('');
 
     if (isEqualPlace(current, selectedPlace)) {
       dispatchAddTravelMap({ type: 'UNSELECT_PLACE' });
@@ -47,65 +47,35 @@ export default function AddSpotMap() {
       return;
     }
 
-    try {
-      const { name, address, coords } = current;
-      const imageUrl = await getMap(name, address, coords);
+    dispatchAddTravelMap({
+      type: 'SELECT_PLACE',
+      payload: current,
+    });
 
-      if (imageUrl.status === 'failed') {
-        throw new Error(imageUrl.error);
-      }
-
-      dispatchAddTravelMap({
-        type: 'SELECT_PLACE',
-        payload: {
-          name,
-          address,
-          coords,
-          mapImageUrl: imageUrl.data,
-        },
-      });
-
-      dispatchAddTravelMap({
-        type: 'SET_CURRENT_PLACE',
-        payload: {
-          name,
-          address,
-          coords,
-          mapImageUrl: imageUrl.data,
-        },
-      });
-      setInform('완료를 눌러 장소를 입력하세요.');
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-      console.error(error);
-    } finally {
-      setTimeout(() => setError(''), 2000);
-      setTimeout(() => setInform(''), 2000);
-    }
+    setInform('⊕ 를 눌러 장소를 추가하세요.');
+    setTimeout(() => setInform(''), 2000);
   }
-
-  const { lat, lng } = current.coords;
 
   return (
     <section className="flex flex-col grow">
       <hr className="my-4" />
       <section className="relative grow">
         <div className="absolute w-full h-full">
+          {/* <div className="bg-white">야호~</div> */}
           <Container
             style={{ position: 'absolute', width: '100%', height: '100%' }}
           >
             <NaverMap defaultCenter={defaultCenter} ref={mapRef}>
-              {lng !== 0 && lat !== 0 && (
+              {current.coords.lng !== 0 && current.coords.lat !== 0 && (
                 <Marker
                   ref={markerRef}
                   title={current.name}
                   position={current.coords}
-                  icon={basicMarker(
-                    current.name,
-                    isEqualPlace(selectedPlace, current),
-                  )}
+                  icon={
+                    isEqualPlace(current, selectedPlace)
+                      ? plusMarker({ name: current.name })
+                      : basicMarker(current.name)
+                  }
                   onClick={handleClick}
                 ></Marker>
               )}

@@ -7,18 +7,16 @@ import { isDefaultChoosePlace } from '@/context/travel/place/reducer';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
 
-export default function SelectPlaceNavigation() {
+export default function AddSpotSelectPlaceNavigation() {
   const [addTravelMapState, dispatchAddTravel] =
     useContext(AddTravelMapContext);
   const [, dispatchSpot] = useContext(SpotContext);
 
   function handleConfirm() {
-    if (addTravelMapState.current.type === 'spot') {
-      dispatchSpot({
-        type: 'SET_PLACE',
-        payload: addTravelMapState.current.data,
-      });
-    }
+    dispatchSpot({
+      type: 'SET_PLACE',
+      payload: addTravelMapState.current,
+    });
 
     dispatchAddTravel({ type: 'CLOSE_RESULT' });
     dispatchAddTravel({ type: 'CLOSE_MAP' });

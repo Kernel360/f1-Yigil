@@ -7,8 +7,8 @@ import { CourseWithoutNewStepContext } from '@/context/travel/step/course/Course
 
 import CourseProgress from './CourseProgress';
 import CourseNavigation from './CourseNavigation';
-import SelectPlaceNavigation from '../SelectPlaceNavigation';
 import AddCourseData from './AddCourseData';
+import AddCourseSelectPlaceNavigation from './AddCourseSelectPlaceNavigation';
 
 export default function AddCourseContent() {
   const [state] = useContext(AddTravelMapContext);
@@ -34,7 +34,7 @@ export default function AddCourseContent() {
           />
         )}
         {state.isMapOpen ? (
-          <SelectPlaceNavigation />
+          <AddCourseSelectPlaceNavigation />
         ) : (
           <CourseNavigation
             step={method === 'with-new' ? withNew : withoutNew}

@@ -1,8 +1,4 @@
-import {
-  TPlaceState,
-  defaultPlaceState,
-  placeStateSchema,
-} from '../travel/place/reducer';
+import { TPlaceState, placeStateSchema } from '../travel/place/reducer';
 import { choosePlaceSchema, defaultChoosePlace } from '../travel/schema';
 
 import type { TChoosePlace } from '../travel/schema';
@@ -10,15 +6,15 @@ import type { TChoosePlace } from '../travel/schema';
 export const defaultAddTravelMapState: TAddTravelMapState = {
   isMapOpen: false,
   isSearchResultOpen: false,
+  current: defaultChoosePlace,
   selectedPlace: defaultChoosePlace,
-  current: defaultPlaceState,
 };
 
 export interface TAddTravelMapState {
   isMapOpen: boolean;
   isSearchResultOpen: boolean;
+  current: TChoosePlace;
   selectedPlace: TChoosePlace;
-  current: TPlaceState;
 }
 
 export type TAddTravelMapAction = {
@@ -61,10 +57,13 @@ export default function reducer(
       return { ...state, selectedPlace: result.data };
     }
     case 'UNSELECT_PLACE': {
-      return { ...state, selectedPlace: defaultChoosePlace };
+      return {
+        ...state,
+        selectedPlace: defaultChoosePlace,
+      };
     }
     case 'SET_CURRENT_PLACE': {
-      const result = placeStateSchema.safeParse(action.payload);
+      const result = choosePlaceSchema.safeParse(action.payload);
 
       if (!result.success) {
         console.error(result.error.message);
