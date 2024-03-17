@@ -70,6 +70,11 @@ export default function Navigation() {
           if (step.type === 'course' && step.data.value === 1) {
             const places = course.spots.map((spot) => spot.place);
 
+            if (places.length === 0) {
+              dispatch({ type: 'PREVIOUS' });
+              return;
+            }
+
             if (!isDefaultPlace({ type: 'course', data: places })) {
               dispatchCourse({ type: 'INIT_COURSE' });
               return;
@@ -93,17 +98,17 @@ export default function Navigation() {
       {step.data.value === 4 ? (
         <button className="text-blue-500">확정</button>
       ) : (
-      <button
-        onClick={() => {
-          const result = canGoNext(spot, course, step);
+        <button
+          onClick={() => {
+            const result = canGoNext(spot, course, step);
 
-          if (result !== true) {
-            setError(result);
-            return;
-          }
+            if (result !== true) {
+              setError(result);
+              return;
+            }
 
-          dispatch({ type: 'NEXT' });
-        }}
+            dispatch({ type: 'NEXT' });
+          }}
         >
           다음
         </button>
