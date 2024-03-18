@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService{
@@ -31,4 +33,12 @@ public class NotificationServiceImpl implements NotificationService{
         return notificationReader.getNotificationSlice(memberId, pageRequest);
     }
 
+    @Transactional
+    @Override
+    public void readNotification(Long memberId, List<Long> ids) {
+        for(Long notificationId: ids) {
+            Notification notification = notificationReader.getNotification(memberId, notificationId);
+            notification.read();
+        }
+    }
 }
