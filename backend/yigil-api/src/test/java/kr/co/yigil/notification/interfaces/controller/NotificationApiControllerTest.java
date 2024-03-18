@@ -11,6 +11,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import kr.co.yigil.auth.domain.Accessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.notification.application.NotificationFacade;
+import kr.co.yigil.notification.domain.Notification;
+import kr.co.yigil.notification.interfaces.dto.NotificationInfoDto;
+import kr.co.yigil.notification.interfaces.dto.mapper.NotificationMapper;
+import kr.co.yigil.notification.interfaces.dto.request.NotificationReadRequest;
+import kr.co.yigil.notification.interfaces.dto.response.NotificationsResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +51,21 @@ import kr.co.yigil.notification.interfaces.dto.response.NotificationsResponse;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
+
+import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
+import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(NotificationApiController.class)
 @AutoConfigureRestDocs
@@ -56,7 +81,7 @@ public class NotificationApiControllerTest {
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext,
-            RestDocumentationContextProvider restDocumentation) {
+               RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation)).build();
     }
@@ -84,10 +109,17 @@ public class NotificationApiControllerTest {
     void whenGetNotifications_thenReturns200AndNotificationsResponse() throws Exception {
         Member member = new Member(1L, "email", "12345678", "nickname", "image.jpg",
                 SocialLoginType.KAKAO);
+        Long notificationId = 1L;
         Notification notification = new Notification(member, "새로운 알림입니다.");
-        when(notificationFacade.getNotificationSlice(anyLong(), any(PageRequest.class))).thenReturn(new SliceImpl<>(List.of(notification)));
-        NotificationInfoDto notificationInfoDto = new NotificationInfoDto("message", "createDate");
-        when(notificationMapper.notificationSliceToNotificationsResponse(new SliceImpl<>(List.of(notification)))).thenReturn(new NotificationsResponse(List.of(notificationInfoDto), false));
+        when(notificationFacade.getNotificationSlice(anyLong(), any(PageRequest.class))).thenReturn(
+                new SliceImpl<>(List.of(notification)));
+        NotificationInfoDto notificationInfoDto1 = new NotificationInfoDto(notificationId,
+                "message", "createDate", true);
+        NotificationInfoDto notificationInfoDto2 = new NotificationInfoDto(2L, "message",
+                "createDate", false);
+        when(notificationMapper.notificationSliceToNotificationsResponse(
+                any())).thenReturn(
+                new NotificationsResponse(List.of(notificationInfoDto1), false));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/notifications"))
                 .andExpect(status().isOk())
@@ -97,20 +129,54 @@ public class NotificationApiControllerTest {
                         getDocumentResponse(),
                         queryParameters(
                                 parameterWithName("page").description("현재 페이지").optional(),
-                                parameterWithName("size").description("페이지 크기").optional(),
-                                parameterWithName("sortBy").description("정렬 옵션").optional(),
-                                parameterWithName("sortOrder").description("정렬 순서").optional()
+                                parameterWithName("size").description("페이지 크기").optional()
                         ),
                         responseFields(
-                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 여부"),
+                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지가 있는지 여부"),
                                 subsectionWithPath("notifications").description("notification의 정보"),
                                 fieldWithPath("notifications[].message").description("Notification의 메시지"),
-                                fieldWithPath("notifications[].create_date").type(JsonFieldType.STRING).description("Notification의 생성일시")
+                                fieldWithPath("notifications[].create_date").type(JsonFieldType.STRING)
+                                        .description("Notification의 생성일시")
                         )
                 ));
 
         verify(notificationFacade).getNotificationSlice(anyLong(), any(PageRequest.class));
-        verify(notificationMapper).notificationSliceToNotificationsResponse(new SliceImpl<>(List.of(notification)));
+        verify(notificationMapper).notificationSliceToNotificationsResponse(
+                new SliceImpl<>(List.of(notification)));
+    }
 
+    @DisplayName("ReadNotification이 올바르게 동작하는지 테스트")
+    @Test
+    void whenReadNotification_thenReturns200AndNotificationReadResponse() throws Exception {
+
+        Long notificationId = 1L;
+        List<Long> ids = List.of(notificationId);
+        NotificationReadRequest request = new NotificationReadRequest();
+        request.setIds(ids);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        String requestJson = objectMapper.writeValueAsString(request);
+
+
+        mockMvc.perform(post("/api/v1/notifications/read")
+                        .contentType("application/json")
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "notifications/read-notification",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("ids").description("읽을 Notification의 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("읽은 Notification의 메시지")
+                        )
+                ));
+
+        verify(notificationFacade).readNotification(anyLong(), any());
     }
 }

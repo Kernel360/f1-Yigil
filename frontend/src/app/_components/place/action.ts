@@ -28,6 +28,5 @@ export async function postBookmark(placeId: number, bookmarked: boolean) {
   if (response.ok) {
     revalidateTag(`placeDetail/${placeId}`);
   }
-
   return await response.json();
 }

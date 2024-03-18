@@ -56,4 +56,8 @@ public class Notification {
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
     }
+
+    public void read() {
+        isRead = true;
+    }
 }

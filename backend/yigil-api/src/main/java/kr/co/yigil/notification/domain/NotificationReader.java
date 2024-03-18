@@ -7,4 +7,6 @@ import reactor.core.publisher.Flux;
 
 public interface NotificationReader {
     Slice<Notification> getNotificationSlice(Long memberId, Pageable pageable);
+
+    Notification getNotification(Long memberId, Long notificationId);
 }

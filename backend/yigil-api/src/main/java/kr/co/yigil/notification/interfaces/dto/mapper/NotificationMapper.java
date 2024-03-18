@@ -6,7 +6,6 @@ import kr.co.yigil.notification.interfaces.dto.NotificationInfoDto;
 import kr.co.yigil.notification.interfaces.dto.response.NotificationsResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Slice;
 
 @Mapper(componentModel = "spring")
@@ -24,7 +23,9 @@ public interface NotificationMapper {
                 .toList();
     }
 
+    @Mapping(target = "notificationId", source = "id")
     @Mapping(target = "message", source = "message")
     @Mapping(target = "createDate", expression = "java(notification.getCreatedAt().toString())")
+    @Mapping(target = "isRead", source = "read")
     NotificationInfoDto notificationToNotificationInfoDto(Notification notification);
 }
