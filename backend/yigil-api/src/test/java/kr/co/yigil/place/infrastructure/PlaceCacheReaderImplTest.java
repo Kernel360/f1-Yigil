@@ -31,4 +31,16 @@ public class PlaceCacheReaderImplTest {
 
         assertEquals(expectedSpotCount, result);
     }
+
+    @DisplayName("getSpotTotalRate 메서드가 spot의 TotalRate를 잘 반환하는지")
+    @Test
+    void getSpotTotalRate_ReturnsSpotTotalRate() {
+        Long placeId = 1L;
+        double expectedSpotTotalRate = 1.0;
+        when(spotReader.getSpotTotalRateInPlace(placeId)).thenReturn(expectedSpotTotalRate);
+
+        double result = placeCacheReader.getSpotTotalRate(placeId);
+
+        assertEquals(expectedSpotTotalRate, result);
+    }
 }

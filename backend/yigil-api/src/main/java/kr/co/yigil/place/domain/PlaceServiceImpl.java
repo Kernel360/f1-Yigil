@@ -3,13 +3,6 @@ package kr.co.yigil.place.domain;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
 import kr.co.yigil.member.Ages;
@@ -22,6 +15,11 @@ import kr.co.yigil.place.domain.PlaceInfo.Main;
 import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
 import kr.co.yigil.travel.domain.spot.SpotReader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +31,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final BookmarkReader bookmarkReader;
     private final MemberReader memberReader;
     private final SpotReader spotReader;
+    private final PlaceRateCalculator placeRateCalculator;
 
     @Override
     @Transactional(readOnly = true)
@@ -40,12 +39,12 @@ public class PlaceServiceImpl implements PlaceService {
         return popularPlaceReader.getPopularPlace().stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
                     if (accessor.isMember()) {
-                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(),
-                                place.getId());
-                        return new Main(place, spotCount, isBookmarked);
+                        boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
+                        return new Main(place, spotCount, isBookmarked, placeRate);
                     }
-                    return new Main(place, spotCount);
+                    return new Main(place, spotCount, placeRate);
                 })
                 .collect(Collectors.toList());
     }
@@ -56,11 +55,12 @@ public class PlaceServiceImpl implements PlaceService {
         return popularPlaceReader.getPopularPlaceMore().stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
                     if (accessor.isMember()) {
                         boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
-                        return new Main(place, spotCount, isBookmarked);
+                        return new Main(place, spotCount, isBookmarked, placeRate);
                     }
-                    return new Main(place, spotCount);
+                    return new Main(place, spotCount, placeRate);
                 })
                 .collect(Collectors.toList());
     }
@@ -71,11 +71,12 @@ public class PlaceServiceImpl implements PlaceService {
         return placeReader.getPlaceInRegion(regionId).stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
                     if (accessor.isMember()) {
                         boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
-                        return new Main(place, spotCount, isBookmarked);
+                        return new Main(place, spotCount, isBookmarked, placeRate);
                     }
-                    return new Main(place, spotCount);
+                    return new Main(place, spotCount, placeRate);
                 })
                 .collect(Collectors.toList());
     }
@@ -86,11 +87,12 @@ public class PlaceServiceImpl implements PlaceService {
         return placeReader.getPlaceInRegionMore(regionId).stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
                     if (accessor.isMember()) {
                         boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
-                        return new Main(place, spotCount, isBookmarked);
+                        return new Main(place, spotCount, isBookmarked, placeRate);
                     }
-                    return new Main(place, spotCount);
+                    return new Main(place, spotCount, placeRate);
                 })
                 .collect(Collectors.toList());
     }
@@ -100,9 +102,10 @@ public class PlaceServiceImpl implements PlaceService {
     public Detail retrievePlace(final Long placeId, final Accessor accessor) {
         var place = placeReader.getPlace(placeId);
         int spotCount = placeCacheReader.getSpotCount(placeId);
+        double placeRate = placeRateCalculator.calculatePlaceRate(placeId);
         return accessor.isMember()
-                ? new Detail(place, spotCount, bookmarkReader.isBookmarked(accessor.getMemberId(), placeId))
-                : new Detail(place, spotCount);
+                ? new Detail(place, spotCount, bookmarkReader.isBookmarked(accessor.getMemberId(), placeId), placeRate)
+                : new Detail(place, spotCount, placeRate);
     }
 
 
@@ -146,8 +149,9 @@ public class PlaceServiceImpl implements PlaceService {
         return placeReader.getPopularPlaceByDemographics(ages, gender).stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
                     boolean isBookmarked = bookmarkReader.isBookmarked(memberId, place.getId());
-                    return new Main(place, spotCount, isBookmarked);
+                    return new Main(place, spotCount, isBookmarked, placeRate);
 
                 })
                 .collect(Collectors.toList());
@@ -164,8 +168,9 @@ public class PlaceServiceImpl implements PlaceService {
         return placeReader.getPopularPlaceByDemographicsMore(ages, gender).stream()
                 .map(place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
                     boolean isBookmarked = bookmarkReader.isBookmarked(memberId, place.getId());
-                    return new Main(place, spotCount, isBookmarked);
+                    return new Main(place, spotCount, isBookmarked, placeRate);
 
                 })
                 .collect(Collectors.toList());
@@ -178,12 +183,14 @@ public class PlaceServiceImpl implements PlaceService {
        return placeReader.getPlacesByKeyword(keyword, pageable).map(
                 place -> {
                     int spotCount = placeCacheReader.getSpotCount(place.getId());
+                    double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
                     if (accessor.isMember()) {
                         boolean isBookmarked = bookmarkReader.isBookmarked(accessor.getMemberId(), place.getId());
-                        return new Main(place, spotCount, isBookmarked);
+                        return new Main(place, spotCount, isBookmarked, placeRate);
                     }
-                    return new Main(place, spotCount);
+                    return new Main(place, spotCount, placeRate);
                 }
         );
     }
+
 }

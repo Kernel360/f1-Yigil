@@ -27,4 +27,6 @@ public interface SpotReader {
     Page<SpotListDto> getMemberSpotList(Long memberId, Selected selected, Pageable pageable);
 
     boolean isExistSpot(Long placeId, Long memberId);
+
+    double getSpotTotalRateInPlace(Long placeId);
 }
