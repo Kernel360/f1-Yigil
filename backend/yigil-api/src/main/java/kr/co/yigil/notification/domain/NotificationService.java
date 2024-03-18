@@ -4,11 +4,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 
 public interface NotificationService {
 
-    Flux<ServerSentEvent<Notification>> getNotificationStream(Long memberId);
+    SseEmitter createEmitter(Long memberId);
 
     void sendNotification(NotificationType notificationType, Long senderId, Long receiverId);
 

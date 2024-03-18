@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import kr.co.yigil.auth.domain.Accessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.notification.interfaces.dto.NotificationInfoDto;
 import kr.co.yigil.notification.interfaces.dto.mapper.NotificationMapper;
 import kr.co.yigil.notification.interfaces.dto.response.NotificationsResponse;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
@@ -61,16 +63,12 @@ public class NotificationApiControllerTest {
 
     @DisplayName("Notificationstream이 올바르게 동작하는지 테스트")
     @Test
-    void whenStreamNotification_thenReturns200() throws Exception {
-        Member member = new Member(1L, "email", "12345678", "nickname", "image.jpg", SocialLoginType.KAKAO);
-        Notification notification = new Notification(member, "새로운 알림입니다.");
-        ServerSentEvent<Notification> sse = ServerSentEvent.builder(notification).id("1").event("test event").build();
-
-        when(notificationFacade.getNotificationStream(anyLong())).thenReturn(Flux.just(sse));
+    void whenStreamNotifications_thenReturns200() throws Exception {
+        SseEmitter mockEmitter = mock(SseEmitter.class);
+        when(notificationFacade.createEmitter(0L)).thenReturn(mockEmitter);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/notifications/stream"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                // .andExpect(content().contentType(MediaType.TEXT_EVENT_STREAM_VALUE))
                 .andDo(document(
                         "notifications/stream-notification",
                         getDocumentRequest(),
@@ -78,7 +76,7 @@ public class NotificationApiControllerTest {
                         responseBody()
                 ));
 
-        verify(notificationFacade).getNotificationStream(anyLong());
+        verify(notificationFacade).createEmitter(0L);
     }
 
     @DisplayName("GetNotifications가 올바르게 동작하는지 테스트")

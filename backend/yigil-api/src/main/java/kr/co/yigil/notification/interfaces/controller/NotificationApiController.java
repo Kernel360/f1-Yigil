@@ -1,6 +1,7 @@
 package kr.co.yigil.notification.interfaces.controller;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeoutException;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
@@ -9,8 +10,15 @@ import kr.co.yigil.global.SortBy;
 import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.SSETimeoutException;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.MemberStatus;
+import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.notification.application.NotificationFacade;
 import kr.co.yigil.notification.domain.Notification;
+import kr.co.yigil.notification.domain.NotificationSender;
+import kr.co.yigil.notification.domain.NotificationType;
 import kr.co.yigil.notification.interfaces.dto.mapper.NotificationMapper;
 import kr.co.yigil.notification.interfaces.dto.response.NotificationsResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +31,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,18 +47,12 @@ public class NotificationApiController {
     private final NotificationFacade notificationFacade;
     private final NotificationMapper notificationMapper;
 
-    @GetMapping(path = "/api/v1/notifications/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(path = "/api/v1/notifications/stream")
     @MemberOnly
-    public Flux<ServerSentEvent<Notification>> streamNotifications(@Auth Accessor accessor) {
-        return notificationFacade.getNotificationStream(accessor.getMemberId())
-                .timeout(Duration.ofSeconds(10))
-                .onErrorResume(e -> {
-                    if (e instanceof TimeoutException) {
-                        return Flux.error(new SSETimeoutException(ExceptionCode.SSE_TIMEOUT));
-                    }
-                    return Flux.error(e);
-                });
+    public SseEmitter streamNotifications(@Auth Accessor accessor) {
+        return notificationFacade.createEmitter(accessor.getMemberId());
     }
+
 
     @GetMapping("/api/v1/notifications")
     @MemberOnly
@@ -66,5 +73,4 @@ public class NotificationApiController {
         return ResponseEntity.ok().body(response);
     }
 
-    // ToDo: add notification read api
 }
