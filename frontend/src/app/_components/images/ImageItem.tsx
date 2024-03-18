@@ -26,7 +26,6 @@ const ImageItem = forwardRef<HTMLDivElement, ItemProps>(
     },
     ref,
   ) => {
-    console.log(image);
     return (
       <div
         onClick={() => {

@@ -6,10 +6,15 @@ import {
   myPageSpotListSchema,
   mypageSpotDetailSchema,
 } from '@/types/myPageResponse';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
 import { TModifyDetail } from '../spot/SpotDetail';
+import {
+  cdnPathToRelativePath,
+  dataUrlToBlob,
+  getMIMETypeFromDataURI,
+} from '@/utils';
 
 export const getMyPageSpots = async (
   pageNo: number = 1,
@@ -162,7 +167,11 @@ export const changeOnPrivateMyTravel = async (travel_id: number) => {
 
 export const getMyPageSpotDetail = async (spotId: number) => {
   const BASE_URL = await getBaseUrl();
-  const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`);
+  const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
+    next: {
+      tags: [`spotDetail/${spotId}`],
+    },
+  });
   const result = await res.json();
   const parsedSpotDetail = mypageSpotDetailSchema.safeParse(result);
   return parsedSpotDetail;
@@ -177,21 +186,51 @@ export const patchMyPageSpotDetail = async (
 
   const originalSpotImages = image_urls.filter((image) => {
     if (!image.uri.startsWith('data')) {
-      return { imageUrl: image.uri, index: Number(image.filename) };
+      return {
+        imageUrl: image.uri,
+        index: Number(image.filename),
+      };
     }
   });
 
-  const updateSpotImagesIdx = image_urls.filter((image, idx) => {
-    if (image.uri.startsWith('data')) return idx;
-  });
+  const updateSpotImages = image_urls
+    .map(({ uri, filename }, idx) => {
+      if (uri.startsWith('data'))
+        return new File([dataUrlToBlob(uri)], filename, {
+          type: getMIMETypeFromDataURI(uri),
+        });
+    })
+    .filter((i) => i !== undefined);
+
+  const updateSpotImagesIdx = image_urls
+    .map((image, idx) => {
+      if (image.uri.startsWith('data')) return idx;
+    })
+    .filter((i) => i !== undefined);
 
   formData.append('id', id.toString());
   formData.append('description', description);
   formData.append('rate', rate);
 
-  formData.append('originalSpotImages', originalSpotImages);
+  originalSpotImages.forEach((image, idx) => {
+    formData.append(`originalSpotImages[${idx}].index`, image.filename);
+    formData.append(
+      `originalSpotImages[${idx}].imageUrl`,
+      cdnPathToRelativePath(image.uri),
+    );
+  });
 
-  // formdata 설정 및 spot image 배열 데이터 어떻게 들어갈지 물어보기
+  updateSpotImages.forEach((image, idx) => {
+    if (image) {
+      formData.append(`updateSpotImages[${idx}].imageFile`, image);
+    }
+  });
+
+  updateSpotImagesIdx.forEach((item, idx) => {
+    if (item)
+      formData.append(`updateSpotImages[${idx}].index`, item.toString());
+  });
+
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get(`SESSION`)?.value;
   const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
@@ -199,5 +238,9 @@ export const patchMyPageSpotDetail = async (
     headers: {
       Cookie: `SESSION=${cookie}`,
     },
+    body: formData,
   });
+  if (res.ok) {
+    revalidateTag(`spotDetail/${spotId}`);
+  }
 };

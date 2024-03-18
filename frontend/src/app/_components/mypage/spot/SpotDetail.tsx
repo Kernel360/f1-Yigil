@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import BackButton from '../../place/BackButton';
 import IconWithCounts from '../../IconWithCounts';
 import StarIcon from '/public/icons/star.svg';
-import { TSpotState } from '@/context/travel/schema';
 import { TMyPageSpotDetail } from '@/types/myPageResponse';
 import Select from '../../ui/select/Select';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -11,6 +10,8 @@ import Image from 'next/image';
 import ImageHandler from '../../images';
 import { TImageData } from '../../images/ImageHandler';
 import { patchMyPageSpotDetail } from '../hooks/myPageActions';
+import Dialog from '../../ui/dialog/Dialog';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 const starList = Array.from({ length: 5 }, (v, idx) => ({
   label: (
@@ -61,6 +62,9 @@ export default function SpotDetail({
     })),
   });
 
+  const [isDialogOpened, setIsDialogOpened] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
   const [emblaRef] = useEmblaCarousel({
     loop: false,
     dragFree: true,
@@ -76,7 +80,18 @@ export default function SpotDetail({
   };
 
   const onClickComplete = () => {
-    patchMyPageSpotDetail(spotId, modifyDetail);
+    try {
+      patchMyPageSpotDetail(spotId, modifyDetail);
+    } catch (error) {
+      setErrorText('수정에 실패했습니다.');
+    } finally {
+      setIsDialogOpened(false);
+      setIsModifyMode(false);
+    }
+  };
+
+  const closeModal = () => {
+    setIsDialogOpened(false);
   };
   return (
     <div className="mx-4">
@@ -88,9 +103,13 @@ export default function SpotDetail({
 
         <button
           className={`${isModifyMode ? 'text-main' : 'text-gray-500'} py-2`}
-          onClick={() => setIsModifyMode(!isModifyMode)}
+          onClick={() => setIsModifyMode(true)}
         >
-          {isModifyMode ? <span onClick={onClickComplete}>완료</span> : '수정'}
+          {isModifyMode ? (
+            <span onClick={() => setIsDialogOpened(true)}>완료</span>
+          ) : (
+            '수정'
+          )}
         </button>
       </nav>
       <section className="h-full p-2 flex flex-col gap-5 grow justify-between">
@@ -133,19 +152,18 @@ export default function SpotDetail({
             />
           </div>
         ) : (
-          image_urls.map((image) => (
-            <div className="overflow-hidden" ref={emblaRef} key={image}>
-              <div
-                className={`p-2 relative w-1/3 overflow-hidden aspect-square rounded-2xl ${
-                  isModifyMode
-                    ? 'border-2 border-violet'
-                    : 'border-2 border-gray-300'
-                } shrink-0`}
-              >
-                <Image src={image} alt="Uploaded image" fill />
-              </div>
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex gap-2">
+              {image_urls.map((image) => (
+                <div
+                  className="p-2 relative w-1/3 overflow-hidden aspect-square rounded-2xl border-2 border-gray-300 shrink-0"
+                  key={image}
+                >
+                  <Image src={image} alt="Uploaded image" fill />
+                </div>
+              ))}
             </div>
-          ))
+          </div>
         )}
 
         <span className="self-end mt-[-8px] pr-4 text-gray-400">
@@ -164,6 +182,15 @@ export default function SpotDetail({
           </div>
         )}
       </section>
+      {isDialogOpened && (
+        <Dialog
+          text="수정을 완료하시겠습니까?"
+          closeModal={closeModal}
+          handleConfirm={async () => onClickComplete()}
+          loadingText="수정중입니다."
+        />
+      )}
+      {errorText && <ToastMsg title={errorText} timer={2000} id={Date.now()} />}
     </div>
   );
 }
