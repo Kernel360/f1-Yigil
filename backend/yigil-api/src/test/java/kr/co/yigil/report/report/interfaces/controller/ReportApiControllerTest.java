@@ -7,7 +7,6 @@ import kr.co.yigil.report.report.domain.dto.ReportCommand;
 import kr.co.yigil.report.report.domain.dto.ReportInfo;
 import kr.co.yigil.report.report.interfaces.dto.ReportDto;
 import kr.co.yigil.report.report.interfaces.dto.mapper.ReportMapper;
-import kr.co.yigil.report.type.domain.ReportType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -106,14 +105,19 @@ class ReportApiControllerTest {
     void whenGetMyReports_thenShouldReturnAndResponse() throws Exception {
 
         ReportInfo.ReportsInfo reports = mock(ReportInfo.ReportsInfo.class);
+        ReportDto.ReportTypeDto dto1 = new ReportDto.ReportTypeDto();
+        dto1.setId(1L);
+        dto1.setName("광고성 글");
+
+        ReportDto.ReportTypeDto dto2 = new ReportDto.ReportTypeDto();
+        dto2.setId(2L);
+        dto2.setName("욕설");
         ReportDto.MyReportDetail myReportDetail1 = new ReportDto.MyReportDetail(
-                1L,
-                new ReportType(1L, "광고성 글", "광고성 글 신고할 때 선택합니다"),
-                LocalDateTime.now().toString()
+                1L, dto1, LocalDateTime.now().toString()
         );
         ReportDto.MyReportDetail myReportDetail2 = new ReportDto.MyReportDetail(
                 2L,
-                new ReportType(2L, "욕설", "욕설 신고할 때 선택합니다"),
+                dto2,
                 LocalDateTime.now().toString()
         );
 
@@ -150,7 +154,6 @@ class ReportApiControllerTest {
                                 subsectionWithPath("my_reports[].report_type").description("신고 타입"),
                                 fieldWithPath("my_reports[].report_type.id").type(JsonFieldType.NUMBER).description("신고 타입 아이디"),
                                 fieldWithPath("my_reports[].report_type.name").type(JsonFieldType.STRING).description("신고 타입 이름"),
-                                fieldWithPath("my_reports[].report_type.description").type(JsonFieldType.STRING).description("신고 타입 설명"),
                                 fieldWithPath("my_reports[].created_at").type(JsonFieldType.STRING).description("신고글 생성일"),
                                 fieldWithPath("total_page").type(JsonFieldType.NUMBER).description("다음 페이지 존재 여부")
                         )
@@ -162,9 +165,12 @@ class ReportApiControllerTest {
     @Test
     void getMyReportDetail() throws Exception {
 
+        ReportDto.ReportTypeDto reportType1 = new ReportDto.ReportTypeDto();
+        reportType1.setId(1L);
+        reportType1.setName("광고성 글");
         ReportDto.MyReportDetail myReportDetail = new ReportDto.MyReportDetail(
                 1L,
-                new ReportType(1L, "광고성 글", "광고성 글 신고할 때 선택합니다"),
+                reportType1,
                 LocalDateTime.now().toString()
         );
 
@@ -191,7 +197,6 @@ class ReportApiControllerTest {
                                 subsectionWithPath("report_type").description("신고 타입"),
                                 fieldWithPath("report_type.id").type(JsonFieldType.NUMBER).description("신고 타입 아이디"),
                                 fieldWithPath("report_type.name").type(JsonFieldType.STRING).description("신고 타입 이름"),
-                                fieldWithPath("report_type.description").type(JsonFieldType.STRING).description("신고 타입 설명"),
                                 fieldWithPath("created_at").type(JsonFieldType.STRING).description("신고글 생성일")
                         )
                 ));

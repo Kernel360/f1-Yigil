@@ -1,6 +1,5 @@
 package kr.co.yigil.report.report.interfaces.dto;
 
-import kr.co.yigil.report.type.domain.ReportType;
 import lombok.*;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class ReportDto {
 
     public static class MyReportDetail {
         private Long id;
-        private ReportType reportType;
+        private ReportTypeDto reportType;
         private String createdAt;
 
     }
@@ -51,4 +50,6 @@ public class ReportDto {
     public static class ReportResponse {
         private String message;
     }
+
+
 }

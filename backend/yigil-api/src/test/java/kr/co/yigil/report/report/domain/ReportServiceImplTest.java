@@ -77,7 +77,8 @@ class ReportServiceImplTest {
 
         var reportInfo = reportService.getMemberReport(1L, 1L);
         assertThat(reportInfo).isInstanceOf(ReportInfo.ReportDetailInfo.class);
-        assertThat(reportInfo.getReportType()).isEqualTo(reportType);
+        assertThat(reportInfo.getReportType().getId()).isEqualTo(reportType.getId());
+        assertThat(reportInfo.getReportType().getName()).isEqualTo(reportType.getName());
         assertThat(reportInfo.getContent()).isEqualTo(content);
         assertThat(reportInfo.getId()).isEqualTo(reportId);
         assertThat(reportInfo.getStatus()).isEqualTo(status);

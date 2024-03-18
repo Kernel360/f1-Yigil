@@ -26,27 +26,38 @@ public class ReportInfo {
     @Data
     public static class ReportListInfo {
         private final Long id;
-        private final ReportType reportType;
+        private final ReportTypeInfo reportType;
         private final LocalDateTime createdAt;
 
         public ReportListInfo(Report report) {
             this.id = report.getId();
-            this.reportType = report.getReportType();
+            this.reportType = new ReportTypeInfo(report.getReportType());
             this.createdAt = report.getCreatedAt();
+        }
+    }
+
+    @Data
+    public static class ReportTypeInfo {
+        private final Long id;
+        private final String name;
+
+        public ReportTypeInfo(ReportType reportType) {
+            this.id = reportType.getId();
+            this.name = reportType.getName();
         }
     }
 
     @Data
     public static class ReportDetailInfo {
         private final Long id;
-        private final ReportType reportType;
+        private final ReportTypeInfo reportType;
         private final String content;
         private final ProcessStatus status;
         private final LocalDateTime createdAt;
 
         public ReportDetailInfo(Report report) {
             this.id = report.getId();
-            this.reportType = report.getReportType();
+            this.reportType = new ReportTypeInfo(report.getReportType());
             this.content = report.getContent();
             this.status = report.getStatus();
             this.createdAt = report.getCreatedAt();

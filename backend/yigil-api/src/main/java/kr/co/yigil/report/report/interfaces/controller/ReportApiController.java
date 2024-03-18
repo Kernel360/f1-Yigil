@@ -76,6 +76,4 @@ public class ReportApiController {
         ReportDto.ReportTypeResponse response = requestMapper.toDto(reportType);
         return ResponseEntity.ok(response);
     }
-
-
 }
