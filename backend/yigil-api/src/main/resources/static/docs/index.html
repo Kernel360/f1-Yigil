@@ -2753,7 +2753,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-18T09:56:04.596468"
+    "create_date" : "2024-03-18T15:27:44.900259"
   } ],
   "has_next" : false
 }</code></pre>
@@ -6606,14 +6606,6 @@ Content-Length: 24
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -6671,12 +6663,14 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 115
+Content-Length: 161
 
 {
   "notifications" : [ {
+    "notification_id" : 1,
     "message" : "message",
-    "create_date" : "createDate"
+    "create_date" : "createDate",
+    "read" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -6714,7 +6708,7 @@ Content-Length: 501
 
 id:1
 event:test event
-data:{"id":null,"member":{"id":1,"email":"email","social_login_id":"12345678","nickname":"nickname","profile_image_url":"image.jpg","status":"ACTIVE","social_login_type":"KAKAO","gender":"NONE","ages":"NONE","favorite_regions":[],"joined_at":"2024-03-18T09:56:02.117614","modified_at":"2024-03-18T09:56:02.117615","favorite_region_ids":[]},"message":"새로운 알림입니다.","created_at":"2024-03-18T09:56:02.117617","modified_at":"2024-03-18T09:56:02.117617","read":false}</code></pre>
+data:{"id":null,"member":{"id":1,"email":"email","social_login_id":"12345678","nickname":"nickname","profile_image_url":"image.jpg","status":"ACTIVE","social_login_type":"KAKAO","gender":"NONE","ages":"NONE","favorite_regions":[],"joined_at":"2024-03-18T15:27:42.390052","modified_at":"2024-03-18T15:27:42.390053","favorite_region_ids":[]},"message":"새로운 알림입니다.","read":false,"created_at":"2024-03-18T15:27:42.390055","modified_at":"2024-03-18T15:27:42.390055"}</code></pre>
 </div>
 </div>
 </div>
@@ -7100,14 +7094,14 @@ Host: spring.restdocs.test
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-18T09:56:03.583842"
+    "created_at" : "2024-03-18T15:27:43.907487"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-18T09:56:03.583894"
+    "created_at" : "2024-03-18T15:27:43.907538"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7183,14 +7177,14 @@ Content-Length: 326
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-18T09:56:03.583842"
+    "created_at" : "2024-03-18T15:27:43.907487"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-18T09:56:03.583894"
+    "created_at" : "2024-03-18T15:27:43.907538"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7260,7 +7254,7 @@ Host: spring.restdocs.test</code></pre>
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-18T09:56:03.593600"
+  "created_at" : "2024-03-18T15:27:43.916989"
 }</code></pre>
 </div>
 </div>
@@ -7323,7 +7317,7 @@ Content-Length: 129
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-18T09:56:03.593600"
+  "created_at" : "2024-03-18T15:27:43.916989"
 }</code></pre>
 </div>
 </div>
@@ -7537,7 +7531,7 @@ Content-Length: 118
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-18 09:54:03 +0900
+Last updated 2024-03-18 11:12:17 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
