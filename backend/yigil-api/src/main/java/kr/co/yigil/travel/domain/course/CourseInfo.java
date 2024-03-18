@@ -1,14 +1,17 @@
 package kr.co.yigil.travel.domain.course;
 
+import kr.co.yigil.travel.domain.Course;
+import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
+import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
+import org.locationtech.jts.geom.Point;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import kr.co.yigil.travel.domain.Course;
-import kr.co.yigil.travel.domain.Spot;
-import kr.co.yigil.travel.domain.dto.CourseListDto;
-import lombok.Getter;
-import lombok.ToString;
 
 public class CourseInfo {
 
@@ -127,4 +130,48 @@ public class CourseInfo {
     }
 
 
+    @Data
+    public static class MySpotsInfo {
+        private final List<MySpotDetailDto> mySpotDetailDtoList;
+
+        public MySpotsInfo(List<Spot> spots){
+            this.mySpotDetailDtoList = spots.stream()
+                    .map(MySpotDetailDto::new)
+                    .toList();
+        }
+    }
+
+    @Data
+    public static class MySpotDetailDto {
+        private final Long spotId;
+        private final String placeName;
+        private final String placeAddress;
+        private final double rate;
+        private final String description;
+        private final List<String> imageUrls;
+        private final LocalDateTime createDate;
+        private PointInfo point;
+
+        public MySpotDetailDto(Spot spot) {
+            this.spotId = spot.getId();
+            this.placeName = spot.getPlace().getName();
+            this.placeAddress = spot.getPlace().getAddress();
+            this.description = spot.getDescription();
+            this.imageUrls = spot.getAttachFiles().getUrls();
+            this.rate = spot.getRate();
+            this.createDate = spot.getCreatedAt();
+            this.point = new PointInfo(spot.getLocation());
+        }
+    }
+
+    @Data
+    public static class PointInfo {
+        private final Double x;
+        private final Double y;
+
+        public PointInfo(Point point) {
+            this.x = point.getX();
+            this.y = point.getY();
+        }
+    }
 }

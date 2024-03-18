@@ -210,7 +210,7 @@ public class PlaceServiceImplTest {
         Long memberId = 1L;
         when(placeReader.findPlaceByNameAndAddress("장소", "장소구 장소면 장소리")).thenReturn(java.util.Optional.of(mockPlace));
         when(mockPlace.getId()).thenReturn(1L);
-        when(spotReader.isExistSpot(mockPlace.getId(), memberId)).thenReturn(true);
+        when(spotReader.isExistPlace(mockPlace.getId(), memberId)).thenReturn(true);
 
         PlaceInfo.MapStaticImageInfo mapStaticImageInfo = placeService.findPlaceStaticImage(memberId, "장소", "장소구 장소면 장소리");
 
