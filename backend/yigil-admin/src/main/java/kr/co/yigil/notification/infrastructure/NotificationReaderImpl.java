@@ -27,6 +27,6 @@ public class NotificationReaderImpl implements NotificationReader {
 
     @Override
     public Slice<Notification> getNotificationSlice(Long memberId, Pageable pageable) {
-        return notificationRepository.findAllByMemberId(memberId, pageable);
+        return notificationRepository.findAllByMemberIdAndReadIsFalse(memberId, pageable);
     }
 }

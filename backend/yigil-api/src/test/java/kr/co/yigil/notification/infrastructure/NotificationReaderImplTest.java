@@ -70,7 +70,7 @@ public class NotificationReaderImplTest {
         List<Notification> notifications = new ArrayList<>();
         Slice<Notification> expectedSlice = new SliceImpl<>(notifications);
 
-        when(notificationRepository.findAllByMemberId(memberId, Pageable.unpaged())).thenReturn(
+        when(notificationRepository.findAllByMemberIdAndReadIsFalse(memberId, Pageable.unpaged())).thenReturn(
                 expectedSlice);
 
         Slice<Notification> actualSlice = notificationReader.getNotificationSlice(memberId,
