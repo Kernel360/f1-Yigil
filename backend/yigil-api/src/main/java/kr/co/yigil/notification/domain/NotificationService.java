@@ -5,6 +5,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.codec.ServerSentEvent;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
+
 public interface NotificationService {
 
     Flux<ServerSentEvent<Notification>> getNotificationStream(Long memberId);
@@ -13,5 +15,5 @@ public interface NotificationService {
 
     Slice<Notification> getNotificationSlice(Long memberId, PageRequest pageRequest);
 
-    void readNotification(Long memberId, Long notificationId);
+    void readNotification(Long memberId, List<Long> notificationId);
 }
