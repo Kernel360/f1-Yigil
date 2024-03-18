@@ -5,6 +5,7 @@ import Image from 'next/image';
 import MapPinIcon from '/public/icons/filled-map-pin.svg';
 import IconWithCounts from '../../IconWithCounts';
 import { TMyPageCourse } from '@/types/myPageResponse';
+import { useRouter } from 'next/navigation';
 
 interface TMyPageCourseItem extends TMyPageCourse {
   idx: number;
@@ -28,6 +29,7 @@ export default function MyPageCourseItem({
 }: TMyPageCourseItem) {
   const [isCheckDisabled, setIsCheckDisabled] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const { push } = useRouter();
 
   useEffect(() => {
     const found = checkedList.find(
@@ -72,9 +74,12 @@ export default function MyPageCourseItem({
             <LockIcon className="w-5 h-5" />
           </div>
         )}
-        <div className="text-2xl leading-7 text-gray-900 font-semibold ml-2">
+        <button
+          className="text-2xl text-start w-fit leading-7 text-gray-900 font-semibold ml-2 cursor-pointer hover:underline"
+          onClick={() => push(`/detail/course/${course_id}`)}
+        >
           {title}
-        </div>
+        </button>
         <div className="flex gap-x-2 items-center mx-2 text-xl leading-6 text-gray-500 font-semibold">
           <IconWithCounts
             icon={
