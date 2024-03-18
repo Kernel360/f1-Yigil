@@ -36,7 +36,7 @@ public class Place {
     @JoinColumn(name = "map_static_image_file_id")
     private AttachFile mapStaticImageFile;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "image_file_id")
     private AttachFile imageFile;
 
