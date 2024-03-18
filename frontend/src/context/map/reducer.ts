@@ -25,7 +25,8 @@ export type TAddTravelMapAction = {
     | 'CLOSE_RESULT'
     | 'SELECT_PLACE'
     | 'UNSELECT_PLACE'
-    | 'SET_CURRENT_PLACE';
+    | 'SET_CURRENT_PLACE'
+    | 'RESET_CURRENT_PLACE';
   payload?: unknown;
 };
 
@@ -71,6 +72,9 @@ export default function reducer(
       }
 
       return { ...state, current: result.data };
+    }
+    case 'RESET_CURRENT_PLACE': {
+      return { ...state, current: defaultChoosePlace };
     }
   }
 }

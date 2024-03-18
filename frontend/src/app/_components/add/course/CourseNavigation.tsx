@@ -14,6 +14,7 @@ import type {
   TCourseWithoutNewStepState,
 } from '@/context/travel/step/course/types';
 import { TCourseState } from '@/context/travel/schema';
+import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
 function canGoNext(
   course: TCourseState,
@@ -46,6 +47,8 @@ export default function CourseNavigation({
   step: TCourseWithNewStepState | TCourseWithoutNewStepState;
   dispatchStep: Dispatch<TCourseStepAction>;
 }) {
+  const [travelMapState, dispatchTravelMapState] =
+    useContext(AddTravelMapContext);
   const [course, dispatchCourse] = useContext(CourseContext);
   const [error, setError] = useState('');
 
@@ -63,10 +66,8 @@ export default function CourseNavigation({
               return;
             }
 
-            if (!isDefaultPlace({ type: 'course', data: places })) {
-              dispatchCourse({ type: 'INIT_COURSE' });
-              return;
-            }
+            dispatchTravelMapState({ type: 'OPEN_MAP' });
+            return;
           }
 
           if (step.value === 0) {

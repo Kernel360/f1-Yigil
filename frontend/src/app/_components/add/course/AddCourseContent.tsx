@@ -11,7 +11,7 @@ import AddCourseData from './AddCourseData';
 import AddCourseSelectPlaceNavigation from './AddCourseSelectPlaceNavigation';
 
 export default function AddCourseContent() {
-  const [state] = useContext(AddTravelMapContext);
+  const [state, dispatchAddTravelMap] = useContext(AddTravelMapContext);
   const [withNew, dispatchWithNew] = useContext(CourseWithNewStepContext);
   const [withoutNew, dispatchWithoutNew] = useContext(
     CourseWithoutNewStepContext,
@@ -25,7 +25,10 @@ export default function AddCourseContent() {
 
   return (
     <section className="relative flex flex-col grow">
-      <div className="h-16 flex flex-col justify-center">
+      <div
+        className="h-16 flex flex-col justify-center"
+        onClick={() => dispatchAddTravelMap({ type: 'CLOSE_RESULT' })}
+      >
         {state.isMapOpen ? (
           <AddCourseSelectPlaceNavigation />
         ) : (

@@ -20,25 +20,24 @@ export default function AddCourseNewPlace() {
     setIndex(nextIndex);
   }
 
-  const { isMapOpen } = travelMapState;
+  const { isMapOpen, isSearchResultOpen } = travelMapState;
   const { spots } = course;
+
+  const showSearchBar = spots.length === 0 || isMapOpen || isSearchResultOpen;
+  const showTitle = !isMapOpen && !isSearchResultOpen;
 
   return (
     <section className={`flex flex-col grow`}>
-      {spots.length === 0 && (
-        <>
-          <div
-            className={`h-80 flex flex-col justify-center duration-500 ease-in-out ${
-              isMapOpen
-                ? 'collapse opacity-0 max-h-0 transition-all'
-                : 'visible opacity-100 max-h-full transition-all'
-            }`}
-          >
-            <InfoTitle label="장소" additionalLabel="를 입력하세요." />
-          </div>
-          <AddTravelSearchBar />
-        </>
-      )}
+      <div
+        className={`h-80 flex flex-col justify-center duration-500 ease-in-out ${
+          !showTitle
+            ? 'collapse opacity-0 max-h-0 transition-all'
+            : 'visible opacity-100 max-h-full transition-all'
+        }`}
+      >
+        <InfoTitle label="장소" additionalLabel="를 입력하세요." />
+      </div>
+      {showSearchBar && <AddTravelSearchBar key="search-bar" />}
       {isMapOpen ? (
         <AddCourseMap />
       ) : (
