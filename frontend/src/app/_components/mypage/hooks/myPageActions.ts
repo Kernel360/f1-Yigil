@@ -5,7 +5,6 @@ import {
   myPageSpotListSchema,
 } from '@/types/myPageResponse';
 import { revalidatePath } from 'next/cache';
-import { requestWithCookie } from '../../api/httpRequest';
 import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
 
