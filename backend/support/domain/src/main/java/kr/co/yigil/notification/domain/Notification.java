@@ -1,6 +1,19 @@
 package kr.co.yigil.notification.domain;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,10 +40,14 @@ public class Notification {
 
     private boolean read;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @CreatedDate
     @Column(updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @LastModifiedDate
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime modifiedAt;
