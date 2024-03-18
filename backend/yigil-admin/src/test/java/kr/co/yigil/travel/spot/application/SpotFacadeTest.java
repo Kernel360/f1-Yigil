@@ -62,7 +62,7 @@ class SpotFacadeTest {
         when(adminService.getAdminId()).thenReturn(adminId);
         spotFacade.deleteSpot(1L);
 
-        verify(notificationService).sendNotification(NotificationType.SPOT_DELETED, adminId, memberId);
+        verify(notificationService).saveNotification(NotificationType.SPOT_DELETED, adminId, memberId);
 
     }
 }
