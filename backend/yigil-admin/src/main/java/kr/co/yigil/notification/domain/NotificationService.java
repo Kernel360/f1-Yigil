@@ -1,10 +1,6 @@
 package kr.co.yigil.notification.domain;
 
 public interface NotificationService {
+    void saveNotification(NotificationType notificationType, Long senderId, Long receiverId);
 
-//    Flux<ServerSentEvent<Notification>> getNotificationStream(Long memberId);
-
-    void sendNotification(NotificationType notificationType, Long senderId, Long receiverId);
-
-//    Slice<Notification> getNotificationSlice(Long memberId, PageRequest pageRequest);
 }
