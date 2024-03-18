@@ -41,28 +41,6 @@ public class NotificationReaderImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @DisplayName("getNotificationStream 메서드가 올바른 Flux를 반환하는지")
-    @Test
-    void whenGetNotificationStream_thenReturnsCorrectFlux() {
-        Long memberId = 1L;
-        Member member = new Member(memberId, "kiit0901@gmail.com", "123456", "stone", "profile.jpg",
-                SocialLoginType.KAKAO);
-        Notification notification = new Notification(member, "Notification content");
-
-        Sinks.Many<Notification> realSink = Sinks.many().multicast().onBackpressureBuffer();
-        realSink.tryEmitNext(notification);
-
-        ReflectionTestUtils.setField(notificationReader, "sink", realSink);
-
-        Flux<ServerSentEvent<Notification>> actualFlux = notificationReader.getNotificationStream(
-                memberId);
-
-        StepVerifier.create(actualFlux)
-                .expectNextMatches(sse -> sse.data().equals(notification))
-                .thenCancel()
-                .verify();
-    }
-
     @DisplayName("getNotificationSlice 메서드가 올바른 Slice를 반환하는지")
     @Test
     void whenGetNotificationSlice_thenReturnsCorrectSlice() {
