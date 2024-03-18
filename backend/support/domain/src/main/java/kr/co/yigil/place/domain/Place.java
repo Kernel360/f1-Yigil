@@ -1,24 +1,14 @@
 package kr.co.yigil.place.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -92,8 +82,8 @@ public class Place {
         this.region = region;
     }
 
-    public void updateLatestUploadedTime(LocalDateTime latestUploadedTime) {
-        this.latestUploadedTime = latestUploadedTime;
+    public void updateLatestUploadedTime() {
+        this.latestUploadedTime = LocalDateTime.now();
     }
 
     public void updateImage(AttachFile updatedImage) {

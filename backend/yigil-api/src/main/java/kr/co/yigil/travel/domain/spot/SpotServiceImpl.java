@@ -1,14 +1,5 @@
 package kr.co.yigil.travel.domain.spot;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.FileUploader;
@@ -33,6 +24,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,6 +78,7 @@ public class SpotServiceImpl implements SpotService {
 		}
 
 		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
+		place.updateLatestUploadedTime();
 		var attachFiles = spotSeriesFactory.initAttachFiles(command);
 		var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
 		var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
