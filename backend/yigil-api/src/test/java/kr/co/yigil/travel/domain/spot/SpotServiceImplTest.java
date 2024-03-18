@@ -1,22 +1,5 @@
 package kr.co.yigil.travel.domain.spot;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
@@ -48,6 +31,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SpotServiceImplTest {
@@ -133,7 +125,7 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, null, null, null, null);
         Spot spot = mock(Spot.class);
         AttachFiles mockAttachFiles = mock(AttachFiles.class);
 
@@ -161,7 +153,7 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, null, null, null, null);
         Spot spot = mock(Spot.class);
         RegisterPlaceRequest placeCommand = mock(RegisterPlaceRequest.class);
         AttachFiles mockAttachFiles = mock(AttachFiles.class);

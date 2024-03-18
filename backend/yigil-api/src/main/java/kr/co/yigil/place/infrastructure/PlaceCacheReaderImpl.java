@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PlaceCacheReaderImpl implements PlaceCacheReader {
+
     private final SpotReader spotReader;
 
     @Override
@@ -16,4 +17,11 @@ public class PlaceCacheReaderImpl implements PlaceCacheReader {
     public int getSpotCount(Long placeId) {
         return spotReader.getSpotCountInPlace(placeId);
     }
+
+    @Override
+    @Cacheable(value = "spotTotalRate")
+    public double getSpotTotalRate(Long placeId) {
+        return spotReader.getSpotTotalRateInPlace(placeId);
+    }
+
 }

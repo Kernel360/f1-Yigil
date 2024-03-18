@@ -80,8 +80,9 @@ public class SpotServiceImpl implements SpotService {
 		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
 		place.updateLatestUploadedTime();
 		var attachFiles = spotSeriesFactory.initAttachFiles(command);
-		var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
-		var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
+		placeCacheStore.incrementSpotCountInPlace(place.getId());
+		placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), command.getRate());
+		spotStore.store(command.toEntity(member, place, false, attachFiles));
 	}
 
     @Override
@@ -105,8 +106,11 @@ public class SpotServiceImpl implements SpotService {
         var spot = spotReader.getSpot(spotId);
         if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(
                 ExceptionCode.INVALID_AUTHORITY);
-        spotStore.remove(spot);
-        if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
+		if(spot.getPlace() != null){
+			placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
+			placeCacheStore.decrementSpotTotalRateInPlace(spot.getPlace().getId(), spot.getRate());
+		}
+		spotStore.remove(spot);
     }
 
     private Place registerNewPlace(RegisterPlaceRequest command) {
