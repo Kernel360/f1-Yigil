@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -31,15 +32,15 @@ class NotificationFacadeTest {
     }
 
     @Test
-    @DisplayName("getNotificationStream 메서드가 NotificationService의 메서드를 잘 호출하는지")
+    @DisplayName("createEmitter 메서드가 NotificationService의 메서드를 잘 호출하는지")
     void getNotificationStream() {
         Long memberId = 1L;
-        Flux<ServerSentEvent<Notification>> notificationFlux = Flux.empty();
-        when(notificationService.getNotificationStream(memberId)).thenReturn(notificationFlux);
+        SseEmitter mockEmitter = mock(SseEmitter.class);
+        when(notificationService.createEmitter(memberId)).thenReturn(mockEmitter);
 
-        notificationFacade.getNotificationStream(memberId);
+        notificationFacade.createEmitter(memberId);
 
-        verify(notificationService, times(1)).getNotificationStream(memberId);
+        verify(notificationService, times(1)).createEmitter(memberId);
     }
 
     @Test

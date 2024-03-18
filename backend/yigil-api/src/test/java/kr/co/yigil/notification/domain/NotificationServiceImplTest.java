@@ -9,6 +9,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -34,15 +36,16 @@ class NotificationServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @DisplayName("유효한 파라미터로 getNotificationStream 메서드가 잘 호출되는지")
+    @DisplayName("유효한 파라미터로 create Emitter 메서드가 잘 호출되는지")
     @Test
     void shouldCallGetNotificationStreamMethodCorrectly_givenValidParameters() {
         Long notifierId = 1L;
-        when(notificationReader.getNotificationStream(anyLong())).thenReturn(Flux.empty());
+        SseEmitter mockEmitter = mock(SseEmitter.class);
+        when(notificationSender.createEmitter(notifierId)).thenReturn(mockEmitter);
 
-        notificationService.getNotificationStream(notifierId);
+        notificationService.createEmitter(notifierId);
 
-        verify(notificationReader, times(1)).getNotificationStream(notifierId);
+        verify(notificationSender, times(1)).createEmitter(notifierId);
     }
 
 
