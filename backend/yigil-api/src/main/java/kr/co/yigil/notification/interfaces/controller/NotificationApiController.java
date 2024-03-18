@@ -1,12 +1,22 @@
 package kr.co.yigil.notification.interfaces.controller;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeoutException;
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.SSETimeoutException;
+import kr.co.yigil.member.Ages;
+import kr.co.yigil.member.Gender;
+import kr.co.yigil.member.Member;
+import kr.co.yigil.member.MemberStatus;
+import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.notification.application.NotificationFacade;
 import kr.co.yigil.notification.domain.Notification;
+import kr.co.yigil.notification.domain.NotificationSender;
+import kr.co.yigil.notification.domain.NotificationType;
 import kr.co.yigil.notification.interfaces.dto.mapper.NotificationMapper;
 import kr.co.yigil.notification.interfaces.dto.request.NotificationReadRequest;
 import kr.co.yigil.notification.interfaces.dto.response.NotificationReadResponse;
@@ -23,8 +33,14 @@ import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 import java.time.Duration;
 import java.util.concurrent.TimeoutException;
@@ -36,18 +52,12 @@ public class NotificationApiController {
     private final NotificationFacade notificationFacade;
     private final NotificationMapper notificationMapper;
 
-    @GetMapping(path = "/api/v1/notifications/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(path = "/api/v1/notifications/stream")
     @MemberOnly
-    public Flux<ServerSentEvent<Notification>> streamNotifications(@Auth Accessor accessor) {
-        return notificationFacade.getNotificationStream(accessor.getMemberId())
-                .timeout(Duration.ofSeconds(10))
-                .onErrorResume(e -> {
-                    if (e instanceof TimeoutException) {
-                        return Flux.error(new SSETimeoutException(ExceptionCode.SSE_TIMEOUT));
-                    }
-                    return Flux.error(e);
-                });
+    public SseEmitter streamNotifications(@Auth Accessor accessor) {
+        return notificationFacade.createEmitter(accessor.getMemberId());
     }
+
 
     @GetMapping("/api/v1/notifications")
     @MemberOnly
@@ -63,7 +73,7 @@ public class NotificationApiController {
             notificationSlice);
         return ResponseEntity.ok().body(response);
     }
-  
+
     @PostMapping("/api/v1/notifications/read")
     @MemberOnly
     public ResponseEntity<NotificationReadResponse> readNotification(
