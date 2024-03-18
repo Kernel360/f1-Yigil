@@ -39,9 +39,6 @@ public class Place {
 
     private LocalDateTime latestUploadedTime;
 
-    @Column(columnDefinition = "double precision default 0")
-    private double rate;
-
     @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
 
@@ -57,23 +54,21 @@ public class Place {
     @JoinColumn(name = "region_id")
     private Region region;
 
-    public Place(final String name, final String address, final double rate,
+    public Place(final String name, final String address,
         final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile, final LocalDateTime latestUploadedTime) {
         this.name = name;
         this.address = address;
-        this.rate = rate;
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
         this.latestUploadedTime = latestUploadedTime;
     }
 
-    public Place(Long id, final String name, final String address, final double rate,
+    public Place(Long id, final String name, final String address,
         final Point location, final AttachFile imageFile, final AttachFile mapStaticImageFile, final LocalDateTime latestUploadedTime) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.rate = rate;
         this.location = location;
         this.imageFile = imageFile;
         this.mapStaticImageFile = mapStaticImageFile;
@@ -92,7 +87,4 @@ public class Place {
         this.region = region;
     }
 
-    public void updateLatestUploadedTime(LocalDateTime latestUploadedTime) {
-        this.latestUploadedTime = latestUploadedTime;
-    }
 }

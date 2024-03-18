@@ -5,6 +5,8 @@ import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCacheReader;
+import kr.co.yigil.place.domain.PlaceRateCalculator;
 import kr.co.yigil.place.domain.PlaceReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,8 @@ public class BookmarkServiceImpl implements BookmarkService{
     private final BookmarkReader bookmarkReader;
     private final MemberReader memberReader;
     private final PlaceReader placeReader;
+    private final PlaceRateCalculator placeRateCalculator;
+
     @Transactional
     @Override
     public void addBookmark(Long memberId, Long placeId) {
@@ -46,6 +50,10 @@ public class BookmarkServiceImpl implements BookmarkService{
     public Slice<BookmarkInfo> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
         memberReader.validateMember(memberId);
         Slice<Bookmark> bookmarkSlice = bookmarkReader.getBookmarkSlice(memberId, pageRequest);
-        return bookmarkSlice.map(BookmarkInfo::new);
+        return bookmarkSlice.map(bookmark -> {
+            Place place = bookmark.getPlace();
+            double placeRate = placeRateCalculator.calculatePlaceRate(place.getId());
+            return new BookmarkInfo(bookmark.getId(), place.getId(), place.getName(), place.getImageFile().getFileUrl(), placeRate);
+        });
     }
 }
