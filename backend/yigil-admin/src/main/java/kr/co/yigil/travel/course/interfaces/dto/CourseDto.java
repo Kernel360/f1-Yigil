@@ -23,7 +23,11 @@ public class CourseDto {
     public static class CourseListUnit {
         private Long courseId;
         private String title;
+        private String description;
         private LocalDateTime createdAt;
+        private String ownerNickname;
+        private String ownerProfileImageUrl;
+        private int spotCount;
         private int favorCount;
         private int commentCount;
     }

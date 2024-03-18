@@ -28,14 +28,22 @@ public class CourseInfoDto {
 
         private final Long courseId;
         private final String title;
+        private final String description;
         private final LocalDateTime createdAt;
+        private final String ownerNickname;
+        private final String ownerProfileImageUrl;
+        private final int spotCount;
         private final int favorCount;
         private final int commentCount;
 
         public CourseListUnit(Course course, CourseAdditionalInfo courseAdditionalInfo) {
             this.courseId = course.getId();
             this.title = course.getTitle();
+            this.description = course.getDescription();
             this.createdAt = course.getCreatedAt();
+            this.ownerNickname = course.getMember().getNickname();
+            this.ownerProfileImageUrl = course.getMember().getProfileImageUrl();
+            this.spotCount = course.getSpots().size();
             this.favorCount = courseAdditionalInfo.getFavorCount();
             this.commentCount = courseAdditionalInfo.getCommentCount();
 
