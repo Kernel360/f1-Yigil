@@ -85,7 +85,7 @@ export const changeOnPublicMyTravel = async (travel_id: number) => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(`${BASE_URL}/v1/travels/change-on-public`, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       Cookie: `SESSION=${cookie}`,
       'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ export const changeOnPrivateMyTravel = async (travel_id: number) => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(`${BASE_URL}/v1/travels/change-on-private`, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       Cookie: `SESSION=${cookie}`,
       'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export const changeOnPrivateMyTravel = async (travel_id: number) => {
 //   };
 
 //   const res = await fetch(`${BASE_URL}/v1/travels/change-visibility`, {
-//     method: 'POST',
+//     method: 'PUT',
 //     headers: {
 //       Cookie: `SESSION=${cookie}`,
 //       'Content-Type': 'application/json',
@@ -163,25 +163,4 @@ export const getMyPageFollwings = async (
     }`,
   )()()();
   return res;
-};
-
-export const getMyPageBookmarks = (
-  pageNo: number = 1,
-  size: number = 5,
-  sortOrder: string = 'desc',
-  sortBy?: string,
-) => {
-  return requestWithCookie('bookmarks')(
-    `?page=${pageNo}&size=${size}&sortOrder=${
-      sortOrder !== 'rate' ? sortOrder : `sortOrder=desc&sortBy=rate`
-    }`,
-  )()()();
-};
-
-export const deleteMyPageBookmark = (placeId: number) => {
-  return requestWithCookie('delete-bookmark')(`${placeId}`)()()();
-};
-
-export const addMyPageBookmark = (placeId: number) => {
-  return requestWithCookie('add-bookmark')(`${placeId}`)()()();
 };

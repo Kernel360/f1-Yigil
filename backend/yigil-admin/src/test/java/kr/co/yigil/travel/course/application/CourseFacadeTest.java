@@ -59,6 +59,6 @@ class CourseFacadeTest {
         when(courseService.deleteCourse(anyLong())).thenReturn(memberId);
         when(adminService.getAdminId()).thenReturn(adminId);
         courseFacade.deleteCourse(1L);
-        verify(notificationService).sendNotification(NotificationType.COURSE_DELETED, adminId, memberId);
+        verify(notificationService).saveNotification(NotificationType.COURSE_DELETED, adminId, memberId);
     }
 }
