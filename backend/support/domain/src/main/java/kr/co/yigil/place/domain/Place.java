@@ -95,4 +95,8 @@ public class Place {
     public void updateLatestUploadedTime(LocalDateTime latestUploadedTime) {
         this.latestUploadedTime = latestUploadedTime;
     }
+
+    public void updateImage(AttachFile updatedImage) {
+        this.imageFile = updatedImage;
+    }
 }
