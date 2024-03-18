@@ -123,34 +123,27 @@ export default function ViewTravelMap() {
         onSizeChanged={onChangedMap}
         onBoundsChanged={onChangedMap}
       >
-        {isGeolocationLoading || isLoading ? (
-          <div className="relative w-full h-full flex items-center justify-center">
+        {(isGeolocationLoading || isLoading) && (
+          <div className="absolute left-[50%] -translate-x-[50%] bottom-[50%] flex items-center justify-center">
             <LoadingIndicator
-              backgroundColor="bg-white"
-              loadingText={
-                isGeolocationLoading
-                  ? '내 위치 불러오는중...'
-                  : isLoading
-                  ? '장소 정보 불러오는중...'
-                  : ''
-              }
+              backgroundColor={`${isGeolocationLoading ? 'bg-white' : ''}`}
+              loadingText={isGeolocationLoading ? '내 위치 불러오는중...' : ''}
             />
           </div>
-        ) : (
-          allPlaces.map((place) => (
-            <MapMarker
-              key={place.id}
-              {...place}
-              markerClickedId={markerClickedId}
-              setMarkerClickedId={setMarkerClickedId}
-              isClickedMarker={
-                place.id !== markerClickedId || markerClickedId === -1
-                  ? false
-                  : true
-              }
-            />
-          ))
         )}
+        {allPlaces.map((place) => (
+          <MapMarker
+            key={place.id}
+            {...place}
+            markerClickedId={markerClickedId}
+            setMarkerClickedId={setMarkerClickedId}
+            isClickedMarker={
+              place.id !== markerClickedId || markerClickedId === -1
+                ? false
+                : true
+            }
+          />
+        ))}
       </NaverMap>
       {markerClickedId > 0 && (
         <ToastMsg
