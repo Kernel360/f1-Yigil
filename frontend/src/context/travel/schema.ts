@@ -42,6 +42,7 @@ export const manyInputImageSchema = z
   .max(IMAGES_COUNT);
 
 export const spotStateSchema = z.object({
+  id: z.number().int().optional(),
   place: choosePlaceSchema,
   images: manyInputImageSchema,
   review: reviewSchema,

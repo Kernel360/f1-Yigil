@@ -20,6 +20,7 @@ export interface TCourseAction {
   type:
     | 'CHANGE_SPOT_ORDER'
     | 'ADD_SPOT'
+    | 'ADD_EXISTING_SPOT'
     | 'REMOVE_SPOT'
     | 'SET_SPOT_PLACE'
     | 'SET_SPOT_IMAGES'
@@ -68,6 +69,9 @@ export default function reducer(
       };
 
       return { ...state, spots: [...state.spots, newSpot] };
+    }
+    case 'ADD_EXISTING_SPOT': {
+      return { ...state };
     }
     case 'REMOVE_SPOT': {
       const result = spotStateSchema.safeParse(action.payload);

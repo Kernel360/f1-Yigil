@@ -4,7 +4,8 @@ import { useContext } from 'react';
 import { CourseWithNewStepContext } from '@/context/travel/step/course/CourseWithNewStepContext';
 import { CourseWithoutNewStepContext } from '@/context/travel/step/course/CourseWithoutNewStepContext';
 
-import AddCoursePlace from './AddCoursePlace';
+import AddCourseNewPlace from './AddCourseNewPlace';
+import AddCourseExistSpots from './AddCourseExistSpots';
 import AddCourseImages from './AddCourseImages';
 import AddCourseReview from './AddCourseReviews';
 import AddCourseConfirm from './AddCourseConfirm';
@@ -23,7 +24,7 @@ export default function AddCourseData({
   const { value } = method === 'with-new' ? withNew : withoutnew;
 
   switch (value) {
-    case 0:
+    case 0: {
       return (
         <section className="p-4 flex flex-col grow justify-center items-center gap-4">
           <SetMethodButton
@@ -40,10 +41,21 @@ export default function AddCourseData({
           />
         </section>
       );
-    case 1:
-      return <AddCoursePlace method={method} />;
-    case 2:
-      return <AddCourseImages />;
+    }
+    case 1: {
+      if (method === 'with-new') {
+        return <AddCourseNewPlace />;
+      }
+
+      return <AddCourseExistSpots />;
+    }
+    case 2: {
+      if (method === 'with-new') {
+        return <AddCourseImages />;
+      }
+
+      return <>순서 정하기~</>;
+    }
     case 3:
       return <AddCourseReview />;
     case 4:
