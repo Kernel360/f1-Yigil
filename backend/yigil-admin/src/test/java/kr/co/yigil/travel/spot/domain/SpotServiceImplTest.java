@@ -89,7 +89,7 @@ class SpotServiceImplTest {
         SpotInfoDto.SpotAdditionalInfo additionalInfo = new SpotInfoDto.SpotAdditionalInfo(1, 1);
         when(favorReader.getFavorCount(any(Long.class))).thenReturn(additionalInfo.getFavorCount());
         when(commentReader.getCommentCount(any(Long.class))).thenReturn(
-                additionalInfo.getCommentCount());
+            additionalInfo.getCommentCount());
 
         var result = spotServiceImpl.getSpot(spotId);
 
