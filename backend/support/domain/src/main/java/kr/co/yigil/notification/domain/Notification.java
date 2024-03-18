@@ -58,6 +58,6 @@ public class Notification {
     }
 
     public void read() {
-        isRead = true;
+        read = true;
     }
 }
