@@ -21,6 +21,7 @@ import type { TAddSpotProps } from './spot/SpotContext';
 
 import { searchAction } from '../search/action';
 import Alert from '../ui/dialog/Alert';
+import { TImageData } from '../images/ImageHandler';
 
 function getAlertText(step: DataInput.TDataInputStep) {
   switch (step.data.label) {
@@ -114,6 +115,11 @@ export default function AddSpot() {
     coords: { lat: number; lng: number };
   }>();
 
+  // imageHandler를 사용하기 위해 추가한 변수 및 함수
+  function setImages(nextImages: TImageData[]) {
+    dispatchSpot({ type: 'SET_IMAGES', payload: nextImages });
+  }
+
   return (
     <section className="flex flex-col grow relative">
       <AddSpotContext.Provider value={addSpotState}>
@@ -167,7 +173,11 @@ export default function AddSpot() {
                   label={inputLabel}
                   additionalLabel="을 업로드하세요"
                 />
-                <ImageHandler dispatch={dispatchSpot} size={5} />
+                <ImageHandler
+                  setImages={setImages}
+                  images={addSpotState.images}
+                  size={5}
+                />
               </>
             )}
             {inputLabel === '별점' && (

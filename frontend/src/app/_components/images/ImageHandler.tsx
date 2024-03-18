@@ -1,14 +1,9 @@
 'use client';
 
-import { useContext } from 'react';
-
+import { useState } from 'react';
 import ImageInput from './ImageInput';
 import ImagesContainer from './ImagesContainer';
-import { AddSpotContext } from '../add/spot/SpotContext';
-
-import type { Dispatch } from 'react';
-
-import type { TAddSpotAction } from '../add/spot/SpotContext';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 export interface TImageData {
   filename: string;
@@ -16,45 +11,47 @@ export interface TImageData {
 }
 
 export default function ImageHandler({
-  dispatch,
-  size,
+  images,
+  setImages,
+  size = 5,
 }: {
-  dispatch: Dispatch<TAddSpotAction>;
-  size: number;
+  images: TImageData[];
+  setImages: (newImages: TImageData[]) => void;
+  size?: number;
+  gridStyle?: string;
 }) {
-  const addSpotState = useContext(AddSpotContext);
-  const images = addSpotState.images;
-
-  function addImages(newImages: TImageData[]) {
-    if (newImages.length === 0) {
-      return;
-    }
-
-    const currentImageNames = images.map((image) => image.filename);
-
-    const deduplicated = newImages.filter(
-      (image) => !currentImageNames.includes(image.filename),
-    );
-
-    const nextImages = [...images, ...deduplicated];
-
-    dispatch({ type: 'SET_IMAGES', payload: nextImages });
-  }
+  const [error, setError] = useState('');
 
   const availableSpace = size - images.length;
 
   const blankSpaces = [...Array(availableSpace)];
 
   return (
-    <section className="grid grid-rows-2 grid-cols-3 gap-2">
-      <ImageInput availableSpace={availableSpace} addImages={addImages} />
-      <ImagesContainer dispatch={dispatch} />
+    <section className="grid grid-rows-2 grid-cols-3 gap-2 my-4">
+      <ImageInput
+        availableSpace={availableSpace}
+        images={images}
+        setImages={setImages}
+        invokeError={(title: string) => setError(title)}
+      />
+      <ImagesContainer images={images} setImages={setImages} />
       {blankSpaces.map((_, i) => (
         <div
           key={i}
           className="aspect-square border-2 rounded-2xl border-gray-200 shrink-0"
         />
       ))}
+      {/* 에러 토스트 */}
+      {error && (
+        <div className="absolute">
+          <ToastMsg
+            id={Date.now()}
+            key={Date.now()}
+            title={error}
+            timer={1000}
+          />
+        </div>
+      )}
     </section>
   );
 }

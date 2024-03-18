@@ -66,3 +66,17 @@ export const mypageAllAreaSchema = z.object({
 
 export type TMyPageRegions = z.infer<typeof myPageRegionSchema>;
 export type TMyPageAllArea = z.infer<typeof mypageAllAreaSchema>;
+
+export const mypageSpotDetailSchema = z.object({
+  place_name: z.string(),
+  rate: z.string(),
+  place_address: z.string(),
+  map_static_image_file_url: z.string(),
+  image_urls: z.array(z.string()),
+  create_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
+  description: z.string(),
+});
+
+export type TMyPageSpotDetail = z.infer<typeof mypageSpotDetailSchema>;
