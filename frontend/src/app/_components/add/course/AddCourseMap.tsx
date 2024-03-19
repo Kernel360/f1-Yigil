@@ -31,7 +31,7 @@ export default function AddCourseMap() {
   const navermaps = useNavermaps();
   const mapRef = useRef<naver.maps.Map>(null);
   const markerRef = useRef<naver.maps.Marker>(null);
-  const courseMarkersRef = useRef<Map<string, naver.maps.Marker>>(new Map());
+  const courseMarkersRef = useRef<naver.maps.Marker[]>([]);
 
   const [error, setError] = useState('');
   const [inform, setInform] = useState('');
@@ -51,72 +51,22 @@ export default function AddCourseMap() {
     mapRef.current?.autoResize();
   }, [current]);
 
-  const courseSpotPlaceData = useMemo(() => {
-    return course.spots
-      .map((spot) => spot.place)
-      .map(({ name, coords: { lat, lng } }) => {
-        return { title: name, lat, lng };
-      });
-  }, [course.spots]);
-
   useEffect(() => {
     if (!mapRef.current) {
       return;
     }
 
-    if (course.spots.length > courseMarkersRef.current.size) {
-      const {
-        place: { name, coords },
-      } = course.spots[course.spots.length - 1];
+    courseMarkersRef.current.forEach((marker) => marker.setMap(null));
 
-      const newMarker = new naver.maps.Marker({
-        title: name,
-        position: coords,
-      });
+    const courseMarkers = course.spots.map(
+      ({ place }) =>
+        new naver.maps.Marker({ position: place.coords, title: place.name }),
+    );
 
-      newMarker.setMap(mapRef.current);
-      courseMarkersRef.current.set(newMarker.get('_nmarker_id'), newMarker);
+    courseMarkersRef.current = courseMarkers;
 
-      return;
-    }
-
-    if (course.spots.length < courseMarkersRef.current.size) {
-      const prevMarkers = Array.from(courseMarkersRef.current.entries());
-
-      if (course.spots.length === 0) {
-        const [, value] = prevMarkers[0];
-        value.setMap(null);
-        courseMarkersRef.current.clear();
-        return;
-      }
-
-      for (let i = 0; i < prevMarkers.length - 1; i++) {
-        const place = courseSpotPlaceData[i];
-
-        const [key, value] = prevMarkers[i];
-        const markerTitle = value.getTitle();
-        const { x, y } = value.getPosition();
-
-        if (place.title === markerTitle) {
-          continue;
-        }
-
-        if (place.lng === x && place.lat === y) {
-          continue;
-        }
-
-        value.setMap(null);
-        courseMarkersRef.current.delete(key);
-
-        return;
-      }
-
-      // 반복문 통과 시 마지막이 제거된 마커
-      const [key, value] = prevMarkers[prevMarkers.length - 1];
-      value.setMap(null);
-      courseMarkersRef.current.delete(key);
-    }
-  }, [course.spots, courseSpotPlaceData]);
+    courseMarkersRef.current.forEach((marker) => marker.setMap(mapRef.current));
+  }, [course.spots]);
 
   const places = course.spots.map((spot) => spot.place);
 
