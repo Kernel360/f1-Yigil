@@ -10,9 +10,6 @@ import XMarkIcon from '/public/icons/x-mark.svg';
 
 import type { EventFor } from '@/types/type';
 
-/**
- * 로딩 상태 UI 필요
- */
 export default function BaseSearchBar({
   onCancel,
   onFocus,
@@ -21,7 +18,7 @@ export default function BaseSearchBar({
   cancellable,
 }: {
   onCancel: () => void;
-  onFocus?: (event: EventFor<'input', 'onFocus'>) => void;
+  onFocus?: () => void;
   onSearch: (term: string) => Promise<void>;
   placeholder?: string;
   cancellable?: boolean;

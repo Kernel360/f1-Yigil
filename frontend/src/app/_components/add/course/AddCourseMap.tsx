@@ -54,7 +54,6 @@ const defaultCenter = {
 export default function AddCourseMap() {
   const navermaps = useNavermaps();
   const mapRef = useRef<naver.maps.Map>(null);
-  const markerRef = useRef<naver.maps.Marker>(null);
   const courseMarkersRef = useRef<naver.maps.Marker[]>([]);
 
   const [error, setError] = useState('');
@@ -173,15 +172,15 @@ export default function AddCourseMap() {
               onSizeChanged={onChangedMap}
             >
               <Marker
-                ref={markerRef}
                 title={current.name}
                 position={current.coords}
                 icon={
                   isEqualPlace(current, selectedPlace)
-                    ? plusMarker({ name: current.name })
+                    ? plusMarker(current.name)
                     : basicMarker(current.name)
                 }
                 onClick={handleClick}
+                zIndex={1}
               ></Marker>
             </NaverMap>
           </Container>

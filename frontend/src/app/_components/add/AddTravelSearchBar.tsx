@@ -8,13 +8,11 @@ import { defaultChoosePlace } from '@/context/travel/schema';
 import BaseSearchBar from '../search/BaseSearchBar';
 import { searchNaverAction } from '../search/action';
 
-import type { EventFor } from '@/types/type';
-
 export default function AddTravelSearchBar() {
   const [, dispatchTravelMap] = useContext(AddTravelMapContext);
   const [, dispatch] = useContext(SearchContext);
 
-  function onFocus(event: EventFor<'input', 'onFocus'>) {
+  function onFocus() {
     dispatchTravelMap({
       type: 'SET_CURRENT_PLACE',
       payload: defaultChoosePlace,

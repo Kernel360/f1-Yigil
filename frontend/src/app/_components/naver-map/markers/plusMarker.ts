@@ -1,10 +1,10 @@
-export const plusMarker = (place: { name: string }) => {
+export const plusMarker = (name: string) => {
   return {
     content: `<div style="transform: translate(-50%, -100%); background-color: #3B82F6; border: 1px #3B82F6 solid; border-radius: 5px;">
       <div style="display: flex; padding: 8px">
         <div style="max-width: 215px; padding:0px 8px 0px 0px; color: #FFFFFF; font-size: 18px; font-weight: 600; text-align: center;">
           <div style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; word-break: keep-all; overflow: hidden; text-overflow: ellipsis;">
-            ${place.name}
+            ${name}
           </div>
         </div>
         <div style="display:flex; justify-content: center; align-items: center;">

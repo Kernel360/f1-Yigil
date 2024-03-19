@@ -13,7 +13,7 @@ export const basicMarker = (
         </div>
         <div style="position: absolute; width: 0.75rem; height: 0.75rem; bottom: -7px; left: 0; right: 0; margin: 0 auto; background-color: ${
           selected ? '#3B82F6' : '#FFFFFF'
-        }; border-bottom: 1px #3B82F6 solid; border-right:1px #374151 solid; border-bottom-right-radius: 3px; transform: rotate(45deg);"></div>
+        }; border-bottom: 1px #3B82F6 solid; border-right:1px #3B82F6 solid; border-bottom-right-radius: 3px; transform: rotate(45deg);"></div>
       </div>
     </div>`,
     anchor: new naver.maps.Point(0, 0),
