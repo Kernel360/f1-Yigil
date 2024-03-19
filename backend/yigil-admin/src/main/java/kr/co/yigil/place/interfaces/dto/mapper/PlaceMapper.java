@@ -1,11 +1,13 @@
 package kr.co.yigil.place.interfaces.dto.mapper;
 
 import kr.co.yigil.place.domain.Place;
-import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
 import kr.co.yigil.place.interfaces.dto.response.PlaceDetailResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlacesResponse;
+import kr.co.yigil.place.interfaces.dto.response.PointDto;
+import org.locationtech.jts.geom.Point;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 @Mapper(
@@ -19,7 +21,15 @@ public interface PlaceMapper {
         return new PlacesResponse(places.map(this::toDto));
     }
 
-    PlaceInfoDto toDto(Place place);
+    @Mapping(target = "location", source = "location")
+    PlacesResponse.PlaceInfoDto toDto(Place place);
 
+    default PointDto map(Point value){
+        return new PointDto(value.getX(), value.getY());
+    }
+
+
+    @Mapping(target = "location", source = "location")
     PlaceDetailResponse toResponse(Place place);
+
 }

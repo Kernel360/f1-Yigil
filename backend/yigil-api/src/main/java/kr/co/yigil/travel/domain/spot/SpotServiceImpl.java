@@ -78,7 +78,6 @@ public class SpotServiceImpl implements SpotService {
 		}
 
 		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
-		place.updateLatestUploadedTime();
 		var attachFiles = spotSeriesFactory.initAttachFiles(command);
 		placeCacheStore.incrementSpotCountInPlace(place.getId());
 		placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), command.getRate());

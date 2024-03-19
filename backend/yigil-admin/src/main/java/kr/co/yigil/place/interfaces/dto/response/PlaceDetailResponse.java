@@ -1,9 +1,10 @@
 package kr.co.yigil.place.interfaces.dto.response;
 
-import java.awt.Point;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -11,7 +12,10 @@ import lombok.NoArgsConstructor;
 public class PlaceDetailResponse {
     private Long id;
     private String name;
-    private Point location;
+    private String address;
+    private LocalDateTime latestUploadedTime;
+    private PointDto location;
     private String imageFileUrl;
-
+    private String mapStaticImageFileUrl;
+    private String regionName;
 }

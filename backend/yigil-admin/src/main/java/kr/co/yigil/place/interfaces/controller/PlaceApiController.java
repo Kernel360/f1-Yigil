@@ -16,12 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +29,7 @@ public class PlaceApiController {
     @GetMapping
     public ResponseEntity<PlacesResponse> getPlaces(
             @PageableDefault(size = 5, page = 1) Pageable pageable,
-            @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
+            @RequestParam(name = "sortBy", defaultValue = "latest_uploaded_time", required = false) SortBy sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
@@ -46,8 +41,8 @@ public class PlaceApiController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<PlaceDetailResponse> getPlaceDetail(@RequestParam Long placeId) {
+    @GetMapping("/{placeId}")
+    public ResponseEntity<PlaceDetailResponse> getPlaceDetail(@PathVariable Long placeId) {
         Place place = placeFacade.getPlaceDetail(placeId);
         PlaceDetailResponse response = placeMapper.toResponse(place);
         return ResponseEntity.ok(response);
@@ -58,7 +53,4 @@ public class PlaceApiController {
         placeFacade.updateImage(request.getPlaceId(), request.getImageFile());
         return ResponseEntity.ok(new PlaceImageUpdateResponse("이미지 업데이트 완료"));
     }
-
-
-
 }

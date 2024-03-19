@@ -84,4 +84,8 @@ public class Place {
     public void updateImage(AttachFile updatedImage) {
         this.imageFile = updatedImage;
     }
+
+    public String getRegionName() {
+        return region.getName();
+    }
 }
