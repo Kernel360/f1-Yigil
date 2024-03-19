@@ -41,22 +41,56 @@ const manyPlaceSchema = z.object({
   places: z.array(placeSchema),
 });
 
-export async function getRecommendedPlaces(): Promise<
+type TPlaceResult =
   | { status: 'failed'; message: string; code: number }
-  | { status: 'succeed'; data: TPlace[] }
-> {
+  | { status: 'succeed'; data: TPlace[] };
+
+async function getEndpoint(
+  type: 'popular' | 'region' | 'recommended',
+  more?: boolean,
+  id?: number,
+) {
   const BASE_URL = await getBaseUrl();
+
+  const placeEndpoint = `${BASE_URL}/v1/places`;
+
+  switch (type) {
+    case 'popular': {
+      return `${placeEndpoint}/popular${more ? '/more' : ''}`;
+    }
+    case 'region': {
+      return `${placeEndpoint}/region/${id}${more ? '/more' : ''}`;
+    }
+    case 'recommended': {
+      return `${placeEndpoint}/popular-demographics${more ? '-more' : ''}`;
+    }
+  }
+}
+
+async function fetchPlaces(
+  type: 'popular' | 'region' | 'recommended',
+  more?: boolean,
+  id?: number,
+) {
+  const endpoint = await getEndpoint(type, more, id);
   const session = cookies().get('SESSION')?.value;
 
-  const response = await fetch(`${BASE_URL}/v1/places/popular-demographics`, {
-    method: 'GET',
+  const response = await fetch(endpoint, {
     headers: {
       Cookie: `SESSION=${session}`,
     },
-    next: { tags: ['recommended'] },
+    next: { tags: [type] },
   });
 
-  const json = await response.json();
+  return await response.json();
+}
+
+export async function getPlaces(
+  type: 'popular' | 'region' | 'recommended',
+  more?: 'more',
+  id?: number,
+): Promise<TPlaceResult> {
+  const json = await fetchPlaces(type, more === 'more', id);
 
   const error = backendErrorSchema.safeParse(json);
 

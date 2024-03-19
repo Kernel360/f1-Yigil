@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import DummyPlace from './DummyPlace';
 
+import ChevronRightIcon from '/public/icons/chevron-right.svg';
+
 export default function DummyPlaces({
   title,
   variant,
@@ -12,7 +14,9 @@ export default function DummyPlaces({
     <div className="relative flex flex-col">
       <div className="flex justify-between items-center px-4 pt-2">
         <span className="pl-4 text-3xl font-medium">{title}</span>
-        <span>더보기</span>
+        <span>
+          <ChevronRightIcon className="w-6 h-6 stroke-black stroke-2 [stroke-linecap:round] [stroke-linejoin:round]" />
+        </span>
       </div>
       <div className="flex overflow-hidden px-4">
         <DummyPlace variant={variant} />

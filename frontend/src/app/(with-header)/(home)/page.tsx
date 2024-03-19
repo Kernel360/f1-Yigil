@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { homePopOverData } from '@/app/_components/ui/popover/constants';
 import FloatingActionButton from '@/app/_components/FloatingActionButton';
 import { PopularPlaces, RegionPlaces } from '@/app/_components/place';
@@ -14,6 +12,8 @@ import {
 import PlusIcon from '@/../public/icons/plus.svg';
 import { myInfoSchema } from '@/types/response';
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
+import RecommendedPlaces from '@/app/_components/place/RecommendedPlaces';
+import { Suspense } from 'react';
 
 function OpenedFABIcon() {
   return <PlusIcon className="w-9 h-9 rotate-45 duration-200 z-30" />;
@@ -24,24 +24,19 @@ function ClosedFABIcon() {
 }
 
 export default async function HomePage() {
-  const popularPlacesResult = await getPopularPlaces();
-
-  if (!popularPlacesResult.success) {
-    console.log(popularPlacesResult.error.errors);
-
-    return <main>Failed to get popular places</main>;
-  }
-
-  const popularPlaces = popularPlacesResult.data.places;
-
   const memberJson = await authenticateUser();
   const memberInfo = myInfoSchema.safeParse(memberJson);
 
   if (!memberInfo.success) {
     return (
       <main className="max-w-full flex flex-col gap-6 relative">
-        <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
+        <Suspense
+          fallback={<DummyPlaces title="관심 지역" variant="primary" />}
+        >
+          <PopularPlaces isLoggedIn={memberInfo.success} />
+        </Suspense>
         <DummyPlaces title="관심 지역" variant="secondary" />
+        <DummyPlaces title="맞춤 추천" variant="secondary" />
         <FloatingActionButton
           popOverData={homePopOverData}
           backdropStyle="bg-black bg-opacity-10"
@@ -63,7 +58,11 @@ export default async function HomePage() {
   if (regions.length === 0) {
     return (
       <main className="max-w-full flex flex-col gap-6 relative">
-        <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
+        <Suspense
+          fallback={<DummyPlaces title="관심 지역" variant="primary" />}
+        >
+          <PopularPlaces isLoggedIn={memberInfo.success} />
+        </Suspense>
         <RegionPlaces
           regions={regions}
           initialRegionPlaces={[]}
@@ -91,15 +90,27 @@ export default async function HomePage() {
 
   return (
     <main className="max-w-full flex flex-col gap-8 relative">
-      <PopularPlaces data={popularPlaces} isLoggedIn={memberInfo.success} />
-      <RegionPlaces
-        regions={regions}
-        initialRegion={regions[0]}
-        initialRegionPlaces={regionPlaces}
-        isLoggedIn={memberInfo.success}
-        variant="secondary"
-        carousel
-      />
+      <Suspense fallback={<DummyPlaces title="인기" variant="primary" />}>
+        <PopularPlaces isLoggedIn={memberInfo.success} />
+      </Suspense>
+      <Suspense
+        fallback={<DummyPlaces title="관심 지역" variant="secondary" />}
+      >
+        <RegionPlaces
+          regions={regions}
+          initialRegion={regions[0]}
+          initialRegionPlaces={regionPlaces}
+          isLoggedIn={memberInfo.success}
+          variant="secondary"
+          carousel
+        />
+      </Suspense>
+
+      <Suspense
+        fallback={<DummyPlaces title="맞춤 추천" variant="secondary" />}
+      >
+        <RecommendedPlaces />
+      </Suspense>
       <FloatingActionButton
         popOverData={homePopOverData}
         backdropStyle="bg-black bg-opacity-10"

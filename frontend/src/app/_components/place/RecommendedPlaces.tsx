@@ -1,16 +1,16 @@
 import Places from './Places';
-import { getRecommendedPlaces } from './action';
+import { getPlaces } from './action';
 
 export default async function RecommendedPlaces() {
-  const recommended = await getRecommendedPlaces();
+  const result = await getPlaces('recommended', 'more');
 
-  if (recommended.status === 'failed') {
-    return <>{recommended.message}</>;
+  if (result.status === 'failed') {
+    return <>{result.message}</>;
   }
 
   return (
     <Places
-      data={recommended.data}
+      data={result.data}
       isLoggedIn={false}
       carousel
       variant="secondary"
