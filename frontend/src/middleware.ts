@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authenticateUser } from './app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from './types/response';
 
-const restricted = ['/add', '/mypage', '/setting'];
+const restricted = ['/add', '/mypage', '/setting', '/area'];
 
 export default async function middleware(request: NextRequest) {
   const { ENVIRONMENT, PRODUCTION_FRONTEND_URL, DEV_FRONTEND_URL } =

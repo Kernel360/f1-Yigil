@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { getRegionPlaces } from '@/app/(with-header)/(home)/action';
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -32,10 +33,9 @@ export default function RegionSelect({
     return (
       <nav className="flex items-center gap-2">
         <span>관심 지역을 설정하세요.</span>
-        {/* 사용자 정보 수정 UI로 연결 */}
-        {/* <Link className="underline text-gray-500" href="#">
+        <Link className="underline text-gray-500" href="/area">
           설정
-        </Link> */}
+        </Link>
       </nav>
     );
   }
@@ -56,10 +56,9 @@ export default function RegionSelect({
           {region.name}
         </button>
       ))}
-      {/* 사용자 정보 수정 UI로 연결 */}
-      {/* <Link className="underline text-gray-500" href="#">
+      <Link className="underline text-gray-500" href="/area">
         설정
-      </Link> */}
+      </Link>
     </nav>
   );
 }

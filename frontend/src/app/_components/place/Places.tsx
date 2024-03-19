@@ -21,7 +21,7 @@ export default function Places({
 
   if (!carousel) {
     return (
-      <div className="flex">
+      <div className="flex flex-col gap-4">
         {data.map((post, index) => (
           <Place
             key={post.id}
