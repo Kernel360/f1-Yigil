@@ -2,11 +2,14 @@ package kr.co.yigil.travel.domain.spot;
 
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
+import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotInfo.MySpotsResponse;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Slice;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface SpotService {
 
@@ -23,4 +26,6 @@ public interface SpotService {
     void deleteSpot(Long spotId, Long memberId);
 
     MySpotsResponse retrieveSpotList(Long memberId, Selected selected, Pageable pageable);
+
+    CourseInfo.MySpotsInfo getMySpotsDetailInfo(List<Long> spotIds, Long memberId);
 }
