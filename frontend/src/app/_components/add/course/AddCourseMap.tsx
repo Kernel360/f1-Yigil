@@ -1,13 +1,7 @@
 'use client';
 
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Container,
-  Marker,
-  NaverMap,
-  Overlay,
-  useNavermaps,
-} from 'react-naver-maps';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Container, Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import AddTravelSearchResult from '../AddTravelSearchResult';
 
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
@@ -21,6 +15,36 @@ import { basicMarker } from '../../naver-map/markers/basicMarker';
 import { plusMarker } from '../../naver-map/markers/plusMarker';
 import ChipCarousel from '../../ui/carousel/ChipCarousel';
 import { SPOTS_COUNT } from '@/context/travel/schema';
+
+import Marker1 from '/public/icons/markers/marker1.svg?url';
+import Marker2 from '/public/icons/markers/marker2.svg?url';
+import Marker3 from '/public/icons/markers/marker3.svg?url';
+import Marker4 from '/public/icons/markers/marker4.svg?url';
+import Marker5 from '/public/icons/markers/marker5.svg?url';
+
+function getNumberMarker(num: number) {
+  if (num === 1) {
+    return Marker1.src;
+  }
+
+  if (num === 2) {
+    return Marker2.src;
+  }
+
+  if (num === 3) {
+    return Marker3.src;
+  }
+
+  if (num === 4) {
+    return Marker4.src;
+  }
+
+  if (num === 5) {
+    return Marker5.src;
+  }
+
+  return '';
+}
 
 const defaultCenter = {
   lat: 37.5135869,
@@ -59,8 +83,14 @@ export default function AddCourseMap() {
     courseMarkersRef.current.forEach((marker) => marker.setMap(null));
 
     const courseMarkers = course.spots.map(
-      ({ place }) =>
-        new naver.maps.Marker({ position: place.coords, title: place.name }),
+      ({ place }, index) =>
+        new naver.maps.Marker({
+          position: place.coords,
+          title: place.name,
+          icon: {
+            url: getNumberMarker(index + 1),
+          },
+        }),
     );
 
     courseMarkersRef.current = courseMarkers;
@@ -153,9 +183,6 @@ export default function AddCourseMap() {
                 }
                 onClick={handleClick}
               ></Marker>
-              {/* {courseMarkerRef.current.map((spotMarker, index) => (
-                <Overlay key={index} element={spotMarker} />
-              ))} */}
             </NaverMap>
           </Container>
         </div>
