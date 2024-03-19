@@ -4,7 +4,6 @@ import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { CourseContext } from '@/context/travel/course/CourseContext';
-import { isDefaultPlace } from '@/context/travel/place/reducer';
 import ToastMsg from '../../ui/toast/ToastMsg';
 
 import type { Dispatch } from 'react';

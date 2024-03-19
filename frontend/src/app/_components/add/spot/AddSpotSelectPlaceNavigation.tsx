@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 import { SpotContext } from '@/context/travel/spot/SpotContext';
 
-import { isDefaultChoosePlace } from '@/context/travel/place/reducer';
+import { isDefaultChoosePlace } from '@/context/travel/utils';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { SpotStepContext } from '@/context/travel/step/spot/SpotStepContext';
 import { SpotContext } from '@/context/travel/spot/SpotContext';
-import { isDefaultPlace } from '@/context/travel/place/reducer';
+import { isDefaultPlace } from '@/context/travel/utils';
 
 import { postSpot } from './action';
 

@@ -67,3 +67,10 @@ export const currentSpotReviewSchema = currentSpotDataSchema(reviewSchema);
 export const currentSpotImagesSchema =
   currentSpotDataSchema(manyInputImageSchema);
 export const currentSpotPlaceSchema = currentSpotDataSchema(choosePlaceSchema);
+
+export const placeStateSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('spot'), data: choosePlaceSchema }),
+  z.object({ type: z.literal('course'), data: z.array(choosePlaceSchema) }),
+]);
+
+export type TPlaceState = z.infer<typeof placeStateSchema>;
