@@ -78,18 +78,19 @@ class SpotServiceImplTest {
     void whenGetSpot_thenShouldReturnSpotDetailInfo() {
         Long spotId = 1L;
         AttachFile mockAttachFile = new AttachFile(null, "url", "filename", 4L);
-        Point point = mock(Point.class);
-        Place mockPlace = new Place(1L, "name", "address", point, mockAttachFile,
+        Point location = mock(Point.class);
+        Place mockPlace = new Place(1L, "name", "address", location, mockAttachFile,
                 mockAttachFile, LocalDateTime.now());
         AttachFiles attachFiles = new AttachFiles(List.of(mockAttachFile, mockAttachFile));
-        Spot spot = new Spot(1L, mock(Member.class), null, false, null, null, attachFiles,
+
+        Spot spot = new Spot(1L, mock(Member.class), location, false, null, null, attachFiles,
                 mockPlace, 5.0);
         when(spotReader.getSpot(spotId)).thenReturn(spot);
-        when(point.getCoordinate()).thenReturn(new Coordinate(1.0, 1.0));
+        when(location.getCoordinate()).thenReturn(new Coordinate(1.0, 1.0));
         SpotInfoDto.SpotAdditionalInfo additionalInfo = new SpotInfoDto.SpotAdditionalInfo(1, 1);
         when(favorReader.getFavorCount(any(Long.class))).thenReturn(additionalInfo.getFavorCount());
         when(commentReader.getCommentCount(any(Long.class))).thenReturn(
-            additionalInfo.getCommentCount());
+                additionalInfo.getCommentCount());
 
         var result = spotServiceImpl.getSpot(spotId);
 
