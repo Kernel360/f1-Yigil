@@ -1,6 +1,8 @@
 package kr.co.yigil.place.interfaces.dto.mapper;
 
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.interfaces.dto.request.PlaceImageUpdateRequest;
 import kr.co.yigil.place.interfaces.dto.response.PlaceDetailResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlacesResponse;
 import kr.co.yigil.place.interfaces.dto.response.PointDto;
@@ -32,4 +34,5 @@ public interface PlaceMapper {
     @Mapping(target = "location", source = "location")
     PlaceDetailResponse toResponse(Place place);
 
+    PlaceCommand.UpdateImageCommand toCommand(PlaceImageUpdateRequest request);
 }

@@ -5,6 +5,7 @@ import kr.co.yigil.global.SortBy;
 import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.place.application.PlaceFacade;
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
 import kr.co.yigil.place.interfaces.dto.request.PlaceImageUpdateRequest;
 import kr.co.yigil.place.interfaces.dto.response.PlaceDetailResponse;
@@ -50,7 +51,8 @@ public class PlaceApiController {
 
     @PostMapping("/update-image")
     public ResponseEntity<PlaceImageUpdateResponse> updateImage(@ModelAttribute PlaceImageUpdateRequest request) {
-        placeFacade.updateImage(request.getPlaceId(), request.getImageFile());
+        PlaceCommand.UpdateImageCommand command = placeMapper.toCommand(request);
+        placeFacade.updateImage(command);
         return ResponseEntity.ok(new PlaceImageUpdateResponse("이미지 업데이트 완료"));
     }
 }

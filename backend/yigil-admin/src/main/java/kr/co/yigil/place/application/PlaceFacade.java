@@ -1,12 +1,12 @@
 package kr.co.yigil.place.application;
 
 import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
 import kr.co.yigil.place.domain.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class PlaceFacade {
@@ -19,11 +19,8 @@ public class PlaceFacade {
         return placeService.getPlaceDetail(placeId);
     }
 
-    public void updateImage(Long placeId, MultipartFile imageFile) {
-        placeService.updateImage(placeId, imageFile);
+    public void updateImage(PlaceCommand.UpdateImageCommand command) {
+        placeService.updateImage(command);
     }
-
-
-
 
 }
