@@ -1,7 +1,11 @@
 import Places from './Places';
 import { getPlaces } from './action';
 
-export default async function RecommendedPlaces() {
+export default async function RecommendedPlaces({
+  isLoggedIn,
+}: {
+  isLoggedIn: boolean;
+}) {
   const result = await getPlaces('recommended', 'more');
 
   if (result.status === 'failed') {
@@ -11,7 +15,7 @@ export default async function RecommendedPlaces() {
   return (
     <Places
       data={result.data}
-      isLoggedIn={false}
+      isLoggedIn={isLoggedIn}
       carousel
       variant="secondary"
     />

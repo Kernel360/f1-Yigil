@@ -5,10 +5,14 @@ import ChevronRightIcon from '/public/icons/chevron-right.svg';
 
 export default function DummyPlaces({
   title,
+  message,
   variant,
+  isLoggedIn,
 }: {
   title: string;
+  message?: string;
   variant?: 'primary' | 'secondary';
+  isLoggedIn?: boolean;
 }) {
   return (
     <div className="relative flex flex-col">
@@ -22,13 +26,14 @@ export default function DummyPlaces({
         <DummyPlace variant={variant} />
         <DummyPlace variant={variant} />
       </div>
+
       <div className="absolute inset-0 bg-white/75 flex flex-col gap-4 justify-center items-center">
-        <span className="text-lg font-semibold">
-          로그인 후 사용 가능합니다.
-        </span>
-        <Link className="p-2 rounded-lg bg-main text-white" href="/login">
-          로그인
-        </Link>
+        <span className="text-lg font-semibold">{message}</span>
+        {!isLoggedIn && (
+          <Link className="p-2 rounded-lg bg-main text-white" href="/login">
+            로그인
+          </Link>
+        )}
       </div>
     </div>
   );
