@@ -12,5 +12,5 @@ public class NotificationInfoDto {
     private Long notificationId;
     private String message;
     private String createDate;
-    private Boolean isRead;
+    private boolean read;
 }
