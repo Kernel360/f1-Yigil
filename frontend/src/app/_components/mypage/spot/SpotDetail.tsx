@@ -12,6 +12,7 @@ import { TImageData } from '../../images/ImageHandler';
 import { patchMyPageSpotDetail } from '../hooks/myPageActions';
 import Dialog from '../../ui/dialog/Dialog';
 import ToastMsg from '../../ui/toast/ToastMsg';
+import * as Common from './spotDetailModify';
 
 const starList = Array.from({ length: 5 }, (v, idx) => ({
   label: (
@@ -64,6 +65,7 @@ export default function SpotDetail({
 
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [isValidated, setIsValidated] = useState(true);
 
   const [emblaRef] = useEmblaCarousel({
     loop: false,
@@ -80,6 +82,11 @@ export default function SpotDetail({
   };
 
   const onClickComplete = () => {
+    if (!modifyDetail.description || description.length > 30) {
+      setErrorText('리뷰를 1자이상 30자 이내로 입력해야 합니다.');
+      setIsDialogOpened(false);
+      return;
+    }
     try {
       patchMyPageSpotDetail(spotId, modifyDetail);
     } catch (error) {
@@ -170,12 +177,12 @@ export default function SpotDetail({
           {create_date}
         </span>
         {isModifyMode ? (
-          <textarea
-            name=""
-            id=""
-            placeholder={description}
-            className="p-4 h-1/5 border-2 border-violet bg-gray-100 rounded-xl text-lg resize-none"
-          ></textarea>
+          <Common.TextArea
+            description={modifyDetail.description}
+            setModifyDetail={setModifyDetail}
+            isValidated={isValidated}
+            setIsValidated={setIsValidated}
+          />
         ) : (
           <div className="p-4 h-1/6 flex flex-col gap-2 bg-gray-100 rounded-xl text-lg justify-self-end border-2 border-transparent">
             {description}
@@ -194,15 +201,3 @@ export default function SpotDetail({
     </div>
   );
 }
-
-/**
- *  <section className="mt-8">
-        <div className="flex justify-between items-center">
-          <span className="text-gray-900 text-2xl leading-5 py-2 pl-2">
-            {place_name}
-          </span>
-         
-        </div>
-        <div className="text-gray-500 text-lg leading-5">{place_address}</div>
-      </section>
- */
