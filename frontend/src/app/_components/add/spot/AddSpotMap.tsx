@@ -5,7 +5,6 @@ import { Container, Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import AddTravelSearchResult from '../AddTravelSearchResult';
 
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
-import { PlaceContext } from '@/context/travel/place/PlaceContext';
 
 import ToastMsg from '../../ui/toast/ToastMsg';
 
@@ -28,39 +27,28 @@ export default function AddSpotMap() {
 
   const [addTravelMapState, dispatchAddTravelMap] =
     useContext(AddTravelMapContext);
-  const [placeState] = useContext(PlaceContext);
 
   const { current, selectedPlace } = addTravelMapState;
 
   useEffect(() => {
-    if (mapRef.current && current.type === 'spot') {
+    if (mapRef.current) {
       mapRef.current.autoResize();
-      mapRef.current.panTo(current.data.coords);
+      mapRef.current.panTo(current.coords);
     }
   }, [current]);
-
-  if (placeState.type === 'course') {
-    return null;
-  }
-
-  if (current.type === 'course') {
-    return null;
-  }
-
-  const currentPlace = current.data;
 
   async function handleClick() {
     setError('');
     setInform('');
 
-    if (isEqualPlace(currentPlace, selectedPlace)) {
+    if (isEqualPlace(current, selectedPlace)) {
       dispatchAddTravelMap({ type: 'UNSELECT_PLACE' });
       setInform('');
       return;
     }
 
     try {
-      const { name, address, coords } = currentPlace;
+      const { name, address, coords } = current;
       const imageUrl = await getMap(name, address, coords);
 
       if (imageUrl.status === 'failed') {
@@ -80,13 +68,10 @@ export default function AddSpotMap() {
       dispatchAddTravelMap({
         type: 'SET_CURRENT_PLACE',
         payload: {
-          type: 'spot',
-          data: {
-            name,
-            address,
-            coords,
-            mapImageUrl: imageUrl.data,
-          },
+          name,
+          address,
+          coords,
+          mapImageUrl: imageUrl.data,
         },
       });
       setInform('완료를 눌러 장소를 입력하세요.');
@@ -101,7 +86,7 @@ export default function AddSpotMap() {
     }
   }
 
-  const { lat, lng } = currentPlace.coords;
+  const { lat, lng } = current.coords;
 
   return (
     <section className="flex flex-col grow">
@@ -115,11 +100,11 @@ export default function AddSpotMap() {
               {lng !== 0 && lat !== 0 && (
                 <Marker
                   ref={markerRef}
-                  title={currentPlace.name}
-                  position={currentPlace.coords}
+                  title={current.name}
+                  position={current.coords}
                   icon={basicMarker(
-                    currentPlace.name,
-                    isEqualPlace(selectedPlace, currentPlace),
+                    current.name,
+                    isEqualPlace(selectedPlace, current),
                   )}
                   onClick={handleClick}
                 ></Marker>

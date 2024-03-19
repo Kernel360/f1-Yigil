@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { SpotContext } from '@/context/travel/spot/SpotContext';
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
-import { isDefaultPlace } from '@/context/travel/place/reducer';
+import { isDefaultPlace } from '@/context/travel/utils';
 
 import { InfoTitle } from '../common';
 import AddTravelSearchBar from '../AddTravelSearchBar';

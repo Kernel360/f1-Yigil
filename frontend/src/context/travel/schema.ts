@@ -42,6 +42,7 @@ export const manyInputImageSchema = z
   .max(IMAGES_COUNT);
 
 export const spotStateSchema = z.object({
+  id: z.number().int().optional(),
   place: choosePlaceSchema,
   images: manyInputImageSchema,
   review: reviewSchema,
@@ -66,3 +67,10 @@ export const currentSpotReviewSchema = currentSpotDataSchema(reviewSchema);
 export const currentSpotImagesSchema =
   currentSpotDataSchema(manyInputImageSchema);
 export const currentSpotPlaceSchema = currentSpotDataSchema(choosePlaceSchema);
+
+export const placeStateSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('spot'), data: choosePlaceSchema }),
+  z.object({ type: z.literal('course'), data: z.array(choosePlaceSchema) }),
+]);
+
+export type TPlaceState = z.infer<typeof placeStateSchema>;

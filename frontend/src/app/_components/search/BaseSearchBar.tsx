@@ -10,9 +10,6 @@ import XMarkIcon from '/public/icons/x-mark.svg';
 
 import type { EventFor } from '@/types/type';
 
-/**
- * 로딩 상태 UI 필요
- */
 export default function BaseSearchBar({
   onCancel,
   onFocus,
@@ -21,7 +18,7 @@ export default function BaseSearchBar({
   cancellable,
 }: {
   onCancel: () => void;
-  onFocus?: (event: EventFor<'input', 'onFocus'>) => void;
+  onFocus?: () => void;
   onSearch: (term: string) => Promise<void>;
   placeholder?: string;
   cancellable?: boolean;
@@ -78,35 +75,6 @@ export default function BaseSearchBar({
     } finally {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
-
-    // switch (state.result.status) {
-    //   case 'searchEngine': {
-    //     return;
-    //   }
-
-    //   case 'start': {
-    //     const json = await searchPlaces(state.keyword);
-
-    //     dispatch({ type: 'SEARCH_PLACE', payload: json });
-    //     dispatch({ type: 'SET_LOADING', payload: false });
-
-    //     return;
-    //   }
-
-    //   case 'backend': {
-    //     const { type } = state.result.data;
-
-    //     if (type === 'course') {
-    //       // 코스 검색
-    //       return;
-    //     }
-
-    //     const json = await searchPlaces(state.keyword);
-
-    //     dispatch({ type: 'SEARCH_PLACE', payload: json });
-    //     dispatch({ type: 'SET_LOADING', payload: false });
-    //   }
-    // }
   }
 
   async function handleEnter(event: EventFor<'input', 'onKeyDown'>) {
@@ -132,10 +100,10 @@ export default function BaseSearchBar({
         />
         {searchParams.size !== 0 && (
           <button
-            className="p-1 bg-gray-400 rounded-full flex justify-center items-center"
+            className="p-[5px] bg-gray-400 rounded-full flex justify-center items-center"
             onClick={handleErase}
           >
-            <XMarkIcon className="w-3 h-3 stroke-white stroke-[1.25]" />
+            <XMarkIcon className="w-4 h-4 stroke-white stroke-[1.25]" />
           </button>
         )}
         <button onClick={handleSearch}>

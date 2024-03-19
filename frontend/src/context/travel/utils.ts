@@ -1,10 +1,12 @@
 import { TInputImage } from '@/app/_components/images';
-import type {
-  TChoosePlace,
-  TCoords,
-  TCourseState,
-  TReview,
-  TSpotState,
+import {
+  defaultChoosePlace,
+  type TChoosePlace,
+  type TCoords,
+  type TCourseState,
+  type TPlaceState,
+  type TReview,
+  type TSpotState,
 } from './schema';
 
 export function isEqualArray<T>(
@@ -73,4 +75,25 @@ export function isEqualCourse(first: TCourseState, second: TCourseState) {
   ];
 
   return results.every((result) => result);
+}
+
+export function isDefaultChoosePlace(choosePlace: TChoosePlace) {
+  return isEqualPlace(choosePlace, defaultChoosePlace);
+}
+
+export const defaultPlaceState: TPlaceState = {
+  type: 'spot',
+  data: defaultChoosePlace,
+};
+
+export function isDefaultPlace(state: TPlaceState) {
+  if (state.type === 'spot' && defaultPlaceState.type === 'spot') {
+    return isEqualPlace(state.data, defaultPlaceState.data);
+  }
+
+  if (state.type === 'course') {
+    return state.data.length === 0;
+  }
+
+  return false;
 }

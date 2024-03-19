@@ -2,22 +2,13 @@
 
 import { cookies } from 'next/headers';
 
-import {
-  blobTodataUrl,
-  coordsToGeoJSONPoint,
-  dataUrlToBlob,
-  getMIMETypeFromDataURI,
-} from '@/utils';
+import { blobTodataUrl } from '@/utils';
 
 import {
-  backendErrorSchema,
   naverStaticMapUrlErrorSchema,
-  postSpotResponseSchema,
   staticMapUrlSchema,
 } from '@/types/response';
 
-import type { TAddSpotProps } from '../spot/SpotContext';
-import { revalidateTag } from 'next/cache';
 import { getBaseUrl } from '@/app/utilActions';
 
 function staticMapUrl(
@@ -112,82 +103,4 @@ export async function getMap(
   const dataUrl = await blobTodataUrl(image);
 
   return { status: 'succeed', data: dataUrl };
-}
-
-async function parseAddSpotProps(state: TAddSpotProps) {
-  const { name, address, spotMapImageUrl, images, coords, rating, review } =
-    state;
-
-  const formData = new FormData();
-
-  formData.append('title', 'Spot Review');
-  formData.append('isInCourse', 'false');
-  formData.append('placeName', name);
-  formData.append('placeAddress', address);
-  formData.append('rate', rating.toString());
-  formData.append('description', review.review);
-
-  const pointJson = coordsToGeoJSONPoint(coords);
-
-  formData.append('placePointJson', pointJson);
-  formData.append('pointJson', pointJson);
-
-  const parsedImages = images.map(
-    ({ filename, uri }) =>
-      new File([dataUrlToBlob(uri)], filename, {
-        type: getMIMETypeFromDataURI(uri),
-      }),
-  );
-
-  formData.append('placeImageFile', parsedImages[0]);
-
-  parsedImages.forEach((image) => formData.append('files', image));
-
-  // If map image from Naver
-  if (spotMapImageUrl.startsWith('data:')) {
-    formData.append(
-      'mapStaticImageFile',
-      new File([dataUrlToBlob(spotMapImageUrl)], `${name} 지도 이미지.png`, {
-        type: 'image/png',
-      }),
-    );
-  }
-
-  return formData;
-}
-
-export async function postSpotData(state: TAddSpotProps) {
-  const session = cookies().get('SESSION')?.value;
-
-  const formData = await parseAddSpotProps(state);
-
-  const BASE_URL = await getBaseUrl();
-
-  // Next.js fetch form은 'Content-Type': 'multipart/form-data를
-  // 직접 명시하면 Boundary 설정이 어긋나 제대로 동작하지 않음
-  const response = await fetch(`${BASE_URL}/v1/spots`, {
-    method: 'POST',
-    body: formData,
-    headers: {
-      Cookie: `SESSION=${session}`,
-    },
-  });
-
-  if (!response.ok) {
-    console.log(response.status);
-    console.error('fetch failed');
-  }
-
-  const json = await response.json();
-
-  const result = postSpotResponseSchema.safeParse(json);
-
-  if (result.success) {
-    revalidateTag('popularPlaces');
-    return result;
-  }
-
-  const parsedError = backendErrorSchema.safeParse(json);
-
-  return parsedError;
 }

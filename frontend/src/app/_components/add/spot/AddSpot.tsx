@@ -1,8 +1,7 @@
 'use client';
 
 import NaverContext from '@/context/NaverContext';
-import StepProvider from '@/context/travel/step/StepContext';
-import PlaceProvider from '@/context/travel/place/PlaceContext';
+import SpotStepProvider from '@/context/travel/step/spot/SpotStepContext';
 import SpotProvider from '@/context/travel/spot/SpotContext';
 import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
 import SearchProvider from '@/context/search/SearchContext';
@@ -18,17 +17,15 @@ export default function AddSpot({
   return (
     <section className="h-full flex flex-col grow">
       <NaverContext ncpClientId={ncpClientId}>
-        <PlaceProvider>
-          <SpotProvider>
-            <StepProvider>
-              <AddTravelMapProvider>
-                <SearchProvider initialKeyword={initialKeyword}>
-                  <AddSpotContent />
-                </SearchProvider>
-              </AddTravelMapProvider>
-            </StepProvider>
-          </SpotProvider>
-        </PlaceProvider>
+        <SpotProvider>
+          <SpotStepProvider>
+            <AddTravelMapProvider>
+              <SearchProvider initialKeyword={initialKeyword}>
+                <AddSpotContent />
+              </SearchProvider>
+            </AddTravelMapProvider>
+          </SpotStepProvider>
+        </SpotProvider>
       </NaverContext>
     </section>
   );

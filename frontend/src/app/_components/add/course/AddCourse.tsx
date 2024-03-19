@@ -1,28 +1,34 @@
 'use client';
 
 import NaverContext from '@/context/NaverContext';
-import StepProvider from '@/context/travel/step/StepContext';
-import PlaceProvider from '@/context/travel/place/PlaceContext';
+import CourseWithNewStepProvider from '@/context/travel/step/course/CourseWithNewStepContext';
+import CourseWithoutNewStepProvider from '@/context/travel/step/course/CourseWithoutNewStepContext';
 import CourseProvider from '@/context/travel/course/CourseContext';
 import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
 import SearchProvider from '@/context/search/SearchContext';
 import AddCourseContent from './AddCourseContent';
 
-export default function AddCourse({ ncpClientId }: { ncpClientId: string }) {
+export default function AddCourse({
+  ncpClientId,
+  initialKeyword,
+}: {
+  ncpClientId: string;
+  initialKeyword: string;
+}) {
   return (
     <section className="h-full flex flex-col grow">
       <NaverContext ncpClientId={ncpClientId}>
-        <PlaceProvider course>
-          <CourseProvider>
-            <StepProvider course>
+        <CourseProvider>
+          <CourseWithNewStepProvider>
+            <CourseWithoutNewStepProvider>
               <AddTravelMapProvider>
-                <SearchProvider>
+                <SearchProvider initialKeyword={initialKeyword}>
                   <AddCourseContent />
                 </SearchProvider>
               </AddTravelMapProvider>
-            </StepProvider>
-          </CourseProvider>
-        </PlaceProvider>
+            </CourseWithoutNewStepProvider>
+          </CourseWithNewStepProvider>
+        </CourseProvider>
       </NaverContext>
     </section>
   );

@@ -3,9 +3,9 @@
 import { useContext } from 'react';
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
-import Progress from '../Progress';
-import Navigation from '../Navigation';
-import SelectPlaceNavigation from '../SelectPlaceNavigation';
+import SpotProgress from './SpotProgress';
+import SpotNavigation from './SpotNavigation';
+import AddSpotSelectPlaceNavigation from './AddSpotSelectPlaceNavigation';
 import AddSpotData from './AddSpotData';
 
 export default function AddSpotContent() {
@@ -14,10 +14,14 @@ export default function AddSpotContent() {
   return (
     <section className="relative flex flex-col grow">
       <div className="h-16 flex flex-col justify-center">
-        {!state.isMapOpen && <Progress />}
-        {state.isMapOpen ? <SelectPlaceNavigation /> : <Navigation />}
+        {state.isMapOpen ? (
+          <AddSpotSelectPlaceNavigation />
+        ) : (
+          <SpotNavigation />
+        )}
       </div>
       <div className="flex flex-col grow">
+        {!state.isMapOpen && <SpotProgress />}
         <AddSpotData />
       </div>
     </section>
