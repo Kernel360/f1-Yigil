@@ -54,28 +54,8 @@ export default function MyPageSpotList({
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
-      label: '기록 공개하기',
-      icon: <UnLockIcon className="w-6 h-6" />,
-      onClick: () => {
-        setDialogText('기록을 공개하시겠나요?');
-        setDialogState('unlock');
-        setIsDialogOpened(true);
-      },
+      label: '',
     },
-    {
-      label: '기록 삭제하기',
-      icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => {
-        setDialogText('기록을 삭제하시겠나요?');
-        setDialogState('delete');
-        setIsDialogOpened(true);
-      },
-    },
-    // {
-    //   href: '/add/course',
-    //   label: '일정 기록하기',
-    //   icon: <CalendarIcon className="w-6 h-6" />,
-    // },
   ]);
 
   const getSpots = async (
@@ -107,33 +87,7 @@ export default function MyPageSpotList({
   };
 
   useEffect(() => {
-    if (selectOption === 'all') {
-      setPopOverData([
-        {
-          label: '기록 나만보기',
-          icon: <LockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => {
-            setDialogText('기록을 잠금 설정하시겠나요?');
-            setDialogState('lock');
-            setIsDialogOpened(true);
-          },
-        },
-        {
-          label: '기록 삭제하기',
-          icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => {
-            setDialogText('기록을 삭제하시겠나요?');
-            setDialogState('delete');
-            setIsDialogOpened(true);
-          },
-        },
-        // {
-        //   label: '일정 기록하기',
-        //   href: '/add/course',
-        //   icon: <CalendarIcon className="w-6 h-6" />,
-        // },
-      ]);
-    } else if (selectOption === 'public') {
+    if (selectOption === ('all' || 'public')) {
       setPopOverData([
         {
           label: '기록 나만보기',
