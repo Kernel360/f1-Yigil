@@ -146,5 +146,4 @@ public class PlaceApiController {
         var response = placeMapper.toPlaceKeywordResponse(keywordsInfo);
         return ResponseEntity.ok().body(response);
     }
-
 }

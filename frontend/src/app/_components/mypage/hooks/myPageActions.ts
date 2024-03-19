@@ -57,30 +57,45 @@ export const deleteMySpot = async (spotId: number) => {
   }
 };
 
-// export const getMyPageCourses = async (
-//   pageNo: number = 1,
-//   size: number = 5,
-//   sortOrder: string = 'desc',
-//   selectOption: string = 'all',
-// ) => {
-//   const courseList = await myPageCourseRequest(
-//     `?page=${pageNo}&size=${size}&sortBy=${
-//       sortOrder !== 'rate'
-//         ? `created_at&sortOrder=${sortOrder}`
-//         : `rate&sortOrder=desc`
-//     }&selected=${selectOption}`,
-//   )()()();
-//   const parsedCourseList = myPageCourseListSchema.safeParse(courseList);
-//   return parsedCourseList;
-// };
+export const getMyPageCourses = async (
+  pageNo: number = 1,
+  size: number = 5,
+  sortOrder: string = 'desc',
+  selectOption: string = 'all',
+) => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+  const res = await fetch(
+    `${BASE_URL}/v1/courses/my?page=${pageNo}&size=${size}&sortBy=${
+      sortOrder !== 'rate'
+        ? `created_at&sortOrder=${sortOrder}`
+        : `rate&sortOrder=desc`
+    }&selected=${selectOption}`,
+    {
+      headers: {
+        Cookie: `SESSION=${cookie}`,
+      },
+    },
+  );
+  const courseList = await res.json();
+  const parsedCourseList = myPageCourseListSchema.safeParse(courseList);
+  return parsedCourseList;
+};
 
-// export const deleteMyCourse = async (courseId: number) => {
-//   const res = await courseRequest(`/${courseId}`)('DELETE')()();
-//   if (res) {
-//     revalidatePath('/mypage/my/travel/course');
-//     return res;
-//   }
-// };
+export const deleteMyCourse = async (courseId: number) => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+  const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
+    method: 'DELETE',
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+    },
+  });
+  if (res.ok) {
+    revalidatePath('/mypage/my/travel/course');
+    return res;
+  }
+};
 
 export const changeOnPublicMyTravel = async (travel_id: number) => {
   const BASE_URL = await getBaseUrl();
@@ -255,7 +270,6 @@ export const getMyPageCourseDetail = async (courseId: number) => {
     },
   });
   const result = await res.json();
-  console.log(result);
   const courseDetail = mypageCourseDetailSchema.safeParse(result);
   return courseDetail;
 };

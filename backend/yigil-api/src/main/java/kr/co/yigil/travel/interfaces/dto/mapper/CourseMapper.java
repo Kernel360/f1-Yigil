@@ -1,7 +1,5 @@
 package kr.co.yigil.travel.interfaces.dto.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseCommand;
 import kr.co.yigil.travel.domain.course.CourseInfo;
@@ -14,12 +12,16 @@ import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Slice;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = {SpotMapper.class})
 public interface CourseMapper {
@@ -112,4 +114,10 @@ public interface CourseMapper {
 
     @Mapping(target = "createDate", source = "createDate")
     CourseDto toCourseDto(CourseInfo.CourseSearchInfo courseSearchInfo);
+
+    @Mapping(target = "spotDetails", source = "mySpotDetailDtoList")
+    MySpotsDetailResponse toMySpotsDetailResponse(CourseInfo.MySpotsInfo infos);
+
+    @Mapping(target = "imageUrls", source = "imageUrls")
+    List<MySpotsDetailResponse.SpotDetailDto> toMySpotDetailDtoList(List<CourseInfo.MySpotDetailDto> mySpotDetails);
 }

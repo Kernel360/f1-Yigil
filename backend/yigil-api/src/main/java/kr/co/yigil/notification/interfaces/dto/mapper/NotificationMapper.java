@@ -1,13 +1,13 @@
 package kr.co.yigil.notification.interfaces.dto.mapper;
 
-import java.util.List;
 import kr.co.yigil.notification.domain.Notification;
 import kr.co.yigil.notification.interfaces.dto.NotificationInfoDto;
 import kr.co.yigil.notification.interfaces.dto.response.NotificationsResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface NotificationMapper {
@@ -24,7 +24,9 @@ public interface NotificationMapper {
                 .toList();
     }
 
+    @Mapping(target = "notificationId", source = "id")
     @Mapping(target = "message", source = "message")
     @Mapping(target = "createDate", expression = "java(notification.getCreatedAt().toString())")
+    @Mapping(target = "read", source = "read")
     NotificationInfoDto notificationToNotificationInfoDto(Notification notification);
 }

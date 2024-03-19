@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-11T15:27:23+0900",
+    date = "2024-03-18T12:33:22+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -21,7 +21,9 @@ public class NotificationMapperImpl implements NotificationMapper {
 
         NotificationInfoDto notificationInfoDto = new NotificationInfoDto();
 
+        notificationInfoDto.setNotificationId( notification.getId() );
         notificationInfoDto.setMessage( notification.getMessage() );
+        notificationInfoDto.setRead( notification.isRead() );
 
         notificationInfoDto.setCreateDate( notification.getCreatedAt().toString() );
 

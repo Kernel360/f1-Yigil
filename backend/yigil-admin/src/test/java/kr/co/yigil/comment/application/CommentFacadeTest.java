@@ -70,7 +70,7 @@ class CommentFacadeTest {
 
         commentFacade.deleteComment(commentId);
 
-        verify(notificationService).sendNotification(NotificationType.COMMENT_DELETE, adminId, memberId);
+        verify(notificationService).saveNotification(NotificationType.COMMENT_DELETE, adminId, memberId);
     }
 
     @DisplayName("getComments 메서드가 잘 호출되는지")

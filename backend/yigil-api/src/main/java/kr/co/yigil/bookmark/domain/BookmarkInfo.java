@@ -11,12 +11,12 @@ public class BookmarkInfo {
     private String placeImage;
     private Double rate;
 
-    public BookmarkInfo(Bookmark bookmark) {
-        this.bookmarkId = bookmark.getId();
-        this.placeId = bookmark.getPlace().getId();
-        this.placeName = bookmark.getPlace().getName();
-        this.placeImage = bookmark.getPlace().getImageFileUrl();
-        this.rate = bookmark.getPlace().getRate();
+    public BookmarkInfo(Long bookmarkId, Long placeId, String placeName, String placeImage, Double placeRate) {
+        this.bookmarkId = bookmarkId;
+        this.placeId = placeId;
+        this.placeName = placeName;
+        this.placeImage = placeImage;
+        this.rate = placeRate;
     }
 
 }

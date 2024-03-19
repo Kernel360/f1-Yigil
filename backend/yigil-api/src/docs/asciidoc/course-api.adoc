@@ -152,3 +152,32 @@ include::{snippets}/courses/search-course-by-place-name/response-fields.adoc[]
 
 ===== HTTP Response 예시
 include::{snippets}/courses/search-course-by-place-name/http-response.adoc[]
+
+=== 스팟아이디들로 스팟 정보 조회
+
+==== Request
+include::{snippets}/courses/get-my-spots-detail-info/request-body.adoc[]
+로그인 필수 : Y
+
+===== Request Body
+include::{snippets}/courses/get-my-spots-detail-info/request-body.adoc[]
+
+===== Request Fields
+include::{snippets}/courses/get-my-spots-detail-info/request-fields.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/courses/get-my-spots-detail-info/http-request.adoc[]
+
+==== Response
+include::{snippets}/courses/get-my-spots-detail-info/response-fields.adoc[]
+
+===== Response Body
+include::{snippets}/courses/get-my-spots-detail-info/response-body.adoc[]
+
+===== HTTP Response 예시
+include::{snippets}/courses/get-my-spots-detail-info/http-response.adoc[]
+
+
+
+
+

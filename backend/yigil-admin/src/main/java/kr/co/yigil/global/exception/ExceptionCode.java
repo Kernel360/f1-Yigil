@@ -20,6 +20,9 @@ public enum ExceptionCode {
     ADMIN_ALREADY_EXISTED(1201, "이미 존재하는 이메일 또는 닉네임입니다."),
     ADMIN_SIGNUP_REQUEST_NOT_FOUND(1202, "관리자 가입 요청 정보를 찾을 수 없습니다."),
 
+    REPORT_TYPE_DUPLICATED(2001,"이미 존재하는 리포트 타입입니다."),
+    REPORT_TYPE_NOT_FOUND(2002, "리포트 타입을 찾을 수 없습니다."),
+
     NOTICE_NOT_FOUND(3001, "공지사항을 찾을 수 없습니다."),
 
     ALREADY_BANNED(4001, "이미 정지된 사용자입니다."),
@@ -33,7 +36,8 @@ public enum ExceptionCode {
     EXPIRED_JWT_TOKEN(9102, "만료된 JWT 토큰입니다."),
     INVALID_AUTHORITY(9201, "해당 요청에 대한 접근 권한이 없습니다."),
 
-    SMTP_SERVER_ERROR(9998, "이메일 전송 중 에러가 발생했습니다."),
+    SMTP_SERVER_ERROR(8001, "이메일 전송 중 에러가 발생했습니다."),
+    INVALID_EMAIL_TYPE(8002, "이메일 이벤트 타입을 찾을 수 없습니다."),
     INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생했습니다.")
     ;
 
