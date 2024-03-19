@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.course.domain;
 
-import java.util.List;
 import kr.co.yigil.comment.domain.CommentReader;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.travel.course.domain.CourseInfoDto.CourseAdditionalInfo;
@@ -8,11 +7,14 @@ import kr.co.yigil.travel.course.domain.CourseInfoDto.CourseDetailInfo;
 import kr.co.yigil.travel.course.domain.CourseInfoDto.CourseListUnit;
 import kr.co.yigil.travel.course.domain.CourseInfoDto.CoursesPageInfo;
 import kr.co.yigil.travel.domain.Course;
+import kr.co.yigil.travel.domain.Spot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +31,11 @@ public class CourseServiceImpl implements CourseService {
         Page<Course> courses = courseReader.getCourses(pageRequest);
         List<Course> courseList = courses.getContent();
         var courseListUnits = courseList.stream()
-            .map(this::getCourseListUnit)
-            .toList();
+                .map(this::getCourseListUnit)
+                .toList();
 
         return new CoursesPageInfo(
-            courseListUnits, courses.getPageable(), courses.getTotalElements()
+                courseListUnits, courses.getPageable(), courses.getTotalElements()
         );
     }
 
@@ -41,7 +43,11 @@ public class CourseServiceImpl implements CourseService {
     @Transactional(readOnly = true)
     public CourseDetailInfo getCourse(Long courseId) {
         Course course = courseReader.getCourse(courseId);
-        return new CourseDetailInfo(course, getAdditionalInfo(courseId));
+        List<Spot> spots = course.getSpots();
+        List<CourseInfoDto.SpotDetailInfo> spotDetailInfos = spots.stream()
+                .map(this::getSpotDetailInfo).toList();
+
+        return new CourseDetailInfo(course, getAdditionalInfo(courseId), spotDetailInfos);
     }
 
     @Override
@@ -60,5 +66,13 @@ public class CourseServiceImpl implements CourseService {
 
     private CourseListUnit getCourseListUnit(Course course) {
         return new CourseListUnit(course, getAdditionalInfo(course.getId()));
+    }
+
+    private CourseInfoDto.SpotDetailInfo getSpotDetailInfo(Spot spot) {
+        return new CourseInfoDto.SpotDetailInfo(
+                spot,
+                favorReader.getFavorCount(spot.getId()),
+                commentReader.getCommentCount(spot.getId())
+        );
     }
 }
