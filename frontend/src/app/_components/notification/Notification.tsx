@@ -1,13 +1,11 @@
 'use client';
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getNotificationList } from './notificationActions';
 import { TNotification } from '@/types/notificationResponse';
 import Select from '../ui/select/Select';
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
 import { scrollToTop } from '@/utils';
 import LoadingIndicator from '../LoadingIndicator';
-import NotificationItem from './NotificationItem';
-import { subtract } from '@dnd-kit/utilities';
 import NotificationList from './NotificationList';
 import ToastMsg from '../ui/toast/ToastMsg';
 
@@ -44,7 +42,7 @@ export default function Notification({
       selectOption,
     );
     if (!notifications.success) {
-      setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
+      setErrorText('알림 데이터를 불러오는데 실패했습니다.');
       setIsLoading(false);
       return;
     }
