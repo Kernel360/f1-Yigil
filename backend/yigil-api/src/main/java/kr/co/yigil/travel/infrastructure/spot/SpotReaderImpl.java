@@ -67,12 +67,17 @@ public class SpotReaderImpl implements SpotReader {
     }
 
     @Override
-    public boolean isExistSpot(Long placeId, Long memberId) {
+    public boolean isExistPlace(Long placeId, Long memberId) {
         return spotRepository.existsByPlaceIdAndMemberId(placeId, memberId);
     }
 
     @Override
     public double getSpotTotalRateInPlace(Long placeId) {
         return spotRepository.getRateTotalByPlaceId(placeId).orElse(0.0);
+    }
+
+    @Override
+    public boolean isExistSpot(Long spotId, Long memberId) {
+        return spotRepository.existsByIdAndMemberId(spotId, memberId);
     }
 }

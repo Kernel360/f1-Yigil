@@ -86,12 +86,11 @@ class SpotServiceImplTest {
         Spot spot = new Spot(1L, mock(Member.class), location, false, null, null, attachFiles,
                 mockPlace, 5.0);
         when(spotReader.getSpot(spotId)).thenReturn(spot);
+        when(point.getCoordinate()).thenReturn(new Coordinate(1.0, 1.0));
         SpotInfoDto.SpotAdditionalInfo additionalInfo = new SpotInfoDto.SpotAdditionalInfo(1, 1);
         when(favorReader.getFavorCount(any(Long.class))).thenReturn(additionalInfo.getFavorCount());
         when(commentReader.getCommentCount(any(Long.class))).thenReturn(
                 additionalInfo.getCommentCount());
-
-        when(location.getCoordinate()).thenReturn(new Coordinate(1.0, 1.0));
 
         var result = spotServiceImpl.getSpot(spotId);
 

@@ -1,8 +1,5 @@
 package kr.co.yigil.place.domain;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
 import kr.co.yigil.member.Ages;
@@ -20,6 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -114,14 +115,14 @@ public class PlaceServiceImpl implements PlaceService {
     public MapStaticImageInfo findPlaceStaticImage(final Long memberId, final String placeName, final String address) {
         var placeOptional = placeReader.findPlaceByNameAndAddress(placeName, address);
 
-        boolean exist = checkExistSpot(placeOptional, memberId);
+        boolean exist = checkExistPlace(placeOptional, memberId);
         return new MapStaticImageInfo(placeOptional, exist);
     }
 
-    private boolean checkExistSpot(Optional<Place> placeOptional, Long memberId) {
+    private boolean checkExistPlace(Optional<Place> placeOptional, Long memberId) {
         if (placeOptional.isPresent()) {
             var placeId = placeOptional.get().getId();
-            return spotReader.isExistSpot(placeId, memberId);
+            return spotReader.isExistPlace(placeId, memberId);
         }
         return false;
     }
