@@ -6,33 +6,73 @@ import { useRouter } from 'next/navigation';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 import ToastMsg from '../../ui/toast/ToastMsg';
 
+import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
+import { getCourseStaticMap, getRouteGeoJson } from './action';
+
 import type { Dispatch } from 'react';
 import type {
   TCourseStepAction,
   TCourseWithNewStepState,
   TCourseWithoutNewStepState,
 } from '@/context/travel/step/course/types';
-import { TCourseState } from '@/context/travel/schema';
-import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
+import type { TCourseState } from '@/context/travel/schema';
+import type { TCourseAction } from '@/context/travel/course/reducer';
 
-function canGoNext(
+async function canGoNext(
   course: TCourseState,
+  dispatch: Dispatch<TCourseAction>,
   step: TCourseWithNewStepState | TCourseWithoutNewStepState,
-): true | string {
+): Promise<true | string> {
   switch (step.value) {
     case 0: {
       return true;
     }
     case 1: {
-      if (course.spots.length === 0) {
+      if (course.spots.length < 2) {
         return '장소를 선택해주세요!';
       }
+
+      const path = await getRouteGeoJson(course.spots);
+
+      if (path.status === 'failed') {
+        return path.message;
+      }
+
+      dispatch({ type: 'SET_PATH', payload: path.data });
 
       return true;
     }
     case 2:
+      if (course.spots.some((spot) => spot.images.length === 0)) {
+        return '각 장소에 적어도 하나의 사진을 올려주세요!';
+      }
+
       return true;
     case 3:
+      if (
+        course.spots.some((spot) => spot.review.content === '') ||
+        course.review.content === ''
+      ) {
+        return '각 장소와 코스 전체에 대한 리뷰를 작성해주세요!';
+      }
+
+      if (course.review.title === undefined || course.review.title === '') {
+        return '코스 제목을 작성해주세요!';
+      }
+
+      const staticMapImageUrl = await getCourseStaticMap(
+        course.spots.map(({ place }) => place.coords),
+      );
+
+      if (staticMapImageUrl.status === 'failed') {
+        return staticMapImageUrl.message;
+      }
+
+      dispatch({
+        type: 'SET_COURSE_STATIC_MAP',
+        payload: staticMapImageUrl.dataUrl,
+      });
+
       return true;
     case 4:
       return true;
@@ -84,11 +124,12 @@ export default function CourseNavigation({
         <button className="text-blue-500">확정</button>
       ) : (
         <button
-          onClick={() => {
-            const result = canGoNext(course, step);
+          onClick={async () => {
+            const result = await canGoNext(course, dispatchCourse, step);
 
             if (result !== true) {
               setError(result);
+              setTimeout(() => setError(''), 2000);
               return;
             }
 

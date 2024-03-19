@@ -53,7 +53,7 @@ export default function AddCourseContent() {
         {!state.isMapOpen && (
           <CourseProgress
             currentValue={
-              method === 'with-new' ? withNew.value : withoutNew.value
+              method === 'with-new' ? withNew.value + 1 : withoutNew.value
             }
           />
         )}

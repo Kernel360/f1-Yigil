@@ -11,13 +11,10 @@ import StarIcon from '/public/icons/star.svg';
 import PlaceholderImage from '/public/images/placeholder.png';
 import AddCourseSpots from './AddCourseSpots';
 
-const tempImage =
-  'http://cdn.yigil.co.kr/images/a188a3e6-6a33-4013-b97d-103d570f958a_%EC%86%94%ED%96%A5%EA%B8%B0%20%EC%A7%80%EB%8F%84%20%EC%9D%B4%EB%AF%B8%EC%A7%80.png';
-
 export default function AddCourseConfirm() {
   const [course] = useContext(CourseContext);
 
-  const { spots, review } = course;
+  const { spots, review, staticMapImageUrl } = course;
 
   const currentDate = new Date(Date.now());
 
@@ -36,12 +33,11 @@ export default function AddCourseConfirm() {
         </span>
       </div>
       <AddCourseSpots spots={spots} />
-      {/* 경로 이미지 */}
       <div className="my-4 relative aspect-video">
         <Image
           className="rounded-xl object-cover"
           priority
-          src={tempImage}
+          src={staticMapImageUrl}
           placeholder="blur"
           blurDataURL={PlaceholderImage.blurDataURL}
           alt={`${review.title} 경로 이미지`}
