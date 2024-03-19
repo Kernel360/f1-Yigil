@@ -1,13 +1,21 @@
-export const basicMarker = (name: string) => {
+export const basicMarker = (
+  name: string,
+  selected?: boolean,
+): naver.maps.HtmlIcon => {
   return {
-    content: `<div style=" border: 1px #374151 solid; border-radius: 5px; background-color: #fff; word-break:keep-all;">
-    <div style="display: flex; padding: 8px 10px; ">
-    <div style="padding:0px 0px 0px 0px; color:#374151; font-size: 18px; font-weight: 600; text-align: center;">${name}</div>
-    <div style="display:flex; justify-content: center; align-items: center;">
-    </div>
-    </div>
-    <div style="position:absolute; bottom:-6.3px; left: 45%; width: 12px; height:12px; background-color:#fff; border-bottom: 1px #374151 solid; border-right:1px #374151 solid; border-bottom-right-radius: 3px; transform: rotate(45deg);"></div>
+    content: `<div style="min-width: 85px; max-width: 215px; transform: translate(-50%, -100%); background-color: ${
+      selected ? '#3B82F6' : '#FFFFFF'
+    }; border: 1px #3B82F6 solid; border-radius: 5px;">
+      <div style="padding: 8px;">
+        <div style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; word-break: keep-all; color: ${
+          selected ? '#FFFFFF' : '#374151'
+        }; overflow: hidden; text-overflow: ellipsis; font-size: 18px; font-weight: 600; text-align: center;">${name}</div>
+        </div>
+        <div style="position: absolute; width: 0.75rem; height: 0.75rem; bottom: -7px; left: 0; right: 0; margin: 0 auto; background-color: ${
+          selected ? '#3B82F6' : '#FFFFFF'
+        }; border-bottom: 1px #3B82F6 solid; border-right:1px #3B82F6 solid; border-bottom-right-radius: 3px; transform: rotate(45deg);"></div>
+      </div>
     </div>`,
-    anchor: new naver.maps.Point(50, 50),
+    anchor: new naver.maps.Point(0, 0),
   };
 };

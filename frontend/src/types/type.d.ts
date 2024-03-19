@@ -27,15 +27,6 @@ declare global {
   }
 }
 
-declare module '*.svg' {
-  import React = require('react');
-  export const ReactComponent: React.FunctionComponent<
-    React.SVGProps<SVGSVGElement>
-  >;
-  const src: string;
-  export default src;
-}
-
 type GetEventHandlers<T extends keyof JSX.IntrinsicElements> = Extract<
   keyof JSX.IntrinsicElements[T],
   `on${string}`
