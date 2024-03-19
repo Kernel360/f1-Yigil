@@ -1,10 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import BackButton from '../../place/BackButton';
-import IconWithCounts from '../../IconWithCounts';
-import StarIcon from '/public/icons/star.svg';
 import { TMyPageSpotDetail } from '@/types/myPageResponse';
-import Select from '../../ui/select/Select';
+import StarIcon from '/public/icons/star.svg';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
 import ImageHandler from '../../images';
@@ -13,19 +11,7 @@ import { patchMyPageSpotDetail } from '../hooks/myPageActions';
 import Dialog from '../../ui/dialog/Dialog';
 import ToastMsg from '../../ui/toast/ToastMsg';
 import * as Common from './spotDetailModify';
-
-const starList = Array.from({ length: 5 }, (v, idx) => ({
-  label: (
-    <span className="text-gray-500 text-xl leading-6">
-      <IconWithCounts
-        icon={<StarIcon className="w-6 h-6 fill-[#FAbb15] pb-[3px]" />}
-        count={idx + 1}
-        rating
-      />
-    </span>
-  ),
-  value: `${idx + 1}.0`,
-}));
+import IconWithCounts from '../../IconWithCounts';
 
 export interface TModifyDetail {
   id: number;
@@ -123,14 +109,11 @@ export default function SpotDetail({
         <div className="flex justify-between items-center">
           <span className="text-2xl font-semibold">{place_name}</span>
           {isModifyMode ? (
-            <span className="border-violet border-2 rounded-md">
-              <Select
-                list={starList}
-                selectOption={selectOption}
-                defaultValue={rate}
-                onChangeSelectOption={onChangeSelectOption}
-              />
-            </span>
+            <Common.SelectContainer
+              selectOption={selectOption}
+              rate={rate}
+              onChangeSelectOption={onChangeSelectOption}
+            />
           ) : (
             <span className="text-gray-500 text-xl leading-6 flex items-center p-2 border-2 border-transparent">
               <IconWithCounts
@@ -152,12 +135,10 @@ export default function SpotDetail({
         </div>
 
         {isModifyMode ? (
-          <div className="h-1/3">
-            <ImageHandler
-              images={modifyDetail.image_urls}
-              setImages={setImages}
-            />
-          </div>
+          <Common.ModifyImage
+            image_urls={modifyDetail.image_urls}
+            setImages={setImages}
+          />
         ) : (
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex gap-2">
