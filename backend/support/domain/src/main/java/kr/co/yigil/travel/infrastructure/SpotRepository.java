@@ -1,8 +1,6 @@
 package kr.co.yigil.travel.infrastructure;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
+import kr.co.yigil.travel.domain.Spot;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -11,7 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import kr.co.yigil.travel.domain.Spot;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Repository
 public interface SpotRepository extends JpaRepository<Spot, Long> {
@@ -42,4 +41,6 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     @Query("SELECT SUM(s.rate) FROM Spot s WHERE s.place.id = :placeId")
     Optional<Double> getRateTotalByPlaceId(Long placeId);
+
+    boolean existsByIdAndMemberId(Long spotId, Long memberId);
 }

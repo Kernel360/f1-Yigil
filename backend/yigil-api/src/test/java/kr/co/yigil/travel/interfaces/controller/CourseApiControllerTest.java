@@ -1,31 +1,7 @@
 package kr.co.yigil.travel.interfaces.controller;
 
-import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
-import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.application.CourseFacade;
@@ -36,9 +12,11 @@ import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto.CourseSpotInfoDto;
 import kr.co.yigil.travel.interfaces.dto.CourseDto;
 import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.CourseMapper;
+import kr.co.yigil.travel.interfaces.dto.request.MySpotsDetailRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,6 +37,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
+import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(CourseApiController.class)
 @AutoConfigureRestDocs
@@ -74,7 +66,7 @@ public class CourseApiControllerTest {
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext,
-            RestDocumentationContextProvider restDocumentation) {
+               RestDocumentationContextProvider restDocumentation) {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation)).build();
     }
@@ -516,7 +508,71 @@ public class CourseApiControllerTest {
                                 fieldWithPath("courses[].create_date").type(JsonFieldType.STRING).description("코스 생성일")
                         )
                 ));
+    }
 
+    @DisplayName("getMySpotsDetailInfo 메서드가 잘 동작하는지")
+    @Test
+    void whenGetMySpotsDetailInfo_thenShouldReturn200AndResponse() throws Exception {
+
+        MySpotsDetailRequest request = new MySpotsDetailRequest();
+        request.setSpotIds(List.of(1L, 2L));
+
+        MySpotsDetailResponse.SpotDetailDto spotDetailDto1 = MySpotsDetailResponse.SpotDetailDto.builder()
+                .spotId(1L)
+                .placeName("장소명")
+                .placeAddress("장소주소")
+                .rate(4.5)
+                .description("스팟 본문")
+                .imageUrls(List.of("images/spot.jpg", "images/spotted.png"))
+                .createDate(LocalDateTime.now())
+                .point(MySpotsDetailResponse.PointDto.builder().x(1.0).y(1.0).build())
+                .build();
+
+        MySpotsDetailResponse.SpotDetailDto spotDetailDto2 = MySpotsDetailResponse.SpotDetailDto.builder()
+                .spotId(2L)
+                .placeName("장소명")
+                .placeAddress("장소주소")
+                .rate(4.5)
+                .description("스팟 본문")
+                .imageUrls(List.of("images/spot.jpg", "images/spotted.png"))
+                .createDate(LocalDateTime.now())
+                .point(MySpotsDetailResponse.PointDto.builder().x(2.0).y(2.0).build())
+                .build();
+
+        MySpotsDetailResponse response = new MySpotsDetailResponse();
+        response.setSpotDetails(List.of(spotDetailDto1, spotDetailDto2));
+
+        when(courseFacade.getMySpotsDetailInfo(anyList(), anyLong())).thenReturn(mock(CourseInfo.MySpotsInfo.class));
+
+        when(courseMapper.toMySpotsDetailResponse(any(CourseInfo.MySpotsInfo.class))).thenReturn(response);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        String json = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(post("/api/v1/courses/spots")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "courses/get-my-spots-detail-info",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("spot_ids").type(JsonFieldType.ARRAY).description("스팟 아이디 배열")
+                        ),
+                        responseFields(
+                                subsectionWithPath("spot_details").description("스팟의 상세 정보"),
+                                fieldWithPath("spot_details[].spot_id").type(JsonFieldType.NUMBER).description("스팟 아이디"),
+                                fieldWithPath("spot_details[].place_name").type(JsonFieldType.STRING).description("장소명"),
+                                fieldWithPath("spot_details[].place_address").type(JsonFieldType.STRING).description("장소주소"),
+                                fieldWithPath("spot_details[].rate").type(JsonFieldType.NUMBER).description("평점"),
+                                fieldWithPath("spot_details[].description").type(JsonFieldType.STRING).description("스팟 본문"),
+                                fieldWithPath("spot_details[].image_urls").type(JsonFieldType.ARRAY).description("이미지 URL 배열"),
+                                fieldWithPath("spot_details[].create_date").type(JsonFieldType.STRING).description("생성일"),
+                                subsectionWithPath("spot_details[].point").description("스팟의 좌표 정보")
+                        )
+                ));
 
     }
 }

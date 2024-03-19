@@ -43,6 +43,7 @@ public class Spot extends Travel {
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
         this.place = place;
+        this.place.updateLatestUploadedTime();
     }
 
 
@@ -54,6 +55,7 @@ public class Spot extends Travel {
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
         this.place = place;
+        this.place.updateLatestUploadedTime();
     }
 
     public void updateSpot(double rate, final String description, final List<AttachFile> attachFiles) {
