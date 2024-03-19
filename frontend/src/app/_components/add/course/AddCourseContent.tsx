@@ -9,6 +9,7 @@ import CourseProgress from './CourseProgress';
 import CourseNavigation from './CourseNavigation';
 import AddCourseData from './AddCourseData';
 import AddCourseSelectPlaceNavigation from './AddCourseSelectPlaceNavigation';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 export default function AddCourseContent() {
   const [state, dispatchAddTravelMap] = useContext(AddTravelMapContext);
@@ -17,9 +18,17 @@ export default function AddCourseContent() {
     CourseWithoutNewStepContext,
   );
 
+  const [error, setError] = useState('');
+
   const [method, setMethod] = useState<'with-new' | 'without-new'>('with-new');
 
   function onSelectMethod(nextMethod: 'with-new' | 'without-new') {
+    if (nextMethod === 'without-new') {
+      setError('준비 중입니다!');
+      setTimeout(() => setError(''), 2000);
+      return;
+    }
+
     setMethod(nextMethod);
   }
 
@@ -50,6 +59,7 @@ export default function AddCourseContent() {
         )}
         <AddCourseData method={method} onSelect={onSelectMethod} />
       </div>
+      {error && <ToastMsg id={Date.now()} title={error} timer={2000} />}
     </section>
   );
 }

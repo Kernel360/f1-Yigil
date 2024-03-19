@@ -1,4 +1,3 @@
-import { TPlaceState, placeStateSchema } from '../travel/place/reducer';
 import { choosePlaceSchema, defaultChoosePlace } from '../travel/schema';
 
 import type { TChoosePlace } from '../travel/schema';
