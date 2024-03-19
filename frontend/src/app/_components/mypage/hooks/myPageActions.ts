@@ -4,6 +4,7 @@ import {
   TMyPageSpotDetail,
   myPageCourseListSchema,
   myPageSpotListSchema,
+  mypageCourseDetailSchema,
   mypageSpotDetailSchema,
 } from '@/types/myPageResponse';
 import { revalidatePath, revalidateTag } from 'next/cache';
@@ -243,4 +244,18 @@ export const patchMyPageSpotDetail = async (
   if (res.ok) {
     revalidateTag(`spotDetail/${spotId}`);
   }
+};
+
+export const getMyPageCourseDetail = async (courseId: number) => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
+  const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+    },
+  });
+  const result = await res.json();
+  console.log(result);
+  const courseDetail = mypageCourseDetailSchema.safeParse(result);
+  return courseDetail;
 };

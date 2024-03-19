@@ -1,4 +1,7 @@
-import { getMyPageSpotDetail } from '@/app/_components/mypage/hooks/myPageActions';
+import {
+  getMyPageCourseDetail,
+  getMyPageSpotDetail,
+} from '@/app/_components/mypage/hooks/myPageActions';
 import SpotDetail from '@/app/_components/mypage/spot/SpotDetail';
 import React from 'react';
 
@@ -23,7 +26,8 @@ export default async function SpotDetailPage({
       </>
     );
   } else {
-    const courseDetail = '';
+    const courseDetail = await getMyPageCourseDetail(params.id);
+    console.log(courseDetail);
     return <></>;
   }
 }
