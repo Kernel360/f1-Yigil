@@ -26,9 +26,7 @@ export default async function LoggedInHome() {
     return (
       <main className="max-w-full flex flex-col gap-6 relative">
         <Suspense
-          fallback={
-            <DummyPlaces title="관심 지역" variant="primary" isLoggedIn />
-          }
+          fallback={<DummyPlaces title="관심 지역" variant="primary" />}
         >
           <PopularPlaces isLoggedIn />
         </Suspense>
@@ -41,7 +39,7 @@ export default async function LoggedInHome() {
         />
         <Suspense
           fallback={
-            <DummyPlaces title="맞춤 추천" variant="secondary" isLoggedIn />
+            <DummyPlaces title="맞춤 추천" variant="secondary" needLogin />
           }
         >
           <RecommendedPlaces isLoggedIn />
@@ -61,15 +59,11 @@ export default async function LoggedInHome() {
 
   return (
     <main className="max-w-full flex flex-col gap-8 relative">
-      <Suspense
-        fallback={<DummyPlaces title="인기" variant="primary" isLoggedIn />}
-      >
+      <Suspense fallback={<DummyPlaces title="인기" variant="primary" />}>
         <PopularPlaces isLoggedIn />
       </Suspense>
       <Suspense
-        fallback={
-          <DummyPlaces title="관심 지역" variant="secondary" isLoggedIn />
-        }
+        fallback={<DummyPlaces title="관심 지역" variant="secondary" />}
       >
         <RegionPlaces
           regions={regions}
@@ -81,9 +75,7 @@ export default async function LoggedInHome() {
         />
       </Suspense>
       <Suspense
-        fallback={
-          <DummyPlaces title="맞춤 추천" variant="secondary" isLoggedIn />
-        }
+        fallback={<DummyPlaces title="맞춤 추천" variant="secondary" />}
       >
         <RecommendedPlaces isLoggedIn />
       </Suspense>

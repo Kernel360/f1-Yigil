@@ -19,7 +19,7 @@ export default function Place({
   data: TPlace;
   order: number;
   variant?: 'primary' | 'secondary';
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
 }) {
   const {
     id,

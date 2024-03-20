@@ -7,12 +7,12 @@ export default function DummyPlaces({
   title,
   message,
   variant,
-  isLoggedIn,
+  needLogin,
 }: {
   title: string;
   message?: string;
   variant?: 'primary' | 'secondary';
-  isLoggedIn?: boolean;
+  needLogin?: boolean;
 }) {
   return (
     <div className="relative flex flex-col">
@@ -29,7 +29,7 @@ export default function DummyPlaces({
 
       <div className="absolute inset-0 bg-white/75 flex flex-col gap-4 justify-center items-center">
         <span className="text-lg font-semibold">{message}</span>
-        {!isLoggedIn && (
+        {needLogin && (
           <Link className="p-2 rounded-lg bg-main text-white" href="/login">
             로그인
           </Link>

@@ -7,7 +7,7 @@ import { getPlaces } from './action';
 export default async function PopularPlaces({
   isLoggedIn,
 }: {
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
 }) {
   const result = await getPlaces('popular');
 

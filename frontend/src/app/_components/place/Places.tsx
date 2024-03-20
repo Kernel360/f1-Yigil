@@ -14,7 +14,7 @@ export default function Places({
 }: {
   data: TPlace[];
   variant?: 'primary' | 'secondary';
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
   carousel?: boolean;
 }) {
   const [emblaRef] = useEmblaCarousel();
