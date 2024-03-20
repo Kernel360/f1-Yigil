@@ -5,7 +5,6 @@ import { TMyPageSpotDetail } from '@/types/myPageResponse';
 import StarIcon from '/public/icons/star.svg';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
-import ImageHandler from '../../images';
 import { TImageData } from '../../images/ImageHandler';
 import { patchMyPageSpotDetail } from '../hooks/myPageActions';
 import Dialog from '../../ui/dialog/Dialog';

@@ -1,3 +1,4 @@
+import CourseDetail from '@/app/_components/mypage/course/CourseDetail';
 import {
   getMyPageCourseDetail,
   getMyPageSpotDetail,
@@ -20,14 +21,9 @@ export default async function SpotDetailPage({
         </div>
       );
 
-    return (
-      <>
-        <SpotDetail spotDetail={spotDetail.data} spotId={params.id} />
-      </>
-    );
+    return <SpotDetail spotDetail={spotDetail.data} spotId={params.id} />;
   } else {
     const courseDetail = await getMyPageCourseDetail(params.id);
-    console.log(courseDetail);
     if (!courseDetail.success)
       return (
         <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">
@@ -35,6 +31,8 @@ export default async function SpotDetailPage({
         </div>
       );
 
-    return <></>;
+    return (
+      <CourseDetail courseDetail={courseDetail.data} courseId={params.id} />
+    );
   }
 }
