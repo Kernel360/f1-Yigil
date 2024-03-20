@@ -16,6 +16,9 @@ import kr.co.yigil.travel.domain.dto.CourseListDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.geojson.GeoJsonReader;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -94,12 +97,16 @@ public class CourseServiceImplTest {
 
     @DisplayName("retrieveCourseInfo 메서드가 CourseInfo를 잘 반환하는지")
     @Test
-    void retrieveCourseInfo_ShouldReturnCourseInfo() {
+    void retrieveCourseInfo_ShouldReturnCourseInfo() throws ParseException {
         Long courseId = 1L;
+        String json = "{\"type\":\"LineString\",\"coordinates\":[[5,6],[7,8]],\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"EPSG:4326\"}}}";
+        LineString path = (LineString) new GeoJsonReader().read(json);
+
         Course course = mock(Course.class);
         when(courseReader.getCourse(courseId)).thenReturn(course);
         when(course.getCreatedAt()).thenReturn(LocalDateTime.now());
         when(course.getMapStaticImageFileUrl()).thenReturn("~~~");
+        when(course.getPath()).thenReturn(path);
         Main result = courseService.retrieveCourseInfo(courseId);
 
         assertNotNull(result);
@@ -108,7 +115,7 @@ public class CourseServiceImplTest {
 
     @DisplayName("modifyCourse 메서드가 유효한 memberId가 있을 때 엔티티를 잘 수정하는지")
     @Test
-    void modifyCourse_WithValidMemberId_ModifiesCourse() {
+    void modifyCourse_WithValidMemberId_ModifiesCourse() throws ParseException {
         Long courseId = 1L, memberId = 1L;
         ModifyCourseRequest command = mock(ModifyCourseRequest.class);
         Course course = mock(Course.class);

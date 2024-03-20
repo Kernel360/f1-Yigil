@@ -264,9 +264,9 @@ public class CourseApiControllerTest {
     void retrieveCourse_ShouldReturnOk() throws Exception {
         CourseInfo.Main mockInfo = mock(CourseInfo.Main.class);
         CourseSpotInfoDto spotInfo = new CourseSpotInfoDto(1L, "1", "장소명", "주소",
-                List.of("images/spot.jpg", "images/spotted.png"), "4.5", "스팟 본문", "2024-02-01");
-        CourseDetailInfoDto courseInfo = new CourseDetailInfoDto("최고의 코스", "4.5",
-                "images/static.png", "코스의 본문", LocalDateTime.now().toString(), List.of(spotInfo));
+                List.of("images/spot.jpg", "images/spotted.png"), 4.5, "스팟 본문", "2024-02-01");
+        CourseDetailInfoDto courseInfo = new CourseDetailInfoDto("title", 4.5, "images/static.png",
+                "본문", LocalDateTime.now().toString(), "lineStringJson", List.of(spotInfo));
 
         when(courseFacade.retrieveCourseInfo(anyLong())).thenReturn(mockInfo);
         when(courseMapper.toCourseDetailInfoDto(mockInfo)).thenReturn(courseInfo);
@@ -283,12 +283,14 @@ public class CourseApiControllerTest {
                         responseFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING)
                                         .description("코스의 제목"),
-                                fieldWithPath("rate").type(JsonFieldType.STRING)
+                                fieldWithPath("rate").type(JsonFieldType.NUMBER)
                                         .description("코스의 평점"),
                                 fieldWithPath("map_static_image_url").type(JsonFieldType.STRING)
                                         .description("코스의 위치를 나타내는 지도 이미지 경로"),
                                 fieldWithPath("description").type(JsonFieldType.STRING)
                                         .description("코스의 본문"),
+                                fieldWithPath("line_string_json").type(JsonFieldType.STRING)
+                                        .description("코스의 라인 스트링 정보"),
                                 fieldWithPath("created_date").type(JsonFieldType.STRING)
                                         .description("코스의 생성 일자"),
                                 subsectionWithPath("spots").description("코스 내 스팟의 정보"),
@@ -300,7 +302,7 @@ public class CourseApiControllerTest {
                                         .description("코스 내 스팟의 장소 주소"),
                                 fieldWithPath("spots[].image_url_list").type(JsonFieldType.ARRAY)
                                         .description("코스 내 스팟 관련 이미지의 경로 배열"),
-                                fieldWithPath("spots[].rate").type(JsonFieldType.STRING)
+                                fieldWithPath("spots[].rate").type(JsonFieldType.NUMBER)
                                         .description("코스 내 스팟의 평점 정보"),
                                 fieldWithPath("spots[].description").type(JsonFieldType.STRING)
                                         .description("코스 내 스팟의 본문 정보"),
@@ -318,7 +320,7 @@ public class CourseApiControllerTest {
         MockMultipartFile image1 = new MockMultipartFile("image", "image.jpg", "image/jpeg",
                 "<<jpg data>>".getBytes());
 
-        String requestBody = "{\"description\" : \"test\", \"rate\" : 4.5, \"spotIdOrder\" : [1, 2], \"courseSpotUpdateRequests\" : [{\"id\" : 1, \"description\" : \"test\", \"rate\" : 4.5, \"originalSpotImages\" : [{\"imageUrl\" : \"images/spot.jpg\", \"index\" : 1}], \"updateSpotImages\" : [{\"index\" : 1}]}]}";
+        String requestBody = "{\"title\" : \"new title\",\"description\" : \"test\", \"rate\" : 4.5, \"lineStringJson\": \"{\\\"type\\\" : \\\"LineString\\\", \\\"coordinates\\\" : [[1, 2], [3, 4]]}\",\"spotIdOrder\" : [1, 2], \"courseSpotUpdateRequests\" : [{\"id\" : 1, \"description\" : \"test\", \"rate\" : 4.5, \"originalSpotImages\" : [{\"imageUrl\" : \"images/spot.jpg\", \"index\" : 1}], \"updateSpotImages\" : [{\"index\" : 1}]}]}";
 
         mockMvc.perform(multipart("/api/v1/courses/{courseId}", 1L)
                         .file("courseSpotUpdateRequests[0].updateSpotImages[0].imageFile",
@@ -339,10 +341,14 @@ public class CourseApiControllerTest {
                                         "스팟 관련 이미지 파일")
                         ),
                         requestFields(
+                                fieldWithPath("title").type(JsonFieldType.STRING)
+                                        .description("코스의 제목"),
                                 fieldWithPath("description").type(JsonFieldType.STRING)
                                         .description("코스의 본문"),
                                 fieldWithPath("rate").type(JsonFieldType.NUMBER)
                                         .description("코스의 평점"),
+                                fieldWithPath("lineStringJson").type(JsonFieldType.STRING)
+                                        .description("코스의 라인 스트링 정보"),
                                 fieldWithPath("spotIdOrder").type(JsonFieldType.ARRAY)
                                         .description("코스 내 스팟의 아이디 배열"),
                                 subsectionWithPath("courseSpotUpdateRequests").description(

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.io.ParseException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -56,7 +58,7 @@ public class CourseSeriesFactoryImplTest {
         List<ModifySpotRequest> modifySpotRequests = Arrays.asList(modifySpotRequest1, modifySpotRequest2);
         List<Long> spotIdOrder = Arrays.asList(2L, 1L);
 
-        modifyCourseRequest = new ModifyCourseRequest("New Course Description", 4.5, "new title", spotIdOrder, modifySpotRequests);
+        modifyCourseRequest = new ModifyCourseRequest("New Course Description", 4.5, "new title", mock(LineString.class), spotIdOrder, modifySpotRequests);
 
         when(spotReader.getSpot(1L)).thenReturn(spot1);
         when(spotReader.getSpot(2L)).thenReturn(spot2);
@@ -66,7 +68,7 @@ public class CourseSeriesFactoryImplTest {
 
     @DisplayName("modify 메서드가 Course를 잘 업데이트 하는지")
     @Test
-    void modify_CourseIsUpdatedCorrectly() {
+    void modify_CourseIsUpdatedCorrectly() throws ParseException {
         Course modifiedCourse = courseSeriesFactory.modify(modifyCourseRequest, course);
 
         assertEquals("New Course Description", modifiedCourse.getDescription());

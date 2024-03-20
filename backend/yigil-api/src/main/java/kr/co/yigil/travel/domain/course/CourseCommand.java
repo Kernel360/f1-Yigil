@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.locationtech.jts.geom.LineString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -81,6 +82,7 @@ public class CourseCommand {
         private String description;
         private double rate;
         private String title;
+        private LineString lineStringJson;
         private List<Long> spotIdOrder;
         private List<ModifySpotRequest> modifySpotRequests;
     }

@@ -51,8 +51,9 @@ public class Course extends Travel {
         this.mapStaticImageFile = mapStaticImageFile;
     }
 
-    public void updateCourse(String title, String description, double rate, List<Spot> spots) {
+    public void updateCourse(String title, String description, double rate, LineString lineString, List<Spot> spots) {
         updateTravel(title, description, rate);
+        this.path = lineString;
         this.spots.clear();
         this.spots.addAll(spots);
     }

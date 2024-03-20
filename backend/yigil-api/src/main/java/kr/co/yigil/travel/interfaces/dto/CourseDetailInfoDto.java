@@ -12,10 +12,11 @@ import java.util.List;
 public class CourseDetailInfoDto {
 
     private String title;
-    private String rate;
+    private double rate;
     private String mapStaticImageUrl;
     private String description;
     private String createdDate;
+    private String lineStringJson;
     List<CourseSpotInfoDto> spots;
 
     @Data
@@ -27,7 +28,7 @@ public class CourseDetailInfoDto {
         private String placeName;
         private String placeAddress;
         private List<String> imageUrlList;
-        private String rate;
+        private double rate;
         private String description;
         private String createDate;
     }

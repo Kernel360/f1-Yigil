@@ -25,19 +25,20 @@ public class CourseSeriesFactoryImpl implements CourseSeriesFactory {
     @Override
     public Course modify(ModifyCourseRequest command, Course course) {
         List<Spot> sortedSpots = updateSpotsInCourse(command, course);
-        course.updateCourse(command.getTitle(), command.getDescription(), command.getRate(), sortedSpots);
+
+        course.updateCourse(command.getTitle(), command.getDescription(), command.getRate(), command.getLineStringJson(), sortedSpots);
         return course;
     }
 
     private List<Spot> updateSpotsInCourse(ModifyCourseRequest command, Course course) {
-        if(command.getSpotIdOrder() == null || command.getSpotIdOrder().size() != course.getSpots().size()){
+        if (command.getSpotIdOrder() == null || command.getSpotIdOrder().size() != course.getSpots().size()) {
             throw new BadRequestException(ExceptionCode.INVALID_SPOT_ORDER_CHANGE_REQUEST);
         }
 
         Map<Long, Spot> existingSpotMap = course.getSpots().stream()
                 .collect(Collectors.toMap(Spot::getId, spot -> spot));
 
-        if(command.getModifySpotRequests() != null)
+        if (command.getModifySpotRequests() != null)
             command.getModifySpotRequests()
                     .forEach(request -> spotSeriesFactory.modify(request, spotReader.getSpot(request.getId())));
 
