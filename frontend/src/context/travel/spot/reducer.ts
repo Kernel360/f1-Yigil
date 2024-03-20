@@ -7,7 +7,7 @@ import {
 import type { TSpotState } from '../schema';
 
 export interface TSpotAction {
-  type: 'SET_PLACE' | 'SET_IMAGES' | 'SET_REVIEW';
+  type: 'SET_PLACE' | 'SET_IMAGES' | 'SET_REVIEW' | 'INIT_SPOT';
   payload?: unknown;
 }
 
@@ -60,6 +60,10 @@ export default function reducer(
       }
 
       return { ...state, review: result.data };
+    }
+
+    case 'INIT_SPOT': {
+      return initialSpotState;
     }
   }
 }

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
 
-import SearchItem from './SearchItem';
+import BackendSearchItem from './BackendSearchItem';
 
 export default function BaseSearchHistory() {
   const [state, dispatch] = useContext(SearchContext);
@@ -39,7 +39,7 @@ export default function BaseSearchHistory() {
       ) : (
         <ul className="pl-8 pr-3 py-4 flex flex-col gap-4 grow">
           {histories.map((item) => (
-            <SearchItem key={item} item={item} erasable />
+            <BackendSearchItem key={item} name={item} erasable />
           ))}
         </ul>
       )}

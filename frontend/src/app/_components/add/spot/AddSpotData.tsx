@@ -1,24 +1,26 @@
 'use client';
 
-import { StepContext } from '@/context/travel/step/StepContext';
 import { useContext } from 'react';
+import { SpotStepContext } from '@/context/travel/step/spot/SpotStepContext';
+
+import AddSpotPlace from './AddSpotPlace';
+import AddSpotImages from './AddSpotImages';
+import AddSpotReview from './AddSpotReview';
+import AddSpotConfirm from './AddSpotConfirm';
 
 export default function AddSpotData() {
-  const [step] = useContext(StepContext);
+  const [step] = useContext(SpotStepContext);
 
-  const { label, value } = step.data;
+  const { value } = step;
 
   switch (value) {
-    // Spot은 0번이 없음
-    case 0:
-      return <></>;
     case 1:
-      return <>{label}</>;
+      return <AddSpotPlace />;
     case 2:
-      return <>{label}</>;
+      return <AddSpotImages />;
     case 3:
-      return <>{label}</>;
+      return <AddSpotReview />;
     case 4:
-      return <>{label}</>;
+      return <AddSpotConfirm />;
   }
 }

@@ -31,13 +31,6 @@ export const TextArea = ({
   };
   return (
     <>
-      <span
-        className={`text-end ${
-          isValidated ? 'text-gray-500' : 'text-red-500'
-        } my-[-10px]`}
-      >
-        {description.length} / 30
-      </span>
       <textarea
         placeholder={description}
         className={`p-4 h-1/5 border-2 ${
@@ -46,6 +39,13 @@ export const TextArea = ({
         onChange={onChange}
         value={description}
       />
+      <span
+        className={`text-end ${
+          isValidated ? 'text-gray-500' : 'text-red-500'
+        } mt-[-20px]`}
+      >
+        {description.length} / 30
+      </span>
     </>
   );
 };
