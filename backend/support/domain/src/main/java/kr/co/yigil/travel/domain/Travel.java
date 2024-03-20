@@ -1,16 +1,6 @@
 package kr.co.yigil.travel.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,6 +9,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -90,6 +82,12 @@ public class Travel {
     public void changeOnPrivate() { this.isPrivate = true; }
 
     public void updateTravel(String description, double rate) {
+        this.description = description;
+        this.rate = rate;
+    }
+
+    public void updateTravel(String title, String description, double rate) {
+        this.title = title;
         this.description = description;
         this.rate = rate;
     }

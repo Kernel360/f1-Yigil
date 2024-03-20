@@ -1,20 +1,14 @@
 package kr.co.yigil.travel.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.OrderColumn;
-import java.util.List;
+import jakarta.persistence.*;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.LineString;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -57,8 +51,8 @@ public class Course extends Travel {
         this.mapStaticImageFile = mapStaticImageFile;
     }
 
-    public void updateCourse(String description, double rate, List<Spot> spots) {
-        updateTravel(description, rate);
+    public void updateCourse(String title, String description, double rate, List<Spot> spots) {
+        updateTravel(title, description, rate);
         this.spots.clear();
         this.spots.addAll(spots);
     }

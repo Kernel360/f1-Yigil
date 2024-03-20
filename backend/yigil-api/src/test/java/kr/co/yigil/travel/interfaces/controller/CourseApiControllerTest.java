@@ -263,7 +263,7 @@ public class CourseApiControllerTest {
     @Test
     void retrieveCourse_ShouldReturnOk() throws Exception {
         CourseInfo.Main mockInfo = mock(CourseInfo.Main.class);
-        CourseSpotInfoDto spotInfo = new CourseSpotInfoDto("1", "장소명", "주소",
+        CourseSpotInfoDto spotInfo = new CourseSpotInfoDto(1L, "1", "장소명", "주소",
                 List.of("images/spot.jpg", "images/spotted.png"), "4.5", "스팟 본문", "2024-02-01");
         CourseDetailInfoDto courseInfo = new CourseDetailInfoDto("최고의 코스", "4.5",
                 "images/static.png", "코스의 본문", LocalDateTime.now().toString(), List.of(spotInfo));

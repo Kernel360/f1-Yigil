@@ -41,6 +41,7 @@ public class CourseInfo {
     @Getter
     @ToString
     public static class CourseSpotInfo {
+        private final Long id;
         private final int order;
         private final String placeName;
         private final String placeAddress;
@@ -50,6 +51,7 @@ public class CourseInfo {
         private final LocalDateTime createDate;
 
         public CourseSpotInfo(Spot spot, int index) {
+            this.id = spot.getId();
             this.order = index;
             this.placeName = spot.getPlace().getName();
             this.placeAddress = spot.getPlace().getAddress();

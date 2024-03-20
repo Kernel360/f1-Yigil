@@ -77,6 +77,7 @@ public interface CourseMapper {
     @Mappings({
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "rate", target = "rate"),
+            @Mapping(source = "title", target = "title"),
             @Mapping(source = "spotIdOrder", target = "spotIdOrder"),
             @Mapping(source = "courseSpotUpdateRequests", target = "modifySpotRequests")
     })
@@ -92,6 +93,7 @@ public interface CourseMapper {
     CourseDetailInfoDto toCourseDetailInfoDto(CourseInfo.Main courseInfo);
 
     @Mappings({
+            @Mapping(source = "id", target = "id"),
             @Mapping(source = "order", target = "order", qualifiedByName = "intToString"),
             @Mapping(source = "placeName", target = "placeName"),
             @Mapping(source = "imageUrlList", target = "imageUrlList"),

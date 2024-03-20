@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.domain.course;
 
-import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.travel.domain.Course;
@@ -13,6 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public class CourseCommand {
 
@@ -79,6 +80,7 @@ public class CourseCommand {
     public static class ModifyCourseRequest {
         private String description;
         private double rate;
+        private String title;
         private List<Long> spotIdOrder;
         private List<ModifySpotRequest> modifySpotRequests;
     }
