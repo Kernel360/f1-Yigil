@@ -8,10 +8,20 @@ import { myPageSpotListSchema } from '@/types/myPageResponse';
 import {
   backendErrorSchema,
   naverStaticMapUrlErrorSchema,
+  postResponseSchema,
 } from '@/types/response';
 
-import type { TLineString, TSpotState } from '@/context/travel/schema';
-import { blobTodataUrl } from '@/utils';
+import type {
+  TCourseState,
+  TLineString,
+  TSpotState,
+} from '@/context/travel/schema';
+import {
+  blobTodataUrl,
+  coordsToGeoJSONPoint,
+  dataUrlToBlob,
+  getMIMETypeFromDataURI,
+} from '@/utils';
 
 type TMyPageSpotList = z.infer<typeof myPageSpotListSchema>;
 
@@ -312,4 +322,135 @@ export async function getCourseStaticMap(
   const dataUrl = await blobTodataUrl(image);
 
   return { status: 'success', dataUrl };
+}
+
+async function parseAddCourseState(course: TCourseState): Promise<FormData> {
+  const formData = new FormData();
+
+  const { spots, review, staticMapImageUrl, lineString } = course;
+
+  formData.append('title', review.title || '');
+  formData.append('description', review.content);
+  formData.append('rate', review.rate.toString());
+  formData.append('isPrivate', JSON.stringify(false));
+  formData.append('lineStringJson', JSON.stringify(lineString));
+  formData.append('representativeSpotOrder', JSON.stringify(1));
+
+  const spotRegisterRequests = spots.map((spot) => {
+    const place = spot.place;
+    const review = spot.review;
+    const pointJson = coordsToGeoJSONPoint(place.coords);
+
+    return {
+      title: 'Spot Review',
+      placeName: place.name,
+      placeAddress: place.address,
+      rate: review.rate,
+      description: review.content,
+      pointJson,
+      placePointJson: pointJson,
+    };
+  });
+
+  spotRegisterRequests.forEach((request) =>
+    formData.append(`spotRegisterRequests`, JSON.stringify(request)),
+  );
+
+  formData.append(
+    'mapStaticImageFile',
+    new File(
+      [dataUrlToBlob(staticMapImageUrl)],
+      `${review.title} 코스 이미지.png`,
+      {
+        type: 'image/png',
+      },
+    ),
+  );
+
+  const spotImages = spots.map((spot) =>
+    spot.images.map(
+      ({ filename, uri }) =>
+        new File([dataUrlToBlob(uri)], filename, {
+          type: getMIMETypeFromDataURI(uri),
+        }),
+    ),
+  );
+
+  spots.forEach((spot, index) => {
+    const { name, mapImageUrl } = spot.place;
+
+    if (mapImageUrl.startsWith('data:')) {
+      const staticMapFile = new File(
+        [dataUrlToBlob(mapImageUrl)],
+        `${name} 지도 이미지.png`,
+        {
+          type: 'image/png',
+        },
+      );
+
+      formData.append(
+        `spotRegisterRequests[${index}].mapStaticImageFile`,
+        staticMapFile,
+      );
+      formData.append(
+        `spotRegisterRequests[${index}].placeImageFile`,
+        staticMapFile,
+      );
+    }
+  });
+
+  spotImages.forEach((images, spotIndex) => {
+    images.forEach((image) => {
+      formData.append(`spotRegisterRequests[${spotIndex}].files`, image);
+    });
+  });
+
+  console.log(formData);
+
+  return formData;
+}
+
+export async function postCourse(
+  course: TCourseState,
+): Promise<
+  { status: 'succeed' } | { status: 'failed'; message: string; code: number }
+> {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const formData = await parseAddCourseState(course);
+
+  const response = await fetch(`${BASE_URL}/v1/spots`, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+  });
+
+  if (response.status.toString()[0] === '5') {
+    return {
+      status: 'failed',
+      message: '서버와 연결할 수 없습니다!',
+      code: response.status,
+    };
+  }
+
+  const json = await response.json();
+
+  const error = backendErrorSchema.safeParse(json);
+
+  if (error.success) {
+    const { code, message } = error.data;
+    console.error(`${code} - ${message}`);
+    return { status: 'failed', message, code };
+  }
+
+  const result = postResponseSchema.safeParse(json);
+
+  if (!result.success) {
+    return { status: 'failed', message: '알 수 없는 에러입니다!', code: 500 };
+  }
+
+  return { status: 'succeed' };
 }

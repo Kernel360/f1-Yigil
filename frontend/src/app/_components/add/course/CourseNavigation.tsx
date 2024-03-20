@@ -4,10 +4,11 @@ import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { CourseContext } from '@/context/travel/course/CourseContext';
-import ToastMsg from '../../ui/toast/ToastMsg';
+import ToastMsg from '@/app/_components/ui/toast/ToastMsg';
+import Dialog from '@/app/_components/ui/dialog/Dialog';
 
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
-import { getCourseStaticMap, getRouteGeoJson } from './action';
+import { getCourseStaticMap, getRouteGeoJson, postCourse } from './action';
 
 import type { Dispatch } from 'react';
 import type {
@@ -90,8 +91,29 @@ export default function CourseNavigation({
     useContext(AddTravelMapContext);
   const [course, dispatchCourse] = useContext(CourseContext);
   const [error, setError] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
-  const { back } = useRouter();
+  const { back, push } = useRouter();
+
+  function openDialog() {
+    setIsOpen(true);
+  }
+
+  function closeDialog() {
+    setIsOpen(false);
+  }
+
+  async function handleConfirm() {
+    const result = await postCourse(course);
+
+    if (result.status === 'failed') {
+      setError(result.message);
+      setTimeout(() => setError(''), 2000);
+      return;
+    }
+
+    push('/add/course/confirm');
+  }
 
   return (
     <nav className="mx-4 flex justify-between items-center">
@@ -121,7 +143,9 @@ export default function CourseNavigation({
       </button>
       <span className="text-xl text-semibold text-gray-900">{step.label}</span>
       {step.value === 4 ? (
-        <button className="text-blue-500">확정</button>
+        <button className="text-blue-500" onClick={openDialog}>
+          확정
+        </button>
       ) : (
         <button
           onClick={async () => {
@@ -138,6 +162,14 @@ export default function CourseNavigation({
         >
           다음
         </button>
+      )}
+      {isOpen && (
+        <Dialog
+          text="코스를 확정하시겠나요?"
+          loadingText="코스 기록 중..."
+          closeModal={closeDialog}
+          handleConfirm={handleConfirm}
+        />
       )}
       <div className="absolute">
         {error && <ToastMsg title={error} id={Date.now()} timer={2000} />}
