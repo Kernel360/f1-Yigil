@@ -14,10 +14,12 @@ export default function ImageHandler({
   images,
   setImages,
   size = 5,
+  order,
 }: {
   images: TImageData[];
   setImages: (newImages: TImageData[]) => void;
   size?: number;
+  order?: string;
 }) {
   const [error, setError] = useState('');
 
@@ -32,6 +34,7 @@ export default function ImageHandler({
         images={images}
         setImages={setImages}
         invokeError={(title: string) => setError(title)}
+        order={order}
       />
       <ImagesContainer images={images} setImages={setImages} />
       {blankSpaces.map((_, i) => (

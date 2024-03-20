@@ -1,52 +1,53 @@
 import { EventFor } from '@/types/type';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { TModifyDetail } from './SpotDetail';
-import IconWithCounts from '../../IconWithCounts';
+import IconWithCounts from '../IconWithCounts';
 import StarIcon from '/public/icons/star.svg';
-import Select from '../../ui/select/Select';
-import ImageHandler from '../../images';
-import { TImageData } from '../../images/ImageHandler';
+import Select from '../ui/select/Select';
+import ImageHandler from '../images';
+import { TImageData } from '../images/ImageHandler';
 
 export const TextArea = ({
   description,
-  setModifyDetail,
-  isValidated,
-  setIsValidated,
+  onChangeHandler,
 }: {
   description: string;
-  setModifyDetail: Dispatch<SetStateAction<TModifyDetail>>;
-  isValidated: boolean;
-  setIsValidated: Dispatch<SetStateAction<boolean>>;
+  onChangeHandler: (title: string) => void;
 }) => {
   const onChange = (e: EventFor<'textarea', 'onChange'>) => {
-    setModifyDetail((prev) => ({
-      ...prev,
-      description: e.target.value,
-    }));
-    if (e.target.value.length > 30 || !e.target.value.length)
-      setIsValidated(false);
-    else {
-      setIsValidated(true);
-    }
+    onChangeHandler(e.currentTarget.value);
   };
   return (
     <>
       <textarea
         placeholder={description}
-        className={`p-4 h-1/5 border-2 ${
-          isValidated ? 'border-violet' : 'border-red-500'
-        } bg-gray-100 rounded-xl text-lg resize-none`}
+        className="p-4 h-32 border-2 border-violet bg-gray-100 rounded-xl text-lg resize-none"
         onChange={onChange}
         value={description}
       />
-      <span
-        className={`text-end ${
-          isValidated ? 'text-gray-500' : 'text-red-500'
-        } mt-[-20px]`}
-      >
+      <span className="text-end text-gray-400 mt-[-16px] mr-4">
         {description.length} / 30
       </span>
     </>
+  );
+};
+
+export const TitleInput = ({
+  title,
+  onChangeTitle,
+}: {
+  title: string;
+  onChangeTitle: (title: string) => void;
+}) => {
+  const onChange = (e: EventFor<'input', 'onChange'>) => {
+    onChangeTitle(e.currentTarget.value);
+  };
+  return (
+    <input
+      className="text-2xl font-semibold border-2 border-violet rounded-md w-[180px] pl-1"
+      type="text"
+      placeholder={title}
+      value={title}
+      onChange={onChange}
+    />
   );
 };
 
@@ -87,13 +88,15 @@ export const SelectContainer = ({
 export const ModifyImage = ({
   image_urls,
   setImages,
+  order,
 }: {
   image_urls: TImageData[];
   setImages: (newImages: TImageData[]) => void;
+  order?: string;
 }) => {
   return (
     <div className="h-1/3">
-      <ImageHandler images={image_urls} setImages={setImages} />
+      <ImageHandler images={image_urls} setImages={setImages} order={order} />
     </div>
   );
 };

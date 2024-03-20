@@ -65,10 +65,11 @@ export default function MyPageCourseItem({
         <Image
           src={map_static_image_url || ''}
           alt="course-image"
-          width={360}
+          width={320}
           height={160}
-          className="w-[360px] h-[160px] rounded-md"
+          className="w-[320px] h-[160px] rounded-md object-cover"
         />
+
         {is_private && (
           <div className="absolute top-2 right-2 p-3 bg-black rounded-full">
             <LockIcon className="w-5 h-5" />

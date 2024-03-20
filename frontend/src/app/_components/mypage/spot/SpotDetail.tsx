@@ -6,10 +6,10 @@ import StarIcon from '/public/icons/star.svg';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
 import { TImageData } from '../../images/ImageHandler';
-import { patchMyPageSpotDetail } from '../hooks/myPageActions';
+import { patchSpotDetail } from '../hooks/myPageActions';
 import Dialog from '../../ui/dialog/Dialog';
 import ToastMsg from '../../ui/toast/ToastMsg';
-import * as Common from './spotDetailModify';
+import * as Common from '../detailModify';
 import IconWithCounts from '../../IconWithCounts';
 
 export interface TModifyDetail {
@@ -50,7 +50,6 @@ export default function SpotDetail({
 
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [isValidated, setIsValidated] = useState(true);
 
   const [emblaRef] = useEmblaCarousel({
     loop: false,
@@ -61,19 +60,29 @@ export default function SpotDetail({
     setModifyDetail({ ...modifyDetail, image_urls: newImages });
   };
 
+  const onChangeDescription = (description: string) => {
+    if (description.length > 30) {
+      setErrorText('리뷰를 30자 이내로 입력해야 합니다.');
+      return;
+    } else {
+      setModifyDetail((prev) => ({ ...prev, description }));
+      setErrorText('');
+    }
+  };
+
   const onChangeSelectOption = (option: string | number) => {
     if (typeof option === 'number') return;
     setSelectOption(option);
   };
 
   const onClickComplete = () => {
-    if (!modifyDetail.description || description.length > 30) {
-      setErrorText('리뷰를 1자이상 30자 이내로 입력해야 합니다.');
+    if (!modifyDetail.description) {
+      setErrorText('리뷰를 1자이상 입력해야 합니다.');
       setIsDialogOpened(false);
       return;
     }
     try {
-      patchMyPageSpotDetail(spotId, modifyDetail);
+      patchSpotDetail(spotId, modifyDetail);
     } catch (error) {
       setErrorText('수정에 실패했습니다.');
     } finally {
@@ -159,9 +168,7 @@ export default function SpotDetail({
         {isModifyMode ? (
           <Common.TextArea
             description={modifyDetail.description}
-            setModifyDetail={setModifyDetail}
-            isValidated={isValidated}
-            setIsValidated={setIsValidated}
+            onChangeHandler={onChangeDescription}
           />
         ) : (
           <div className="p-4 h-1/6 flex flex-col gap-2 bg-gray-100 rounded-xl text-lg justify-self-end border-2 border-transparent">

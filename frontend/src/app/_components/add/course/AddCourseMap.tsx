@@ -22,7 +22,7 @@ import Marker3 from '/public/icons/markers/marker3.svg?url';
 import Marker4 from '/public/icons/markers/marker4.svg?url';
 import Marker5 from '/public/icons/markers/marker5.svg?url';
 
-function getNumberMarker(num: number) {
+export function getNumberMarker(num: number) {
   if (num === 1) {
     return Marker1.src;
   }

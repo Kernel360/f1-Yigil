@@ -86,6 +86,7 @@ const myPageCourseDetailSpot = z.object({
   place_name: z.string(),
   image_url_list: z.array(z.string()),
   rate: z.string(),
+  description: z.string(),
   create_date: z.coerce
     .date()
     .transform((date) => date.toLocaleDateString('ko-kr')),
@@ -100,3 +101,5 @@ export const mypageCourseDetailSchema = z.object({
 });
 
 export type TMyPageCourseDetail = z.infer<typeof mypageCourseDetailSchema>;
+
+export type TMyPageCourseDetailSpot = z.infer<typeof myPageCourseDetailSpot>;

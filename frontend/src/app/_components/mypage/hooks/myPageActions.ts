@@ -16,6 +16,7 @@ import {
   dataUrlToBlob,
   getMIMETypeFromDataURI,
 } from '@/utils';
+import { TModifyCourse } from '../course/CourseDetail';
 
 export const getMyPageSpots = async (
   pageNo: number = 1,
@@ -181,7 +182,7 @@ export const changeOnPrivateMyTravel = async (travel_id: number) => {
 //   return res;
 // };
 
-export const getMyPageSpotDetail = async (spotId: number) => {
+export const getSpotDetail = async (spotId: number) => {
   const BASE_URL = await getBaseUrl();
   const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
     next: {
@@ -193,7 +194,7 @@ export const getMyPageSpotDetail = async (spotId: number) => {
   return parsedSpotDetail;
 };
 
-export const patchMyPageSpotDetail = async (
+export const patchSpotDetail = async (
   spotId: number,
   modifiedData: TModifyDetail,
 ) => {
@@ -261,7 +262,7 @@ export const patchMyPageSpotDetail = async (
   }
 };
 
-export const getMyPageCourseDetail = async (courseId: number) => {
+export const getCourseDetail = async (courseId: number) => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get(`SESSION`)?.value;
   const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
@@ -272,4 +273,74 @@ export const getMyPageCourseDetail = async (courseId: number) => {
   const result = await res.json();
   const courseDetail = mypageCourseDetailSchema.safeParse(result);
   return courseDetail;
+};
+
+export const patchCourseDetail = (
+  courseId: number,
+  modifiedData: TModifyCourse,
+) => {
+  const { title, description, rate, spotIdOrder, spots } = modifiedData;
+  const formData = new FormData();
+
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('rate', rate);
+  spotIdOrder.forEach((id) => formData.append('spotIdOrder', id));
+
+  const originalSpotImages = spots.map((spot) =>
+    spot.image_url_list.map((image) => {
+      if (!image.uri.startsWith('data')) {
+        return {
+          imageUrl: image.uri,
+          index: Number(image.filename),
+        };
+      }
+    }),
+  );
+  const updateSpotImagesIdx = spots
+    .map((spot) =>
+      spot.image_url_list.map((image, idx) => {
+        if (image.uri.startsWith('data')) return idx;
+      }),
+    )
+    .filter((i) => i !== undefined);
+
+  const updateSpotImages = spots.map((spot) =>
+    spot.image_url_list
+      .map(({ uri, filename }, idx) => {
+        if (uri.startsWith('data'))
+          return new File([dataUrlToBlob(uri)], filename, {
+            type: getMIMETypeFromDataURI(uri),
+          });
+      })
+      .filter((i) => i !== undefined),
+  );
+
+  updateSpotImages.forEach((updatedSpot, frontIdx) => {
+    updatedSpot.forEach((spot, behindIdx) => {
+      if (spot) {
+        formData.append(
+          `courseSpotUpdateRequest[${frontIdx}].updateSpotImages[${behindIdx}].imageFile`,
+          spot,
+        );
+      }
+    });
+  });
+
+  const updateRequest = {
+    title: title,
+    rate: rate,
+    spotIdOrder: spotIdOrder,
+    courseSpotUpdateRequests: spots.map((spot) => {
+      return {
+        id: spot.order,
+        description: spot.description,
+        rate: spot.rate,
+        originalSpotImages,
+        updateSpotImagesIdx,
+      };
+    }),
+  };
+  formData.append('courseSpotUpdateRequest', JSON.stringify(updateRequest));
+  console.log(formData);
 };

@@ -1,7 +1,7 @@
 import CourseDetail from '@/app/_components/mypage/course/CourseDetail';
 import {
-  getMyPageCourseDetail,
-  getMyPageSpotDetail,
+  getCourseDetail,
+  getSpotDetail,
 } from '@/app/_components/mypage/hooks/myPageActions';
 import SpotDetail from '@/app/_components/mypage/spot/SpotDetail';
 import React from 'react';
@@ -12,7 +12,7 @@ export default async function SpotDetailPage({
   params: { id: number; travel: string };
 }) {
   if (params.travel === 'spot') {
-    const spotDetail = await getMyPageSpotDetail(params.id);
+    const spotDetail = await getSpotDetail(params.id);
 
     if (!spotDetail.success)
       return (
@@ -23,7 +23,7 @@ export default async function SpotDetailPage({
 
     return <SpotDetail spotDetail={spotDetail.data} spotId={params.id} />;
   } else {
-    const courseDetail = await getMyPageCourseDetail(params.id);
+    const courseDetail = await getCourseDetail(params.id);
     if (!courseDetail.success)
       return (
         <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">

@@ -14,11 +14,13 @@ export default function ImageInput({
   images,
   setImages,
   invokeError,
+  order,
 }: {
   availableSpace: number;
   images: TImageData[];
   setImages: (newImages: TImageData[]) => void;
   invokeError: (title: string) => void;
+  order?: string;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -63,7 +65,7 @@ export default function ImageInput({
       <label
         className="w-full h-full rounded-2xl flex justify-center items-center hover:cursor-pointer"
         tabIndex={0}
-        htmlFor="add-image"
+        htmlFor={order ? `add-image-${order}` : 'add-image'}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             fileInputRef.current?.click();
@@ -76,7 +78,7 @@ export default function ImageInput({
         className="hidden"
         ref={fileInputRef}
         key={availableSpace}
-        id="add-image"
+        id={order ? `add-image-${order}` : 'add-image'}
         type="file"
         accept="image/*"
         multiple
