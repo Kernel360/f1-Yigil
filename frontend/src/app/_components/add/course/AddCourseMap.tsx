@@ -8,43 +8,14 @@ import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 import { isEqualPlace } from '@/context/travel/utils';
 
+import ChipCarousel from '../../ui/carousel/ChipCarousel';
 import ToastMsg from '../../ui/toast/ToastMsg';
-
-import { getMap } from '../common/action';
 import { basicMarker } from '../../naver-map/markers/basicMarker';
 import { plusMarker } from '../../naver-map/markers/plusMarker';
-import ChipCarousel from '../../ui/carousel/ChipCarousel';
+
+import { getNumberMarker } from './util';
+import { getMap } from '../common/action';
 import { SPOTS_COUNT } from '@/context/travel/schema';
-
-import Marker1 from '/public/icons/markers/marker1.svg?url';
-import Marker2 from '/public/icons/markers/marker2.svg?url';
-import Marker3 from '/public/icons/markers/marker3.svg?url';
-import Marker4 from '/public/icons/markers/marker4.svg?url';
-import Marker5 from '/public/icons/markers/marker5.svg?url';
-
-function getNumberMarker(num: number) {
-  if (num === 1) {
-    return Marker1.src;
-  }
-
-  if (num === 2) {
-    return Marker2.src;
-  }
-
-  if (num === 3) {
-    return Marker3.src;
-  }
-
-  if (num === 4) {
-    return Marker4.src;
-  }
-
-  if (num === 5) {
-    return Marker5.src;
-  }
-
-  return '';
-}
 
 const defaultCenter = {
   lat: 37.5135869,
