@@ -13,6 +13,8 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
+import java.util.List;
+
 @Mapper(
     componentModel = "spring",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
@@ -27,6 +29,9 @@ public interface CourseDtoMapper {
     CourseDto.CourseListUnit of(CourseInfoDto.CourseListUnit course);
 
     CourseDetailResponse toDetailDto(CourseDetailInfo course);
+
+    List<CourseDto.SpotDetailDto> toSpotDetailDto(List<CourseInfoDto.SpotDetailInfo> spotDetailInfos);
+
 
     default Page<CourseDto.CourseListUnit> mapToPage(Page<CourseListUnit> page) {
         return new PageImpl<>(
