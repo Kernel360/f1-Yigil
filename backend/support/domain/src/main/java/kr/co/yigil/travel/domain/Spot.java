@@ -67,4 +67,8 @@ public class Spot extends Travel {
         this.isInCourse = true;
     }
     public void changeOutOfCourse() { this.isInCourse = false; }
+
+    public List<String> getImageUrls(){
+        return attachFiles.getUrls();
+    }
 }
