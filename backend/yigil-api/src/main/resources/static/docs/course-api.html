@@ -1030,6 +1030,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스의 본문</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>created_date</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스의 생성 일자</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스 내 스팟의 정보</p></td>
@@ -1072,20 +1077,21 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 370
+Content-Length: 435
 
 {
   "title" : "최고의 코스",
   "rate" : "4.5",
   "map_static_image_url" : "images/static.png",
   "description" : "코스의 본문",
+  "created_date" : "2024-03-20T11:05:02.187666",
   "spots" : [ {
     "order" : "1",
     "place_name" : "장소명",
     "image_url_list" : [ "images/spot.jpg", "images/spotted.png" ],
     "rate" : "4.5",
     "description" : "스팟 본문",
-    "create_date" : "2024-02-01"
+    "create_date" : "2024-03-20T11:05:02.187602"
   } ]
 }</code></pre>
 </div>
@@ -1666,7 +1672,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-18T19:58:08.488785"
+    "create_date" : "2024-03-20T11:05:02.088846"
   } ],
   "has_next" : false
 }</code></pre>
@@ -1814,7 +1820,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-18T19:58:08.508527",
+    "create_date" : "2024-03-20T11:05:02.108624",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -1826,7 +1832,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-18T19:58:08.508779",
+    "create_date" : "2024-03-20T11:05:02.10889",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -1842,7 +1848,7 @@ Host: spring.restdocs.test
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 665
+Content-Length: 664
 
 {
   "spot_details" : [ {
@@ -1852,7 +1858,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-18T19:58:08.508527",
+    "create_date" : "2024-03-20T11:05:02.108624",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -1864,7 +1870,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-18T19:58:08.508779",
+    "create_date" : "2024-03-20T11:05:02.10889",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -1882,7 +1888,7 @@ Content-Length: 665
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-08 17:23:15 +0900
+Last updated 2024-03-20 11:05:42 +0900
 </div>
 </div>
 </body>
