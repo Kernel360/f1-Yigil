@@ -263,10 +263,10 @@ public class CourseApiControllerTest {
     @Test
     void retrieveCourse_ShouldReturnOk() throws Exception {
         CourseInfo.Main mockInfo = mock(CourseInfo.Main.class);
-        CourseSpotInfoDto spotInfo = new CourseSpotInfoDto("1", "장소명",
+        CourseSpotInfoDto spotInfo = new CourseSpotInfoDto("1", "장소명", "주소",
                 List.of("images/spot.jpg", "images/spotted.png"), "4.5", "스팟 본문", "2024-02-01");
         CourseDetailInfoDto courseInfo = new CourseDetailInfoDto("최고의 코스", "4.5",
-                "images/static.png", "코스의 본문", List.of(spotInfo));
+                "images/static.png", "코스의 본문", LocalDateTime.now().toString(), List.of(spotInfo));
 
         when(courseFacade.retrieveCourseInfo(anyLong())).thenReturn(mockInfo);
         when(courseMapper.toCourseDetailInfoDto(mockInfo)).thenReturn(courseInfo);
@@ -289,11 +289,15 @@ public class CourseApiControllerTest {
                                         .description("코스의 위치를 나타내는 지도 이미지 경로"),
                                 fieldWithPath("description").type(JsonFieldType.STRING)
                                         .description("코스의 본문"),
+                                fieldWithPath("created_date").type(JsonFieldType.STRING)
+                                        .description("코스의 생성 일자"),
                                 subsectionWithPath("spots").description("코스 내 스팟의 정보"),
                                 fieldWithPath("spots[].order").type(JsonFieldType.STRING)
                                         .description("코스 내 현재 스팟의 순서"),
                                 fieldWithPath("spots[].place_name").type(JsonFieldType.STRING)
                                         .description("코스 내 스팟의 장소명"),
+                                fieldWithPath("spots[].place_address").type(JsonFieldType.STRING)
+                                        .description("코스 내 스팟의 장소 주소"),
                                 fieldWithPath("spots[].image_url_list").type(JsonFieldType.ARRAY)
                                         .description("코스 내 스팟 관련 이미지의 경로 배열"),
                                 fieldWithPath("spots[].rate").type(JsonFieldType.STRING)

@@ -1,9 +1,10 @@
 package kr.co.yigil.travel.interfaces.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +14,7 @@ public class CourseDetailInfoDto {
     private String rate;
     private String mapStaticImageUrl;
     private String description;
+    private String createdDate;
     List<CourseSpotInfoDto> spots;
 
     @Data
@@ -21,6 +23,7 @@ public class CourseDetailInfoDto {
     public static class CourseSpotInfoDto {
         private String order;
         private String placeName;
+        private String placeAddress;
         private List<String> imageUrlList;
         private String rate;
         private String description;
