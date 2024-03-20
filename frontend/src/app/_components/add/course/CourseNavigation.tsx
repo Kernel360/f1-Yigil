@@ -50,15 +50,15 @@ async function canGoNext(
 
       return true;
     case 3:
-      if (
-        course.spots.some((spot) => spot.review.content === '') ||
-        course.review.content === ''
-      ) {
-        return '각 장소와 코스 전체에 대한 리뷰를 작성해주세요!';
-      }
-
       if (course.review.title === undefined || course.review.title === '') {
         return '코스 제목을 작성해주세요!';
+      }
+
+      if (
+        course.spots.some((spot) => spot.review.content.trim() === '') ||
+        course.review.content.trim() === ''
+      ) {
+        return '각 장소와 코스 전체에 대한 리뷰를 작성해주세요!';
       }
 
       const staticMapImageUrl = await getCourseStaticMap(

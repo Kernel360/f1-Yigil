@@ -352,9 +352,14 @@ async function parseAddCourseState(course: TCourseState): Promise<FormData> {
     };
   });
 
-  spotRegisterRequests.forEach((request) =>
-    formData.append(`spotRegisterRequests`, JSON.stringify(request)),
-  );
+  spotRegisterRequests.forEach((request, index) => {
+    Object.entries(request).forEach(([key, value]) =>
+      formData.append(
+        `spotRegisterRequests[${index}].${key}`,
+        typeof value === 'number' ? value.toString() : value,
+      ),
+    );
+  });
 
   formData.append(
     'mapStaticImageFile',
@@ -400,12 +405,13 @@ async function parseAddCourseState(course: TCourseState): Promise<FormData> {
   });
 
   spotImages.forEach((images, spotIndex) => {
-    images.forEach((image) => {
-      formData.append(`spotRegisterRequests[${spotIndex}].files`, image);
+    images.forEach((image, imageIndex) => {
+      formData.append(
+        `spotRegisterRequests[${spotIndex}].files[${imageIndex}]`,
+        image,
+      );
     });
   });
-
-  console.log(formData);
 
   return formData;
 }
@@ -420,7 +426,7 @@ export async function postCourse(
 
   const formData = await parseAddCourseState(course);
 
-  const response = await fetch(`${BASE_URL}/v1/spots`, {
+  const response = await fetch(`${BASE_URL}/v1/courses`, {
     method: 'POST',
     body: formData,
     headers: {
