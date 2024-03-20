@@ -22,6 +22,7 @@ public class CourseInfo {
         private final double rate;
         private final String mapStaticImageUrl;
         private final String description;
+        private final LocalDateTime createdDate;
         private final List<CourseSpotInfo> courseSpotList;
 
         public Main(Course course) {
@@ -29,6 +30,7 @@ public class CourseInfo {
             this.rate = course.getRate();
             this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
             this.description = course.getDescription();
+            this.createdDate = course.getCreatedAt();
             AtomicInteger index = new AtomicInteger(1);
             this.courseSpotList = course.getSpots().stream()
                     .map(spot -> new CourseSpotInfo(spot, index.getAndIncrement()))
