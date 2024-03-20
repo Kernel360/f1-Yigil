@@ -13,6 +13,7 @@ public class CourseUpdateRequest {
     private String description;
     private double rate;
     private String title;
+    private String lineStringJson;
     private List<Long> spotIdOrder;
     private List<SpotUpdateRequest> courseSpotUpdateRequests;
 }
