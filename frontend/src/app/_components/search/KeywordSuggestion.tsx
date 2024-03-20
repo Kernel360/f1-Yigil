@@ -4,7 +4,8 @@ import { useContext, useEffect, useState } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
 import { keywordSuggestions } from './action';
 import { keywordsSchema } from '@/types/response';
-import SearchItem from './SearchItem';
+
+import BackendSearchItem from './BackendSearchItem';
 
 export default function KeywordSuggestion() {
   const [state, dispatch] = useContext(SearchContext);
@@ -34,7 +35,7 @@ export default function KeywordSuggestion() {
   return (
     <section className="px-7 flex flex-col grow gap-2">
       {suggestions.map((suggestion, index) => (
-        <SearchItem key={`${suggestion}-${index}`} item={suggestion} />
+        <BackendSearchItem key={`${suggestion}-${index}`} name={suggestion} />
       ))}
     </section>
   );

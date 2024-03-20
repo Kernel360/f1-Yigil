@@ -62,6 +62,7 @@ export const dataWithAddressSchema = z.array(datumWithAddressSchema);
 export const staticMapUrlSchema = z.object({
   exists: z.boolean(),
   map_static_image_url: z.string().optional(),
+  registered_place: z.boolean(),
 });
 
 export const naverStaticMapUrlErrorSchema = z.object({

@@ -1,15 +1,12 @@
 'use client';
 
 import { createContext, useEffect, useReducer } from 'react';
-import {
-  createInitialState,
-  defaultSearchState,
-  searchReducer,
-} from './reducer';
+import reducer, { createInitialState, defaultSearchState } from './reducer';
+
+import { parseSearchHistory } from '@/utils';
 
 import type { Dispatch, ReactNode } from 'react';
 import type { TSearchState, TSearchAction } from './reducer';
-import { parseSearchHistory } from '@/utils';
 
 export const SearchContext = createContext<
   [TSearchState, Dispatch<TSearchAction>]
@@ -26,10 +23,12 @@ function getSearchHistory(searchKey: string) {
 export default function SearchProvider({
   showHistory,
   initialKeyword,
+  backendSearchType,
   children,
 }: {
   showHistory?: boolean;
   initialKeyword?: string;
+  backendSearchType?: 'place' | 'course';
   children: ReactNode;
 }) {
   const histories = getSearchHistory(searchKey);
@@ -38,9 +37,10 @@ export default function SearchProvider({
     histories,
     initialKeyword,
     showHistory,
+    backendSearchType,
   );
 
-  const [state, dispatch] = useReducer(searchReducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     localStorage.setItem(searchKey, JSON.stringify(state.histories));
