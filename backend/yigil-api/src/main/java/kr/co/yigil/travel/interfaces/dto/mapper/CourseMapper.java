@@ -13,6 +13,9 @@ import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
 import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.geojson.GeoJsonReader;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -75,12 +78,16 @@ public interface CourseMapper {
             CourseRegisterWithoutSeriesRequest request);
 
     @Mappings({
-            @Mapping(source = "description", target = "description"),
-            @Mapping(source = "rate", target = "rate"),
             @Mapping(source = "spotIdOrder", target = "spotIdOrder"),
             @Mapping(source = "courseSpotUpdateRequests", target = "modifySpotRequests")
     })
     CourseCommand.ModifyCourseRequest toModifyCourseRequest(CourseUpdateRequest courseUpdateRequest);
+
+    default LineString map(String lineStringJson) throws ParseException {
+        return (LineString) new GeoJsonReader().read(lineStringJson);
+    }
+
+
 
     @Mappings({
             @Mapping(source = "title", target = "title"),
@@ -92,6 +99,7 @@ public interface CourseMapper {
     CourseDetailInfoDto toCourseDetailInfoDto(CourseInfo.Main courseInfo);
 
     @Mappings({
+            @Mapping(source = "id", target = "id"),
             @Mapping(source = "order", target = "order", qualifiedByName = "intToString"),
             @Mapping(source = "placeName", target = "placeName"),
             @Mapping(source = "imageUrlList", target = "imageUrlList"),

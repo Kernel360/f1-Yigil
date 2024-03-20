@@ -11,8 +11,9 @@ import { EventFor } from '@/types/type';
 import * as Common from '../detailModify';
 import { TImageData } from '../../images/ImageHandler';
 import ToastMsg from '../../ui/toast/ToastMsg';
-import { getNumberMarker } from '../../add/course/AddCourseMap';
+
 import { TModifyCourse } from './CourseDetail';
+import { getNumberMarker } from '../../add/course/util';
 
 export default function CourseSpotItem({
   spot,

@@ -6,6 +6,7 @@ import IconWithCounts from '../IconWithCounts';
 
 import ReviewIcon from '/public/icons/review.svg';
 import StarIcon from '/public/icons/star.svg';
+import PlaceholderImage from '/public/images/placeholder.png';
 
 import type { TPlace } from '@/types/response';
 
@@ -18,7 +19,7 @@ export default function Place({
   data: TPlace;
   order: number;
   variant?: 'primary' | 'secondary';
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
 }) {
   const {
     id,
@@ -50,7 +51,10 @@ export default function Place({
             src={thumbnail_image_url}
             alt={`${place_name} 대표 이미지`}
             fill
-            sizes="33vw"
+            sizes="400px 300px 200px 100px"
+            priority={order === 0 || order === 1}
+            placeholder="blur"
+            blurDataURL={PlaceholderImage.blurDataURL}
           />
         </Link>
         <BookmarkButton

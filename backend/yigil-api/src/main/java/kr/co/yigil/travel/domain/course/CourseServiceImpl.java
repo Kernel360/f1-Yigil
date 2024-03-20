@@ -1,9 +1,5 @@
 package kr.co.yigil.travel.domain.course;
 
-import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
-
-import java.util.List;
-import java.util.Objects;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.FileUploader;
@@ -25,6 +21,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+
+import static kr.co.yigil.global.exception.ExceptionCode.INVALID_AUTHORITY;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional
     public void registerCourseWithoutSeries(final RegisterCourseRequestWithSpotInfo command,
-            final Long memberId) {
+                                            final Long memberId) {
         Member member = memberReader.getMember(memberId);
         var spots = courseSpotSeriesFactory.store(command, memberId);
         var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
@@ -79,7 +80,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public Course modifyCourse(final ModifyCourseRequest command, final Long courseId, final Long memberId) {
         var course = courseReader.getCourse(courseId);
-        if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
+        if (!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
         return courseSeriesFactory.modify(command, course);
     }
 
@@ -87,7 +88,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public void deleteCourse(final Long courseId, final Long memberId) {
         var course = courseReader.getCourse(courseId);
-        if(!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
+        if (!Objects.equals(course.getMember().getId(), memberId)) throw new AuthException(INVALID_AUTHORITY);
         courseStore.remove(course);
         course.getSpots().forEach(Spot::changeOutOfCourse);
     }
@@ -95,18 +96,18 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public CourseInfo.MyCoursesResponse retrieveCourseList(final Long memberId, final Pageable pageable,
-        Selected visibility) {
+                                                           Selected visibility) {
         Page<CourseListDto> pageCourse = courseReader.getMemberCourseList(memberId, pageable, visibility);
         List<CourseInfo.CourseListInfo> courseInfoList = pageCourse.getContent().stream()
-            .map(CourseInfo.CourseListInfo::new)
-            .toList();
+                .map(CourseInfo.CourseListInfo::new)
+                .toList();
         return new CourseInfo.MyCoursesResponse(courseInfoList, pageCourse.getTotalPages());
     }
 
     @Override
     @Transactional(readOnly = true)
     public CourseInfo.Slice searchCourseByPlaceName(String keyword, Accessor accessor,
-            Pageable pageable) {
+                                                    Pageable pageable) {
         var result = courseReader.searchCourseByPlaceName(keyword, pageable);
         var courses = result.getContent().stream()
                 .map(course -> {

@@ -8,53 +8,23 @@ import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 import { isEqualPlace } from '@/context/travel/utils';
 
+import ChipCarousel from '../../ui/carousel/ChipCarousel';
 import ToastMsg from '../../ui/toast/ToastMsg';
-
-import { getMap } from '../common/action';
 import { basicMarker } from '../../naver-map/markers/basicMarker';
 import { plusMarker } from '../../naver-map/markers/plusMarker';
-import ChipCarousel from '../../ui/carousel/ChipCarousel';
+
+import { getNumberMarker } from './util';
+import { getMap } from '../common/action';
 import { SPOTS_COUNT } from '@/context/travel/schema';
 
-import Marker1 from '/public/icons/markers/marker1.svg?url';
-import Marker2 from '/public/icons/markers/marker2.svg?url';
-import Marker3 from '/public/icons/markers/marker3.svg?url';
-import Marker4 from '/public/icons/markers/marker4.svg?url';
-import Marker5 from '/public/icons/markers/marker5.svg?url';
-
-export function getNumberMarker(num: number) {
-  if (num === 1) {
-    return Marker1.src;
-  }
-
-  if (num === 2) {
-    return Marker2.src;
-  }
-
-  if (num === 3) {
-    return Marker3.src;
-  }
-
-  if (num === 4) {
-    return Marker4.src;
-  }
-
-  if (num === 5) {
-    return Marker5.src;
-  }
-
-  return '';
-}
-
 const defaultCenter = {
-  lat: 37.5135869,
-  lng: 127.0621708,
+  lat: 37.513574239451074,
+  lng: 127.06207199205083,
 };
 
 export default function AddCourseMap() {
   const navermaps = useNavermaps();
   const mapRef = useRef<naver.maps.Map>(null);
-  const courseMarkersRef = useRef<naver.maps.Marker[]>([]);
 
   const [error, setError] = useState('');
   const [inform, setInform] = useState('');
@@ -65,39 +35,16 @@ export default function AddCourseMap() {
 
   const { current, selectedPlace } = addTravelMapState;
 
-  function onChangedMap() {
-    dispatchAddTravelMap({ type: 'UNSELECT_PLACE' });
-  }
-
   useEffect(() => {
     mapRef.current?.panTo(current.coords);
-    mapRef.current?.autoResize();
   }, [current]);
 
-  useEffect(() => {
-    if (!mapRef.current) {
-      return;
-    }
-
-    courseMarkersRef.current.forEach((marker) => marker.setMap(null));
-
-    const courseMarkers = course.spots.map(
-      ({ place }, index) =>
-        new naver.maps.Marker({
-          position: place.coords,
-          title: place.name,
-          icon: {
-            url: getNumberMarker(index + 1),
-          },
-        }),
-    );
-
-    courseMarkersRef.current = courseMarkers;
-
-    courseMarkersRef.current.forEach((marker) => marker.setMap(mapRef.current));
-  }, [course.spots]);
-
   const places = course.spots.map((spot) => spot.place);
+
+  function onChangedMap() {
+    mapRef.current?.autoResize();
+    dispatchAddTravelMap({ type: 'UNSELECT_PLACE' });
+  }
 
   async function handleClick() {
     try {
@@ -162,15 +109,26 @@ export default function AddCourseMap() {
       <hr className="my-4" />
       <section className="relative grow">
         <div className="absolute w-full h-full">
-          <Container
-            style={{ position: 'absolute', width: '100%', height: '100%' }}
-          >
+          <Container style={{ width: '100%', height: '100%' }}>
             <NaverMap
               defaultCenter={defaultCenter}
               ref={mapRef}
               onBoundsChanged={onChangedMap}
               onSizeChanged={onChangedMap}
             >
+              {course.spots.map(({ place }, index) => (
+                <Marker
+                  key={`${place.name}-${place.address}-${index}`}
+                  position={place.coords}
+                  title={place.name}
+                  clickable={false}
+                  icon={{
+                    url: getNumberMarker(index + 1),
+                    size: new naver.maps.Size(46, 56),
+                    anchor: naver.maps.Position.BOTTOM_CENTER,
+                  }}
+                />
+              ))}
               <Marker
                 title={current.name}
                 position={current.coords}

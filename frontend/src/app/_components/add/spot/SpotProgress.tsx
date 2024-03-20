@@ -8,5 +8,5 @@ import Progress from '../Progress';
 export default function SpotProgress() {
   const [step] = useContext(SpotStepContext);
 
-  return <Progress value={step.value} />;
+  return step.value < 4 && <Progress value={step.value} />;
 }

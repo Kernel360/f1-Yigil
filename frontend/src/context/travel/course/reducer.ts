@@ -3,6 +3,8 @@ import {
   currentSpotImagesSchema,
   currentSpotPlaceSchema,
   currentSpotReviewSchema,
+  imageUrlSchema,
+  lineStringSchema,
   manySpotStateSchema,
   reviewSchema,
   spotStateSchema,
@@ -14,6 +16,8 @@ import type { TCourseState, TSpotState } from '../schema';
 export const initialCourseState: TCourseState = {
   review: { title: '', content: '', rate: 1 },
   spots: [],
+  staticMapImageUrl: '',
+  lineString: { type: 'LineString', coordinates: [] },
 };
 
 export interface TCourseAction {
@@ -26,7 +30,9 @@ export interface TCourseAction {
     | 'SET_SPOT_IMAGES'
     | 'SET_SPOT_REVIEW'
     | 'SET_COURSE_REVIEW'
-    | 'INIT_COURSE';
+    | 'INIT_COURSE'
+    | 'SET_COURSE_STATIC_MAP'
+    | 'SET_PATH';
   payload?: unknown;
 }
 
@@ -159,6 +165,32 @@ export default function reducer(
     }
     case 'INIT_COURSE': {
       return initialCourseState;
+    }
+    case 'SET_COURSE_STATIC_MAP': {
+      const result = imageUrlSchema.safeParse(action.payload);
+
+      /**
+       * @todo SET_ERROR for Toast
+       */
+      if (!result.success) {
+        console.error(result.error.message);
+        return { ...state };
+      }
+
+      return { ...state, staticMapImageUrl: result.data };
+    }
+    case 'SET_PATH': {
+      const result = lineStringSchema.safeParse(action.payload);
+
+      /**
+       * @todo SET_ERROR for Toast
+       */
+      if (!result.success) {
+        console.error(result.error.message);
+        return { ...state };
+      }
+
+      return { ...state, lineString: result.data };
     }
   }
 }
