@@ -6,6 +6,13 @@ const IMAGES_COUNT = 5;
 const PLACES_COUNT = 5;
 export const SPOTS_COUNT = 5;
 
+export const lineStringSchema = z.object({
+  type: z.literal('LineString'),
+  coordinates: z.array(z.array(z.number()).length(2)),
+});
+
+export type TLineString = z.infer<typeof lineStringSchema>;
+
 export const coordsSchema = z.object({ lng: z.number(), lat: z.number() });
 export type TCoords = z.infer<typeof coordsSchema>;
 
@@ -54,6 +61,8 @@ export const manySpotStateSchema = z.array(spotStateSchema);
 export const courseStateSchema = z.object({
   spots: manySpotStateSchema.min(0).max(SPOTS_COUNT),
   review: reviewSchema,
+  staticMapImageUrl: z.string(),
+  lineString: lineStringSchema,
 });
 export type TCourseState = z.infer<typeof courseStateSchema>;
 
@@ -74,3 +83,5 @@ export const placeStateSchema = z.discriminatedUnion('type', [
 ]);
 
 export type TPlaceState = z.infer<typeof placeStateSchema>;
+
+export const imageUrlSchema = z.string();

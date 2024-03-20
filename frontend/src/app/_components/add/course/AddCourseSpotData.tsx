@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 import ImageCarousel from '../../ui/carousel/ImageCarousel';
 import IconWithCounts from '../../IconWithCounts';
+
+import { getNumberMarker } from './util';
 
 import ChevronDownIcon from '/public/icons/chevron-down.svg';
 import StarIcon from '/public/icons/star.svg';
@@ -30,8 +33,13 @@ export default function AddCourseSpotData({
         className="px-4 py-2 w-full border border-gray-500 rounded-lg flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex gap-4">
-          {/* ICON */}
+        <div className="flex gap-4 items-center">
+          <Image
+            width={32}
+            height={32}
+            src={getNumberMarker(index + 1)}
+            alt={`${index + 1}번 마커`}
+          />
           <span>{place.name}</span>
         </div>
         <span>
