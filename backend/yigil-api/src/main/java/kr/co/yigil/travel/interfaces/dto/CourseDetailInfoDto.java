@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseDetailInfoDto {
+
     private String title;
     private String rate;
     private String mapStaticImageUrl;
@@ -21,6 +22,7 @@ public class CourseDetailInfoDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CourseSpotInfoDto {
+        private Long id;
         private String order;
         private String placeName;
         private String placeAddress;
