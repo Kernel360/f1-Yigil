@@ -1,7 +1,9 @@
 import { logout } from '../../api/action';
 import MapPin from '/public/icons/map-pin.svg';
 import Logout from '/public/icons/logout.svg';
+
 import LocationIcon from '/public/icons/location.svg';
+import CalendarIcon from '/public/icons/calendar.svg';
 
 import type { TPopOverData } from './types';
 
@@ -28,9 +30,9 @@ export const homePopOverData: TPopOverData[] = [
     label: '장소 추가하기',
     icon: <LocationIcon className="w-6 h-6" />,
   },
-  // {
-  //   href: '/add/course',
-  //   label: '일정 추가하기',
-  //   icon: <CalendarIcon className="w-6 h-6" />,
-  // },
+  {
+    href: '/add/course',
+    label: '일정 추가하기',
+    icon: <CalendarIcon className="w-6 h-6" />,
+  },
 ];
