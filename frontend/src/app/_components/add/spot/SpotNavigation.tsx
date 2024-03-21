@@ -25,8 +25,16 @@ function canGoNext(spot: TSpotState, step: TSpotStepState): true | string {
       return true;
     }
     case 2:
+      if (spot.images.length === 0) {
+        return '적어도 하나의 사진을 올려주세요!';
+      }
+
       return true;
     case 3:
+      if (spot.review.content.trim() === '') {
+        return '리뷰를 작성해주세요!';
+      }
+
       return true;
     case 4:
       return true;
@@ -100,6 +108,7 @@ export default function SpotNavigation() {
 
             if (result !== true) {
               setError(result);
+              setTimeout(() => setError(''), 2000);
               return;
             }
 

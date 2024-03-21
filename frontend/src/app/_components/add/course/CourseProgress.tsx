@@ -7,5 +7,5 @@ export default function SpotProgress({
 }: {
   currentValue: number;
 }) {
-  return <Progress value={currentValue} />;
+  return currentValue < 4 && <Progress value={currentValue} />;
 }

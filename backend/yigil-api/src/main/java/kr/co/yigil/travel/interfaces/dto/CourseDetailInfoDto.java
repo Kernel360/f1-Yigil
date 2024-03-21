@@ -10,22 +10,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseDetailInfoDto {
+
     private String title;
-    private String rate;
+    private double rate;
     private String mapStaticImageUrl;
     private String description;
     private String createdDate;
+    private String lineStringJson;
     List<CourseSpotInfoDto> spots;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CourseSpotInfoDto {
+        private Long id;
         private String order;
         private String placeName;
         private String placeAddress;
         private List<String> imageUrlList;
-        private String rate;
+        private double rate;
         private String description;
         private String createDate;
     }

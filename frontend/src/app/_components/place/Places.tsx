@@ -14,14 +14,14 @@ export default function Places({
 }: {
   data: TPlace[];
   variant?: 'primary' | 'secondary';
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
   carousel?: boolean;
 }) {
   const [emblaRef] = useEmblaCarousel();
 
   if (!carousel) {
     return (
-      <div className="flex">
+      <div className="flex flex-col gap-4">
         {data.map((post, index) => (
           <Place
             key={post.id}

@@ -17,7 +17,7 @@ export default function reducer(
           return { label: '리뷰 입력', value: 3 };
         }
         case 3: {
-          return { label: '기록 확정', value: 4 };
+          return { label: '일정 확정', value: 4 };
         }
         case 4: {
           return state;

@@ -14,24 +14,6 @@ const regionResponseSchema = z.object({
   regions: z.array(regionSchema),
 });
 
-async function fetchPopularPlaces(more?: 'more') {
-  const BASE_URL = await getBaseUrl();
-  const session = cookies().get('SESSION')?.value;
-
-  const endpoint = `${BASE_URL}/v1/places/popular${
-    more === 'more' ? '/more' : ''
-  }`;
-
-  const response = await fetch(endpoint, {
-    headers: {
-      Cookie: `SESSION=${session}`,
-    },
-    next: { tags: ['popularPlaces'] },
-  });
-
-  return await response.json();
-}
-
 async function fetchInterestedRegions() {
   const BASE_URL = await getBaseUrl();
 
@@ -55,14 +37,6 @@ async function fetchRegionPlaces(id: number) {
   });
 
   return await response.json();
-}
-
-export async function getPopularPlaces(more?: 'more') {
-  const json = await fetchPopularPlaces(more);
-
-  const result = placeResponseSchema.safeParse(json);
-
-  return result;
 }
 
 export async function getInterestedRegions() {

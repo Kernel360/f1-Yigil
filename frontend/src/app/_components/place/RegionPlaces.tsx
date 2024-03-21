@@ -9,6 +9,8 @@ import DummyPlace from './dummy/DummyPlace';
 
 import type { TPlace, TRegion } from '@/types/response';
 
+import ChevronRightIcon from '/public/icons/chevron-right.svg';
+
 export default function RegionPlaces({
   regions,
   initialRegion,
@@ -36,11 +38,11 @@ export default function RegionPlaces({
 
   return (
     <section className="flex flex-col" aria-label="region-places">
-      <div className="flex justify-between items-center pt-2">
+      <div className="flex justify-between items-center px-4 py-2">
         <span className="pl-4 text-3xl font-medium">관심 지역</span>
         {!more && (
-          <Link className="pr-4" href={`places/regions/${currentRegion?.id}`}>
-            더보기
+          <Link href={`places/regions/${currentRegion?.id}`}>
+            <ChevronRightIcon className="w-6 h-6 stroke-black stroke-2 [stroke-linecap:round] [stroke-linejoin:round]" />
           </Link>
         )}
       </div>

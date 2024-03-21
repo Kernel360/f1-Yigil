@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.geojson.GeoJsonWriter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,7 @@ public class CourseInfo {
         private final String mapStaticImageUrl;
         private final String description;
         private final String createdDate;
+        private final String lineStringJson;
         private final List<CourseSpotInfo> courseSpotList;
 
         public Main(Course course) {
@@ -31,6 +33,7 @@ public class CourseInfo {
             this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
             this.description = course.getDescription();
             this.createdDate = course.getCreatedAt().toString();
+            this.lineStringJson = new GeoJsonWriter().write(course.getPath());;
             AtomicInteger index = new AtomicInteger(1);
             this.courseSpotList = course.getSpots().stream()
                     .map(spot -> new CourseSpotInfo(spot, index.getAndIncrement()))
@@ -41,6 +44,7 @@ public class CourseInfo {
     @Getter
     @ToString
     public static class CourseSpotInfo {
+        private final Long id;
         private final int order;
         private final String placeName;
         private final String placeAddress;
@@ -50,6 +54,7 @@ public class CourseInfo {
         private final LocalDateTime createDate;
 
         public CourseSpotInfo(Spot spot, int index) {
+            this.id = spot.getId();
             this.order = index;
             this.placeName = spot.getPlace().getName();
             this.placeAddress = spot.getPlace().getAddress();
