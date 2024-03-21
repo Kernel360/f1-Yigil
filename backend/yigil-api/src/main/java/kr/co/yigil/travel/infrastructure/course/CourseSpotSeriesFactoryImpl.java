@@ -1,9 +1,5 @@
 package kr.co.yigil.travel.infrastructure.course;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Member;
@@ -22,6 +18,11 @@ import kr.co.yigil.travel.domain.spot.SpotStore;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -61,7 +62,7 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
 
     @Override
     public List<Spot> store(RegisterCourseRequestWithSpotInfo request, Long memberId) {
-        List<Spot> spots = spotReader.getSpots(request.getSpotIds());
+        List<Spot> spots = spotReader.getMemberSpots(memberId, request.getSpotIds());
         spots.forEach(Spot::changeInCourse);
         return spots;
     }
