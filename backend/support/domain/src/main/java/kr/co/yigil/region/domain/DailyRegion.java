@@ -35,4 +35,9 @@ public class DailyRegion {
         this.region = region;
         this.referenceCount = referenceCount;
     }
+
+    public DailyRegion(Region region, Long referenceCount) {
+        this.region = region;
+        this.referenceCount = referenceCount;
+    }
 }
