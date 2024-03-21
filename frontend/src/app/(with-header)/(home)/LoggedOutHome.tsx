@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { PopularPlaces } from '@/app/_components/place';
+import { PopularPlaces } from '@/app/_components/place/places';
 
 import DummyPlaces from '@/app/_components/place/dummy/DummyPlaces';
 import HomeFAB from './HomeFAB';
@@ -8,9 +8,7 @@ import HomeFAB from './HomeFAB';
 export default function LoggedOutHome() {
   return (
     <main className="max-w-full flex flex-col gap-6 relative">
-      <Suspense
-        fallback={<DummyPlaces title="관심 지역" variant="primary" needLogin />}
-      >
+      <Suspense fallback={<DummyPlaces title="관심 지역" variant="primary" />}>
         <PopularPlaces />
       </Suspense>
       <DummyPlaces

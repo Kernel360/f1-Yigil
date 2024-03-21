@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Place } from '../place';
+import { Place } from '../place/places';
 
 import { SearchContext } from '@/context/search/SearchContext';
 import { MemberContext } from '@/context/MemberContext';
