@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.course.domain;
 
+import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
 import lombok.AllArgsConstructor;
@@ -63,6 +64,8 @@ public class CourseInfoDto {
         private final double rate;
         private final Long writerId;
         private final String writerName;
+        private final String writerProfileImageUrl;
+        private final SocialLoginType writerSocialLoginType;
         private final int favorCount;
         private final int commentCount;
 
@@ -78,6 +81,8 @@ public class CourseInfoDto {
             this.rate = course.getRate();
             this.writerId = course.getMember().getId();
             this.writerName = course.getMember().getNickname();
+            this.writerProfileImageUrl = course.getMember().getProfileImageUrl();
+            this.writerSocialLoginType = course.getMember().getSocialLoginType();
             this.favorCount = courseAdditionalInfo.getFavorCount();
             this.commentCount = courseAdditionalInfo.getCommentCount();
             this.spots = spots;
