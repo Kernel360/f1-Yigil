@@ -2,7 +2,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 50MB
-      max-request-size: 100MB
+      max-request-size: 250MB
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
@@ -13,32 +13,28 @@ spring:
     master:
       hikari:
         driver-class-name: org.postgresql.Driver
-        #        jdbc-url: jdbc:postgresql://localhost:5432/yigil-db
-        jdbc-url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
+        jdbc-url: @MASTER_DB_URL@
         read-only: false
-        username: postgres
-        password: 12345678
+        username: @MASTER_DB_USERNAME@
+        password: @MASTER_DB_PASSWORD@
     slave:
       hikari:
         driver-class-name: org.postgresql.Driver
-        #        jdbc-url: jdbc:postgresql://localhost:5433/yigil-db
-        jdbc-url: jdbc:postgresql://database-1- read.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
+        jdbc-url: @SLAVE_DB_URL@
         read-only: true
-        username: postgres
-        password: 12345678
+        username: @SLAVE_DB_USERNAME@
+        password: @SLAVE_DB_PASSWORD@
   data:
     redis:
-      host: localhost
-      port: 6379
-
+      host: @REDIS_HOST@
+      port: @REDIS_PORT@
   jackson:
     property-naming-strategy: SNAKE_CASE
-
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: kiit0901
-    password: irbjczbuoksnjjad
+    host: @MAIL_HOST@
+    port: @MAIL_PORT@
+    username: @MAIL_USERNAME@
+    password: @MAIL_PASSWORD@
 
     properties:
       mail:
@@ -47,13 +43,14 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+
 cloud:
   aws:
     s3:
-    bucket: cdn.yigil.co.kr
+    bucket: @S3_BUCKET@
     credentials:
-      access-key: AKIA57RFG4SU5VO6U3PQ
-      secret-key: 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
+      access-key: @AWS_ACCESS_KEY@
+      secret-key: @AWS_SECRET_KEY@
     region:
       static: ap-northeast-2
       auto: false
@@ -61,7 +58,7 @@ cloud:
       auto: false
 
 server:
-  port: 8081
+  port: @YIGIL_ADMIN_PORT@
   servlet:
     session:
       cookie:
@@ -76,10 +73,9 @@ logging:
   level:
     root: DEBUG
   slack:
-    webhook-uri: https://hooks.slack.com/services/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
-
+    webhook-uri: @SLACK_WEBHOOK_URI@
 jwt:
-  secret: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
+  secret: @JWT_SECRET@
 
 decorator:
   datasource:
