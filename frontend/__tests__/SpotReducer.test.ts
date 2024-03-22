@@ -26,7 +26,7 @@ const review: TReview = {
 describe('Spot reducer success test', () => {
   const actions: TSpotAction[] = [
     { type: 'SET_PLACE', payload: place },
-    { type: 'SET_IMAGES', payload: images },
+    { type: 'SET_IMAGES', payload: { type: 'new', data: images } },
     { type: 'SET_REVIEW', payload: review },
   ];
 
@@ -39,7 +39,7 @@ describe('Spot reducer success test', () => {
         return;
       }
       case 'SET_IMAGES': {
-        expect(nextState.images).toEqual(images);
+        expect(nextState.images).toEqual({ type: 'new', data: images });
         return;
       }
       case 'SET_REVIEW': {
