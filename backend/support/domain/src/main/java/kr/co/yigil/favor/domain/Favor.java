@@ -22,7 +22,7 @@ public class Favor {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "travel_id")
     private Travel travel;
 
     private final LocalDate createdAt = LocalDate.now();
