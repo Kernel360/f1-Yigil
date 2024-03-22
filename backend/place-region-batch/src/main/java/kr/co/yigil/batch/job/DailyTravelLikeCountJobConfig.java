@@ -3,6 +3,8 @@ package kr.co.yigil.batch.job;
 import jakarta.persistence.EntityManagerFactory;
 import kr.co.yigil.favor.domain.DailyFavorCount;
 import kr.co.yigil.favor.infrastructure.DailyFavorCountRepository;
+import kr.co.yigil.travel.TravelType;
+import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.Travel;
 import kr.co.yigil.travel.infrastructure.TravelRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,7 @@ public class DailyTravelLikeCountJobConfig {
             JobRepository jobRepository,
             Step calculateLikeCountStep
     ) {
-        return new JobBuilder("likeCountJob", jobRepository)
+        return new JobBuilder("DailyLikeCountJob", jobRepository)
                 .start(calculateLikeCountStep)
                 .incrementer(new RunIdIncrementer())
                 .build();
@@ -70,7 +72,6 @@ public class DailyTravelLikeCountJobConfig {
 
         return new JpaPagingItemReaderBuilder<Object[]>()
                 .queryString("SELECT t.id, COUNT(f), f.createdAt FROM Travel t LEFT JOIN Favor f ON f.travel = t AND f.createdAt >= :yesterday AND f.createdAt < :today GROUP BY t.id, f.createdAt HAVING COUNT(f) > 0")
-//                .queryString("SELECT t.id, COUNT(f), f.createdAt FROM Travel t LEFT JOIN Favor f ON f.travel = t AND f.createdAt >= :yesterday AND f.createdAt < :today GROUP BY t.id, f.createdAt")
                 .entityManagerFactory(em)
                 .name("likeCountItemReader")
                 .parameterValues(parameters)
@@ -85,9 +86,15 @@ public class DailyTravelLikeCountJobConfig {
             Travel travel = travelRepository.findById(travelId).orElseThrow(
                     () -> new IllegalArgumentException("Travel not found. id=" + travelId)
             );
+            TravelType travelType;
+            if(travel instanceof Spot) {
+                travelType = TravelType.SPOT;
+            } else {
+                travelType = TravelType.COURSE;
+            }
             long count = (Long) item[1];
             LocalDate date = (LocalDate) item[2];
-            return new DailyFavorCount(count, travel, date);
+            return new DailyFavorCount(count, travel, date, travelType);
         };
     }
 

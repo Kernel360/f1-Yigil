@@ -2,6 +2,7 @@ package kr.co.yigil.favor.domain;
 
 import jakarta.persistence.*;
 import kr.co.yigil.member.Member;
+import kr.co.yigil.travel.TravelType;
 import kr.co.yigil.travel.domain.Travel;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,10 +30,14 @@ public class DailyFavorCount {
 
     private LocalDate createdAt;
 
-    public DailyFavorCount(Long count, Travel travel, LocalDate createdAt) {
+    @Enumerated(EnumType.STRING)
+    private TravelType travelType;
+
+    public DailyFavorCount(Long count, Travel travel, LocalDate createdAt, TravelType travelType) {
         this.count = count;
         this.travel = travel;
         this.writer = travel.getMember();
         this.createdAt = createdAt;
+        this.travelType = travelType;
     }
 }
