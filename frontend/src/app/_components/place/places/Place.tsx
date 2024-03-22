@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import BookmarkButton from './BookmarkButton';
-import IconWithCounts from '../IconWithCounts';
+import BookmarkButton from '../BookmarkButton';
+import IconWithCounts from '../../IconWithCounts';
 
 import ReviewIcon from '/public/icons/review.svg';
 import StarIcon from '/public/icons/star.svg';
