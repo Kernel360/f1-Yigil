@@ -20,6 +20,7 @@ export default function AddCourseConfirm() {
 
   function open() {
     setIsMapOpen(true);
+    window.scrollTo({ top: 0 });
   }
 
   function close() {
@@ -31,8 +32,8 @@ export default function AddCourseConfirm() {
   const currentDate = new Date(Date.now());
 
   return (
-    <>
-      <section className="px-4 flex flex-col grow">
+    <section className="relative flex flex-col grow">
+      <div className="px-4 flex flex-col grow">
         <div className="px-2 py-4 flex justify-between">
           <span className="text-2xl font-semibold">{review.title}</span>
           <span className="flex items-center">
@@ -68,8 +69,8 @@ export default function AddCourseConfirm() {
             {review.content}
           </div>
         </div>
-      </section>
+      </div>
       {isMapOpen && <AddCourseConfirmMap close={close} />}
-    </>
+    </section>
   );
 }
