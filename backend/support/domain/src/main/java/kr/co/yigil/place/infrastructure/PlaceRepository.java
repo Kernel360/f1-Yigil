@@ -20,6 +20,9 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     @Query(value = "SELECT p.* FROM Place p WHERE ST_Within(p.location, ST_MakeEnvelope(:minX, :minY, :maxX, :maxY, 4326))", nativeQuery = true)
     Page<Place> findWithinCoordinates(double minX, double minY, double maxX, double maxY, Pageable pageable);
 
+    @Query(value = "SELECT p.* FROM Place p WHERE ST_Within(p.location, ST_MakeEnvelope(:minX, :minY, :maxX, :maxY, 4326))", nativeQuery = true)
+    List<Place> findWithinCoordinates(double minX, double minY, double maxX, double maxY);
+
     @Query("SELECT p FROM Place p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(p.address) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Slice<Place> findByNameOrAddressContainingIgnoreCase(String keyword, Pageable pageable);
     }
