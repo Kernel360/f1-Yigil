@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -17,10 +18,11 @@ public class DailyFavorCountReaderImpl implements DailyFavorCountReader {
 
     @Override
     public Page<DailyFavorCount> readDailyFavorCountBetween(LocalDate startDate, LocalDate endDate, TravelType travelType, Pageable pageable) {
-        return dailyFavorCountRepository.findAllByCreatedAtBetweenAndTravelTypeOrderByCountDesc(startDate, endDate, travelType, pageable);
+        return dailyFavorCountRepository.findAllByCreatedAtBetweenAndTravelTypeOrAllOrderByCountDesc(startDate, endDate, travelType, pageable);
     }
 
-//    public List<DailyFavorCount> getTopTravelFavor(LocalDate startDate, LocalDate endDate, TravelType travelType) {
-//        return dailyFavorCountRepository.findAllByCreatedAtBetweenAndTravelTypeOrderByCountDesc(startDate, endDate, travelType);
-//    }
+    @Override
+    public List<DailyFavorCount> getTopDailyFavorCount(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
+        return dailyFavorCountRepository.findTopByTravelTypeOrderByCountDesc(startDate, endDate, travelType, limit);
+    }
 }

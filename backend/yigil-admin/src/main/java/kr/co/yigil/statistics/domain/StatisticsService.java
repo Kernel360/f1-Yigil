@@ -9,4 +9,5 @@ public interface StatisticsService {
 
 
     StaticInfo.DailyFavorsInfo getDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Pageable pageable);
+    public StaticInfo.DailyFavorsInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit);
 }

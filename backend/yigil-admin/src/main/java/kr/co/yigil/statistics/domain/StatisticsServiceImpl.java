@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,14 @@ public class StatisticsServiceImpl implements StatisticsService {
     public StaticInfo.DailyFavorsInfo getDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Pageable pageable) {
         Page<DailyFavorCount> dailyFavorCountPageable = dailyFavorCountReader.readDailyFavorCountBetween(startDate, endDate, travelType, pageable);
         return new StaticInfo.DailyFavorsInfo(dailyFavorCountPageable);
+    }
+
+    @Transactional
+    @Override
+    public StaticInfo.DailyFavorsInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
+        List<DailyFavorCount> topDailyFavorCount = dailyFavorCountReader.getTopDailyFavorCount(startDate, endDate, travelType, limit);
+
+        return new StaticInfo.DailyFavorsInfo(topDailyFavorCount);
     }
 
 }

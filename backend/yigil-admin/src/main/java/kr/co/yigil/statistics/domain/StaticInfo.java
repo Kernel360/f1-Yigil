@@ -18,6 +18,10 @@ public class StaticInfo {
             this.dailyFavors = dailyFavors.getContent().stream().map(DailyTravelFavorDetail::new).toList();
             this.totalPages = dailyFavors.getTotalPages();
         }
+        public DailyFavorsInfo(List<DailyFavorCount> dailyFavorCountList){
+            this.dailyFavors = dailyFavorCountList.stream().map(DailyTravelFavorDetail::new).toList();
+            this.totalPages = 1;
+        }
     }
 
     @Data

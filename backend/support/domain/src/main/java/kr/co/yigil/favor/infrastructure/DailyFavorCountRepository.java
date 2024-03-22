@@ -5,13 +5,12 @@ import kr.co.yigil.travel.TravelType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 
 public interface DailyFavorCountRepository extends JpaRepository<DailyFavorCount, Long>, DailyFavorCountRepositoryCustom {
-    Page<DailyFavorCount> findTop5ByOrderByCountDesc(Pageable pageable);
-
-    Page<DailyFavorCount> findAllByCreatedAtOrderByCountDesc(LocalDate createdAt, Pageable pageable);
-
-    Page<DailyFavorCount> findAllByCreatedAtBetweenAndTravelTypeOrderByCountDesc(LocalDate startDate, LocalDate endDate, TravelType travelType, Pageable pageable);
+    @Query("SELECT d FROM DailyFavorCount d WHERE d.createdAt BETWEEN :startDate AND :endDate AND (d.travelType = :travelType OR :travelType = 'ALL') ORDER BY d.count DESC")
+    Page<DailyFavorCount> findAllByCreatedAtBetweenAndTravelTypeOrAllOrderByCountDesc(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("travelType") TravelType travelType, Pageable pageable);
 }
