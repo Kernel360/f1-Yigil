@@ -10,6 +10,7 @@ import AddCourseImages from './AddCourseImages';
 import AddCourseReview from './AddCourseReviews';
 import AddCourseConfirm from './AddCourseConfirm';
 import SetMethodButton from './SetMethodButton';
+import AddCourseOrder from './AddCourseOrder';
 
 export default function AddCourseData({
   method,
@@ -54,10 +55,10 @@ export default function AddCourseData({
         return <AddCourseImages />;
       }
 
-      return <>순서 정하기~</>;
+      return <AddCourseOrder />;
     }
     case 3:
-      return <AddCourseReview />;
+      return <AddCourseReview disabled={method === 'without-new'} />;
     case 4:
       return <AddCourseConfirm />;
   }

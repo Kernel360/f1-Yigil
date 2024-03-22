@@ -7,10 +7,12 @@ import { getBaseUrl } from '@/app/utilActions';
 import { myPageSpotListSchema } from '@/types/myPageResponse';
 import {
   backendErrorSchema,
+  existingSpotsSchema,
   naverStaticMapUrlErrorSchema,
   postResponseSchema,
 } from '@/types/response';
 
+import type { TExistingSpots } from '@/types/response';
 import type {
   TCourseState,
   TLineString,
@@ -84,6 +86,42 @@ export async function getMySpots(
 
     return { status: 'failed', message: '알 수 없는 에러입니다!' };
   }
+}
+
+export async function getSelectedSpots(
+  spotIds: number[],
+): Promise<
+  | { status: 'failed'; message: string; code?: number }
+  | { status: 'succeed'; data: TExistingSpots }
+> {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/courses/spots`, {
+    method: 'POST',
+    body: JSON.stringify({ spot_ids: spotIds }),
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: `SESSION=${cookie}`,
+    },
+  });
+
+  const json = await response.json();
+
+  const backendError = backendErrorSchema.safeParse(json);
+
+  if (backendError.success) {
+    const { message, code } = backendError.data;
+    return { status: 'failed', message, code };
+  }
+
+  const result = existingSpotsSchema.safeParse(json);
+
+  if (!result.success) {
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  return { status: 'succeed', data: result.data };
 }
 
 function routeUrl(coords: { lng: number; lat: number }[]) {
@@ -372,14 +410,18 @@ async function parseAddCourseState(course: TCourseState): Promise<FormData> {
     ),
   );
 
-  const spotImages = spots.map((spot) =>
-    spot.images.map(
-      ({ filename, uri }) =>
-        new File([dataUrlToBlob(uri)], filename, {
-          type: getMIMETypeFromDataURI(uri),
-        }),
-    ),
-  );
+  const spotImages = spots.map((spot) => {
+    const images = spot.images;
+
+    return images.type === 'new'
+      ? images.data.map(
+          ({ filename, uri }) =>
+            new File([dataUrlToBlob(uri)], filename, {
+              type: getMIMETypeFromDataURI(uri),
+            }),
+        )
+      : [];
+  });
 
   spots.forEach((spot, index) => {
     const { name, mapImageUrl } = spot.place;

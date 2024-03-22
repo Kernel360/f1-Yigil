@@ -1,7 +1,6 @@
 'use client';
 
 import { useContext, useEffect, useState } from 'react';
-import { CourseContext } from '@/context/travel/course/CourseContext';
 
 import ToastMsg from '@/app/_components/ui/toast/ToastMsg';
 import Select from '@/app/_components/ui/select/Select';
@@ -12,8 +11,7 @@ import LoadingIndicator from '../../LoadingIndicator';
 import ExistPlaceItem from './ExistPlaceItem';
 
 import type { TMyPageSpot } from '@/types/myPageResponse';
-import type { TSpotState } from '@/context/travel/schema';
-import { number } from 'zod';
+import { AddTravelExistsContext } from '@/context/exists/AddTravelExistsContext';
 
 const sortOptions = [
   { label: '최신순', value: 'desc' },
@@ -25,12 +23,23 @@ const sortOptions = [
 ];
 
 export default function AddCourseExistSpots() {
-  const [course, dispatchCourse] = useContext(CourseContext);
+  const [addTravelExists, dispatchExists] = useContext(AddTravelExistsContext);
+  const { selectedSpotsId } = addTravelExists;
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const [allSpots, setAllSpots] = useState<TMyPageSpot[]>([]);
   const [sortOption, setSortOption] = useState<string>('desc');
+
+  function handleSelect(id: number) {
+    if (selectedSpotsId.includes(id)) {
+      dispatchExists({ type: 'UNSELECT_SPOT', payload: id });
+      return;
+    }
+
+    dispatchExists({ type: 'SELECT_SPOT', payload: id });
+  }
 
   async function getMySpotsFromBackend(
     pageNo: number = 1,
@@ -40,8 +49,6 @@ export default function AddCourseExistSpots() {
     setIsLoading(true);
 
     const result = await getMySpots(pageNo, size, sortOrder);
-
-    console.log(result);
 
     if (result.status === 'failed') {
       setError(result.message);
@@ -69,11 +76,6 @@ export default function AddCourseExistSpots() {
 
   return (
     <section className="flex flex-col grow">
-      {isLoading && (
-        <div className="flex justify-center items-center grow">
-          <LoadingIndicator loadingText="데이터 로딩 중입니다..." />
-        </div>
-      )}
       <div className="flex justify-end">
         <Select
           list={sortOptions}
@@ -82,8 +84,18 @@ export default function AddCourseExistSpots() {
           onChangeSelectOption={onChangeSelectOption}
         />
       </div>
+      {isLoading && (
+        <div className="flex justify-center items-center grow">
+          <LoadingIndicator loadingText="데이터 로딩 중입니다..." />
+        </div>
+      )}
       {allSpots.map((spot) => (
-        <ExistPlaceItem key={spot.spot_id} spot={spot} />
+        <ExistPlaceItem
+          key={spot.spot_id}
+          checked={selectedSpotsId.includes(spot.spot_id)}
+          handleSelect={() => handleSelect(spot.spot_id)}
+          spot={spot}
+        />
       ))}
       {error && <ToastMsg title={error} id={Date.now()} timer={2000} />}
     </section>

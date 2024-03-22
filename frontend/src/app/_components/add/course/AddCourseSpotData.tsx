@@ -24,7 +24,10 @@ export default function AddCourseSpotData({
 
   const { place, images, review } = spot;
 
-  const imageUris = images.map((image) => image.uri);
+  const imageUris =
+    images.type === 'new'
+      ? images.data.map((image) => image.uri)
+      : images.data.map((image) => image);
   const currentDate = new Date(Date.now());
 
   return (
