@@ -1,8 +1,11 @@
 package kr.co.yigil.place.application;
 
+import java.util.List;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceInfo.Map;
 import kr.co.yigil.place.domain.PlaceService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,15 +29,15 @@ class PlaceFacadeTest {
     private PlaceFacade placeFacade;
 
 
+    @DisplayName("getPlaces 메서드가 잘 동작하는지")
     @Test
     void getPlaces() {
-        Page<Place> mockPage = mock(Page.class);
-        when(placeService.getPlaces(any(PageRequest.class))).thenReturn(mockPage);
+        Map mockMap = mock(Map.class);
+        when(placeService.getPlaces(any(PlaceCommand.PlaceMapCommand.class))).thenReturn(List.of(mockMap));
 
-        PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<Place> result = placeFacade.getPlaces(pageRequest);
+        List<Map> result = placeFacade.getPlaces(new PlaceCommand.PlaceMapCommand(1, 1, 1, 1));
 
-        assertEquals(mockPage, result);
+        assertEquals(List.of(mockMap), result);
     }
 
     @Test
@@ -49,7 +52,7 @@ class PlaceFacadeTest {
 
     @Test
     void updateImage() {
-        PlaceCommand.UpdateImageCommand command = new PlaceCommand.UpdateImageCommand();
+        PlaceCommand.UpdateImageCommand command = mock(PlaceCommand.UpdateImageCommand.class);
 
         placeFacade.updateImage(command);
 

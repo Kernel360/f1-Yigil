@@ -6,10 +6,12 @@ import kr.co.yigil.global.SortOrder;
 import kr.co.yigil.place.application.PlaceFacade;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceCommand.PlaceMapCommand;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
 import kr.co.yigil.place.interfaces.dto.request.PlaceImageUpdateRequest;
 import kr.co.yigil.place.interfaces.dto.response.PlaceDetailResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlaceImageUpdateResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceMapResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlacesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -28,16 +30,13 @@ public class PlaceApiController {
     private final PlaceMapper placeMapper;
 
     @GetMapping
-    public ResponseEntity<PlacesResponse> getPlaces(
-            @PageableDefault(size = 5, page = 1) Pageable pageable,
-            @RequestParam(name = "sortBy", defaultValue = "latest_uploaded_time", required = false) SortBy sortBy,
-            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
+    public ResponseEntity<PlaceMapResponse> getPlaces(
+            @RequestParam(name = "startX") double startX,
+            @RequestParam(name = "startY") double startY,
+            @RequestParam(name = "endX") double endX,
+            @RequestParam(name = "endY") double endY
     ) {
-        Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
-                pageable.getPageSize(),
-                Sort.by(direction, sortBy.getValue()));
-        var places = placeFacade.getPlaces(pageRequest);
+        var places = placeFacade.getPlaces(new PlaceMapCommand(startX, startY, endX, endY));
         var response = placeMapper.toResponse(places);
         return ResponseEntity.ok().body(response);
     }

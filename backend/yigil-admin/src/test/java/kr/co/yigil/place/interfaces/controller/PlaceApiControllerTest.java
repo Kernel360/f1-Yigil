@@ -1,10 +1,15 @@
 package kr.co.yigil.place.interfaces.controller;
 
+import java.util.List;
 import kr.co.yigil.place.application.PlaceFacade;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceCommand.PlaceMapCommand;
+import kr.co.yigil.place.domain.PlaceInfo;
+import kr.co.yigil.place.domain.PlaceInfo.Map;
 import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
 import kr.co.yigil.place.interfaces.dto.response.PlaceDetailResponse;
+import kr.co.yigil.place.interfaces.dto.response.PlaceMapResponse;
 import kr.co.yigil.place.interfaces.dto.response.PlacesResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -41,14 +47,15 @@ class PlaceApiControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-
-    @DisplayName("장소 리스트를 조회하는 테스트")
+    @DisplayName("getPlaces 메서드가 잘 동작하는지")
     @Test
-    void whenGetPlaces_thenShouldReturn200AndResponse() throws Exception {
-        when(placeFacade.getPlaces(any())).thenReturn(mock(Page.class));
-        when(placeMapper.toResponse(any(Page.class))).thenReturn(mock(PlacesResponse.class));
+    void getPlaces() throws Exception {
+        PlaceInfo.Map map = mock (PlaceInfo.Map.class);
 
-        mockMvc.perform(get("/api/v1/places"))
+        when(placeFacade.getPlaces(any(PlaceMapCommand.class))).thenReturn(List.of(map));
+        when(placeMapper.toResponse(List.of(map))).thenReturn(mock(PlaceMapResponse.class));
+
+        mockMvc.perform(get("/api/v1/places?startX=1&startY=1&endX=1&endY=1"))
             .andExpect(status().isOk());
     }
 

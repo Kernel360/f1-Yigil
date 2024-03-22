@@ -4,20 +4,18 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlacesResponse {
-    private List<PlaceInfoDto> places;
+public class PlaceMapResponse {
+    private List<PlaceMapDto> places;
 
     @Data
-    public static class PlaceInfoDto {
+    public static class PlaceMapDto {
         private Long id;
         private String name;
-        private PointDto location;
+        private double x;
+        private double y;
     }
-
-
 }
