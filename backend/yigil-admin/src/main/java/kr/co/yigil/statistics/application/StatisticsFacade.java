@@ -20,10 +20,4 @@ public class StatisticsFacade {
     public StaticInfo.DailyFavorsInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
         return statisticsService.getTopDailyFavors(startDate, endDate, travelType, limit);
     }
-
-//    public StaticInfo.DailyFavorsInfo getList7DaysInfo(Pageable pageable){
-//        LocalDate endDate = LocalDate.now();
-//        LocalDate startDate = endDate.minusDays(6);
-//        return statisticsService.getDailyFavors(startDate, endDate, pageable);
-//    }
 }
