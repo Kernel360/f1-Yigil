@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import Places from './Places';
-import RegionSelect from './RegionSelect';
-import DummyPlace from './dummy/DummyPlace';
+import RegionSelect from '../RegionSelect';
+import DummyPlace from '../dummy/DummyPlace';
 
 import type { TPlace, TRegion } from '@/types/response';
 

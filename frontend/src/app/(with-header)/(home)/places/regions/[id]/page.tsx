@@ -1,9 +1,12 @@
+import Link from 'next/link';
+
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
 import { getInterestedRegions, getRegionPlaces } from '../../../action';
+
 import DummyPlace from '@/app/_components/place/dummy/DummyPlace';
-import Link from 'next/link';
-import { RegionPlaces } from '@/app/_components/place';
+
+import { RegionPlaces } from '@/app/_components/place/places';
 
 export default async function RegionsPlacePage({
   params,

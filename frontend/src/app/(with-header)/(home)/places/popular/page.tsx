@@ -3,8 +3,8 @@ export const dynamic = 'force-dynamic';
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
 
-import { Place } from '@/app/_components/place';
-import { getPlaces } from '@/app/_components/place/action';
+import { Place } from '@/app/_components/place/places';
+import { getPlaces } from '@/app/_components/place/places/action';
 
 export default async function PopularPlacesPage() {
   const memberJson = await authenticateUser();

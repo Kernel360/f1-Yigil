@@ -7,7 +7,7 @@ export const basicMarker = (
       selected ? '#3B82F6' : '#FFFFFF'
     }; border: 1px #3B82F6 solid; border-radius: 5px;">
       <div style="padding: 8px;">
-        <div style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; word-break: keep-all; color: ${
+        <div style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; color: ${
           selected ? '#FFFFFF' : '#374151'
         }; overflow: hidden; text-overflow: ellipsis; font-size: 18px; font-weight: 600; text-align: center;">${name}</div>
         </div>
