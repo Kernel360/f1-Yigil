@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import IconWithCounts from '../../IconWithCounts';
+import IconWithCounts from '../../../IconWithCounts';
 
 import StarIcon from '/public/icons/star.svg';
 

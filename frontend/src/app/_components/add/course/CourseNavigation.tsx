@@ -182,7 +182,10 @@ export default function CourseNavigation({
   }
 
   async function handleConfirm() {
-    const result = await postCourse(course);
+    const result =
+      method === 'with-new'
+        ? await postCourse(course)
+        : await postCourse(course, true);
 
     if (result.status === 'failed') {
       setError(result.message);

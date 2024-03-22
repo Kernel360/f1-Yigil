@@ -18,7 +18,7 @@ export default function AddCourseSpotData({
   index,
 }: {
   spot: TSpotState;
-  index: number;
+  index?: number;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -30,8 +30,10 @@ export default function AddCourseSpotData({
       : images.data.map((image) => image);
   const currentDate = new Date(Date.now());
 
+  const currentIndex = index !== undefined ? index : -1;
+
   return (
-    <article className="flex flex-col">
+    <article className="flex flex-col bg-white">
       <button
         className="px-4 py-2 w-full border border-gray-500 rounded-lg flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
@@ -40,8 +42,8 @@ export default function AddCourseSpotData({
           <Image
             width={32}
             height={32}
-            src={getNumberMarker(index + 1)}
-            alt={`${index + 1}번 마커`}
+            src={getNumberMarker(currentIndex + 1)}
+            alt={`${currentIndex + 1}번 마커`}
           />
           <span>{place.name}</span>
         </div>

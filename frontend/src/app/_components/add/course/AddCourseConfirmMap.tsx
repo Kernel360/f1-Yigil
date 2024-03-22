@@ -1,7 +1,13 @@
 'use client';
 
 import { useContext, useEffect, useRef } from 'react';
-import { Container, Marker, NaverMap, Polyline } from 'react-naver-maps';
+import {
+  Container,
+  Marker,
+  NaverMap,
+  Polyline,
+  useNavermaps,
+} from 'react-naver-maps';
 
 import { CourseContext } from '@/context/travel/course/CourseContext';
 import { getNumberMarker } from './util';
@@ -13,6 +19,7 @@ function getPath(positions: number[][]) {
 }
 
 export default function AddCourseConfirmMap({ close }: { close: () => void }) {
+  const navermaps = useNavermaps();
   const mapRef = useRef<naver.maps.Map>(null);
 
   const [course] = useContext(CourseContext);

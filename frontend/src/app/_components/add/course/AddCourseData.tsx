@@ -4,13 +4,13 @@ import { useContext } from 'react';
 import { CourseWithNewStepContext } from '@/context/travel/step/course/CourseWithNewStepContext';
 import { CourseWithoutNewStepContext } from '@/context/travel/step/course/CourseWithoutNewStepContext';
 
-import AddCourseNewPlace from './AddCourseNewPlace';
-import AddCourseExistSpots from './AddCourseExistSpots';
-import AddCourseImages from './AddCourseImages';
+import AddCourseNewPlace from './with-new/AddCourseNewPlace';
+import AddCourseExistSpots from './without-new/AddCourseExistSpots';
+import AddCourseImages from './with-new/AddCourseImages';
 import AddCourseReview from './AddCourseReviews';
 import AddCourseConfirm from './AddCourseConfirm';
 import SetMethodButton from './SetMethodButton';
-import AddCourseOrder from './AddCourseOrder';
+import AddCourseOrder from './without-new/AddCourseOrder';
 
 export default function AddCourseData({
   method,

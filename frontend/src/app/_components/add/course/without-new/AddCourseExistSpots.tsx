@@ -5,9 +5,9 @@ import { useContext, useEffect, useState } from 'react';
 import ToastMsg from '@/app/_components/ui/toast/ToastMsg';
 import Select from '@/app/_components/ui/select/Select';
 
-import { getMySpots } from './action';
+import { getMySpots } from '../action';
 
-import LoadingIndicator from '../../LoadingIndicator';
+import LoadingIndicator from '../../../LoadingIndicator';
 import ExistPlaceItem from './ExistPlaceItem';
 
 import type { TMyPageSpot } from '@/types/myPageResponse';

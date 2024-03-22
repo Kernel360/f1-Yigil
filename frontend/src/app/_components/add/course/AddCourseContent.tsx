@@ -8,7 +8,7 @@ import { CourseWithoutNewStepContext } from '@/context/travel/step/course/Course
 import CourseProgress from './CourseProgress';
 import CourseNavigation from './CourseNavigation';
 import AddCourseData from './AddCourseData';
-import AddCourseSelectPlaceNavigation from './AddCourseSelectPlaceNavigation';
+import AddCourseSelectPlaceNavigation from './with-new/AddCourseSelectPlaceNavigation';
 
 export default function AddCourseContent() {
   const [state, dispatchAddTravelMap] = useContext(AddTravelMapContext);
