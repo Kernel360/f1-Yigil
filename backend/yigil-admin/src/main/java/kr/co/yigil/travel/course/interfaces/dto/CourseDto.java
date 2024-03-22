@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.course.interfaces.dto;
 
+import kr.co.yigil.member.SocialLoginType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,11 @@ public class CourseDto {
     public static class CourseListUnit {
         private Long courseId;
         private String title;
+        private String description;
         private LocalDateTime createdAt;
+        private String ownerNickname;
+        private String ownerProfileImageUrl;
+        private int spotCount;
         private int favorCount;
         private int commentCount;
     }
@@ -45,6 +50,8 @@ public class CourseDto {
 
         private Long writerId;
         private String writerName;
+        private String writerProfileImageUrl;
+        private SocialLoginType writerSocialLoginType;
 
         private List<SpotDetailDto> spots;
     }
@@ -73,7 +80,5 @@ public class CourseDto {
         private int favorCount;
         private int commentCount;
         private List<String> imageUrls;
-
-
     }
 }

@@ -2,10 +2,11 @@ package kr.co.yigil.batch.job;
 
 
 import jakarta.persistence.EntityManagerFactory;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PopularPlace;
 import kr.co.yigil.place.infrastructure.PopularPlaceRepository;
-import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -26,14 +27,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class PopularPlaceJobConfig {
-    private final SpotRepository spotRepository;
     private final PopularPlaceRepository popularPlaceRepository;
     private final EntityManagerFactory entityManagerFactory;
     @Bean

@@ -22,6 +22,7 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Sinks;
 @Component
@@ -51,6 +52,7 @@ public class NotificationSenderImpl implements NotificationSender {
     }
 
     @Override
+    @Transactional
     public void sendNotification(NotificationType notificationType, Long senderId,
             Long receiverId) {
         Member sender = memberReader.getMember(senderId);

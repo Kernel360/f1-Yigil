@@ -45,6 +45,9 @@ class CourseServiceImplTest {
         // Arrange
         PageRequest pageRequest = PageRequest.of(0, 10);
         Course course = mock(Course.class);
+        Member member = mock(Member.class);
+        when(course.getMember()).thenReturn(member);
+        when(member.getNickname()).thenReturn("nickname");
         List<Course> courses = List.of(course);
         Page<Course> pageCourses = new PageImpl<>(courses, pageRequest, courses.size());
         when(courseReader.getCourses(any(PageRequest.class))).thenReturn(pageCourses);

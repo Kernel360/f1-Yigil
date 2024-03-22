@@ -1,11 +1,13 @@
 package kr.co.yigil.place.domain;
 
+import java.util.List;
+import kr.co.yigil.place.domain.PlaceInfo.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PlaceService {
 
-    Page<Place> getPlaces(Pageable pageRequest);
+    List<Map> getPlaces(PlaceCommand.PlaceMapCommand command);
 
     Place getPlaceDetail(Long placeId);
 

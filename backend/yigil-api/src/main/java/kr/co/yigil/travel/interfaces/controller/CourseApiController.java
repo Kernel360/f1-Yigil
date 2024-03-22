@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.interfaces.controller;
 
+
 import kr.co.yigil.auth.Auth;
 import kr.co.yigil.auth.MemberOnly;
 import kr.co.yigil.auth.domain.Accessor;
@@ -47,7 +48,7 @@ public class CourseApiController {
     }
 
     @PostMapping
-    @MemberOnly
+    //@MemberOnly
     public ResponseEntity<CourseRegisterResponse> registerCourse(
         @ModelAttribute CourseRegisterRequest request,
         @Auth final Accessor accessor

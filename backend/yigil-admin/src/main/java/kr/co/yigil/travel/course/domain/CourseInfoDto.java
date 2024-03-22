@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.course.domain;
 
+import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
 import lombok.AllArgsConstructor;
@@ -30,14 +31,22 @@ public class CourseInfoDto {
 
         private final Long courseId;
         private final String title;
+        private final String description;
         private final LocalDateTime createdAt;
+        private final String ownerNickname;
+        private final String ownerProfileImageUrl;
+        private final int spotCount;
         private final int favorCount;
         private final int commentCount;
 
         public CourseListUnit(Course course, CourseAdditionalInfo courseAdditionalInfo) {
             this.courseId = course.getId();
             this.title = course.getTitle();
+            this.description = course.getDescription();
             this.createdAt = course.getCreatedAt();
+            this.ownerNickname = course.getMember().getNickname();
+            this.ownerProfileImageUrl = course.getMember().getProfileImageUrl();
+            this.spotCount = course.getSpots().size();
             this.favorCount = courseAdditionalInfo.getFavorCount();
             this.commentCount = courseAdditionalInfo.getCommentCount();
 
@@ -55,6 +64,8 @@ public class CourseInfoDto {
         private final double rate;
         private final Long writerId;
         private final String writerName;
+        private final String writerProfileImageUrl;
+        private final SocialLoginType writerSocialLoginType;
         private final int favorCount;
         private final int commentCount;
 
@@ -70,6 +81,8 @@ public class CourseInfoDto {
             this.rate = course.getRate();
             this.writerId = course.getMember().getId();
             this.writerName = course.getMember().getNickname();
+            this.writerProfileImageUrl = course.getMember().getProfileImageUrl();
+            this.writerSocialLoginType = course.getMember().getSocialLoginType();
             this.favorCount = courseAdditionalInfo.getFavorCount();
             this.commentCount = courseAdditionalInfo.getCommentCount();
             this.spots = spots;
