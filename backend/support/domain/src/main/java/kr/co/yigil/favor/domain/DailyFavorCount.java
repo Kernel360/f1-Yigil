@@ -12,23 +12,27 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Favor {
+public class DailyFavorCount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private Long count;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "travel_id")
     private Travel travel;
 
-    private final LocalDate createdAt = LocalDate.now();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private Member writer;
 
-    public Favor(final Member member, final Travel travel) {
-        this.member = member;
+    private LocalDate createdAt;
+
+    public DailyFavorCount(Long count, Travel travel, LocalDate createdAt) {
+        this.count = count;
         this.travel = travel;
+        this.writer = travel.getMember();
+        this.createdAt = createdAt;
     }
 }
