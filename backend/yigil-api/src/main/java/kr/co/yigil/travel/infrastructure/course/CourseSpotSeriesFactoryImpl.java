@@ -64,7 +64,7 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
 
     @Override
     public List<Spot> store(RegisterCourseRequestWithSpotInfo request, Long memberId) {
-        List<Spot> spots = spotReader.getSpots(request.getSpotIds());
+        List<Spot> spots = spotReader.getMemberSpots(memberId, request.getSpotIds());
         spots.forEach(Spot::changeInCourse);
         return spots;
     }

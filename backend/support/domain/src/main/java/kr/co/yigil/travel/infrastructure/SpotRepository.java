@@ -43,4 +43,6 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     Optional<Double> getRateTotalByPlaceId(Long placeId);
 
     boolean existsByIdAndMemberId(Long spotId, Long memberId);
+
+    Optional<Spot> findByIdAndMemberId(Long spotId, Long memberId);
 }

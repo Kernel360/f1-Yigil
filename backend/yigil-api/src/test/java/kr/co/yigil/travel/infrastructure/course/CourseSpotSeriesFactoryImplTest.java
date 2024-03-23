@@ -1,17 +1,5 @@
 package kr.co.yigil.travel.infrastructure.course;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
@@ -31,6 +19,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseSpotSeriesFactoryImplTest {
@@ -73,12 +70,12 @@ public class CourseSpotSeriesFactoryImplTest {
     void store_WithExistingSpots_RegistersSpotsSuccessfully() {
         RegisterCourseRequestWithSpotInfo requestWithSpotInfo = mock(RegisterCourseRequestWithSpotInfo.class); // 필요한 메서드를 모킹
         when(requestWithSpotInfo.getSpotIds()).thenReturn(Arrays.asList(1L, 2L));
-        when(spotReader.getSpots(anyList())).thenReturn(Collections.singletonList(spot));
+        when(spotReader.getMemberSpots(anyLong(), anyList())).thenReturn(Collections.singletonList(spot));
 
         List<Spot> resultSpots = courseSpotSeriesFactory.store(requestWithSpotInfo, 1L);
 
         assertFalse(resultSpots.isEmpty());
-        verify(spotReader).getSpots(anyList());
+        verify(spotReader).getMemberSpots(anyLong(), anyList());
         verify(spot, times(1)).changeInCourse();
     }
 }
