@@ -14,18 +14,25 @@ export default function MyPageFollowingItem({
   profile_image_url,
 }: TMyPageFollowingItem) {
   const [isFollowing, setIsFollowing] = useState(true);
+  const [errorText, setErrorText] = useState('');
 
   const onClickFollowingBtn = async () => {
+    setErrorText('');
+
     if (isFollowing) {
       unFollow(member_id);
     } else {
-      addFollow(member_id);
+      const result = await addFollow(member_id);
+      if (result.status === 'failed') {
+        setErrorText(result.message);
+      }
     }
+
     setIsFollowing(!isFollowing);
   };
   return (
     <div className="flex justify-center items-center py-3">
-      <RoundProfile img={profile_image_url} size={48} />
+      <RoundProfile img={profile_image_url} size={48} height="h-12" />
       <div className="grow ml-4 text-gray-900">{nickname}</div>
       <button
         className={`${

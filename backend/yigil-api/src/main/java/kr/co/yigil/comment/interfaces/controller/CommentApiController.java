@@ -9,6 +9,7 @@ import kr.co.yigil.comment.interfaces.dto.CommentDto;
 import kr.co.yigil.comment.interfaces.dto.CommentDto.CommentCreateRequest;
 import kr.co.yigil.comment.interfaces.dto.CommentDto.CommentCreateResponse;
 import kr.co.yigil.comment.interfaces.dto.mapper.CommentMapper;
+import kr.co.yigil.global.SortBy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +54,7 @@ public class CommentApiController {
     ) {
 
         var pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize()
-            , Sort.by(Sort.Direction.ASC, "createdAt"));
+            , Sort.by(Sort.Direction.ASC, SortBy.CREATED_AT.getValue()));
         CommentInfo.CommentsResponse parentCommentList = commentFacade.getParentCommentList(
             travelId,
             pageRequest);
@@ -67,14 +69,14 @@ public class CommentApiController {
     ) {
 
         var pageRequest = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize()
-            , Sort.by(Direction.ASC, "createdAt"));
+            , Sort.by(Direction.ASC, SortBy.CREATED_AT.getValue()));
         CommentInfo.CommentsResponse childCommentList = commentFacade.getChildCommentList(commentId,
             pageRequest);
         var response = commentMapper.of(childCommentList);
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/{comment_id}")
+    @PutMapping("/{comment_id}")
     @MemberOnly
     public ResponseEntity<CommentDto.CommentUpdateResponse> updateComment(
         @PathVariable("comment_id") Long commentId,

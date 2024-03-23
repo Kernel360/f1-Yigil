@@ -1,25 +1,54 @@
+'use server';
+
 import z from 'zod';
 
-import { placesSchema } from '@/types/response';
+import { cookies } from 'next/headers';
+import { placeSchema, regionSchema } from '@/types/response';
+import { getBaseUrl } from '@/app/utilActions';
 
-async function fetchPopularPlaces() {
-  const { BASE_URL, DEV_BASE_URL, ENVIRONMENT } = process.env;
+const placeResponseSchema = z.object({
+  places: z.array(placeSchema),
+});
 
-  const baseUrl = ENVIRONMENT === 'production' ? BASE_URL : DEV_BASE_URL;
+const regionResponseSchema = z.object({
+  regions: z.array(regionSchema),
+});
 
-  const response = await fetch(`${baseUrl}/v1/places/popular`, {
-    next: { tags: ['popularPlaces'] },
+async function fetchInterestedRegions() {
+  const BASE_URL = await getBaseUrl();
+
+  const session = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/regions/my`, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+    next: { tags: ['interestedRegions'] },
   });
 
   return await response.json();
 }
 
-const placeResponseSchema = z.object({
-  places: placesSchema,
-});
+async function fetchRegionPlaces(id: number) {
+  const BASE_URL = await getBaseUrl();
 
-export async function getPopularPlaces() {
-  const json = await fetchPopularPlaces();
+  const response = await fetch(`${BASE_URL}/v1/places/region/${id}`, {
+    next: { tags: ['regionPlaces'] },
+  });
+
+  return await response.json();
+}
+
+export async function getInterestedRegions() {
+  const json = await fetchInterestedRegions();
+
+  const result = regionResponseSchema.safeParse(json);
+
+  return result;
+}
+
+export async function getRegionPlaces(id: number) {
+  const json = await fetchRegionPlaces(id);
 
   const result = placeResponseSchema.safeParse(json);
 

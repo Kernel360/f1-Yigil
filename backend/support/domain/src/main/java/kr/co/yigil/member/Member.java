@@ -1,5 +1,10 @@
 package kr.co.yigil.member;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +19,9 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.region.domain.MemberRegion;
+import kr.co.yigil.region.domain.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +39,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @SQLDelete(sql = "UPDATE member SET status = 'WITHDRAW' WHERE id = ?")
 @Where(clause = "status = 'ACTIVE'")
 public class Member {
+
     private static final String DEFAULT_PROFILE_CDN = "http://cdn.yigil.co.kr/";
 
     @Id
@@ -62,14 +70,17 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Ages ages = Ages.NONE;
 
-    @Column
-    @OneToMany(fetch = FetchType.LAZY)
-    private final List<MemberRegion> favoriteRegions =  new ArrayList<>();
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private final List<MemberRegion> favoriteRegions = new ArrayList<>();
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime joinedAt;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
@@ -111,8 +122,10 @@ public class Member {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public Member(Long id, String email, String socialLoginId, String nickname,
-        String profileImageUrl, SocialLoginType socialLoginType, Ages ages, Gender gender) {
+    public Member(final Long id, final String email, final String socialLoginId,
+        final String nickname,
+        final String profileImageUrl, final SocialLoginType socialLoginType, final Ages ages,
+        final Gender gender) {
         this.id = id;
         this.email = email;
         this.socialLoginId = socialLoginId;
@@ -126,24 +139,39 @@ public class Member {
         this.gender = gender;
     }
 
-    public void updateMemberInfo(String nickname, String age, String gender, String profileImageUrl, List<MemberRegion> favoriteRegionIds) {
-        this.nickname = nickname;
-        this.ages = Ages.from(age);
-        this.gender = Gender.from(gender);
-        this.profileImageUrl = profileImageUrl;
-        this.favoriteRegions.clear();
-        this.favoriteRegions.addAll(favoriteRegions);
-    }
+    public void updateMemberInfo(final String nickname, final String age, final String gender,
+        final AttachFile profileImageFile, final List<MemberRegion> favoriteRegions) {
 
-    public String getProfileImageUrl() {
-        if(profileImageUrl == null) return null;
-        if(profileImageUrl.startsWith("http://")) return profileImageUrl;
-        else return DEFAULT_PROFILE_CDN + profileImageUrl;
+        if (nickname != null) {
+            this.nickname = nickname;
+        }
+        if (age != null) {
+            this.ages = Ages.from(age);
+        }
+        if (gender != null) {
+            this.gender = Gender.from(gender);
+        }
+        if (profileImageFile != null) {
+            this.profileImageUrl = profileImageFile.getFileUrl();
+        }
+        if (favoriteRegions != null) {
+            this.favoriteRegions.clear();
+            this.favoriteRegions.addAll(favoriteRegions);
+        }
     }
 
     public List<Long> getFavoriteRegionIds() {
         return favoriteRegions.stream().map(
             memberRegion -> memberRegion.getRegion().getId()
         ).toList();
+    }
+
+    public boolean isFavoriteRegion(Region region) {
+        return favoriteRegions.stream()
+            .anyMatch(memberRegion -> memberRegion.getRegion().equals(region));
+    }
+
+    public List<Region> getFavoriteRegions() {
+        return favoriteRegions.stream().map(MemberRegion::getRegion).toList();
     }
 }

@@ -1,10 +1,10 @@
 package kr.co.yigil.admin.infrastructure.admin;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import kr.co.yigil.admin.domain.admin.Admin;
+import kr.co.yigil.admin.domain.Admin;
+import kr.co.yigil.admin.infrastructure.AdminRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

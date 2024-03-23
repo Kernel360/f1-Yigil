@@ -1,6 +1,7 @@
 package kr.co.yigil.bookmark.application;
 
 import kr.co.yigil.bookmark.domain.Bookmark;
+import kr.co.yigil.bookmark.domain.BookmarkInfo;
 import kr.co.yigil.bookmark.domain.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,7 @@ public class BookmarkFacade {
         bookmarkService.deleteBookmark(memberId, placeId);
     }
 
-    public Slice<Bookmark> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
+    public Slice<BookmarkInfo> getBookmarkSlice(Long memberId, PageRequest pageRequest) {
         return bookmarkService.getBookmarkSlice(memberId, pageRequest);
     }
 }

@@ -358,3 +358,5 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/node,react
 
 backend/support/domain/src/main/generated/*
+
+*.yml

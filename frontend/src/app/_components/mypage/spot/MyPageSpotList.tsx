@@ -4,7 +4,6 @@ import FloatingActionButton from '../../FloatingActionButton';
 import MyPageSpotItem from './MyPageSpotItem';
 import MyPageSelectBtns from '../MyPageSelectBtns';
 import Pagination from '../Pagination';
-import CalendarIcon from '/public/icons/calendar.svg';
 import UnLockIcon from '/public/icons/unlock.svg';
 import TrashIcon from '/public/icons/trash.svg';
 import LockIcon from '/public/icons/lock.svg';
@@ -13,8 +12,15 @@ import PlusIcon from '/public/icons/plus.svg';
 import { TPopOverData } from '../../ui/popover/types';
 import { EventFor } from '@/types/type';
 import Dialog from '../../ui/dialog/Dialog';
-import { getMyPageSpots } from '../hooks/myPageActions';
+import {
+  changeOnPrivateMyTravel,
+  changeOnPublicMyTravel,
+  deleteMySpot,
+  getMyPageSpots,
+} from '../hooks/myPageActions';
 import { TMyPageSpot } from '@/types/myPageResponse';
+import LoadingIndicator from '../../LoadingIndicator';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 export default function MyPageSpotList({
   placeList,
@@ -36,27 +42,19 @@ export default function MyPageSpotList({
   const [sortOption, setSortOption] = useState<string>('desc');
 
   const [isDialogOpened, setIsDialogOpened] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
+  const [dialogText, setDialogText] = useState('');
+  const [dialogState, setDialogState] = useState('');
+  const [isBackendDataLoading, setIsBackendDataLoading] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
-  // currentPage가 바뀔 때 마다 새로운 데이터 호출
   useEffect(() => {
     getSpots(currentPage, divideCount, sortOption, selectOption);
-  }, [currentPage, sortOption, selectOption]);
+  }, [currentPage, sortOption, selectOption, placeList]);
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
-      label: '기록 공개하기',
-      icon: <UnLockIcon className="w-6 h-6" />,
-      onClick: () => onClickUnLock(),
-    },
-    {
-      label: '기록 삭제하기',
-      icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => setIsDialogOpened(true),
-    },
-    {
-      href: '/add/course',
-      label: '일정 기록하기',
-      icon: <CalendarIcon className="w-6 h-6" />,
+      label: '',
     },
   ]);
 
@@ -66,91 +64,146 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const spotList = await getMyPageSpots(
-      pageNum,
-      size,
-      sortOption,
-      selectOption,
-    );
-    if (!spotList.success) {
-      setAllSpotList([]);
-      return;
+    try {
+      setIsBackendDataLoading(true);
+      const spotList = await getMyPageSpots(
+        pageNum,
+        size,
+        sortOption,
+        selectOption,
+      );
+      if (!spotList.success) {
+        setAllSpotList([]);
+        setErrorText('데이터를 불러오는데 실패했습니다');
+        return;
+      }
+      setTotalPageCount(spotList.data.total_pages);
+      setAllSpotList([...spotList.data.content]);
+    } catch (error) {
+      setErrorText('데이터를 불러오는데 실패했습니다');
+    } finally {
+      setIsBackendDataLoading(false);
     }
-    setTotalPageCount(spotList.data.total_pages);
-    setAllSpotList([...spotList.data.content]);
   };
 
   useEffect(() => {
-    if (selectOption === 'all') {
+    if (selectOption === ('all' || 'public')) {
       setPopOverData([
         {
           label: '기록 나만보기',
           icon: <LockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickLock(),
+          onClick: () => {
+            setDialogText('기록을 잠금 설정하시겠나요?');
+            setDialogState('lock');
+            setIsDialogOpened(true);
+          },
         },
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => {
+            setDialogText('기록을 삭제하시겠나요?');
+            setDialogState('delete');
+            setIsDialogOpened(true);
+          },
         },
-        {
-          label: '일정 기록하기',
-          href: '/add/course',
-          icon: <CalendarIcon className="w-6 h-6" />,
-        },
-      ]);
-    } else if (selectOption === 'public') {
-      setPopOverData([
-        {
-          label: '기록 나만보기',
-          icon: <LockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickLock(),
-        },
-        {
-          label: '기록 삭제하기',
-          icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
-        },
-        {
-          label: '일정 기록하기',
-          href: '/add/course',
-          icon: <CalendarIcon className="w-6 h-6" />,
-        },
+        // {
+        //   label: '일정 기록하기',
+        //   href: '/add/course',
+        //   icon: <CalendarIcon className="w-6 h-6" />,
+        // },
       ]);
     } else {
       setPopOverData([
         {
           label: '기록 공개하기',
           icon: <UnLockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickUnLock(),
+          onClick: () => {
+            setDialogText('기록을 잠금 해제하시겠나요?');
+            setDialogState('unlock');
+            setIsDialogOpened(true);
+          },
         },
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => onClickDelete(),
+          onClick: () => {
+            setDialogText('기록을 삭제하시겠나요?');
+            setDialogState('delete');
+            setIsDialogOpened(true);
+          },
         },
       ]);
     }
   }, [selectOption, checkedList]);
 
-  // 공개 여부에 따라 렌더링 할 spot list 정렬
   useEffect(() => {
     setCurrentPage(1);
     getSpots(1, divideCount, sortOption, selectOption);
   }, [selectOption, sortOption]);
 
-  // 함수 분리 예정
-  const onClickDelete = () => {
-    setIsDialogOpened(true);
-    // delete 로직
-    // delete(checkedList)
+  const onClickDelete = async (checkedIds: number[]) => {
+    try {
+      setLoadingText('삭제중 입니다');
+      const promises = checkedIds.map((checkedId) => deleteMySpot(checkedId));
+      await Promise.all(promises);
+    } catch (error) {
+      setErrorText('삭제에 실패했습니다');
+    } finally {
+      closeDialog();
+    }
   };
 
-  const onClickUnLock = () => {
-    // unLock or lock
+  const onClickUnLock = async () => {
+    try {
+      setLoadingText('잠금 해제중 입니다');
+      const promises = checkedList.map((checked) =>
+        changeOnPublicMyTravel(checked.spot_id),
+      );
+      await Promise.all(promises);
+    } catch (error) {
+      setErrorText('잠금 해제에 실패했습니다');
+    } finally {
+      closeDialog();
+    }
   };
 
-  const onClickLock = () => {};
+  const onClickLock = async () => {
+    try {
+      setLoadingText('잠금 처리중 입니다');
+      const promises = checkedList.map((checked) =>
+        changeOnPrivateMyTravel(checked.spot_id),
+      );
+      await Promise.all(promises);
+    } catch (error) {
+      setErrorText('잠금 처리에 실패했습니다');
+    } finally {
+      closeDialog();
+    }
+  };
+
+  const handleDialogFunc = async () => {
+    if (dialogState === 'delete') {
+      onClickDelete(checkedList.map((checked) => checked.spot_id));
+    } else if (dialogState === 'unlock') {
+      onClickUnLock();
+    } else {
+      onClickLock();
+    }
+    setCheckedList([]);
+  };
+
+  // const onClickChangeVisibility = async () => {
+  //   if (checkedList[0].is_private) {
+  //     const ids = checkedList.map((checked) => checked.spot_id);
+  //     const res = await changeTravelsVisibility(ids, true);
+  //     console.log(res);
+  //   } else {
+  //     const ids = checkedList.map((checked) => checked.spot_id);
+  //     const res = await changeTravelsVisibility(ids, false);
+  //     console.log(res);
+  //   }
+  // };
 
   const closeDialog = () => {
     setIsDialogOpened(false);
@@ -161,11 +214,21 @@ export default function MyPageSpotList({
     setIsChecked: Dispatch<SetStateAction<boolean>>,
   ) => {
     if (e.currentTarget.checked) {
-      const allSpots = allSpotList.map((spot) => {
-        return { spot_id: spot.spot_id, is_private: spot.is_private };
-      });
-      setCheckedList(allSpots);
-      setIsChecked(true);
+      if (selectOption === 'all') {
+        const allSpots = allSpotList
+          .map((spot) => {
+            return { spot_id: spot.spot_id, is_private: spot.is_private };
+          })
+          .filter((spot) => !spot.is_private);
+        setCheckedList(allSpots);
+        setIsChecked(true);
+      } else {
+        const allSpots = allSpotList.map((spot) => {
+          return { spot_id: spot.spot_id, is_private: spot.is_private };
+        });
+        setCheckedList(allSpots);
+        setIsChecked(true);
+      }
     } else {
       setCheckedList([]);
       setIsChecked(false);
@@ -193,7 +256,6 @@ export default function MyPageSpotList({
   ) => {
     if (!checkedList.length) setCheckedList([{ spot_id, is_private }]);
     else {
-      // checkList 배열의 각 값을 확인 후 값이 없으면 체크 리스트 추가 값이 있으면 filter로 제거
       const found = checkedList.find((checked) => checked.spot_id === spot_id);
 
       if (!found) {
@@ -207,7 +269,11 @@ export default function MyPageSpotList({
     }
   };
 
-  return (
+  return isBackendDataLoading ? (
+    <div className="max-w-[430px] mx-auto mt-10">
+      <LoadingIndicator loadingText="데이터 로딩중입니다" />
+    </div>
+  ) : (
     <>
       <div className="mt-4 mb-3 px-2">
         <MyPageSelectBtns
@@ -223,19 +289,33 @@ export default function MyPageSpotList({
         <div className="relative">
           {isDialogOpened && (
             <Dialog
-              text="기록을 삭제하시겠나요?"
+              text={dialogText}
               closeModal={closeDialog}
-              handleConfirm={async () => onClickDelete()}
+              handleConfirm={async () => handleDialogFunc()}
+              loadingText={loadingText}
             />
           )}
           <FloatingActionButton
             popOverData={popOverData}
-            openedIcon={<PlusIcon className="rotate-45 duration-200 z-30" />}
-            closedIcon={<HamburgerIcon className="w-20 h-20" />}
+            openedIcon={
+              <PlusIcon className="w-9 h-9 rotate-45 duration-200 z-30" />
+            }
+            closedIcon={<HamburgerIcon className="w-12 h-12" />}
           />
         </div>
       )}
-
+      {!allSpotList.length && selectOption === 'public' ? (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          공개 데이터가 없습니다.
+        </div>
+      ) : (
+        !allSpotList.length &&
+        selectOption === 'private' && (
+          <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+            비공개 데이터가 없습니다.
+          </div>
+        )
+      )}
       {allSpotList.map(({ spot_id, ...data }, idx) => (
         <MyPageSpotItem
           idx={idx}
@@ -254,6 +334,7 @@ export default function MyPageSpotList({
           totalPage={totalPageCount}
         />
       )}
+      {errorText && <ToastMsg title={errorText} timer={2000} />}
     </>
   );
 }

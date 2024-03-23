@@ -1,23 +1,9 @@
 package kr.co.yigil.travel.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
-import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.global.Selected;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
@@ -29,6 +15,8 @@ import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.course.CourseService;
+import kr.co.yigil.travel.domain.dto.CourseListDto;
+import kr.co.yigil.travel.domain.spot.SpotService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,8 +28,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseFacadeTest {
@@ -51,6 +46,9 @@ public class CourseFacadeTest {
 
     @Mock
     private CourseService courseService;
+
+    @Mock
+    private SpotService spotService;
 
     @Mock
     private FileUploader fileUploader;
@@ -76,7 +74,8 @@ public class CourseFacadeTest {
         int representativeSpotOrder = 0;
         AttachFile mapStaticImageFile = null;
 
-        Course course = new Course(id, member, title, description, rate, path, isPrivate, spots, representativeSpotOrder, mapStaticImageFile);
+        Course course = new Course(id, member, title, description, rate, path, isPrivate, spots,
+                representativeSpotOrder, mapStaticImageFile);
 
         Long placeId = 1L;
         Pageable pageable = PageRequest.of(0, 10);
@@ -169,38 +168,59 @@ public class CourseFacadeTest {
         String nickname = "tester";
         String profileImageUrl = "test.jpg";
         Member member = new Member(memberId, email, socialLoginId, nickname, profileImageUrl,
-            SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
+                SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
 
         Long courseId = 1L;
         String title = "Test Course Title";
         double rate = 5.0;
-        LineString path = null;
         boolean isPrivate = false;
-        List<Spot> spots = Collections.emptyList();
-        int representativeSpotOrder = 0;
-        AttachFile mapStaticImageFile = new AttachFile(FileType.IMAGE, "test.jpg", "test.jpg", 10L);
+        int numberOfSpots = 3;
+        String imageUrl = "test.jpg";
 
-        Course mockCourse = new Course(courseId, member, title, null, rate, path, isPrivate,
-            spots, representativeSpotOrder, mapStaticImageFile);
+        CourseListDto mockCourse = new CourseListDto(courseId, title, rate, imageUrl,
+                numberOfSpots, null, isPrivate);
 
         CourseInfo.CourseListInfo courseInfo = new CourseInfo.CourseListInfo(mockCourse);
         List<CourseInfo.CourseListInfo> courseList = Collections.singletonList(courseInfo);
 
         CourseInfo.MyCoursesResponse mockCourseListResponse = new CourseInfo.MyCoursesResponse(
-            courseList,
-            totalPages
+                courseList,
+                totalPages
         );
 
-        when(courseService.retrieveCourseList(anyLong(), any(Pageable.class), anyString())).thenReturn(
-            mockCourseListResponse);
+        when(courseService.retrieveCourseList(anyLong(), any(Pageable.class),
+                any(Selected.class))).thenReturn(
+                mockCourseListResponse);
 
         // When
-        var result = courseFacade.getMemberCoursesInfo(memberId, pageable, "private");
+        var result = courseFacade.getMemberCoursesInfo(memberId, pageable, Selected.ALL);
 
         // Then
         assertThat(result).isNotNull()
-            .isInstanceOf(CourseInfo.MyCoursesResponse.class)
-            .usingRecursiveComparison().isEqualTo(mockCourseListResponse);
+                .isInstanceOf(CourseInfo.MyCoursesResponse.class)
+                .usingRecursiveComparison().isEqualTo(mockCourseListResponse);
         assertThat(result.getContent().size()).isEqualTo(1);
+    }
+
+    @DisplayName("searchCourseByPlaceName 메서드가 유효한 요청이 들어왔을 때 CourseInfo의 Slice 객체를 잘 반환하는지")
+    @Test
+    void WhenSearchCourseByPlaceName_ThenShouldReturnValidSlice() {
+        CourseInfo.Slice mockSlice = mock(CourseInfo.Slice.class);
+        when(courseService.searchCourseByPlaceName(anyString(), any(Accessor.class), any(Pageable.class))).thenReturn(mockSlice);
+
+        var result = courseFacade.searchCourseByPlaceName("test", mock(Accessor.class), PageRequest.of(0, 5));
+
+        assertThat(result).isNotNull();
+    }
+
+    @DisplayName("getMySpotsDetailInfo 메서드가 유효한 요청이 들어왔을 때 CourseInfo의 MySpotsInfo 객체를 잘 반환하는지")
+    @Test
+    void whenGetMySpotsDetailInfo_thenShouldReturnMySpotsInfo() {
+        CourseInfo.MySpotsInfo spotsInfo = mock(CourseInfo.MySpotsInfo.class);
+        when(spotService.getMySpotsDetailInfo(anyList(), anyLong())).thenReturn(spotsInfo);
+
+        var result = courseFacade.getMySpotsDetailInfo(List.of(1L, 2L), 1L);
+
+        assertThat(result).isInstanceOf(CourseInfo.MySpotsInfo.class);
     }
 }

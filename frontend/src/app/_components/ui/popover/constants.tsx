@@ -1,7 +1,7 @@
 import { logout } from '../../api/action';
-
 import MapPin from '/public/icons/map-pin.svg';
-import Bell from '/public/icons/bell.svg';
+import Logout from '/public/icons/logout.svg';
+
 import LocationIcon from '/public/icons/location.svg';
 import CalendarIcon from '/public/icons/calendar.svg';
 
@@ -16,7 +16,7 @@ export const headerPopOverData: TPopOverData[] = [
   {
     href: '/',
     label: '로그아웃',
-    icon: <Bell className="w-6 h-6" />,
+    icon: <Logout className="w-6 h-6" />,
     onClick: async () => {
       await logout();
       location.reload();

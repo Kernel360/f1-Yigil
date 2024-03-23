@@ -7,10 +7,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import kr.co.yigil.admin.domain.AdminSignUp;
+import kr.co.yigil.admin.domain.admin.AdminCommand;
 import kr.co.yigil.admin.domain.admin.AdminCommand.LoginRequest;
+import kr.co.yigil.admin.domain.admin.AdminInfo.AdminDetailInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminInfo.AdminInfoResponse;
 import kr.co.yigil.admin.domain.admin.AdminService;
-import kr.co.yigil.admin.domain.adminSignUp.AdminSignUp;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpCommand.AdminSignUpRequest;
 import kr.co.yigil.admin.domain.adminSignUp.AdminSignUpService;
 import kr.co.yigil.admin.interfaces.dto.request.AdminSignUpListRequest;
@@ -25,9 +27,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-public class AdminFacadeTest {
+class AdminFacadeTest {
 
     @Mock
     private AdminService adminService;
@@ -116,7 +119,45 @@ public class AdminFacadeTest {
         verify(adminService).getAdminInfoByEmail(email);
     }
 
-    @DisplayName("testSignUp 메서드가 AdminService를 잘 호출하는지")
+    @DisplayName("getAdminDetailInfoByEmail 메서드가 AdminDetailInfoResponse를 잘 반환하는지")
+    @Test
+    void getAdminDetailInfoByEmail_ShouldReturnAdminDetailInfoResponse() {
+        String email = "test@test.com";
+        AdminDetailInfoResponse expectedResponse = mock(AdminDetailInfoResponse.class);
+
+        when(adminService.getAdminDetailInfoByEmail(email)).thenReturn(expectedResponse);
+
+        AdminDetailInfoResponse result = adminFacade.getAdminDetailInfoByEmail(email);
+
+        assertEquals(expectedResponse, result);
+        verify(adminService).getAdminDetailInfoByEmail(email);
+    }
+
+    @DisplayName("updateProfileImage 메서드가 AdminService를 잘 호출하는지")
+    @Test
+    void updateProfileImage_ShouldCallService() {
+        String email = "test@test.com";
+        MultipartFile mockFile = mock(MultipartFile.class);
+
+        adminFacade.updateProfileImage(email, mockFile);
+
+        verify(adminService).updateProfileImage(email, mockFile);
+    }
+
+    @DisplayName("updatePassword 메서드가 AdminService를 잘 호출하는지")
+    @Test
+    void updatePassword_ShouldCallService() {
+        String email = "test@test.com";
+        AdminCommand.AdminPasswordUpdateRequest command = AdminCommand.AdminPasswordUpdateRequest.builder()
+                .existingPassword("oldPassword")
+                .newPassword("newPassword")
+                .build();
+
+        adminFacade.updatePassword(email, command);
+
+        verify(adminService).updatePassword(email, command);
+    }
+        @DisplayName("testSignUp 메서드가 AdminService를 잘 호출하는지")
     @Test
     void testSignUp_ShouldCallService() {
         doNothing().when(adminService).testSignUp();

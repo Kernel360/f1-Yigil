@@ -62,6 +62,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
     }
 
+    @ExceptionHandler(TimeoutException.class)
+    public ResponseEntity<ExceptionResponse> handleTimeoutException(final TimeoutException e) {
+        log.error(e.getMessage(), e);
+
+        return ResponseEntity.status(504)
+                .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(final Exception e) {
         log.error(e.getMessage(), e);

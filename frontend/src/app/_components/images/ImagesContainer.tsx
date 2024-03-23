@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -19,9 +19,7 @@ import {
 
 import ImageItem from './ImageItem';
 import SortableItem from './SortableItem';
-import { AddSpotContext } from '../add/spot/SpotContext';
 
-import type { Dispatch } from 'react';
 import type {
   DragEndEvent,
   DragStartEvent,
@@ -29,15 +27,14 @@ import type {
 } from '@dnd-kit/core';
 
 import type { TImageData } from './ImageHandler';
-import type { TAddSpotAction } from '../add/spot/SpotContext';
 
 export default function ImagesContainer({
-  dispatch,
+  images,
+  setImages,
 }: {
-  dispatch: Dispatch<TAddSpotAction>;
+  images: TImageData[];
+  setImages: (newImages: TImageData[]) => void;
 }) {
-  const { images } = useContext(AddSpotContext);
-
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 0.01 } }),
@@ -75,18 +72,18 @@ export default function ImagesContainer({
       if (active.id !== over?.id) {
         const nextImage = imageMove(images, active.id, over?.id);
 
-        dispatch({ type: 'SET_IMAGES', payload: nextImage });
+        setImages(nextImage);
 
         setActiveId(null);
       }
     },
-    [images, dispatch],
+    [images, setImages],
   );
 
   function removeImage(filename: string) {
     const nextImages = images.filter((image) => image.filename !== filename);
 
-    dispatch({ type: 'SET_IMAGES', payload: nextImages });
+    setImages(nextImages);
   }
 
   const handleDragCancel = useCallback(() => {

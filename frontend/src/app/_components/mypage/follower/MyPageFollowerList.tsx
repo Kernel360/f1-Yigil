@@ -44,8 +44,7 @@ export default function MyPageFollowerList({
     selectOption: string,
   ) => {
     const followerList = await getFollowerList(pageNo, size, selectOption);
-    console.log(followerList);
-    if (!followerList.success) {
+    if (followerList.status === 'failed') {
       setAllFollowerList([]);
       return;
     }
@@ -53,31 +52,6 @@ export default function MyPageFollowerList({
     setAllFollowerList(followerList.data.content);
     setHasNext(followerList.data.has_next);
   };
-
-  // const ioCallback = (
-  //   entries: IntersectionObserverEntry,
-  //   io: IntersectionObserver,
-  // ) => {
-  //   entries.forEach((entry) => {
-  //     if (entry.isIntersecting) {
-  //       io.unobserve(entry.target);
-
-  //       setTimeout(() => {
-  //         addNewContent();
-
-  //         observeLastItem(io, document.querySelectorAll('.card'));
-  //       }, 2000);
-  //     }
-  //   });
-  // };
-
-  // const observeLastItem = (io, allFollwerList) => {
-  //   const lastItem = allFollwerList[allFollwerList.length - 1];
-  //   io.observe(lastItem);
-  // };
-
-  // const io = new IntersectionObserver(ioCallback, { threshold: 0.7 });
-  // observeLastItem(io, items);
 
   출처: https: useEffect(() => {
     getFollowerLists(currentPage, 5, selectOption);

@@ -1,5 +1,7 @@
 package kr.co.yigil.favor.domain;
 
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.travel.domain.Travel;
@@ -22,7 +24,7 @@ public class FavorServiceImpl implements FavorService{
     @Transactional
     public Long addFavor(Long memberId, Long travelId) {
         if(favorReader.existsByMemberIdAndTravelId(memberId, travelId))
-            throw new IllegalArgumentException("이미 좋아요를 누른 게시글입니다.");
+            throw new BadRequestException(ExceptionCode.ALREADY_FAVOR);
 
         Member member = memberReader.getMember(memberId);
         Travel travel = travelReader.getTravel(travelId);
@@ -34,7 +36,9 @@ public class FavorServiceImpl implements FavorService{
     @Override
     @Transactional
     public void deleteFavor(Long memberId, Long travelId) {
-        Long favorId = favorReader.getFavorIdByMemberIdAndTravelId(memberId, travelId);
+        Member member = memberReader.getMember(memberId);
+        Travel travel = travelReader.getTravel(travelId);
+        Long favorId = favorReader.getFavorIdByMemberAndTravel(member, travel);
         favorStore.deleteFavorById(favorId);
         favorCountCacheStore.decrementFavorCount(travelId);
     }

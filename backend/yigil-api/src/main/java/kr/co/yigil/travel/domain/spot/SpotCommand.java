@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.domain.spot;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
@@ -53,8 +54,8 @@ public class SpotCommand {
         private final String placePointJson;
 
         public Place toEntity(AttachFile placeImage, AttachFile mapStaticImage) {
-            return new Place(placeName, placeAddress, 0.0,
-                    GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage);
+            return new Place(placeName, placeAddress,
+                    GeojsonConverter.convertToPoint(placePointJson), placeImage, mapStaticImage, LocalDateTime.now());
         }
     }
 

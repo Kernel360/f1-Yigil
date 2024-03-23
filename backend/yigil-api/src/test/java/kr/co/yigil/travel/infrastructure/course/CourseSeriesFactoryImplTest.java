@@ -1,15 +1,5 @@
 package kr.co.yigil.travel.infrastructure.course;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
@@ -20,9 +10,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.io.ParseException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseSeriesFactoryImplTest {
@@ -58,7 +58,7 @@ public class CourseSeriesFactoryImplTest {
         List<ModifySpotRequest> modifySpotRequests = Arrays.asList(modifySpotRequest1, modifySpotRequest2);
         List<Long> spotIdOrder = Arrays.asList(2L, 1L);
 
-        modifyCourseRequest = new ModifyCourseRequest("New Course Description", 4.5, spotIdOrder, modifySpotRequests);
+        modifyCourseRequest = new ModifyCourseRequest("New Course Description", 4.5, "new title", mock(LineString.class), spotIdOrder, modifySpotRequests);
 
         when(spotReader.getSpot(1L)).thenReturn(spot1);
         when(spotReader.getSpot(2L)).thenReturn(spot2);
@@ -68,7 +68,7 @@ public class CourseSeriesFactoryImplTest {
 
     @DisplayName("modify 메서드가 Course를 잘 업데이트 하는지")
     @Test
-    void modify_CourseIsUpdatedCorrectly() {
+    void modify_CourseIsUpdatedCorrectly() throws ParseException {
         Course modifiedCourse = courseSeriesFactory.modify(modifyCourseRequest, course);
 
         assertEquals("New Course Description", modifiedCourse.getDescription());

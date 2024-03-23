@@ -1,0 +1,97 @@
+== Report API
+
+=== 신고하기
+=== Request
+로그인 필수: Y
+
+==== Request Body
+location
+include::{snippets}/reports/submit-report/request-body.adoc[]
+
+include::{snippets}/reports/submit-report/request-fields.adoc[]
+
+===== HTTP Request 예시
+include::{snippets}/reports/submit-report/http-request.adoc[]
+
+=== Response
+include::{snippets}/reports/submit-report/response-body.adoc[]
+include::{snippets}/reports/submit-report/response-fields.adoc[]
+
+==== HTTP Response 예시
+include::{snippets}/reports/submit-report/http-response.adoc[]
+
+=== 신고 목록 조회
+=== Request
+로그인 필수: Y
+
+==== Query Parameters
+include::{snippets}/reports/get-my-reports/query-parameters.adoc[]
+==== Request Body
+include::{snippets}/reports/get-my-reports/request-body.adoc[]
+
+==== HTTP Request 예시
+include::{snippets}/reports/get-my-reports/http-request.adoc[]
+
+=== Response
+==== Response Body
+include::{snippets}/reports/get-my-reports/response-body.adoc[]
+==== Response Fields
+include::{snippets}/reports/get-my-reports/response-fields.adoc[]
+==== HTTP Response 예시
+include::{snippets}/reports/get-my-reports/http-response.adoc[]
+
+=== 신고 상세 조회
+=== Request
+로그인 필수: Y
+
+==== Path Parameters
+include::{snippets}/reports/get-my-report-detail/path-parameters.adoc[]
+==== Request Body
+include::{snippets}/reports/get-my-report-detail/request-body.adoc[]
+==== HTTP Request 예시
+include::{snippets}/reports/get-my-report-detail/http-request.adoc[]
+=== Response
+==== Response Body
+include::{snippets}/reports/get-my-report-detail/response-body.adoc[]
+==== Response Fields
+include::{snippets}/reports/get-my-report-detail/response-fields.adoc[]
+==== HTTP Response 예시
+include::{snippets}/reports/get-my-report-detail/http-response.adoc[]
+
+=== 신고 삭제
+=== Request
+로그인 필수: Y
+
+==== Path Parameters
+include::{snippets}/reports/delete-my-report/path-parameters.adoc[]
+==== Request Body
+include::{snippets}/reports/delete-my-report/request-body.adoc[]
+==== HTTP Request 예시
+include::{snippets}/reports/delete-my-report/http-request.adoc[]
+=== Response
+==== Response Body
+include::{snippets}/reports/delete-my-report/response-body.adoc[]
+==== Response Fields
+include::{snippets}/reports/delete-my-report/response-fields.adoc[]
+==== HTTP Response 예시
+include::{snippets}/reports/delete-my-report/http-response.adoc[]
+
+
+=== 신고 타입 목록 조회
+=== Request
+로그인 필수: Y
+
+==== Request Body
+include::{snippets}/reports/get-report-types/request-body.adoc[]
+==== HTTP Request 예시
+include::{snippets}/reports/get-report-types/http-request.adoc[]
+=== Response
+==== Response Body
+include::{snippets}/reports/get-report-types/response-body.adoc[]
+==== Response Fields
+include::{snippets}/reports/get-report-types/response-fields.adoc[]
+==== HTTP Response 예시
+include::{snippets}/reports/get-report-types/http-response.adoc[]
+
+
+

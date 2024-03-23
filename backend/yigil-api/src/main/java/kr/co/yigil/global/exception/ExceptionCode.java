@@ -17,21 +17,19 @@ public enum ExceptionCode {
     NOT_FOUND_FAVOR_COUNT(1071, "해당하는 favor count가 없습니다"),
     NOT_FOUND_REGION_ID(1081, "해당하는 region이 없습니다"),
 
+    NOT_FOUND_REPORT_ID(2001, "해당하는 report가 없습니다"),
+    NOT_FOUND_REPORT_TYPE_ID(2101, "해당하는 report type이 없습니다"),
 
-    // travel 3000
-    INVALID_VISIBILITY_REQUEST(3001, "올바르지 않은 visibility 요청입니다."),
-
-    // spot 3100
     ALREADY_EXIST_SPOT(3001, "이미 등록된 spot입니다."),
-
-    // course 3200
+    INVALID_VISIBILITY_REQUEST(3011, "올바르지 않은 visibility 요청입니다."),
+    SPOT_ALREADY_EXIST_IN_PLACE(3101,"해당 장소에 이미 스팟을 등록하였습니다."),
+    INVALID_SPOT_ORDER_CHANGE_REQUEST(3201, "올바르지 않은 spot 순서 변경 요청입니다."),
 
     FOLLOW_MYSELF(4001, "자신을 follow 할 수 없습니다."),
     ALREADY_FOLLOWING(4002, "이미 follow 중인 사용자입니다."),
     UNFOLLOW_MYSELF(4003, "자신을 unfollow 할 수 없습니다."),
     NOT_FOLLOWING(4004, "팔로우 중이 아닌 사용자입니다."),
 
-    // comment 3300
     ALREADY_REMOVED_COMMENT(3301, "이미 삭제된 댓글입니다."),
 
     EMPTY_FILE(5001, "업로드한 파일이 비어있습니다."), // todo 현재  모듈 구조상 AttachFiles에서  사용 불가
@@ -47,7 +45,6 @@ public enum ExceptionCode {
     INVALID_POINT_GEO_JSON(6011, "Point GeoJson 형식이 아닙니다"),
     INVALID_LINESTRING_GEO_JSON(6021, "Point GeoJson 형식이 아닙니다"),
 
-
     ALREADY_BOOKMARKED(7001, "이미 북마크된 장소입니다."),
     NOT_BOOKMARKED(7002, "북마크되지 않은 장소입니다."),
 
@@ -59,6 +56,9 @@ public enum ExceptionCode {
     // Authorization & Authentication
     INVALID_ACCESS_TOKEN(9101, "올바르지 않은 형식의 Access Token입니다."),
     INVALID_AUTHORITY(9201, "해당 요청에 대한 접근 권한이 없습니다."),
+
+    SSE_TIMEOUT(9301, "SSE 요청 시간이 초과되었습니다."),
+
     INTERNAL_SERVER_ERROR(9999, "서버 에러가 발생했습니다.");
 
     private final int code;

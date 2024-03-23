@@ -1,6 +1,5 @@
 package kr.co.yigil.file.infrastructure;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileType;
@@ -33,7 +32,7 @@ public class FileUploaderImpl implements FileUploader {
     }
 
     private FileType determineFileType(MultipartFile file) {
-        if (file.getContentType() == null) throw new FileException(ExceptionCode.EMPTY_FILE);
+        if (file == null) throw new FileException(ExceptionCode.EMPTY_FILE);
 
         if(file.getContentType().startsWith("image/")) {
             return FileType.IMAGE;

@@ -1,7 +1,9 @@
 package kr.co.yigil.follow.domain;
 
 import jakarta.transaction.Transactional;
+import kr.co.yigil.follow.domain.FollowInfo.FollowerInfo;
 import kr.co.yigil.follow.domain.FollowInfo.FollowersResponse;
+import kr.co.yigil.follow.domain.FollowInfo.FollowingInfo;
 import kr.co.yigil.follow.domain.FollowInfo.FollowingsResponse;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -61,7 +63,7 @@ public class FollowServiceImpl implements FollowService {
         var followerSlice = followReader.getFollowerSlice(memberId, pageable);
         var followerList = followerSlice.getContent().stream()
             .map(Follow::getFollower)
-            .map(FollowInfo.FollowBasicInfo::new)
+            .map(follower -> new FollowerInfo(follower, followReader.isFollowing(memberId, follower.getId())))
             .toList();
         return new FollowersResponse(followerList, followerSlice.hasNext());
     }
@@ -73,7 +75,7 @@ public class FollowServiceImpl implements FollowService {
         var followingSlice = followReader.getFollowingSlice(memberId, pageable);
         var followingList = followingSlice.getContent().stream()
             .map(Follow::getFollowing)
-            .map(FollowInfo.FollowBasicInfo::new)
+            .map(FollowingInfo::new)
             .toList();
         return new FollowingsResponse(followingList, followingSlice.hasNext());
     }

@@ -25,4 +25,18 @@ public class PlaceCacheStoreImpl implements PlaceCacheStore {
         int spotCount = placeCacheReader.getSpotCount(placeId);
         return --spotCount;
     }
+
+    @Override
+    @CachePut(value = "spotTotalRate", key = "#placeId")
+    public double incrementSpotTotalRateInPlace(Long placeId, double rate) {
+        double spotTotalRate = placeCacheReader.getSpotTotalRate(placeId);
+        return spotTotalRate + rate;
+    }
+
+    @Override
+    @CachePut(value = "spotTotalRate", key = "#placeId")
+    public double decrementSpotTotalRateInPlace(Long placeId, double rate) {
+        double spotTotalRate = placeCacheReader.getSpotTotalRate(placeId);
+        return spotTotalRate - rate;
+    }
 }

@@ -12,6 +12,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -69,7 +70,7 @@ class CommentApiControllerTest {
                 .uris()
                 .withScheme("https")
                 .withHost("yigil.co.kr")
-                .withPort(80)
+                .withPort(8080)
             )
             .build();
     }
@@ -224,7 +225,7 @@ class CommentApiControllerTest {
         when(commentMapper.of(any(CommentDto.CommentUpdateRequest.class))).thenReturn(
             mock(CommentCommand.CommentUpdateRequest.class));
 
-        mockMvc.perform(post("/api/v1/comments/{commentId}", 1L)
+        mockMvc.perform(put("/api/v1/comments/{commentId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
             .andExpect(status().isOk())

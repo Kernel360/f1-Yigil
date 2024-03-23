@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Select from '../../ui/select/Select';
 import { getFollowingList } from '../hooks/followActions';
 import MyPageFollowingItem from './MyPageFollowingItem';
+import useIntersectionObserver from '../../hooks/useIntersectionObserver';
+import LoadingIndicator from '../../LoadingIndicator';
 
 const selectList = [
   {
@@ -26,11 +28,31 @@ export default function MyPageFollowingList({
   followingList: TMyPageFollow[];
 }) {
   const [selectOption, setSelectOption] = useState('id');
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const [hasNext, setHasNext] = useState(false);
   const [allFollowingList, setAllFollowingList] =
     useState<TMyPageFollow[]>(followingList);
   const ref = useRef(null);
+
+  const getMoreFollowings = async () => {
+    setCurrentPage((prev) => (prev += 1));
+    const followingList = await getFollowingList(
+      currentPage + 1,
+      5,
+      selectOption,
+    );
+    if (followingList.status === 'failed') {
+      setAllFollowingList([]);
+      setErrorText(followingList.message);
+      return;
+    }
+    setAllFollowingList(followingList.data.content);
+    setHasNext(followingList.data.has_next);
+  };
+
+  useIntersectionObserver(ref, getMoreFollowings, hasNext);
 
   const onChangeSelectOption = (option: string | number) => {
     if (typeof option === 'number') return;
@@ -43,13 +65,24 @@ export default function MyPageFollowingList({
     size: number,
     selectOption: string,
   ) => {
-    const followingList = await getFollowingList(pageNo, size, selectOption);
-    if (!followingList.success) {
-      setAllFollowingList([]);
-      return;
+    try {
+      setErrorText('');
+      setIsLoading(true);
+      const followingList = await getFollowingList(pageNo, size, selectOption);
+      if (followingList.status === 'failed') {
+        setAllFollowingList([]);
+        setErrorText(followingList.message);
+        return;
+      }
+      setAllFollowingList(followingList.data.content);
+      setHasNext(followingList.data.has_next);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
-    setAllFollowingList(followingList.data.content);
-    setHasNext(followingList.data.has_next);
   };
 
   useEffect(() => {
@@ -68,6 +101,14 @@ export default function MyPageFollowingList({
       {allFollowingList.map((follow, idx) => (
         <MyPageFollowingItem key={follow.member_id} {...follow} idx={idx} />
       ))}
+      <div className="flex justify-center my-8" ref={ref}>
+        {hasNext &&
+          (isLoading ? (
+            <LoadingIndicator loadingText="데이터 로딩중" />
+          ) : (
+            <button className="py-1 px-8 bg-gray-200 rounded-lg">더보기</button>
+          ))}
+      </div>
     </div>
   );
 }

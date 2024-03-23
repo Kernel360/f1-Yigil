@@ -9,5 +9,5 @@ public interface BookmarkService {
 
     void deleteBookmark(Long memberId, Long placeId);
 
-    Slice<Bookmark> getBookmarkSlice(Long memberId, PageRequest pageRequest);
+    Slice<BookmarkInfo> getBookmarkSlice(Long memberId, PageRequest pageRequest);
 }

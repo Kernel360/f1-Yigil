@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookmarkInfoDto {
+    private Long bookmarkId;
     private Long placeId;
     private String placeName;
     private String placeImage;
     private Double rate;
-
 }

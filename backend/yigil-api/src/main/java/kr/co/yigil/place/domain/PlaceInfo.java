@@ -16,20 +16,20 @@ public class PlaceInfo {
         private final double rate;
         private final boolean isBookmarked;
 
-        public Main(Place place, int spotCount) {
+        public Main(Place place, int spotCount, double placeRate) {
             id = place.getId();
             name = place.getName();
             reviewCount = spotCount;
             thumbnailImageUrl = place.getImageFileUrl();
-            rate = place.getRate();
+            rate = placeRate;
             isBookmarked = false;
         }
-        public Main(Place place, int spotCount, boolean isBookmarked) {
+        public Main(Place place, int spotCount, boolean isBookmarked, double placeRate) {
             id = place.getId();
             name = place.getName();
             reviewCount = spotCount;
             thumbnailImageUrl = place.getImageFileUrl();
-            rate = place.getRate();
+            rate = placeRate;
             this.isBookmarked = isBookmarked;
         }
     }
@@ -46,23 +46,23 @@ public class PlaceInfo {
         private final double rate;
         private final int reviewCount;
 
-        public Detail(Place place, int spotCount) {
+        public Detail(Place place, int spotCount, double placeRate) {
             id = place.getId();
             name = place.getName();
             address = place.getAddress();
             thumbnailImageUrl = place.getImageFileUrl();
             mapStaticImageUrl = place.getMapStaticImageFileUrl();
-            rate = place.getRate();
+            rate = placeRate;
             reviewCount = spotCount;
             isBookmarked = false;
         }
-        public Detail(Place place, int spotCount, boolean isBookmarked) {
+        public Detail(Place place, int spotCount, boolean isBookmarked, double placeRate) {
             id = place.getId();
             name = place.getName();
             address = place.getAddress();
             thumbnailImageUrl = place.getImageFileUrl();
             mapStaticImageUrl = place.getMapStaticImageFileUrl();
-            rate = place.getRate();
+            rate = placeRate;
             reviewCount = spotCount;
             this.isBookmarked = isBookmarked;
         }
@@ -71,10 +71,11 @@ public class PlaceInfo {
     @Getter
     @ToString
     public static class MapStaticImageInfo {
-        private final String imageUrl;
         private final boolean exists;
+        private final String imageUrl;
+        private final boolean registeredPlace;
 
-        public MapStaticImageInfo(Optional<Place> placeOptional) {
+        public MapStaticImageInfo(Optional<Place> placeOptional, boolean isRegisteredPlace) {
             if(placeOptional.isEmpty()) {
                 exists = false;
                 imageUrl = "";
@@ -83,6 +84,17 @@ public class PlaceInfo {
                 imageUrl = placeOptional.get()
                         .getMapStaticImageFileUrl();
             }
+            this.registeredPlace = isRegisteredPlace;
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class Keyword {
+        private final String keyword;
+
+        public Keyword(String keyword) {
+            this.keyword = keyword;
         }
     }
 }

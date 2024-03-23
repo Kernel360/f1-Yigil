@@ -1,6 +1,8 @@
 package kr.co.yigil.follow.interfaces.dto;
 
 import kr.co.yigil.follow.domain.FollowInfo;
+import kr.co.yigil.follow.interfaces.dto.FollowDto.FollowersResponse;
+import kr.co.yigil.follow.interfaces.dto.FollowDto.FollowingsResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -11,9 +13,7 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface FollowDtoMapper {
+    FollowersResponse of (FollowInfo.FollowersResponse followersResponse);
 
-    FollowDto.FollowerResponse of (FollowInfo.FollowersResponse followersResponse);
-
-    FollowDto.FollowingResponse of (FollowInfo.FollowingsResponse followingsResponse);
-
+    FollowingsResponse of (FollowInfo.FollowingsResponse followingsResponse);
 }

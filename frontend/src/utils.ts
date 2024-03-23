@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export function dataUrlToBlob(dataURI: string) {
   const byteString = atob(dataURI.split(',')[1]);
 
@@ -33,3 +35,25 @@ export function coordsToGeoJSONPoint(coords: { lat: number; lng: number }) {
     coordinates: [coords.lng, coords.lat],
   });
 }
+
+export function parseSearchHistory(historyStr: string | null) {
+  const historiesSchema = z.array(z.string());
+
+  if (historyStr === null) {
+    return [];
+  }
+
+  const json = JSON.parse(historyStr);
+
+  const result = historiesSchema.safeParse(json);
+
+  if (!result.success) {
+    return [];
+  }
+
+  return result.data;
+}
+
+export const scrollToTop = () => {
+  if (typeof window !== 'undefined') window.scrollTo(0, 0);
+};

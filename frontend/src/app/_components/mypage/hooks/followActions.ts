@@ -1,136 +1,154 @@
 'use server';
 
-import { myPageFollowListSchema } from '@/types/myPageResponse';
+import { getBaseUrl } from '@/app/utilActions';
+import {
+  myPageFollowResponseSchema,
+  TMyPageFollowResponse,
+} from '@/types/myPageResponse';
+import { backendErrorSchema, postResponseSchema } from '@/types/response';
 import { cookies } from 'next/headers';
-
-const data = [
-  {
-    member_id: 1,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 2,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 3,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 4,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 5,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 6,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 7,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 9,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 8,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 10,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 11,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-  {
-    member_id: 12,
-    nickname: 'John',
-    profile_image_url: 'https://picsum.photos/50/50',
-  },
-];
-
-const BASE_URL =
-  process.env.ENVIRONMENT === 'production'
-    ? process.env.BASE_URL
-    : process.env.NEXT_PUBLIC_API_MOCKING !== 'enabled'
-    ? process.env.DEV_BASE_URL
-    : typeof window === 'undefined'
-    ? 'http://localhost:8080/api'
-    : 'http://localhost:3000/api';
 
 export const getFollowingList = async (
   pageNo: number = 1,
   size: number = 5,
   sortOrder: string = 'asc',
-) => {
-  const res = await fetch(
-    `${BASE_URL}/v1/follows/followings?page=${pageNo}&size=${size}&sortBy=id&sortOrder=asc`,
-    {
-      headers: {
-        Cookie: `SESSION=${cookies().get('SESSION')?.value}`,
+): Promise<
+  | { status: 'failed'; message: string }
+  | { status: 'succeed'; data: TMyPageFollowResponse }
+> => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
+  try {
+    const res = await fetch(
+      `${BASE_URL}/v1/follows/followings?page=${pageNo}&size=${size}&
+      ${
+        sortOrder === 'id'
+          ? 'sortBy=id&sortOrder=asc'
+          : `sortBy=created_at&sortOrder=${sortOrder}`
+      }
+`,
+      {
+        headers: {
+          Cookie: `SESSION=${cookie}`,
+        },
       },
-    },
-  );
-  const followingList = await res.json();
-  const parsedFollowList = myPageFollowListSchema.safeParse(followingList);
-  return JSON.parse(JSON.stringify(parsedFollowList));
+    );
+    const followingList = await res.json();
+    const error = backendErrorSchema.safeParse(followingList);
+
+    if (error.success) {
+      console.error(`${error.data.code} - ${error.data.message}`);
+      throw new Error(`${error.data.code} - ${error.data.message}`);
+    }
+
+    const parsedFollowList =
+      myPageFollowResponseSchema.safeParse(followingList);
+    if (!parsedFollowList.success) {
+      console.error(parsedFollowList.error.message);
+      throw new Error('zod 검증 에러입니다.');
+    }
+    return JSON.parse(JSON.stringify(parsedFollowList));
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return { status: 'failed', message: error.message };
+    }
+    return { status: 'failed', message: '알 수 없는 에러입니다.' };
+  }
 };
 
 export const getFollowerList = async (
   pageNo: number = 1,
   size: number = 5,
   sortOrder: string = 'asc',
-) => {
-  // const res = await fetch(
-  //   `${BASE_URL}/v1/follows/followers?page=${pageNo}&size=${size}&sortBy=id&sortOrder=asc`,
-  //   {
-  //     headers: {
-  //       Cookie: `SESSION=${cookies().get('SESSION')?.value}`,
-  //     },
-  //   },
-  // );
-  // const followerList = await res.json();
-  // const parsedFollowList = myPageFollowListSchema.safeParse(followerList);
-  // return JSON.parse(JSON.stringify(parsedFollowList));
+): Promise<
+  | { status: 'failed'; message: string }
+  | { status: 'succeed'; data: TMyPageFollowResponse }
+> => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
 
-  const sliced = data.slice(pageNo, size + 1);
-  if (sliced.length < 4)
-    return { success: true, data: { content: sliced, has_next: false } };
-  return { success: true, data: { content: sliced, has_next: true } };
+  try {
+    const res = await fetch(
+      `${BASE_URL}/v1/follows/followers?page=${pageNo}&size=${size}&${
+        sortOrder === 'id'
+          ? 'sortBy=id&sortOrder=asc'
+          : `sortBy=created_at&sortOrder=${sortOrder}`
+      }`,
+      {
+        headers: {
+          Cookie: `SESSION=${cookie}`,
+        },
+      },
+    );
+    const followerList = await res.json();
+    const error = backendErrorSchema.safeParse(followerList);
+
+    if (error.success) {
+      console.error(`${error.data.code} - ${error.data.message}`);
+      throw new Error(`${error.data.code} - ${error.data.message}`);
+    }
+
+    const parsedFollowerList =
+      myPageFollowResponseSchema.safeParse(followerList);
+    if (!parsedFollowerList.success) {
+      console.error(parsedFollowerList.error.message);
+      throw new Error('zod 검증 에러입니다.');
+    }
+    return JSON.parse(JSON.stringify(parsedFollowerList));
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return { status: 'failed', message: error.message };
+    }
+    return { status: 'failed', message: '알 수 없는 에러입니다.' };
+  }
 };
 
 export const addFollow = async (memberId: number) => {
-  const res = await fetch(`${BASE_URL}/v1/follows/follow/${memberId}`, {
-    method: 'POST',
-    headers: {
-      Cookie: `SESSION=${cookies().get('SESSION')?.value}`,
-    },
-  });
-  return res.json();
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
+  try {
+    const res = await fetch(`${BASE_URL}/v1/follows/follow/${memberId}`, {
+      method: 'POST',
+      headers: {
+        Cookie: `SESSION=${cookie}`,
+      },
+    });
+
+    const result = await res.json();
+
+    const error = backendErrorSchema.safeParse(result);
+
+    if (error.success) {
+      const { code, message } = error.data;
+      console.error(`${code} - ${message}`);
+      return { status: 'failed', message, code };
+    }
+
+    const parsedResult = postResponseSchema.safeParse(result);
+
+    if (!parsedResult.success) {
+      return { status: 'failed', message: 'zod 검증 에러입니다' };
+    }
+
+    return { status: 'succeed', message: '성공' };
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return { status: 'failed', message: error.message };
+    }
+    return { status: 'failed', message: '알 수 없는 에러입니다.' };
+  }
 };
 
 export const unFollow = async (memberId: number) => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
   const res = await fetch(`${BASE_URL}/v1/follows/unfollow/${memberId}`, {
     method: 'POST',
     headers: {
-      Cookie: `SESSION=${cookies().get('SESSION')?.value}`,
+      Cookie: `SESSION=${cookie}`,
     },
   });
   return res.json();

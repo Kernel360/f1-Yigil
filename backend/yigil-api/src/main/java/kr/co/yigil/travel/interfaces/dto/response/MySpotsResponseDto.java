@@ -19,7 +19,8 @@ public class MySpotsResponseDto {
     public static class SpotInfo {
 
         private final Long spotId;
-        private final String title;
+        private final Long placeId;
+        private final String placeName;
         private final double rate;
         private final String imageUrl;
         private final String createdDate;

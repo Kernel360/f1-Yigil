@@ -1,15 +1,5 @@
 package kr.co.yigil.travel.infrastructure.spot;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.infrastructure.SpotRepository;
@@ -21,6 +11,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SpotReaderImplTest {
@@ -56,7 +55,7 @@ public class SpotReaderImplTest {
     @Test
     void findByPlaceIdAndMemberId_ReturnsOptionalOfSpot() {
         Optional<Spot> expected = mock(Optional.class);
-        when(spotRepository.findByPlaceIdAndMemberId(anyLong(), anyLong())).thenReturn(expected);
+        when(spotRepository.findTopByPlaceIdAndMemberId(anyLong(), anyLong())).thenReturn(expected);
 
         Optional<Spot> result = spotReader.findSpotByPlaceIdAndMemberId(1L, 1L);
 
@@ -101,5 +100,27 @@ public class SpotReaderImplTest {
         int result = spotReader.getSpotCountInPlace(placeId);
 
         assertEquals(expectedCount, result);
+    }
+
+    @Test
+    void isExistSpot_ReturnsTrue_WhenSpotExists() {
+        Long spotId = 1L;
+        Long memberId = 1L;
+        when(spotRepository.existsByIdAndMemberId(spotId, memberId)).thenReturn(true);
+
+        boolean result = spotReader.isExistSpot(spotId, memberId);
+
+        assertTrue(result);
+    }
+
+    @Test
+    void isExistSpot_ReturnsFalse_WhenSpotDoesNotExist() {
+        Long spotId = 1L;
+        Long memberId = 1L;
+        when(spotRepository.existsByIdAndMemberId(spotId, memberId)).thenReturn(false);
+
+        boolean result = spotReader.isExistSpot(spotId, memberId);
+
+        assertFalse(result);
     }
 }

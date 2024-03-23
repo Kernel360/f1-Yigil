@@ -26,6 +26,7 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     implementation project(':support:log')
     implementation project(':support:domain')
@@ -35,7 +36,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.528'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'

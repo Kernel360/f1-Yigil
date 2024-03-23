@@ -22,12 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 import kr.co.yigil.bookmark.application.BookmarkFacade;
-import kr.co.yigil.bookmark.domain.Bookmark;
+import kr.co.yigil.bookmark.domain.BookmarkInfo;
 import kr.co.yigil.bookmark.interfaces.dto.BookmarkInfoDto;
 import kr.co.yigil.bookmark.interfaces.dto.mapper.BookmarkMapper;
 import kr.co.yigil.bookmark.interfaces.dto.response.BookmarksResponse;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.place.domain.Place;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -113,14 +111,21 @@ class BookmarkApiControllerTest {
     @DisplayName("북마크 조회 요청시 200 응답과 response가 잘 반환되는지")
     @Test
     void whenGetBookmarks_thenReturns200AndBookmarksResponse() throws Exception {
-        Bookmark bookmark = new Bookmark(mock(Member.class), mock(Place.class));
-        PageRequest pageRequest = PageRequest.of(0, 5);
-        Slice<Bookmark> bookmarkSlice = new SliceImpl<>(List.of(bookmark), pageRequest, true);
-        when(bookmarkFacade.getBookmarkSlice(anyLong(), any(PageRequest.class))).thenReturn(bookmarkSlice);
+        BookmarkInfoDto bookmarkInfoDto = new BookmarkInfoDto(1L, 1L, "장소이름", "장소이미지", 4.5);
+        BookmarksResponse bookmarksResponse = new BookmarksResponse(List.of(bookmarkInfoDto), false);
 
-        BookmarkInfoDto bookmarkInfoDto = new BookmarkInfoDto(1L, "placeName", "placeImage", 5.0);
-        BookmarksResponse bookmarksResponse = new BookmarksResponse(List.of(bookmarkInfoDto), true);
-        when(bookmarkMapper.bookmarkSliceToBookmarksResponse(bookmarkSlice)).thenReturn(bookmarksResponse);
+        BookmarkInfo mockBookmark1 = mock(BookmarkInfo.class);
+        BookmarkInfo mockBookmark2 = mock(BookmarkInfo.class);
+        BookmarkInfo mockBookmark3 = mock(BookmarkInfo.class);
+
+        Slice<BookmarkInfo> bookmarkSlice = new SliceImpl(List.of(mockBookmark1, mockBookmark2, mockBookmark3), PageRequest.of(0, 5), false);
+
+        when(bookmarkFacade.getBookmarkSlice(anyLong(), any(PageRequest.class)))
+                .thenReturn(bookmarkSlice);
+        when(bookmarkMapper.toDto(any(Slice.class)))
+                .thenReturn(bookmarksResponse);
+
+
         mockMvc.perform(get("/api/v1/bookmarks")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -130,20 +135,20 @@ class BookmarkApiControllerTest {
                         queryParameters(
                                 parameterWithName("page").description("현재 페이지 - default:1").optional(),
                                 parameterWithName("size").description("페이지 크기 - default:5").optional(),
-                                parameterWithName("sortBy").description("정렬 옵션 - createdAt(디폴트값) / rate").optional(),
+                                parameterWithName("sortBy").description("정렬 옵션 - created_at(디폴트값) / rate").optional(),
                                 parameterWithName("sortOrder").description("정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
                         ),
                         responseFields(
-                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 여부"),
                                 subsectionWithPath("bookmarks").description("Bookmark의 정보"),
+                                fieldWithPath("bookmarks[].bookmark_id").description("Bookmark 아이디"),
                                 fieldWithPath("bookmarks[].place_id").description("Bookmark한 장소 아이디"),
                                 fieldWithPath("bookmarks[].place_name").description("Bookmark한 장소 이름"),
                                 fieldWithPath("bookmarks[].place_image").description("Bookmark한 장소 이미지 URL"),
-                                fieldWithPath("bookmarks[].rate").description("Bookmark한 장소 평점")
+                                fieldWithPath("bookmarks[].rate").description("Bookmark한 장소 평점"),
+                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 여부")
                         )
                 ));
         verify(bookmarkFacade).getBookmarkSlice(anyLong(), any(PageRequest.class));
-        verify(bookmarkMapper).bookmarkSliceToBookmarksResponse(bookmarkSlice);
-
+        verify(bookmarkMapper).toDto(bookmarkSlice);
     }
 }

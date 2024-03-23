@@ -51,9 +51,10 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                             .map(fileUploader::upload)
                             .collect(Collectors.toList()));
 
+                    placeCacheStore.incrementSpotCountInPlace(place.getId());
+                    placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), registerSpotRequest.getRate());
                     var spot = spotStore.store(registerSpotRequest.toEntity(member, place, true, attachFiles));
 
-                    var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
                     return spot;
                 }).collect(Collectors.toList());
     }
