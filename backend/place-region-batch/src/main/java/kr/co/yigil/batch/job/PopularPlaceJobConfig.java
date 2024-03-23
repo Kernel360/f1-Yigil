@@ -3,13 +3,10 @@ package kr.co.yigil.batch.job;
 
 import jakarta.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PopularPlace;
 import kr.co.yigil.place.infrastructure.PopularPlaceRepository;
-import kr.co.yigil.travel.infrastructure.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -21,23 +18,19 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
-import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class PopularPlaceJobConfig {
-    private final SpotRepository spotRepository;
     private final PopularPlaceRepository popularPlaceRepository;
     private final EntityManagerFactory entityManagerFactory;
     @Bean

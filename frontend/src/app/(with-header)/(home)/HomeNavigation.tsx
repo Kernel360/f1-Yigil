@@ -22,7 +22,7 @@ export default function HomeNavigation() {
 
   return (
     <nav className="px-4 py-4 text-3xl font-semibold text-gray-300 flex justify-between items-center">
-      <div className="flex gap-4">
+      <div className="flex gap-6">
         <Link className={`${isHomeActive && selected}`} href="/">
           홈
         </Link>
@@ -30,10 +30,10 @@ export default function HomeNavigation() {
           className={`${pathname === '/nearby' && selected}`}
           href="/nearby"
         >
-          주변
+          지도
         </Link>
         <Link href="/privacy-policy" className="self-center ml-4">
-          <InfoIcon />
+          <InfoIcon className="fill-gray-500" />
         </Link>
       </div>
       <div className="grow"></div>

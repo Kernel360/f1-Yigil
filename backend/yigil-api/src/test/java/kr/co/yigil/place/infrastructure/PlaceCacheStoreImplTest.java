@@ -43,4 +43,28 @@ public class PlaceCacheStoreImplTest {
 
         assertEquals(spotCount - 1, result);
     }
+
+    @DisplayName("incrementSpotTotalRateInPlace 메서드가 spotTotalRate를 잘 증가시키는지")
+    @Test
+    void incrementSpotTotalRateInPlace_IncreasesSpotTotalRate() {
+        Long placeId = 1L;
+        double spotTotalRate = 1.0;
+        when(placeCacheReader.getSpotTotalRate(placeId)).thenReturn(spotTotalRate);
+
+        double result = placeCacheStore.incrementSpotTotalRateInPlace(placeId, 1.0);
+
+        assertEquals(spotTotalRate + 1.0, result);
+    }
+
+    @DisplayName("decrementSpotTotalRateInPlace 메서드가 spotTotalRate를 잘 감소시키는지")
+    @Test
+    void decrementSpotTotalRateInPlace_DecreasesSpotTotalRate() {
+        Long placeId = 1L;
+        double spotTotalRate = 1.0;
+        when(placeCacheReader.getSpotTotalRate(placeId)).thenReturn(spotTotalRate);
+
+        double result = placeCacheStore.decrementSpotTotalRateInPlace(placeId, 1.0);
+
+        assertEquals(spotTotalRate - 1.0, result);
+    }
 }

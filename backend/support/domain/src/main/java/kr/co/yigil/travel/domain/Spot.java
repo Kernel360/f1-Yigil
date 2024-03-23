@@ -1,13 +1,6 @@
 package kr.co.yigil.travel.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.util.List;
+import jakarta.persistence.*;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
@@ -19,6 +12,8 @@ import lombok.Setter;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.locationtech.jts.geom.Point;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -48,6 +43,7 @@ public class Spot extends Travel {
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
         this.place = place;
+        this.place.updateLatestUploadedTime();
     }
 
 
@@ -59,6 +55,7 @@ public class Spot extends Travel {
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
         this.place = place;
+        this.place.updateLatestUploadedTime();
     }
 
     public void updateSpot(double rate, final String description, final List<AttachFile> attachFiles) {
@@ -70,4 +67,8 @@ public class Spot extends Travel {
         this.isInCourse = true;
     }
     public void changeOutOfCourse() { this.isInCourse = false; }
+
+    public List<String> getImageUrls(){
+        return attachFiles.getUrls();
+    }
 }

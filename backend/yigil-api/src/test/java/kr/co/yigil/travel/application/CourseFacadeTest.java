@@ -1,20 +1,5 @@
 package kr.co.yigil.travel.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collections;
-import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
@@ -31,6 +16,7 @@ import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithS
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.course.CourseService;
 import kr.co.yigil.travel.domain.dto.CourseListDto;
+import kr.co.yigil.travel.domain.spot.SpotService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +29,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class CourseFacadeTest {
 
@@ -51,6 +46,9 @@ public class CourseFacadeTest {
 
     @Mock
     private CourseService courseService;
+
+    @Mock
+    private SpotService spotService;
 
     @Mock
     private FileUploader fileUploader;
@@ -213,5 +211,16 @@ public class CourseFacadeTest {
         var result = courseFacade.searchCourseByPlaceName("test", mock(Accessor.class), PageRequest.of(0, 5));
 
         assertThat(result).isNotNull();
+    }
+
+    @DisplayName("getMySpotsDetailInfo 메서드가 유효한 요청이 들어왔을 때 CourseInfo의 MySpotsInfo 객체를 잘 반환하는지")
+    @Test
+    void whenGetMySpotsDetailInfo_thenShouldReturnMySpotsInfo() {
+        CourseInfo.MySpotsInfo spotsInfo = mock(CourseInfo.MySpotsInfo.class);
+        when(spotService.getMySpotsDetailInfo(anyList(), anyLong())).thenReturn(spotsInfo);
+
+        var result = courseFacade.getMySpotsDetailInfo(List.of(1L, 2L), 1L);
+
+        assertThat(result).isInstanceOf(CourseInfo.MySpotsInfo.class);
     }
 }

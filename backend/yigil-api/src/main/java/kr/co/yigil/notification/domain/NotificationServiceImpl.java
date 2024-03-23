@@ -6,17 +6,21 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService{
     private final NotificationReader notificationReader;
     private final NotificationSender notificationSender;
-    @Transactional(readOnly = true)
+
+
     @Override
-    public Flux<ServerSentEvent<Notification>> getNotificationStream(Long memberId) {
-        return notificationReader.getNotificationStream(memberId);
+    public SseEmitter createEmitter(Long memberId) {
+        return notificationSender.createEmitter(memberId);
     }
 
     @Transactional
@@ -31,4 +35,12 @@ public class NotificationServiceImpl implements NotificationService{
         return notificationReader.getNotificationSlice(memberId, pageRequest);
     }
 
+    @Transactional
+    @Override
+    public void readNotification(Long memberId, List<Long> ids) {
+        for(Long notificationId: ids) {
+            Notification notification = notificationReader.getNotification(memberId, notificationId);
+            notification.read();
+        }
+    }
 }

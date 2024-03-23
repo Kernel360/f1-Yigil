@@ -1,15 +1,5 @@
 package kr.co.yigil.travel.spot.domain;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.List;
 import kr.co.yigil.comment.domain.CommentReader;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.AttachFile;
@@ -21,6 +11,8 @@ import kr.co.yigil.travel.spot.domain.SpotInfoDto.SpotPageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,6 +20,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SpotServiceImplTest {
@@ -62,7 +63,7 @@ class SpotServiceImplTest {
         SpotInfoDto.SpotAdditionalInfo additionalInfo = new SpotInfoDto.SpotAdditionalInfo(1, 1);
         when(favorReader.getFavorCount(any(Long.class))).thenReturn(additionalInfo.getFavorCount());
         when(commentReader.getCommentCount(any(Long.class))).thenReturn(
-            additionalInfo.getCommentCount());
+                additionalInfo.getCommentCount());
 
         SpotPageInfo result = spotServiceImpl.getSpots(pageable);
 
@@ -77,16 +78,19 @@ class SpotServiceImplTest {
     void whenGetSpot_thenShouldReturnSpotDetailInfo() {
         Long spotId = 1L;
         AttachFile mockAttachFile = new AttachFile(null, "url", "filename", 4L);
-        Place mockPlace = new Place(1L, "name", "address", 4.0, null, mockAttachFile,
-            mockAttachFile, LocalDateTime.now());
+        Point location = mock(Point.class);
+        Place mockPlace = new Place(1L, "name", "address", location, mockAttachFile,
+                mockAttachFile, LocalDateTime.now());
         AttachFiles attachFiles = new AttachFiles(List.of(mockAttachFile, mockAttachFile));
-        Spot spot = new Spot(1L, mock(Member.class), null, false, null, null, attachFiles,
-            mockPlace, 5.0);
+
+        Spot spot = new Spot(1L, mock(Member.class), location, false, null, null, attachFiles,
+                mockPlace, 5.0);
         when(spotReader.getSpot(spotId)).thenReturn(spot);
+        when(location.getCoordinate()).thenReturn(new Coordinate(1.0, 1.0));
         SpotInfoDto.SpotAdditionalInfo additionalInfo = new SpotInfoDto.SpotAdditionalInfo(1, 1);
         when(favorReader.getFavorCount(any(Long.class))).thenReturn(additionalInfo.getFavorCount());
         when(commentReader.getCommentCount(any(Long.class))).thenReturn(
-            additionalInfo.getCommentCount());
+                additionalInfo.getCommentCount());
 
         var result = spotServiceImpl.getSpot(spotId);
 

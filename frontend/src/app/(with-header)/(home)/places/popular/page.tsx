@@ -1,21 +1,24 @@
+export const dynamic = 'force-dynamic';
+
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
-import { getPopularPlaces } from '../../action';
-import { Place } from '@/app/_components/place';
+
+import { Place } from '@/app/_components/place/places';
+import { getPlaces } from '@/app/_components/place/places/action';
 
 export default async function PopularPlacesPage() {
   const memberJson = await authenticateUser();
   const memberInfo = myInfoSchema.safeParse(memberJson);
 
-  const result = await getPopularPlaces('more');
+  const result = await getPlaces('popular', 'more');
 
-  if (!result.success) {
-    console.log(result);
+  if (result.status === 'failed') {
+    console.log(result.message);
 
     return <main>Failed</main>;
   }
 
-  const places = result.data.places;
+  const places = result.data;
 
   return (
     <main className="px-4 max-w-full flex flex-col">
