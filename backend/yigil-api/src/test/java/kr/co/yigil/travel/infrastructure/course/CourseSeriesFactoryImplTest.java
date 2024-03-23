@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.infrastructure.course;
 
+import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
@@ -15,10 +16,10 @@ import org.locationtech.jts.io.ParseException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,11 +34,14 @@ public class CourseSeriesFactoryImplTest {
     @Mock
     private SpotReader spotReader;
 
+    @Mock
+    private FileUploader fileUploader;
+
     @InjectMocks
     private CourseSeriesFactoryImpl courseSeriesFactory;
 
     private Course course;
-    private Spot spot1, spot2;
+    private Spot spot1, spot2, spot3, spot4;
     private ModifyCourseRequest modifyCourseRequest;
 
     @BeforeEach
@@ -48,20 +52,25 @@ public class CourseSeriesFactoryImplTest {
         spot2 = mock(Spot.class);
         when(spot2.getId()).thenReturn(2L);
 
+        spot3 = mock(Spot.class);
+        spot4 = mock(Spot.class);
+
         course = mock(Course.class);
-        when(course.getSpots()).thenReturn(Arrays.asList(spot1, spot2));
+        when(course.getSpots()).thenReturn(Arrays.asList(spot1, spot2, spot4));
         when(course.getDescription()).thenReturn("New Course Description");
         when(course.getRate()).thenReturn(4.5);
 
         ModifySpotRequest modifySpotRequest1 = new ModifySpotRequest(1L, 3.0, "수정수정", null, null);
         ModifySpotRequest modifySpotRequest2 = new ModifySpotRequest(2L, 4.0, "수정수정2", null, null);
         List<ModifySpotRequest> modifySpotRequests = Arrays.asList(modifySpotRequest1, modifySpotRequest2);
-        List<Long> spotIdOrder = Arrays.asList(2L, 1L);
+        List<Long> spotIdOrder = Arrays.asList(2L, 1L, 3L);
 
-        modifyCourseRequest = new ModifyCourseRequest("New Course Description", 4.5, "new title", mock(LineString.class), spotIdOrder, modifySpotRequests);
+        modifyCourseRequest = new ModifyCourseRequest("New Course Description", 4.5, "new title", mock(LineString.class), mock(MultipartFile.class), spotIdOrder, modifySpotRequests);
 
         when(spotReader.getSpot(1L)).thenReturn(spot1);
         when(spotReader.getSpot(2L)).thenReturn(spot2);
+        when(spotReader.getSpot(3L)).thenReturn(spot3);
+
         when(spotSeriesFactory.modify(any(ModifySpotRequest.class), any(Spot.class)))
                 .thenAnswer(invocation -> invocation.getArgument(1));
     }
@@ -74,12 +83,15 @@ public class CourseSeriesFactoryImplTest {
         assertEquals("New Course Description", modifiedCourse.getDescription());
         assertEquals(4.5, modifiedCourse.getRate());
 
-        List<Long> updatedSpotIds = modifiedCourse.getSpots().stream().map(Spot::getId).collect(
-                Collectors.toList());
-        assertEquals(Arrays.asList(1L, 2L), updatedSpotIds);
+        List<Long> updatedSpotIds = modifiedCourse.getSpots().stream().map(Spot::getId).toList();
+        assertEquals(3, modifiedCourse.getSpots().size());
 
         verify(spotSeriesFactory, times(2)).modify(any(ModifySpotRequest.class), any(Spot.class));
-        verify(spotReader, times(1)).getSpot(1L);
-        verify(spotReader, times(1)).getSpot(2L);
+        verify(spot1, times(1)).changeInCourse();
+        verify(spot2, times(1)).changeInCourse();
+        verify(spot3, times(1)).changeInCourse();
+        verify(spot4, times(1)).changeOutOfCourse();
+        verify(course, times(1)).updateCourse(modifyCourseRequest.getTitle(), modifyCourseRequest.getDescription(), modifyCourseRequest.getRate(), modifyCourseRequest.getLineStringJson(), List.of(spot2, spot1, spot3), null);
+
     }
 }
