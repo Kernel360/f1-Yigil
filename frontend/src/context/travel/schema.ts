@@ -43,10 +43,16 @@ export const reviewSchema = z.object({
 });
 export type TReview = z.infer<typeof reviewSchema>;
 
-export const manyInputImageSchema = z
-  .array(inputImageSchema)
-  .min(0)
-  .max(IMAGES_COUNT);
+export const manyInputImageSchema = z.discriminatedUnion('type', [
+  z.object({
+    type: z.literal('new'),
+    data: z.array(inputImageSchema).min(0).max(IMAGES_COUNT),
+  }),
+  z.object({
+    type: z.literal('exist'),
+    data: z.array(z.string()).min(0).max(IMAGES_COUNT),
+  }),
+]);
 
 export const spotStateSchema = z.object({
   id: z.number().int().optional(),

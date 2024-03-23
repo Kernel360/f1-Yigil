@@ -2,19 +2,19 @@
 
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Container, Marker, NaverMap, useNavermaps } from 'react-naver-maps';
-import AddTravelSearchResult from '../AddTravelSearchResult';
+import AddTravelSearchResult from '../../AddTravelSearchResult';
 
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 import { isEqualPlace } from '@/context/travel/utils';
 
-import ChipCarousel from '../../ui/carousel/ChipCarousel';
-import ToastMsg from '../../ui/toast/ToastMsg';
-import { basicMarker } from '../../naver-map/markers/basicMarker';
-import { plusMarker } from '../../naver-map/markers/plusMarker';
+import ChipCarousel from '../../../ui/carousel/ChipCarousel';
+import ToastMsg from '../../../ui/toast/ToastMsg';
+import { basicMarker } from '../../../naver-map/markers/basicMarker';
+import { plusMarker } from '../../../naver-map/markers/plusMarker';
 
-import { getNumberMarker } from './util';
-import { getMap } from '../common/action';
+import { getNumberMarker } from '../util';
+import { getMap } from '../../common/action';
 import { SPOTS_COUNT } from '@/context/travel/schema';
 
 const defaultCenter = {

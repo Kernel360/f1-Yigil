@@ -17,16 +17,12 @@ export default function ImageInput({
 }: {
   availableSpace: number;
   images: TImageData[];
-  setImages: (newImages: TImageData[]) => void;
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
   invokeError: (title: string) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleUpload(fileList: FileList) {
-    // if (availableSpace === 0) {
-    //   throw Error('더 이상 추가할 수 없습니다!');
-    // }
-
     if (fileList.length > availableSpace) {
       throw Error(`${availableSpace}개 이상 추가할 수 없습니다!`);
     }
@@ -46,7 +42,7 @@ export default function ImageInput({
 
     const nextImages = [...images, ...deduplicated];
 
-    setImages(nextImages);
+    setImages({ type: 'new', data: nextImages });
   }
 
   function handleClick(event: EventFor<'input', 'onClick'>) {
