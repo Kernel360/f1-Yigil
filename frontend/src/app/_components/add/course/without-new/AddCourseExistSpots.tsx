@@ -12,6 +12,7 @@ import ExistPlaceItem from './ExistPlaceItem';
 
 import type { TMyPageSpot } from '@/types/myPageResponse';
 import { AddTravelExistsContext } from '@/context/exists/AddTravelExistsContext';
+import Pagination from '@/app/_components/mypage/Pagination';
 
 const sortOptions = [
   { label: '최신순', value: 'desc' },
@@ -31,6 +32,8 @@ export default function AddCourseExistSpots() {
 
   const [allSpots, setAllSpots] = useState<TMyPageSpot[]>([]);
   const [sortOption, setSortOption] = useState<string>('desc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   function handleSelect(id: number) {
     if (selectedSpotsId.includes(id)) {
@@ -43,7 +46,7 @@ export default function AddCourseExistSpots() {
 
   async function getMySpotsFromBackend(
     pageNo: number = 1,
-    size: number = 5,
+    size: number = 4,
     sortOrder?: string,
   ) {
     setIsLoading(true);
@@ -54,6 +57,7 @@ export default function AddCourseExistSpots() {
       setError(result.message);
     } else {
       setAllSpots(result.data.content);
+      setTotalPage(result.data.total_pages);
     }
 
     setTimeout(() => setError(''), 2000);
@@ -67,12 +71,17 @@ export default function AddCourseExistSpots() {
 
     setAllSpots([]);
     setSortOption(option);
-    getMySpotsFromBackend(1, 5, option);
+    setCurrentPage(1);
+    getMySpotsFromBackend(1, 4, option);
   }
 
   useEffect(() => {
     getMySpotsFromBackend();
   }, []);
+
+  useEffect(() => {
+    getMySpotsFromBackend(currentPage);
+  }, [currentPage]);
 
   return (
     <section className="flex flex-col grow">
@@ -84,19 +93,25 @@ export default function AddCourseExistSpots() {
           onChangeSelectOption={onChangeSelectOption}
         />
       </div>
-      {isLoading && (
+      {isLoading ? (
         <div className="flex justify-center items-center grow">
           <LoadingIndicator loadingText="데이터 로딩 중입니다..." />
         </div>
+      ) : (
+        allSpots.map((spot) => (
+          <ExistPlaceItem
+            key={spot.spot_id}
+            checked={selectedSpotsId.includes(spot.spot_id)}
+            handleSelect={() => handleSelect(spot.spot_id)}
+            spot={spot}
+          />
+        ))
       )}
-      {allSpots.map((spot) => (
-        <ExistPlaceItem
-          key={spot.spot_id}
-          checked={selectedSpotsId.includes(spot.spot_id)}
-          handleSelect={() => handleSelect(spot.spot_id)}
-          spot={spot}
-        />
-      ))}
+      <Pagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPage={totalPage}
+      />
       {error && <ToastMsg title={error} id={Date.now()} timer={2000} />}
     </section>
   );

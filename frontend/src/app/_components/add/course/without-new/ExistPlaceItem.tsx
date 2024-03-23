@@ -24,7 +24,7 @@ export default function ExistPlaceItem({
   handleSelect: () => void;
   checked: boolean;
 }) {
-  const { spot_id, place_name, image_url, rate, created_date } = spot;
+  const { place_name, image_url, rate, created_date } = spot;
 
   return (
     <article className="p-4 flex items-center border gap-4">
