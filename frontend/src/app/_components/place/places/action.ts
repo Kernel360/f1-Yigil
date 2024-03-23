@@ -9,7 +9,6 @@ import { cookies } from 'next/headers';
 import { backendErrorSchema, placeSchema } from '@/types/response';
 
 import type { TPlace } from '@/types/response';
-import { redirect } from 'next/navigation';
 
 /**
  * Client Component에서 Server Action을 실행할 때, 직렬화할 수 없는 복잡한 자료구조를 반환값으로 돌려줄 수 없음

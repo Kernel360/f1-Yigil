@@ -12,19 +12,19 @@ export default async function SpotsPage({
   params: { id: number };
 }) {
   const memberJson = await authenticateUser();
-  const memberResult = myInfoSchema.safeParse(memberJson);
 
+  const memberResult = myInfoSchema.safeParse(memberJson);
   const memberStatus: TMemberStatus = memberResult.success
     ? { member: memberResult.data, isLoggedIn: 'true' }
     : { isLoggedIn: 'false' };
 
-  const spotsResult = await getSpots(params.id);
+  const result = await getSpots(params.id);
 
-  if (!spotsResult.success) {
-    return <section>Failed to get spots</section>;
+  if (!result.success) {
+    throw result.error;
   }
 
-  const { spots, has_next } = spotsResult.data;
+  const { spots, has_next } = result.data;
 
   return (
     <MemberProvider status={memberStatus}>

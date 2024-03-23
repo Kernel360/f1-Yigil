@@ -1,7 +1,11 @@
 package kr.co.yigil.place.domain;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.domain.FileUploader;
+import kr.co.yigil.place.domain.PlaceCommand.PlaceMapCommand;
+import kr.co.yigil.place.domain.PlaceInfo.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +19,9 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceReader placeReader;
 
     @Override
-    @Transactional(readOnly = true)
-    public Page<Place> getPlaces(Pageable pageRequest) {
-        return placeReader.getPlaces(pageRequest);
+    public List<PlaceInfo.Map> getPlaces(PlaceMapCommand command) {
+        var places = placeReader.getPlaces(command.getStartX(), command.getStartY(), command.getEndX(), command.getEndY());
+        return places.stream().map(Map::new).collect(Collectors.toList());
     }
 
     @Override

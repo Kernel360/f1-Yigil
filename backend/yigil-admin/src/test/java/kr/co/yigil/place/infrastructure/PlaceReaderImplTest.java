@@ -18,6 +18,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -33,13 +34,12 @@ class PlaceReaderImplTest {
 
     @Test
     void getPlaces() {
-        Page<Place> page = new PageImpl<>(List.of(mock(Place.class)));
-        when(placeRepository.findAll(any(Pageable.class))).thenReturn(page);
+        Place place = mock(Place.class);
+        when(placeRepository.findWithinCoordinates(anyDouble(), anyDouble(), anyDouble(), anyDouble())).thenReturn(List.of(place));
 
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Place> result = placeReader.getPlaces(pageable);
+        List<Place> result = placeReader.getPlaces(1, 1, 1, 1);
 
-        assertEquals(page, result);
+        assertEquals(List.of(place), result);
     }
 
     @Test

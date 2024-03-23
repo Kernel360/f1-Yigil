@@ -4,7 +4,7 @@ import {
   PopularPlaces,
   RecommendedPlaces,
   RegionPlaces,
-} from '@/app/_components/place';
+} from '@/app/_components/place/places';
 import DummyPlaces from '@/app/_components/place/dummy/DummyPlaces';
 
 import { getInterestedRegions, getRegionPlaces } from './action';

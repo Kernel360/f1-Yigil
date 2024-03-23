@@ -398,7 +398,7 @@ async function parseAddCourseState(course: TCourseState): Promise<FormData> {
       );
       formData.append(
         `spotRegisterRequests[${index}].placeImageFile`,
-        staticMapFile,
+        spotImages[index][0],
       );
     }
   });

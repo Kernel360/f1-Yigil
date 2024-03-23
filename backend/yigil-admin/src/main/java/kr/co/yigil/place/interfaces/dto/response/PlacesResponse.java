@@ -1,5 +1,6 @@
 package kr.co.yigil.place.interfaces.dto.response;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlacesResponse {
-    private Page<PlaceInfoDto> places;
+    private List<PlaceInfoDto> places;
 
     @Data
     public static class PlaceInfoDto {
