@@ -3,9 +3,9 @@
 import { useContext, useState } from 'react';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 
-import { InfoTitle } from '../common';
-import CourseImageHandler from '../../images/CourseImageHandler';
-import SelectSpot from './SelectSpot';
+import { InfoTitle } from '../../common';
+import CourseImageHandler from '../../../images/CourseImageHandler';
+import SelectSpot from '../SelectSpot';
 
 export default function AddCourseImages() {
   const [state] = useContext(CourseContext);

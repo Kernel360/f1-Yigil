@@ -13,7 +13,7 @@ export interface TSpotAction {
 
 export const initialSpotState: TSpotState = {
   place: { name: '', address: '', mapImageUrl: '', coords: { lng: 0, lat: 0 } },
-  images: [],
+  images: { type: 'new', data: [] },
   review: { rate: 1, content: '' },
 };
 
@@ -42,7 +42,7 @@ export default function reducer(
        * @todo SET_ERROR for Toast
        */
       if (!result.success) {
-        console.error(result.error.message);
+        console.error(result.error.issues);
         return { ...state };
       }
 

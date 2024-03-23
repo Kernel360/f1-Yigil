@@ -4,11 +4,11 @@ import { useContext, useState } from 'react';
 import { CourseContext } from '@/context/travel/course/CourseContext';
 import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
 
-import { InfoTitle } from '../common';
-import AddTravelSearchBar from '../AddTravelSearchBar';
+import { InfoTitle } from '../../common';
+import AddTravelSearchBar from '../../AddTravelSearchBar';
 
-import SelectSpot from './SelectSpot';
-import AddTravelPlaceInfo from '../AddTravelPlaceInfo';
+import SelectSpot from '../SelectSpot';
+import AddTravelPlaceInfo from '../../AddTravelPlaceInfo';
 import AddCourseMap from './AddCourseMap';
 
 export default function AddCourseNewPlace() {

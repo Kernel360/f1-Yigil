@@ -8,27 +8,16 @@ import { CourseWithoutNewStepContext } from '@/context/travel/step/course/Course
 import CourseProgress from './CourseProgress';
 import CourseNavigation from './CourseNavigation';
 import AddCourseData from './AddCourseData';
-import AddCourseSelectPlaceNavigation from './AddCourseSelectPlaceNavigation';
-import ToastMsg from '../../ui/toast/ToastMsg';
+import AddCourseSelectPlaceNavigation from './with-new/AddCourseSelectPlaceNavigation';
 
 export default function AddCourseContent() {
   const [state, dispatchAddTravelMap] = useContext(AddTravelMapContext);
-  const [withNew, dispatchWithNew] = useContext(CourseWithNewStepContext);
-  const [withoutNew, dispatchWithoutNew] = useContext(
-    CourseWithoutNewStepContext,
-  );
-
-  const [error, setError] = useState('');
+  const [withNew] = useContext(CourseWithNewStepContext);
+  const [withoutNew] = useContext(CourseWithoutNewStepContext);
 
   const [method, setMethod] = useState<'with-new' | 'without-new'>('with-new');
 
   function onSelectMethod(nextMethod: 'with-new' | 'without-new') {
-    if (nextMethod === 'without-new') {
-      setError('준비 중입니다!');
-      setTimeout(() => setError(''), 2000);
-      return;
-    }
-
     setMethod(nextMethod);
   }
 
@@ -41,12 +30,7 @@ export default function AddCourseContent() {
         {state.isMapOpen ? (
           <AddCourseSelectPlaceNavigation />
         ) : (
-          <CourseNavigation
-            step={method === 'with-new' ? withNew : withoutNew}
-            dispatchStep={
-              method === 'with-new' ? dispatchWithNew : dispatchWithoutNew
-            }
-          />
+          <CourseNavigation method={method} />
         )}
       </div>
       <div className="flex flex-col grow">
@@ -59,7 +43,6 @@ export default function AddCourseContent() {
         )}
         <AddCourseData method={method} onSelect={onSelectMethod} />
       </div>
-      {error && <ToastMsg id={Date.now()} title={error} timer={2000} />}
     </section>
   );
 }
