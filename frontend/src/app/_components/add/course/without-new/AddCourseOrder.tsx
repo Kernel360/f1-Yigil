@@ -30,7 +30,7 @@ import SortableSpot from './SortableSpot';
 
 export default function AddCourseOrder() {
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 0.01 } }),
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
