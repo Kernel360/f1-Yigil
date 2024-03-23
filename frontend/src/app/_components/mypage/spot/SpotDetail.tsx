@@ -22,9 +22,11 @@ export interface TModifyDetail {
 export default function SpotDetail({
   spotDetail,
   spotId,
+  isLoggedIn,
 }: {
   spotDetail: TMyPageSpotDetail;
   spotId: number;
+  isLoggedIn: boolean;
 }) {
   const {
     rate,
@@ -101,17 +103,20 @@ export default function SpotDetail({
         <span className="text-2xl font-light">
           {isModifyMode ? '기록 수정' : '장소 기록'}
         </span>
-
-        <button
-          className={`${isModifyMode ? 'text-main' : 'text-gray-500'} py-2`}
-          onClick={() => setIsModifyMode(true)}
-        >
-          {isModifyMode ? (
-            <span onClick={() => setIsDialogOpened(true)}>완료</span>
-          ) : (
-            '수정'
-          )}
-        </button>
+        {isLoggedIn ? (
+          <button
+            className={`${isModifyMode ? 'text-main' : 'text-gray-500'} py-2`}
+            onClick={() => setIsModifyMode(true)}
+          >
+            {isModifyMode ? (
+              <span onClick={() => setIsDialogOpened(true)}>완료</span>
+            ) : (
+              '수정'
+            )}
+          </button>
+        ) : (
+          <div></div>
+        )}
       </nav>
       <section className="h-full p-2 flex flex-col gap-5 grow justify-between">
         <div className="flex justify-between items-center">

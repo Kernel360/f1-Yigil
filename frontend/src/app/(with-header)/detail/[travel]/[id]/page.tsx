@@ -1,9 +1,11 @@
 import CourseDetail from '@/app/_components/mypage/course/CourseDetail';
+import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import {
   getCourseDetail,
   getSpotDetail,
 } from '@/app/_components/mypage/hooks/myPageActions';
 import SpotDetail from '@/app/_components/mypage/spot/SpotDetail';
+import { myInfoSchema } from '@/types/response';
 import React from 'react';
 
 export default async function SpotDetailPage({
@@ -11,6 +13,9 @@ export default async function SpotDetailPage({
 }: {
   params: { id: number; travel: string };
 }) {
+  const user = await authenticateUser();
+  const parsedUser = myInfoSchema.safeParse(user);
+  const isLoggedIn = parsedUser.success;
   if (params.travel === 'spot') {
     const spotDetail = await getSpotDetail(params.id);
 
@@ -21,7 +26,13 @@ export default async function SpotDetailPage({
         </div>
       );
 
-    return <SpotDetail spotDetail={spotDetail.data} spotId={params.id} />;
+    return (
+      <SpotDetail
+        spotDetail={spotDetail.data}
+        spotId={params.id}
+        isLoggedIn={isLoggedIn}
+      />
+    );
   } else {
     const courseDetail = await getCourseDetail(params.id);
     if (!courseDetail.success)
@@ -32,7 +43,11 @@ export default async function SpotDetailPage({
       );
 
     return (
-      <CourseDetail courseDetail={courseDetail.data} courseId={params.id} />
+      <CourseDetail
+        courseDetail={courseDetail.data}
+        courseId={params.id}
+        isLoggedIn={isLoggedIn}
+      />
     );
   }
 }

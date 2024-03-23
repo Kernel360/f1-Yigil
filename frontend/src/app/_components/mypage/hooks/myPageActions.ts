@@ -1,7 +1,6 @@
 'use server';
 
 import {
-  TMyPageSpotDetail,
   myPageCourseListSchema,
   myPageSpotListSchema,
   mypageCourseDetailSchema,
@@ -264,10 +263,10 @@ export const patchSpotDetail = async (
 
 export const getCourseDetail = async (courseId: number) => {
   const BASE_URL = await getBaseUrl();
-  const cookie = cookies().get(`SESSION`)?.value;
+
   const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
-    headers: {
-      Cookie: `SESSION=${cookie}`,
+    next: {
+      tags: [`courseDetail/${courseId}`],
     },
   });
   const result = await res.json();
@@ -275,35 +274,62 @@ export const getCourseDetail = async (courseId: number) => {
   return courseDetail;
 };
 
-export const patchCourseDetail = (
+export const patchCourseDetail = async (
   courseId: number,
   modifiedData: TModifyCourse,
 ) => {
-  const { title, description, rate, spotIdOrder, spots } = modifiedData;
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
+  const {
+    title,
+    description,
+    rate,
+    spotIdOrder,
+    spots,
+    line_string_json,
+    map_static_image_url,
+  } = modifiedData;
   const formData = new FormData();
 
   formData.append('title', title);
   formData.append('description', description);
-  formData.append('rate', rate);
-  spotIdOrder.forEach((id) => formData.append('spotIdOrder', id));
+  formData.append('rate', rate.toString());
+  formData.append('lineStringJson', JSON.stringify(line_string_json));
+  spotIdOrder.forEach((id) => formData.append('spotIdOrder', id.toString()));
 
-  const originalSpotImages = spots.map((spot) =>
-    spot.image_url_list.map((image) => {
-      if (!image.uri.startsWith('data')) {
-        return {
-          imageUrl: image.uri,
-          index: Number(image.filename),
-        };
+  if (!map_static_image_url.includes('yigil')) {
+    // name 부분 수정 가능성 있음.
+    formData.append(
+      'mapStaticImageFile',
+      new File(
+        [dataUrlToBlob(map_static_image_url)],
+        `${title} 코스 이미지.png`,
+        {
+          type: 'image/png',
+        },
+      ),
+    );
+  }
+
+  spots.forEach((spot, firstIdx) =>
+    spot.image_url_list.forEach((image, secondIdx) => {
+      if (image.uri.startsWith('data')) {
+        formData.append(
+          `courseSpotUpdateRequests[${firstIdx}].updateSpotImages[${secondIdx}].index`,
+          secondIdx.toString(),
+        );
+      } else {
+        formData.append(
+          `courseSpotUpdateRequests[${firstIdx}].originalSpotImages[${secondIdx}].imageUrl`,
+          cdnPathToRelativePath(image.uri),
+        );
+        formData.append(
+          `courseSpotUpdateRequests[${firstIdx}].originalSpotImages[${secondIdx}].index`,
+          image.filename,
+        );
       }
     }),
   );
-  const updateSpotImagesIdx = spots
-    .map((spot) =>
-      spot.image_url_list.map((image, idx) => {
-        if (image.uri.startsWith('data')) return idx;
-      }),
-    )
-    .filter((i) => i !== undefined);
 
   const updateSpotImages = spots.map((spot) =>
     spot.image_url_list
@@ -313,34 +339,41 @@ export const patchCourseDetail = (
             type: getMIMETypeFromDataURI(uri),
           });
       })
-      .filter((i) => i !== undefined),
+      .filter((image) => image),
   );
 
-  updateSpotImages.forEach((updatedSpot, frontIdx) => {
-    updatedSpot.forEach((spot, behindIdx) => {
+  spots.forEach((spot, idx) => {
+    formData.append(`courseSpotUpdateRequests[${idx}].id`, spot.id.toString());
+    formData.append(
+      `courseSpotUpdateRequests[${idx}].rate`,
+      spot.rate.toString(),
+    );
+    formData.append(
+      `courseSpotUpdateRequests[${idx}].description`,
+      spot.description,
+    );
+  });
+  updateSpotImages.forEach((updatedSpot, firstIdx) => {
+    updatedSpot.forEach((spot, secondIdx) => {
       if (spot) {
         formData.append(
-          `courseSpotUpdateRequest[${frontIdx}].updateSpotImages[${behindIdx}].imageFile`,
+          `courseSpotUpdateRequests[${
+            firstIdx + 1
+          }].updateSpotImages[${secondIdx}].imageFile`,
           spot,
         );
       }
     });
   });
 
-  const updateRequest = {
-    title: title,
-    rate: rate,
-    spotIdOrder: spotIdOrder,
-    courseSpotUpdateRequests: spots.map((spot) => {
-      return {
-        id: spot.order,
-        description: spot.description,
-        rate: spot.rate,
-        originalSpotImages,
-        updateSpotImagesIdx,
-      };
-    }),
-  };
-  formData.append('courseSpotUpdateRequest', JSON.stringify(updateRequest));
-  console.log(formData);
+  // const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
+  //   method: 'POST',
+  //   headers: {
+  //     Cookie: `SESSION=${cookie}`,
+  //   },
+  //   body: formData,
+  // });
+  // if (res.ok) {
+  //   revalidateTag(`courseDetail/${courseId}`);
+  // }
 };

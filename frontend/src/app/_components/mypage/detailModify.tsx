@@ -47,6 +47,7 @@ export const TitleInput = ({
       placeholder={title}
       value={title}
       onChange={onChange}
+      maxLength={20}
     />
   );
 };

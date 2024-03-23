@@ -1,3 +1,4 @@
+import { TLineString, lineStringSchema } from '@/context/travel/schema';
 import { z } from 'zod';
 
 export const myPageSpotItemSchema = z.object({
@@ -81,11 +82,13 @@ export const mypageSpotDetailSchema = z.object({
 
 export type TMyPageSpotDetail = z.infer<typeof mypageSpotDetailSchema>;
 
-const myPageCourseDetailSpot = z.object({
+const myPageCourseDetailSpotSchema = z.object({
+  id: z.number(),
   order: z.string(),
   place_name: z.string(),
+  place_address: z.string(),
   image_url_list: z.array(z.string()),
-  rate: z.string(),
+  rate: z.number(),
   description: z.string(),
   create_date: z.coerce
     .date()
@@ -94,12 +97,15 @@ const myPageCourseDetailSpot = z.object({
 
 export const mypageCourseDetailSchema = z.object({
   title: z.string(),
-  rate: z.string(),
+  rate: z.number(),
   map_static_image_url: z.string(),
   description: z.string(),
-  spots: z.array(myPageCourseDetailSpot),
+  line_string_json: z.string().transform((json) => JSON.parse(json)),
+  spots: z.array(myPageCourseDetailSpotSchema),
 });
 
 export type TMyPageCourseDetail = z.infer<typeof mypageCourseDetailSchema>;
 
-export type TMyPageCourseDetailSpot = z.infer<typeof myPageCourseDetailSpot>;
+export type TMyPageCourseDetailSpot = z.infer<
+  typeof myPageCourseDetailSpotSchema
+>;
