@@ -317,12 +317,15 @@ public class CourseApiControllerTest {
     @DisplayName("updateCourse 메서드가 잘 동작하는지")
     @Test
     void updateCourse_ShouldReturnOk() throws Exception {
+        MockMultipartFile mapStaticImage = new MockMultipartFile("image", "image.jpg", "image/jpeg",
+                "<<jpg data>>".getBytes());
         MockMultipartFile image1 = new MockMultipartFile("image", "image.jpg", "image/jpeg",
                 "<<jpg data>>".getBytes());
 
         String requestBody = "{\"title\" : \"new title\",\"description\" : \"test\", \"rate\" : 4.5, \"lineStringJson\": \"{\\\"type\\\" : \\\"LineString\\\", \\\"coordinates\\\" : [[1, 2], [3, 4]]}\",\"spotIdOrder\" : [1, 2], \"courseSpotUpdateRequests\" : [{\"id\" : 1, \"description\" : \"test\", \"rate\" : 4.5, \"originalSpotImages\" : [{\"imageUrl\" : \"images/spot.jpg\", \"index\" : 1}], \"updateSpotImages\" : [{\"index\" : 1}]}]}";
 
         mockMvc.perform(multipart("/api/v1/courses/{courseId}", 1L)
+                        .file("mapStaticImage", mapStaticImage.getBytes())
                         .file("courseSpotUpdateRequests[0].updateSpotImages[0].imageFile",
                                 image1.getBytes())
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -336,6 +339,7 @@ public class CourseApiControllerTest {
                                 parameterWithName("courseId").description("코스 아이디")
                         ),
                         requestParts(
+                                partWithName("mapStaticImage").description("코스 맵 스태틱 이미지 파일"),
                                 partWithName(
                                         "courseSpotUpdateRequests[0].updateSpotImages[0].imageFile").description(
                                         "스팟 관련 이미지 파일")
