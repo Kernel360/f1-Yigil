@@ -68,8 +68,21 @@ export default function Spots({
     };
   }, [endRef, hasNext, onScroll]);
 
+  if (spots.length === 0) {
+    return (
+      <section className="w-full aspect-square flex flex-col justify-center items-center text-center">
+        <div className="flex flex-col gap-6">
+          <span className="text-6xl">🍃</span>
+          <span className="text-2xl break-keep">
+            장소에 대한 리뷰가 없습니다.
+          </span>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="pt-6">
+    <section className="pt-4">
       {spots.map((spot, index) => (
         <Spot placeId={placeId} key={index} data={spot} />
       ))}

@@ -8,7 +8,7 @@ import Spinner from '@/app/_components/ui/Spinner';
 import BookmarkIcon from '/public/icons/bookmark.svg';
 
 import type { EventFor } from '@/types/type';
-import { postBookmark } from './action';
+import { postBookmark } from './places/action';
 import { postSpotResponseSchema } from '@/types/response';
 
 export default function BookmarkButton({

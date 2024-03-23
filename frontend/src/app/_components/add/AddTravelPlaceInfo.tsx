@@ -21,7 +21,7 @@ export default function AddTravelPlaceInfo({
       </div>
       <div className="px-4 flex justify-between items-center">
         <span className="pr-8 text-lg text-gray-400 shrink-0">주소</span>
-        <span className="text-xl font-medium text-end">
+        <span className="text-xl font-medium text-end break-keep">
           {address.replace('&amp;', '&')}
         </span>
       </div>

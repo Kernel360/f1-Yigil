@@ -4,7 +4,7 @@ import StarIcon from '/public/icons/star.svg';
 import BookmarkIcon from '/public/icons/bookmark.svg';
 import IconWithCounts from '../../IconWithCounts';
 import { TMyPageBookmark } from '@/types/myPageResponse';
-import { postBookmark } from '../../place/action';
+import { postBookmark } from '../../place/places/action';
 import ToastMsg from '../../ui/toast/ToastMsg';
 
 export default function MyPageBookmarkItem({
