@@ -86,6 +86,12 @@ async function canGoNext(
         }
       }
 
+      if (method === 'without-new') {
+        if (course.review.content.trim() === '') {
+          return '코스에 대한 리뷰를 작성해주세요!';
+        }
+      }
+
       if (
         course.review.title === undefined ||
         course.review.title.trim() === ''
