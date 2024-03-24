@@ -1,7 +1,5 @@
 package kr.co.yigil.travel.domain.spot;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.member.Member;
@@ -14,6 +12,9 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class SpotCommand {
 
     @Getter
@@ -22,7 +23,6 @@ public class SpotCommand {
     public static class RegisterSpotRequest {
 
         private final String pointJson;
-        private final String title;
         private final String description;
         private final double rate;
         private final List<MultipartFile> files;
@@ -33,7 +33,6 @@ public class SpotCommand {
                     member,
                     GeojsonConverter.convertToPoint(pointJson),
                     isInCourse,
-                    title,
                     description,
                     attachFiles,
                     place,
@@ -48,7 +47,6 @@ public class SpotCommand {
     public static class RegisterPlaceRequest {
 
         private final MultipartFile mapStaticImageFile;
-        private final MultipartFile placeImageFile;
         private final String placeName;
         private final String placeAddress;
         private final String placePointJson;

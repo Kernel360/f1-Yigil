@@ -2,6 +2,7 @@ package kr.co.yigil.travel.domain.spot;
 
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
@@ -78,8 +79,8 @@ public class SpotServiceImpl implements SpotService {
 			throw new BadRequestException(ExceptionCode.SPOT_ALREADY_EXIST_IN_PLACE);
 		}
 
-		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
 		var attachFiles = spotSeriesFactory.initAttachFiles(command);
+		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest(), attachFiles.getFiles().getFirst()));
 		placeCacheStore.incrementSpotCountInPlace(place.getId());
 		placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), command.getRate());
 		spotStore.store(command.toEntity(member, place, false, attachFiles));
@@ -113,8 +114,7 @@ public class SpotServiceImpl implements SpotService {
 		spotStore.remove(spot);
     }
 
-    private Place registerNewPlace(RegisterPlaceRequest command) {
-        var placeImageFile = fileUploader.upload(command.getPlaceImageFile());
+    private Place registerNewPlace(RegisterPlaceRequest command, AttachFile placeImageFile) {
         var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
         return placeStore.store(command.toEntity(placeImageFile, mapStaticImage));
     }

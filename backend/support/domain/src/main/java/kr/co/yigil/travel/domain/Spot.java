@@ -35,10 +35,9 @@ public class Spot extends Travel {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    public Spot(final Long id, final Member member, final Point location, final boolean isInCourse,
-        final String title, final String description, final AttachFiles attachFiles,
+    public Spot(final Long id, final Member member, final Point location, final boolean isInCourse, final String description, final AttachFiles attachFiles,
         final Place place, final double rate) {
-        super(id, member, title, description, rate, false);
+        super(id, member, "", description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
@@ -47,10 +46,10 @@ public class Spot extends Travel {
     }
 
 
-    public Spot(final Member member, final Point location, final boolean isInCourse, final String title,
+    public Spot(final Member member, final Point location, final boolean isInCourse,
             final String description, final AttachFiles attachFiles, final Place place,
             final double rate) {
-        super(member, title, description, rate, false);
+        super(member, "", description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;
         this.attachFiles = attachFiles;
