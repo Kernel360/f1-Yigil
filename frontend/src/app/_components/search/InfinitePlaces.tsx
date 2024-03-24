@@ -10,19 +10,24 @@ import { searchPlaces } from './action';
 import type { TPlace } from '@/types/response';
 
 export default function InfinitePlaces({
-  content,
-  hasNext,
-  currentPage,
+  initialContent,
+  initialHasNext,
 }: {
-  content: TPlace[];
-  hasNext: boolean;
-  currentPage: number;
+  initialContent: TPlace[];
+  initialHasNext: boolean;
+  // content: TPlace[];
+  // hasNext: boolean;
+  // currentPage: number;
 }) {
   const [state, dispatch] = useContext(SearchContext);
   const { isLoggedIn } = useContext(MemberContext);
 
   const [isLoading, setIsLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+
+  const [content, setContent] = useState(initialContent);
+  const [hasNext, setHasNext] = useState(initialHasNext);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onScroll: IntersectionObserverCallback = useCallback(
     async (entries) => {
@@ -32,16 +37,22 @@ export default function InfinitePlaces({
 
       setIsLoading(true);
 
-      const json = await searchPlaces(state.keyword, currentPage + 1);
+      const result = await searchPlaces(state.keyword, currentPage + 1);
 
-      dispatch({
-        type: 'MORE_PLACE',
-        payload: { json, nextPage: currentPage + 1 },
-      });
+      if (result.status === 'failed') {
+        // Toast
+        console.log(result.message);
+        setIsLoading(false);
+        return;
+      }
+
+      setContent([...content, ...result.data.places]);
+      setCurrentPage(currentPage + 1);
+      setHasNext(result.data.has_next);
 
       setIsLoading(false);
     },
-    [state.keyword, currentPage, dispatch],
+    [state.keyword, currentPage, content],
   );
 
   useEffect(() => {

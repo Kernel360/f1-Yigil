@@ -6,18 +6,7 @@ import { revalidateTag } from 'next/cache';
 import { getBaseUrl } from '@/app/utilActions';
 import { backendErrorSchema, postResponseSchema } from '@/types/response';
 
-interface TBackendRequestFailed {
-  status: 'failed';
-  message: string;
-  code?: number;
-}
-interface TBackendRequestSucceed<T> {
-  status: 'succeed';
-  data: T;
-}
-type TBackendRequestResult<T> =
-  | TBackendRequestFailed
-  | TBackendRequestSucceed<T>;
+import type { TBackendRequestResult } from '@/types/response';
 
 export async function postLikeCourse(
   travelId: number,

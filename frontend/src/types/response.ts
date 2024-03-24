@@ -1,5 +1,18 @@
 import { ZodType, ZodTypeDef, z } from 'zod';
 
+interface TBackendRequestFailed {
+  status: 'failed';
+  message: string;
+  code?: number;
+}
+interface TBackendRequestSucceed<T> {
+  status: 'succeed';
+  data: T;
+}
+export type TBackendRequestResult<T> =
+  | TBackendRequestFailed
+  | TBackendRequestSucceed<T>;
+
 export const postResponseSchema = z.object({
   message: z.string(),
 });

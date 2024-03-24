@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
 import { searchCourses, searchPlaces } from './action';
 
@@ -65,9 +65,15 @@ export default function TravelSearchResult() {
 
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    const json = await searchPlaces(state.keyword);
+    const result = await searchPlaces(state.keyword);
 
-    dispatch({ type: 'SEARCH_PLACE', payload: json });
+    if (result.status === 'failed') {
+      // Toast
+      dispatch({ type: 'SET_LOADING', payload: false });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_PLACE', payload: result.data });
     dispatch({ type: 'SET_LOADING', payload: false });
   }
 
@@ -78,9 +84,15 @@ export default function TravelSearchResult() {
 
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    const json = await searchCourses(state.keyword);
+    const result = await searchCourses(state.keyword);
 
-    dispatch({ type: 'SEARCH_COURSE', payload: json });
+    if (result.status === 'failed') {
+      // Toast
+      dispatch({ type: 'SET_LOADING', payload: false });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_COURSE', payload: result.data });
     dispatch({ type: 'SET_LOADING', payload: false });
   }
 
@@ -113,9 +125,8 @@ export default function TravelSearchResult() {
       ) : data.type === 'place' ? (
         <div className="flex grow">
           <InfinitePlaces
-            content={data.places}
-            hasNext={data.hasNext}
-            currentPage={data.currentPage}
+            initialContent={data.places}
+            initialHasNext={data.hasNext}
           />
         </div>
       ) : (
@@ -124,9 +135,8 @@ export default function TravelSearchResult() {
             checkBatchimEnding(state.currentTerm) ? '이' : '가'
           } 포함된 코스를 모두 검색하였습니다.`}</span>
           <InfiniteCourses
-            content={data.courses}
-            hasNext={data.hasNext}
-            currentPage={data.currentPage}
+            initialContent={data.courses}
+            initialHasNext={data.hasNext}
           />
         </div>
       )}

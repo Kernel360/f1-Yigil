@@ -13,14 +13,24 @@ export default function BackendSearchBar() {
     if (search.backendSearchType === 'place') {
       const result = await searchPlaces(term);
 
-      dispatch({ type: 'SEARCH_PLACE', payload: result });
+      if (result.status === 'failed') {
+        dispatch({ type: 'SET_ERROR', payload: result.message });
+        return;
+      }
+
+      dispatch({ type: 'SEARCH_PLACE', payload: result.data });
 
       return;
     }
 
     const result = await searchCourses(term);
 
-    dispatch({ type: 'SEARCH_COURSE', payload: result });
+    if (result.status === 'failed') {
+      dispatch({ type: 'SET_ERROR', payload: result.message });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_COURSE', payload: result.data });
   }
 
   function onCancel() {

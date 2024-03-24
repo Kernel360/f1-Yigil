@@ -1,9 +1,16 @@
 'use server';
 
+import { z } from 'zod';
+
 import { cookies } from 'next/headers';
 import { getBaseUrl } from '@/app/utilActions';
-import { dataWithAddressSchema, searchItemsSchema } from '@/types/response';
-
+import {
+  TBackendRequestResult,
+  backendErrorSchema,
+  courseSchema,
+  dataWithAddressSchema,
+  searchItemsSchema,
+} from '@/types/response';
 import { searchPlaceSchema } from '@/context/search/reducer';
 
 function searchUrl(keyword: string) {
@@ -118,12 +125,12 @@ export async function getCoords(
   return { status: 'succeed', content: { lng, lat } };
 }
 
-export async function searchPlaces(
+async function fetchSearchPlaces(
   keyword: string,
-  page: number = 1,
-  size: number = 5,
-  sortBy: 'latest_uploaded_time' | 'rate' = 'latest_uploaded_time',
-  sortOrder: 'desc' | 'asc' = 'desc',
+  page: number,
+  size: number,
+  sortBy: 'latest_uploaded_time' | 'rate',
+  sortOrder: 'desc' | 'asc',
 ) {
   const BASE_URL = await getBaseUrl();
   const session = cookies().get('SESSION')?.value;
@@ -143,6 +150,33 @@ export async function searchPlaces(
   return await response.json();
 }
 
+export async function searchPlaces(
+  keyword: string,
+  page: number = 1,
+  size: number = 5,
+  sortBy: 'latest_uploaded_time' | 'rate' = 'latest_uploaded_time',
+  sortOrder: 'desc' | 'asc' = 'desc',
+): Promise<TBackendRequestResult<z.infer<typeof searchPlaceSchema>>> {
+  const json = await fetchSearchPlaces(keyword, page, size, sortBy, sortOrder);
+
+  const error = backendErrorSchema.safeParse(json);
+
+  if (error.success) {
+    const { code, message } = error.data;
+    console.error(`${code} - ${message}`);
+    return { status: 'failed', message, code };
+  }
+
+  const result = searchPlaceSchema.safeParse(json);
+
+  if (!result.success) {
+    console.error('알 수 없는 에러입니다!');
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  return { status: 'succeed', data: result.data };
+}
+
 export async function keywordSuggestions(keyword: string) {
   const BASE_URL = await getBaseUrl();
 
@@ -156,12 +190,17 @@ export async function keywordSuggestions(keyword: string) {
   return await response.json();
 }
 
-export async function searchCourses(
+const searchCourseSchema = z.object({
+  courses: z.array(courseSchema),
+  has_next: z.boolean(),
+});
+
+async function fetchSearchCourses(
   keyword: string,
-  page: number = 1,
-  size: number = 5,
-  sortBy: 'created_at' | 'rate' | 'name' = 'created_at',
-  sortOrder: 'desc' | 'asc' = 'desc',
+  page: number,
+  size: number,
+  sortBy: 'created_at' | 'rate' | 'name',
+  sortOrder: 'desc' | 'asc',
 ) {
   const BASE_URL = await getBaseUrl();
   const session = cookies().get('SESSION')?.value;
@@ -179,4 +218,31 @@ export async function searchCourses(
   });
 
   return await response.json();
+}
+
+export async function searchCourses(
+  keyword: string,
+  page: number = 1,
+  size: number = 5,
+  sortBy: 'created_at' | 'rate' | 'name' = 'created_at',
+  sortOrder: 'desc' | 'asc' = 'desc',
+): Promise<TBackendRequestResult<z.infer<typeof searchCourseSchema>>> {
+  const json = await fetchSearchCourses(keyword, page, size, sortBy, sortOrder);
+
+  const error = backendErrorSchema.safeParse(json);
+
+  if (error.success) {
+    const { code, message } = error.data;
+    console.error(`${code} - ${message}`);
+    return { status: 'failed', message, code };
+  }
+
+  const result = searchCourseSchema.safeParse(json);
+
+  if (!result.success) {
+    console.error('알 수 없는 에러입니다!');
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  return { status: 'succeed', data: result.data };
 }

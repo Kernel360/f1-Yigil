@@ -40,8 +40,6 @@ export type TSearchState = {
 
   backendSearchType: 'place' | 'course';
 
-  // type: 'searchEngine' | 'place' | 'course';
-
   results:
     | { status: 'start' }
     | { status: 'failed'; message: string }
@@ -57,7 +55,6 @@ export type TSearchState = {
               data: {
                 type: 'place';
                 hasNext: boolean;
-                currentPage: number;
                 places: TPlace[];
               };
             }
@@ -66,7 +63,6 @@ export type TSearchState = {
               data: {
                 type: 'course';
                 hasNext: boolean;
-                currentPage: number;
                 courses: TCourse[];
               };
             };
@@ -111,7 +107,6 @@ export type TSearchAction = {
     | 'SET_LOADING'
     | 'SET_ERROR'
     | 'SEARCH_PLACE'
-    | 'MORE_PLACE'
     | 'SEARCH_COURSE'
     | 'SEARCH_NAVER';
   payload?: any;
@@ -235,45 +230,12 @@ export default function reducer(
             from: 'backend',
             data: {
               type: 'place',
-              currentPage: 1,
               places,
               hasNext: has_next,
             },
           },
         },
       };
-    }
-
-    case 'MORE_PLACE': {
-      const json = action.payload.json;
-      const page = action.payload.nextPage;
-
-      const searchPlaceResult = searchPlaceSchema.safeParse(json);
-      const nextPageResult = pageSchema.safeParse(page);
-
-      if (searchPlaceResult.success && nextPageResult.success) {
-        const { places, has_next } = searchPlaceResult.data;
-
-        if (
-          state.result.status === 'backend' &&
-          state.result.data.type === 'place'
-        ) {
-          return {
-            ...state,
-            result: {
-              status: 'backend',
-              data: {
-                type: 'place',
-                currentPage: nextPageResult.data,
-                content: [...state.result.data.content, ...places],
-                hasNext: has_next,
-              },
-            },
-          };
-        }
-      }
-
-      return { ...state };
     }
 
     case 'SEARCH_COURSE': {
@@ -301,7 +263,6 @@ export default function reducer(
               type: 'course',
               hasNext: result.data.has_next,
               courses: result.data.courses,
-              currentPage: 1,
             },
           },
         },

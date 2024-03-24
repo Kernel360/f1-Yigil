@@ -1,28 +1,29 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-// import { Place } from '../place/places';
 
 import { SearchContext } from '@/context/search/SearchContext';
-import { MemberContext } from '@/context/MemberContext';
-import { searchPlaces } from './action';
+import { searchCourses } from './action';
 
-import type { TCourse } from '@/types/response';
 import Course from '../course/Course';
 
+import type { TCourse } from '@/types/response';
+
 export default function InfiniteCourses({
-  content,
-  hasNext,
-  currentPage,
+  initialContent,
+  initialHasNext,
 }: {
-  content: TCourse[];
-  hasNext: boolean;
-  currentPage: number;
+  initialContent: TCourse[];
+  initialHasNext: boolean;
 }) {
-  const [state, dispatch] = useContext(SearchContext);
+  const [state] = useContext(SearchContext);
 
   const [isLoading, setIsLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+
+  const [content, setContent] = useState(initialContent);
+  const [hasNext, setHasNext] = useState(initialHasNext);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onScroll: IntersectionObserverCallback = useCallback(
     async (entries) => {
@@ -32,16 +33,22 @@ export default function InfiniteCourses({
 
       setIsLoading(true);
 
-      const json = await searchPlaces(state.keyword, currentPage + 1);
+      const result = await searchCourses(state.keyword, currentPage + 1);
 
-      dispatch({
-        type: 'MORE_PLACE',
-        payload: { json, nextPage: currentPage + 1 },
-      });
+      if (result.status === 'failed') {
+        // Toast
+        console.log(result.message);
+        setIsLoading(false);
+        return;
+      }
+
+      setContent([...content, ...result.data.courses]);
+      setCurrentPage(currentPage + 1);
+      setHasNext(result.data.has_next);
 
       setIsLoading(false);
     },
-    [state.keyword, currentPage, dispatch],
+    [state.keyword, currentPage, content],
   );
 
   useEffect(() => {
