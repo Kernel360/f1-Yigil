@@ -8,7 +8,6 @@ import kr.co.yigil.place.domain.Place;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.locationtech.jts.geom.Point;
@@ -24,7 +23,6 @@ public class Spot extends Travel {
     @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
 
-    @Setter
     private boolean isInCourse;
 
     @Embedded
