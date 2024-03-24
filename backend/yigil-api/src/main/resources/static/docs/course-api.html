@@ -670,11 +670,6 @@ Content-Length: 306
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 포인트 정보</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].title</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 제목</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].description</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 본문</p></td>
@@ -693,11 +688,6 @@ Content-Length: 306
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].placeAddress</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 장소 주소</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].placePointJson</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 장소 포인트 정보</p></td>
 </tr>
 </tbody>
 </table>
@@ -730,10 +720,6 @@ Content-Length: 306
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[0].mapStaticImageFile</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 위치 정보를 나타내는 지도 이미지 파일</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[0].placeImageFile</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 장소 이미지 파일</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -743,7 +729,7 @@ Content-Length: 306
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/courses HTTP/1.1
 Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Length: 366
+Content-Length: 313
 Host: spring.restdocs.test
 
 {
@@ -755,12 +741,10 @@ Host: spring.restdocs.test
   "lineStringJson" : "test",
   "spotRegisterRequests" : [ {
     "pointJson" : "test",
-    "title" : "test",
     "description" : "test",
     "rate" : 4.5,
     "placeName" : "test",
-    "placeAddress" : "test",
-    "placePointJson" : "test"
+    "placeAddress" : "test"
   } ]
 }</code></pre>
 </div>

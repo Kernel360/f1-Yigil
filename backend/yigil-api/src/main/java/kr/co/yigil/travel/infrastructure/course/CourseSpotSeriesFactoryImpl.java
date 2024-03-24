@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.infrastructure.course;
 
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.member.Member;
@@ -46,11 +47,12 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                 .map(registerSpotRequest -> {
                     var registerPlaceRequest = registerSpotRequest.getRegisterPlaceRequest();
                     Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(registerPlaceRequest.getPlaceName(), registerPlaceRequest.getPlaceAddress());
-                    Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest));
 
                     var attachFiles = new AttachFiles(registerSpotRequest.getFiles().stream()
                             .map(fileUploader::upload)
                             .collect(Collectors.toList()));
+
+                    Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest, attachFiles.getFiles().getFirst()));
 
                     placeCacheStore.incrementSpotCountInPlace(place.getId());
                     placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), registerSpotRequest.getRate());
@@ -67,8 +69,8 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
         return spots;
     }
 
-    private Place registerNewPlace(RegisterPlaceRequest command) {
-        var placeImage = fileUploader.upload(command.getPlaceImageFile());
+    private Place registerNewPlace(RegisterPlaceRequest command, AttachFile placeImage) {
+
         var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
         return placeStore.store(command.toEntity(placeImage, mapStaticImage));
     }
