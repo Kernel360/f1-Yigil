@@ -58,8 +58,8 @@ export default function SpotDetail({
     dragFree: true,
   });
 
-  const setImages = (newImages: TImageData[]) => {
-    setModifyDetail({ ...modifyDetail, image_urls: newImages });
+  const setImages = (newImages: { type: 'new'; data: TImageData[] }) => {
+    setModifyDetail({ ...modifyDetail, image_urls: newImages.data });
   };
 
   const onChangeDescription = (description: string) => {

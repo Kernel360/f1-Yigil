@@ -95,7 +95,7 @@ export const ModifyImage = ({
   order,
 }: {
   image_urls: TImageData[];
-  setImages: (newImages: TImageData[]) => void;
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
   order?: string;
 }) => {
   return (

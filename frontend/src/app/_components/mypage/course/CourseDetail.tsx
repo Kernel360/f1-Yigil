@@ -232,7 +232,7 @@ export default function CourseDetail({
         );
       setCoordsList(contents);
     })();
-  }, []);
+  }, [spots]);
 
   return (
     <div className="mx-4 touch-none">

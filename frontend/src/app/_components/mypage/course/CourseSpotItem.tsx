@@ -76,8 +76,8 @@ const CourseSpotItem = forwardRef<HTMLDivElement, TItemProps>(
       });
     };
 
-    const onChangeImages = (newImages: TImageData[]) => {
-      const updatedSpot = { ...spot, image_url_list: newImages };
+    const onChangeImages = (newImages: { type: 'new'; data: TImageData[] }) => {
+      const updatedSpot = { ...spot, image_url_list: newImages.data };
 
       setModifyCourse((prev) => {
         const updatedSpots = prev.spots.map((prevSpot) =>

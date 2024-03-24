@@ -270,7 +270,7 @@ export const patchCourseDetail = async (
 
   if (map_static_image_url && !map_static_image_url.includes('yigil')) {
     formData.append(
-      'mapStaticImageFile',
+      'mapStaticImage',
       new File(
         [dataUrlToBlob(map_static_image_url)],
         `${title} 코스 이미지.png`,
