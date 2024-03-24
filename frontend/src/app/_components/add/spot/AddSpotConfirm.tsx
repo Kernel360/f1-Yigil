@@ -16,7 +16,10 @@ export default function AddSpotConfirm() {
 
   const { place, images, review } = spot;
 
-  const uris = images.map((image) => image.uri);
+  const uris =
+    images.type === 'new'
+      ? images.data.map((image) => image.uri)
+      : images.data.map((image) => image);
 
   const currentDate = new Date(Date.now());
 

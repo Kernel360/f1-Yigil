@@ -145,17 +145,16 @@ public class CourseApiControllerTest {
 
         MockMultipartFile spotMapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png",
                 "image/png", "<<png data>>".getBytes());
-        MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png",
-                "image/png", "<<png data>>".getBytes());
+//        MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png",
+//                "image/png", "<<png data>>".getBytes());
 
-        String requestBody = "{\"title\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"isPrivate\" : false, \"representativeSpotOrder\" : 1, \"lineStringJson\" : \"test\", \"spotRegisterRequests\" : [{\"pointJson\" : \"test\", \"title\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"placeName\" : \"test\", \"placeAddress\" : \"test\", \"placePointJson\" : \"test\"}]}";
+        String requestBody = "{\"title\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"isPrivate\" : false, \"representativeSpotOrder\" : 1, \"lineStringJson\" : \"test\", \"spotRegisterRequests\" : [{\"pointJson\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"placeName\" : \"test\", \"placeAddress\" : \"test\"}]}";
 
         mockMvc.perform(multipart("/api/v1/courses")
                         .file("mapStaticImageFile", mapStaticImage.getBytes())
                         .file("spotRegisterRequests[0].files", image1.getBytes())
                         .file("spotRegisterRequests[0].files", image2.getBytes())
                         .file("spotRegisterRequests[0].mapStaticImageFile", spotMapStaticImage.getBytes())
-                        .file("spotRegisterRequests[0].placeImageFile", placeImage.getBytes())
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .content(requestBody))
                 .andExpect(status().isOk())
@@ -170,9 +169,7 @@ public class CourseApiControllerTest {
                                         "스팟 관련 이미지 파일"),
                                 partWithName(
                                         "spotRegisterRequests[0].mapStaticImageFile").description(
-                                        "스팟의 위치 정보를 나타내는 지도 이미지 파일"),
-                                partWithName("spotRegisterRequests[0].placeImageFile").description(
-                                        "스팟의 장소 이미지 파일")
+                                        "스팟의 위치 정보를 나타내는 지도 이미지 파일")
                         ),
                         requestFields(
                                 fieldWithPath("title").type(JsonFieldType.STRING)
@@ -191,8 +188,6 @@ public class CourseApiControllerTest {
                                         "코스 내 스팟의 정보"),
                                 fieldWithPath("spotRegisterRequests[].pointJson").type(
                                         JsonFieldType.STRING).description("스팟의 포인트 정보"),
-                                fieldWithPath("spotRegisterRequests[].title").type(
-                                        JsonFieldType.STRING).description("스팟의 제목"),
                                 fieldWithPath("spotRegisterRequests[].description").type(
                                         JsonFieldType.STRING).description("스팟의 본문"),
                                 fieldWithPath("spotRegisterRequests[].rate").type(
@@ -200,9 +195,7 @@ public class CourseApiControllerTest {
                                 fieldWithPath("spotRegisterRequests[].placeName").type(
                                         JsonFieldType.STRING).description("스팟의 장소명"),
                                 fieldWithPath("spotRegisterRequests[].placeAddress").type(
-                                        JsonFieldType.STRING).description("스팟의 장소 주소"),
-                                fieldWithPath("spotRegisterRequests[].placePointJson").type(
-                                        JsonFieldType.STRING).description("스팟의 장소 포인트 정보")
+                                        JsonFieldType.STRING).description("스팟의 장소 주소")
                         ),
                         responseFields(
                                 fieldWithPath("message").type(JsonFieldType.STRING)
@@ -317,12 +310,15 @@ public class CourseApiControllerTest {
     @DisplayName("updateCourse 메서드가 잘 동작하는지")
     @Test
     void updateCourse_ShouldReturnOk() throws Exception {
+        MockMultipartFile mapStaticImage = new MockMultipartFile("image", "image.jpg", "image/jpeg",
+                "<<jpg data>>".getBytes());
         MockMultipartFile image1 = new MockMultipartFile("image", "image.jpg", "image/jpeg",
                 "<<jpg data>>".getBytes());
 
         String requestBody = "{\"title\" : \"new title\",\"description\" : \"test\", \"rate\" : 4.5, \"lineStringJson\": \"{\\\"type\\\" : \\\"LineString\\\", \\\"coordinates\\\" : [[1, 2], [3, 4]]}\",\"spotIdOrder\" : [1, 2], \"courseSpotUpdateRequests\" : [{\"id\" : 1, \"description\" : \"test\", \"rate\" : 4.5, \"originalSpotImages\" : [{\"imageUrl\" : \"images/spot.jpg\", \"index\" : 1}], \"updateSpotImages\" : [{\"index\" : 1}]}]}";
 
         mockMvc.perform(multipart("/api/v1/courses/{courseId}", 1L)
+                        .file("mapStaticImage", mapStaticImage.getBytes())
                         .file("courseSpotUpdateRequests[0].updateSpotImages[0].imageFile",
                                 image1.getBytes())
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -336,6 +332,7 @@ public class CourseApiControllerTest {
                                 parameterWithName("courseId").description("코스 아이디")
                         ),
                         requestParts(
+                                partWithName("mapStaticImage").description("코스 맵 스태틱 이미지 파일"),
                                 partWithName(
                                         "courseSpotUpdateRequests[0].updateSpotImages[0].imageFile").description(
                                         "스팟 관련 이미지 파일")

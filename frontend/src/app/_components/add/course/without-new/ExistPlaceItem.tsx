@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import IconWithCounts from '../../IconWithCounts';
+import IconWithCounts from '../../../IconWithCounts';
 
 import StarIcon from '/public/icons/star.svg';
 
@@ -15,12 +15,25 @@ export interface TExistingSpot {
 }
 
 // Check to add to Course
-export default function ExistPlaceItem({ spot }: { spot: TExistingSpot }) {
+export default function ExistPlaceItem({
+  spot,
+  handleSelect,
+  checked,
+}: {
+  spot: TExistingSpot;
+  handleSelect: () => void;
+  checked: boolean;
+}) {
   const { place_name, image_url, rate, created_date } = spot;
 
   return (
     <article className="p-4 flex items-center border gap-4">
-      <input type="checkbox" className="w-[32px] h-[32px] shrink-0" />
+      <input
+        checked={checked}
+        onChange={handleSelect}
+        type="checkbox"
+        className="w-[32px] h-[32px] shrink-0"
+      />
       <Image
         src={image_url}
         alt={`${place_name} 대표 이미지`}

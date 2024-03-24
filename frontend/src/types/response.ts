@@ -150,3 +150,26 @@ export type TComment = z.infer<typeof commentSchema>;
 export const keywordsSchema = z.object({
   keywords: z.array(z.string()),
 });
+
+export const existingSpotSchema = z.object({
+  spot_id: z.number().int(),
+  place_name: z.string(),
+  place_address: z.string(),
+  rate: z.number(),
+  description: z.string(),
+  image_urls: z.array(z.string()),
+  create_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
+  point: z.object({
+    x: z.number(),
+    y: z.number(),
+  }),
+});
+
+export const existingSpotsSchema = z.object({
+  spot_details: z.array(existingSpotSchema),
+});
+
+export type TExistingSpot = z.infer<typeof existingSpotSchema>;
+export type TExistingSpots = z.infer<typeof existingSpotsSchema>;

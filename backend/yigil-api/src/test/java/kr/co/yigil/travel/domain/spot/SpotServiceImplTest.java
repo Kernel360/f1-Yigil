@@ -158,7 +158,7 @@ public class SpotServiceImplTest {
         Place place = new Place(placeId, placeName, placeAddress, null, null, null, null);
         Spot spot = mock(Spot.class);
         RegisterPlaceRequest placeCommand = mock(RegisterPlaceRequest.class);
-        AttachFiles mockAttachFiles = mock(AttachFiles.class);
+        AttachFiles mockAttachFiles = new AttachFiles(List.of(mock(AttachFile.class)));
 
         when(memberReader.getMember(memberId)).thenReturn(member);
         when(command.getRegisterPlaceRequest()).thenReturn(placeCommand);
@@ -172,7 +172,7 @@ public class SpotServiceImplTest {
 
         spotService.registerSpot(command, memberId);
 
-        verify(fileUploader, times(2)).upload(any());
+        verify(fileUploader, times(1)).upload(any());
         verify(placeStore).store(any());
         verify(spotStore).store(any(Spot.class));
     }

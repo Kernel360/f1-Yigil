@@ -28,12 +28,15 @@ async function parseAddSpotState(state: TSpotState) {
   formData.append('placePointJson', pointJson);
   formData.append('pointJson', pointJson);
 
-  const parsedImages = images.map(
-    ({ filename, uri }) =>
-      new File([dataUrlToBlob(uri)], filename, {
-        type: getMIMETypeFromDataURI(uri),
-      }),
-  );
+  const parsedImages =
+    images.type === 'new'
+      ? images.data.map(
+          ({ filename, uri }) =>
+            new File([dataUrlToBlob(uri)], filename, {
+              type: getMIMETypeFromDataURI(uri),
+            }),
+        )
+      : [];
 
   formData.append('placeImageFile', parsedImages[0]);
   parsedImages.forEach((image) => formData.append('files', image));

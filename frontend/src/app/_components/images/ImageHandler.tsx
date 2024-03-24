@@ -17,7 +17,7 @@ export default function ImageHandler({
   order,
 }: {
   images: TImageData[];
-  setImages: (newImages: TImageData[]) => void;
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
   size?: number;
   order?: string;
 }) {
@@ -43,7 +43,6 @@ export default function ImageHandler({
           className="aspect-square border-2 rounded-2xl border-gray-200 shrink-0"
         />
       ))}
-      {/* 에러 토스트 */}
       {error && (
         <div className="absolute">
           <ToastMsg

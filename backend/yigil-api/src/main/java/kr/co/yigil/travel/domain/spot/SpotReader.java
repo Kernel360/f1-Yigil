@@ -30,4 +30,6 @@ public interface SpotReader {
     double getSpotTotalRateInPlace(Long placeId);
 
     boolean isExistSpot(Long spotId, Long memberId);
+
+    List<Spot> getMemberSpots(Long memberId, List<Long> spotIds);
 }

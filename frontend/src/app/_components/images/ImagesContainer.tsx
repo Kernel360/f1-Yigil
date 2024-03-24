@@ -34,7 +34,7 @@ export default function ImagesContainer({
   setImages,
 }: {
   images: TImageData[];
-  setImages: (newImages: TImageData[]) => void;
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
 }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
@@ -71,9 +71,9 @@ export default function ImagesContainer({
       const { active, over } = event;
 
       if (active.id !== over?.id) {
-        const nextImage = imageMove(images, active.id, over?.id);
+        const nextImages = imageMove(images, active.id, over?.id);
 
-        setImages(nextImage);
+        setImages({ type: 'new', data: nextImages });
 
         setActiveId(null);
       }
@@ -84,7 +84,7 @@ export default function ImagesContainer({
   function removeImage(filename: string) {
     const nextImages = images.filter((image) => image.filename !== filename);
 
-    setImages(nextImages);
+    setImages({ type: 'new', data: nextImages });
   }
 
   const handleDragCancel = useCallback(() => {

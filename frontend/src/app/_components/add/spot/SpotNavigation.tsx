@@ -25,7 +25,7 @@ function canGoNext(spot: TSpotState, step: TSpotStepState): true | string {
       return true;
     }
     case 2:
-      if (spot.images.length === 0) {
+      if (spot.images.data.length === 0) {
         return '적어도 하나의 사진을 올려주세요!';
       }
 

@@ -7,9 +7,9 @@ import SelectSpot from './SelectSpot';
 
 import type { TReview } from '@/context/travel/schema';
 
-export default function AddCourseReview() {
+export default function AddCourseReview({ disabled }: { disabled: boolean }) {
   const [state, dispatch] = useContext(CourseContext);
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(disabled ? -1 : 0);
 
   function selectIndex(nextIndex: number) {
     setIndex(nextIndex);
@@ -29,6 +29,7 @@ export default function AddCourseReview() {
       <SelectSpot
         key="reviews"
         index={index}
+        disabled={disabled}
         selectIndex={selectIndex}
         review
       />
