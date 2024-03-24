@@ -91,4 +91,8 @@ public class Travel {
         this.description = description;
         this.rate = rate;
     }
+
+    public long getWriterId() {
+        return member.getId();
+    }
 }

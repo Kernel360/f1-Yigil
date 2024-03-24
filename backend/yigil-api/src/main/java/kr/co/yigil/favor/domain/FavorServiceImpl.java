@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class FavorServiceImpl implements FavorService{
@@ -23,14 +25,22 @@ public class FavorServiceImpl implements FavorService{
     @Override
     @Transactional
     public Long addFavor(Long memberId, Long travelId) {
-        if(favorReader.existsByMemberIdAndTravelId(memberId, travelId))
-            throw new BadRequestException(ExceptionCode.ALREADY_FAVOR);
-
         Member member = memberReader.getMember(memberId);
         Travel travel = travelReader.getTravel(travelId);
+
+        validateRequest(memberId, travel);
+
         favorStore.save(new Favor(member, travel));
         favorCountCacheStore.incrementFavorCount(travelId);
         return travel.getMember().getId();
+    }
+
+    private void validateRequest(Long giverId, Travel travel) {
+        if(favorReader.existsByMemberIdAndTravelId(giverId, travel.getId()))
+            throw new BadRequestException(ExceptionCode.ALREADY_FAVOR);
+
+        if(Objects.equals(travel.getWriterId(), giverId))
+            throw new BadRequestException(ExceptionCode.CANNOT_FAVOR_OWN_TRAVEL);
     }
 
     @Override
