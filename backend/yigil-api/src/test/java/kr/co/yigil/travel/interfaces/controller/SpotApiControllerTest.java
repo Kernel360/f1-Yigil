@@ -1,29 +1,5 @@
 package kr.co.yigil.travel.interfaces.controller;
 
-import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
-import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.application.SpotFacade;
@@ -55,6 +31,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
+
+import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
+import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(SpotApiController.class)
@@ -175,14 +165,12 @@ class SpotApiControllerTest {
             "image/png", "<<png data>>".getBytes());
         MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png",
             "image/png", "<<png data>>".getBytes());
-
-        String requestBody = "{\"pointJson\": \"{ \\\"type\\\" : \\\"Point\\\", \\\"coordinates\\\": [ 555,  555 ] }\", \"title\": \"스팟 타이틀\", \"description\": \"스팟 본문\", \"rate\": 5.0, \"placeName\": \"장소 타이틀\", \"placeAddress\": \"장소구 장소면 장소리\", \"placePointJson\": \"{ \\\"type\\\" : \\\"Point\\\", \\\"coordinates\\\": [ 555,  555 ] }\"}";
+        String requestBody = "{\"pointJson\": \"{ \\\"type\\\" : \\\"Point\\\", \\\"coordinates\\\": [ 555,  555 ] }\", \"description\": \"스팟 본문\", \"rate\": 5.0, \"placeName\": \"장소 타이틀\", \"placeAddress\": \"장소구 장소면 장소리\"}";
 
         mockMvc.perform(multipart("/api/v1/spots")
             .file("files", image1.getBytes())
             .file("files", image2.getBytes())
             .file("mapStaticImageFile", mapStaticImage.getBytes())
-            .file("placeImageFile", placeImage.getBytes())
             .contentType(MediaType.MULTIPART_FORM_DATA)
             .content(requestBody)
         ).andDo(document(
@@ -191,19 +179,15 @@ class SpotApiControllerTest {
             getDocumentResponse(),
             requestParts(
                 partWithName("files").description("Spot의 이미지 파일 (다중파일)"),
-                partWithName("mapStaticImageFile").description("Spot의 장소를 나타내는 지도 이미지 파일(필수x)"),
-                partWithName("placeImageFile").description("Spot의 장소를 나타내는 썸네일 이미지 파일(필수x)")
+                partWithName("mapStaticImageFile").description("Spot의 장소를 나타내는 지도 이미지 파일")
             ),
             requestFields(
                 fieldWithPath("pointJson").type(JsonFieldType.STRING)
                     .description("스팟의 위치를 나타내는 geojson"),
-                fieldWithPath("title").type(JsonFieldType.STRING).description("스팟의 제목"),
                 fieldWithPath("description").type(JsonFieldType.STRING).description("스팟의 본문"),
                 fieldWithPath("rate").type(JsonFieldType.NUMBER).description("스팟 관련 평점 정보"),
                 fieldWithPath("placeName").type(JsonFieldType.STRING).description("스팟 관련 장소 명"),
-                fieldWithPath("placeAddress").type(JsonFieldType.STRING).description("스팟 관련 장소 주소"),
-                fieldWithPath("placePointJson").type(JsonFieldType.STRING)
-                    .description("스팟 관련 장소의 위치를 나타내는 geojson")
+                fieldWithPath("placeAddress").type(JsonFieldType.STRING).description("스팟 관련 장소 주소")
             ),
             responseFields(
                 fieldWithPath("message").type(JsonFieldType.STRING).description("응답의 본문 메시지")

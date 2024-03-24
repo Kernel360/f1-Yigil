@@ -83,6 +83,7 @@ public class CourseCommand {
         private double rate;
         private String title;
         private LineString lineStringJson;
+        private MultipartFile mapStaticImage;
         private List<Long> spotIdOrder;
         private List<ModifySpotRequest> modifySpotRequests;
     }

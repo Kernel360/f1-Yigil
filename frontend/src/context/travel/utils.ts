@@ -59,9 +59,23 @@ export function isEqualImage(first: TInputImage, second: TInputImage) {
 }
 
 export function isEqualSpot(first: TSpotState, second: TSpotState) {
+  const firstImages = first.images;
+  const secondImages = second.images;
+
+  const isEqualImages =
+    firstImages.type === 'new' && secondImages.type === 'new'
+      ? isEqualArray(firstImages.data, secondImages.data, isEqualImage)
+      : firstImages.type === 'exist' && secondImages.type === 'exist'
+      ? isEqualArray(
+          firstImages.data,
+          secondImages.data,
+          (first, second) => first === second,
+        )
+      : false;
+
   const results = [
     isEqualPlace(first.place, second.place),
-    isEqualArray(first.images, second.images, isEqualImage),
+    isEqualImages,
     isEqualReview(first.review, second.review),
   ];
 

@@ -35,7 +35,11 @@ describe('Course reducer success test', () => {
 
   test('REMOVE_SPOT', () => {
     const currentCourseState = initialCourseState;
-    currentCourseState.spots.push({ place, images, review });
+    currentCourseState.spots.push({
+      place,
+      images: { type: 'new', data: images },
+      review,
+    });
 
     const nextState = reducer(currentCourseState, {
       type: 'REMOVE_SPOT',
