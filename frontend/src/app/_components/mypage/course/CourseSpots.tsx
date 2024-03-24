@@ -13,7 +13,10 @@ export default function CourseSpots({
   spots: TModifyCourse['spots'];
   isModifyMode: boolean;
   setModifyCourse: Dispatch<SetStateAction<TModifyCourse>>;
-  changedSpotIdOrder: (idOrder: number[]) => void;
+  changedSpotIdOrder: (
+    idOrder: number[],
+    spots: TModifyCourse['spots'],
+  ) => void;
   onClickDeleteSpot: (e: EventFor<'span', 'onClick'>, id: number) => void;
 }) {
   return (

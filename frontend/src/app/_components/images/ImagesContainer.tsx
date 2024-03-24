@@ -27,6 +27,7 @@ import type {
 } from '@dnd-kit/core';
 
 import type { TImageData } from './ImageHandler';
+import { createPortal } from 'react-dom';
 
 export default function ImagesContainer({
   images,
@@ -37,7 +38,7 @@ export default function ImagesContainer({
 }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 0.01 } }),
+    useSensor(PointerSensor, { activationConstraint: { distance: 1 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -111,9 +112,13 @@ export default function ImagesContainer({
           />
         ))}
       </SortableContext>
-      <DragOverlay className="origin-top-left" adjustScale>
-        {activeImage && <ImageItem image={activeImage} isDragging />}
-      </DragOverlay>
+      {activeImage &&
+        createPortal(
+          <DragOverlay className="origin-top-left" adjustScale>
+            <ImageItem image={activeImage} isDragging />
+          </DragOverlay>,
+          document.body,
+        )}
     </DndContext>
   );
 }

@@ -241,8 +241,7 @@ export default function MyPageSpotList({
     setSortOption('desc');
   };
 
-  const onChangeSortOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+  const onChangeSortOption = (option: string) => {
     setAllSpotList([]);
     setSortOption(option);
     setCheckedList([]);

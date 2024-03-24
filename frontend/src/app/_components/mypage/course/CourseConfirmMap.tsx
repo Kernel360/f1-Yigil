@@ -56,7 +56,7 @@ export default function CourseConfirmMap({
             <Marker
               key={`${coord}-${index}`}
               position={coord}
-              title={'coord'}
+              title="coord"
               icon={{
                 url: getNumberMarker(index + 1),
               }}

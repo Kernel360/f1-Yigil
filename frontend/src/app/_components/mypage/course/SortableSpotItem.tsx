@@ -11,7 +11,7 @@ export default function SortableSpotItem({
   isModifyMode,
   setModifyCourse,
   idx,
-  changedSpotIdOrder,
+
   onClickDeleteSpot,
 }: {
   spot: TModifyCourse['spots'][0];
@@ -19,7 +19,7 @@ export default function SortableSpotItem({
   isModifyMode: boolean;
   setModifyCourse: Dispatch<SetStateAction<TModifyCourse>>;
   idx: number;
-  changedSpotIdOrder: (idOrder: number[]) => void;
+
   onClickDeleteSpot: (e: EventFor<'span', 'onClick'>, id: number) => void;
 }) {
   const {
@@ -47,7 +47,6 @@ export default function SortableSpotItem({
       animationStyle={tailWindAnimationStyle}
       withOpacity={isDragging}
       isDragging={isDragging}
-      changedSpotIdOrder={changedSpotIdOrder}
       onClickDeleteSpot={onClickDeleteSpot}
       {...attributes}
       {...listeners}

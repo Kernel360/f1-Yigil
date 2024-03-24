@@ -19,12 +19,11 @@ import {
   sortableKeyboardCoordinates,
   SortableContext,
   verticalListSortingStrategy,
-  rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import SortableSpotItem from './SortableSpotItem';
 import { EventFor } from '@/types/type';
 import { createPortal } from 'react-dom';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import ViewPortal from '../../Portal';
 
 export default function CourseSpotContainer({
   spots,
@@ -36,7 +35,10 @@ export default function CourseSpotContainer({
   spots: TModifyCourse['spots'];
   isModifyMode: boolean;
   setModifyCourse: Dispatch<SetStateAction<TModifyCourse>>;
-  changedSpotIdOrder: (idOrder: number[]) => void;
+  changedSpotIdOrder: (
+    idOrder: number[],
+    spots: TModifyCourse['spots'],
+  ) => void;
   onClickDeleteSpot: (e: EventFor<'span', 'onClick'>, id: number) => void;
 }) {
   const [activeId, setActiveId] = useState<number | null>(null);
@@ -59,7 +61,8 @@ export default function CourseSpotContainer({
         const nextSpot = courseMove(spots, active.id, over?.id);
         const spotIdOrder = nextSpot.map((spot) => spot.id);
         setModifyCourse((prev) => ({ ...prev, spots: nextSpot }));
-        changedSpotIdOrder(spotIdOrder);
+        changedSpotIdOrder(spotIdOrder, nextSpot);
+
         setActiveId(null);
       }
     },
@@ -101,7 +104,6 @@ export default function CourseSpotContainer({
             isModifyMode={isModifyMode}
             setModifyCourse={setModifyCourse}
             idx={idx}
-            changedSpotIdOrder={changedSpotIdOrder}
             onClickDeleteSpot={onClickDeleteSpot}
           />
           {idx < spots.length - 1 && (
@@ -118,7 +120,6 @@ export default function CourseSpotContainer({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
-      modifiers={[restrictToVerticalAxis]}
     >
       <SortableContext
         items={courseUIDs}
@@ -136,7 +137,6 @@ export default function CourseSpotContainer({
                 isModifyMode={isModifyMode}
                 setModifyCourse={setModifyCourse}
                 idx={idx}
-                changedSpotIdOrder={changedSpotIdOrder}
                 onClickDeleteSpot={onClickDeleteSpot}
               />
               {idx < spots.length - 1 && (
@@ -146,20 +146,19 @@ export default function CourseSpotContainer({
           ))}
         </section>
       </SortableContext>
-      <DragOverlay className="origin-top-left" adjustScale>
-        {activeSpot && (
+      {activeSpot && (
+        <DragOverlay>
           <CourseSpotItem
             spot={activeSpot}
             spots={spots}
             isModifyMode={isModifyMode}
             setModifyCourse={setModifyCourse}
             idx={Number(activeSpot.order)}
-            changedSpotIdOrder={changedSpotIdOrder}
             onClickDeleteSpot={onClickDeleteSpot}
             isDragging
           />
-        )}
-      </DragOverlay>
+        </DragOverlay>
+      )}
     </DndContext>
   );
 }

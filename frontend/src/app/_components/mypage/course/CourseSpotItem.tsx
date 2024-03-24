@@ -4,6 +4,7 @@ import React, {
   HTMLAttributes,
   SetStateAction,
   forwardRef,
+  useEffect,
   useState,
 } from 'react';
 import IconWithCounts from '../../IconWithCounts';
@@ -25,7 +26,6 @@ interface TItemProps extends HTMLAttributes<HTMLDivElement> {
   isModifyMode: boolean;
   setModifyCourse: Dispatch<SetStateAction<TModifyCourse>>;
   idx: number;
-  changedSpotIdOrder: (idOrder: number[]) => void;
   animationStyle?: string;
   withOpacity?: boolean;
   isDragging?: boolean;
@@ -40,7 +40,6 @@ const CourseSpotItem = forwardRef<HTMLDivElement, TItemProps>(
       isModifyMode,
       setModifyCourse,
       idx,
-      changedSpotIdOrder,
       onClickDeleteSpot,
       animationStyle,
       withOpacity,
@@ -62,9 +61,24 @@ const CourseSpotItem = forwardRef<HTMLDivElement, TItemProps>(
 
     const [isOpen, setIsOpen] = useState(false);
     const [errorText, setErrorText] = useState('');
+    const [selectOption, setSelectOption] = useState(rate);
+
+    const onChangeSelectOption = (option: string) => {
+      setSelectOption(option);
+
+      const updatedSpot = { ...spot, rate: option };
+
+      setModifyCourse((prev) => {
+        const updatedSpots = prev.spots.map((prevSpot) =>
+          prevSpot.order === order ? updatedSpot : prevSpot,
+        );
+        return { ...prev, spots: updatedSpots };
+      });
+    };
 
     const onChangeImages = (newImages: TImageData[]) => {
       const updatedSpot = { ...spot, image_url_list: newImages };
+
       setModifyCourse((prev) => {
         const updatedSpots = prev.spots.map((prevSpot) =>
           prevSpot.order === order ? updatedSpot : prevSpot,
@@ -97,7 +111,7 @@ const CourseSpotItem = forwardRef<HTMLDivElement, TItemProps>(
     return (
       <article
         ref={ref}
-        className={`flex flex-col ${
+        className={`flex flex-col bg-white ${
           withOpacity ? 'opacity-50' : 'opacity-100'
         } ${
           isDragging ? 'cursor-grabbing scale-105' : 'scale-100'
@@ -139,18 +153,30 @@ const CourseSpotItem = forwardRef<HTMLDivElement, TItemProps>(
         </button>
         {isOpen && !isDragging && (
           <section className="py-4 flex flex-col gap-4">
-            <div className="px-4 flex justify-between items-center">
-              <span className="text-gray-500 font-medium">{place_address}</span>
-              <span className="pl-4 shrink-0">
-                <IconWithCounts
-                  icon={
-                    <StarIcon className="w-4 h-4 stroke-[#FACC15] fill-[#FACC15]" />
-                  }
-                  count={Number(rate)}
-                  rating
+            <div className="flex justify-between items-center py-4 overflow-ellipsis">
+              <div className="text-gray-500 font-semibold text-lg leading-5 break-keep">
+                {place_address}
+              </div>
+              {isModifyMode ? (
+                <Common.SelectContainer
+                  selectOption={selectOption}
+                  rate={rate}
+                  onChangeSelectOption={onChangeSelectOption}
+                  selectStyle="p-1"
                 />
-              </span>
+              ) : (
+                <span className="shrink-0 text-gray-500">
+                  <IconWithCounts
+                    icon={
+                      <StarIcon className="w-4 h-4 stroke-[#FACC15] fill-[#FACC15]" />
+                    }
+                    count={Number(rate)}
+                    rating
+                  />
+                </span>
+              )}
             </div>
+
             {isModifyMode ? (
               <Common.ModifyImage
                 image_urls={spot.image_url_list}

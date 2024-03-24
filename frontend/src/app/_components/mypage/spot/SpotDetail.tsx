@@ -72,19 +72,23 @@ export default function SpotDetail({
     }
   };
 
-  const onChangeSelectOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+  const onChangeSelectOption = (option: string) => {
     setSelectOption(option);
   };
 
-  const onClickComplete = () => {
+  const onClickComplete = async () => {
     if (!modifyDetail.description) {
       setErrorText('리뷰를 1자이상 입력해야 합니다.');
       setIsDialogOpened(false);
       return;
     }
     try {
-      patchSpotDetail(spotId, modifyDetail);
+      setErrorText('');
+      const res = await patchSpotDetail(spotId, modifyDetail);
+
+      if (res.status === 'failed') {
+        setErrorText(res.message);
+      }
     } catch (error) {
       setErrorText('수정에 실패했습니다.');
     } finally {

@@ -21,7 +21,7 @@ interface TMyPageSelectBtn {
   selectOption: string;
   sortOption: string;
   onClickSelectOption: (option: string) => void;
-  onChangeSortOption: (option: string | number) => void;
+  onChangeSortOption: (option: string) => void;
   onChangeAllList: (
     e: EventFor<'input', 'onChange'>,
     setIsChecked: Dispatch<SetStateAction<boolean>>,
@@ -70,6 +70,7 @@ export default function MyPageSelectBtns({
         </div>
         <Select
           list={sortOptions}
+          selectStyle="p-2"
           optionStyle={'top-10 left-0 bg-white w-full mx-auto'}
           selectOption={sortOption}
           onChangeSelectOption={onChangeSortOption}

@@ -69,10 +69,12 @@ export const SelectContainer = ({
   selectOption,
   rate,
   onChangeSelectOption,
+  selectStyle,
 }: {
   selectOption: string;
   rate: string;
-  onChangeSelectOption: (option: string | number) => void;
+  onChangeSelectOption: (option: string) => void;
+  selectStyle?: string;
 }) => {
   return (
     <span className="border-violet border-2 rounded-md">
@@ -81,6 +83,7 @@ export const SelectContainer = ({
         selectOption={selectOption}
         defaultValue={rate}
         onChangeSelectOption={onChangeSelectOption}
+        selectStyle={selectStyle}
       />
     </span>
   );

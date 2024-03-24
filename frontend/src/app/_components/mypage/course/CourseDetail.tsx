@@ -1,6 +1,6 @@
 'use client';
 import { TMyPageCourseDetail } from '@/types/myPageResponse';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import IconWithCounts from '../../IconWithCounts';
 import StarIcon from '/public/icons/star.svg';
 import Image from 'next/image';
@@ -18,6 +18,7 @@ import { getCoords } from '../../search/action';
 import { getCourseStaticMap, getRouteGeoJson } from '../../add/course/action';
 import { TCoords, TLineString } from '@/context/travel/schema';
 import { EventFor } from '@/types/type';
+import { checkCourseDifference } from './util';
 
 export interface TModifyCourse {
   title: string;
@@ -33,7 +34,7 @@ export interface TModifyCourse {
     create_date: string;
     order: string;
     description: string;
-    rate: number;
+    rate: string;
     image_url_list: { filename: string; uri: string }[];
   }[];
 }
@@ -61,7 +62,6 @@ export default function CourseDetail({
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const [coordsList, setCoordsList] = useState<TCoords[]>([]);
   const [modifyCourse, setModifyCourse] = useState<TModifyCourse>({
     title,
@@ -73,9 +73,10 @@ export default function CourseDetail({
     spots: spots.map((spot) => ({
       ...spot,
       image_url_list: spot.image_url_list.map((image, idx) => ({
-        filename: idx.toString(),
+        filename: (idx + 1).toString(),
         uri: image,
       })),
+      rate: spot.rate.toFixed(1),
     })),
   });
 
@@ -104,26 +105,38 @@ export default function CourseDetail({
     setModifyCourse((prev) => ({ ...prev, title }));
   };
 
-  const onChangeSelectOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+  const onChangeSelectOption = (option: string) => {
     setModifyCourse((prev) => ({ ...prev, rate: option }));
   };
 
   const onClickComplete = async () => {
-    setErrorText('');
-    setIsDialogOpened(false);
-
     if (
-      courseDetail.spots.some(
-        (spot) => !spot.image_url_list.length || !spot.description.trim(),
+      modifyCourse.spots.some(
+        (spot) =>
+          spot.image_url_list.length === 0 || spot.description.trim() === '',
       )
     ) {
       setErrorText('각 장소에 사진이나 리뷰가 필요합니다.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
+      setIsDialogOpened(false);
       return;
     }
     await getCoordsList(modifyCourse.spots);
+    const modifiedData = checkCourseDifference(courseDetail, modifyCourse);
     setIsModifyMode(false);
-    await patchCourseDetail(courseId, modifyCourse);
+    if (!modifiedData) return;
+    try {
+      setIsLoading(true);
+      const res = await patchCourseDetail(courseId, modifiedData);
+      if (res.status === 'failed') setErrorText(res.message);
+    } catch (error) {
+      setErrorText('수정에 실패했습니다.');
+    } finally {
+      setIsDialogOpened(false);
+      setIsLoading(false);
+    }
   };
 
   const getCoordsList = async (spots: TModifyCourse['spots']) => {
@@ -150,6 +163,7 @@ export default function CourseDetail({
         setErrorText(staticImage.message);
         return;
       }
+
       setModifyCourse((prev) => ({
         ...prev,
         map_static_image_url: staticImage.dataUrl,
@@ -174,11 +188,15 @@ export default function CourseDetail({
     }));
   };
 
-  const changedSpotIdOrder = async (spotIdOrder: number[]) => {
+  const changedSpotIdOrder = async (
+    spotIdOrder: number[],
+    spots: TModifyCourse['spots'],
+  ) => {
     setModifyCourse((prev) => ({
       ...prev,
       spotIdOrder,
     }));
+    getCoordsList(spots);
   };
 
   const onClickDeleteSpot = (e: EventFor<'span', 'onClick'>, id: number) => {
@@ -193,6 +211,28 @@ export default function CourseDetail({
     setModifyCourse((prev) => ({ ...prev, spots: filteredSpot }));
     setErrorText('');
   };
+
+  useEffect(() => {
+    (async () => {
+      const res = spots.map((spot) => getCoords(spot.place_address));
+      const results = await Promise.allSettled(res);
+      const contents = results
+        .filter(
+          (result) =>
+            result.status === 'fulfilled' && result.value.status === 'succeed',
+        )
+        .map(
+          (result) =>
+            (
+              result as PromiseFulfilledResult<{
+                status: 'succeed';
+                content: { lng: number; lat: number };
+              }>
+            ).value.content,
+        );
+      setCoordsList(contents);
+    })();
+  }, []);
 
   return (
     <div className="mx-4 touch-none">
@@ -229,15 +269,16 @@ export default function CourseDetail({
                 selectOption={modifyCourse.rate}
                 rate={modifyCourse.rate}
                 onChangeSelectOption={onChangeSelectOption}
+                selectStyle="p-2"
               />
             </div>
           ) : (
-            <div className="px-2 py-4">
-              <div className="flex justify-between">
-                <span className="text-2xl font-semibold border-2 border-transparent">
+            <div className="py-4">
+              <div className="flex justify-between text-ellipsis items-center">
+                <span className="text-2xl font-semibold border-2 border-transparent break-keep">
                   {title}
                 </span>
-                <span className="flex items-center">
+                <span className="flex items-center text-gray-500">
                   <IconWithCounts
                     icon={
                       <StarIcon className="w-4 h-4 stroke-[#FACC15] fill-[#FACC15]" />
