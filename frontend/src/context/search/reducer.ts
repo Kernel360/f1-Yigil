@@ -16,8 +16,6 @@ const engineSearchSchema = z.array(
   }),
 );
 
-const pageSchema = z.number().int();
-
 // 응답의 진짜 내용을 담는 이름이 굳이 places, courses... 이어야 할까?
 // 응답 프로퍼티명이 달라서 한큐에 처리하기 힘듦
 // const searchPlaceSchema = fetchableSchema(placeSchema);
@@ -67,21 +65,6 @@ export type TSearchState = {
               };
             };
       };
-  result:
-    | { status: 'start' }
-    | { status: 'searchEngine'; content: string[] }
-    | { status: 'error'; message: string[] }
-    | {
-        status: 'backend';
-        data:
-          | {
-              type: 'place';
-              hasNext: boolean;
-              currentPage: number;
-              content: TPlace[];
-            }
-          | { type: 'course'; hasNext: boolean; currentPage: number };
-      };
 };
 
 export const defaultSearchState: TSearchState = {
@@ -92,7 +75,6 @@ export const defaultSearchState: TSearchState = {
   histories: [],
   backendSearchType: 'place',
   results: { status: 'start' },
-  result: { status: 'start' },
 };
 
 export type TSearchAction = {
@@ -126,7 +108,6 @@ export function createInitialState(
     currentTerm: initialKeyword,
     backendSearchType,
     results: { status: 'start' },
-    result: { status: 'start' },
   };
 }
 
@@ -152,7 +133,7 @@ export default function reducer(
     }
 
     case 'EMPTY_KEYWORD': {
-      return { ...state, keyword: '', result: { status: 'start' } };
+      return { ...state, keyword: '', results: { status: 'start' } };
     }
 
     case 'ADD_HISTORY': {

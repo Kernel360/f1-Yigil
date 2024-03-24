@@ -28,7 +28,6 @@ export default function Course({ data }: { data: TCourse }) {
           liked={liked}
           position="top-4 right-4"
           sizes="w-12 h-12"
-          isLoggedIn
         />
       </Link>
       <Link
