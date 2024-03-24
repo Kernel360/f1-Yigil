@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { placeSchema } from '@/types/response';
+import { courseSchema, placeSchema } from '@/types/response';
 
-import type { TPlace } from '@/types/response';
+import type { TCourse, TPlace } from '@/types/response';
 
 const keywordSchema = z.string();
 const errorSchema = z.string();
@@ -26,10 +26,16 @@ export const searchPlaceSchema = z.object({
   has_next: z.boolean(),
 });
 
+export const searchCourseSchema = z.object({
+  courses: z.array(courseSchema),
+  has_next: z.boolean(),
+});
+
 export type TSearchState = {
   loading: boolean;
   showHistory: boolean;
   keyword: string;
+  currentTerm: string;
   histories: string[];
 
   backendSearchType: 'place' | 'course';
@@ -61,6 +67,7 @@ export type TSearchState = {
                 type: 'course';
                 hasNext: boolean;
                 currentPage: number;
+                courses: TCourse[];
               };
             };
       };
@@ -85,6 +92,7 @@ export const defaultSearchState: TSearchState = {
   loading: false,
   showHistory: false,
   keyword: '',
+  currentTerm: '',
   histories: [],
   backendSearchType: 'place',
   results: { status: 'start' },
@@ -94,6 +102,7 @@ export const defaultSearchState: TSearchState = {
 export type TSearchAction = {
   type:
     | 'SET_KEYWORD'
+    | 'SET_CURRENT_TERM'
     | 'EMPTY_KEYWORD'
     | 'ADD_HISTORY'
     | 'DELETE_HISTORY'
@@ -119,6 +128,7 @@ export function createInitialState(
     loading: false,
     showHistory: showHistory,
     keyword: initialKeyword,
+    currentTerm: initialKeyword,
     backendSearchType,
     results: { status: 'start' },
     result: { status: 'start' },
@@ -129,7 +139,7 @@ export default function reducer(
   state: TSearchState,
   action: TSearchAction,
 ): TSearchState {
-  const { histories, keyword, result } = state;
+  const { histories, keyword } = state;
 
   switch (action.type) {
     case 'SET_KEYWORD': {
@@ -140,6 +150,10 @@ export default function reducer(
       }
 
       return { ...state };
+    }
+
+    case 'SET_CURRENT_TERM': {
+      return { ...state, currentTerm: keyword };
     }
 
     case 'EMPTY_KEYWORD': {
@@ -263,6 +277,19 @@ export default function reducer(
     }
 
     case 'SEARCH_COURSE': {
+      const json = action.payload;
+
+      const result = searchCourseSchema.safeParse(json);
+
+      if (!result.success) {
+        console.log(result.error.message);
+
+        return {
+          ...state,
+          results: { status: 'failed', message: result.error.message },
+        };
+      }
+
       return {
         ...state,
         backendSearchType: 'course',
@@ -270,7 +297,12 @@ export default function reducer(
           status: 'success',
           content: {
             from: 'backend',
-            data: { type: 'course', hasNext: false, currentPage: 1 },
+            data: {
+              type: 'course',
+              hasNext: result.data.has_next,
+              courses: result.data.courses,
+              currentPage: 1,
+            },
           },
         },
       };

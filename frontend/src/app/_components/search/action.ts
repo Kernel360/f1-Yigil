@@ -155,3 +155,28 @@ export async function keywordSuggestions(keyword: string) {
 
   return await response.json();
 }
+
+export async function searchCourses(
+  keyword: string,
+  page: number = 1,
+  size: number = 5,
+  sortBy: 'created_at' | 'rate' | 'name' = 'created_at',
+  sortOrder: 'desc' | 'asc' = 'desc',
+) {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const endpoint = `${BASE_URL}/v1/courses/search`;
+  const queryParams = Object.entries({ keyword, page, size, sortBy, sortOrder })
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+
+  const response = await fetch(`${endpoint}?${queryParams}`, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+    next: { tags: [`search/courses/${keyword}`] },
+  });
+
+  return await response.json();
+}

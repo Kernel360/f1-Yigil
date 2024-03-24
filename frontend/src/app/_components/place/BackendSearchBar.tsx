@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext } from 'react';
-import { searchPlaces } from '../search/action';
+import { searchCourses, searchPlaces } from '../search/action';
 
 import BaseSearchBar from '../search/BaseSearchBar';
 import { SearchContext } from '@/context/search/SearchContext';
@@ -18,7 +18,9 @@ export default function BackendSearchBar() {
       return;
     }
 
-    // const result = await searchCourses(term);
+    const result = await searchCourses(term);
+
+    dispatch({ type: 'SEARCH_COURSE', payload: result });
   }
 
   function onCancel() {

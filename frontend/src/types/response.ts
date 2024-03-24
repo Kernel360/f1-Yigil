@@ -30,6 +30,20 @@ export const placeSchema = z.object({
 
 export type TPlace = z.infer<typeof placeSchema>;
 
+export const courseSchema = z.object({
+  id: z.number().int(),
+  title: z.string(),
+  map_static_image_url: z.string(),
+  owner_profile_image_url: z.string(),
+  owner_nickname: z.string(),
+  spot_count: z.number().int(),
+  rate: z.number(),
+  liked: z.boolean(),
+  create_date: z.coerce.date().transform((date) => date.toLocaleDateString()),
+});
+
+export type TCourse = z.infer<typeof courseSchema>;
+
 export const placeDetailSchema = z.object({
   id: z.number().int(),
   place_name: z.string(),
