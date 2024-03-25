@@ -1,7 +1,7 @@
 package kr.co.yigil.stats.domain;
 
 import kr.co.yigil.favor.domain.DailyFavorCount;
-import kr.co.yigil.favor.domain.DailyFavorCountReader;
+import kr.co.yigil.favor.domain.DailyTotalFavorCount;
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.travel.TravelType;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
     private final StatsReader statsReader;
-    private final DailyFavorCountReader dailyFavorCountReader;
 
     @Override
     public List<DailyRegion> getRegionStats(LocalDate startDate, LocalDate endDate) {
@@ -26,16 +25,16 @@ public class StatsServiceImpl implements StatsService {
 
     @Transactional
     @Override
-    public StaticInfo.DailyFavorsInfo getDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Pageable pageable) {
-        Page<DailyFavorCount> dailyFavorCountPageable = dailyFavorCountReader.readDailyFavorCountBetween(startDate, endDate, travelType, pageable);
-        return new StaticInfo.DailyFavorsInfo(dailyFavorCountPageable);
+    public StaticInfo.DailyTotalFavorCountInfo getDailyFavors(Pageable pageable) {
+        Page<DailyTotalFavorCount> dailyFavorCountPageable = statsReader.getDailyTotalFavorCounts(pageable);
+        return new StaticInfo.DailyTotalFavorCountInfo(dailyFavorCountPageable);
     }
 
     @Transactional
     @Override
-    public StaticInfo.DailyFavorsInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
-        List<DailyFavorCount> topDailyFavorCount = dailyFavorCountReader.getTopDailyFavorCount(startDate, endDate, travelType, limit);
+    public StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
+        List<DailyFavorCount> topDailyFavorCount = statsReader.getTopDailyFavorCount(startDate, endDate, travelType, limit);
 
-        return new StaticInfo.DailyFavorsInfo(topDailyFavorCount);
+        return new StaticInfo.DailyTravelsFavorCountInfo(topDailyFavorCount);
     }
 }

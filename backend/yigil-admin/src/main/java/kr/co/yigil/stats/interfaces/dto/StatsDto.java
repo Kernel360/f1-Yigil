@@ -7,18 +7,32 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
-public class StatisticsDto {
+public class StatsDto {
 
     @Data
     @NoArgsConstructor
-    public static class DailyFavorsResponse{
-        List<DailyFavorDto> dailyFavors;
+    public static class DailyTotalFavorCountResponse {
+    private List<DailyTotalFavorCountDto> dailyFavors;
+        private int totalPages;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class DailyTotalFavorCountDto {
+        private Long count;
+        private LocalDate date;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class DailyTravelFavorsResponse {
+        List<TravelFavorDto> dailyFavors;
         int totalPages;
     }
 
     @Data
     @NoArgsConstructor
-    public static class DailyFavorDto{
+    public static class TravelFavorDto {
         private Long travelId;
         private String travelType;
         private Long writerId;

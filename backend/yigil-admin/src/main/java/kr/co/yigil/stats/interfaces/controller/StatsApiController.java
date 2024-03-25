@@ -2,7 +2,7 @@ package kr.co.yigil.stats.interfaces.controller;
 
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.stats.application.StatsFacade;
-import kr.co.yigil.stats.interfaces.dto.StatisticsDto;
+import kr.co.yigil.stats.interfaces.dto.StatsDto;
 import kr.co.yigil.stats.interfaces.dto.mapper.StatsMapper;
 import kr.co.yigil.travel.TravelType;
 import lombok.RequiredArgsConstructor;
@@ -27,35 +27,26 @@ public class StatsApiController {
     private final StatsMapper statsMapper;
 
     @GetMapping("/region")
-    public ResponseEntity<StatisticsDto.RegionStatsResponse> getRegionStats(
+    public ResponseEntity<StatsDto.RegionStatsResponse> getRegionStats(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         List<DailyRegion> regionStats = statsFacade.getRegionStats(startDate, endDate);
-        StatisticsDto.RegionStatsResponse response = statsMapper.toResponse(regionStats);
+        StatsDto.RegionStatsResponse response = statsMapper.toResponse(regionStats);
         return ResponseEntity.ok(response);
 
     }
 
     @GetMapping("/daily-favors")
-    public ResponseEntity<StatisticsDto.DailyFavorsResponse> getDailyFavors(
-            @PageableDefault Pageable pageable,
-            @RequestParam(name = "travelType", defaultValue = "spot") TravelType travelType,
-            @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    public ResponseEntity<StatsDto.DailyTotalFavorCountResponse> getDailyFavors(
+            @PageableDefault Pageable pageable
     ) {
-        if (startDate == null) {
-            startDate = LocalDate.now().minusDays(1);
-        }
-        if (endDate == null) {
-            endDate = LocalDate.now();
-        }
-        var info = statsFacade.getDailyFavors(startDate, endDate, travelType, pageable);
-        var response = statsMapper.toDailyFavorsResponse(info);
+        var info = statsFacade.getDailyFavors(pageable);
+        var response = statsMapper.toDailyTotalFavorCountDto(info);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/daily-favors/top")
-    public ResponseEntity<StatisticsDto.DailyFavorsResponse> getTopDailyFavors(
+    public ResponseEntity<StatsDto.DailyTravelFavorsResponse> getTopDailyFavors(
             @RequestParam(name = "travelType", defaultValue = "spot") TravelType travelType,
             @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,

@@ -1,6 +1,7 @@
 package kr.co.yigil.stats.domain;
 
 import kr.co.yigil.favor.domain.DailyFavorCount;
+import kr.co.yigil.favor.domain.DailyTotalFavorCount;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
@@ -10,15 +11,11 @@ import java.util.List;
 public class StaticInfo {
 
     @Data
-    public static class DailyFavorsInfo{
+    public static class DailyTravelsFavorCountInfo {
         List<DailyTravelFavorDetail> dailyFavors;
         int totalPages;
 
-        public DailyFavorsInfo(Page<DailyFavorCount> dailyFavors) {
-            this.dailyFavors = dailyFavors.getContent().stream().map(DailyTravelFavorDetail::new).toList();
-            this.totalPages = dailyFavors.getTotalPages();
-        }
-        public DailyFavorsInfo(List<DailyFavorCount> dailyFavorCountList){
+        public DailyTravelsFavorCountInfo(List<DailyFavorCount> dailyFavorCountList){
             this.dailyFavors = dailyFavorCountList.stream().map(DailyTravelFavorDetail::new).toList();
             this.totalPages = 1;
         }
@@ -46,6 +43,29 @@ public class StaticInfo {
             this.writerProfileImageUrl = dailyFavorCount.getWriter().getProfileImageUrl();
             this.favorCount = dailyFavorCount.getCount();
             this.date = dailyFavorCount.getCreatedAt();
+        }
+    }
+
+
+    @Data
+    public static class DailyTotalFavorCountInfo {
+        private List<FavorTotalCountInfo> dailyFavors;
+        private int totalPages;
+
+        public DailyTotalFavorCountInfo(Page<DailyTotalFavorCount> dailyFavors){
+            this.dailyFavors = dailyFavors.getContent().stream().map(FavorTotalCountInfo::new).toList();
+            this.totalPages = dailyFavors.getTotalPages();
+        }
+    }
+
+    @Data
+    public static class FavorTotalCountInfo {
+        private LocalDate date;
+        private Long count;
+
+        public FavorTotalCountInfo(DailyTotalFavorCount dailyFavorCount){
+            this.date = dailyFavorCount.getDate();
+            this.count = dailyFavorCount.getCount();
         }
     }
 }

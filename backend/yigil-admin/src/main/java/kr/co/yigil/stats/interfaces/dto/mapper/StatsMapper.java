@@ -2,7 +2,7 @@ package kr.co.yigil.stats.interfaces.dto.mapper;
 
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.stats.domain.StaticInfo;
-import kr.co.yigil.stats.interfaces.dto.StatisticsDto;
+import kr.co.yigil.stats.interfaces.dto.StatsDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,15 +17,19 @@ import java.util.List;
 )
 public interface StatsMapper {
 
-    default StatisticsDto.RegionStatsResponse toResponse(List<DailyRegion> dailyRegions) {
-        return new StatisticsDto.RegionStatsResponse(dailyRegions.stream().map(this::toDto).toList());
+    default StatsDto.RegionStatsResponse toResponse(List<DailyRegion> dailyRegions) {
+        return new StatsDto.RegionStatsResponse(dailyRegions.stream().map(this::toDto).toList());
     }
 
     @Mapping(target = "region", expression = "java(dailyRegion.getRegion().getName())")
-    StatisticsDto.RegionStatsInfo toDto(DailyRegion dailyRegion);
+    StatsDto.RegionStatsInfo toDto(DailyRegion dailyRegion);
 
     @Mapping(target = "dailyFavors", source = "dailyFavors")
-    StatisticsDto.DailyFavorsResponse toDailyFavorsResponse(StaticInfo.DailyFavorsInfo info);
+    StatsDto.DailyTravelFavorsResponse toDailyFavorsResponse(StaticInfo.DailyTravelsFavorCountInfo info);
 
-    StatisticsDto.DailyFavorDto toDailyFavorDto(StaticInfo.DailyTravelFavorDetail detail);
+    StatsDto.TravelFavorDto toDailyTravelFavorDto(StaticInfo.DailyTravelFavorDetail detail);
+
+    StatsDto.DailyTotalFavorCountResponse toDailyTotalFavorCountDto(StaticInfo.DailyTotalFavorCountInfo info);
+
+    StatsDto.DailyTotalFavorCountDto toDailyFavorDto(StaticInfo.FavorTotalCountInfo detail);
 }
