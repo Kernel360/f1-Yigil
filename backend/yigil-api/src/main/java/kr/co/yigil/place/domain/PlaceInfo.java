@@ -1,8 +1,10 @@
 package kr.co.yigil.place.domain;
 
-import java.util.Optional;
 import lombok.Getter;
 import lombok.ToString;
+import org.locationtech.jts.geom.Point;
+
+import java.util.Optional;
 
 public class PlaceInfo {
 
@@ -42,6 +44,7 @@ public class PlaceInfo {
         private final String address;
         private final String thumbnailImageUrl;
         private final String mapStaticImageUrl;
+        private final PointInfo point;
         private final boolean isBookmarked;
         private final double rate;
         private final int reviewCount;
@@ -52,6 +55,7 @@ public class PlaceInfo {
             address = place.getAddress();
             thumbnailImageUrl = place.getImageFileUrl();
             mapStaticImageUrl = place.getMapStaticImageFileUrl();
+            point = new PointInfo(place.getLocation());
             rate = placeRate;
             reviewCount = spotCount;
             isBookmarked = false;
@@ -62,9 +66,20 @@ public class PlaceInfo {
             address = place.getAddress();
             thumbnailImageUrl = place.getImageFileUrl();
             mapStaticImageUrl = place.getMapStaticImageFileUrl();
+            point = new PointInfo(place.getLocation());
             rate = placeRate;
             reviewCount = spotCount;
             this.isBookmarked = isBookmarked;
+        }
+    }
+    @Getter
+    public static class PointInfo {
+        private final double x;
+        private final double y;
+
+        public PointInfo(Point point) {
+            this.x = point.getX();
+            this.y = point.getY();
         }
     }
 
