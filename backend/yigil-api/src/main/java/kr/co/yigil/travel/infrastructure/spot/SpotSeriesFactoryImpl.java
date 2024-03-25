@@ -1,9 +1,5 @@
 package kr.co.yigil.travel.infrastructure.spot;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileReader;
@@ -15,6 +11,9 @@ import kr.co.yigil.travel.domain.spot.SpotSeriesFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class SpotSeriesFactoryImpl implements SpotSeriesFactory {
@@ -24,11 +23,14 @@ public class SpotSeriesFactoryImpl implements SpotSeriesFactory {
 
     @Override
     public Spot modify(ModifySpotRequest command, Spot spot) {
-        List<CombinedImage> spotComibinedImageList = command.getOriginalImages().stream()
+
+        List<CombinedImage> spotComibinedImageList = Optional.ofNullable(command.getOriginalImages())
+                .orElseGet(ArrayList::new)
+                .stream()
                 .map(image -> new CombinedImage(
                         fileReader.getFileByUrl(image.getImageUrl()), image.getIndex()))
                 .collect(Collectors.toCollection(LinkedList::new));
-        if(command.getUpdatedImages() != null) {
+        if (command.getUpdatedImages() != null) {
             spotComibinedImageList.addAll(command.getUpdatedImages().stream()
                     .map(image -> new CombinedImage(
                             fileUploader.upload(image.getImageFile()), image.getIndex()))
@@ -57,5 +59,6 @@ public class SpotSeriesFactoryImpl implements SpotSeriesFactory {
 
     }
 
-    private record CombinedImage(AttachFile attachFile, int index) { }
+    private record CombinedImage(AttachFile attachFile, int index) {
+    }
 }
