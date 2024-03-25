@@ -12,11 +12,11 @@ export default function Select({
   defaultValue,
   defaultValueColor,
 }: {
-  list: { label: string | ReactElement; value: string | number }[];
+  list: { label: string | ReactElement; value: string }[];
   selectStyle?: string;
   optionStyle?: string;
   selectOption: string;
-  onChangeSelectOption: (option: string | number) => void;
+  onChangeSelectOption: (option: string) => void;
   defaultValue: string | ReactElement;
   defaultValueColor?: string;
 }) {
@@ -41,7 +41,7 @@ export default function Select({
   return (
     <ul
       tabIndex={0}
-      className={`${
+      className={` ${
         selectStyle && selectStyle
       } rounded-md cursor-pointer relative`}
       onClick={() => setIsSortOpened(!isSortOpened)}
@@ -49,7 +49,7 @@ export default function Select({
       aria-label="select"
     >
       <div
-        className={`flex items-center justify-between p-2 gap-x-2 ${
+        className={`flex items-center justify-between gap-x-2 ${
           defaultValueColor ? defaultValueColor : 'text-gray-700'
         }`}
       >
