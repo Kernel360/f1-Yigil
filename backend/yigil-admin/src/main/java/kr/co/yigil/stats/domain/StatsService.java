@@ -7,4 +7,6 @@ import kr.co.yigil.region.domain.DailyRegion;
 public interface StatsService {
 
     List<DailyRegion> getRegionStats(LocalDate startDate, LocalDate endDate);
+
+    StatsInfo.Recent getRecentRegionStats();
 }
