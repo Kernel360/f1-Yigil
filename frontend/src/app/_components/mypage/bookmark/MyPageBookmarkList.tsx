@@ -49,10 +49,9 @@ export default function MyPageBookmarkList({
     setAllBookmarkList((prev) => [...prev, ...bookmarkList.data.bookmarks]);
   };
 
-  useIntersectionObserver(ref, getMoreBookMarks,hasNext);
+  useIntersectionObserver(ref, getMoreBookMarks, hasNext);
 
-  const onChangeSortOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+  const onChangeSortOption = (option: string) => {
     setSortOption(option);
   };
 
@@ -90,7 +89,7 @@ export default function MyPageBookmarkList({
       <div className="flex justify-end mt-6 mb-4">
         <Select
           list={sortOptions}
-          optionStyle=""
+          selectStyle="p-2"
           selectOption={sortOption}
           onChangeSelectOption={onChangeSortOption}
           defaultValue="최신순"

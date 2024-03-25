@@ -64,11 +64,7 @@ export default function AddCourseExistSpots() {
     setIsLoading(false);
   }
 
-  function onChangeSelectOption(option: string | number) {
-    if (typeof option === 'number') {
-      return;
-    }
-
+  function onChangeSelectOption(option: string) {
     setAllSpots([]);
     setSortOption(option);
     setCurrentPage(1);
@@ -91,6 +87,7 @@ export default function AddCourseExistSpots() {
           selectOption={sortOption}
           defaultValue={sortOptions[0].label}
           onChangeSelectOption={onChangeSelectOption}
+          selectStyle="p-2"
         />
       </div>
       {isLoading ? (

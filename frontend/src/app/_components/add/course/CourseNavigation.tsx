@@ -99,7 +99,9 @@ async function canGoNext(
         return '코스 제목을 작성해주세요!';
       }
 
-      const path = await getRouteGeoJson(course.spots);
+      const coordsList = course.spots.map((spot) => spot.place.coords);
+
+      const path = await getRouteGeoJson(coordsList);
 
       if (path.status === 'failed') {
         return path.message;
