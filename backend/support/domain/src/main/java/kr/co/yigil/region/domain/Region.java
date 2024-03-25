@@ -1,5 +1,6 @@
 package kr.co.yigil.region.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,6 +30,7 @@ public class Region {
     private String name2;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "category_id")
     private RegionCategory category;
 
