@@ -19,6 +19,7 @@ import { getCourseStaticMap, getRouteGeoJson } from '../../add/course/action';
 import { TCoords, TLineString } from '@/context/travel/schema';
 import { EventFor } from '@/types/type';
 import { checkCourseDifference } from './util';
+import { TMyInfo } from '@/types/response';
 
 export interface TModifyCourse {
   title: string;
@@ -42,11 +43,11 @@ export interface TModifyCourse {
 export default function CourseDetail({
   courseDetail,
   courseId,
-  isLoggedIn,
+  isMyCourse,
 }: {
   courseDetail: TMyPageCourseDetail;
   courseId: number;
-  isLoggedIn: boolean;
+  isMyCourse?: boolean;
 }) {
   const {
     title,
@@ -247,7 +248,7 @@ export default function CourseDetail({
         <span className="text-2xl font-light">
           {isModifyMode ? '기록 수정' : '장소 기록'}
         </span>
-        {isLoggedIn ? (
+        {isMyCourse ? (
           <button
             className={`${isModifyMode ? 'text-main' : 'text-gray-500'} py-2`}
             onClick={() => setIsModifyMode(true)}
