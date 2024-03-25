@@ -748,11 +748,6 @@ Content-Length: 183
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 위치를 나타내는 geojson</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 제목</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 본문</p></td>
@@ -771,11 +766,6 @@ Content-Length: 183
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>placeAddress</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟 관련 장소 주소</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>placePointJson</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟 관련 장소의 위치를 나타내는 geojson</p></td>
 </tr>
 </tbody>
 </table>
@@ -802,11 +792,7 @@ Content-Length: 183
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mapStaticImageFile</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 장소를 나타내는 지도 이미지 파일(필수x)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>placeImageFile</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 장소를 나타내는 썸네일 이미지 파일(필수x)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 장소를 나타내는 지도 이미지 파일</p></td>
 </tr>
 </tbody>
 </table>
@@ -817,17 +803,15 @@ Content-Length: 183
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/spots HTTP/1.1
 Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Length: 330
+Content-Length: 217
 Host: spring.restdocs.test
 
 {
   "pointJson" : "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }",
-  "title" : "스팟 타이틀",
   "description" : "스팟 본문",
   "rate" : 5.0,
   "placeName" : "장소 타이틀",
-  "placeAddress" : "장소구 장소면 장소리",
-  "placePointJson" : "{ \"type\" : \"Point\", \"coordinates\": [ 555,  555 ] }"
+  "placeAddress" : "장소구 장소면 장소리"
 }</code></pre>
 </div>
 </div>
@@ -1391,7 +1375,7 @@ Content-Length: 235
 <div id="footer">
 <div id="footer-text">
 Version 0.0.2-SNAPSHOT<br>
-Last updated 2024-03-04 19:40:54 +0900
+Last updated 2024-03-20 11:05:42 +0900
 </div>
 </div>
 </body>

@@ -1,35 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AddTravelMapContext } from '@/context/map/AddTravelMapContext';
+import { CourseWithNewStepContext } from '@/context/travel/step/course/CourseWithNewStepContext';
+import { CourseWithoutNewStepContext } from '@/context/travel/step/course/CourseWithoutNewStepContext';
 
-import Progress from '../Progress';
-import SelectPlaceNavigation from '../SelectPlaceNavigation';
-import Navigation from '../Navigation';
+import CourseProgress from './CourseProgress';
+import CourseNavigation from './CourseNavigation';
 import AddCourseData from './AddCourseData';
+import AddCourseSelectPlaceNavigation from './with-new/AddCourseSelectPlaceNavigation';
 
 export default function AddCourseContent() {
-  const [isSelecting, setIsSelecting] = useState(false);
+  const [state, dispatchAddTravelMap] = useContext(AddTravelMapContext);
+  const [withNew] = useContext(CourseWithNewStepContext);
+  const [withoutNew] = useContext(CourseWithoutNewStepContext);
 
-  function startSelect() {
-    setIsSelecting(true);
-  }
+  const [method, setMethod] = useState<'with-new' | 'without-new'>('with-new');
 
-  function endSelect() {
-    setIsSelecting(false);
+  function onSelectMethod(nextMethod: 'with-new' | 'without-new') {
+    setMethod(nextMethod);
   }
 
   return (
     <section className="relative flex flex-col grow">
-      <div className="h-16 flex flex-col justify-center">
-        {!isSelecting && <Progress />}
-        {isSelecting ? (
-          <SelectPlaceNavigation endSelect={endSelect} />
+      <div
+        className="h-16 flex flex-col justify-center"
+        onClick={() => dispatchAddTravelMap({ type: 'CLOSE_RESULT' })}
+      >
+        {state.isMapOpen ? (
+          <AddCourseSelectPlaceNavigation />
         ) : (
-          <Navigation />
+          <CourseNavigation method={method} />
         )}
       </div>
       <div className="flex flex-col grow">
-        <AddCourseData />
+        {!state.isMapOpen && (
+          <CourseProgress
+            currentValue={
+              method === 'with-new' ? withNew.value : withoutNew.value
+            }
+          />
+        )}
+        <AddCourseData method={method} onSelect={onSelectMethod} />
       </div>
     </section>
   );

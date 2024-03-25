@@ -7,13 +7,13 @@ import {
 import type { TSpotState } from '../schema';
 
 export interface TSpotAction {
-  type: 'SET_PLACE' | 'SET_IMAGES' | 'SET_REVIEW';
+  type: 'SET_PLACE' | 'SET_IMAGES' | 'SET_REVIEW' | 'INIT_SPOT';
   payload?: unknown;
 }
 
 export const initialSpotState: TSpotState = {
   place: { name: '', address: '', mapImageUrl: '', coords: { lng: 0, lat: 0 } },
-  images: [],
+  images: { type: 'new', data: [] },
   review: { rate: 1, content: '' },
 };
 
@@ -42,7 +42,7 @@ export default function reducer(
        * @todo SET_ERROR for Toast
        */
       if (!result.success) {
-        console.error(result.error.message);
+        console.error(result.error.issues);
         return { ...state };
       }
 
@@ -60,6 +60,10 @@ export default function reducer(
       }
 
       return { ...state, review: result.data };
+    }
+
+    case 'INIT_SPOT': {
+      return initialSpotState;
     }
   }
 }

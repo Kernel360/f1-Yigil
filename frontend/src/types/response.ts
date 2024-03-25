@@ -1,5 +1,18 @@
 import { ZodType, ZodTypeDef, z } from 'zod';
 
+interface TBackendRequestFailed {
+  status: 'failed';
+  message: string;
+  code?: number;
+}
+interface TBackendRequestSucceed<T> {
+  status: 'succeed';
+  data: T;
+}
+export type TBackendRequestResult<T> =
+  | TBackendRequestFailed
+  | TBackendRequestSucceed<T>;
+
 export const postResponseSchema = z.object({
   message: z.string(),
 });
@@ -29,6 +42,20 @@ export const placeSchema = z.object({
 });
 
 export type TPlace = z.infer<typeof placeSchema>;
+
+export const courseSchema = z.object({
+  id: z.number().int(),
+  title: z.string(),
+  map_static_image_url: z.string(),
+  owner_profile_image_url: z.string(),
+  owner_nickname: z.string(),
+  spot_count: z.number().int(),
+  rate: z.number(),
+  liked: z.boolean(),
+  create_date: z.coerce.date().transform((date) => date.toLocaleDateString()),
+});
+
+export type TCourse = z.infer<typeof courseSchema>;
 
 export const placeDetailSchema = z.object({
   id: z.number().int(),
@@ -62,6 +89,7 @@ export const dataWithAddressSchema = z.array(datumWithAddressSchema);
 export const staticMapUrlSchema = z.object({
   exists: z.boolean(),
   map_static_image_url: z.string().optional(),
+  registered_place: z.boolean(),
 });
 
 export const naverStaticMapUrlErrorSchema = z.object({
@@ -149,3 +177,26 @@ export type TComment = z.infer<typeof commentSchema>;
 export const keywordsSchema = z.object({
   keywords: z.array(z.string()),
 });
+
+export const existingSpotSchema = z.object({
+  spot_id: z.number().int(),
+  place_name: z.string(),
+  place_address: z.string(),
+  rate: z.number(),
+  description: z.string(),
+  image_urls: z.array(z.string()),
+  create_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
+  point: z.object({
+    x: z.number(),
+    y: z.number(),
+  }),
+});
+
+export const existingSpotsSchema = z.object({
+  spot_details: z.array(existingSpotSchema),
+});
+
+export type TExistingSpot = z.infer<typeof existingSpotSchema>;
+export type TExistingSpots = z.infer<typeof existingSpotsSchema>;

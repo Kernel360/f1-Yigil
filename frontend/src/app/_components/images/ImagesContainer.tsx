@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -19,9 +19,7 @@ import {
 
 import ImageItem from './ImageItem';
 import SortableItem from './SortableItem';
-import { AddSpotContext } from '../add/spot/SpotContext';
 
-import type { Dispatch } from 'react';
 import type {
   DragEndEvent,
   DragStartEvent,
@@ -29,18 +27,18 @@ import type {
 } from '@dnd-kit/core';
 
 import type { TImageData } from './ImageHandler';
-import type { TAddSpotAction } from '../add/spot/SpotContext';
+import { createPortal } from 'react-dom';
 
 export default function ImagesContainer({
-  dispatch,
+  images,
+  setImages,
 }: {
-  dispatch: Dispatch<TAddSpotAction>;
+  images: TImageData[];
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
 }) {
-  const { images } = useContext(AddSpotContext);
-
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 0.01 } }),
+    useSensor(PointerSensor, { activationConstraint: { distance: 1 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -73,20 +71,20 @@ export default function ImagesContainer({
       const { active, over } = event;
 
       if (active.id !== over?.id) {
-        const nextImage = imageMove(images, active.id, over?.id);
+        const nextImages = imageMove(images, active.id, over?.id);
 
-        dispatch({ type: 'SET_IMAGES', payload: nextImage });
+        setImages({ type: 'new', data: nextImages });
 
         setActiveId(null);
       }
     },
-    [images, dispatch],
+    [images, setImages],
   );
 
   function removeImage(filename: string) {
     const nextImages = images.filter((image) => image.filename !== filename);
 
-    dispatch({ type: 'SET_IMAGES', payload: nextImages });
+    setImages({ type: 'new', data: nextImages });
   }
 
   const handleDragCancel = useCallback(() => {
@@ -114,9 +112,13 @@ export default function ImagesContainer({
           />
         ))}
       </SortableContext>
-      <DragOverlay className="origin-top-left" adjustScale>
-        {activeImage && <ImageItem image={activeImage} isDragging />}
-      </DragOverlay>
+      {activeImage &&
+        createPortal(
+          <DragOverlay className="origin-top-left" adjustScale>
+            <ImageItem image={activeImage} isDragging />
+          </DragOverlay>,
+          document.body,
+        )}
     </DndContext>
   );
 }

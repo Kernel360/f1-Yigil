@@ -30,7 +30,7 @@ public class SpotFacade {
     public void deleteSpot(Long spotId) {
         var memberId = spotService.deleteSpot(spotId);
         var adminId = adminService.getAdminId();
-        notificationService.sendNotification(NotificationType.SPOT_DELETED, adminId, memberId);
+        notificationService.saveNotification(NotificationType.SPOT_DELETED, adminId, memberId);
     }
 
 }

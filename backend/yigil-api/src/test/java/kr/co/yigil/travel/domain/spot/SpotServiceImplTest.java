@@ -1,22 +1,5 @@
 package kr.co.yigil.travel.domain.spot;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
@@ -32,6 +15,7 @@ import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
 import kr.co.yigil.travel.domain.Spot;
+import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.dto.SpotListDto;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
@@ -41,6 +25,7 @@ import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -48,6 +33,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SpotServiceImplTest {
@@ -133,7 +127,7 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, null, null, null, null);
         Spot spot = mock(Spot.class);
         AttachFiles mockAttachFiles = mock(AttachFiles.class);
 
@@ -161,10 +155,10 @@ public class SpotServiceImplTest {
         Long placeId = 1L;
         String placeName = "Test Place";
         String placeAddress = "Test Address";
-        Place place = new Place(placeId, placeName, placeAddress, 0.0, null, null, null, null);
+        Place place = new Place(placeId, placeName, placeAddress, null, null, null, null);
         Spot spot = mock(Spot.class);
         RegisterPlaceRequest placeCommand = mock(RegisterPlaceRequest.class);
-        AttachFiles mockAttachFiles = mock(AttachFiles.class);
+        AttachFiles mockAttachFiles = new AttachFiles(List.of(mock(AttachFile.class)));
 
         when(memberReader.getMember(memberId)).thenReturn(member);
         when(command.getRegisterPlaceRequest()).thenReturn(placeCommand);
@@ -178,7 +172,7 @@ public class SpotServiceImplTest {
 
         spotService.registerSpot(command, memberId);
 
-        verify(fileUploader, times(2)).upload(any());
+        verify(fileUploader, times(1)).upload(any());
         verify(placeStore).store(any());
         verify(spotStore).store(any(Spot.class));
     }
@@ -286,10 +280,10 @@ public class SpotServiceImplTest {
         Long spotId = 1L;
         PageRequest pageable = PageRequest.of(0, 10);
         AttachFile mockAttachFile = new AttachFile(mock(FileType.class), "fileUrl",
-            "originalFileName", 100L);
+                "originalFileName", 100L);
 
         SpotListDto mockSpotListDto = new SpotListDto(spotId, 1L, "title", 3.5, "fileUrl",
-            LocalDateTime.now(), false);
+                LocalDateTime.now(), false);
         PageImpl<SpotListDto> mockSpotList = new PageImpl<>(List.of(mockSpotListDto));
 
         when(spotReader.getMemberSpotList(anyLong(), any(Selected.class), any())).thenReturn(mockSpotList);
@@ -300,4 +294,61 @@ public class SpotServiceImplTest {
         assertThat(result.getContent().getFirst()).isInstanceOf(SpotInfo.SpotListInfo.class);
     }
 
+    @DisplayName("getMySpotsDetailInfo 를 호출했을 때 마이 스팟 상세 정보 조회가 잘 되는지 확인")
+    @Test
+    void WhenGetMySpotsDetailInfo_ThenShouldReturnMySpotsInfo() {
+        Long memberId = 1L;
+        List<Long> spotIds = List.of(1L, 2L);
+
+        Spot spot1 = mock(Spot.class);
+
+        Place place1 = mock(Place.class);
+        when(spot1.getId()).thenReturn(1L);
+        when(spot1.getPlace()).thenReturn(place1);
+        when(place1.getName()).thenReturn("placeName");
+        when(place1.getAddress()).thenReturn("placeAddress");
+        when(spot1.getDescription()).thenReturn("description");
+        AttachFiles mockAttachFiles = mock(AttachFiles.class);
+        when(spot1.getAttachFiles()).thenReturn(mockAttachFiles);
+        when(mockAttachFiles.getUrls()).thenReturn(List.of("imageUrl"));
+        when(spot1.getRate()).thenReturn(3.5);
+        when(spot1.getCreatedAt()).thenReturn(LocalDateTime.now());
+        Point point1 = mock(Point.class);
+        when(spot1.getLocation()).thenReturn(point1);
+        when(point1.getX()).thenReturn(1.0);
+        when(point1.getY()).thenReturn(1.0);
+
+        Spot spot2 = mock(Spot.class);
+        when(spot2.getId()).thenReturn(2L);
+        when(spot2.getPlace()).thenReturn(place1);
+        when(place1.getName()).thenReturn("placeName");
+        when(place1.getAddress()).thenReturn("placeAddress");
+        when(spot2.getDescription()).thenReturn("description");
+        when(spot2.getAttachFiles()).thenReturn(mockAttachFiles);
+        when(mockAttachFiles.getUrls()).thenReturn(List.of("imageUrl"));
+        when(spot2.getRate()).thenReturn(3.5);
+        when(spot2.getCreatedAt()).thenReturn(LocalDateTime.now());
+        when(spot2.getLocation()).thenReturn(point1);
+        Point point2 = mock(Point.class);
+        when(spot2.getLocation()).thenReturn(point2);
+        when(point2.getX()).thenReturn(1.0);
+        when(point2.getY()).thenReturn(1.0);
+
+        List<Spot> spots = List.of(spot1, spot2);
+
+        when(spotReader.isExistSpot(anyLong(), anyLong())).thenReturn(true);
+        when(spotReader.getSpots(anyList())).thenReturn(spots);
+
+
+        when(spotReader.isExistSpot(anyLong(), anyLong())).thenReturn(true);
+        when(spotReader.getSpots(anyList())).thenReturn(spots);
+
+        var result = spotService.getMySpotsDetailInfo(spotIds, memberId);
+
+        assertThat(result).isNotNull().isInstanceOf(CourseInfo.MySpotsInfo.class);
+        assertThat(result.getMySpotDetailDtoList().size()).isEqualTo(2);
+    }
+
 }
+
+

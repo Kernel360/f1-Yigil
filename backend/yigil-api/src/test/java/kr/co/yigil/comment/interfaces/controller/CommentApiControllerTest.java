@@ -70,7 +70,7 @@ class CommentApiControllerTest {
                 .uris()
                 .withScheme("https")
                 .withHost("yigil.co.kr")
-                .withPort(80)
+                .withPort(8080)
             )
             .build();
     }

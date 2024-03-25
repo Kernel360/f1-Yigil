@@ -4,11 +4,7 @@ import reducer, { initialCourseState } from '@/context/travel/course/reducer';
 
 import type { TInputImage } from '@/app/_components/images';
 import type { TCourseAction } from '@/context/travel/course/reducer';
-import type {
-  TChoosePlace,
-  TReview,
-  TSpotState,
-} from '@/context/travel/schema';
+import type { TChoosePlace, TReview } from '@/context/travel/schema';
 
 const place: TChoosePlace = {
   name: '장소',
@@ -27,29 +23,27 @@ const review: TReview = {
   content: '리뷰 내용',
 };
 
-const spot: TSpotState = {
-  place,
-  images,
-  review,
-};
-
 describe('Course reducer success test', () => {
   test('ADD_SPOT', () => {
     const nextState = reducer(initialCourseState, {
       type: 'ADD_SPOT',
-      payload: spot,
+      payload: place,
     });
 
-    expect(nextState.spots[0]).toEqual(spot);
+    expect(nextState.spots[0].place).toEqual(place);
   });
 
   test('REMOVE_SPOT', () => {
     const currentCourseState = initialCourseState;
-    currentCourseState.spots.push(spot);
+    currentCourseState.spots.push({
+      place,
+      images: { type: 'new', data: images },
+      review,
+    });
 
     const nextState = reducer(currentCourseState, {
       type: 'REMOVE_SPOT',
-      payload: spot,
+      payload: currentCourseState.spots[0],
     });
 
     expect(nextState.spots).toEqual([]);

@@ -57,3 +57,7 @@ export function parseSearchHistory(historyStr: string | null) {
 export const scrollToTop = () => {
   if (typeof window !== 'undefined') window.scrollTo(0, 0);
 };
+
+export const cdnPathToRelativePath = (path: string) => {
+  return path.split('http://cdn.yigil.co.kr/')[1];
+};

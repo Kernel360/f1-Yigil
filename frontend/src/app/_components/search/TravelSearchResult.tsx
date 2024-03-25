@@ -2,51 +2,98 @@
 
 import { useContext } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
-import { searchPlaces } from './action';
+import { searchCourses, searchPlaces } from './action';
 
 import LoadingIndicator from '../LoadingIndicator';
-import InfinitePlaces from './InfinitePlaces';
+import BaseSearchHistory from './BaseSearchHistory';
+import KeywordSuggestion from './KeywordSuggestion';
 
-import type { EventFor } from '@/types/type';
+import PlaceResults from './PlaceResults';
+import CourseResults from './CourseResults';
 
 export default function TravelSearchResult() {
   const [state, dispatch] = useContext(SearchContext);
 
-  const { status } = state.result;
+  const { results, loading, keyword, backendSearchType } = state;
 
-  if (status !== 'backend') {
+  if (results.status === 'start') {
+    if (keyword.length === 0) {
+      return <BaseSearchHistory />;
+    }
+
+    if (loading) {
+      return (
+        <section className="grow flex flex-col justify-center items-center gap-8">
+          <LoadingIndicator loadingText="검색 중..." />
+        </section>
+      );
+    }
+
+    return <KeywordSuggestion />;
+  }
+
+  if (results.status === 'failed') {
+    return (
+      <section className="flex flex-col grow justify-center items-center gap-8">
+        <span className="text-6xl">⚠️</span>
+        <br />
+        <span className="text-3xl">서버 연결에 실패했습니다.</span>
+      </section>
+    );
+  }
+
+  if (results.content.from === 'searchEngine') {
     return null;
   }
 
-  async function handlePlaceButton(event: EventFor<'button', 'onClick'>) {
-    if (status === 'backend' && state.result.data.type === 'place') {
+  const content = results.content;
+
+  async function handlePlaceButton() {
+    if (content.from === 'backend' && content.data.type === 'place') {
       return;
     }
 
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    const json = await searchPlaces(state.keyword);
+    const result = await searchPlaces(state.keyword, 1, 5, state.sortOptions);
 
-    dispatch({ type: 'SEARCH_PLACE', payload: json });
-    dispatch({ type: 'SET_LOADING', payload: false });
-  }
-
-  function handleCourseButton(event: EventFor<'button', 'onClick'>) {
-    if (status === 'backend' && state.result.data.type === 'course') {
+    if (result.status === 'failed') {
+      // Toast
+      dispatch({ type: 'SET_LOADING', payload: false });
       return;
     }
 
-    dispatch({ type: 'SEARCH_COURSE' });
+    dispatch({ type: 'SEARCH_PLACE', payload: result.data });
+    dispatch({ type: 'SET_LOADING', payload: false });
   }
 
-  const { data } = state.result;
+  async function handleCourseButton() {
+    if (content.from === 'backend' && content.data.type === 'course') {
+      return;
+    }
+
+    dispatch({ type: 'SET_LOADING', payload: true });
+
+    const result = await searchCourses(state.keyword, 1, 5, state.sortOptions);
+
+    if (result.status === 'failed') {
+      // Toast
+      dispatch({ type: 'SET_LOADING', payload: false });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_COURSE', payload: result.data });
+    dispatch({ type: 'SET_LOADING', payload: false });
+  }
+
+  const data = content.data;
 
   return (
     <section className="flex flex-col grow">
       <div className="flex">
         <button
           className={`py-4 grow ${
-            data.type === 'place' && 'border-black border-b-2'
+            backendSearchType === 'place' && 'border-black border-b-2'
           }`}
           onClick={handlePlaceButton}
         >
@@ -54,7 +101,7 @@ export default function TravelSearchResult() {
         </button>
         <button
           className={`py-4 grow ${
-            data.type === 'course' && 'border-black border-b-2'
+            backendSearchType === 'course' && 'border-black border-b-2'
           }`}
           onClick={handleCourseButton}
         >
@@ -66,17 +113,9 @@ export default function TravelSearchResult() {
           <LoadingIndicator loadingText="검색 중..." />
         </section>
       ) : data.type === 'place' ? (
-        <InfinitePlaces
-          content={data.content}
-          hasNext={data.hasNext}
-          currentPage={data.currentPage}
-        />
+        <PlaceResults data={data} />
       ) : (
-        <section className="grow flex flex-col justify-center items-center gap-8">
-          <span className="text-6xl">🚧</span>
-          <br />
-          <span className="text-5xl">준비 중입니다!</span>
-        </section>
+        <CourseResults data={data} />
       )}
     </section>
   );

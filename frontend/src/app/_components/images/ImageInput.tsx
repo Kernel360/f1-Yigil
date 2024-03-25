@@ -2,50 +2,58 @@
 
 import { useRef } from 'react';
 
+import { blobTodataUrl } from '@/utils';
+
 import type { TImageData } from './ImageHandler';
 
 import ImageIcon from '/public/icons/image.svg';
-
-function toBase64(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-
-    reader.readAsDataURL(file);
-  });
-}
+import { EventFor } from '@/types/type';
 
 export default function ImageInput({
   availableSpace,
-  addImages,
+  images,
+  setImages,
+  invokeError,
+  order,
 }: {
   availableSpace: number;
-  addImages: (newImages: TImageData[]) => void;
+  images: TImageData[];
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
+  invokeError: (title: string) => void;
+  order?: string;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleUpload(fileList: FileList) {
-    try {
-      if (availableSpace === 0) {
-        throw Error('더 이상 추가할 수 없습니다!');
-      }
-
-      if (fileList.length > availableSpace) {
-        throw Error(`${availableSpace}개 이상 추가할 수 없습니다!`);
-      }
-
-      const images: TImageData[] = [];
-
-      for (let i = 0; i < fileList.length; i++) {
-        const uri = await toBase64(fileList[i]);
-        images.push({ filename: fileList[i].name, uri });
-      }
-
-      addImages(images);
-    } catch (error) {
-      alert(error);
+    if (fileList.length > availableSpace) {
+      throw Error(`${availableSpace}개 이상 추가할 수 없습니다!`);
     }
+
+    const newImages: TImageData[] = [];
+
+    for (let i = 0; i < fileList.length; i++) {
+      const uri = await blobTodataUrl(fileList[i]);
+      newImages.push({ filename: fileList[i].name, uri });
+    }
+
+    const currentImageNames = images.map((image) => image.filename);
+
+    const deduplicated = newImages.filter(
+      (image) => !currentImageNames.includes(image.filename),
+    );
+
+    const nextImages = [...images, ...deduplicated];
+
+    setImages({ type: 'new', data: nextImages });
+  }
+
+  function handleClick(event: EventFor<'input', 'onClick'>) {
+    if (availableSpace === 0) {
+      event.preventDefault();
+      invokeError('더 이상 추가할 수 없습니다!');
+    }
+
+    setTimeout(() => invokeError(''), 1000);
   }
 
   return (
@@ -53,7 +61,7 @@ export default function ImageInput({
       <label
         className="w-full h-full rounded-2xl flex justify-center items-center hover:cursor-pointer"
         tabIndex={0}
-        htmlFor="add-image"
+        htmlFor={order ? `add-image-${order}` : 'add-image'}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             fileInputRef.current?.click();
@@ -66,16 +74,27 @@ export default function ImageInput({
         className="hidden"
         ref={fileInputRef}
         key={availableSpace}
-        id="add-image"
+        id={order ? `add-image-${order}` : 'add-image'}
         type="file"
         accept="image/*"
         multiple
-        onInput={(event) => {
-          if (!event.currentTarget.files) {
-            return;
-          }
+        onClick={handleClick}
+        onInput={async (event) => {
+          invokeError('');
 
-          handleUpload(event.currentTarget.files);
+          try {
+            if (!event.currentTarget.files) {
+              return;
+            }
+
+            await handleUpload(event.currentTarget.files);
+          } catch (error) {
+            if (error instanceof Error) {
+              invokeError(error.message);
+            }
+
+            console.log(error);
+          }
         }}
       />
     </div>

@@ -1,5 +1,8 @@
 'use client';
 
+import Link from 'next/link';
+import useEmblaCarousel from 'embla-carousel-react';
+
 import { getRegionPlaces } from '@/app/(with-header)/(home)/action';
 
 import type { Dispatch, SetStateAction } from 'react';
@@ -16,6 +19,10 @@ export default function RegionSelect({
   changeRegion: (nextRegion: TRegion) => void;
   setRegionPlaces: Dispatch<SetStateAction<TPlace[]>>;
 }) {
+  const [emblaRef] = useEmblaCarousel({
+    dragFree: true,
+  });
+
   async function handleSelect(region: TRegion) {
     const regionPlacesResult = await getRegionPlaces(region.id);
 
@@ -32,10 +39,9 @@ export default function RegionSelect({
     return (
       <nav className="flex items-center gap-2">
         <span>관심 지역을 설정하세요.</span>
-        {/* 사용자 정보 수정 UI로 연결 */}
-        {/* <Link className="underline text-gray-500" href="#">
+        <Link className="underline text-gray-500" href="/area">
           설정
-        </Link> */}
+        </Link>
       </nav>
     );
   }
@@ -44,22 +50,23 @@ export default function RegionSelect({
   const unselectedStyle = 'bg-gray-200 text-gray-500';
 
   return (
-    <nav className="flex items-center gap-2">
-      {userRegions.map((region) => (
-        <button
-          className={`min-w-14 px-4 py-[6px] rounded-full font-light ${
-            currentRegion?.id === region.id ? selectedStyle : unselectedStyle
-          }`}
-          key={region.id}
-          onClick={() => handleSelect(region)}
-        >
-          {region.name}
-        </button>
-      ))}
-      {/* 사용자 정보 수정 UI로 연결 */}
-      {/* <Link className="underline text-gray-500" href="#">
-        설정
-      </Link> */}
-    </nav>
+    <div className="overflow-hidden" ref={emblaRef}>
+      <nav className="flex items-center gap-2">
+        {userRegions.map((region) => (
+          <button
+            className={`min-w-14 px-4 py-[6px] rounded-full font-light shrink-0 ${
+              currentRegion?.id === region.id ? selectedStyle : unselectedStyle
+            }`}
+            key={region.id}
+            onClick={() => handleSelect(region)}
+          >
+            {region.name}
+          </button>
+        ))}
+        <Link className="underline text-gray-500 shrink-0" href="/area">
+          설정
+        </Link>
+      </nav>
+    </div>
   );
 }

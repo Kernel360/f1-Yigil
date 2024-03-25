@@ -3,10 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+import Spinner from '@/app/_components/ui/Spinner';
+
 import BookmarkIcon from '/public/icons/bookmark.svg';
 
 import type { EventFor } from '@/types/type';
-import { postBookmark } from './action';
+import { postBookmark } from './places/action';
 import { postSpotResponseSchema } from '@/types/response';
 
 export default function BookmarkButton({
@@ -18,7 +20,7 @@ export default function BookmarkButton({
   className?: string;
   placeId: number;
   bookmarked: boolean;
-  isLoggedIn: boolean;
+  isLoggedIn?: boolean;
 }) {
   const { push } = useRouter();
 
@@ -41,7 +43,6 @@ export default function BookmarkButton({
 
     if (!result.success) {
       console.log(result.error.message);
-      // 오류 UI 작성(Toast?)
       setIsLoading(false);
     }
 
@@ -55,11 +56,15 @@ export default function BookmarkButton({
       onClick={handleClick}
       disabled={isLoading}
     >
-      <BookmarkIcon
-        className={`w-12 h-12 stroke-white stroke-[3px] ${
-          placeBookmarked ? 'fill-white' : 'fill-none'
-        }`}
-      />
+      {isLoading ? (
+        <Spinner size="w-12 h-12" />
+      ) : (
+        <BookmarkIcon
+          className={`w-12 h-12 stroke-white stroke-[3px] ${
+            placeBookmarked ? 'fill-white' : 'fill-none'
+          }`}
+        />
+      )}
     </button>
   );
 }

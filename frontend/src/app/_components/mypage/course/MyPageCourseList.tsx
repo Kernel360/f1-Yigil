@@ -12,8 +12,15 @@ import LockIcon from '/public/icons/lock.svg';
 import HamburgerIcon from '/public/icons/hamburger.svg';
 import PlusIcon from '/public/icons/plus.svg';
 import { TMyPageCourse } from '@/types/myPageResponse';
-import { deleteMyCourse, getMyPageCourses } from '../hooks/myPageActions';
+import {
+  changeOnPrivateMyTravel,
+  changeOnPublicMyTravel,
+  deleteMyCourse,
+  getMyPageCourses,
+} from '../hooks/myPageActions';
 import Dialog from '../../ui/dialog/Dialog';
+import ToastMsg from '../../ui/toast/ToastMsg';
+import LoadingIndicator from '../../LoadingIndicator';
 
 export default function MyPageCourseList({
   placeList,
@@ -36,23 +43,21 @@ export default function MyPageCourseList({
   const [sortOption, setSortOption] = useState<string>('desc');
 
   const [isDialogOpened, setIsDialogOpened] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
+  const [dialogText, setDialogText] = useState('');
+  const [dialogState, setDialogState] = useState('');
+  const [isBackendDataLoading, setIsBackendDataLoading] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const [popOverData, setPopOverData] = useState<TPopOverData[]>([
     {
-      label: '기록 나만보기',
-      icon: <LockIcon className="w-6 h-6 stroke-black" />,
-      onClick: () => onClickUnLock(),
-    },
-    {
-      label: '기록 삭제하기',
-      icon: <TrashIcon className="w-6 h-6" />,
-      onClick: () => setIsDialogOpened(true),
+      label: '',
     },
   ]);
 
   useEffect(() => {
     getCourse(currentPage, divideCount, sortOption, selectOption);
-  }, [currentPage, sortOption, selectOption]);
+  }, [currentPage, sortOption, selectOption, placeList]);
 
   const getCourse = async (
     pageNum: number,
@@ -60,44 +65,69 @@ export default function MyPageCourseList({
     sortOption: string,
     selectOption: string,
   ) => {
-    const courseList = await getMyPageCourses(
-      pageNum,
-      size,
-      sortOption,
-      selectOption,
-    );
-    if (!courseList.success) {
-      return setAllCourseList([]);
+    try {
+      setIsBackendDataLoading(true);
+      const courseList = await getMyPageCourses(
+        pageNum,
+        size,
+        sortOption,
+        selectOption,
+      );
+      if (!courseList.success) {
+        setAllCourseList([]);
+        setErrorText('데이터를 불러오는데 실패했습니다');
+        return;
+      }
+      setTotalPageCount(courseList.data.total_pages);
+      setAllCourseList([...courseList.data.content]);
+    } catch (error) {
+      setErrorText('데이터를 불러오는데 실패했습니다');
+    } finally {
+      setIsBackendDataLoading(false);
     }
-    setTotalPageCount(courseList.data.total_pages);
-    setAllCourseList([...courseList.data.content]);
   };
 
   useEffect(() => {
-    if (selectOption === 'private') {
+    if (selectOption === ('all' || 'public')) {
       setPopOverData([
         {
-          label: '기록 공개하기',
-          icon: <UnLockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickUnLock(),
+          label: '기록 나만보기',
+          icon: <LockIcon className="w-6 h-6 stroke-black" />,
+          onClick: () => {
+            setDialogText('기록을 잠금 설정하시겠나요?');
+            setDialogState('lock');
+            setIsDialogOpened(true);
+          },
         },
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => setIsDialogOpened(true),
+          onClick: () => {
+            setDialogText('기록을 삭제하시겠나요?');
+            setDialogState('delete');
+            setIsDialogOpened(true);
+          },
         },
       ]);
     } else {
       setPopOverData([
         {
-          label: '기록 나만보기',
-          icon: <LockIcon className="w-6 h-6 stroke-black" />,
-          onClick: () => onClickUnLock(),
+          label: '기록 공개하기',
+          icon: <UnLockIcon className="w-6 h-6 stroke-black" />,
+          onClick: () => {
+            setDialogText('기록을 잠금 해제하시겠나요?');
+            setDialogState('unlock');
+            setIsDialogOpened(true);
+          },
         },
         {
           label: '기록 삭제하기',
           icon: <TrashIcon className="w-6 h-6" />,
-          onClick: () => setIsDialogOpened(true),
+          onClick: () => {
+            setDialogText('기록을 삭제하시겠나요?');
+            setDialogState('delete');
+            setIsDialogOpened(true);
+          },
         },
       ]);
     }
@@ -108,13 +138,54 @@ export default function MyPageCourseList({
     getCourse(1, divideCount, sortOption, selectOption);
   }, [selectOption, sortOption]);
 
-  const onClickDelete = (courseIds: number[]) => {
-    // promise로 여러 코스 삭제를 한번에 처리하는 로직 필요
-    // Promise.all(courseIds.map((course_id) => deleteMyCourse(course_id)));
+  const onClickDelete = async (courseIds: number[]) => {
+    try {
+      setLoadingText('삭제중 입니다');
+      const promises = courseIds.map((courseId) => deleteMyCourse(courseId));
+      await Promise.all(promises);
+    } catch (error) {
+      setErrorText('삭제에 실패했습니다');
+    } finally {
+      closeDialog();
+    }
   };
-  // TODO: lock, unlock은 단일 id이냐 아니냐에 따라 다르게 호출
-  const onClickUnLock = () => {};
-  const onClickLock = () => {};
+
+  const onClickUnLock = async () => {
+    try {
+      setLoadingText('잠금 해제중 입니다');
+      const promises = checkedList.map((checked) =>
+        changeOnPublicMyTravel(checked.course_id),
+      );
+      await Promise.all(promises);
+    } catch (error) {
+      setErrorText('잠금 해제에 실패했습니다');
+    } finally {
+      closeDialog();
+    }
+  };
+  const onClickLock = async () => {
+    try {
+      setLoadingText('잠금 처리중 입니다');
+      const promises = checkedList.map((checked) =>
+        changeOnPrivateMyTravel(checked.course_id),
+      );
+      await Promise.all(promises);
+    } catch (error) {
+      setErrorText('잠금 처리에 실패했습니다');
+    } finally {
+      closeDialog();
+    }
+  };
+  const handleDialogFunc = async () => {
+    if (dialogState === 'delete') {
+      onClickDelete(checkedList.map((checked) => checked.course_id));
+    } else if (dialogState === 'unlock') {
+      onClickUnLock();
+    } else {
+      onClickLock();
+    }
+    setCheckedList([]);
+  };
 
   const closeDialog = () => {
     setIsDialogOpened(false);
@@ -133,8 +204,7 @@ export default function MyPageCourseList({
     setCheckedList([]);
   };
 
-  const onChangeSortOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+  const onChangeSortOption = (option: string) => {
     resetCourseList();
     setSortOption(option);
     resetCheckList();
@@ -178,7 +248,11 @@ export default function MyPageCourseList({
     }
   };
 
-  return (
+  return isBackendDataLoading ? (
+    <div className="max-w-[430px] mx-auto mt-10">
+      <LoadingIndicator loadingText="데이터 로딩중입니다" />
+    </div>
+  ) : (
     <>
       <div className="my-4 px-2">
         <MyPageSelectBtns
@@ -193,11 +267,10 @@ export default function MyPageCourseList({
         <div className="relative z-40">
           {isDialogOpened && (
             <Dialog
-              text="기록을 삭제하시겠나요?"
+              text={dialogText}
               closeModal={closeDialog}
-              handleConfirm={async () =>
-                onClickDelete(checkedList.map((list) => list.course_id))
-              }
+              handleConfirm={async () => handleDialogFunc()}
+              loadingText={loadingText}
             />
           )}
           <FloatingActionButton
@@ -206,6 +279,18 @@ export default function MyPageCourseList({
             closedIcon={<HamburgerIcon className="w-20 h-20" />}
           />
         </div>
+      )}
+      {!allCourseList.length && selectOption === 'public' ? (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          공개된 코스가 없습니다.
+        </div>
+      ) : (
+        !allCourseList.length &&
+        selectOption === 'private' && (
+          <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+            비공개된 코스가 없습니다.
+          </div>
+        )
       )}
       {allCourseList.map(({ course_id, ...data }, idx) => (
         <MyPageCourseItem
@@ -225,6 +310,7 @@ export default function MyPageCourseList({
           totalPage={totalPageCount}
         />
       )}
+      {errorText && <ToastMsg title={errorText} timer={2000} />}
     </>
   );
 }

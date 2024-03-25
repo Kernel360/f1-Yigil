@@ -1,3 +1,5 @@
+// 삭제 예정
+
 'use client';
 import React, {
   Dispatch,
@@ -101,7 +103,7 @@ export default function AddSpotMap({
           ref={markerRef}
           title={place.name}
           position={place.coords}
-          icon={plusMarker(place)}
+          icon={plusMarker(place.name)}
           onClick={() => handleClick(place)}
         ></Marker>
       )}

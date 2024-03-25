@@ -1,16 +1,8 @@
 package kr.co.yigil.travel.domain.spot;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
+import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
@@ -22,6 +14,7 @@ import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCacheStore;
 import kr.co.yigil.place.domain.PlaceReader;
 import kr.co.yigil.place.domain.PlaceStore;
+import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.spot.SpotCommand.ModifySpotRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterPlaceRequest;
 import kr.co.yigil.travel.domain.spot.SpotCommand.RegisterSpotRequest;
@@ -33,6 +26,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -77,14 +75,15 @@ public class SpotServiceImpl implements SpotService {
 		Member member = memberReader.getMember(memberId);
 		Optional<Place> optionalPlace = placeReader.findPlaceByNameAndAddress(
 			command.getRegisterPlaceRequest().getPlaceName(), command.getRegisterPlaceRequest().getPlaceAddress());
-		if (optionalPlace.isPresent() && spotReader.isExistSpot(memberId, optionalPlace.get().getId())) {
+		if (optionalPlace.isPresent() && spotReader.isExistPlace(memberId, optionalPlace.get().getId())) {
 			throw new BadRequestException(ExceptionCode.SPOT_ALREADY_EXIST_IN_PLACE);
 		}
 
-		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest()));
 		var attachFiles = spotSeriesFactory.initAttachFiles(command);
-		var spotCount = placeCacheStore.incrementSpotCountInPlace(place.getId());
-		var spot = spotStore.store(command.toEntity(member, place, false, attachFiles));
+		Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest(), attachFiles.getFiles().getFirst()));
+		placeCacheStore.incrementSpotCountInPlace(place.getId());
+		placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), command.getRate());
+		spotStore.store(command.toEntity(member, place, false, attachFiles));
 	}
 
     @Override
@@ -108,12 +107,14 @@ public class SpotServiceImpl implements SpotService {
         var spot = spotReader.getSpot(spotId);
         if(!Objects.equals(spot.getMember().getId(), memberId)) throw new AuthException(
                 ExceptionCode.INVALID_AUTHORITY);
-        spotStore.remove(spot);
-        if(spot.getPlace() != null) placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
+		if(spot.getPlace() != null){
+			placeCacheStore.decrementSpotCountInPlace(spot.getPlace().getId());
+			placeCacheStore.decrementSpotTotalRateInPlace(spot.getPlace().getId(), spot.getRate());
+		}
+		spotStore.remove(spot);
     }
 
-    private Place registerNewPlace(RegisterPlaceRequest command) {
-        var placeImageFile = fileUploader.upload(command.getPlaceImageFile());
+    private Place registerNewPlace(RegisterPlaceRequest command, AttachFile placeImageFile) {
         var mapStaticImage = fileUploader.upload(command.getMapStaticImageFile());
         return placeStore.store(command.toEntity(placeImageFile, mapStaticImage));
     }
@@ -127,4 +128,15 @@ public class SpotServiceImpl implements SpotService {
             .toList();
         return new MySpotsResponse(spotInfoList, pageSpot.getTotalPages());
     }
+
+	@Override
+	public CourseInfo.MySpotsInfo getMySpotsDetailInfo(List<Long> spotIds, Long memberId) {
+		for(Long spotId : spotIds){
+			if(!spotReader.isExistSpot(spotId, memberId)){
+				throw new BadRequestException(ExceptionCode.INVALID_AUTHORITY);
+			}
+		}
+		var spots = spotReader.getSpots(spotIds);
+		return new CourseInfo.MySpotsInfo(spots);
+	}
 }
