@@ -96,17 +96,23 @@ export default function Comments({ parentId }: { parentId: number }) {
   }
 
   return (
-    <section>
-      <div className="min-h-24 flex justify-center items-center">
-        {isLoading ? (
-          <Spinner />
-        ) : comments.length === 0 ? (
-          <span>댓글이 없습니다.</span>
+    <section className="flex flex-col">
+      <div className="min-h-24 flex flex-col justify-center items-center">
+        {!isLoading && comments.length === 0 ? (
+          <span className="self-center">댓글이 없습니다.</span>
         ) : (
-          comments.map((comment) => <Comment key={comment.id} data={comment} />)
+          <div className="flex w-full flex-col">
+            {comments.map((comment) => (
+              <Comment key={comment.id} data={comment} />
+            ))}
+          </div>
+        )}
+        {isLoading && (
+          <div className="py-4">
+            <Spinner />
+          </div>
         )}
       </div>
-      {/* 무한 스크롤 또는 버튼 */}
       <hr />
       <div className="w-full p-2 flex gap-2 items-center">
         <textarea
