@@ -2,21 +2,20 @@
 
 import { useContext } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
-import { searchPlaces } from './action';
+import { searchCourses, searchPlaces } from './action';
 
 import LoadingIndicator from '../LoadingIndicator';
-import InfinitePlaces from './InfinitePlaces';
-
-import type { EventFor } from '@/types/type';
 import BaseSearchHistory from './BaseSearchHistory';
 import KeywordSuggestion from './KeywordSuggestion';
+
+import PlaceResults from './PlaceResults';
+import CourseResults from './CourseResults';
 
 export default function TravelSearchResult() {
   const [state, dispatch] = useContext(SearchContext);
 
   const { results, loading, keyword, backendSearchType } = state;
 
-  // 추천 검색어 뜨는 경우 조정
   if (results.status === 'start') {
     if (keyword.length === 0) {
       return <BaseSearchHistory />;
@@ -49,25 +48,42 @@ export default function TravelSearchResult() {
 
   const content = results.content;
 
-  async function handlePlaceButton(event: EventFor<'button', 'onClick'>) {
+  async function handlePlaceButton() {
     if (content.from === 'backend' && content.data.type === 'place') {
       return;
     }
 
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    const json = await searchPlaces(state.keyword);
+    const result = await searchPlaces(state.keyword, 1, 5, state.sortOptions);
 
-    dispatch({ type: 'SEARCH_PLACE', payload: json });
+    if (result.status === 'failed') {
+      // Toast
+      dispatch({ type: 'SET_LOADING', payload: false });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_PLACE', payload: result.data });
     dispatch({ type: 'SET_LOADING', payload: false });
   }
 
-  function handleCourseButton(event: EventFor<'button', 'onClick'>) {
+  async function handleCourseButton() {
     if (content.from === 'backend' && content.data.type === 'course') {
       return;
     }
 
-    dispatch({ type: 'SEARCH_COURSE' });
+    dispatch({ type: 'SET_LOADING', payload: true });
+
+    const result = await searchCourses(state.keyword, 1, 5, state.sortOptions);
+
+    if (result.status === 'failed') {
+      // Toast
+      dispatch({ type: 'SET_LOADING', payload: false });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_COURSE', payload: result.data });
+    dispatch({ type: 'SET_LOADING', payload: false });
   }
 
   const data = content.data;
@@ -97,17 +113,9 @@ export default function TravelSearchResult() {
           <LoadingIndicator loadingText="검색 중..." />
         </section>
       ) : data.type === 'place' ? (
-        <InfinitePlaces
-          content={data.places}
-          hasNext={data.hasNext}
-          currentPage={data.currentPage}
-        />
+        <PlaceResults data={data} />
       ) : (
-        <section className="grow flex flex-col justify-center items-center gap-8">
-          <span className="text-6xl">🚧</span>
-          <br />
-          <span className="text-5xl">준비 중입니다!</span>
-        </section>
+        <CourseResults data={data} />
       )}
     </section>
   );

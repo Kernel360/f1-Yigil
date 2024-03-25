@@ -43,7 +43,6 @@ export default function BookmarkButton({
 
     if (!result.success) {
       console.log(result.error.message);
-      // 오류 UI 작성(Toast?)
       setIsLoading(false);
     }
 
