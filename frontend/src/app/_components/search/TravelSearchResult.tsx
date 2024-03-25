@@ -5,14 +5,10 @@ import { SearchContext } from '@/context/search/SearchContext';
 import { searchCourses, searchPlaces } from './action';
 
 import LoadingIndicator from '../LoadingIndicator';
-import InfinitePlaces from './InfinitePlaces';
-import InfiniteCourses from './InfiniteCourses';
 import BaseSearchHistory from './BaseSearchHistory';
 import KeywordSuggestion from './KeywordSuggestion';
 
 import PlaceResults from './PlaceResults';
-
-import type { EventFor } from '@/types/type';
 import CourseResults from './CourseResults';
 
 export default function TravelSearchResult() {
@@ -52,7 +48,7 @@ export default function TravelSearchResult() {
 
   const content = results.content;
 
-  async function handlePlaceButton(event: EventFor<'button', 'onClick'>) {
+  async function handlePlaceButton() {
     if (content.from === 'backend' && content.data.type === 'place') {
       return;
     }
@@ -71,7 +67,7 @@ export default function TravelSearchResult() {
     dispatch({ type: 'SET_LOADING', payload: false });
   }
 
-  async function handleCourseButton(event: EventFor<'button', 'onClick'>) {
+  async function handleCourseButton() {
     if (content.from === 'backend' && content.data.type === 'course') {
       return;
     }

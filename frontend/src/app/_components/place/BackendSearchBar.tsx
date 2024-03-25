@@ -23,7 +23,7 @@ export default function BackendSearchBar() {
       return;
     }
 
-    const result = await searchCourses(term);
+    const result = await searchCourses(term, 1, 5, search.sortOptions);
 
     if (result.status === 'failed') {
       dispatch({ type: 'SET_ERROR', payload: result.message });
