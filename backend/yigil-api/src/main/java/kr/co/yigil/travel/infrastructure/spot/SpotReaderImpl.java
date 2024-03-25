@@ -47,7 +47,7 @@ public class SpotReaderImpl implements SpotReader {
 
     @Override
     public Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable) {
-        return spotRepository.findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(placeId,
+        return spotRepository.findAllByPlaceIdAndIsPrivateIsFalse(placeId,
                 pageable);
     }
 

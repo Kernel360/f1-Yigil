@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface SpotRepository extends JpaRepository<Spot, Long> {
 
-    Slice<Spot> findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(Long placeId, Pageable pageable);
+    Slice<Spot> findAllByPlaceIdAndIsPrivateIsFalse(Long placeId, Pageable pageable);
 
     Optional<Spot> findTopByPlaceIdAndMemberId(Long placeId, Long memberId);
 

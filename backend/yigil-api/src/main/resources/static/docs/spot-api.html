@@ -562,6 +562,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 설명</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].owner_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot 등록 사용자의 고유 아이디</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].owner_profile_image_url</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot 등록 사용자의 프로필 이미지 Url</p></td>
@@ -573,7 +578,7 @@ Host: spring.restdocs.test</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].rate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 평점</p></td>
 </tr>
 <tr>
@@ -594,17 +599,18 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 328
+Content-Length: 362
 
 {
   "spots" : [ {
     "id" : 1,
     "image_url_list" : [ "images/image.png", "images/photo.jpeg" ],
     "description" : "설명",
+    "owner_id" : 1,
     "owner_profile_image_url" : "images/profile.jpg",
     "owner_nickname" : "오너 닉네임",
-    "rate" : "4.5",
-    "create_date" : "2024-02-01",
+    "rate" : 4.5,
+    "create_date" : "2024-03-26T00:27:27.299493",
     "liked" : true
   } ],
   "has_next" : true

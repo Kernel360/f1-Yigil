@@ -13,7 +13,7 @@ public class CourseInfoDto {
     private Long id;
     private String title;
     private String content;
-    private String mapStaticImageFileUrl;
+    private String mapStaticImageUrl;
     private double rate;
     private int spotCount;
     private LocalDateTime createDate;

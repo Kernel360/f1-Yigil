@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.interfaces.dto.mapper;
 
-import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-11T15:27:23+0900",
+    date = "2024-03-26T00:24:08+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class SpotMapperImpl implements SpotMapper {
-
-    private final DateTimeFormatter dateTimeFormatter_yyyy_MM_dd_0159776256 = DateTimeFormatter.ofPattern( "yyyy-MM-dd" );
 
     @Override
     public MySpotInPlaceResponse toMySpotInPlaceResponse(SpotInfo.MySpot mySpot) {
@@ -99,7 +96,6 @@ public class SpotMapperImpl implements SpotMapper {
             registerSpotRequest.files( new ArrayList<MultipartFile>( list ) );
         }
         registerSpotRequest.pointJson( request.getPointJson() );
-        registerSpotRequest.title( request.getTitle() );
         registerSpotRequest.description( request.getDescription() );
         registerSpotRequest.rate( request.getRate() );
 
@@ -130,7 +126,7 @@ public class SpotMapperImpl implements SpotMapper {
 
         spotInfo1.spotId( spotInfo.getSpotId() );
         spotInfo1.placeId( spotInfo.getPlaceId() );
-        spotInfo1.title( spotInfo.getTitle() );
+        spotInfo1.placeName( spotInfo.getPlaceName() );
         spotInfo1.rate( spotInfo.getRate() );
         spotInfo1.imageUrl( spotInfo.getImageUrl() );
         if ( spotInfo.getCreatedDate() != null ) {
@@ -157,11 +153,10 @@ public class SpotMapperImpl implements SpotMapper {
         spotInfoDto.setDescription( spotInfoMain.getDescription() );
         spotInfoDto.setOwnerProfileImageUrl( spotInfoMain.getOwnerProfileImageUrl() );
         spotInfoDto.setOwnerNickname( spotInfoMain.getOwnerNickname() );
-        spotInfoDto.setRate( new DecimalFormat( "#.#" ).format( spotInfoMain.getRate() ) );
-        if ( spotInfoMain.getCreateDate() != null ) {
-            spotInfoDto.setCreateDate( dateTimeFormatter_yyyy_MM_dd_0159776256.format( spotInfoMain.getCreateDate() ) );
-        }
+        spotInfoDto.setRate( spotInfoMain.getRate() );
+        spotInfoDto.setCreateDate( spotInfoMain.getCreateDate() );
         spotInfoDto.setLiked( spotInfoMain.isLiked() );
+        spotInfoDto.setOwnerId( spotInfoMain.getOwnerId() );
 
         return spotInfoDto;
     }
@@ -226,10 +221,9 @@ public class SpotMapperImpl implements SpotMapper {
         SpotCommand.RegisterPlaceRequest.RegisterPlaceRequestBuilder registerPlaceRequest = SpotCommand.RegisterPlaceRequest.builder();
 
         registerPlaceRequest.mapStaticImageFile( spotRegisterRequest.getMapStaticImageFile() );
-        registerPlaceRequest.placeImageFile( spotRegisterRequest.getPlaceImageFile() );
         registerPlaceRequest.placeName( spotRegisterRequest.getPlaceName() );
         registerPlaceRequest.placeAddress( spotRegisterRequest.getPlaceAddress() );
-        registerPlaceRequest.placePointJson( spotRegisterRequest.getPlacePointJson() );
+        registerPlaceRequest.placePointJson( spotRegisterRequest.getPointJson() );
 
         return registerPlaceRequest.build();
     }

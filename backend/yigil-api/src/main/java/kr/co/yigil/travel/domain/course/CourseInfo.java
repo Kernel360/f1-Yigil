@@ -34,7 +34,7 @@ public class CourseInfo {
         private final Long id;
         private final String title;
         private final String content;
-        private final String mapStaticImageFileUrl;
+        private final String mapStaticImageUrl;
         private final double rate;
         private final int spotCount;
         private final LocalDateTime createDate;
@@ -47,7 +47,7 @@ public class CourseInfo {
             this.id = course.getId();
             this.title = course.getTitle();
             this.content = course.getDescription();
-            this.mapStaticImageFileUrl = course.getMapStaticImageFileUrl();
+            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
             this.ownerId = course.getMember().getId();
             this.ownerProfileImageUrl = course.getMember().getProfileImageUrl();
             this.ownerNickname = course.getMember().getNickname();

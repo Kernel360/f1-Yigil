@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-11T15:38:21+0900",
+    date = "2024-03-26T00:24:08+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -79,6 +79,7 @@ public class PlaceMapperImpl implements PlaceMapper {
         boolean isBookmarked = false;
         double rate = 0.0d;
         int reviewCount = 0;
+        PlaceDetailInfoDto.PointDto point = null;
 
         id = detail.getId();
         placeName = detail.getName();
@@ -88,12 +89,27 @@ public class PlaceMapperImpl implements PlaceMapper {
         isBookmarked = detail.isBookmarked();
         rate = detail.getRate();
         reviewCount = detail.getReviewCount();
+        point = toPointDto( detail.getPoint() );
 
-        PlaceDetailInfoDto placeDetailInfoDto = new PlaceDetailInfoDto( id, placeName, address, thumbnailImageUrl, mapStaticImageUrl, isBookmarked, rate, reviewCount );
+        PlaceDetailInfoDto placeDetailInfoDto = new PlaceDetailInfoDto( id, placeName, address, thumbnailImageUrl, mapStaticImageUrl, point, isBookmarked, rate, reviewCount );
 
         placeDetailInfoDto.setBookmarked( detail.isBookmarked() );
 
         return placeDetailInfoDto;
+    }
+
+    @Override
+    public PlaceDetailInfoDto.PointDto toPointDto(PlaceInfo.PointInfo point) {
+        if ( point == null ) {
+            return null;
+        }
+
+        PlaceDetailInfoDto.PointDto pointDto = new PlaceDetailInfoDto.PointDto();
+
+        pointDto.setX( point.getX() );
+        pointDto.setY( point.getY() );
+
+        return pointDto;
     }
 
     @Override
