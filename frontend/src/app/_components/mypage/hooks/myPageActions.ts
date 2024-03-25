@@ -1,12 +1,30 @@
 'use server';
 
 import {
+  TMyPageCourseDetail,
   myPageCourseListSchema,
   myPageSpotListSchema,
+  mypageCourseDetailSchema,
+  mypageSpotDetailSchema,
 } from '@/types/myPageResponse';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
+import { TModifyDetail } from '../spot/SpotDetail';
+import {
+  cdnPathToRelativePath,
+  dataUrlToBlob,
+  getMIMETypeFromDataURI,
+} from '@/utils';
+import { TModifyCourse } from '../course/CourseDetail';
+import { TPatchCourse } from '../course/types';
+import { NextResponse } from 'next/server';
+import {
+  TBackendError,
+  backendErrorSchema,
+  postResponseSchema,
+} from '@/types/response';
+import { SafeParseReturnType } from 'zod';
 
 export const getMyPageSpots = async (
   pageNo: number = 1,
@@ -120,54 +138,242 @@ export const changeOnPrivateMyTravel = async (travel_id: number) => {
   }
 };
 
-// export const changeTravelsVisibility = async (
-//   travel_ids: number[],
-//   is_private: boolean,
-// ) => {
-//   const BASE_URL = await getBaseUrl();
-//   const cookie = cookies().get('SESSION')?.value;
-//   const data = {
-//     travel_ids,
-//     is_private,
-//   };
+export const getSpotDetail = async (spotId: number) => {
+  const BASE_URL = await getBaseUrl();
+  const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
+    next: {
+      tags: [`spotDetail/${spotId}`],
+    },
+  });
+  const result = await res.json();
+  const parsedSpotDetail = mypageSpotDetailSchema.safeParse(result);
+  return parsedSpotDetail;
+};
 
-//   const res = await fetch(`${BASE_URL}/v1/travels/change-visibility`, {
-//     method: 'PUT',
-//     headers: {
-//       Cookie: `SESSION=${cookie}`,
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   });
-//   console.log(await res.json());
-//   if (res.ok) {
-//     revalidatePath('/mypage/my/travel', 'layout');
-//   }
-// };
+export const patchSpotDetail = async (
+  spotId: number,
+  modifiedData: TModifyDetail,
+): Promise<{ status: 'succeed' } | { status: 'failed'; message: string }> => {
+  const { id, description, rate, image_urls } = modifiedData;
+  const formData = new FormData();
 
-// export const getMyPageFollwers = async (
-//   pageNo: number = 1,
-//   size: number = 5,
-//   sortOrder: string = 'desc',
-//   sortBy?: string,
-// ) => {
-//   const res = await myPageFollowerRequest(
-//     `?page=${pageNo}&size=${size}&sortBy=${
-//       sortOrder !== 'rate' ? `id&sortOrder=${sortOrder}` : `rate&sortOrder=desc`
-//     }`,
-//   )()()();
-//   return res;
-// };
-// export const getMyPageFollwings = async (
-//   pageNo: number = 1,
-//   size: number = 5,
-//   sortOrder: string = 'desc',
-//   sortBy?: string,
-// ) => {
-//   const res = await myPageFollowingRequest(
-//     `?page=${pageNo}&size=${size}&sortOrder=${sortBy ? 'desc' : sortOrder}${
-//       sortBy ? '&sortBy=rate' : ''
-//     }`,
-//   )()()();
-//   return res;
-// };
+  const originalSpotImages = image_urls.filter((image) => {
+    if (!image.uri.startsWith('data')) {
+      return {
+        imageUrl: image.uri,
+        index: Number(image.filename),
+      };
+    }
+  });
+
+  const updateSpotImages = image_urls
+    .map(({ uri, filename }, idx) => {
+      if (uri.startsWith('data'))
+        return new File([dataUrlToBlob(uri)], filename, {
+          type: getMIMETypeFromDataURI(uri),
+        });
+    })
+    .filter((i) => i !== undefined);
+
+  const updateSpotImagesIdx = image_urls
+    .map((image, idx) => {
+      if (image.uri.startsWith('data')) return idx;
+    })
+    .filter((i) => i !== undefined);
+
+  formData.append('id', id.toString());
+  formData.append('description', description);
+  formData.append('rate', rate);
+
+  originalSpotImages.forEach((image, idx) => {
+    formData.append(`originalSpotImages[${idx}].index`, image.filename);
+    formData.append(
+      `originalSpotImages[${idx}].imageUrl`,
+      cdnPathToRelativePath(image.uri),
+    );
+  });
+
+  updateSpotImages.forEach((image, idx) => {
+    if (image) {
+      formData.append(`updateSpotImages[${idx}].imageFile`, image);
+    }
+  });
+
+  updateSpotImagesIdx.forEach((item, idx) => {
+    if (item)
+      formData.append(`updateSpotImages[${idx}].index`, item.toString());
+  });
+
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
+  const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
+    method: 'POST',
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+    },
+    body: formData,
+  });
+  const result = await res.json();
+
+  const error = backendErrorSchema.safeParse(result);
+
+  if (error.success) {
+    return { status: 'failed', message: error.data.message };
+  }
+
+  const parsedResult = postResponseSchema.safeParse(result);
+
+  if (!parsedResult.success) {
+    return { status: 'failed', message: 'zod 검증 에러입니다.' };
+  }
+  revalidateTag(`spotDetail/${spotId}`);
+  return { status: 'succeed' };
+};
+
+export const getCourseDetail = async (courseId: number) => {
+  const BASE_URL = await getBaseUrl();
+
+  const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
+    next: {
+      tags: [`courseDetail/${courseId}`],
+    },
+  });
+  const result = await res.json();
+  const courseDetail = mypageCourseDetailSchema.safeParse(result);
+
+  return courseDetail;
+};
+
+export const patchCourseDetail = async (
+  courseId: number,
+  modifiedData: TPatchCourse,
+): Promise<{ status: 'succeed' } | { status: 'failed'; message: string }> => {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get(`SESSION`)?.value;
+  const {
+    title,
+    description,
+    rate,
+    spotIdOrder,
+    spots,
+    line_string_json,
+    map_static_image_url,
+  } = modifiedData;
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('rate', rate.toString());
+  line_string_json &&
+    formData.append('lineStringJson', JSON.stringify(line_string_json));
+  if (spotIdOrder)
+    spotIdOrder.forEach((id) => formData.append('spotIdOrder', id.toString()));
+
+  if (map_static_image_url && !map_static_image_url.includes('yigil')) {
+    formData.append(
+      'mapStaticImage',
+      new File(
+        [dataUrlToBlob(map_static_image_url)],
+        `${title} 코스 이미지.png`,
+        {
+          type: 'image/png',
+        },
+      ),
+    );
+  }
+
+  spots &&
+    spots.forEach((spot, firstIdx) => {
+      formData.append(
+        `courseSpotUpdateRequests[${firstIdx}].id`,
+        spot.id.toString(),
+      );
+      formData.append(
+        `courseSpotUpdateRequests[${firstIdx}].rate`,
+        spot.rate.toString(),
+      );
+      formData.append(
+        `courseSpotUpdateRequests[${firstIdx}].description`,
+        spot.description,
+      );
+    });
+
+  const updateSpotImages =
+    spots &&
+    spots.map((spot, firstIdx) => {
+      return spot.image_url_list
+        .map((image, secondIdx) => {
+          if (image.uri.startsWith('data')) {
+            return new File([dataUrlToBlob(image.uri)], image.filename, {
+              type: getMIMETypeFromDataURI(image.uri),
+            });
+          }
+        })
+        .filter((i) => i);
+    });
+
+  const originalSpotImages =
+    spots &&
+    spots.map((spot) => {
+      return spot.image_url_list.map((image, idx) => {
+        if (!image.uri.startsWith('data'))
+          return { uri: image.uri, filename: image.filename };
+      });
+    });
+
+  originalSpotImages &&
+    originalSpotImages.forEach((originSpot, firstIdx) => {
+      originSpot.forEach((image, secondIdx) => {
+        if (image) {
+          formData.append(
+            `courseSpotUpdateRequests[${firstIdx}].originalSpotImages[${secondIdx}].imageUrl`,
+            cdnPathToRelativePath(image.uri),
+          );
+          formData.append(
+            `courseSpotUpdateRequests[${firstIdx}].originalSpotImages[${secondIdx}].index`,
+            image.filename,
+          );
+        }
+      });
+    });
+
+  updateSpotImages &&
+    updateSpotImages.forEach((updatedSpot, firstIdx) => {
+      updatedSpot.forEach((spot, secondIdx) => {
+        if (spot) {
+          formData.append(
+            `courseSpotUpdateRequests[${firstIdx}].updateSpotImages[${secondIdx}].index`,
+            (secondIdx + 1).toString(),
+          );
+
+          formData.append(
+            `courseSpotUpdateRequests[${firstIdx}].updateSpotImages[${secondIdx}].imageFile`,
+            spot,
+          );
+        }
+      });
+    });
+
+  const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
+    method: 'POST',
+    headers: {
+      Cookie: `SESSION=${cookie}`,
+    },
+    body: formData,
+  });
+
+  const result = await res.json();
+
+  const error = backendErrorSchema.safeParse(result);
+
+  if (error.success) {
+    return { status: 'failed', message: error.data.message };
+  }
+
+  const parsedResult = postResponseSchema.safeParse(result);
+
+  if (!parsedResult.success) {
+    return { status: 'failed', message: 'zod 검증 에러입니다.' };
+  }
+  revalidateTag(`courseDetail/${courseId}`);
+  return { status: 'succeed' };
+};

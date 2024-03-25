@@ -32,7 +32,7 @@ const ImageItem = forwardRef<HTMLDivElement, ItemProps>(
           removeImage && removeImage(image.filename);
         }}
         ref={ref}
-        className={`relative aspect-square border-2 rounded-2xl origin-center overflow-hidden ${
+        className={`relative aspect-square border-2 rounded-2xl origin-center overflow-hidden shrink-0 ${
           withOpacity ? 'opacity-50' : 'opacity-100'
         } ${
           isDragging ? 'cursor-grabbing scale-105' : 'scale-100'

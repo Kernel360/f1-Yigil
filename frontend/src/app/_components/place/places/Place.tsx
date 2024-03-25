@@ -78,7 +78,7 @@ export default function Place({
         >
           {place_name}
         </Link>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           <IconWithCounts
             icon={<ReviewIcon className="w-4 h-4" />}
             count={Number.parseInt(review_count, 10)}

@@ -65,6 +65,7 @@ export default function BaseSearchBar({
     }
 
     dispatch({ type: 'ADD_HISTORY' });
+    dispatch({ type: 'SET_CURRENT_TERM' });
     dispatch({ type: 'SET_LOADING', payload: true });
 
     try {
