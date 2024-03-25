@@ -4,6 +4,8 @@ import kr.co.yigil.favor.domain.DailyFavorCount;
 import kr.co.yigil.favor.domain.DailyTotalFavorCount;
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.travel.TravelType;
+import kr.co.yigil.stats.domain.StatsInfo.Recent;
+import kr.co.yigil.travel.domain.Travel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +19,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
     private final StatsReader statsReader;
+    private final TravelReader travelReader;
 
     @Override
     public List<DailyRegion> getRegionStats(LocalDate startDate, LocalDate endDate) {
         return statsReader.getRegionStats(startDate, endDate);
+    }
+
+    @Override
+    public Recent getRecentRegionStats() {
+        long travelCount = travelReader.getTodayTravelCnt();
+        List<Travel> recentTravel = travelReader.getRecentTravel();
+        return new Recent(travelCount, recentTravel);
     }
 
     @Transactional

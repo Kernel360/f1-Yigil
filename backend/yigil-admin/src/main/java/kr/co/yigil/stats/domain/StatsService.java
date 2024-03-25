@@ -11,6 +11,8 @@ public interface StatsService {
 
     List<DailyRegion> getRegionStats(LocalDate startDate, LocalDate endDate);
 
+    StatsInfo.Recent getRecentRegionStats();
+
     StaticInfo.DailyTotalFavorCountInfo getDailyFavors(Pageable pageable);
 
     StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit);

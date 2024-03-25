@@ -1,7 +1,16 @@
 package kr.co.yigil.stats.application;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.stats.domain.StaticInfo;
+import kr.co.yigil.stats.domain.StatsInfo;
 import kr.co.yigil.stats.domain.StatsService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,5 +73,16 @@ class StatsFacadeTest {
         var result = statsFacade.getTopDailyFavors(null, null, null, null);
 
         assertThat(result).isInstanceOf(StaticInfo.DailyTravelsFavorCountInfo.class);
+    }
+
+    @DisplayName("getRecentRegionStats 메서드가 StatsService를 잘 호출하는지")
+    @Test
+    void getRecentRegionStatsTest() {
+        StatsInfo.Recent expectedRecentRegionStats = mock(StatsInfo.Recent.class);
+        when(statsService.getRecentRegionStats()).thenReturn(expectedRecentRegionStats);
+
+        StatsInfo.Recent actualRecentRegionStats = statsFacade.getRecentRegionStats();
+
+        assertEquals(expectedRecentRegionStats, actualRecentRegionStats);
     }
 }

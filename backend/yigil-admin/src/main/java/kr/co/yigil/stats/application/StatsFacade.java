@@ -1,6 +1,7 @@
 package kr.co.yigil.stats.application;
 
 import kr.co.yigil.region.domain.DailyRegion;
+import kr.co.yigil.stats.domain.StatsInfo;
 import kr.co.yigil.stats.domain.StaticInfo;
 import kr.co.yigil.stats.domain.StatsService;
 import kr.co.yigil.travel.TravelType;
@@ -18,6 +19,10 @@ public class StatsFacade {
 
     public List<DailyRegion> getRegionStats(LocalDate startDate, LocalDate endDate) {
         return statsService.getRegionStats(startDate, endDate);
+    }
+
+    public StatsInfo.Recent getRecentRegionStats() {
+        return statsService.getRecentRegionStats();
     }
 
     public StaticInfo.DailyTotalFavorCountInfo getDailyFavors(Pageable pageable) {

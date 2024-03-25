@@ -1,9 +1,13 @@
 package kr.co.yigil.stats.interfaces.controller;
 
+import java.time.LocalDate;
+import java.util.List;
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.stats.application.StatsFacade;
+import kr.co.yigil.stats.domain.StatsInfo.Recent;
 import kr.co.yigil.stats.interfaces.dto.StatsDto;
 import kr.co.yigil.stats.interfaces.dto.mapper.StatsMapper;
+import kr.co.yigil.stats.interfaces.dto.response.RecentRegionStatsResponse;
 import kr.co.yigil.travel.TravelType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class StatsApiController {
 
     private final StatsFacade statsFacade;
     private final StatsMapper statsMapper;
+
 
     @GetMapping("/region")
     public ResponseEntity<StatsDto.RegionStatsResponse> getRegionStats(
@@ -60,6 +63,13 @@ public class StatsApiController {
         }
         var info = statsFacade.getTopDailyFavors(startDate, endDate, travelType, limit);
         var response = statsMapper.toDailyFavorsResponse(info);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/region/recent")
+    public ResponseEntity<RecentRegionStatsResponse> getRecentRegionStats() {
+        Recent recent = statsFacade.getRecentRegionStats();
+        RecentRegionStatsResponse response = statsMapper.toRecentRegionStatsResponse(recent);
         return ResponseEntity.ok(response);
     }
 

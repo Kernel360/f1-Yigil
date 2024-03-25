@@ -3,6 +3,8 @@ package kr.co.yigil.stats.interfaces.dto.mapper;
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.stats.domain.StaticInfo;
 import kr.co.yigil.stats.interfaces.dto.StatsDto;
+import kr.co.yigil.stats.domain.StatsInfo;
+import kr.co.yigil.stats.interfaces.dto.response.RecentRegionStatsResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -32,4 +34,14 @@ public interface StatsMapper {
     StatsDto.DailyTotalFavorCountResponse toDailyTotalFavorCountDto(StaticInfo.DailyTotalFavorCountInfo info);
 
     StatsDto.DailyTotalFavorCountDto toDailyFavorDto(StaticInfo.FavorTotalCountInfo detail);
+
+    @Mapping(source = "travels", target = "travels")
+    RecentRegionStatsResponse toRecentRegionStatsResponse(StatsInfo.Recent recent);
+
+    @Mapping(source = "ownerProfileImageUrl", target = "ownerProfileImageUrl")
+    @Mapping(source = "ownerNickname", target = "ownerNickname")
+    @Mapping(source = "ownerEmail", target = "ownerEmail")
+    @Mapping(source = "travelName", target = "travelName")
+    @Mapping(source = "travelUrl", target = "travelUrl")
+    RecentRegionStatsResponse.RecentTravel toRecentRegionStatsResponseTravel(StatsInfo.RecentTravel recentTravel);
 }
