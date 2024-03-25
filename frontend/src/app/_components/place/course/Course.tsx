@@ -20,7 +20,7 @@ export default function Course({
   const {
     id,
     title,
-    map_static_image_file_url,
+    map_static_image_url,
     owner_nickname,
     owner_profile_image_url,
     rate,
@@ -52,7 +52,7 @@ export default function Course({
       <div className="mx-4 relative aspect-video">
         <Image
           className="rounded-xl"
-          src={map_static_image_file_url}
+          src={map_static_image_url}
           alt={`${title} 경로 이미지`}
           fill
         />

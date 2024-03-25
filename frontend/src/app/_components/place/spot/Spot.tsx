@@ -4,10 +4,11 @@ import IconWithCounts from '../../IconWithCounts';
 import RoundProfile from '../../ui/profile/RoundProfile';
 import ImageCarousel from '../../ui/carousel/ImageCarousel';
 
+import Reaction from '../../reaction/Reaction';
+
 import StarIcon from '/public/icons/star.svg';
 
 import type { TSpot } from '@/types/response';
-import Reaction from '../../reaction/Reaction';
 
 export default function Spot({
   placeId,
@@ -42,7 +43,7 @@ export default function Spot({
           icon={
             <StarIcon className="w-6 h-6 stroke-[#FACC15] fill-[#FACC15] [stroke-linecap:round] [stroke-linejoin:round] " />
           }
-          count={Number.parseFloat(rate)}
+          count={rate}
           rating
         />
       </div>

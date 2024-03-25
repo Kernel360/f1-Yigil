@@ -47,7 +47,7 @@ export const courseSchema = z.object({
   id: z.number().int(),
   title: z.string(),
   content: z.string(),
-  map_static_image_file_url: z.string(),
+  map_static_image_url: z.string(),
   rate: z.number(),
   spot_count: z.number().int(),
   create_date: z.coerce
@@ -175,11 +175,12 @@ export const spotSchema = z.object({
   id: z.number().int(),
   image_url_list: z.array(z.string()),
   description: z.string(),
+  owner_id: z.number().int(),
   owner_profile_image_url: z.string(),
   owner_nickname: z.string(),
-  liked: z.boolean(),
-  rate: z.string(),
+  rate: z.number(),
   create_date: z.coerce.date(),
+  liked: z.boolean(),
 });
 
 export type TSpot = z.infer<typeof spotSchema>;

@@ -9,7 +9,7 @@ import InfiniteCourses from './InfiniteCourses';
 
 import { searchCourses } from './action';
 
-import type { TCourse } from '@/types/response';
+import type { TCourseDetail } from '@/types/response';
 
 // 최신순 오래된순 평점순 이름순
 const sortOptions = [
@@ -21,7 +21,7 @@ const sortOptions = [
   },
   // {
   //   label: '이름순',
-  //   value: 'name',
+  //   value: 'title',
   // },
 ];
 
@@ -37,7 +37,7 @@ function checkBatchimEnding(word: string) {
 export default function CourseResults({
   data,
 }: {
-  data: { courses: TCourse[]; hasNext: boolean };
+  data: { courses: TCourseDetail[]; hasNext: boolean };
 }) {
   const [state, dispatch] = useContext(SearchContext);
   const [error, setError] = useState('');

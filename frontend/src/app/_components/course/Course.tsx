@@ -4,14 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import IconWithCounts from '../IconWithCounts';
+import LikeButton from './LikeButton';
 
-import type { TCourse } from '@/types/response';
+import type { TCourseDetail } from '@/types/response';
 
 import StarIcon from '/public/icons/star.svg';
 import ReviewIcon from '/public/icons/review.svg';
-import LikeButton from './LikeButton';
 
-export default function Course({ data }: { data: TCourse }) {
+export default function Course({ data }: { data: TCourseDetail }) {
   const { id, title, map_static_image_url, spot_count, rate, liked } = data;
   return (
     <article className="p-4 flex flex-col gap-2">
