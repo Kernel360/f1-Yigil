@@ -7,6 +7,7 @@ import MyPageFollowingItem from './MyPageFollowingItem';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import LoadingIndicator from '../../LoadingIndicator';
 import { cookies } from 'next/headers';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 const selectList = [
   {
@@ -65,24 +66,20 @@ export default function MyPageFollowingList({
     size: number,
     selectOption: string,
   ) => {
-    try {
-      setErrorText('');
-      setIsLoading(true);
-      const followingList = await getFollowingList(pageNo, size, selectOption);
-      if (followingList.status === 'failed') {
-        setAllFollowingList([]);
-        setErrorText(followingList.message);
-        return;
-      }
-      setAllFollowingList(followingList.data.content);
-      setHasNext(followingList.data.has_next);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
-    } finally {
+    setIsLoading(true);
+    const followingList = await getFollowingList(pageNo, size, selectOption);
+    if (followingList.status === 'failed') {
+      setAllFollowingList([]);
+      setErrorText(followingList.message);
+      setTimeout(() => {
+        setErrorText('');
+      }, 1000);
       setIsLoading(false);
+      return;
     }
+    setAllFollowingList(followingList.data.content);
+    setHasNext(followingList.data.has_next);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -114,6 +111,7 @@ export default function MyPageFollowingList({
             <button className="py-1 px-8 bg-gray-200 rounded-lg">더보기</button>
           ))}
       </div>
+      {errorText && <ToastMsg title={errorText} timer={1000} id={Date.now()} />}
     </div>
   );
 }

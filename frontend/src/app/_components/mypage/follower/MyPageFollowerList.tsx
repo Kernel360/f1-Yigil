@@ -6,6 +6,7 @@ import Select from '../../ui/select/Select';
 import { getFollowerList } from '../hooks/followActions';
 import MyPageFollowerItem from './MyPageFollowerItem';
 import LoadingIndicator from '../../LoadingIndicator';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 const selectList = [
   {
@@ -65,17 +66,24 @@ export default function MyPageFollowerList({
     size: number,
     selectOption: string,
   ) => {
+    setIsLoading(true);
     const followerList = await getFollowerList(pageNo, size, selectOption);
     if (followerList.status === 'failed') {
       setAllFollowerList([]);
+      setErrorText(followerList.message);
+      setTimeout(() => {
+        setErrorText('');
+      }, 1000);
+      setIsLoading(false);
       return;
     }
 
     setAllFollowerList(followerList.data.content);
     setHasNext(followerList.data.has_next);
+    setIsLoading(false);
   };
 
-  출처: https: useEffect(() => {
+  useEffect(() => {
     getFollowerLists(1, 5, selectOption);
   }, [selectOption]);
   return (
@@ -100,6 +108,7 @@ export default function MyPageFollowerList({
             <button className="py-1 px-8 bg-gray-200 rounded-lg">더보기</button>
           ))}
       </div>
+      {errorText && <ToastMsg title={errorText} timer={1000} id={Date.now()} />}
     </div>
   );
 }

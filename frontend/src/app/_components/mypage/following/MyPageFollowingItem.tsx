@@ -1,7 +1,8 @@
 import { TMyPageFollow } from '@/types/myPageResponse';
 import React, { useState } from 'react';
 import RoundProfile from '../../ui/profile/RoundProfile';
-import { addFollow, unFollow } from '../hooks/followActions';
+import { postFollow } from '../hooks/followActions';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 export default function MyPageFollowingItem({
   member_id,
@@ -12,21 +13,14 @@ export default function MyPageFollowingItem({
   const [errorText, setErrorText] = useState('');
 
   const onClickFollowingBtn = async () => {
-    setErrorText('');
-
-    if (isFollowing) {
-      const result = await unFollow(member_id);
-      if (result.status === 'failed') {
-        setErrorText(result.message);
-        return;
-      }
-      setIsFollowing(!isFollowing);
+    const result = await postFollow(member_id, isFollowing);
+    if (result.status === 'failed') {
+      setErrorText(result.message);
+      setTimeout(() => {
+        setErrorText('');
+      }, 1000);
+      return;
     } else {
-      const result = await addFollow(member_id);
-      if (result.status === 'failed') {
-        setErrorText(result.message);
-        return;
-      }
       setIsFollowing(!isFollowing);
     }
   };
@@ -42,6 +36,7 @@ export default function MyPageFollowingItem({
       >
         팔로잉
       </button>
+      {errorText && <ToastMsg title={errorText} timer={1000} id={Date.now()} />}
     </div>
   );
 }

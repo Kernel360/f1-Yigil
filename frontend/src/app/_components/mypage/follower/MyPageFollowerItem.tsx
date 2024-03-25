@@ -2,7 +2,8 @@ import { TMyPageFollower } from '@/types/myPageResponse';
 import React, { useState } from 'react';
 import Dialog from '../../ui/dialog/Dialog';
 import RoundProfile from '../../ui/profile/RoundProfile';
-import { addFollow, unFollow } from '../hooks/followActions';
+import { postFollow } from '../hooks/followActions';
+import ToastMsg from '../../ui/toast/ToastMsg';
 
 const MyPageFollowerItem = ({
   member_id,
@@ -12,11 +13,13 @@ const MyPageFollowerItem = ({
 }: TMyPageFollower) => {
   const [isFollowing, setIsFollowing] = useState(following);
   const [isDialogOpened, setIsDialogOpened] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
   const onClickFollowingBtn = async () => {
-    if (isFollowing) {
-      unFollow(member_id);
-    } else {
-      addFollow(member_id);
+    const result = await postFollow(member_id, isFollowing);
+    if (result.status === 'failed') {
+      setErrorText(result.message);
+      return;
     }
     setIsFollowing(!isFollowing);
   };
@@ -24,8 +27,19 @@ const MyPageFollowerItem = ({
     setIsDialogOpened(false);
   };
 
-  const deleteFollwer = (memberId: number) => {
-    // 삭제 로직
+  const deleteFollwer = async (memberId: number) => {
+    const result = await postFollow(member_id, isFollowing);
+    if (result.status === 'failed') {
+      setErrorText(result.message);
+      setIsDialogOpened(false);
+      setTimeout(() => {
+        setErrorText('');
+      }, 1000);
+      return;
+    } else {
+      setIsFollowing(!isFollowing);
+      setIsDialogOpened(false);
+    }
   };
 
   return (
@@ -52,9 +66,11 @@ const MyPageFollowerItem = ({
         <Dialog
           closeModal={closeModal}
           text="팔로워를 삭제하시겠나요?"
+          loadingText="삭제중 입니다."
           handleConfirm={async () => deleteFollwer(member_id)}
         />
       )}
+      {errorText && <ToastMsg title={errorText} timer={1000} id={Date.now()} />}
     </div>
   );
 };
