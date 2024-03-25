@@ -1,16 +1,21 @@
 package kr.co.yigil.place.interfaces.controller;
 
-import static kr.co.yigil.RestDocumentUtils.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
-
+import kr.co.yigil.auth.domain.Accessor;
+import kr.co.yigil.place.application.PlaceFacade;
+import kr.co.yigil.place.domain.Place;
+import kr.co.yigil.place.domain.PlaceCommand;
+import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
+import kr.co.yigil.place.domain.PlaceInfo;
+import kr.co.yigil.place.domain.PlaceInfo.Detail;
+import kr.co.yigil.place.domain.PlaceInfo.Keyword;
+import kr.co.yigil.place.domain.PlaceInfo.Main;
+import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
+import kr.co.yigil.place.interfaces.dto.PlaceCoordinateDto;
+import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
+import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
+import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
+import kr.co.yigil.place.interfaces.dto.request.PlaceImageRequest;
+import kr.co.yigil.place.interfaces.dto.response.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,27 +35,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.place.application.PlaceFacade;
-import kr.co.yigil.place.domain.Place;
-import kr.co.yigil.place.domain.PlaceCommand;
-import kr.co.yigil.place.domain.PlaceCommand.NearPlaceRequest;
-import kr.co.yigil.place.domain.PlaceInfo;
-import kr.co.yigil.place.domain.PlaceInfo.Detail;
-import kr.co.yigil.place.domain.PlaceInfo.Keyword;
-import kr.co.yigil.place.domain.PlaceInfo.Main;
-import kr.co.yigil.place.domain.PlaceInfo.MapStaticImageInfo;
-import kr.co.yigil.place.interfaces.dto.PlaceCoordinateDto;
-import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
-import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
-import kr.co.yigil.place.interfaces.dto.mapper.PlaceMapper;
-import kr.co.yigil.place.interfaces.dto.request.PlaceImageRequest;
-import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
-import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
-import kr.co.yigil.place.interfaces.dto.response.PlaceSearchResponse;
-import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
-import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
-import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
+import java.util.List;
+
+import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
+import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(PlaceApiController.class)
@@ -238,7 +235,10 @@ class PlaceApiControllerTest {
 	void retrievePlace_ShouldReturnOk() throws Exception {
 		Long placeId = 1L;
 		Detail mockDetail = mock(Detail.class);
-		PlaceDetailInfoDto mockResponse = new PlaceDetailInfoDto(placeId, "장소명", "장소주소", "image.com", "image.net", true,
+		PlaceDetailInfoDto.PointDto pointDto = new PlaceDetailInfoDto.PointDto();
+		pointDto.setX(1.0);
+		pointDto.setY(1.0);
+		PlaceDetailInfoDto mockResponse = new PlaceDetailInfoDto(placeId, "장소명", "장소주소", "image.com", "image.net", pointDto,true,
 			3.0, 50);
 
 		when(placeFacade.retrievePlaceInfo(anyLong(), any(Accessor.class))).thenReturn(mockDetail);
@@ -259,6 +259,8 @@ class PlaceApiControllerTest {
 					fieldWithPath("address").type(JsonFieldType.STRING).description("장소의 주소"),
 					fieldWithPath("thumbnail_image_url").type(JsonFieldType.STRING).description("장소의 대표 이미지 URL"),
 					fieldWithPath("map_static_image_url").type(JsonFieldType.STRING).description("장소의 지도 이미지 URL"),
+					fieldWithPath("point.x").type(JsonFieldType.NUMBER).description("장소의 x 좌표"),
+					fieldWithPath("point.y").type(JsonFieldType.NUMBER).description("장소의 y 좌표"),
 					fieldWithPath("bookmarked").type(JsonFieldType.BOOLEAN).description("유저의 장소 북마크 여부"),
 					fieldWithPath("rate").type(JsonFieldType.NUMBER).description("장소의 평점"),
 					fieldWithPath("review_count").type(JsonFieldType.NUMBER).description("장소 내의 리뷰 개수")
