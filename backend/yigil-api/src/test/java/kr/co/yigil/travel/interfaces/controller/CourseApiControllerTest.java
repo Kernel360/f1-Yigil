@@ -77,7 +77,7 @@ public class CourseApiControllerTest {
         courseInfo.setId(1L);
         courseInfo.setTitle("test");
         courseInfo.setContent("test");
-        courseInfo.setMapStaticImageFileUrl("test");
+        courseInfo.setMapStaticImageUrl("test");
         courseInfo.setRate(4.5);
         courseInfo.setSpotCount(10);
         courseInfo.setCreateDate(LocalDateTime.now());
@@ -123,7 +123,7 @@ public class CourseApiControllerTest {
                                 subsectionWithPath("courses").description("course의 정보"),
                                 fieldWithPath("courses[].id").type(JsonFieldType.NUMBER)
                                         .description("코스 ID"),
-                                fieldWithPath("courses[].map_static_image_file_url").type(
+                                fieldWithPath("courses[].map_static_image_url").type(
                                                 JsonFieldType.STRING)
                                         .description("코스의 지도 정보를 나타내는 이미지 파일 경로"),
                                 fieldWithPath("courses[].title").type(JsonFieldType.STRING)

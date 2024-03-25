@@ -83,7 +83,7 @@ public class SpotReaderImplTest {
         Long placeId = 1L;
         Pageable pageable = mock(Pageable.class);
         Slice<Spot> expectedSlice = mock(Slice.class);
-        when(spotRepository.findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(placeId, pageable)).thenReturn(expectedSlice);
+        when(spotRepository.findAllByPlaceIdAndIsPrivateIsFalse(placeId, pageable)).thenReturn(expectedSlice);
 
         Slice<Spot> result = spotReader.getSpotSliceInPlace(placeId, pageable);
 
