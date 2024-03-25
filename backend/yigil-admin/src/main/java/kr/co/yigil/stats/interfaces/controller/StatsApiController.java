@@ -4,12 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 import kr.co.yigil.region.domain.DailyRegion;
 import kr.co.yigil.stats.application.StatsFacade;
-import kr.co.yigil.stats.domain.StatsInfo;
 import kr.co.yigil.stats.domain.StatsInfo.Recent;
 import kr.co.yigil.stats.interfaces.dto.StatsDto;
 import kr.co.yigil.stats.interfaces.dto.mapper.StatsMapper;
 import kr.co.yigil.stats.interfaces.dto.response.RecentRegionStatsResponse;
-import kr.co.yigil.stats.interfaces.dto.response.RegionStatsResponse;
 import kr.co.yigil.travel.TravelType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
