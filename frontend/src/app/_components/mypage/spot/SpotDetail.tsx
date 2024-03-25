@@ -101,7 +101,7 @@ export default function SpotDetail({
     setIsDialogOpened(false);
   };
   return (
-    <div className="mx-4">
+    <div className="mx-4 grow">
       <nav className="relative py-4 flex justify-between items-center">
         <BackButton />
         <span className="text-2xl font-light">
@@ -128,6 +128,7 @@ export default function SpotDetail({
           {isModifyMode ? (
             <Common.SelectContainer
               selectOption={selectOption}
+              selectStyle="p-2"
               rate={rate}
               onChangeSelectOption={onChangeSelectOption}
             />

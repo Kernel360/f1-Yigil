@@ -99,8 +99,6 @@ export const ModifyImage = ({
   order?: string;
 }) => {
   return (
-    <div className="h-1/3">
-      <ImageHandler images={image_urls} setImages={setImages} order={order} />
-    </div>
+    <ImageHandler images={image_urls} setImages={setImages} order={order} />
   );
 };

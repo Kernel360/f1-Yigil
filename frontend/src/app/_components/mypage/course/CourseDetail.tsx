@@ -205,10 +205,16 @@ export default function CourseDetail({
       setErrorText('코스는 2개 이상 장소가 존재해야 합니다.');
       return;
     }
-    const filteredSpot = modifyCourse.spots.filter((spot) =>
-      modifyCourse.spotIdOrder.includes(spot.id),
+    const filteredSpot = modifyCourse.spots.filter((spot) => spot.id !== id);
+    const filteredSpotIdOrder = modifyCourse.spotIdOrder.filter(
+      (idOrder) => idOrder !== id,
     );
-    setModifyCourse((prev) => ({ ...prev, spots: filteredSpot }));
+    setModifyCourse((prev) => ({
+      ...prev,
+      spots: filteredSpot,
+      spotIdOrder: filteredSpotIdOrder,
+    }));
+    getCoordsList(filteredSpot);
     setErrorText('');
   };
 
@@ -306,7 +312,6 @@ export default function CourseDetail({
               blurDataURL={PlaceholderImage.blurDataURL}
               alt={`${title} 경로 이미지`}
               fill
-              sizes="100vw"
             />
             <button
               onClick={() => {
