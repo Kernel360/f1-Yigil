@@ -8,6 +8,7 @@ const keywordSchema = z.string();
 const errorSchema = z.string();
 const searchHistorySchema = z.string();
 const loadingSchema = z.boolean();
+const sortOptionSchema = z.string();
 
 const engineSearchSchema = z.array(
   z.object({
@@ -35,6 +36,8 @@ export type TSearchState = {
   keyword: string;
   currentTerm: string;
   histories: string[];
+
+  sortOptions: string;
 
   backendSearchType: 'place' | 'course';
 
@@ -73,6 +76,7 @@ export const defaultSearchState: TSearchState = {
   keyword: '',
   currentTerm: '',
   histories: [],
+  sortOptions: 'desc',
   backendSearchType: 'place',
   results: { status: 'start' },
 };
@@ -85,6 +89,7 @@ export type TSearchAction = {
     | 'ADD_HISTORY'
     | 'DELETE_HISTORY'
     | 'CLEAR_HISTORY'
+    | 'SET_SORT_OPTION'
     | 'INIT_RESULT'
     | 'SET_LOADING'
     | 'SET_ERROR'
@@ -106,6 +111,7 @@ export function createInitialState(
     showHistory: showHistory,
     keyword: initialKeyword,
     currentTerm: initialKeyword,
+    sortOptions: 'desc',
     backendSearchType,
     results: { status: 'start' },
   };
@@ -160,6 +166,16 @@ export default function reducer(
 
     case 'CLEAR_HISTORY': {
       return { ...state, histories: [] };
+    }
+
+    case 'SET_SORT_OPTION': {
+      const result = sortOptionSchema.safeParse(action.payload);
+
+      if (!result.success) {
+        return { ...state };
+      }
+
+      return { ...state, sortOptions: result.data };
     }
 
     case 'INIT_RESULT': {

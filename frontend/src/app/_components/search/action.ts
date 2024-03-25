@@ -129,14 +129,19 @@ async function fetchSearchPlaces(
   keyword: string,
   page: number,
   size: number,
-  sortBy: 'latest_uploaded_time' | 'rate',
-  sortOrder: 'desc' | 'asc',
+  sortOrder: string,
 ) {
   const BASE_URL = await getBaseUrl();
   const session = cookies().get('SESSION')?.value;
 
   const endpoint = `${BASE_URL}/v1/places/search`;
-  const queryParams = Object.entries({ keyword, page, size, sortBy, sortOrder })
+
+  const sortBy =
+    sortOrder !== 'rate'
+      ? `latest_uploaded_time&sortOrder=${sortOrder}`
+      : `rate&sortOrder=desc`;
+
+  const queryParams = Object.entries({ keyword, page, size, sortBy })
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
@@ -154,10 +159,9 @@ export async function searchPlaces(
   keyword: string,
   page: number = 1,
   size: number = 5,
-  sortBy: 'latest_uploaded_time' | 'rate' = 'latest_uploaded_time',
-  sortOrder: 'desc' | 'asc' = 'desc',
+  sortOrder: string = 'desc',
 ): Promise<TBackendRequestResult<z.infer<typeof searchPlaceSchema>>> {
-  const json = await fetchSearchPlaces(keyword, page, size, sortBy, sortOrder);
+  const json = await fetchSearchPlaces(keyword, page, size, sortOrder);
 
   const error = backendErrorSchema.safeParse(json);
 
@@ -199,14 +203,20 @@ async function fetchSearchCourses(
   keyword: string,
   page: number,
   size: number,
-  sortBy: 'created_at' | 'rate' | 'name',
-  sortOrder: 'desc' | 'asc',
+  sortOrder: string,
 ) {
   const BASE_URL = await getBaseUrl();
   const session = cookies().get('SESSION')?.value;
 
   const endpoint = `${BASE_URL}/v1/courses/search`;
-  const queryParams = Object.entries({ keyword, page, size, sortBy, sortOrder })
+  const sortBy =
+    sortOrder === 'rate'
+      ? `rate&sortOrder=desc`
+      : sortOrder === 'name'
+      ? `name&sortOrder=desc`
+      : `created_at&sortOrder=${sortOrder}`;
+
+  const queryParams = Object.entries({ keyword, page, size, sortBy })
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
@@ -224,10 +234,9 @@ export async function searchCourses(
   keyword: string,
   page: number = 1,
   size: number = 5,
-  sortBy: 'created_at' | 'rate' | 'name' = 'created_at',
-  sortOrder: 'desc' | 'asc' = 'desc',
+  sortOrder: string = 'desc',
 ): Promise<TBackendRequestResult<z.infer<typeof searchCourseSchema>>> {
-  const json = await fetchSearchCourses(keyword, page, size, sortBy, sortOrder);
+  const json = await fetchSearchCourses(keyword, page, size, sortOrder);
 
   const error = backendErrorSchema.safeParse(json);
 

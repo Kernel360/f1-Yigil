@@ -11,7 +11,7 @@ export default function BackendSearchBar() {
 
   async function onSearch(term: string) {
     if (search.backendSearchType === 'place') {
-      const result = await searchPlaces(term);
+      const result = await searchPlaces(term, 1, 5, search.sortOptions);
 
       if (result.status === 'failed') {
         dispatch({ type: 'SET_ERROR', payload: result.message });

@@ -36,7 +36,7 @@ export default function Course({ data }: { data: TCourse }) {
       >
         {title}
       </Link>
-      <div className="px-2 flex gap-2">
+      <div className="px-2 flex gap-4">
         <IconWithCounts
           count={spot_count}
           icon={<ReviewIcon className="w-4 h-4" />}

@@ -5,6 +5,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { SearchContext } from '@/context/search/SearchContext';
 import { searchCourses } from './action';
 
+import Spinner from '../ui/Spinner';
 import Course from '../course/Course';
 
 import type { TCourse } from '@/types/response';
@@ -87,7 +88,17 @@ export default function InfiniteCourses({
         className="min-h-6 bg-gray-200 flex justify-center items-center"
         ref={endRef}
       >
-        {hasNext ? isLoading ? <>Loading...</> : <>Load?</> : <></>}
+        <div className="py-4">
+          {hasNext ? (
+            isLoading ? (
+              <Spinner />
+            ) : (
+              <span className="font-medium">아래로 내려 더 보기</span>
+            )
+          ) : (
+            <span className="font-medium">마지막 결과입니다!</span>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -8,6 +8,7 @@ import { MemberContext } from '@/context/MemberContext';
 import { searchPlaces } from './action';
 
 import type { TPlace } from '@/types/response';
+import Spinner from '../ui/Spinner';
 
 export default function InfinitePlaces({
   initialContent,
@@ -15,11 +16,8 @@ export default function InfinitePlaces({
 }: {
   initialContent: TPlace[];
   initialHasNext: boolean;
-  // content: TPlace[];
-  // hasNext: boolean;
-  // currentPage: number;
 }) {
-  const [state, dispatch] = useContext(SearchContext);
+  const [state] = useContext(SearchContext);
   const { isLoggedIn } = useContext(MemberContext);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +26,19 @@ export default function InfinitePlaces({
   const [content, setContent] = useState(initialContent);
   const [hasNext, setHasNext] = useState(initialHasNext);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    if (state.results.status === 'success') {
+      if (state.results.content.from === 'backend') {
+        if (state.results.content.data.type === 'place') {
+          const { places, hasNext } = state.results.content.data;
+
+          setContent(places);
+          setHasNext(hasNext);
+        }
+      }
+    }
+  }, [state.results]);
 
   const onScroll: IntersectionObserverCallback = useCallback(
     async (entries) => {
@@ -96,7 +107,17 @@ export default function InfinitePlaces({
         className="min-h-6 bg-gray-200 flex justify-center items-center"
         ref={endRef}
       >
-        {hasNext ? isLoading ? <>Loading...</> : <>Load?</> : <></>}
+        <div className="py-4">
+          {hasNext ? (
+            isLoading ? (
+              <Spinner />
+            ) : (
+              <span className="font-medium">아래로 내려 더 보기</span>
+            )
+          ) : (
+            <span className="font-medium">마지막 결과입니다!</span>
+          )}
+        </div>
       </div>
     </section>
   );

@@ -10,16 +10,10 @@ import InfiniteCourses from './InfiniteCourses';
 import BaseSearchHistory from './BaseSearchHistory';
 import KeywordSuggestion from './KeywordSuggestion';
 
+import PlaceResults from './PlaceResults';
+
 import type { EventFor } from '@/types/type';
-
-function checkBatchimEnding(word: string) {
-  const lastLetter = word[word.length - 1];
-  const uni = lastLetter.charCodeAt(0);
-
-  if (uni < 44032 || uni > 55203) return false;
-
-  return (uni - 44032) % 28 != 0;
-}
+import CourseResults from './CourseResults';
 
 export default function TravelSearchResult() {
   const [state, dispatch] = useContext(SearchContext);
@@ -65,7 +59,7 @@ export default function TravelSearchResult() {
 
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    const result = await searchPlaces(state.keyword);
+    const result = await searchPlaces(state.keyword, 1, 5, state.sortOptions);
 
     if (result.status === 'failed') {
       // Toast
@@ -84,7 +78,7 @@ export default function TravelSearchResult() {
 
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    const result = await searchCourses(state.keyword);
+    const result = await searchCourses(state.keyword, 1, 5, state.sortOptions);
 
     if (result.status === 'failed') {
       // Toast
@@ -123,22 +117,9 @@ export default function TravelSearchResult() {
           <LoadingIndicator loadingText="검색 중..." />
         </section>
       ) : data.type === 'place' ? (
-        <div className="flex grow">
-          <InfinitePlaces
-            initialContent={data.places}
-            initialHasNext={data.hasNext}
-          />
-        </div>
+        <PlaceResults data={data} />
       ) : (
-        <div className="py-4 flex flex-col grow">
-          <span className="px-4 text-gray-500">{`'${state.currentTerm}'${
-            checkBatchimEnding(state.currentTerm) ? '이' : '가'
-          } 포함된 코스를 모두 검색하였습니다.`}</span>
-          <InfiniteCourses
-            initialContent={data.courses}
-            initialHasNext={data.hasNext}
-          />
-        </div>
+        <CourseResults data={data} />
       )}
     </section>
   );
