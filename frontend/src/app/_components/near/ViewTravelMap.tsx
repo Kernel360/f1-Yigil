@@ -36,6 +36,8 @@ export default function ViewTravelMap() {
   const [totalPages, setTotalPages] = useState(0);
   const [markerClickedId, setMarkerClickedId] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
+  const [errorText, setErrorText] = useState('');
   const [isGeolocationLoading, setIsGeolocationLoading] = useState(true);
   const { onSuccessGeolocation, onErrorGeolocation } = useGeolocation(
     mapRef,
@@ -81,13 +83,14 @@ export default function ViewTravelMap() {
     try {
       const placeList = await getNearPlaces(maxMinBounds, currentPage);
       if (!placeList.success) {
-        alert('장소 데이터를 불러오는데 실패했습니다');
+        setErrorText('장소 데이터를 불러오는데 실패했습니다');
         return;
       }
       setAllPlaces(placeList.data.places);
       setTotalPages(placeList.data.total_pages);
     } catch (error) {
       console.log(error);
+      setErrorText('알 수 없는 에러 발생');
     } finally {
       setIsLoading(false);
     }
@@ -142,15 +145,12 @@ export default function ViewTravelMap() {
                 ? false
                 : true
             }
+            setToastMsg={setToastMsg}
           />
         ))}
       </NaverMap>
-      {markerClickedId > 0 && (
-        <ToastMsg
-          title="한번 더 클릭하면 장소 상세페이지로 이동합니다"
-          timer={2000}
-          id={markerClickedId}
-        />
+      {toastMsg && (
+        <ToastMsg title={toastMsg} timer={2000} id={markerClickedId} />
       )}
 
       {!allPlaces.length && !isLoading && (
