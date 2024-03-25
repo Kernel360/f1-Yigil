@@ -33,6 +33,9 @@ export const getFollowingList = async (
         headers: {
           Cookie: `SESSION=${cookie}`,
         },
+        next: {
+          tags: ['following'],
+        },
       },
     );
     const followingList = await res.json();
@@ -84,6 +87,9 @@ export const getFollowerList = async (
         headers: {
           Cookie: `SESSION=${cookie}`,
         },
+        next: {
+          tags: ['follower'],
+        },
       },
     );
     const followerList = await res.json();
@@ -132,7 +138,7 @@ export const postFollow = async (memberId: number, isFollowed: boolean) => {
       console.error(`${error.data.code} - ${error.data.message}`);
       return { status: 'failed', message: error.data.message };
     }
-
+    console.log(result);
     const parsedResult = postResponseSchema.safeParse(result);
 
     if (!parsedResult.success) {

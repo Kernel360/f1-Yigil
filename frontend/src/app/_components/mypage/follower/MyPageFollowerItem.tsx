@@ -16,12 +16,13 @@ const MyPageFollowerItem = ({
   const [errorText, setErrorText] = useState('');
 
   const onClickFollowingBtn = async () => {
+    setIsFollowing(!isFollowing);
     const result = await postFollow(member_id, isFollowing);
     if (result.status === 'failed') {
       setErrorText(result.message);
+      setIsFollowing(!isFollowing);
       return;
     }
-    setIsFollowing(!isFollowing);
   };
   const closeModal = () => {
     setIsDialogOpened(false);
@@ -36,10 +37,9 @@ const MyPageFollowerItem = ({
         setErrorText('');
       }, 1000);
       return;
-    } else {
-      setIsFollowing(!isFollowing);
-      setIsDialogOpened(false);
     }
+    setIsFollowing(!isFollowing);
+    setIsDialogOpened(false);
   };
 
   return (

@@ -91,6 +91,7 @@ export default function MyPageFollowerList({
       <div className="flex justify-end mt-6 mb-10">
         <Select
           list={selectList}
+          selectStyle="p-2"
           onChangeSelectOption={onChangeSelectOption}
           selectOption={selectOption}
           defaultValue="이름순"

@@ -13,15 +13,15 @@ export default function MyPageFollowingItem({
   const [errorText, setErrorText] = useState('');
 
   const onClickFollowingBtn = async () => {
+    setIsFollowing(!isFollowing);
     const result = await postFollow(member_id, isFollowing);
     if (result.status === 'failed') {
       setErrorText(result.message);
       setTimeout(() => {
         setErrorText('');
       }, 1000);
-      return;
-    } else {
       setIsFollowing(!isFollowing);
+      return;
     }
   };
   return (
