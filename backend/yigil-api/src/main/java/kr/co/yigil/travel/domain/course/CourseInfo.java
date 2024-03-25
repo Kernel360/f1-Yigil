@@ -16,6 +16,48 @@ import java.util.stream.Collectors;
 
 public class CourseInfo {
 
+    @Data
+    @Getter
+    public static class CoursesInPlaceResponseInfo {
+        private final List<CourseInPlaceInfo> courses;
+        private final boolean hasNext;
+
+        public CoursesInPlaceResponseInfo(List<CourseInPlaceInfo> courses, boolean hasNext) {
+            this.courses = courses;
+            this.hasNext = hasNext;
+        }
+    }
+
+    @Data
+    @Getter
+    public static class CourseInPlaceInfo{
+        private final Long id;
+        private final String title;
+        private final String content;
+        private final String mapStaticImageFileUrl;
+        private final double rate;
+        private final int spotCount;
+        private final LocalDateTime createDate;
+        private final Long ownerId;
+        private final String ownerProfileImageUrl;
+        private final String ownerNickname;
+        private final boolean liked;
+
+        public CourseInPlaceInfo(Course course, boolean isLiked) {
+            this.id = course.getId();
+            this.title = course.getTitle();
+            this.content = course.getDescription();
+            this.mapStaticImageFileUrl = course.getMapStaticImageFileUrl();
+            this.ownerId = course.getMember().getId();
+            this.ownerProfileImageUrl = course.getMember().getProfileImageUrl();
+            this.ownerNickname = course.getMember().getNickname();
+            this.spotCount = course.getSpots().size();
+            this.rate = course.getRate();
+            this.createDate = course.getCreatedAt();
+            this.liked = isLiked;
+        }
+    }
+
     @Getter
     @ToString
     public static class Main {

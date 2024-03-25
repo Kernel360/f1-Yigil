@@ -51,8 +51,6 @@ server:
         cookie:
           http-only: true
           secure: false
-  tomcat:
-    max-http-form-post-size: 500MB
 
 jasypt:
   encryptor:
