@@ -11,6 +11,7 @@ import {
   fetchableSchema,
   postResponseSchema,
 } from '@/types/response';
+import z from 'zod';
 
 async function fetchComments(travelId: number, page: number, size: number) {
   const BASE_URL = await getBaseUrl();
@@ -68,14 +69,29 @@ export async function postComment(
   return { status: 'succeed', data: null };
 }
 
+const fetchableComments = fetchableSchema(commentSchema);
+
 export async function getComments(
   travelId: number,
   page: number = 1,
   size: number = 5,
-) {
+): Promise<TBackendRequestResult<z.infer<typeof fetchableComments>>> {
   const json = await fetchComments(travelId, page, size);
+
+  const error = backendErrorSchema.safeParse(json);
+
+  if (error.success) {
+    const { code, message } = error.data;
+    console.error(`${code} - ${message}`);
+    return { status: 'failed', message, code };
+  }
 
   const result = fetchableSchema(commentSchema).safeParse(json);
 
-  return result;
+  if (!result.success) {
+    console.error(`알 수 없는 에러입니다!`);
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  return { status: 'succeed', data: result.data };
 }

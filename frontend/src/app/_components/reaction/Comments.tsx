@@ -34,9 +34,9 @@ export default function Comments({ parentId }: { parentId: number }) {
 
       const commentsFromBackend = await getComments(travelId);
 
-      if (!commentsFromBackend.success) {
-        // Error UI
-        console.log(commentsFromBackend.error.message);
+      if (commentsFromBackend.status === 'failed') {
+        setError(commentsFromBackend.message);
+        setTimeout(() => setError(''), 2000);
         setIsLoading(false);
         return;
       }
@@ -82,16 +82,36 @@ export default function Comments({ parentId }: { parentId: number }) {
 
     const nextCommentsResult = await getComments(parentId);
 
-    if (!nextCommentsResult.success) {
-      console.log('Read failed');
-      console.log(`Error: ${nextCommentsResult.error.message}`);
+    if (nextCommentsResult.status === 'failed') {
+      setError(nextCommentsResult.message);
       setIsLoading(false);
+      setTimeout(() => setError(''), 2000);
       return;
     }
 
     setComments(nextCommentsResult.data.content);
     setHasNext(nextCommentsResult.data.has_next);
     setDraft('');
+    setIsLoading(false);
+  }
+
+  async function handleMore() {
+    const nextPage = currentPage + 1;
+
+    setIsLoading(true);
+
+    const nextCommentsResult = await getComments(parentId, nextPage);
+
+    if (nextCommentsResult.status === 'failed') {
+      setError(nextCommentsResult.message);
+      setIsLoading(false);
+      setTimeout(() => setError(''), 2000);
+      return;
+    }
+
+    setComments([...comments, ...nextCommentsResult.data.content]);
+    setHasNext(nextCommentsResult.data.has_next);
+    setCurrentPage(nextPage);
     setIsLoading(false);
   }
 
@@ -113,6 +133,16 @@ export default function Comments({ parentId }: { parentId: number }) {
           </div>
         )}
       </div>
+      {hasNext && (
+        <div className="flex justify-center">
+          <button
+            className="py-4 w-full bg-gray-200 text-gray-500 font-medium"
+            onClick={handleMore}
+          >
+            댓글 더보기
+          </button>
+        </div>
+      )}
       <hr />
       <div className="w-full p-2 flex gap-2 items-center">
         <textarea

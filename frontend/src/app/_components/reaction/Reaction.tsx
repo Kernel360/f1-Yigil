@@ -4,12 +4,13 @@ import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { MemberContext } from '@/context/MemberContext';
+
 import Comments from './Comments';
-import { postResponseSchema } from '@/types/response';
 import { postLike } from '../place/spot/action';
 
 import CommentIcon from '/public/icons/comment.svg';
 import HeartIcon from '/public/icons/heart.svg';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 /**
  * @todo 좋아요 애니메이션
@@ -28,6 +29,7 @@ export default function Reaction({
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [liked, setLiked] = useState(initialLiked);
+  const [error, setError] = useState('');
 
   const memberStatus = useContext(MemberContext);
 
@@ -39,12 +41,11 @@ export default function Reaction({
 
     setIsLoading(true);
 
-    const json = JSON.parse(await postLike(placeId, travelId, liked));
+    const result = await postLike(placeId, travelId, liked);
 
-    const result = postResponseSchema.safeParse(json);
-
-    if (!result.success) {
-      console.log(result.error.message);
+    if (result.status === 'failed') {
+      setError(result.message);
+      setTimeout(() => setError(''), 2000);
       setIsLoading(false);
       return;
     }
@@ -95,6 +96,7 @@ export default function Reaction({
           <Comments parentId={travelId} />
         </div>
       )}
+      {error && <ToastMsg id={Date.now()} title={error} timer={2000} />}
     </div>
   );
 }
