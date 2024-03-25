@@ -44,15 +44,19 @@ export const placeSchema = z.object({
 export type TPlace = z.infer<typeof placeSchema>;
 
 export const courseSchema = z.object({
+  id: z.number().int(),
   title: z.string(),
-  owner_nickname: z.string(),
-  owner_profile_image_url: z.string(),
+  content: z.string(),
   map_static_image_file_url: z.string(),
-  spot_count: z.string(),
-  rate: z.string(),
+  rate: z.number(),
+  spot_count: z.number().int(),
   create_date: z.coerce
     .date()
     .transform((date) => date.toLocaleDateString('ko-kr')),
+  owner_id: z.number().int(),
+  owner_nickname: z.string(),
+  owner_profile_image_url: z.string(),
+  liked: z.boolean(),
 });
 
 export type TCourse = z.infer<typeof courseSchema>;

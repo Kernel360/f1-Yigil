@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import RoundProfile from '../../ui/profile/RoundProfile';
 import IconWithCounts from '../../IconWithCounts';
+import Reaction from '../../reaction/Reaction';
 
 import type { TCourse } from '@/types/response';
 
@@ -17,12 +18,16 @@ export default function Course({
   data: TCourse;
 }) {
   const {
+    id,
     title,
     map_static_image_file_url,
     owner_nickname,
     owner_profile_image_url,
     rate,
     create_date,
+    content,
+    liked,
+    owner_id,
   } = data;
 
   return (
@@ -40,7 +45,7 @@ export default function Course({
           icon={
             <StarIcon className="w-6 h-6 stroke-[#FACC15] fill-[#FACC15] [stroke-linecap:round] [stroke-linejoin:round] " />
           }
-          count={Number.parseFloat(rate)}
+          count={rate}
           rating
         />
       </div>
@@ -54,8 +59,9 @@ export default function Course({
       </div>
       <div className="px-6 flex flex-col gap-2">
         <span className="self-end text-gray-400">{create_date}</span>
-        <div className="p-4 min-h-32 rounded-lg bg-gray-100">코스 리뷰</div>
+        <div className="p-4 min-h-32 rounded-lg bg-gray-100">{content}</div>
       </div>
+      <Reaction placeId={placeId} travelId={id} initialLiked={liked} />
     </article>
   );
 }
