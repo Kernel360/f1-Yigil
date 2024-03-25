@@ -1,29 +1,27 @@
 'use client';
 
-import IconWithCounts from '../../IconWithCounts';
+import Image from 'next/image';
+
 import RoundProfile from '../../ui/profile/RoundProfile';
-import ImageCarousel from '../../ui/carousel/ImageCarousel';
+import IconWithCounts from '../../IconWithCounts';
+
+import type { TCourse } from '@/types/response';
 
 import StarIcon from '/public/icons/star.svg';
 
-import type { TSpot } from '@/types/response';
-import Reaction from '../../reaction/Reaction';
-
-export default function Spot({
+export default function Course({
   placeId,
   data,
 }: {
   placeId: number;
-  data: TSpot;
+  data: TCourse;
 }) {
   const {
-    id,
-    image_url_list,
-    description,
-    owner_profile_image_url,
+    title,
+    map_static_image_file_url,
     owner_nickname,
+    owner_profile_image_url,
     rate,
-    liked,
     create_date,
   } = data;
 
@@ -46,18 +44,18 @@ export default function Spot({
           rating
         />
       </div>
-      <div className="px-6 flex flex-col gap-2">
-        <ImageCarousel
-          images={image_url_list}
-          label="스팟 이미지들"
-          variant="thumbnail"
+      <div className="mx-4 relative aspect-video">
+        <Image
+          className="rounded-xl"
+          src={map_static_image_file_url}
+          alt={`${title} 경로 이미지`}
+          fill
         />
-        <span className="self-end text-gray-400">
-          {create_date.toLocaleDateString('ko-KR')}
-        </span>
-        <div className="p-4 min-h-32 rounded-lg bg-gray-100">{description}</div>
       </div>
-      <Reaction placeId={placeId} travelId={id} initialLiked={liked} />
+      <div className="px-6 flex flex-col gap-2">
+        <span className="self-end text-gray-400">{create_date}</span>
+        <div className="p-4 min-h-32 rounded-lg bg-gray-100">코스 리뷰</div>
+      </div>
     </article>
   );
 }

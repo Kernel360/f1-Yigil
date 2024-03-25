@@ -36,8 +36,8 @@ export default async function PlaceDetailWithMySpot({
   }
 
   const mySpot = mySpotResult.data;
-  // coords
-  const { place_name, address, map_static_image_url } = detail;
+  const { place_name, address, map_static_image_url, point } = detail;
+  const { x: lng, y: lat } = point;
 
   return (
     <section className="flex flex-col">
@@ -47,7 +47,7 @@ export default async function PlaceDetailWithMySpot({
         placeName={place_name}
         placeAddress={address}
         mapImageUrl={map_static_image_url}
-        coords={{ lat: 0, lng: 0 }}
+        coords={{ lat, lng }}
         data={mySpot}
       />
     </section>

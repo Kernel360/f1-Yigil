@@ -44,6 +44,20 @@ export const placeSchema = z.object({
 export type TPlace = z.infer<typeof placeSchema>;
 
 export const courseSchema = z.object({
+  title: z.string(),
+  owner_nickname: z.string(),
+  owner_profile_image_url: z.string(),
+  map_static_image_file_url: z.string(),
+  spot_count: z.string(),
+  rate: z.string(),
+  create_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
+});
+
+export type TCourse = z.infer<typeof courseSchema>;
+
+export const courseDetailSchema = z.object({
   id: z.number().int(),
   title: z.string(),
   map_static_image_url: z.string(),
@@ -55,7 +69,7 @@ export const courseSchema = z.object({
   create_date: z.coerce.date().transform((date) => date.toLocaleDateString()),
 });
 
-export type TCourse = z.infer<typeof courseSchema>;
+export type TCourseDetail = z.infer<typeof courseDetailSchema>;
 
 export const placeDetailSchema = z.object({
   id: z.number().int(),
@@ -63,6 +77,10 @@ export const placeDetailSchema = z.object({
   address: z.string(),
   thumbnail_image_url: z.string(),
   map_static_image_url: z.string(),
+  point: z.object({
+    x: z.number(),
+    y: z.number(),
+  }),
   bookmarked: z.boolean(),
   review_count: z.number().int(),
   rate: z.number(),

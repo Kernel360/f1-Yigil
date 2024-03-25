@@ -7,7 +7,7 @@ import { getBaseUrl } from '@/app/utilActions';
 import {
   TBackendRequestResult,
   backendErrorSchema,
-  courseSchema,
+  courseDetailSchema,
   dataWithAddressSchema,
   searchItemsSchema,
 } from '@/types/response';
@@ -195,7 +195,7 @@ export async function keywordSuggestions(keyword: string) {
 }
 
 const searchCourseSchema = z.object({
-  courses: z.array(courseSchema),
+  courses: z.array(courseDetailSchema),
   has_next: z.boolean(),
 });
 
