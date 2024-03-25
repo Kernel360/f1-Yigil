@@ -18,6 +18,7 @@ public class TravelReaderImpl implements TravelReader {
         return travelRepository.countByCreatedAtToday();
     }
 
+    @Override
     public List<Travel> getRecentTravel() {
         return travelRepository.findTop5ByOrderByCreatedAtDesc();
     }

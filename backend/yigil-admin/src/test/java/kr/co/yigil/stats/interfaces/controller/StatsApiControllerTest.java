@@ -45,5 +45,14 @@ class StatsApiControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @DisplayName("최근 통계 정보 요청이 들어왔을 때 200 응답과 response가 잘 반환되는지")
+    @Test
+    void whenSendRecentStatsRequest_thenReturns200AndRecentStatsResponse() throws Exception {
+
+        mockMvc.perform(get("/api/v1/stats/region/recent")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
 
 }
