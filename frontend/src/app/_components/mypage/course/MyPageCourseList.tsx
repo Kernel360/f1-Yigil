@@ -204,8 +204,7 @@ export default function MyPageCourseList({
     setCheckedList([]);
   };
 
-  const onChangeSortOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+  const onChangeSortOption = (option: string) => {
     resetCourseList();
     setSortOption(option);
     resetCheckList();

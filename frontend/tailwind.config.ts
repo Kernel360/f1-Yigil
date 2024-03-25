@@ -9,6 +9,7 @@ module.exports = {
       backgroundImage: {},
       colors: {
         main: '#60A5FA',
+        violet: '#A78BFA',
       },
       keyframes: {
         appear: {
