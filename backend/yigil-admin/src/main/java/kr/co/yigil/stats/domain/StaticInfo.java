@@ -1,4 +1,4 @@
-package kr.co.yigil.statistics.domain;
+package kr.co.yigil.stats.domain;
 
 import kr.co.yigil.favor.domain.DailyFavorCount;
 import lombok.Data;

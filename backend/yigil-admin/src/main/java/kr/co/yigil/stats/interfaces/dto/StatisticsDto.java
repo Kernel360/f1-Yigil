@@ -1,5 +1,6 @@
-package kr.co.yigil.statistics.interfaces.dto;
+package kr.co.yigil.stats.interfaces.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,5 +27,19 @@ public class StatisticsDto {
         private String writerProfileImageUrl;
         private Long favorCount;
         private LocalDate date;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RegionStatsResponse {
+        private List<RegionStatsInfo> regionStatsInfoList;
+
+    }
+    @Data
+    @NoArgsConstructor
+    public static class RegionStatsInfo {
+        private String region;
+        private Long referenceCount;
     }
 }
