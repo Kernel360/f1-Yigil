@@ -1,18 +1,16 @@
-import { TMyPageFollow } from '@/types/myPageResponse';
-import React, { MutableRefObject, useState } from 'react';
+import { TMyPageFollower } from '@/types/myPageResponse';
+import React, { useState } from 'react';
 import Dialog from '../../ui/dialog/Dialog';
 import RoundProfile from '../../ui/profile/RoundProfile';
 import { addFollow, unFollow } from '../hooks/followActions';
 
-interface TMyPageFollowerItem extends TMyPageFollow {
-  idx: number;
-  ref: MutableRefObject<HTMLDivElement | null>;
-}
-const MyPageFollowerItem = React.forwardRef<
-  HTMLDivElement,
-  TMyPageFollowerItem
->(({ member_id, nickname, profile_image_url }, ref) => {
-  const [isFollowing, setIsFollowing] = useState(true);
+const MyPageFollowerItem = ({
+  member_id,
+  nickname,
+  profile_image_url,
+  following,
+}: TMyPageFollower) => {
+  const [isFollowing, setIsFollowing] = useState(following);
   const [isDialogOpened, setIsDialogOpened] = useState(false);
   const onClickFollowingBtn = async () => {
     if (isFollowing) {
@@ -31,8 +29,8 @@ const MyPageFollowerItem = React.forwardRef<
   };
 
   return (
-    <div className="flex justify-center items-center py-10" ref={ref}>
-      <RoundProfile img={profile_image_url} size={48} />
+    <div className="flex justify-center items-center my-4">
+      <RoundProfile img={profile_image_url} size={48} height="h-12" />
       <div className="ml-4 text-gray-900  overflow-hidden text-ellipsis whitespace-nowrap break-words">
         {nickname}
       </div>
@@ -59,6 +57,6 @@ const MyPageFollowerItem = React.forwardRef<
       )}
     </div>
   );
-});
+};
 
 export default MyPageFollowerItem;

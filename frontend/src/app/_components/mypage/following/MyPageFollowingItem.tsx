@@ -3,16 +3,11 @@ import React, { useState } from 'react';
 import RoundProfile from '../../ui/profile/RoundProfile';
 import { addFollow, unFollow } from '../hooks/followActions';
 
-interface TMyPageFollowingItem extends TMyPageFollow {
-  idx: number;
-}
-
 export default function MyPageFollowingItem({
-  idx,
   member_id,
   nickname,
   profile_image_url,
-}: TMyPageFollowingItem) {
+}: TMyPageFollow) {
   const [isFollowing, setIsFollowing] = useState(true);
   const [errorText, setErrorText] = useState('');
 
@@ -20,15 +15,20 @@ export default function MyPageFollowingItem({
     setErrorText('');
 
     if (isFollowing) {
-      unFollow(member_id);
+      const result = await unFollow(member_id);
+      if (result.status === 'failed') {
+        setErrorText(result.message);
+        return;
+      }
+      setIsFollowing(!isFollowing);
     } else {
       const result = await addFollow(member_id);
       if (result.status === 'failed') {
         setErrorText(result.message);
+        return;
       }
+      setIsFollowing(!isFollowing);
     }
-
-    setIsFollowing(!isFollowing);
   };
   return (
     <div className="flex justify-center items-center py-3">

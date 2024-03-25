@@ -2,7 +2,9 @@
 
 import { getBaseUrl } from '@/app/utilActions';
 import {
+  myPageFollowerResponseSchema,
   myPageFollowResponseSchema,
+  TMyPageFollowerResponse,
   TMyPageFollowResponse,
 } from '@/types/myPageResponse';
 import { backendErrorSchema, postResponseSchema } from '@/types/response';
@@ -11,7 +13,7 @@ import { cookies } from 'next/headers';
 export const getFollowingList = async (
   pageNo: number = 1,
   size: number = 5,
-  sortOrder: string = 'asc',
+  sortOrder: string = 'id',
 ): Promise<
   | { status: 'failed'; message: string }
   | { status: 'succeed'; data: TMyPageFollowResponse }
@@ -60,10 +62,10 @@ export const getFollowingList = async (
 export const getFollowerList = async (
   pageNo: number = 1,
   size: number = 5,
-  sortOrder: string = 'asc',
+  sortOrder: string = 'id',
 ): Promise<
   | { status: 'failed'; message: string }
-  | { status: 'succeed'; data: TMyPageFollowResponse }
+  | { status: 'succeed'; data: TMyPageFollowerResponse }
 > => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get(`SESSION`)?.value;
@@ -83,14 +85,14 @@ export const getFollowerList = async (
     );
     const followerList = await res.json();
     const error = backendErrorSchema.safeParse(followerList);
-
+    console.log(followerList);
     if (error.success) {
       console.error(`${error.data.code} - ${error.data.message}`);
       throw new Error(`${error.data.code} - ${error.data.message}`);
     }
 
     const parsedFollowerList =
-      myPageFollowResponseSchema.safeParse(followerList);
+      myPageFollowerResponseSchema.safeParse(followerList);
     if (!parsedFollowerList.success) {
       console.error(parsedFollowerList.error.message);
       throw new Error('zod 검증 에러입니다.');
@@ -117,7 +119,40 @@ export const addFollow = async (memberId: number) => {
     });
 
     const result = await res.json();
+    const error = backendErrorSchema.safeParse(result);
+    console.log(result);
+    if (error.success) {
+      console.error(`${error.data.code} - ${error.data.message}`);
+      return { status: 'failed', message: error.data.message };
+    }
 
+    const parsedResult = postResponseSchema.safeParse(result);
+
+    if (!parsedResult.success) {
+      return { status: 'failed', message: 'zod 검증 에러입니다' };
+    }
+
+    return { status: 'succeed', message: '성공' };
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+      return { status: 'failed', message: error.message };
+    }
+    return { status: 'failed', message: '알 수 없는 에러입니다.' };
+  }
+};
+
+export const unFollow = async (memberId: number) => {
+  try {
+    const BASE_URL = await getBaseUrl();
+    const cookie = cookies().get(`SESSION`)?.value;
+    const res = await fetch(`${BASE_URL}/v1/follows/unfollow/${memberId}`, {
+      method: 'POST',
+      headers: {
+        Cookie: `SESSION=${cookie}`,
+      },
+    });
+    const result = await res.json();
     const error = backendErrorSchema.safeParse(result);
 
     if (error.success) {
@@ -140,16 +175,4 @@ export const addFollow = async (memberId: number) => {
     }
     return { status: 'failed', message: '알 수 없는 에러입니다.' };
   }
-};
-
-export const unFollow = async (memberId: number) => {
-  const BASE_URL = await getBaseUrl();
-  const cookie = cookies().get(`SESSION`)?.value;
-  const res = await fetch(`${BASE_URL}/v1/follows/unfollow/${memberId}`, {
-    method: 'POST',
-    headers: {
-      Cookie: `SESSION=${cookie}`,
-    },
-  });
-  return res.json();
 };

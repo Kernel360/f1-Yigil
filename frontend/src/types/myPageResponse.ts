@@ -89,9 +89,11 @@ export const mypageFollowerSchema = z.object({
   following: z.boolean(),
 });
 
+export type TMyPageFollower = z.infer<typeof mypageFollowerSchema>;
+
 export const myPageFollowerResponseSchema = z.object({
   content: z.array(mypageFollowerSchema),
-  has_nect: z.boolean(),
+  has_next: z.boolean(),
 });
 
 export type TMyPageFollowerResponse = z.infer<

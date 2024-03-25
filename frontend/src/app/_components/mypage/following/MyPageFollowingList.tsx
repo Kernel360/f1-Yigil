@@ -6,6 +6,7 @@ import { getFollowingList } from '../hooks/followActions';
 import MyPageFollowingItem from './MyPageFollowingItem';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import LoadingIndicator from '../../LoadingIndicator';
+import { cookies } from 'next/headers';
 
 const selectList = [
   {
@@ -48,14 +49,13 @@ export default function MyPageFollowingList({
       setErrorText(followingList.message);
       return;
     }
-    setAllFollowingList(followingList.data.content);
+    setAllFollowingList((prev) => [...prev, ...followingList.data.content]);
     setHasNext(followingList.data.has_next);
   };
 
   useIntersectionObserver(ref, getMoreFollowings, hasNext);
 
-  const onChangeSelectOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+  const onChangeSelectOption = (option: string) => {
     setSelectOption(option);
     setCurrentPage(1);
   };
@@ -86,8 +86,9 @@ export default function MyPageFollowingList({
   };
 
   useEffect(() => {
-    getFollowingLists(currentPage, 5, selectOption);
-  }, [currentPage, selectOption]);
+    getFollowingLists(1, 5, selectOption);
+  }, [selectOption]);
+
   return (
     <div className="px-4">
       <div className="flex justify-end mt-6 mb-10">
@@ -98,8 +99,12 @@ export default function MyPageFollowingList({
           defaultValue="이름순"
         />
       </div>
-      {allFollowingList.map((follow, idx) => (
-        <MyPageFollowingItem key={follow.member_id} {...follow} idx={idx} />
+      {allFollowingList.map(({ member_id, ...follow }) => (
+        <MyPageFollowingItem
+          key={member_id}
+          member_id={member_id}
+          {...follow}
+        />
       ))}
       <div className="flex justify-center my-8" ref={ref}>
         {hasNext &&

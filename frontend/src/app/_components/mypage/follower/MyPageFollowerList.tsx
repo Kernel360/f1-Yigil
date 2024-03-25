@@ -1,10 +1,11 @@
 'use client';
-import { TMyPageFollow } from '@/types/myPageResponse';
+import { TMyPageFollower } from '@/types/myPageResponse';
 import React, { useEffect, useRef, useState } from 'react';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import Select from '../../ui/select/Select';
 import { getFollowerList } from '../hooks/followActions';
 import MyPageFollowerItem from './MyPageFollowerItem';
+import LoadingIndicator from '../../LoadingIndicator';
 
 const selectList = [
   {
@@ -24,16 +25,37 @@ const selectList = [
 export default function MyPageFollowerList({
   followerList,
 }: {
-  followerList: TMyPageFollow[];
+  followerList: TMyPageFollower[];
 }) {
   const [selectOption, setSelectOption] = useState('id');
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const [hasNext, setHasNext] = useState(false);
+
   const [allFollowerList, setAllFollowerList] =
-    useState<TMyPageFollow[]>(followerList);
+    useState<TMyPageFollower[]>(followerList);
   const ref = useRef<HTMLDivElement | null>(null);
-  const onChangeSelectOption = (option: string | number) => {
-    if (typeof option === 'number') return;
+
+  const getMoreFollowers = async () => {
+    setCurrentPage((prev) => (prev += 1));
+    const followerList = await getFollowerList(
+      currentPage + 1,
+      5,
+      selectOption,
+    );
+    if (followerList.status === 'failed') {
+      setAllFollowerList([]);
+      setErrorText(followerList.message);
+      return;
+    }
+    setAllFollowerList((prev) => [...prev, ...followerList.data.content]);
+    setHasNext(followerList.data.has_next);
+  };
+
+  useIntersectionObserver(ref, getMoreFollowers, hasNext);
+
+  const onChangeSelectOption = (option: string) => {
     setSelectOption(option);
     setCurrentPage(1);
   };
@@ -54,8 +76,8 @@ export default function MyPageFollowerList({
   };
 
   출처: https: useEffect(() => {
-    getFollowerLists(currentPage, 5, selectOption);
-  }, [currentPage, selectOption]);
+    getFollowerLists(1, 5, selectOption);
+  }, [selectOption]);
   return (
     <div className="px-4">
       <div className="flex justify-end mt-6 mb-10">
@@ -67,14 +89,17 @@ export default function MyPageFollowerList({
         />
       </div>
 
-      {allFollowerList.map((follow, idx) => (
-        <MyPageFollowerItem
-          ref={allFollowerList.length - 1 === idx ? ref : null}
-          key={follow.member_id}
-          {...follow}
-          idx={idx}
-        />
+      {allFollowerList.map((follow) => (
+        <MyPageFollowerItem key={follow.member_id} {...follow} />
       ))}
+      <div className="flex justify-center my-8" ref={ref}>
+        {hasNext &&
+          (isLoading ? (
+            <LoadingIndicator loadingText="데이터 로딩중" />
+          ) : (
+            <button className="py-1 px-8 bg-gray-200 rounded-lg">더보기</button>
+          ))}
+      </div>
     </div>
   );
 }
