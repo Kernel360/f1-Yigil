@@ -4,7 +4,13 @@ import { cookies } from 'next/headers';
 import { revalidateTag } from 'next/cache';
 
 import { getBaseUrl } from '@/app/utilActions';
-import { commentSchema, fetchableSchema } from '@/types/response';
+import {
+  TBackendRequestResult,
+  backendErrorSchema,
+  commentSchema,
+  fetchableSchema,
+  postResponseSchema,
+} from '@/types/response';
 
 async function fetchComments(travelId: number, page: number, size: number) {
   const BASE_URL = await getBaseUrl();
@@ -21,7 +27,10 @@ async function fetchComments(travelId: number, page: number, size: number) {
   return response.json();
 }
 
-export async function postComment(travelId: number, content: string) {
+export async function postComment(
+  travelId: number,
+  content: string,
+): Promise<TBackendRequestResult<null>> {
   const session = cookies().get('SESSION')?.value;
   const BASE_URL = await getBaseUrl();
 
@@ -37,11 +46,26 @@ export async function postComment(travelId: number, content: string) {
     },
   });
 
-  if (response.ok) {
-    revalidateTag(`comments/${travelId}`);
+  const json = await response.json();
+
+  const error = backendErrorSchema.safeParse(json);
+
+  if (error.success) {
+    const { code, message } = error.data;
+    console.error(`${code} - ${message}`);
+    return { status: 'failed', message, code };
   }
 
-  return JSON.stringify(await response.json());
+  const result = postResponseSchema.safeParse(json);
+
+  if (!result.success) {
+    console.error('알 수 없는 에러입니다!');
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  revalidateTag(`comments/${travelId}`);
+
+  return { status: 'succeed', data: null };
 }
 
 export async function getComments(

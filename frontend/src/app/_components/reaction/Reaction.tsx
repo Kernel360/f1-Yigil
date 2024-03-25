@@ -90,8 +90,11 @@ export default function Reaction({
           </span>
         </button>
       </div>
-
-      {isOpen && <Comments parentId={travelId} />}
+      {isOpen && (
+        <div className="py-2">
+          <Comments parentId={travelId} />
+        </div>
+      )}
     </div>
   );
 }

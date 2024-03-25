@@ -10,9 +10,12 @@ import { postResponseSchema, type TComment } from '@/types/response';
 import PlusIcon from '/public/icons/plus.svg';
 import { useRouter } from 'next/navigation';
 import { getComments, postComment } from './action';
+import Spinner from '../ui/Spinner';
+import ToastMsg from '../ui/toast/ToastMsg';
 
 export default function Comments({ parentId }: { parentId: number }) {
   const { push } = useRouter();
+  const { isLoggedIn } = useContext(MemberContext);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [draft, setDraft] = useState('');
@@ -21,6 +24,7 @@ export default function Comments({ parentId }: { parentId: number }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNext, setHasNext] = useState(false);
   const [comments, setComments] = useState<TComment[]>([]);
+  const [error, setError] = useState('');
 
   const memberStatus = useContext(MemberContext);
 
@@ -66,15 +70,13 @@ export default function Comments({ parentId }: { parentId: number }) {
     }
 
     setIsLoading(true);
-    const writeResultJson = JSON.parse(await postComment(parentId, draft));
 
-    const writeResult = postResponseSchema.safeParse(writeResultJson);
+    const writeResult = await postComment(parentId, draft);
 
-    if (!writeResult.success) {
-      console.log('Write failed');
-      console.log(`Error: ${writeResult.error.message}`);
-      // 입력 실패 사용자 확인 UI 필요
+    if (writeResult.status === 'failed') {
+      setError(writeResult.message);
       setIsLoading(false);
+      setTimeout(() => setError(''), 2000);
       return;
     }
 
@@ -95,18 +97,27 @@ export default function Comments({ parentId }: { parentId: number }) {
 
   return (
     <section>
-      {!isLoading ? (
-        comments.map((comment) => <Comment key={comment.id} data={comment} />)
-      ) : (
-        <span>Loading...</span>
-      )}
+      <div className="min-h-24 flex justify-center items-center">
+        {isLoading ? (
+          <Spinner />
+        ) : comments.length === 0 ? (
+          <span>댓글이 없습니다.</span>
+        ) : (
+          comments.map((comment) => <Comment key={comment.id} data={comment} />)
+        )}
+      </div>
       {/* 무한 스크롤 또는 버튼 */}
       <hr />
       <div className="w-full p-2 flex gap-2 items-center">
         <textarea
           className="p-3 resize-none overflow-hidden bg-gray-100 rounded-xl grow"
           ref={textareaRef}
-          placeholder="댓글을 입력하세요."
+          disabled={isLoggedIn === 'false' || isLoading}
+          placeholder={
+            isLoggedIn === 'true'
+              ? '댓글을 입력하세요.'
+              : '로그인 후 댓글을 입력할 수 있습니다!'
+          }
           onChange={handleChange}
           value={draft}
         />
@@ -117,6 +128,7 @@ export default function Comments({ parentId }: { parentId: number }) {
           <PlusIcon className="w-6 h-6 stroke-white" />
         </button>
       </div>
+      {error && <ToastMsg id={Date.now()} title={error} timer={2000} />}
     </section>
   );
 }
