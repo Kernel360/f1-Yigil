@@ -1,24 +1,23 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { Place } from '../place/places';
 
 import { SearchContext } from '@/context/search/SearchContext';
-import { MemberContext } from '@/context/MemberContext';
-import { searchPlaces } from './action';
+import { searchCourses } from './action';
 
-import type { TPlace } from '@/types/response';
 import Spinner from '../ui/Spinner';
+import Course from '../course/Course';
 
-export default function InfinitePlaces({
+import type { TCourse } from '@/types/response';
+
+export default function InfiniteCourses({
   initialContent,
   initialHasNext,
 }: {
-  initialContent: TPlace[];
+  initialContent: TCourse[];
   initialHasNext: boolean;
 }) {
   const [state] = useContext(SearchContext);
-  const { isLoggedIn } = useContext(MemberContext);
 
   const [isLoading, setIsLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
@@ -26,19 +25,6 @@ export default function InfinitePlaces({
   const [content, setContent] = useState(initialContent);
   const [hasNext, setHasNext] = useState(initialHasNext);
   const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    if (state.results.status === 'success') {
-      if (state.results.content.from === 'backend') {
-        if (state.results.content.data.type === 'place') {
-          const { places, hasNext } = state.results.content.data;
-
-          setContent(places);
-          setHasNext(hasNext);
-        }
-      }
-    }
-  }, [state.results]);
 
   const onScroll: IntersectionObserverCallback = useCallback(
     async (entries) => {
@@ -48,7 +34,7 @@ export default function InfinitePlaces({
 
       setIsLoading(true);
 
-      const result = await searchPlaces(state.keyword, currentPage + 1);
+      const result = await searchCourses(state.keyword, currentPage + 1);
 
       if (result.status === 'failed') {
         // Toast
@@ -57,7 +43,7 @@ export default function InfinitePlaces({
         return;
       }
 
-      setContent([...content, ...result.data.places]);
+      setContent([...content, ...result.data.courses]);
       setCurrentPage(currentPage + 1);
       setHasNext(result.data.has_next);
 
@@ -96,12 +82,7 @@ export default function InfinitePlaces({
   return (
     <section className="flex flex-col grow">
       {content.map((item, index) => (
-        <Place
-          key={item.id}
-          data={item}
-          isLoggedIn={isLoggedIn === 'true'}
-          order={index}
-        />
+        <Course key={item.id} data={item} />
       ))}
       <div
         className="min-h-6 bg-gray-200 flex justify-center items-center"

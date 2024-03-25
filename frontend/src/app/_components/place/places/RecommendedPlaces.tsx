@@ -9,7 +9,7 @@ export default async function RecommendedPlaces({
 }: {
   isLoggedIn: boolean;
 }) {
-  const result = await getPlaces('recommended', 'more');
+  const result = await getPlaces('recommended');
 
   if (result.status === 'failed') {
     return <>{result.message}</>;
