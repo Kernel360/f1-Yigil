@@ -42,11 +42,7 @@ export default function CourseResults({
   const [state, dispatch] = useContext(SearchContext);
   const [error, setError] = useState('');
 
-  async function onChangeSelectOption(option: string | number) {
-    if (typeof option === 'number') {
-      return;
-    }
-
+  async function onChangeSelectOption(option: string) {
     dispatch({ type: 'SET_LOADING', payload: true });
 
     const result = await searchCourses(state.keyword, 1, 5, option);
