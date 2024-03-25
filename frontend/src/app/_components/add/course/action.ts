@@ -14,6 +14,7 @@ import {
 
 import type { TExistingSpots } from '@/types/response';
 import type {
+  TCoords,
   TCourseState,
   TLineString,
   TSpotState,
@@ -185,10 +186,8 @@ type TRouteGeoJsonResult =
   | { status: 'success'; data: TLineString };
 
 export async function getRouteGeoJson(
-  spots: TSpotState[],
+  coords: TCoords[],
 ): Promise<TRouteGeoJsonResult> {
-  const coords = spots.map(({ place }) => place.coords);
-
   const response = await fetch(routeUrl(coords), {
     method: 'GET',
     headers: {
