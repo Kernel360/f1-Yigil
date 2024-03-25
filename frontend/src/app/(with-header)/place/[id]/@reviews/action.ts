@@ -52,12 +52,25 @@ export async function getSpots(
   size: number = 5,
   sortBy: 'created_at' | 'rate' = 'created_at',
   sortOrder: 'desc' | 'asc' = 'desc',
-) {
+): Promise<TBackendRequestResult<z.infer<typeof spotsResponseSchema>>> {
   const json = await fetchSpots(placeId, page, size, sortBy, sortOrder);
+
+  const error = backendErrorSchema.safeParse(json);
+
+  if (error.success) {
+    const { message, code } = error.data;
+    console.error(`${code} - ${message}`);
+    return { status: 'failed', message, code };
+  }
 
   const result = spotsResponseSchema.safeParse(json);
 
-  return result;
+  if (!result.success) {
+    console.error('알 수 없는 에러입니다!');
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  return { status: 'succeed', data: result.data };
 }
 
 async function fetchCourses(

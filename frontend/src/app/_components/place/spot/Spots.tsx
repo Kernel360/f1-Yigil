@@ -20,56 +20,31 @@ export default function Spots({
   initialSpots: TSpot[];
   initialHasNext: boolean;
 }) {
-  const endRef = useRef<HTMLDivElement>(null);
-
   const [spots, setSpots] = useState(initialSpots);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [hasNext, setHasNext] = useState(initialHasNext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const onScroll: IntersectionObserverCallback = useCallback(
-    async (entries) => {
-      if (!entries[0].isIntersecting) {
-        return;
-      }
+  async function getMoreSpots() {
+    setIsLoading(true);
 
-      setError('');
-      setIsLoading(true);
+    const nextPage = currentPage + 1;
 
-      const nextPage = currentPage + 1;
+    const result = await getSpots(placeId, nextPage);
 
-      const result = await getSpots(placeId, nextPage);
-
-      if (!result.success) {
-        setError('리뷰를 가져올 수 없습니다!');
-        return;
-      }
-
-      setHasNext(result.data.has_next);
-      setSpots([...spots, ...result.data.spots]);
-      setCurrentPage(nextPage);
+    if (result.status === 'failed') {
+      setError('리뷰를 가져올 수 없습니다!');
       setIsLoading(false);
-    },
-    [currentPage, spots, placeId],
-  );
-
-  useEffect(() => {
-    if (!endRef.current) {
+      setTimeout(() => setError(''), 2000);
       return;
     }
 
-    const observer = new IntersectionObserver(onScroll, { threshold: 0.9 });
-    observer.observe(endRef.current);
-
-    if (!hasNext) {
-      observer.unobserve(endRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [endRef, hasNext, onScroll]);
+    setHasNext(result.data.has_next);
+    setSpots([...spots, ...result.data.spots]);
+    setCurrentPage(nextPage);
+    setIsLoading(false);
+  }
 
   if (spots.length === 0) {
     return (
@@ -89,23 +64,21 @@ export default function Spots({
       {spots.map((spot, index) => (
         <Spot placeId={placeId} key={index} data={spot} />
       ))}
-      {error}
-      <div
-        className="mt-2 min-h-6 bg-gray-200 flex justify-center items-center"
-        ref={endRef}
-      >
-        <div className="py-4">
-          {hasNext ? (
-            isLoading ? (
+      {hasNext && (
+        <div className="flex">
+          <button
+            className="py-4 w-full bg-gray-200 flex justify-center items-center"
+            onClick={getMoreSpots}
+          >
+            {isLoading ? (
               <Spinner />
             ) : (
-              <span className="font-medium">아래로 내려 더 보기</span>
-            )
-          ) : (
-            <span className="font-medium">마지막 결과입니다!</span>
-          )}
+              <span className="text-lg font-medium">더보기</span>
+            )}
+          </button>
         </div>
-      </div>
+      )}
+      {error}
     </section>
   );
 }
