@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -46,21 +47,22 @@ class StatsFacadeTest {
     @DisplayName("일별 좋아요 수를 조회한다.")
     @Test
     void getDailyFavors() {
-        when(statsService.getDailyFavors(any(), any(), any(), any())).thenReturn(mock(StaticInfo.DailyFavorsInfo.class));
+        PageRequest pageable = PageRequest.of(0, 10);
+        when(statsService.getDailyFavors(any(PageRequest.class))).thenReturn(mock(StaticInfo.DailyTotalFavorCountInfo.class));
 
-        var result = statsFacade.getDailyFavors(null, null, null, null);
+        var result = statsFacade.getDailyFavors(pageable);
 
-        assertThat(result).isInstanceOf(StaticInfo.DailyFavorsInfo.class);
+        assertThat(result).isInstanceOf(StaticInfo.DailyTotalFavorCountInfo.class);
     }
 
 
     @DisplayName("일별 좋아요 수 상위를 조회한다.")
     @Test
     void getTopDailyFavors() {
-        when(statsService.getTopDailyFavors(any(), any(), any(), any())).thenReturn(mock(StaticInfo.DailyFavorsInfo.class));
+        when(statsService.getTopDailyFavors(any(), any(), any(), any())).thenReturn(mock(StaticInfo.DailyTravelsFavorCountInfo.class));
 
         var result = statsFacade.getTopDailyFavors(null, null, null, null);
 
-        assertThat(result).isInstanceOf(StaticInfo.DailyFavorsInfo.class);
+        assertThat(result).isInstanceOf(StaticInfo.DailyTravelsFavorCountInfo.class);
     }
 }

@@ -1,7 +1,7 @@
 package kr.co.yigil.stats.domain;
 
 import kr.co.yigil.favor.domain.DailyFavorCount;
-import kr.co.yigil.favor.domain.DailyFavorCountReader;
+import kr.co.yigil.favor.domain.DailyTotalFavorCount;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.region.domain.DailyRegion;
@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -35,9 +36,6 @@ class StatsServiceImplTest {
     @Mock
     private StatsReader statsReader;
 
-    @Mock
-    private DailyFavorCountReader dailyFavorCountReader;
-
     @DisplayName("getRegionStats 메서드가 StatsReader를 잘 호출하는지")
     @Test
     void getRegionStatsTest() {
@@ -51,21 +49,19 @@ class StatsServiceImplTest {
         assertEquals(expectedRegionStats, actualRegionStats);
     }
 
-
     @DisplayName("일별 좋아요 수 조회시 DailyFavorCount의 페이지 정보를 반환한다.")
     @Test
     void getDailyFavors() {
+        PageRequest pageable = PageRequest.of(0, 10);
 
-        Member mockMember = new Member(1L, "email", "socialLoginId", "nickname", "profileImageUrl", SocialLoginType.GOOGLE);
-        Travel mockTravel = new Travel(1L, mockMember, "title", "description", 4.5, false);
-        DailyFavorCount dailyFavorCount = new DailyFavorCount(5L, mockTravel, LocalDate.now(), TravelType.SPOT);
-        Page<DailyFavorCount> dailyFavorCountPage = new PageImpl<>(List.of(dailyFavorCount));
+        DailyTotalFavorCount dailyFavorCount = new DailyTotalFavorCount(5L, LocalDate.now());
+        Page<DailyTotalFavorCount> dailyFavorCountPage = new PageImpl<>(List.of(dailyFavorCount));
 
-        when(dailyFavorCountReader.readDailyFavorCountBetween(any(), any(), any(), any())).thenReturn(dailyFavorCountPage);
+        when(statsReader.getDailyTotalFavorCounts(any())).thenReturn(dailyFavorCountPage);
 
-        var result = statsService.getDailyFavors(LocalDate.now(), LocalDate.now(), TravelType.SPOT, null);
+        var result = statsService.getDailyFavors(pageable);
 
-        assertThat(result).isInstanceOf(StaticInfo.DailyFavorsInfo.class);
+        assertThat(result).isInstanceOf(StaticInfo.DailyTotalFavorCountInfo.class);
     }
 
     @Test
@@ -76,10 +72,10 @@ class StatsServiceImplTest {
         DailyFavorCount dailyFavorCount = new DailyFavorCount(5L, mockTravel, LocalDate.now(), TravelType.SPOT);
         List<DailyFavorCount> dailyFavorCountList = List.of(dailyFavorCount);
 
-        when(dailyFavorCountReader.getTopDailyFavorCount(any(), any(), any(), any())).thenReturn(dailyFavorCountList);
+        when(statsReader.getTopDailyFavorCount(any(), any(), any(), any())).thenReturn(dailyFavorCountList);
 
         var result = statsService.getTopDailyFavors(LocalDate.now(), LocalDate.now(), TravelType.SPOT, null);
 
-        assertThat(result).isInstanceOf(StaticInfo.DailyFavorsInfo.class);
+        assertThat(result).isInstanceOf(StaticInfo.DailyTravelsFavorCountInfo.class);
     }
 }

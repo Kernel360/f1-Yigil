@@ -2,9 +2,8 @@ package kr.co.yigil.stats.interfaces.controller;
 
 import kr.co.yigil.stats.application.StatsFacade;
 import kr.co.yigil.stats.domain.StaticInfo;
-import kr.co.yigil.stats.interfaces.dto.StatisticsDto;
+import kr.co.yigil.stats.interfaces.dto.StatsDto;
 import kr.co.yigil.stats.interfaces.dto.mapper.StatsMapper;
-import kr.co.yigil.travel.TravelType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -58,9 +55,9 @@ class StatsApiControllerTest {
     @Test
     void givenTravelTypeSpot_whenRequestGetDailyFavors_thenShouldReturn200AndResponse() throws Exception {
 
-        when(statsFacade.getDailyFavors(any(LocalDate.class), any(LocalDate.class), any(TravelType.class), any(Pageable.class))
-        ).thenReturn(mock(StaticInfo.DailyFavorsInfo.class));
-        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyFavorsInfo.class))).thenReturn(mock(StatisticsDto.DailyFavorsResponse.class));
+        when(statsFacade.getDailyFavors(any(Pageable.class))
+        ).thenReturn(mock(StaticInfo.DailyTotalFavorCountInfo.class));
+        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyTravelsFavorCountInfo.class))).thenReturn(mock(StatsDto.DailyTravelFavorsResponse.class));
 
         mockMvc.perform(get("/api/v1/stats/daily-favors")
                         .param("travelType", "spot")
@@ -74,14 +71,11 @@ class StatsApiControllerTest {
     @Test
     void GivenTravelTypeCourse_whenRequestGetDailyFavors_thenShouldReturn200AndResponse() throws Exception {
 
-        when(statsFacade.getDailyFavors(any(LocalDate.class), any(LocalDate.class), any(TravelType.class), any(Pageable.class))
-        ).thenReturn(mock(StaticInfo.DailyFavorsInfo.class));
-        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyFavorsInfo.class))).thenReturn(mock(StatisticsDto.DailyFavorsResponse.class));
+        when(statsFacade.getDailyFavors(any(Pageable.class))
+        ).thenReturn(mock(StaticInfo.DailyTotalFavorCountInfo.class));
+        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyTravelsFavorCountInfo.class))).thenReturn(mock(StatsDto.DailyTravelFavorsResponse.class));
 
         mockMvc.perform(get("/api/v1/stats/daily-favors")
-                        .param("travelType", "course")
-                        .param("startDate", "2024-03-21")
-                        .param("endDate", "2024-03-22")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -90,14 +84,11 @@ class StatsApiControllerTest {
     @Test
     void GivenTravelTypeALL_whenRequestGetDailyFavors_thenShouldReturn200AndResponse() throws Exception {
 
-        when(statsFacade.getDailyFavors(any(LocalDate.class), any(LocalDate.class), any(TravelType.class), any(Pageable.class))
-        ).thenReturn(mock(StaticInfo.DailyFavorsInfo.class));
-        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyFavorsInfo.class))).thenReturn(mock(StatisticsDto.DailyFavorsResponse.class));
+        when(statsFacade.getDailyFavors(any(Pageable.class))
+        ).thenReturn(mock(StaticInfo.DailyTotalFavorCountInfo.class));
+        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyTravelsFavorCountInfo.class))).thenReturn(mock(StatsDto.DailyTravelFavorsResponse.class));
 
         mockMvc.perform(get("/api/v1/stats/daily-favors")
-                        .param("travelType", "all")
-                        .param("startDate", "2024-03-21")
-                        .param("endDate", "2024-03-22")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -106,13 +97,11 @@ class StatsApiControllerTest {
     @Test
     void GivenTravelTypeNULL_whenRequestGetDailyFavors_thenShouldReturn400AndResponse() throws Exception {
 
-        when(statsFacade.getDailyFavors(any(LocalDate.class), any(LocalDate.class), any(TravelType.class), any(Pageable.class))
-        ).thenReturn(mock(StaticInfo.DailyFavorsInfo.class));
-        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyFavorsInfo.class))).thenReturn(mock(StatisticsDto.DailyFavorsResponse.class));
+        when(statsFacade.getDailyFavors(any(Pageable.class))
+        ).thenReturn(mock(StaticInfo.DailyTotalFavorCountInfo.class));
+        when(statsMapper.toDailyFavorsResponse(any(StaticInfo.DailyTravelsFavorCountInfo.class))).thenReturn(mock(StatsDto.DailyTravelFavorsResponse.class));
 
         mockMvc.perform(get("/api/v1/stats/daily-favors")
-                        .param("startDate", "2024-03-21")
-                        .param("endDate", "2024-03-22")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
