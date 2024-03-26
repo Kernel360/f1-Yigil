@@ -13,7 +13,7 @@ public interface StatsService {
 
     StatsInfo.Recent getRecentRegionStats();
 
-    StaticInfo.DailyTotalFavorCountInfo getDailyFavors(Pageable pageable);
+    StaticInfo.DailyTotalFavorCountInfo getDailyFavors(LocalDate startDate, LocalDate endDate);
 
-    StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit);
+    StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate);
 }

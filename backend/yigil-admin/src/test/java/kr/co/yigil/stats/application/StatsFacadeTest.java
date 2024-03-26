@@ -52,29 +52,6 @@ class StatsFacadeTest {
         assertEquals(expectedRegionStats, actualRegionStats);
     }
 
-
-    @DisplayName("일별 좋아요 수를 조회한다.")
-    @Test
-    void getDailyFavors() {
-        PageRequest pageable = PageRequest.of(0, 10);
-        when(statsService.getDailyFavors(any(PageRequest.class))).thenReturn(mock(StaticInfo.DailyTotalFavorCountInfo.class));
-
-        var result = statsFacade.getDailyFavors(pageable);
-
-        assertThat(result).isInstanceOf(StaticInfo.DailyTotalFavorCountInfo.class);
-    }
-
-
-    @DisplayName("일별 좋아요 수 상위를 조회한다.")
-    @Test
-    void getTopDailyFavors() {
-        when(statsService.getTopDailyFavors(any(), any(), any(), any())).thenReturn(mock(StaticInfo.DailyTravelsFavorCountInfo.class));
-
-        var result = statsFacade.getTopDailyFavors(null, null, null, null);
-
-        assertThat(result).isInstanceOf(StaticInfo.DailyTravelsFavorCountInfo.class);
-    }
-
     @DisplayName("getRecentRegionStats 메서드가 StatsService를 잘 호출하는지")
     @Test
     void getRecentRegionStatsTest() {
@@ -84,5 +61,31 @@ class StatsFacadeTest {
         StatsInfo.Recent actualRecentRegionStats = statsFacade.getRecentRegionStats();
 
         assertEquals(expectedRecentRegionStats, actualRecentRegionStats);
+    }
+
+    @DisplayName("getDailyFavors 메서드가 StatsService를 잘 호출하는지")
+    @Test
+    void getDailyFavorsTest() {
+        LocalDate startDate = LocalDate.of(2022, 1, 1);
+        LocalDate endDate = LocalDate.of(2022, 1, 31);
+        StaticInfo.DailyTotalFavorCountInfo expectedDailyFavors = mock(StaticInfo.DailyTotalFavorCountInfo.class);
+        when(statsService.getDailyFavors(any(LocalDate.class), any(LocalDate.class))).thenReturn(expectedDailyFavors);
+
+        StaticInfo.DailyTotalFavorCountInfo actualDailyFavors = statsFacade.getDailyFavors(startDate, endDate);
+
+        assertEquals(expectedDailyFavors, actualDailyFavors);
+    }
+
+    @DisplayName("getTopDailyFavors 메서드가 StatsService를 잘 호출하는지")
+    @Test
+    void getTopDailyFavorsTest() {
+        LocalDate startDate = LocalDate.of(2022, 1, 1);
+        LocalDate endDate = LocalDate.of(2022, 1, 31);
+        StaticInfo.DailyTravelsFavorCountInfo expectedTopDailyFavors = mock(StaticInfo.DailyTravelsFavorCountInfo.class);
+        when(statsService.getTopDailyFavors(any(LocalDate.class), any(LocalDate.class))).thenReturn(expectedTopDailyFavors);
+
+        StaticInfo.DailyTravelsFavorCountInfo actualTopDailyFavors = statsFacade.getTopDailyFavors(startDate, endDate);
+
+        assertEquals(expectedTopDailyFavors, actualTopDailyFavors);
     }
 }

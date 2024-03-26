@@ -50,11 +50,9 @@ public class StaticInfo {
     @Data
     public static class DailyTotalFavorCountInfo {
         private List<FavorTotalCountInfo> dailyFavors;
-        private int totalPages;
 
-        public DailyTotalFavorCountInfo(Page<DailyTotalFavorCount> dailyFavors){
-            this.dailyFavors = dailyFavors.getContent().stream().map(FavorTotalCountInfo::new).toList();
-            this.totalPages = dailyFavors.getTotalPages();
+        public DailyTotalFavorCountInfo(List<DailyTotalFavorCount> dailyFavors){
+            this.dailyFavors = dailyFavors.stream().map(FavorTotalCountInfo::new).toList();
         }
     }
 

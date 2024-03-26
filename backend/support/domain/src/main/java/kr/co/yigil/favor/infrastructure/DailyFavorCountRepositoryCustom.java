@@ -7,5 +7,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface DailyFavorCountRepositoryCustom {
-    List<DailyFavorCount> findTopByTravelTypeOrderByCountDesc(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit);
+    List<DailyFavorCount> findTopByTravelTypeOrderByCountDesc(LocalDate startDate, LocalDate endDate);
 }
