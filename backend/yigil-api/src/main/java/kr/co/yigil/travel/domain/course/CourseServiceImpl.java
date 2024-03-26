@@ -3,6 +3,7 @@ package kr.co.yigil.travel.domain.course;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
@@ -33,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
     private final MemberReader memberReader;
     private final CourseReader courseReader;
     private final FavorReader favorReader;
-
+    private final FollowReader followReader;
     private final CourseStore courseStore;
 
     private final CourseSeriesFactory courseSeriesFactory;
@@ -48,8 +49,8 @@ public class CourseServiceImpl implements CourseService {
         List<CourseInfo.CourseInPlaceInfo> courseInPlaceInfoList = courseseSlice.getContent().stream()
                 .map(course -> {
                     boolean isLiked = favorReader.existsByMemberIdAndTravelId(memberId, course.getId());
-                    return new CourseInfo.CourseInPlaceInfo(course, isLiked);
-
+                    boolean isFollowing = followReader.isFollowing(memberId, course.getMember().getId());
+                    return new CourseInfo.CourseInPlaceInfo(course, isLiked, isFollowing);
                 })
                 .toList();
         return new CourseInfo.CoursesInPlaceResponseInfo(courseInPlaceInfoList, courseseSlice.hasNext());

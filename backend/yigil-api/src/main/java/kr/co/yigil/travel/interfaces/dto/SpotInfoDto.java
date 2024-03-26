@@ -13,7 +13,7 @@ import java.util.List;
 public class SpotInfoDto {
     private Long id;
 
-    private List<String> imageUrlList;
+    private List<String> imageUrls;
 
     private String description;
 
@@ -28,4 +28,6 @@ public class SpotInfoDto {
     private LocalDateTime createDate;
 
     private boolean liked;
+
+    private boolean following;
 }

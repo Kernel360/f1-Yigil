@@ -72,7 +72,7 @@ class SpotApiControllerTest {
     void getSpotsInPlace_ShouldReturnOk() throws Exception {
         SpotInfo.Slice mockSlice = mock(Slice.class);
         SpotInfoDto spotInfo = new SpotInfoDto(1L, List.of("images/image.png", "images/photo.jpeg"),
-                "설명",1L, "images/profile.jpg", "오너 닉네임", 4.5, LocalDateTime.now(), true);
+                "설명",1L, "images/profile.jpg", "오너 닉네임", 4.5, LocalDateTime.now(), true, false);
         SpotsInPlaceResponse response = new SpotsInPlaceResponse(List.of(spotInfo), true);
 
         when(spotFacade.getSpotSliceInPlace(anyLong(), any(Accessor.class), any(Pageable.class))).thenReturn(mockSlice);
@@ -104,7 +104,7 @@ class SpotApiControllerTest {
                                         .description("다음 페이지가 있는지 여부"),
                                 subsectionWithPath("spots").description("spot의 정보"),
                                 fieldWithPath("spots[].id").type(JsonFieldType.NUMBER).description("Spot의 고유 아이디"),
-                                fieldWithPath("spots[].image_url_list").type(JsonFieldType.ARRAY).description("imageUrl의 List"),
+                                fieldWithPath("spots[].image_urls").type(JsonFieldType.ARRAY).description("imageUrl의 List"),
                                 fieldWithPath("spots[].description").type(JsonFieldType.STRING).description("Spot의 설명"),
                                 fieldWithPath("spots[].owner_id").type(JsonFieldType.NUMBER).description("Spot 등록 사용자의 고유 아이디"),
                                 fieldWithPath("spots[].owner_profile_image_url").type(JsonFieldType.STRING)
@@ -116,7 +116,9 @@ class SpotApiControllerTest {
                                 fieldWithPath("spots[].create_date").type(JsonFieldType.STRING)
                                         .description("Spot의 생성일시"),
                                 fieldWithPath("spots[].liked").type(JsonFieldType.BOOLEAN)
-                                        .description("로그인한 사용자의 좋아요 여부")
+                                        .description("Spot에 좋아요를 눌렀는지 여부"),
+                                fieldWithPath("spots[].following").type(JsonFieldType.BOOLEAN)
+                                        .description("Spot 등록 사용자를 팔로우 했는지 여부")
                         )
                 ));
 
