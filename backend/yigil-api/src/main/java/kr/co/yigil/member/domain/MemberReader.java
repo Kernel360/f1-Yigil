@@ -15,4 +15,6 @@ public interface MemberReader {
     void validateMember(Long memberId);
 
 	boolean existsByNickname(String nickname);
+
+    boolean existsByEmail(String email);
 }
