@@ -194,4 +194,9 @@ public class PlaceServiceImpl implements PlaceService {
         );
     }
 
+    @Override
+    public List<Long> getMyPlaceIds(Long memberId) {
+        return spotReader.getMySpotPlaceIds(memberId);
+    }
+
 }

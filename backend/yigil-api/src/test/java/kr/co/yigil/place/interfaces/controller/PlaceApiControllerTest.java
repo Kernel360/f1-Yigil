@@ -452,4 +452,22 @@ class PlaceApiControllerTest {
 				)
 			));
 	}
+
+	@DisplayName("getMyPlaceId 메서드가 잘 동작하는지")
+	@Test
+	void getMyPlaceId_ShouldReturnOk() throws Exception {
+		Accessor accessor = mock(Accessor.class);
+		when(accessor.getMemberId()).thenReturn(1L);
+		when(placeFacade.getMyPlaceIds(1L)).thenReturn(List.of(1L, 2L));
+		mockMvc.perform(get("/api/v1/places/me"))
+			.andExpect(status().isOk())
+			.andDo(document(
+				"places/get-my-place-id",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				responseFields(
+					fieldWithPath("ids").type(JsonFieldType.ARRAY).description("유저의 장소 아이디")
+				)
+			));
+	}
 }

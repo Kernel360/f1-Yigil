@@ -25,6 +25,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
     @Query("SELECT p FROM Place p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(p.address) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Slice<Place> findByNameOrAddressContainingIgnoreCase(String keyword, Pageable pageable);
-    }
+
+}
 
 

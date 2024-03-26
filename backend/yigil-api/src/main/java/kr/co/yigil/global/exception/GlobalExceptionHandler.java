@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -60,6 +61,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.badRequest()
                 .body(new ExceptionResponse(e.getCode(), e.getMessage()));
+    }
+
+    @ExceptionHandler(ClientAbortException.class)
+    public ResponseEntity<ExceptionResponse> handleClientAbortException(final ClientAbortException e) {
+        log.warn(e.getMessage(), e);
+
+        return ResponseEntity.status(499)
+                .body(new ExceptionResponse(499, e.getMessage()));
     }
 
     @ExceptionHandler(TimeoutException.class)
