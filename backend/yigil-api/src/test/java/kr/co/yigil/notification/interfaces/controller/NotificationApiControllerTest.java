@@ -92,7 +92,7 @@ public class NotificationApiControllerTest {
         SseEmitter mockEmitter = mock(SseEmitter.class);
         when(notificationFacade.createEmitter(0L)).thenReturn(mockEmitter);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/notifications/stream"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/notifications/stream/0"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(document(
                         "notifications/stream-notification",
