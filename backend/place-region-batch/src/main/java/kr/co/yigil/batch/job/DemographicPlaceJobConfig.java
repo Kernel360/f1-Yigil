@@ -1,8 +1,10 @@
 package kr.co.yigil.batch.job;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import kr.co.yigil.place.domain.DemographicPlace;
@@ -34,6 +36,7 @@ public class DemographicPlaceJobConfig {
 
     private final SpotRepository spotRepository;
     private final DemographicPlaceRepository demographicPlaceRepository;
+    private final Set<String> processedCombination = new HashSet<>();
 
     @Bean
     public Job demographicPlaceJob(
@@ -96,6 +99,11 @@ public class DemographicPlaceJobConfig {
             long referenceCount = (long) item[1];
             Ages ages = (Ages) item[2];
             Gender gender = (Gender) item[3];
+
+            String uniqueKey = place.getId() + "-" + ages.toString() + "-" + gender.toString();
+            if (!processedCombination.add(uniqueKey)) {
+                return null;
+            }
             return new DemographicPlace(place, referenceCount, ages, gender);
         };
     }
