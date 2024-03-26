@@ -1,17 +1,25 @@
-import { TMyPageFollower } from '@/types/myPageResponse';
+import { TMyPageFollow, TMyPageFollower } from '@/types/myPageResponse';
 import React, { useState } from 'react';
 import Dialog from '../../ui/dialog/Dialog';
 import RoundProfile from '../../ui/profile/RoundProfile';
 import { postFollow } from '../hooks/followActions';
 import ToastMsg from '../../ui/toast/ToastMsg';
 
-const MyPageFollowerItem = ({
+interface TMyPageFollowProps extends TMyPageFollow {
+  following?: boolean;
+  action: 'followings' | 'followers';
+}
+
+const MyPageFollowItem = ({
   member_id,
   nickname,
   profile_image_url,
   following,
-}: TMyPageFollower) => {
-  const [isFollowing, setIsFollowing] = useState(following);
+  action,
+}: TMyPageFollowProps) => {
+  const [isFollowing, setIsFollowing] = useState(
+    action === 'followings' ? true : (following as boolean),
+  );
 
   const [errorText, setErrorText] = useState('');
 
@@ -34,19 +42,31 @@ const MyPageFollowerItem = ({
       <div className="ml-4 text-gray-900  overflow-hidden text-ellipsis whitespace-nowrap break-words">
         {nickname}
       </div>
-      <button
-        className={`ml-4 text-start shrink-0 ${
-          isFollowing ? 'text-gray-500' : 'text-blue-500'
-        }`}
-        onClick={onClickFollowingBtn}
-      >
-        {isFollowing ? '팔로잉' : '팔로우'}
-      </button>
       <div className="grow"></div>
+
+      {action === 'followers' ? (
+        <button
+          className={`ml-4 text-start shrink-0 ${
+            isFollowing ? 'text-gray-500' : 'text-blue-500'
+          }`}
+          onClick={onClickFollowingBtn}
+        >
+          {isFollowing ? '팔로잉' : '팔로우'}
+        </button>
+      ) : (
+        <button
+          className={`${
+            isFollowing ? 'bg-gray-200 text-gray-500' : 'bg-blue-500 text-white'
+          } rounded-md px-4 py-2 leading-5`}
+          onClick={onClickFollowingBtn}
+        >
+          팔로잉
+        </button>
+      )}
 
       {errorText && <ToastMsg title={errorText} timer={1000} id={Date.now()} />}
     </div>
   );
 };
 
-export default MyPageFollowerItem;
+export default MyPageFollowItem;

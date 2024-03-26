@@ -18,7 +18,7 @@ export default function Error({
 
   return (
     <ErrorComponent
-      title={`${checkBatchimEnding('팔로잉') ? '을' : '를'}`}
+      title={`팔로잉${checkBatchimEnding('팔로잉') ? '을' : '를'}`}
       reset={reset}
     />
   );

@@ -1,15 +1,18 @@
-import MyPageFollowingList from '@/app/_components/mypage/following/MyPageFollowingList';
-import { getFollowingList } from '@/app/_components/mypage/hooks/followActions';
+import MyPageFollowList from '@/app/_components/mypage/follow/MyPageFollowList';
+import { getFollowList } from '@/app/_components/mypage/hooks/followActions';
 
 import React from 'react';
 
 export default async function FollowingPage() {
-  const followingList = await getFollowingList();
-  if (followingList.status === 'failed') throw new Error(followingList.message);
+  const followList = await getFollowList(1, 5, 'id', 'followings');
+  if (followList.status === 'failed') throw new Error(followList.message);
   return (
     <>
-      {!!followingList.data.content.length ? (
-        <MyPageFollowingList followingList={followingList.data.content} />
+      {!!followList.data.content.length ? (
+        <MyPageFollowList
+          followList={followList.data.content}
+          action="followings"
+        />
       ) : (
         <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
           팔로우한 유저가 없습니다.
