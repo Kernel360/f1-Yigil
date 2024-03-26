@@ -2,17 +2,9 @@ package kr.co.yigil.notification.infrastructure;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import kr.co.yigil.notification.domain.NotificationFactory;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
-import kr.co.yigil.notification.domain.Notification;
-import kr.co.yigil.notification.domain.NotificationSender;
-import kr.co.yigil.notification.domain.NotificationStore;
-import kr.co.yigil.notification.domain.NotificationType;
+import kr.co.yigil.notification.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +12,15 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import reactor.core.publisher.Sinks;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -67,7 +63,7 @@ public class NotificationSenderImpl implements NotificationSender {
     }
 
     private void sendRealTimeNotification(Notification notification) {
-        SseEmitter emitter = userEmitters.get(notification.getMember().getId());
+        SseEmitter emitter = userEmitters.get(notification.getReceiver().getId());
         if (emitter != null) {
             executor.execute(() -> {
                 try {
