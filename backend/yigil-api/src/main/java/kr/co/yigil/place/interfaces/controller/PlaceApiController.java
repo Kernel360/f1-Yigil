@@ -116,7 +116,7 @@ public class PlaceApiController {
     }
 
     @GetMapping("/near")
-    public ResponseEntity<NearPlaceResponse> getNearPlace(NearPlaceRequest request) {
+    public ResponseEntity<NearPlaceResponse> getNearPlace(NearPlaceRequest request, @Auth Accessor accessor) {
         var nearPlaceCommand = placeMapper.toNearPlaceCommand(request);
         var placeInfo = placeFacade.getNearPlace(nearPlaceCommand);
         var response = placeMapper.toNearPlaceResponse(placeInfo);

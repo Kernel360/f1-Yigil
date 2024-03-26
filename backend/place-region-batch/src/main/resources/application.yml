@@ -2,6 +2,7 @@ spring:
   batch:
     job:
       enabled: true
+      name: demographicPlaceJob
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
@@ -11,15 +12,15 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: @MASTER_DB_URL@
-    username: @MASTER_DB_USERNAME@
-    password: @MASTER_DB_PASSWORD@
+    url: jdbc:postgresql://database-1.c90gu44yybro.ap-northeast-2.rds.amazonaws.com:5432/yigildev
+    username: postgres
+    password: 12345678
 
 logging:
   level:
-    root: DEBUG
+    root: info
   slack:
-    webhook-uri: @SLACK_WEBHOOK_URI@
+    webhook-uri: https://hooks.slack.com/services/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
 
 decorator:
   datasource:
@@ -27,5 +28,4 @@ decorator:
       enable-logging: true
 
 server:
-  port: @PLACE_REGION_BATCH_PORT@
-
+  port: 8001

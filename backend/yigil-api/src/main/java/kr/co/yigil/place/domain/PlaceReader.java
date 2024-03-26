@@ -2,6 +2,7 @@ package kr.co.yigil.place.domain;
 
 import java.util.List;
 import java.util.Optional;
+import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.member.Ages;
 import kr.co.yigil.member.Gender;
 import org.springframework.data.domain.Page;
