@@ -8,6 +8,6 @@ export const yMarker = () => {
       </svg>
     </div>
     `,
-    anchor: new naver.maps.Point(0, 0),
+    anchor: new naver.maps.Point(50, 50),
   };
 };

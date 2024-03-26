@@ -1,4 +1,4 @@
-import { TMapPlace } from '@/types/response';
+import { TMapPlace, TMyInfo } from '@/types/response';
 import { useRouter } from 'next/navigation';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Marker } from 'react-naver-maps';
@@ -14,6 +14,7 @@ interface TMapMarker extends TMapPlace {
   setMarkerClickedId: Dispatch<SetStateAction<number>>;
   isClickedMarker: boolean;
   setToastMsg: Dispatch<SetStateAction<string>>;
+  isWrittenByMe: boolean;
 }
 
 export default function MapMarker({
@@ -25,25 +26,17 @@ export default function MapMarker({
   setMarkerClickedId,
   isClickedMarker,
   setToastMsg,
+  isWrittenByMe,
 }: TMapMarker) {
   const { push } = useRouter();
-  const [hasManyReviews, setHasManyReviews] = useState(false);
-  useEffect(() => {
-    (async () => {
-      // 내 아이디 바탕으로 장소 요청
-      // const res = await getMySpotForPlace(id);
-      // if (res.success && res.data.has_next)
-      //   setHasManyReviews(res.data.has_next);
-    })();
-  }, [id]);
-
+  console.log(isWrittenByMe);
   const onClickMarker = (clickedId: number) => {
     setMarkerClickedId(clickedId);
     if (markerClickedId === clickedId) {
       push(`/place/${clickedId}`);
       return;
     } else {
-      if (hasManyReviews) {
+      if (isWrittenByMe) {
         setToastMsg('-> 를 눌러 "장소 기록"으로 이동할 수 있어요.');
       } else setToastMsg('-> 를 눌러 "장소 상세"로 이동할 수 있어요.');
       setTimeout(() => {
@@ -53,13 +46,11 @@ export default function MapMarker({
   };
 
   const markerType = (placeName: string) => {
-    if (hasManyReviews) {
+    if (isClickedMarker) return activateMarker(placeName);
+    if (isWrittenByMe) {
       return yMarker();
-    }
-    if (!isClickedMarker) {
-      return nearMarker(placeName);
     } else {
-      return activateMarker(placeName);
+      return nearMarker(placeName);
     }
   };
   return (
