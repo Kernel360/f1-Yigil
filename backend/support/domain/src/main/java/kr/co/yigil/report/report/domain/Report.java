@@ -32,15 +32,18 @@ public class Report {
     @ManyToOne
     private Member reporter;
 
-    private Long travelId;
+    private Long targetId;
+
+    @Enumerated(EnumType.STRING)
+    private ReportTargetType reportTargetType;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Report(ReportType reportType, String content, Long travelId,  Member reporter) {
+    public Report(ReportType reportType, String content, Long targetId, Member reporter) {
         this.reportType = reportType;
         this.content = content;
-        this.travelId = travelId;
+        this.targetId = targetId;
         this.reporter = reporter;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
