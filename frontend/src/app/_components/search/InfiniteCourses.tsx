@@ -8,13 +8,13 @@ import { searchCourses } from './action';
 import Spinner from '../ui/Spinner';
 import Course from '../course/Course';
 
-import type { TCourse } from '@/types/response';
+import type { TCourseDetail } from '@/types/response';
 
 export default function InfiniteCourses({
   initialContent,
   initialHasNext,
 }: {
-  initialContent: TCourse[];
+  initialContent: TCourseDetail[];
   initialHasNext: boolean;
 }) {
   const [state] = useContext(SearchContext);

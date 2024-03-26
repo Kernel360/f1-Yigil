@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { courseSchema, placeSchema } from '@/types/response';
+import { courseDetailSchema, placeSchema } from '@/types/response';
 
-import type { TCourse, TPlace } from '@/types/response';
+import type { TCourseDetail, TPlace } from '@/types/response';
 
 const keywordSchema = z.string();
 const errorSchema = z.string();
@@ -26,7 +26,7 @@ export const searchPlaceSchema = z.object({
 });
 
 export const searchCourseSchema = z.object({
-  courses: z.array(courseSchema),
+  courses: z.array(courseDetailSchema),
   has_next: z.boolean(),
 });
 
@@ -64,7 +64,7 @@ export type TSearchState = {
               data: {
                 type: 'course';
                 hasNext: boolean;
-                courses: TCourse[];
+                courses: TCourseDetail[];
               };
             };
       };
