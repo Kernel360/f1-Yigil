@@ -60,6 +60,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'phinf.pstatic.net',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   output: 'standalone',
