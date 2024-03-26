@@ -18,7 +18,6 @@ import kr.co.yigil.travel.domain.dto.CourseListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +43,16 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<Course> getCoursesSliceInPlace(final Long placeId, final Pageable pageable) {
-        return courseReader.getCoursesSliceInPlace(placeId, pageable);
+    public CourseInfo.CoursesInPlaceResponseInfo getCoursesSliceInPlace(final Long placeId, final Long memberId, final Pageable pageable) {
+        var courseseSlice =  courseReader.getCoursesSliceInPlace(placeId, pageable);
+        List<CourseInfo.CourseInPlaceInfo> courseInPlaceInfoList = courseseSlice.getContent().stream()
+                .map(course -> {
+                    boolean isLiked = favorReader.existsByMemberIdAndTravelId(memberId, course.getId());
+                    return new CourseInfo.CourseInPlaceInfo(course, isLiked);
+
+                })
+                .toList();
+        return new CourseInfo.CoursesInPlaceResponseInfo(courseInPlaceInfoList, courseseSlice.hasNext());
     }
 
     @Override

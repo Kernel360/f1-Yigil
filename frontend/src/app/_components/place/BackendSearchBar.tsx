@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext } from 'react';
-import { searchPlaces } from '../search/action';
+import { searchCourses, searchPlaces } from '../search/action';
 
 import BaseSearchBar from '../search/BaseSearchBar';
 import { SearchContext } from '@/context/search/SearchContext';
@@ -11,14 +11,26 @@ export default function BackendSearchBar() {
 
   async function onSearch(term: string) {
     if (search.backendSearchType === 'place') {
-      const result = await searchPlaces(term);
+      const result = await searchPlaces(term, 1, 5, search.sortOptions);
 
-      dispatch({ type: 'SEARCH_PLACE', payload: result });
+      if (result.status === 'failed') {
+        dispatch({ type: 'SET_ERROR', payload: result.message });
+        return;
+      }
+
+      dispatch({ type: 'SEARCH_PLACE', payload: result.data });
 
       return;
     }
 
-    // const result = await searchCourses(term);
+    const result = await searchCourses(term, 1, 5, search.sortOptions);
+
+    if (result.status === 'failed') {
+      dispatch({ type: 'SET_ERROR', payload: result.message });
+      return;
+    }
+
+    dispatch({ type: 'SEARCH_COURSE', payload: result.data });
   }
 
   function onCancel() {

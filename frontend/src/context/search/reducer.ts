@@ -1,13 +1,14 @@
 import { z } from 'zod';
 
-import { placeSchema } from '@/types/response';
+import { courseDetailSchema, placeSchema } from '@/types/response';
 
-import type { TPlace } from '@/types/response';
+import type { TCourseDetail, TPlace } from '@/types/response';
 
 const keywordSchema = z.string();
 const errorSchema = z.string();
 const searchHistorySchema = z.string();
 const loadingSchema = z.boolean();
+const sortOptionSchema = z.string();
 
 const engineSearchSchema = z.array(
   z.object({
@@ -15,8 +16,6 @@ const engineSearchSchema = z.array(
     roadAddress: z.string(),
   }),
 );
-
-const pageSchema = z.number().int();
 
 // 응답의 진짜 내용을 담는 이름이 굳이 places, courses... 이어야 할까?
 // 응답 프로퍼티명이 달라서 한큐에 처리하기 힘듦
@@ -26,15 +25,21 @@ export const searchPlaceSchema = z.object({
   has_next: z.boolean(),
 });
 
+export const searchCourseSchema = z.object({
+  courses: z.array(courseDetailSchema),
+  has_next: z.boolean(),
+});
+
 export type TSearchState = {
   loading: boolean;
   showHistory: boolean;
   keyword: string;
+  currentTerm: string;
   histories: string[];
 
-  backendSearchType: 'place' | 'course';
+  sortOptions: string;
 
-  // type: 'searchEngine' | 'place' | 'course';
+  backendSearchType: 'place' | 'course';
 
   results:
     | { status: 'start' }
@@ -51,7 +56,6 @@ export type TSearchState = {
               data: {
                 type: 'place';
                 hasNext: boolean;
-                currentPage: number;
                 places: TPlace[];
               };
             }
@@ -60,24 +64,9 @@ export type TSearchState = {
               data: {
                 type: 'course';
                 hasNext: boolean;
-                currentPage: number;
+                courses: TCourseDetail[];
               };
             };
-      };
-  result:
-    | { status: 'start' }
-    | { status: 'searchEngine'; content: string[] }
-    | { status: 'error'; message: string[] }
-    | {
-        status: 'backend';
-        data:
-          | {
-              type: 'place';
-              hasNext: boolean;
-              currentPage: number;
-              content: TPlace[];
-            }
-          | { type: 'course'; hasNext: boolean; currentPage: number };
       };
 };
 
@@ -85,24 +74,26 @@ export const defaultSearchState: TSearchState = {
   loading: false,
   showHistory: false,
   keyword: '',
+  currentTerm: '',
   histories: [],
+  sortOptions: 'desc',
   backendSearchType: 'place',
   results: { status: 'start' },
-  result: { status: 'start' },
 };
 
 export type TSearchAction = {
   type:
     | 'SET_KEYWORD'
+    | 'SET_CURRENT_TERM'
     | 'EMPTY_KEYWORD'
     | 'ADD_HISTORY'
     | 'DELETE_HISTORY'
     | 'CLEAR_HISTORY'
+    | 'SET_SORT_OPTION'
     | 'INIT_RESULT'
     | 'SET_LOADING'
     | 'SET_ERROR'
     | 'SEARCH_PLACE'
-    | 'MORE_PLACE'
     | 'SEARCH_COURSE'
     | 'SEARCH_NAVER';
   payload?: any;
@@ -119,9 +110,10 @@ export function createInitialState(
     loading: false,
     showHistory: showHistory,
     keyword: initialKeyword,
+    currentTerm: initialKeyword,
+    sortOptions: 'desc',
     backendSearchType,
     results: { status: 'start' },
-    result: { status: 'start' },
   };
 }
 
@@ -129,7 +121,7 @@ export default function reducer(
   state: TSearchState,
   action: TSearchAction,
 ): TSearchState {
-  const { histories, keyword, result } = state;
+  const { histories, keyword } = state;
 
   switch (action.type) {
     case 'SET_KEYWORD': {
@@ -142,8 +134,12 @@ export default function reducer(
       return { ...state };
     }
 
+    case 'SET_CURRENT_TERM': {
+      return { ...state, currentTerm: keyword };
+    }
+
     case 'EMPTY_KEYWORD': {
-      return { ...state, keyword: '', result: { status: 'start' } };
+      return { ...state, keyword: '', results: { status: 'start' } };
     }
 
     case 'ADD_HISTORY': {
@@ -170,6 +166,16 @@ export default function reducer(
 
     case 'CLEAR_HISTORY': {
       return { ...state, histories: [] };
+    }
+
+    case 'SET_SORT_OPTION': {
+      const result = sortOptionSchema.safeParse(action.payload);
+
+      if (!result.success) {
+        return { ...state };
+      }
+
+      return { ...state, sortOptions: result.data };
     }
 
     case 'INIT_RESULT': {
@@ -221,7 +227,6 @@ export default function reducer(
             from: 'backend',
             data: {
               type: 'place',
-              currentPage: 1,
               places,
               hasNext: has_next,
             },
@@ -230,39 +235,20 @@ export default function reducer(
       };
     }
 
-    case 'MORE_PLACE': {
-      const json = action.payload.json;
-      const page = action.payload.nextPage;
+    case 'SEARCH_COURSE': {
+      const json = action.payload;
 
-      const searchPlaceResult = searchPlaceSchema.safeParse(json);
-      const nextPageResult = pageSchema.safeParse(page);
+      const result = searchCourseSchema.safeParse(json);
 
-      if (searchPlaceResult.success && nextPageResult.success) {
-        const { places, has_next } = searchPlaceResult.data;
+      if (!result.success) {
+        console.log(result.error.message);
 
-        if (
-          state.result.status === 'backend' &&
-          state.result.data.type === 'place'
-        ) {
-          return {
-            ...state,
-            result: {
-              status: 'backend',
-              data: {
-                type: 'place',
-                currentPage: nextPageResult.data,
-                content: [...state.result.data.content, ...places],
-                hasNext: has_next,
-              },
-            },
-          };
-        }
+        return {
+          ...state,
+          results: { status: 'failed', message: result.error.message },
+        };
       }
 
-      return { ...state };
-    }
-
-    case 'SEARCH_COURSE': {
       return {
         ...state,
         backendSearchType: 'course',
@@ -270,7 +256,11 @@ export default function reducer(
           status: 'success',
           content: {
             from: 'backend',
-            data: { type: 'course', hasNext: false, currentPage: 1 },
+            data: {
+              type: 'course',
+              hasNext: result.data.has_next,
+              courses: result.data.courses,
+            },
           },
         },
       };

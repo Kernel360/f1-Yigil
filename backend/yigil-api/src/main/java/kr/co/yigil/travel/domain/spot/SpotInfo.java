@@ -1,12 +1,13 @@
 package kr.co.yigil.travel.domain.spot;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.dto.SpotListDto;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 public class SpotInfo {
 
@@ -21,22 +22,13 @@ public class SpotInfo {
         private final List<String> imageUrls;
         private final LocalDateTime createDate;
         private final String description;
+        private final Long ownerId;
         private final String ownerProfileImageUrl;
         private final String ownerNickname;
         private final boolean liked;
 
         public Main(Spot spot) {
-            id = spot.getId();
-            placeName = spot.getPlace().getName();
-            placeAddress = spot.getPlace().getAddress();
-            rate = spot.getRate();
-            mapStaticImageFileUrl = spot.getPlace().getMapStaticImageFileUrl();
-            imageUrls = spot.getAttachFiles().getUrls();
-            createDate = spot.getCreatedAt();
-            description = spot.getDescription();
-            ownerProfileImageUrl = spot.getMember().getProfileImageUrl();
-            ownerNickname = spot.getMember().getNickname();
-            this.liked = false;
+            this(spot, false);
         }
 
         public Main(Spot spot, boolean liked) {
@@ -48,6 +40,7 @@ public class SpotInfo {
             imageUrls = spot.getAttachFiles().getUrls();
             createDate = spot.getCreatedAt();
             description = spot.getDescription();
+            ownerId = spot.getMember().getId();
             ownerProfileImageUrl = spot.getMember().getProfileImageUrl();
             ownerNickname = spot.getMember().getNickname();
             this.liked = liked;
@@ -101,6 +94,7 @@ public class SpotInfo {
         private final boolean exists;
 
         public MySpot(Optional<Spot> spotOptional) {
+
             if(spotOptional.isEmpty()) {
                 exists = false;
                 rate = 0;
