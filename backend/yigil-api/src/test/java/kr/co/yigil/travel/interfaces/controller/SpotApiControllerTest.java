@@ -32,6 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
@@ -71,7 +72,7 @@ class SpotApiControllerTest {
     void getSpotsInPlace_ShouldReturnOk() throws Exception {
         SpotInfo.Slice mockSlice = mock(Slice.class);
         SpotInfoDto spotInfo = new SpotInfoDto(1L, List.of("images/image.png", "images/photo.jpeg"),
-                "설명", "images/profile.jpg", "오너 닉네임", "4.5", "2024-02-01", true);
+                "설명",1L, "images/profile.jpg", "오너 닉네임", 4.5, LocalDateTime.now(), true);
         SpotsInPlaceResponse response = new SpotsInPlaceResponse(List.of(spotInfo), true);
 
         when(spotFacade.getSpotSliceInPlace(anyLong(), any(Accessor.class), any(Pageable.class))).thenReturn(mockSlice);
@@ -105,11 +106,12 @@ class SpotApiControllerTest {
                                 fieldWithPath("spots[].id").type(JsonFieldType.NUMBER).description("Spot의 고유 아이디"),
                                 fieldWithPath("spots[].image_url_list").type(JsonFieldType.ARRAY).description("imageUrl의 List"),
                                 fieldWithPath("spots[].description").type(JsonFieldType.STRING).description("Spot의 설명"),
+                                fieldWithPath("spots[].owner_id").type(JsonFieldType.NUMBER).description("Spot 등록 사용자의 고유 아이디"),
                                 fieldWithPath("spots[].owner_profile_image_url").type(JsonFieldType.STRING)
                                         .description("Spot 등록 사용자의 프로필 이미지 Url"),
                                 fieldWithPath("spots[].owner_nickname").type(JsonFieldType.STRING)
                                         .description("Spot 등록 사용자의 닉네임"),
-                                fieldWithPath("spots[].rate").type(JsonFieldType.STRING)
+                                fieldWithPath("spots[].rate").type(JsonFieldType.NUMBER)
                                         .description("Spot의 평점"),
                                 fieldWithPath("spots[].create_date").type(JsonFieldType.STRING)
                                         .description("Spot의 생성일시"),

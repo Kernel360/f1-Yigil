@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.travel.application.CourseFacade;
-import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto.CourseSpotInfoDto;
@@ -26,7 +25,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -74,14 +72,27 @@ public class CourseApiControllerTest {
     @DisplayName("getCoursesInPlace 메서드가 잘 동작하는지")
     @Test
     void getCoursesInPlace_ShouldReturnOk() throws Exception {
-        Slice<Course> mockSlice = mock(Slice.class);
-        CourseInfoDto courseInfo = new CourseInfoDto("images/static.img", "코스이름", "5.0", "3",
-                "2024-02-01", "images/owner.jpg", "코스 작성자");
-        CoursesInPlaceResponse response = new CoursesInPlaceResponse(List.of(courseInfo), false);
+        CoursesInPlaceResponse response = new CoursesInPlaceResponse();
+        CourseInfoDto courseInfo = new CourseInfoDto();
+        courseInfo.setId(1L);
+        courseInfo.setTitle("test");
+        courseInfo.setContent("test");
+        courseInfo.setMapStaticImageUrl("test");
+        courseInfo.setRate(4.5);
+        courseInfo.setSpotCount(10);
+        courseInfo.setCreateDate(LocalDateTime.now());
+        courseInfo.setOwnerId(1L);
+        courseInfo.setOwnerProfileImageUrl("test");
+        courseInfo.setOwnerNickname("test");
+        courseInfo.setLiked(true);
 
-        when(courseFacade.getCourseSliceInPlace(anyLong(), any(Pageable.class))).thenReturn(
-                mockSlice);
-        when(courseMapper.courseSliceToCourseInPlaceResponse(mockSlice)).thenReturn(response);
+        response.setCourses(List.of(courseInfo));
+        response.setHasNext(false);
+
+        CourseInfo.CoursesInPlaceResponseInfo info = mock(CourseInfo.CoursesInPlaceResponseInfo.class);
+
+        when(courseFacade.getCourseSliceInPlace(anyLong(),anyLong(), any(PageRequest.class))).thenReturn(info);
+        when(courseMapper.courseSliceToCourseInPlaceResponse(any(CourseInfo.CoursesInPlaceResponseInfo.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/courses/place/{placeId}", 1L)
                         .param("page", "1")
@@ -110,14 +121,18 @@ public class CourseApiControllerTest {
                                 fieldWithPath("has_next").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지가 있는지 여부"),
                                 subsectionWithPath("courses").description("course의 정보"),
-                                fieldWithPath("courses[].map_static_image_file_url").type(
+                                fieldWithPath("courses[].id").type(JsonFieldType.NUMBER)
+                                        .description("코스 ID"),
+                                fieldWithPath("courses[].map_static_image_url").type(
                                                 JsonFieldType.STRING)
                                         .description("코스의 지도 정보를 나타내는 이미지 파일 경로"),
                                 fieldWithPath("courses[].title").type(JsonFieldType.STRING)
                                         .description("코스의 제목"),
-                                fieldWithPath("courses[].rate").type(JsonFieldType.STRING)
+                                fieldWithPath("courses[].content").type(JsonFieldType.STRING)
+                                        .description("코스의 본문"),
+                                fieldWithPath("courses[].rate").type(JsonFieldType.NUMBER)
                                         .description("코스의 평점 정보"),
-                                fieldWithPath("courses[].spot_count").type(JsonFieldType.STRING)
+                                fieldWithPath("courses[].spot_count").type(JsonFieldType.NUMBER)
                                         .description("코스 내부 장소의 개수"),
                                 fieldWithPath("courses[].create_date").type(JsonFieldType.STRING)
                                         .description("코스의 생성 일자"),
@@ -125,11 +140,13 @@ public class CourseApiControllerTest {
                                                 JsonFieldType.STRING)
                                         .description("코스 생성자의 프로필 이미지 경로"),
                                 fieldWithPath("courses[].owner_nickname").type(JsonFieldType.STRING)
-                                        .description("코스 생성자의 닉네임 정보")
+                                        .description("코스 생성자의 닉네임 정보"),
+                                fieldWithPath("courses[].liked").type(JsonFieldType.BOOLEAN)
+                                        .description("코스 좋아요 여부")
                         )
                 ));
 
-        verify(courseFacade).getCourseSliceInPlace(anyLong(), any(Pageable.class));
+        verify(courseFacade).getCourseSliceInPlace(anyLong(),anyLong(), any(Pageable.class));
     }
 
     @DisplayName("registerCourse 메서드가 잘 동작하는지")
