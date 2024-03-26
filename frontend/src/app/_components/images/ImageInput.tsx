@@ -14,19 +14,17 @@ export default function ImageInput({
   images,
   setImages,
   invokeError,
+  order,
 }: {
   availableSpace: number;
   images: TImageData[];
-  setImages: (newImages: TImageData[]) => void;
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
   invokeError: (title: string) => void;
+  order?: string;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleUpload(fileList: FileList) {
-    // if (availableSpace === 0) {
-    //   throw Error('더 이상 추가할 수 없습니다!');
-    // }
-
     if (fileList.length > availableSpace) {
       throw Error(`${availableSpace}개 이상 추가할 수 없습니다!`);
     }
@@ -46,7 +44,7 @@ export default function ImageInput({
 
     const nextImages = [...images, ...deduplicated];
 
-    setImages(nextImages);
+    setImages({ type: 'new', data: nextImages });
   }
 
   function handleClick(event: EventFor<'input', 'onClick'>) {
@@ -63,7 +61,7 @@ export default function ImageInput({
       <label
         className="w-full h-full rounded-2xl flex justify-center items-center hover:cursor-pointer"
         tabIndex={0}
-        htmlFor="add-image"
+        htmlFor={order ? `add-image-${order}` : 'add-image'}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             fileInputRef.current?.click();
@@ -76,7 +74,7 @@ export default function ImageInput({
         className="hidden"
         ref={fileInputRef}
         key={availableSpace}
-        id="add-image"
+        id={order ? `add-image-${order}` : 'add-image'}
         type="file"
         accept="image/*"
         multiple

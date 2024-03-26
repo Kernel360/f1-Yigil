@@ -27,17 +27,18 @@ import type {
 } from '@dnd-kit/core';
 
 import type { TImageData } from './ImageHandler';
+import { createPortal } from 'react-dom';
 
 export default function ImagesContainer({
   images,
   setImages,
 }: {
   images: TImageData[];
-  setImages: (newImages: TImageData[]) => void;
+  setImages: (newImages: { type: 'new'; data: TImageData[] }) => void;
 }) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 0.01 } }),
+    useSensor(PointerSensor, { activationConstraint: { distance: 1 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -70,9 +71,9 @@ export default function ImagesContainer({
       const { active, over } = event;
 
       if (active.id !== over?.id) {
-        const nextImage = imageMove(images, active.id, over?.id);
+        const nextImages = imageMove(images, active.id, over?.id);
 
-        setImages(nextImage);
+        setImages({ type: 'new', data: nextImages });
 
         setActiveId(null);
       }
@@ -83,7 +84,7 @@ export default function ImagesContainer({
   function removeImage(filename: string) {
     const nextImages = images.filter((image) => image.filename !== filename);
 
-    setImages(nextImages);
+    setImages({ type: 'new', data: nextImages });
   }
 
   const handleDragCancel = useCallback(() => {
@@ -111,9 +112,13 @@ export default function ImagesContainer({
           />
         ))}
       </SortableContext>
-      <DragOverlay className="origin-top-left" adjustScale>
-        {activeImage && <ImageItem image={activeImage} isDragging />}
-      </DragOverlay>
+      {activeImage &&
+        createPortal(
+          <DragOverlay className="origin-top-left" adjustScale>
+            <ImageItem image={activeImage} isDragging />
+          </DragOverlay>,
+          document.body,
+        )}
     </DndContext>
   );
 }

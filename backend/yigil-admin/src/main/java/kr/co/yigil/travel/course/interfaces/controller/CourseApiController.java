@@ -33,15 +33,13 @@ public class CourseApiController {
 
     @GetMapping
     public ResponseEntity<CoursesResponse> getCourses(
-        @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
+            @PageableDefault(size = 5, page = 1) Pageable pageable,
+            @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
         PageRequest pageRequest = PageRequest.of(
-            pageable.getPageNumber() - 1,
-            pageable.getPageSize(),
-            Sort.by(direction, sortBy.getValue())
+                pageable.getPageNumber() - 1, pageable.getPageSize(), Sort.by(direction, sortBy.getValue())
         );
         CourseInfoDto.CoursesPageInfo courses = courseFacade.getCourses(pageRequest);
         CoursesResponse response = courseDtoMapper.toPageDtp(courses);
@@ -50,7 +48,7 @@ public class CourseApiController {
 
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseDetailResponse> getCourse(
-        @PathVariable Long courseId) {
+            @PathVariable Long courseId) {
         CourseInfoDto.CourseDetailInfo course = courseFacade.getCourse(courseId);
         CourseDetailResponse response = courseDtoMapper.toDetailDto(course);
         return ResponseEntity.ok().body(response);
@@ -58,7 +56,7 @@ public class CourseApiController {
 
     @DeleteMapping("/{courseId}")
     public ResponseEntity<CourseDeleteResponse> deleteCourse(
-        @PathVariable Long courseId) {
+            @PathVariable Long courseId) {
         courseFacade.deleteCourse(courseId);
         return ResponseEntity.ok().body(new CourseDeleteResponse("삭제 성공"));
     }

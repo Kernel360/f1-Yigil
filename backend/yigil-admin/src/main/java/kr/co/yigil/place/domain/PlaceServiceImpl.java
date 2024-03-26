@@ -19,6 +19,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceReader placeReader;
 
     @Override
+    @Transactional(readOnly = true)
     public List<PlaceInfo.Map> getPlaces(PlaceMapCommand command) {
         var places = placeReader.getPlaces(command.getStartX(), command.getStartY(), command.getEndX(), command.getEndY());
         return places.stream().map(Map::new).collect(Collectors.toList());

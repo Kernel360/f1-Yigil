@@ -1,7 +1,6 @@
 package kr.co.yigil.favor.infrastructure;
 
 import kr.co.yigil.favor.domain.FavorReader;
-import kr.co.yigil.favor.domain.repository.FavorRepository;
 import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.member.Member;

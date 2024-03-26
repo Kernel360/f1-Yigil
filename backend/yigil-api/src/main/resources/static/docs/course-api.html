@@ -547,7 +547,12 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">course의 정보</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].map_static_image_file_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].map_static_image_url</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스의 지도 정보를 나타내는 이미지 파일 경로</p></td>
 </tr>
@@ -557,13 +562,18 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스의 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스의 본문</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스의 평점 정보</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].spot_count</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스 내부 장소의 개수</p></td>
 </tr>
 <tr>
@@ -581,6 +591,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스 생성자의 닉네임 정보</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].liked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 좋아요 여부</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -589,17 +604,21 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 306
+Content-Length: 347
 
 {
   "courses" : [ {
-    "map_static_image_file_url" : "images/static.img",
-    "title" : "코스이름",
-    "rate" : "5.0",
-    "spot_count" : "3",
-    "create_date" : "2024-02-01",
-    "owner_profile_image_url" : "images/owner.jpg",
-    "owner_nickname" : "코스 작성자"
+    "id" : 1,
+    "title" : "test",
+    "content" : "test",
+    "map_static_image_url" : "test",
+    "rate" : 4.5,
+    "spot_count" : 10,
+    "create_date" : "2024-03-26T00:27:27.015724",
+    "owner_id" : 1,
+    "owner_profile_image_url" : "test",
+    "owner_nickname" : "test",
+    "liked" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -670,11 +689,6 @@ Content-Length: 306
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 포인트 정보</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].title</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 제목</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].description</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 본문</p></td>
@@ -693,11 +707,6 @@ Content-Length: 306
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].placeAddress</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 장소 주소</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[].placePointJson</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 장소 포인트 정보</p></td>
 </tr>
 </tbody>
 </table>
@@ -730,10 +739,6 @@ Content-Length: 306
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[0].mapStaticImageFile</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 위치 정보를 나타내는 지도 이미지 파일</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spotRegisterRequests[0].placeImageFile</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스팟의 장소 이미지 파일</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -743,7 +748,7 @@ Content-Length: 306
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/courses HTTP/1.1
 Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Length: 366
+Content-Length: 313
 Host: spring.restdocs.test
 
 {
@@ -755,12 +760,10 @@ Host: spring.restdocs.test
   "lineStringJson" : "test",
   "spotRegisterRequests" : [ {
     "pointJson" : "test",
-    "title" : "test",
     "description" : "test",
     "rate" : 4.5,
     "placeName" : "test",
-    "placeAddress" : "test",
-    "placePointJson" : "test"
+    "placeAddress" : "test"
   } ]
 }</code></pre>
 </div>
@@ -1094,7 +1097,7 @@ Content-Length: 481
   "rate" : 4.5,
   "map_static_image_url" : "images/static.png",
   "description" : "본문",
-  "created_date" : "2024-03-21T00:19:31.444626",
+  "created_date" : "2024-03-26T00:27:27.088549",
   "line_string_json" : "lineStringJson",
   "spots" : [ {
     "id" : 1,
@@ -1245,6 +1248,10 @@ Content-Length: 481
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mapStaticImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 맵 스태틱 이미지 파일</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>courseSpotUpdateRequests[0].updateSpotImages[0].imageFile</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">스팟 관련 이미지 파일</p></td>
@@ -1697,7 +1704,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-21T00:19:31.314895"
+    "create_date" : "2024-03-26T00:27:26.958549"
   } ],
   "has_next" : false
 }</code></pre>
@@ -1845,7 +1852,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-21T00:19:31.344648",
+    "create_date" : "2024-03-26T00:27:26.984952",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -1857,7 +1864,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-21T00:19:31.344964",
+    "create_date" : "2024-03-26T00:27:26.98528",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -1873,7 +1880,7 @@ Host: spring.restdocs.test
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 665
+Content-Length: 664
 
 {
   "spot_details" : [ {
@@ -1883,7 +1890,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-21T00:19:31.344648",
+    "create_date" : "2024-03-26T00:27:26.984952",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -1895,7 +1902,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-21T00:19:31.344964",
+    "create_date" : "2024-03-26T00:27:26.98528",
     "point" : {
       "x" : 2.0,
       "y" : 2.0

@@ -7,6 +7,7 @@ import CourseProvider from '@/context/travel/course/CourseContext';
 import AddTravelMapProvider from '@/context/map/AddTravelMapContext';
 import SearchProvider from '@/context/search/SearchContext';
 import AddCourseContent from './AddCourseContent';
+import AddTravelExistsProvider from '@/context/exists/AddTravelExistsContext';
 
 export default function AddCourse({
   ncpClientId,
@@ -22,9 +23,11 @@ export default function AddCourse({
           <CourseWithNewStepProvider>
             <CourseWithoutNewStepProvider>
               <AddTravelMapProvider>
-                <SearchProvider initialKeyword={initialKeyword}>
-                  <AddCourseContent />
-                </SearchProvider>
+                <AddTravelExistsProvider>
+                  <SearchProvider initialKeyword={initialKeyword}>
+                    <AddCourseContent />
+                  </SearchProvider>
+                </AddTravelExistsProvider>
               </AddTravelMapProvider>
             </CourseWithoutNewStepProvider>
           </CourseWithNewStepProvider>

@@ -2,7 +2,6 @@ package kr.co.yigil.travel.application;
 
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.global.Selected;
-import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
@@ -11,7 +10,6 @@ import kr.co.yigil.travel.domain.course.CourseService;
 import kr.co.yigil.travel.domain.spot.SpotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +20,8 @@ public class CourseFacade {
     private final CourseService courseService;
     private final SpotService spotService;
 
-    public Slice<Course> getCourseSliceInPlace(Long placeId, Pageable pageable) {
-        return courseService.getCoursesSliceInPlace(placeId, pageable);
+    public CourseInfo.CoursesInPlaceResponseInfo getCourseSliceInPlace(Long placeId, Long memberId, Pageable pageable) {
+        return courseService.getCoursesSliceInPlace(placeId, memberId, pageable);
     }
 
     public void registerCourse(RegisterCourseRequest command, Long memberId) {

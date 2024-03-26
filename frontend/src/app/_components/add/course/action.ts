@@ -7,11 +7,14 @@ import { getBaseUrl } from '@/app/utilActions';
 import { myPageSpotListSchema } from '@/types/myPageResponse';
 import {
   backendErrorSchema,
+  existingSpotsSchema,
   naverStaticMapUrlErrorSchema,
   postResponseSchema,
 } from '@/types/response';
 
+import type { TExistingSpots } from '@/types/response';
 import type {
+  TCoords,
   TCourseState,
   TLineString,
   TSpotState,
@@ -22,6 +25,7 @@ import {
   dataUrlToBlob,
   getMIMETypeFromDataURI,
 } from '@/utils';
+import { revalidateTag } from 'next/cache';
 
 type TMyPageSpotList = z.infer<typeof myPageSpotListSchema>;
 
@@ -45,6 +49,7 @@ async function fetchMySpots(pageNo: number, size: number, sortOrder: string) {
     headers: {
       Cookie: `SESSION=${cookie}`,
     },
+    next: { tags: ['mySpots'] },
   });
 
   return await response.json();
@@ -84,6 +89,42 @@ export async function getMySpots(
 
     return { status: 'failed', message: '알 수 없는 에러입니다!' };
   }
+}
+
+export async function getSelectedSpots(
+  spotIds: number[],
+): Promise<
+  | { status: 'failed'; message: string; code?: number }
+  | { status: 'succeed'; data: TExistingSpots }
+> {
+  const BASE_URL = await getBaseUrl();
+  const cookie = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/courses/spots`, {
+    method: 'POST',
+    body: JSON.stringify({ spot_ids: spotIds }),
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: `SESSION=${cookie}`,
+    },
+  });
+
+  const json = await response.json();
+
+  const backendError = backendErrorSchema.safeParse(json);
+
+  if (backendError.success) {
+    const { message, code } = backendError.data;
+    return { status: 'failed', message, code };
+  }
+
+  const result = existingSpotsSchema.safeParse(json);
+
+  if (!result.success) {
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  return { status: 'succeed', data: result.data };
 }
 
 function routeUrl(coords: { lng: number; lat: number }[]) {
@@ -145,10 +186,8 @@ type TRouteGeoJsonResult =
   | { status: 'success'; data: TLineString };
 
 export async function getRouteGeoJson(
-  spots: TSpotState[],
+  coords: TCoords[],
 ): Promise<TRouteGeoJsonResult> {
-  const coords = spots.map(({ place }) => place.coords);
-
   const response = await fetch(routeUrl(coords), {
     method: 'GET',
     headers: {
@@ -372,22 +411,26 @@ async function parseAddCourseState(course: TCourseState): Promise<FormData> {
     ),
   );
 
-  const spotImages = spots.map((spot) =>
-    spot.images.map(
-      ({ filename, uri }) =>
-        new File([dataUrlToBlob(uri)], filename, {
-          type: getMIMETypeFromDataURI(uri),
-        }),
-    ),
-  );
+  const spotImages = spots.map((spot) => {
+    const images = spot.images;
+
+    return images.type === 'new'
+      ? images.data.map(
+          ({ filename, uri }) =>
+            new File([dataUrlToBlob(uri)], filename, {
+              type: getMIMETypeFromDataURI(uri),
+            }),
+        )
+      : [];
+  });
 
   spots.forEach((spot, index) => {
-    const { name, mapImageUrl } = spot.place;
+    const { mapImageUrl } = spot.place;
 
     if (mapImageUrl.startsWith('data:')) {
       const staticMapFile = new File(
         [dataUrlToBlob(mapImageUrl)],
-        `${name} 지도 이미지.png`,
+        `코스_지도_이미지_${Date.now()}.png`,
         {
           type: 'image/png',
         },
@@ -416,23 +459,60 @@ async function parseAddCourseState(course: TCourseState): Promise<FormData> {
   return formData;
 }
 
+async function parseAddCourseWithoutNew(
+  course: TCourseState,
+): Promise<FormData> {
+  const formData = new FormData();
+
+  const { spots, review, staticMapImageUrl, lineString } = course;
+  const spotIds = spots.map((spot) => spot.id);
+
+  formData.append('title', review.title || '');
+  formData.append('description', review.content);
+  formData.append('rate', review.rate.toString());
+  formData.append('isPrivate', JSON.stringify(false));
+  formData.append('lineStringJson', JSON.stringify(lineString));
+  formData.append('representativeSpotOrder', JSON.stringify(1));
+
+  spotIds.forEach((id) => formData.append('spotIds', JSON.stringify(id)));
+
+  formData.append(
+    'mapStaticImageFile',
+    new File(
+      [dataUrlToBlob(staticMapImageUrl)],
+      `코스_지도_이미지_${Date.now()}.png`,
+      {
+        type: 'image/png',
+      },
+    ),
+  );
+
+  return formData;
+}
+
 export async function postCourse(
   course: TCourseState,
+  withoutNew?: boolean,
 ): Promise<
   { status: 'succeed' } | { status: 'failed'; message: string; code: number }
 > {
   const BASE_URL = await getBaseUrl();
   const session = cookies().get('SESSION')?.value;
 
-  const formData = await parseAddCourseState(course);
+  const formData = withoutNew
+    ? await parseAddCourseWithoutNew(course)
+    : await parseAddCourseState(course);
 
-  const response = await fetch(`${BASE_URL}/v1/courses`, {
-    method: 'POST',
-    body: formData,
-    headers: {
-      Cookie: `SESSION=${session}`,
+  const response = await fetch(
+    `${BASE_URL}/v1/courses${withoutNew ? '/only' : ''}`,
+    {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Cookie: `SESSION=${session}`,
+      },
     },
-  });
+  );
 
   if (response.status.toString()[0] === '5') {
     return {
@@ -457,6 +537,8 @@ export async function postCourse(
   if (!result.success) {
     return { status: 'failed', message: '알 수 없는 에러입니다!', code: 500 };
   }
+
+  revalidateTag('mySpots');
 
   return { status: 'succeed' };
 }

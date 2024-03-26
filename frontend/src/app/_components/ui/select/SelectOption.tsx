@@ -6,9 +6,9 @@ export default function SelectOption({
   onChangeSelectOption,
   closeModal,
 }: {
-  list: { value: string | number; label: string | ReactElement }[];
+  list: { value: string; label: string | ReactElement }[];
   optionStyle?: string;
-  onChangeSelectOption: (option: string | number) => void;
+  onChangeSelectOption: (option: string) => void;
   closeModal: () => void;
 }) {
   const mouseEventPrevent = (e: Event) => {

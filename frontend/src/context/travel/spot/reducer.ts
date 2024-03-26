@@ -4,7 +4,7 @@ import {
   reviewSchema,
 } from '../schema';
 
-import type { TSpotState } from '../schema';
+import type { TChoosePlace, TSpotState } from '../schema';
 
 export interface TSpotAction {
   type: 'SET_PLACE' | 'SET_IMAGES' | 'SET_REVIEW' | 'INIT_SPOT';
@@ -13,9 +13,23 @@ export interface TSpotAction {
 
 export const initialSpotState: TSpotState = {
   place: { name: '', address: '', mapImageUrl: '', coords: { lng: 0, lat: 0 } },
-  images: [],
+  images: { type: 'new', data: [] },
   review: { rate: 1, content: '' },
 };
+
+export function createInitialSpotState(
+  initialPlace?: TChoosePlace,
+): TSpotState {
+  if (initialPlace) {
+    return {
+      place: initialPlace,
+      images: initialSpotState.images,
+      review: initialSpotState.review,
+    };
+  }
+
+  return initialSpotState;
+}
 
 export default function reducer(
   state: TSpotState,
@@ -42,7 +56,7 @@ export default function reducer(
        * @todo SET_ERROR for Toast
        */
       if (!result.success) {
-        console.error(result.error.message);
+        console.error(result.error.issues);
         return { ...state };
       }
 

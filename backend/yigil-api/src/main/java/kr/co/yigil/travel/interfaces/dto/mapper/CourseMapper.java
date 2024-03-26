@@ -1,6 +1,5 @@
 package kr.co.yigil.travel.interfaces.dto.mapper;
 
-import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseCommand;
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.interfaces.dto.CourseDetailInfoDto;
@@ -16,41 +15,37 @@ import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.geojson.GeoJsonReader;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Slice;
+import org.mapstruct.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = {SpotMapper.class})
+@Mapper(
+        componentModel = "spring",
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        uses = {SpotMapper.class}
+)
 public interface CourseMapper {
 
-    CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
+//    CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
 
-    @Mapping(target = "mapStaticImageFileUrl", expression = "java(course.getMapStaticImageFile().getFileUrl())")
-    @Mapping(target = "title", expression = "java(course.getTitle())")
-    @Mapping(target = "rate", expression = "java(String.valueOf(course.getRate()))")
-    @Mapping(target = "spotCount", expression = "java(String.valueOf(course.getSpots().size()))")
-    @Mapping(target = "createDate", expression = "java(course.getCreatedAt().toString())")
-    @Mapping(target = "ownerProfileImageUrl", expression = "java(course.getMember().getProfileImageUrl())")
-    @Mapping(target = "ownerNickname", expression = "java(course.getMember().getNickname())")
-    CourseInfoDto courseToCourseInfoDto(Course course);
+//    @Mapping(target = "mapStaticImageFileUrl", expression = "java(course.getMapStaticImageFile().getFileUrl())")
+//    @Mapping(target = "title", expression = "java(course.getTitle())")
+//    @Mapping(target = "rate", expression = "java(String.valueOf(course.getRate()))")
+//    @Mapping(target = "spotCount", expression = "java(String.valueOf(course.getSpots().size()))")
+//    @Mapping(target = "createDate", expression = "java(course.getCreatedAt().toString())")
+//    @Mapping(target = "ownerProfileImageUrl", expression = "java(course.getMember().getProfileImageUrl())")
+//    @Mapping(target = "ownerNickname", expression = "java(course.getMember().getNickname())")
+//    CourseInfoDto courseToCourseInfoDto(Course course);
+//
+//    default List<CourseInfoDto> coursesToCourseInfoDtoList(List<Course> courses) {
+//        return courses.stream()
+//                .map(this::courseToCourseInfoDto)
+//                .collect(Collectors.toList());
+//    }
 
-    default List<CourseInfoDto> coursesToCourseInfoDtoList(List<Course> courses) {
-        return courses.stream()
-                .map(this::courseToCourseInfoDto)
-                .collect(Collectors.toList());
-    }
-
-    default CoursesInPlaceResponse courseSliceToCourseInPlaceResponse(Slice<Course> courseSlice) {
-        List<CourseInfoDto> courseInfoDtoList = coursesToCourseInfoDtoList(courseSlice.getContent());
-        boolean hasNext = courseSlice.hasNext();
-        return new CoursesInPlaceResponse(courseInfoDtoList, hasNext);
-    }
+    CoursesInPlaceResponse courseSliceToCourseInPlaceResponse(CourseInfo.CoursesInPlaceResponseInfo courseSlice) ;
+    CourseInfoDto toDto(CourseInfo.CourseInPlaceInfo courseInPlaceInfo);
 
     @Mappings({
             @Mapping(target = "title", source = "title"),

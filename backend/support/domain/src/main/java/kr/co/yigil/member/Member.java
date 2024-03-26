@@ -1,5 +1,6 @@
 package kr.co.yigil.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -19,6 +20,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.region.domain.MemberRegion;
 import kr.co.yigil.region.domain.Region;
@@ -71,6 +73,7 @@ public class Member {
     private Ages ages = Ages.NONE;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonIgnore
     private final List<MemberRegion> favoriteRegions = new ArrayList<>();
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -163,7 +166,7 @@ public class Member {
     public List<Long> getFavoriteRegionIds() {
         return favoriteRegions.stream().map(
             memberRegion -> memberRegion.getRegion().getId()
-        ).toList();
+        ).collect(Collectors.toList());
     }
 
     public boolean isFavoriteRegion(Region region) {

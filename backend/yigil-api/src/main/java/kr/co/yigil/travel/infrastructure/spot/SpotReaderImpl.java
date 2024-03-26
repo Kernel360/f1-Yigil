@@ -2,6 +2,7 @@ package kr.co.yigil.travel.infrastructure.spot;
 
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.dto.SpotListDto;
 import kr.co.yigil.travel.domain.spot.SpotReader;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static kr.co.yigil.global.exception.ExceptionCode.NOT_FOUND_SPOT_ID;
 
 @Component
@@ -29,7 +30,7 @@ public class SpotReaderImpl implements SpotReader {
     @Override
     public Spot getSpot(Long spotId) {
         return spotRepository.findById(spotId)
-            .orElseThrow(() -> new BadRequestException(NOT_FOUND_SPOT_ID));
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_SPOT_ID));
     }
 
     @Override
@@ -40,14 +41,14 @@ public class SpotReaderImpl implements SpotReader {
     @Override
     public List<Spot> getSpots(List<Long> spotIds) {
         return spotIds.stream()
-            .map(this::getSpot)
-            .collect(Collectors.toList());
+                .map(this::getSpot)
+                .collect(toList());
     }
 
     @Override
     public Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable) {
-        return spotRepository.findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(placeId,
-            pageable);
+        return spotRepository.findAllByPlaceIdAndIsPrivateIsFalse(placeId,
+                pageable);
     }
 
     @Override
@@ -79,5 +80,13 @@ public class SpotReaderImpl implements SpotReader {
     @Override
     public boolean isExistSpot(Long spotId, Long memberId) {
         return spotRepository.existsByIdAndMemberId(spotId, memberId);
+    }
+
+    @Override
+    public List<Spot> getMemberSpots(Long memberId, List<Long> spotIds) {
+        return spotIds.stream().map(
+                spotId -> spotRepository.findByIdAndMemberId(spotId, memberId)
+                        .orElseThrow(() -> new BadRequestException(ExceptionCode.INVALID_AUTHORITY))
+        ).toList();
     }
 }

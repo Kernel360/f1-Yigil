@@ -823,6 +823,16 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">장소의 지도 이미지 URL</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 y 좌표</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarked</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저의 장소 북마크 여부</p></td>
@@ -845,7 +855,7 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 215
+Content-Length: 263
 
 {
   "id" : 1,
@@ -853,6 +863,10 @@ Content-Length: 215
   "address" : "장소주소",
   "thumbnail_image_url" : "image.com",
   "map_static_image_url" : "image.net",
+  "point" : {
+    "x" : 1.0,
+    "y" : 1.0
+  },
   "rate" : 3.0,
   "review_count" : 50,
   "bookmarked" : true
