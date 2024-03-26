@@ -1,5 +1,6 @@
 package kr.co.yigil.travel.infrastructure;
 
+import java.util.List;
 import kr.co.yigil.travel.domain.Spot;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,4 +46,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     boolean existsByIdAndMemberId(Long spotId, Long memberId);
 
     Optional<Spot> findByIdAndMemberId(Long spotId, Long memberId);
+
+    @Query("SELECT DISTINCT s.place.id FROM Spot s WHERE s.member.id = :memberId AND s.isDeleted = false")
+    List<Long> findPlaceIdByMemberId(Long memberId);
 }

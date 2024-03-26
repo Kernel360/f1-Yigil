@@ -30,4 +30,5 @@ public interface PlaceReader {
     List<Place> getPopularPlaceByDemographicsMore(Ages ages, Gender gender);
 
     Slice<Place> getPlacesByKeyword(String keyword, Pageable pageable);
+
 }
