@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import RoundProfile from '../ui/profile/RoundProfile';
 
 export default function NotificationItem({
   message,
   create_date,
-}: // read,
-{
+  read,
+}: {
   message: string;
   create_date: string;
-  // read: boolean;
+  read: boolean;
 }) {
+  const [isRead, setIsRead] = useState(read);
+  useEffect(() => {
+    setIsRead(true);
+  }, []);
   return (
     <div className="flex items-center gap-x-4">
       <RoundProfile size={48} />
-      <div>{message}</div>
+      <div className={`${isRead && 'text-gray-300'}`}>{message}</div>
     </div>
   );
 }

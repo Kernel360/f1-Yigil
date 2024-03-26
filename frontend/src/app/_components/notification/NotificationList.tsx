@@ -1,5 +1,5 @@
 import { TNotification } from '@/types/notificationResponse';
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment, ReactElement, ReactNode, useMemo } from 'react';
 import NotificationItem from './NotificationItem';
 
 export default function NotificationList({
@@ -9,34 +9,37 @@ export default function NotificationList({
 }) {
   const notificationElements = useMemo(
     () =>
-      notifications.reduce((acc: any, { message, create_date }, idx, arr) => {
-        // 이전 요소의 날짜와 현재 요소의 날짜를 비교
-        const prevDate = idx > 0 ? arr[idx - 1].create_date : '';
-        const currentDate = checkDate(create_date);
-        const prevFormattedDate = idx > 0 ? checkDate(prevDate) : '';
+      notifications.reduce(
+        (acc: ReactNode[], { message, create_date, read }, idx, arr) => {
+          // 이전 요소의 날짜와 현재 요소의 날짜를 비교
+          const prevDate = idx > 0 ? arr[idx - 1].create_date : '';
+          const currentDate = checkDate(create_date);
+          const prevFormattedDate = idx > 0 ? checkDate(prevDate) : '';
 
-        // 날짜가 달라질 때만 날짜 표시를 추가
-        if (currentDate !== prevFormattedDate) {
+          // 날짜가 달라질 때만 날짜 표시를 추가
+          if (currentDate !== prevFormattedDate) {
+            acc.push(
+              <div key={`date-${create_date}-${idx}`} className="text-gray-500">
+                {currentDate}
+              </div>,
+            );
+          }
+
+          // 메시지 아이템 추가
           acc.push(
-            <div key={`date-${create_date}-${idx}`} className="text-gray-500">
-              {currentDate}
-            </div>,
+            <Fragment key={`${message}-${create_date}-${idx}`}>
+              <NotificationItem
+                message={message}
+                create_date={create_date}
+                read={read}
+              />
+            </Fragment>,
           );
-        }
 
-        // 메시지 아이템 추가
-        acc.push(
-          <Fragment key={`${message}-${create_date}-${idx}`}>
-            <NotificationItem
-              message={message}
-              create_date={create_date}
-              // read={read}
-            />
-          </Fragment>,
-        );
-
-        return acc;
-      }, []),
+          return acc;
+        },
+        [],
+      ),
     [notifications],
   );
 

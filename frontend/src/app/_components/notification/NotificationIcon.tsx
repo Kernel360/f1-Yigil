@@ -1,47 +1,62 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Bell from '/public/icons/bell.svg';
 import { useRouter } from 'next/navigation';
-//import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
+import ToastMsg from '../ui/toast/ToastMsg';
+import { MemberContext } from '@/context/MemberContext';
+
+const BASE_URL =
+  process.env.ENVIRONMENT === 'production'
+    ? process.env.NEXT_PUBLIC_BASE_URL
+    : process.env.NEXT_PUBLIC_DEV_BASE_URL;
+
 export default function NotificationIcon() {
-  const [newData, setNewData] = useState(false);
+  const memberStatus = useContext(MemberContext);
+  const [newData, setNewData] = useState('');
+  const [errorText, setErrorText] = useState('');
+
+  const user = memberStatus.isLoggedIn === 'true' ? memberStatus.member : null;
+
   useEffect(() => {
-    const eventSource = new EventSource(
-      `http://localhost:3000/endpoints/api/notification`,
-      // `http://3.34.236.45:8080/api/v1/notifications/stream`,
-      {
-        withCredentials: true,
-      },
-    );
-    console.log('eve', eventSource);
-    console.log('ready', eventSource.readyState);
+    if (user) {
+      const eventSource = new EventSource(
+        `${BASE_URL}/v1/notifications/stream/${user?.member_id}`,
+      );
 
-    eventSource.onopen = (e) => {
-      console.log(e);
-      console.log('opened');
-    };
-    eventSource.onerror = (e) => {
-      console.log(e);
-    };
+      eventSource.addEventListener('notification', (e) => {
+        setNewData(e.data);
+      });
 
-    eventSource.onmessage = (e) => {
-      console.log(e.data);
-    };
+      eventSource.addEventListener('error', (e) => {
+        console.error('EventSource 에러 발생:', e);
+        setErrorText('실시간 알림을 위한 서버와의 연결이 끊어졌습니다.');
+        eventSource.close();
+      });
 
-    eventSource.addEventListener('notification', (e) => {
-      console.log(e.data);
-    });
-
-    return () => eventSource.close();
-  }, []);
+      return () => eventSource.close();
+    }
+  }, [user]);
 
   const { push } = useRouter();
   return (
-    <div className="relative flex items-center">
-      <div className="p-[6px] rounded-full bg-red-500 absolute top-[2px] right-[6px]"></div>
-      <button onClick={() => push('/notification')}>
+    <div className="relative flex items-center max-w-[430px]">
+      {newData && (
+        <div className="p-[6px] rounded-full bg-red-500 absolute top-[2px] right-[6px]"></div>
+      )}
+      <button
+        onClick={() => {
+          push('/notification');
+          setNewData('');
+        }}
+      >
         <Bell className="w-10 h-10" />
       </button>
+      <div className="text-base">
+        {errorText && (
+          <ToastMsg title={errorText} timer={1000} id={Date.now()} />
+        )}
+        {newData && <ToastMsg title={newData} timer={2000} id={Date.now()} />}
+      </div>
     </div>
   );
 }
