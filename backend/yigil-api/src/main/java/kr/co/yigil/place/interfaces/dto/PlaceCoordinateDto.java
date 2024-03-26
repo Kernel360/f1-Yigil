@@ -10,5 +10,4 @@ public class PlaceCoordinateDto {
     private double x;
     private double y;
     private String placeName;
-    private boolean isAlreadyUsed;
 }
