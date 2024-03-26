@@ -596,6 +596,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스 좋아요 여부</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 생성자를 팔로잉 했는지 여부</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -604,7 +609,7 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 347
+Content-Length: 371
 
 {
   "courses" : [ {
@@ -614,11 +619,12 @@ Content-Length: 347
     "map_static_image_url" : "test",
     "rate" : 4.5,
     "spot_count" : 10,
-    "create_date" : "2024-03-26T00:27:27.015724",
+    "create_date" : "2024-03-26T14:36:57.786534",
     "owner_id" : 1,
     "owner_profile_image_url" : "test",
     "owner_nickname" : "test",
-    "liked" : true
+    "liked" : true,
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -1097,7 +1103,7 @@ Content-Length: 481
   "rate" : 4.5,
   "map_static_image_url" : "images/static.png",
   "description" : "본문",
-  "created_date" : "2024-03-26T00:27:27.088549",
+  "created_date" : "2024-03-26T14:36:57.842695",
   "line_string_json" : "lineStringJson",
   "spots" : [ {
     "id" : 1,
@@ -1704,7 +1710,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-26T00:27:26.958549"
+    "create_date" : "2024-03-26T14:36:57.744514"
   } ],
   "has_next" : false
 }</code></pre>
@@ -1852,7 +1858,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.984952",
+    "create_date" : "2024-03-26T14:36:57.765335",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -1864,7 +1870,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.98528",
+    "create_date" : "2024-03-26T14:36:57.765598",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -1880,7 +1886,7 @@ Host: spring.restdocs.test
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 664
+Content-Length: 665
 
 {
   "spot_details" : [ {
@@ -1890,7 +1896,7 @@ Content-Length: 664
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.984952",
+    "create_date" : "2024-03-26T14:36:57.765335",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -1902,7 +1908,7 @@ Content-Length: 664
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.98528",
+    "create_date" : "2024-03-26T14:36:57.765598",
     "point" : {
       "x" : 2.0,
       "y" : 2.0

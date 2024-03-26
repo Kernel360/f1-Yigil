@@ -71,7 +71,9 @@ public class ReportApiController {
 
     @GetMapping("/types")
     @MemberOnly
-    public ResponseEntity<ReportDto.ReportTypeResponse> getReportTypes(@Auth Accessor accessor) {
+    public ResponseEntity<ReportDto.ReportTypeResponse> getReportTypes(
+            @Auth Accessor accessor
+    ) {
         ReportInfo.ReportTypesInfo reportType = reportFacade.getReportTypes();
         ReportDto.ReportTypeResponse response = requestMapper.toDto(reportType);
         return ResponseEntity.ok(response);

@@ -26,12 +26,13 @@ public class SpotInfo {
         private final String ownerProfileImageUrl;
         private final String ownerNickname;
         private final boolean liked;
+        private final boolean following;
 
         public Main(Spot spot) {
-            this(spot, false);
+            this(spot, false, false);
         }
 
-        public Main(Spot spot, boolean liked) {
+        public Main(Spot spot, boolean liked, boolean following) {
             id = spot.getId();
             placeName = spot.getPlace().getName();
             placeAddress = spot.getPlace().getAddress();
@@ -44,6 +45,7 @@ public class SpotInfo {
             ownerProfileImageUrl = spot.getMember().getProfileImageUrl();
             ownerNickname = spot.getMember().getNickname();
             this.liked = liked;
+            this.following = following;
         }
     }
 
@@ -115,11 +117,11 @@ public class SpotInfo {
     @Getter
     @ToString
     public static class Slice {
-        private final List<Main> mains;
+        private final List<Main> spots;
         private final boolean hasNext;
 
         public Slice(List<Main> mains, boolean hasNext) {
-            this.mains = mains;
+            this.spots = mains;
             this.hasNext = hasNext;
         }
     }

@@ -91,16 +91,6 @@ public interface SpotMapper {
     MySpotsResponseDto of(MySpotsResponse mySpotsResponse);
     MySpotsResponseDto.SpotInfo of(SpotInfo.SpotListInfo spotInfo);
 
-    @Mappings({
-            @Mapping(source = "id", target = "id"),
-            @Mapping(source = "imageUrls", target = "imageUrlList"),
-            @Mapping(source = "description", target = "description"),
-            @Mapping(source = "ownerProfileImageUrl", target = "ownerProfileImageUrl"),
-            @Mapping(source = "ownerNickname", target = "ownerNickname"),
-            @Mapping(source = "rate", target = "rate", numberFormat = "#.#"),
-            @Mapping(source = "createDate", target = "createDate", dateFormat = "yyyy-MM-dd"),
-            @Mapping(source = "liked", target = "liked")
-    })
     SpotInfoDto toSpotInfoDto(SpotInfo.Main spotInfoMain);
 
     default List<SpotInfoDto> spotsSliceToSpotInPlaceResponse(List<Main> mains) {
@@ -109,8 +99,11 @@ public interface SpotMapper {
                 .collect(Collectors.toList());
     }
 
-    default SpotsInPlaceResponse toSpotsInPlaceResponse(SpotInfo.Slice slice) {
-        List<SpotInfoDto> dtos = spotsSliceToSpotInPlaceResponse(slice.getMains());
-        return new SpotsInPlaceResponse(dtos, slice.isHasNext());
-        }
+
+    SpotsInPlaceResponse toSpotsInPlaceResponse(SpotInfo.Slice slice);
+
+//    SpotInfoDto toSpotInfoDto(SpotInfo.Main main);
+//        List<SpotInfoDto> dtos = spotsSliceToSpotInPlaceResponse(slice.getSpots());
+//        return new SpotsInPlaceResponse(dtos, slice.isHasNext());
+//        }
 }
