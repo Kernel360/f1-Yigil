@@ -17,10 +17,10 @@ import Pagination from '@/app/_components/mypage/Pagination';
 const sortOptions = [
   { label: '최신순', value: 'desc' },
   { label: '오래된순', value: 'asc' },
-  {
-    label: '별점순',
-    value: 'rate',
-  },
+  // {
+  //   label: '별점순',
+  //   value: 'rate',
+  // },
 ];
 
 export default function AddCourseExistSpots() {

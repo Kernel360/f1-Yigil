@@ -2,7 +2,6 @@ package kr.co.yigil.favor.infrastructure;
 
 import kr.co.yigil.favor.domain.Favor;
 import kr.co.yigil.favor.domain.FavorStore;
-import kr.co.yigil.favor.domain.repository.FavorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

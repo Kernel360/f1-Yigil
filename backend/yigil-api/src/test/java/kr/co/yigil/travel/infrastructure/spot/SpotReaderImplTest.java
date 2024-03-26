@@ -83,7 +83,7 @@ public class SpotReaderImplTest {
         Long placeId = 1L;
         Pageable pageable = mock(Pageable.class);
         Slice<Spot> expectedSlice = mock(Slice.class);
-        when(spotRepository.findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(placeId, pageable)).thenReturn(expectedSlice);
+        when(spotRepository.findAllByPlaceIdAndIsPrivateIsFalse(placeId, pageable)).thenReturn(expectedSlice);
 
         Slice<Spot> result = spotReader.getSpotSliceInPlace(placeId, pageable);
 
@@ -123,4 +123,17 @@ public class SpotReaderImplTest {
 
         assertFalse(result);
     }
+
+    @DisplayName("getMySpotPlaceIds 메서드가 List<Long>을 잘 반환하는지")
+    @Test
+    void getMySpotPlaceIds_ReturnsListOfLong() {
+        Long memberId = 1L;
+        List<Long> expected = Arrays.asList(1L, 2L, 3L);
+        when(spotRepository.findPlaceIdByMemberId(memberId)).thenReturn(expected);
+
+        List<Long> result = spotReader.getMySpotPlaceIds(memberId);
+
+        assertEquals(expected, result);
+    }
+
 }

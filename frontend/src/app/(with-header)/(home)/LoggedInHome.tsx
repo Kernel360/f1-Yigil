@@ -25,9 +25,7 @@ export default async function LoggedInHome() {
   if (regions.length === 0) {
     return (
       <main className="max-w-full flex flex-col gap-6 relative">
-        <Suspense
-          fallback={<DummyPlaces title="관심 지역" variant="primary" />}
-        >
+        <Suspense fallback={<DummyPlaces title="인기" variant="primary" />}>
           <PopularPlaces isLoggedIn />
         </Suspense>
         <RegionPlaces

@@ -58,18 +58,21 @@ public class CourseServiceImplTest {
     @InjectMocks
     private CourseServiceImpl courseService;
 
+    //todo 수정
     @DisplayName("getCoursesSliceInPlace 메서드가 Course의 Slice를 잘 반환하는지")
     @Test
     void getCoursesSliceInPlace_ReturnsSlice() {
         Long placeId = 1L;
+        Long memberId = 1L;
         Pageable pageable = PageRequest.of(0, 10);
         Slice<Course> expectedSlice = mock(Slice.class);
 
         when(courseReader.getCoursesSliceInPlace(placeId, pageable)).thenReturn(expectedSlice);
 
-        Slice<Course> result = courseService.getCoursesSliceInPlace(placeId, pageable);
+        var result = courseService.getCoursesSliceInPlace(placeId, memberId,pageable);
 
-        assertEquals(expectedSlice, result);
+        assertThat(result).isInstanceOf(CourseInfo.CoursesInPlaceResponseInfo.class);
+//        assertEquals(expectedSlice, result);
         verify(courseReader).getCoursesSliceInPlace(placeId, pageable);
     }
 

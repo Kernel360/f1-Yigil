@@ -12,5 +12,7 @@ public class NotificationInfoDto {
     private Long notificationId;
     private String message;
     private String createDate;
+    private Long senderId;
+    private String senderProfileImageUrl;
     private boolean read;
 }

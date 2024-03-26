@@ -10,8 +10,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import kr.co.yigil.global.exception.BadRequestException;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.SocialLoginType;
 import kr.co.yigil.notification.domain.Notification;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,11 +20,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.test.util.ReflectionTestUtils;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Sinks;
-import reactor.test.StepVerifier;
 
 public class NotificationReaderImplTest {
 
@@ -48,7 +41,7 @@ public class NotificationReaderImplTest {
         List<Notification> notifications = new ArrayList<>();
         Slice<Notification> expectedSlice = new SliceImpl<>(notifications);
 
-        when(notificationRepository.findAllByMemberIdAndReadIsFalse(memberId, Pageable.unpaged())).thenReturn(
+        when(notificationRepository.findAllByReceiverIdAndReadIsFalse(memberId, Pageable.unpaged())).thenReturn(
                 expectedSlice);
 
         Slice<Notification> actualSlice = notificationReader.getNotificationSlice(memberId,
@@ -64,7 +57,7 @@ public class NotificationReaderImplTest {
         Long notificationId = 1L;
         Notification mockNotification = mock(Notification.class);
 
-        when(notificationRepository.findByIdAndMemberId(anyLong(), anyLong())).thenReturn(
+        when(notificationRepository.findByIdAndReceiverId(anyLong(), anyLong())).thenReturn(
             java.util.Optional.of(mockNotification));
 
         var result = notificationReader.getNotification(memberId, notificationId);
@@ -78,7 +71,7 @@ public class NotificationReaderImplTest {
         Long memberId = 1L;
         Long notificationId = 1L;
 
-        when(notificationRepository.findByIdAndMemberId(anyLong(), anyLong())).thenReturn(
+        when(notificationRepository.findByIdAndReceiverId(anyLong(), anyLong())).thenReturn(
             java.util.Optional.empty());
 
         assertThatThrownBy(() -> notificationReader.getNotification(memberId, notificationId))

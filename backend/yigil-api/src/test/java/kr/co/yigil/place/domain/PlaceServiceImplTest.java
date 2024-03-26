@@ -261,4 +261,12 @@ public class PlaceServiceImplTest {
         assertNotNull(result);
     }
 
+    @DisplayName("getMyPlaceIds 메서드가 List를 잘 반환하는지")
+    @Test
+    void getMyPlaceIds_ShouldReturnList() {
+        when(spotReader.getMySpotPlaceIds(1L)).thenReturn(List.of(1L));
+        var result = placeService.getMyPlaceIds(1L);
+
+        assertNotNull(result);
+    }
 }

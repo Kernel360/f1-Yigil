@@ -2,7 +2,6 @@ package kr.co.yigil.favor.infrastructure;
 
 import static org.mockito.Mockito.verify;
 
-import kr.co.yigil.favor.domain.repository.FavorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

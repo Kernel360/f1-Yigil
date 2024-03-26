@@ -47,7 +47,7 @@ public class SpotReaderImpl implements SpotReader {
 
     @Override
     public Slice<Spot> getSpotSliceInPlace(Long placeId, Pageable pageable) {
-        return spotRepository.findAllByPlaceIdAndIsInCourseIsFalseAndIsPrivateIsFalse(placeId,
+        return spotRepository.findAllByPlaceIdAndIsPrivateIsFalse(placeId,
                 pageable);
     }
 
@@ -88,5 +88,10 @@ public class SpotReaderImpl implements SpotReader {
                 spotId -> spotRepository.findByIdAndMemberId(spotId, memberId)
                         .orElseThrow(() -> new BadRequestException(ExceptionCode.INVALID_AUTHORITY))
         ).toList();
+    }
+
+    @Override
+    public List<Long> getMySpotPlaceIds(Long memberId) {
+        return spotRepository.findPlaceIdByMemberId(memberId);
     }
 }

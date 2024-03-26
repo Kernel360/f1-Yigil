@@ -29,7 +29,7 @@ public class CourseReaderImpl implements CourseReader {
 
     @Override
     public Slice<Course> getCoursesSliceInPlace(final Long placeId, final Pageable pageable) {
-        return courseRepository.findBySpotPlaceId(placeId, pageable);
+        return courseRepository.findBySpots_PlaceIdAndIsPrivateFalse(placeId, pageable);
     }
 
     @Override

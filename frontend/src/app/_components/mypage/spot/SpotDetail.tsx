@@ -11,6 +11,7 @@ import Dialog from '../../ui/dialog/Dialog';
 import ToastMsg from '../../ui/toast/ToastMsg';
 import * as Common from '../detailModify';
 import IconWithCounts from '../../IconWithCounts';
+import { TMyInfo } from '@/types/response';
 
 export interface TModifyDetail {
   id: number;
@@ -22,11 +23,11 @@ export interface TModifyDetail {
 export default function SpotDetail({
   spotDetail,
   spotId,
-  isLoggedIn,
+  isMySpot,
 }: {
   spotDetail: TMyPageSpotDetail;
   spotId: number;
-  isLoggedIn: boolean;
+  isMySpot?: boolean;
 }) {
   const {
     rate,
@@ -107,7 +108,7 @@ export default function SpotDetail({
         <span className="text-2xl font-light">
           {isModifyMode ? '기록 수정' : '장소 기록'}
         </span>
-        {isLoggedIn ? (
+        {isMySpot ? (
           <button
             className={`${isModifyMode ? 'text-main' : 'text-gray-500'} py-2`}
             onClick={() => setIsModifyMode(true)}

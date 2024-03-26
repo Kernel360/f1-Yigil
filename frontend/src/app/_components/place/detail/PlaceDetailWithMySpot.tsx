@@ -36,12 +36,20 @@ export default async function PlaceDetailWithMySpot({
   }
 
   const mySpot = mySpotResult.data;
+  const { place_name, address, map_static_image_url, point } = detail;
+  const { x: lng, y: lat } = point;
 
   return (
     <section className="flex flex-col">
       <PlaceDetail detail={detail} isLoggedIn={memberInfo.success} />
       <hr className="border-8" />
-      <PlaceMySpot placeName={detail.place_name} data={mySpot} />
+      <PlaceMySpot
+        placeName={place_name}
+        placeAddress={address}
+        mapImageUrl={map_static_image_url}
+        coords={{ lat, lng }}
+        data={mySpot}
+      />
     </section>
   );
 }

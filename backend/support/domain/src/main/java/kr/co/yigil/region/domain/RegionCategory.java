@@ -1,5 +1,6 @@
 package kr.co.yigil.region.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,5 +22,6 @@ public class RegionCategory {
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonBackReference
     private List<Region> regions;
 }

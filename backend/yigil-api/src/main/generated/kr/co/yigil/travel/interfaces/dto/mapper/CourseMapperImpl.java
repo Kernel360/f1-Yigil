@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
-import kr.co.yigil.travel.domain.Course;
 import kr.co.yigil.travel.domain.course.CourseCommand;
 import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.spot.SpotCommand;
@@ -18,36 +17,62 @@ import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.SpotUpdateRequest;
 import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
+import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
 import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
+import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
+import org.locationtech.jts.io.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-03-11T15:27:23+0900",
+    date = "2024-03-26T00:24:08+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
 public class CourseMapperImpl implements CourseMapper {
 
+    private final SpotMapper spotMapper;
+
     @Autowired
-    private SpotMapper spotMapper;
+    public CourseMapperImpl(SpotMapper spotMapper) {
+
+        this.spotMapper = spotMapper;
+    }
 
     @Override
-    public CourseInfoDto courseToCourseInfoDto(Course course) {
-        if ( course == null ) {
+    public CoursesInPlaceResponse courseSliceToCourseInPlaceResponse(CourseInfo.CoursesInPlaceResponseInfo courseSlice) {
+        if ( courseSlice == null ) {
+            return null;
+        }
+
+        CoursesInPlaceResponse coursesInPlaceResponse = new CoursesInPlaceResponse();
+
+        coursesInPlaceResponse.setCourses( courseInPlaceInfoListToCourseInfoDtoList( courseSlice.getCourses() ) );
+        coursesInPlaceResponse.setHasNext( courseSlice.isHasNext() );
+
+        return coursesInPlaceResponse;
+    }
+
+    @Override
+    public CourseInfoDto toDto(CourseInfo.CourseInPlaceInfo courseInPlaceInfo) {
+        if ( courseInPlaceInfo == null ) {
             return null;
         }
 
         CourseInfoDto courseInfoDto = new CourseInfoDto();
 
-        courseInfoDto.setMapStaticImageFileUrl( course.getMapStaticImageFile().getFileUrl() );
-        courseInfoDto.setTitle( course.getTitle() );
-        courseInfoDto.setRate( String.valueOf(course.getRate()) );
-        courseInfoDto.setSpotCount( String.valueOf(course.getSpots().size()) );
-        courseInfoDto.setCreateDate( course.getCreatedAt().toString() );
-        courseInfoDto.setOwnerProfileImageUrl( course.getMember().getProfileImageUrl() );
-        courseInfoDto.setOwnerNickname( course.getMember().getNickname() );
+        courseInfoDto.setId( courseInPlaceInfo.getId() );
+        courseInfoDto.setTitle( courseInPlaceInfo.getTitle() );
+        courseInfoDto.setContent( courseInPlaceInfo.getContent() );
+        courseInfoDto.setMapStaticImageUrl( courseInPlaceInfo.getMapStaticImageUrl() );
+        courseInfoDto.setRate( courseInPlaceInfo.getRate() );
+        courseInfoDto.setSpotCount( courseInPlaceInfo.getSpotCount() );
+        courseInfoDto.setCreateDate( courseInPlaceInfo.getCreateDate() );
+        courseInfoDto.setOwnerId( courseInPlaceInfo.getOwnerId() );
+        courseInfoDto.setOwnerProfileImageUrl( courseInPlaceInfo.getOwnerProfileImageUrl() );
+        courseInfoDto.setOwnerNickname( courseInPlaceInfo.getOwnerNickname() );
+        courseInfoDto.setLiked( courseInPlaceInfo.isLiked() );
 
         return courseInfoDto;
     }
@@ -103,13 +128,21 @@ public class CourseMapperImpl implements CourseMapper {
 
         CourseCommand.ModifyCourseRequest.ModifyCourseRequestBuilder modifyCourseRequest = CourseCommand.ModifyCourseRequest.builder();
 
-        modifyCourseRequest.description( courseUpdateRequest.getDescription() );
-        modifyCourseRequest.rate( courseUpdateRequest.getRate() );
         List<Long> list = courseUpdateRequest.getSpotIdOrder();
         if ( list != null ) {
             modifyCourseRequest.spotIdOrder( new ArrayList<Long>( list ) );
         }
         modifyCourseRequest.modifySpotRequests( spotUpdateRequestListToModifySpotRequestList( courseUpdateRequest.getCourseSpotUpdateRequests() ) );
+        modifyCourseRequest.description( courseUpdateRequest.getDescription() );
+        modifyCourseRequest.rate( courseUpdateRequest.getRate() );
+        modifyCourseRequest.title( courseUpdateRequest.getTitle() );
+        try {
+            modifyCourseRequest.lineStringJson( map( courseUpdateRequest.getLineStringJson() ) );
+        }
+        catch ( ParseException e ) {
+            throw new RuntimeException( e );
+        }
+        modifyCourseRequest.mapStaticImage( courseUpdateRequest.getMapStaticImage() );
 
         return modifyCourseRequest.build();
     }
@@ -123,10 +156,12 @@ public class CourseMapperImpl implements CourseMapper {
         CourseDetailInfoDto courseDetailInfoDto = new CourseDetailInfoDto();
 
         courseDetailInfoDto.setTitle( courseInfo.getTitle() );
-        courseDetailInfoDto.setRate( spotMapper.doubleToString( courseInfo.getRate() ) );
+        courseDetailInfoDto.setRate( Double.parseDouble( spotMapper.doubleToString( courseInfo.getRate() ) ) );
         courseDetailInfoDto.setMapStaticImageUrl( courseInfo.getMapStaticImageUrl() );
         courseDetailInfoDto.setDescription( courseInfo.getDescription() );
         courseDetailInfoDto.setSpots( courseSpotInfoListToCourseSpotInfoDtoList( courseInfo.getCourseSpotList() ) );
+        courseDetailInfoDto.setCreatedDate( courseInfo.getCreatedDate() );
+        courseDetailInfoDto.setLineStringJson( courseInfo.getLineStringJson() );
 
         return courseDetailInfoDto;
     }
@@ -139,15 +174,17 @@ public class CourseMapperImpl implements CourseMapper {
 
         CourseDetailInfoDto.CourseSpotInfoDto courseSpotInfoDto = new CourseDetailInfoDto.CourseSpotInfoDto();
 
+        courseSpotInfoDto.setId( courseSpotInfo.getId() );
         courseSpotInfoDto.setOrder( intToString( courseSpotInfo.getOrder() ) );
         courseSpotInfoDto.setPlaceName( courseSpotInfo.getPlaceName() );
         List<String> list = courseSpotInfo.getImageUrlList();
         if ( list != null ) {
             courseSpotInfoDto.setImageUrlList( new ArrayList<String>( list ) );
         }
-        courseSpotInfoDto.setRate( spotMapper.doubleToString( courseSpotInfo.getRate() ) );
+        courseSpotInfoDto.setRate( Double.parseDouble( spotMapper.doubleToString( courseSpotInfo.getRate() ) ) );
         courseSpotInfoDto.setDescription( courseSpotInfo.getDescription() );
         courseSpotInfoDto.setCreateDate( spotMapper.localDateTimeToString( courseSpotInfo.getCreateDate() ) );
+        courseSpotInfoDto.setPlaceAddress( courseSpotInfo.getPlaceAddress() );
 
         return courseSpotInfoDto;
     }
@@ -235,6 +272,46 @@ public class CourseMapperImpl implements CourseMapper {
         return courseDto;
     }
 
+    @Override
+    public MySpotsDetailResponse toMySpotsDetailResponse(CourseInfo.MySpotsInfo infos) {
+        if ( infos == null ) {
+            return null;
+        }
+
+        MySpotsDetailResponse mySpotsDetailResponse = new MySpotsDetailResponse();
+
+        mySpotsDetailResponse.setSpotDetails( toMySpotDetailDtoList( infos.getMySpotDetailDtoList() ) );
+
+        return mySpotsDetailResponse;
+    }
+
+    @Override
+    public List<MySpotsDetailResponse.SpotDetailDto> toMySpotDetailDtoList(List<CourseInfo.MySpotDetailDto> mySpotDetails) {
+        if ( mySpotDetails == null ) {
+            return null;
+        }
+
+        List<MySpotsDetailResponse.SpotDetailDto> list = new ArrayList<MySpotsDetailResponse.SpotDetailDto>( mySpotDetails.size() );
+        for ( CourseInfo.MySpotDetailDto mySpotDetailDto : mySpotDetails ) {
+            list.add( mySpotDetailDtoToSpotDetailDto( mySpotDetailDto ) );
+        }
+
+        return list;
+    }
+
+    protected List<CourseInfoDto> courseInPlaceInfoListToCourseInfoDtoList(List<CourseInfo.CourseInPlaceInfo> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<CourseInfoDto> list1 = new ArrayList<CourseInfoDto>( list.size() );
+        for ( CourseInfo.CourseInPlaceInfo courseInPlaceInfo : list ) {
+            list1.add( toDto( courseInPlaceInfo ) );
+        }
+
+        return list1;
+    }
+
     protected List<SpotCommand.RegisterSpotRequest> spotRegisterRequestListToRegisterSpotRequestList(List<SpotRegisterRequest> list) {
         if ( list == null ) {
             return null;
@@ -298,5 +375,40 @@ public class CourseMapperImpl implements CourseMapper {
         }
 
         return list1;
+    }
+
+    protected MySpotsDetailResponse.PointDto pointInfoToPointDto(CourseInfo.PointInfo pointInfo) {
+        if ( pointInfo == null ) {
+            return null;
+        }
+
+        MySpotsDetailResponse.PointDto.PointDtoBuilder pointDto = MySpotsDetailResponse.PointDto.builder();
+
+        pointDto.x( pointInfo.getX() );
+        pointDto.y( pointInfo.getY() );
+
+        return pointDto.build();
+    }
+
+    protected MySpotsDetailResponse.SpotDetailDto mySpotDetailDtoToSpotDetailDto(CourseInfo.MySpotDetailDto mySpotDetailDto) {
+        if ( mySpotDetailDto == null ) {
+            return null;
+        }
+
+        MySpotsDetailResponse.SpotDetailDto.SpotDetailDtoBuilder spotDetailDto = MySpotsDetailResponse.SpotDetailDto.builder();
+
+        spotDetailDto.spotId( mySpotDetailDto.getSpotId() );
+        spotDetailDto.placeName( mySpotDetailDto.getPlaceName() );
+        spotDetailDto.placeAddress( mySpotDetailDto.getPlaceAddress() );
+        spotDetailDto.rate( mySpotDetailDto.getRate() );
+        spotDetailDto.description( mySpotDetailDto.getDescription() );
+        List<String> list = mySpotDetailDto.getImageUrls();
+        if ( list != null ) {
+            spotDetailDto.imageUrls( new ArrayList<String>( list ) );
+        }
+        spotDetailDto.createDate( mySpotDetailDto.getCreateDate() );
+        spotDetailDto.point( pointInfoToPointDto( mySpotDetailDto.getPoint() ) );
+
+        return spotDetailDto.build();
     }
 }

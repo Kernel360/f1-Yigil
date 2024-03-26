@@ -91,6 +91,8 @@ public interface PlaceMapper {
         return new NearPlaceResponse(placeCoordinateDtos, page.getNumber() + 1, page.getTotalPages());
     }
 
+
+
     default PlaceSearchResponse toPlaceSearchResponse(Slice<Main> placeInfo) {
         List<PlaceInfoDto> dtos = placeInfo.getContent().stream().map(this::mainToDto).collect(Collectors.toList());
         return new PlaceSearchResponse(dtos, placeInfo.hasNext());
