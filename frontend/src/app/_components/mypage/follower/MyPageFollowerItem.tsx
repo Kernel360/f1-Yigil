@@ -12,7 +12,7 @@ const MyPageFollowerItem = ({
   following,
 }: TMyPageFollower) => {
   const [isFollowing, setIsFollowing] = useState(following);
-  const [isDialogOpened, setIsDialogOpened] = useState(false);
+
   const [errorText, setErrorText] = useState('');
 
   const onClickFollowingBtn = async () => {
@@ -20,26 +20,12 @@ const MyPageFollowerItem = ({
     const result = await postFollow(member_id, isFollowing);
     if (result.status === 'failed') {
       setErrorText(result.message);
-      setIsFollowing(!isFollowing);
-      return;
-    }
-  };
-  const closeModal = () => {
-    setIsDialogOpened(false);
-  };
-
-  const deleteFollwer = async (memberId: number) => {
-    const result = await postFollow(member_id, isFollowing);
-    if (result.status === 'failed') {
-      setErrorText(result.message);
-      setIsDialogOpened(false);
       setTimeout(() => {
         setErrorText('');
       }, 1000);
+      setIsFollowing(!isFollowing);
       return;
     }
-    setIsFollowing(!isFollowing);
-    setIsDialogOpened(false);
   };
 
   return (
@@ -49,27 +35,15 @@ const MyPageFollowerItem = ({
         {nickname}
       </div>
       <button
-        className={`ml-4 text-start grow shrink-0 ${
+        className={`ml-4 text-start shrink-0 ${
           isFollowing ? 'text-gray-500' : 'text-blue-500'
         }`}
         onClick={onClickFollowingBtn}
       >
         {isFollowing ? '팔로잉' : '팔로우'}
       </button>
-      <button
-        onClick={() => setIsDialogOpened(true)}
-        className={`bg-gray-200 text-gray-500 rounded-md px-6 py-2 leading-5 shrink-0 ml-6`}
-      >
-        삭제
-      </button>
-      {isDialogOpened && (
-        <Dialog
-          closeModal={closeModal}
-          text="팔로워를 삭제하시겠나요?"
-          loadingText="삭제중 입니다."
-          handleConfirm={async () => deleteFollwer(member_id)}
-        />
-      )}
+      <div className="grow"></div>
+
       {errorText && <ToastMsg title={errorText} timer={1000} id={Date.now()} />}
     </div>
   );
