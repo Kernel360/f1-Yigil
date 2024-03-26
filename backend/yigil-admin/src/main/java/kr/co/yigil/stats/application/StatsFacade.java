@@ -25,10 +25,10 @@ public class StatsFacade {
         return statsService.getRecentRegionStats();
     }
 
-    public StaticInfo.DailyTotalFavorCountInfo getDailyFavors(Pageable pageable) {
-        return statsService.getDailyFavors(pageable);
+    public StaticInfo.DailyTotalFavorCountInfo getDailyFavors(LocalDate startDate, LocalDate endDate) {
+        return statsService.getDailyFavors(startDate, endDate);
     }
-    public StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
-        return statsService.getTopDailyFavors(startDate, endDate, travelType, limit);
+    public StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate) {
+        return statsService.getTopDailyFavors(startDate, endDate);
     }
 }

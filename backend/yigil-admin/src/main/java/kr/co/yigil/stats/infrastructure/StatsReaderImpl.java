@@ -28,13 +28,13 @@ public class StatsReaderImpl implements StatsReader {
         return dailyRegionRepository.findBetweenDates(startDate, endDate);
     }
 
-    public Page<DailyTotalFavorCount> getDailyTotalFavorCounts(Pageable pageable) {
-        return dailyTotalFavorCountRepository.findAll(pageable);
+    public List<DailyTotalFavorCount> getDailyTotalFavorCounts(LocalDate startDate, LocalDate endDate) {
+        return dailyTotalFavorCountRepository.findBetweenDates(startDate, endDate);
 
     }
 
     @Override
-    public List<DailyFavorCount> getTopDailyFavorCount(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
-        return dailyFavorCountRepository.findTopByTravelTypeOrderByCountDesc(startDate, endDate, travelType, limit);
+    public List<DailyFavorCount> getTopDailyFavorCount(LocalDate startDate, LocalDate endDate) {
+        return dailyFavorCountRepository.findTopByTravelTypeOrderByCountDesc(startDate, endDate);
     }
 }

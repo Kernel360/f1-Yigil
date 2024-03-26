@@ -61,36 +61,6 @@ class StatsServiceImplTest {
         assertEquals(expectedRegionStats, actualRegionStats);
     }
 
-    @DisplayName("일별 좋아요 수 조회시 DailyFavorCount의 페이지 정보를 반환한다.")
-    @Test
-    void getDailyFavors() {
-        PageRequest pageable = PageRequest.of(0, 10);
-
-        DailyTotalFavorCount dailyFavorCount = new DailyTotalFavorCount(5L, LocalDate.now());
-        Page<DailyTotalFavorCount> dailyFavorCountPage = new PageImpl<>(List.of(dailyFavorCount));
-
-        when(statsReader.getDailyTotalFavorCounts(any())).thenReturn(dailyFavorCountPage);
-
-        var result = statsService.getDailyFavors(pageable);
-
-        assertThat(result).isInstanceOf(StaticInfo.DailyTotalFavorCountInfo.class);
-    }
-
-    @Test
-    void getTopDailyFavors() {
-
-        Member mockMember = new Member(1L, "email", "socialLoginId", "nickname", "profileImageUrl", SocialLoginType.GOOGLE);
-        Travel mockTravel = new Travel(1L, mockMember, "title", "description", 4.5, false);
-        DailyFavorCount dailyFavorCount = new DailyFavorCount(5L, mockTravel, LocalDate.now(), TravelType.SPOT);
-        List<DailyFavorCount> dailyFavorCountList = List.of(dailyFavorCount);
-
-        when(statsReader.getTopDailyFavorCount(any(), any(), any(), any())).thenReturn(dailyFavorCountList);
-
-        var result = statsService.getTopDailyFavors(LocalDate.now(), LocalDate.now(), TravelType.SPOT, null);
-
-        assertThat(result).isInstanceOf(StaticInfo.DailyTravelsFavorCountInfo.class);
-    }
-
     @DisplayName("getRecentRegionStats 메서드가 TravelReader를 잘 호출하는지")
     @Test
     void getRecentRegionStatsTest() {
@@ -107,4 +77,38 @@ class StatsServiceImplTest {
         assertEquals(travelCount, actualRecentRegionStats.getTravelCnt());
         assertEquals(recentTravel.size(), actualRecentRegionStats.getTravels().size());
     }
+
+    @DisplayName("getDailyFavors 메서드가 StatsReader를 잘 호출하는지")
+    @Test
+    void getDailyFavorsTest() {
+        LocalDate startDate = LocalDate.of(2022, 1, 1);
+        LocalDate endDate = LocalDate.of(2022, 1, 31);
+        List<DailyTotalFavorCount> dailyFavorCountList = Collections.singletonList(new DailyTotalFavorCount(1L, LocalDate.now()));
+        when(statsReader.getDailyTotalFavorCounts(any(LocalDate.class), any(LocalDate.class))).thenReturn(dailyFavorCountList);
+
+        StaticInfo.DailyTotalFavorCountInfo actualDailyFavors = statsService.getDailyFavors(startDate, endDate);
+
+        assertEquals(dailyFavorCountList.size(), actualDailyFavors.getDailyFavors().size());
+    }
+
+    @DisplayName("getTopDailyFavors 메서드가 StatsReader를 잘 호출하는지")
+    @Test
+    void getTopDailyFavorsTest() {
+        LocalDate startDate = LocalDate.of(2022, 1, 1);
+        LocalDate endDate = LocalDate.of(2022, 1, 31);
+        DailyFavorCount mockDailyFavorCount = mock(DailyFavorCount.class);
+        Travel mockTravel = mock(Travel.class);
+        Member mockMember = mock(Member.class);
+        when(mockDailyFavorCount.getWriter()).thenReturn(mockMember);
+        when(mockDailyFavorCount.getTravel()).thenReturn(mockTravel);
+        when(mockDailyFavorCount.getTravelType()).thenReturn(TravelType.SPOT);
+        List<DailyFavorCount> topDailyFavorCount = Collections.singletonList(mockDailyFavorCount);
+        when(statsReader.getTopDailyFavorCount(any(LocalDate.class), any(LocalDate.class))).thenReturn(topDailyFavorCount);
+
+        StaticInfo.DailyTravelsFavorCountInfo actualTopDailyFavors = statsService.getTopDailyFavors(startDate, endDate);
+
+        assertEquals(topDailyFavorCount.size(), actualTopDailyFavors.getDailyFavors().size());
+    }
+
+
 }
