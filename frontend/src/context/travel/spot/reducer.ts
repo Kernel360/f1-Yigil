@@ -4,7 +4,7 @@ import {
   reviewSchema,
 } from '../schema';
 
-import type { TSpotState } from '../schema';
+import type { TChoosePlace, TSpotState } from '../schema';
 
 export interface TSpotAction {
   type: 'SET_PLACE' | 'SET_IMAGES' | 'SET_REVIEW' | 'INIT_SPOT';
@@ -16,6 +16,20 @@ export const initialSpotState: TSpotState = {
   images: { type: 'new', data: [] },
   review: { rate: 1, content: '' },
 };
+
+export function createInitialSpotState(
+  initialPlace?: TChoosePlace,
+): TSpotState {
+  if (initialPlace) {
+    return {
+      place: initialPlace,
+      images: initialSpotState.images,
+      review: initialSpotState.review,
+    };
+  }
+
+  return initialSpotState;
+}
 
 export default function reducer(
   state: TSpotState,

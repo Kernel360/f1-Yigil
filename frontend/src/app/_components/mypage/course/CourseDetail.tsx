@@ -19,6 +19,7 @@ import { getCourseStaticMap, getRouteGeoJson } from '../../add/course/action';
 import { TCoords, TLineString } from '@/context/travel/schema';
 import { EventFor } from '@/types/type';
 import { checkCourseDifference } from './util';
+import { TMyInfo } from '@/types/response';
 
 export interface TModifyCourse {
   title: string;
@@ -42,11 +43,11 @@ export interface TModifyCourse {
 export default function CourseDetail({
   courseDetail,
   courseId,
-  isLoggedIn,
+  isMyCourse,
 }: {
   courseDetail: TMyPageCourseDetail;
   courseId: number;
-  isLoggedIn: boolean;
+  isMyCourse?: boolean;
 }) {
   const {
     title,
@@ -55,6 +56,7 @@ export default function CourseDetail({
     map_static_image_url,
     description,
     line_string_json,
+    create_date,
   } = courseDetail;
 
   const [isMapOpen, setIsMapOpen] = useState(false);
@@ -247,7 +249,7 @@ export default function CourseDetail({
         <span className="text-2xl font-light">
           {isModifyMode ? '기록 수정' : '장소 기록'}
         </span>
-        {isLoggedIn ? (
+        {isMyCourse ? (
           <button
             className={`${isModifyMode ? 'text-main' : 'text-gray-500'} py-2`}
             onClick={() => setIsModifyMode(true)}
@@ -324,7 +326,7 @@ export default function CourseDetail({
             </button>
           </div>
           <span className="self-end text-gray-400 font-medium">
-            {new Date(Date.now()).toLocaleDateString()}
+            {create_date}
           </span>
           <div className="my-4 flex flex-col gap-4">
             {isModifyMode ? (
