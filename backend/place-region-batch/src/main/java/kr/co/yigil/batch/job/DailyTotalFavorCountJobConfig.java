@@ -66,7 +66,7 @@ public class DailyTotalFavorCountJobConfig {
         parameters.put("today", today);
 
         return new JpaPagingItemReaderBuilder<Object[]>()
-                .queryString("SELECT count(f.id), f.createdAt FROM DailyFavorCount f GROUP BY f.createdAt")
+                .queryString("SELECT count(f.id), f.createdAt FROM DailyFavorCount f WHERE f.createdAt >= :yesterday AND f.createdAt < :today GROUP BY f.createdAt")
                 .entityManagerFactory(em)
                 .name("totalCountItemReader")
                 .parameterValues(parameters)
@@ -76,7 +76,11 @@ public class DailyTotalFavorCountJobConfig {
 
     @Bean
     public ItemProcessor<Object[], DailyTotalFavorCount> totalFavorCountItemProcessor() {
-        return item -> new DailyTotalFavorCount((Long) item[0], (LocalDate) item[1]);
+        return item ->{
+            Long count = (Long) item[0];
+            LocalDate createdAt = (LocalDate) item[1];
+          return new DailyTotalFavorCount(count, createdAt);
+        };
     }
 
     @Bean

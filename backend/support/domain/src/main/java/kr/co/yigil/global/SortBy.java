@@ -11,6 +11,7 @@ public enum SortBy {
     TITLE("title"),
     ID("id"),
     PLACE_NAME("place.name"),
+    NAME("name"),
     LATEST_UPLOADED_TIME("latestUploadedTime");
 
     private String value;
