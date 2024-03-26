@@ -65,4 +65,8 @@ public class PlaceFacade {
         return placeService.getPlaceKeywords(keyword);
     }
 
+    public List<Long> getMyPlaceIds(final Long memberId) {
+        return placeService.getMyPlaceIds(memberId);
+    }
+
 }

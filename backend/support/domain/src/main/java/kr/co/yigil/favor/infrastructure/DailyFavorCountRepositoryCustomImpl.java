@@ -19,27 +19,21 @@ public class DailyFavorCountRepositoryCustomImpl implements DailyFavorCountRepos
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<DailyFavorCount> findTopByTravelTypeOrderByCountDesc(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit){
+    public List<DailyFavorCount> findTopByTravelTypeOrderByCountDesc(LocalDate startDate, LocalDate endDate){
         QDailyFavorCount dailyFavorCount = QDailyFavorCount.dailyFavorCount;
 
         BooleanExpression expression;
-        if (travelType == TravelType.ALL) {
-            expression = dailyFavorCount.travelType.eq(TravelType.SPOT)
-                    .or(dailyFavorCount.travelType.eq(TravelType.COURSE));
-        } else {
-            expression = dailyFavorCount.travelType.eq(travelType);
-        }
+        expression = dailyFavorCount.travelType.eq(TravelType.SPOT)
+                .or(dailyFavorCount.travelType.eq(TravelType.COURSE));
+
 
         BooleanExpression dateExpression = dailyFavorCount.createdAt.between(startDate, endDate);
 
-        if(limit == null){
-            limit = 10;
-        }
 
         return queryFactory.selectFrom(dailyFavorCount)
                 .where(expression.and(dateExpression))
                 .orderBy(dailyFavorCount.count.desc())
-                .limit(limit)
+                .limit(5)
                 .fetch();
     }
 }

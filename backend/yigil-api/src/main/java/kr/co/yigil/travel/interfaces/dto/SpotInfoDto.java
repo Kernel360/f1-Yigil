@@ -1,10 +1,11 @@
 package kr.co.yigil.travel.interfaces.dto;
 
-import java.util.List;
-import kr.co.yigil.travel.domain.spot.SpotInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -12,17 +13,21 @@ import lombok.NoArgsConstructor;
 public class SpotInfoDto {
     private Long id;
 
-    private List<String> imageUrlList;
+    private List<String> imageUrls;
 
     private String description;
+
+    private Long ownerId;
 
     private String ownerProfileImageUrl;
 
     private String ownerNickname;
 
-    private String rate;
+    private double rate;
 
-    private String createDate;
+    private LocalDateTime createDate;
 
     private boolean liked;
+
+    private boolean following;
 }

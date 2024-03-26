@@ -693,7 +693,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 고유 아이디</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].image_url_list</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].image_urls</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">imageUrl의 List</p></td>
 </tr>
@@ -701,6 +701,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].description</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].owner_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot 등록 사용자의 고유 아이디</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].owner_profile_image_url</code></p></td>
@@ -714,7 +719,7 @@ Host: spring.restdocs.test</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].rate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 평점</p></td>
 </tr>
 <tr>
@@ -725,7 +730,12 @@ Host: spring.restdocs.test</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].liked</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자의 좋아요 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot에 좋아요를 눌렀는지 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot 등록 사용자를 팔로우 했는지 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -735,18 +745,20 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 328
+Content-Length: 383
 
 {
   "spots" : [ {
     "id" : 1,
-    "image_url_list" : [ "images/image.png", "images/photo.jpeg" ],
+    "image_urls" : [ "images/image.png", "images/photo.jpeg" ],
     "description" : "설명",
+    "owner_id" : 1,
     "owner_profile_image_url" : "images/profile.jpg",
     "owner_nickname" : "오너 닉네임",
-    "rate" : "4.5",
-    "create_date" : "2024-02-01",
-    "liked" : true
+    "rate" : 4.5,
+    "create_date" : "2024-03-26T15:43:21.099577",
+    "liked" : true,
+    "following" : false
   } ],
   "has_next" : true
 }</code></pre>
@@ -1619,7 +1631,12 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">course의 정보</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].map_static_image_file_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].map_static_image_url</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스의 지도 정보를 나타내는 이미지 파일 경로</p></td>
 </tr>
@@ -1629,13 +1646,18 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스의 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스의 본문</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스의 평점 정보</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].spot_count</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스 내부 장소의 개수</p></td>
 </tr>
 <tr>
@@ -1653,6 +1675,16 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스 생성자의 닉네임 정보</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].liked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 좋아요 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 생성자를 팔로잉 했는지 여부</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -1661,17 +1693,22 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 306
+Content-Length: 371
 
 {
   "courses" : [ {
-    "map_static_image_file_url" : "images/static.img",
-    "title" : "코스이름",
-    "rate" : "5.0",
-    "spot_count" : "3",
-    "create_date" : "2024-02-01",
-    "owner_profile_image_url" : "images/owner.jpg",
-    "owner_nickname" : "코스 작성자"
+    "id" : 1,
+    "title" : "test",
+    "content" : "test",
+    "map_static_image_url" : "test",
+    "rate" : 4.5,
+    "spot_count" : 10,
+    "create_date" : "2024-03-26T15:43:20.826364",
+    "owner_id" : 1,
+    "owner_profile_image_url" : "test",
+    "owner_nickname" : "test",
+    "liked" : true,
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -2150,7 +2187,7 @@ Content-Length: 481
   "rate" : 4.5,
   "map_static_image_url" : "images/static.png",
   "description" : "본문",
-  "created_date" : "2024-03-24T04:24:13.363295",
+  "created_date" : "2024-03-26T15:43:20.880988",
   "line_string_json" : "lineStringJson",
   "spots" : [ {
     "id" : 1,
@@ -2745,7 +2782,7 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 323
+Content-Length: 324
 
 {
   "courses" : [ {
@@ -2757,7 +2794,7 @@ Content-Length: 323
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-24T04:24:13.25706"
+    "create_date" : "2024-03-26T15:43:20.782047"
   } ],
   "has_next" : false
 }</code></pre>
@@ -2905,7 +2942,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-24T04:24:13.281822",
+    "create_date" : "2024-03-26T15:43:20.803229",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2917,7 +2954,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-24T04:24:13.282168",
+    "create_date" : "2024-03-26T15:43:20.80349",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -2933,7 +2970,7 @@ Host: spring.restdocs.test
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 665
+Content-Length: 664
 
 {
   "spot_details" : [ {
@@ -2943,7 +2980,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-24T04:24:13.281822",
+    "create_date" : "2024-03-26T15:43:20.803229",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2955,7 +2992,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-24T04:24:13.282168",
+    "create_date" : "2024-03-26T15:43:20.80349",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -3566,6 +3603,16 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">장소의 지도 이미지 URL</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 y 좌표</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarked</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">유저의 장소 북마크 여부</p></td>
@@ -3588,7 +3635,7 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 215
+Content-Length: 263
 
 {
   "id" : 1,
@@ -3596,6 +3643,10 @@ Content-Length: 215
   "address" : "장소주소",
   "thumbnail_image_url" : "image.com",
   "map_static_image_url" : "image.net",
+  "point" : {
+    "x" : 1.0,
+    "y" : 1.0
+  },
   "rate" : 3.0,
   "review_count" : 50,
   "bookmarked" : true
@@ -6895,7 +6946,7 @@ Content-Length: 161
 <h5 id="_http_request_예시_55"><a class="link" href="#_http_request_예시_55">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/notifications/stream HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/notifications/stream/0 HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -7293,14 +7344,14 @@ Host: spring.restdocs.test
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-24T04:24:12.136702"
+    "created_at" : "2024-03-26T15:43:19.716849"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-24T04:24:12.136751"
+    "created_at" : "2024-03-26T15:43:19.716894"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7376,14 +7427,14 @@ Content-Length: 326
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-24T04:24:12.136702"
+    "created_at" : "2024-03-26T15:43:19.716849"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-24T04:24:12.136751"
+    "created_at" : "2024-03-26T15:43:19.716894"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7453,7 +7504,7 @@ Host: spring.restdocs.test</code></pre>
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-24T04:24:12.146909"
+  "created_at" : "2024-03-26T15:43:19.728090"
 }</code></pre>
 </div>
 </div>
@@ -7516,7 +7567,7 @@ Content-Length: 129
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-24T04:24:12.146909"
+  "created_at" : "2024-03-26T15:43:19.728090"
 }</code></pre>
 </div>
 </div>

@@ -1,21 +1,5 @@
 package kr.co.yigil.place.domain;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.bookmark.domain.BookmarkReader;
 import kr.co.yigil.member.Ages;
@@ -23,6 +7,23 @@ import kr.co.yigil.member.Gender;
 import kr.co.yigil.member.Member;
 import kr.co.yigil.member.domain.MemberReader;
 import kr.co.yigil.travel.domain.spot.SpotReader;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.locationtech.jts.geom.Point;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PlaceServiceImplTest {
@@ -179,6 +180,8 @@ public class PlaceServiceImplTest {
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(placeReader.getPlace(1L)).thenReturn(mockPlace);
         when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
+        Point mockPoint = mock(Point.class);
+        when(mockPlace.getLocation()).thenReturn(mockPoint);
 
         PlaceInfo.Detail detail = placeService.retrievePlace(1L, mockAccessor);
 
@@ -197,6 +200,8 @@ public class PlaceServiceImplTest {
         when(bookmarkReader.isBookmarked(1L, 1L)).thenReturn(true);
         when(placeReader.getPlace(1L)).thenReturn(mockPlace);
         when(placeRateCalculator.calculatePlaceRate(1L)).thenReturn(1.0);
+        Point mockPoint = mock(Point.class);
+        when(mockPlace.getLocation()).thenReturn(mockPoint);
 
         PlaceInfo.Detail detail = placeService.retrievePlace(1L, mockAccessor);
 
@@ -256,4 +261,12 @@ public class PlaceServiceImplTest {
         assertNotNull(result);
     }
 
+    @DisplayName("getMyPlaceIds 메서드가 List를 잘 반환하는지")
+    @Test
+    void getMyPlaceIds_ShouldReturnList() {
+        when(spotReader.getMySpotPlaceIds(1L)).thenReturn(List.of(1L));
+        var result = placeService.getMyPlaceIds(1L);
+
+        assertNotNull(result);
+    }
 }

@@ -1,15 +1,10 @@
 package kr.co.yigil.travel.application;
 
 import kr.co.yigil.auth.domain.Accessor;
-import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
-import kr.co.yigil.member.Ages;
-import kr.co.yigil.member.Gender;
-import kr.co.yigil.member.Member;
-import kr.co.yigil.member.SocialLoginType;
+import kr.co.yigil.member.*;
 import kr.co.yigil.travel.domain.Course;
-import kr.co.yigil.travel.domain.Spot;
 import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
@@ -20,14 +15,11 @@ import kr.co.yigil.travel.domain.spot.SpotService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.locationtech.jts.geom.LineString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,41 +46,43 @@ public class CourseFacadeTest {
     private FileUploader fileUploader;
 
 
+    //todo: CourseFacadeTest 작성하기
+
     @DisplayName("getCourseSliceInPlace 메서드가 유효한 요청이 들어왔을 때 Course의 Slice객체를 잘 반환하는지")
     @Test
     void whenGetCoursesSliceInPlace_WithValidRequest() {
-        Long id = 1L;
-        String email = "test@test.com";
-        String socialLoginId = "12345";
-        String nickname = "tester";
-        String profileImageUrl = "test.jpg";
-        Member member = new Member(id, email, socialLoginId, nickname, profileImageUrl,
-                SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
+        Long memberId = 1L;
+//        String email = "test@test.com";
+//        String socialLoginId = "12345";
+//        String nickname = "tester";
+//        String profileImageUrl = "test.jpg";
+//        Member member = new Member(id, email, socialLoginId, nickname, profileImageUrl,
+//                SocialLoginType.KAKAO, Ages.NONE, Gender.NONE);
 
-        String title = "Test Course Title";
-        String description = "Test Course Description";
-        double rate = 5.0;
-        LineString path = null;
-        boolean isPrivate = false;
-        List<Spot> spots = Collections.emptyList();
-        int representativeSpotOrder = 0;
-        AttachFile mapStaticImageFile = null;
-
-        Course course = new Course(id, member, title, description, rate, path, isPrivate, spots,
-                representativeSpotOrder, mapStaticImageFile);
+//        String title = "Test Course Title";
+//        String description = "Test Course Description";
+//        double rate = 5.0;
+//        LineString path = null;
+//        boolean isPrivate = false;
+//        List<Spot> spots = Collections.emptyList();
+//        int representativeSpotOrder = 0;
+//        AttachFile mapStaticImageFile = null;
+//
+//        Course course = new Course(id, member, title, description, rate, path, isPrivate, spots,
+//                representativeSpotOrder, mapStaticImageFile);
 
         Long placeId = 1L;
         Pageable pageable = PageRequest.of(0, 10);
-        Slice<Course> expectedSlice = new PageImpl<>(Collections.singletonList(course), pageable,
-                1);
-        when(courseService.getCoursesSliceInPlace(eq(placeId), any(Pageable.class))).thenReturn(
-                expectedSlice);
+        CourseInfo.CoursesInPlaceResponseInfo mockResponse = mock(CourseInfo.CoursesInPlaceResponseInfo.class);
 
-        Slice<Course> result = courseFacade.getCourseSliceInPlace(placeId, pageable);
+        when(courseService.getCoursesSliceInPlace(eq(placeId), anyLong(),any(Pageable.class))).thenReturn(
+                mockResponse);
+
+        var result = courseFacade.getCourseSliceInPlace(placeId, memberId,  pageable);
 
         assertNotNull(result);
-        assertEquals(expectedSlice, result);
-        verify(courseService, times(1)).getCoursesSliceInPlace(eq(placeId), any(Pageable.class));
+        assertEquals(mockResponse, result);
+        verify(courseService, times(1)).getCoursesSliceInPlace(eq(placeId), eq(memberId), any(Pageable.class));
     }
 
     @DisplayName("registerCourse 메서드가 CourseServicer를 잘 호출하는지")

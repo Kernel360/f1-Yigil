@@ -20,8 +20,8 @@ export default async function SpotsPage({
 
   const result = await getSpots(params.id);
 
-  if (!result.success) {
-    throw result.error;
+  if (result.status === 'failed') {
+    throw result.message;
   }
 
   const { spots, has_next } = result.data;

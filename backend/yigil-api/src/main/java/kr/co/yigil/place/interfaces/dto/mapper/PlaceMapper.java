@@ -1,15 +1,5 @@
 package kr.co.yigil.place.interfaces.dto.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Slice;
-
 import kr.co.yigil.place.domain.Place;
 import kr.co.yigil.place.domain.PlaceCommand;
 import kr.co.yigil.place.domain.PlaceInfo;
@@ -20,12 +10,16 @@ import kr.co.yigil.place.interfaces.dto.PlaceCoordinateDto;
 import kr.co.yigil.place.interfaces.dto.PlaceDetailInfoDto;
 import kr.co.yigil.place.interfaces.dto.PlaceInfoDto;
 import kr.co.yigil.place.interfaces.dto.request.NearPlaceRequest;
-import kr.co.yigil.place.interfaces.dto.response.NearPlaceResponse;
-import kr.co.yigil.place.interfaces.dto.response.PlaceKeywordResponse;
-import kr.co.yigil.place.interfaces.dto.response.PlaceSearchResponse;
-import kr.co.yigil.place.interfaces.dto.response.PlaceStaticImageResponse;
-import kr.co.yigil.place.interfaces.dto.response.PopularPlaceResponse;
-import kr.co.yigil.place.interfaces.dto.response.RegionPlaceResponse;
+import kr.co.yigil.place.interfaces.dto.response.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface PlaceMapper {
@@ -68,9 +62,11 @@ public interface PlaceMapper {
             @Mapping(target = "mapStaticImageUrl", source = "mapStaticImageUrl"),
             @Mapping(target = "isBookmarked", source = "bookmarked"),
             @Mapping(target = "rate", source = "rate"),
-            @Mapping(target = "reviewCount", source = "reviewCount")
+            @Mapping(target = "reviewCount", source = "reviewCount"),
+            @Mapping(target = "point", source = "point")
     })
     PlaceDetailInfoDto toPlaceDetailInfoDto(Detail detail);
+    PlaceDetailInfoDto.PointDto toPointDto(PlaceInfo.PointInfo point);
 
     @Mapping(target = "minCoordinate.x", source = "minX")
     @Mapping(target = "minCoordinate.y", source = "minY")
@@ -94,6 +90,8 @@ public interface PlaceMapper {
 
         return new NearPlaceResponse(placeCoordinateDtos, page.getNumber() + 1, page.getTotalPages());
     }
+
+
 
     default PlaceSearchResponse toPlaceSearchResponse(Slice<Main> placeInfo) {
         List<PlaceInfoDto> dtos = placeInfo.getContent().stream().map(this::mainToDto).collect(Collectors.toList());

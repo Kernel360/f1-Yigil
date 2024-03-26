@@ -35,6 +35,7 @@ public class CourseApiController {
     public ResponseEntity<CoursesInPlaceResponse> getCoursesInPlace(
         @PathVariable("placeId") Long placeId,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
+        @Auth Accessor accessor,
         @RequestParam(name = "sortBy", defaultValue = "created_at", required = false) SortBy sortBy,
         @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
     ) {
@@ -42,13 +43,13 @@ public class CourseApiController {
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
             pageable.getPageSize(),
             Sort.by(direction, sortBy.getValue()));
-        var result = courseFacade.getCourseSliceInPlace(placeId, pageRequest);
+        var result = courseFacade.getCourseSliceInPlace(placeId, accessor.getMemberId(), pageRequest);
         var response = courseMapper.courseSliceToCourseInPlaceResponse(result);
         return ResponseEntity.ok().body(response);
     }
 
     @PostMapping
-    //@MemberOnly
+    @MemberOnly
     public ResponseEntity<CourseRegisterResponse> registerCourse(
         @ModelAttribute CourseRegisterRequest request,
         @Auth final Accessor accessor
