@@ -10,7 +10,19 @@ export default function NotificationList({
   const notificationElements = useMemo(
     () =>
       notifications.reduce(
-        (acc: ReactNode[], { message, create_date, read }, idx, arr) => {
+        (
+          acc: ReactNode[],
+          {
+            notification_id,
+            sender_profile_image_url,
+            sender_id,
+            message,
+            create_date,
+            read,
+          },
+          idx,
+          arr,
+        ) => {
           // 이전 요소의 날짜와 현재 요소의 날짜를 비교
           const prevDate = idx > 0 ? arr[idx - 1].create_date : '';
           const currentDate = checkDate(create_date);
@@ -29,6 +41,9 @@ export default function NotificationList({
           acc.push(
             <Fragment key={`${message}-${create_date}-${idx}`}>
               <NotificationItem
+                notification_id={notification_id}
+                sender_profile_image_url={sender_profile_image_url}
+                sender_id={sender_id}
                 message={message}
                 create_date={create_date}
                 read={read}

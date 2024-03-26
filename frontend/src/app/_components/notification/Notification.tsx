@@ -90,7 +90,7 @@ export default function Notification({
   }, [selectOption]);
 
   return (
-    <div className="w-full flex flex-col mx-4">
+    <div className="w-full flex flex-col px-4">
       <div className="flex justify-end">
         <Select
           list={notificationSelect}
