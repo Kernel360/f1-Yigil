@@ -70,7 +70,9 @@ export const courseDetailSchema = z.object({
   spot_count: z.number().int(),
   rate: z.number(),
   liked: z.boolean(),
-  create_date: z.coerce.date().transform((date) => date.toLocaleDateString()),
+  create_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
 });
 
 export type TCourseDetail = z.infer<typeof courseDetailSchema>;

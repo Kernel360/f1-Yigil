@@ -18,7 +18,7 @@ export default function Course({
   data: TCourse;
 }) {
   const {
-    id,
+    id: travelId,
     title,
     map_static_image_url,
     owner_nickname,
@@ -61,7 +61,7 @@ export default function Course({
         <span className="self-end text-gray-400">{create_date}</span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{content}</div>
       </div>
-      <Reaction placeId={placeId} travelId={id} initialLiked={liked} />
+      <Reaction placeId={placeId} travelId={travelId} initialLiked={liked} />
     </article>
   );
 }
