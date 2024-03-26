@@ -552,7 +552,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 고유 아이디</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].image_url_list</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].image_urls</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">imageUrl의 List</p></td>
 </tr>
@@ -604,18 +604,18 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 387
+Content-Length: 383
 
 {
   "spots" : [ {
     "id" : 1,
-    "image_url_list" : [ "images/image.png", "images/photo.jpeg" ],
+    "image_urls" : [ "images/image.png", "images/photo.jpeg" ],
     "description" : "설명",
     "owner_id" : 1,
     "owner_profile_image_url" : "images/profile.jpg",
     "owner_nickname" : "오너 닉네임",
     "rate" : 4.5,
-    "create_date" : "2024-03-26T14:36:58.075116",
+    "create_date" : "2024-03-26T15:43:21.099577",
     "liked" : true,
     "following" : false
   } ],
