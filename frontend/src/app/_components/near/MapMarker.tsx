@@ -29,7 +29,7 @@ export default function MapMarker({
   isWrittenByMe,
 }: TMapMarker) {
   const { push } = useRouter();
-  console.log(isWrittenByMe);
+
   const onClickMarker = (clickedId: number) => {
     setMarkerClickedId(clickedId);
     if (markerClickedId === clickedId) {
