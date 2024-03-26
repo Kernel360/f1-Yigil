@@ -15,7 +15,7 @@ export default function Course({ data }: { data: TCourseDetail }) {
   const { id, title, map_static_image_url, spot_count, rate, liked } = data;
   return (
     <article className="p-4 flex flex-col gap-2">
-      <Link className="relative aspect-video" href={`/courses/${id}`}>
+      <Link className="relative aspect-video" href={`/detail/courses/${id}`}>
         <Image
           className="rounded-2xl"
           src={map_static_image_url}
