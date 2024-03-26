@@ -196,4 +196,18 @@ public class PlaceFacadeTest {
         assertEquals(result, mockSlice);
         verify(placeService).searchPlace(keyword, pageable, accessor);
     }
+
+    @DisplayName("getMyPlaceIds 메서드가 Response를 잘 반환하는지")
+    @Test
+    void getMyPlaceIds_ShouldReturnResponse() {
+        Long memberId = 1L;
+        List<Long> mockResponse = List.of(1L, 2L, 3L);
+
+        when(placeService.getMyPlaceIds(memberId)).thenReturn(mockResponse);
+
+        var result = placeFacade.getMyPlaceIds(memberId);
+
+        assertEquals(result, mockResponse);
+        verify(placeService).getMyPlaceIds(memberId);
+    }
 }
