@@ -27,23 +27,6 @@ import java.util.List;
 )
 public interface CourseMapper {
 
-//    CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
-
-//    @Mapping(target = "mapStaticImageFileUrl", expression = "java(course.getMapStaticImageFile().getFileUrl())")
-//    @Mapping(target = "title", expression = "java(course.getTitle())")
-//    @Mapping(target = "rate", expression = "java(String.valueOf(course.getRate()))")
-//    @Mapping(target = "spotCount", expression = "java(String.valueOf(course.getSpots().size()))")
-//    @Mapping(target = "createDate", expression = "java(course.getCreatedAt().toString())")
-//    @Mapping(target = "ownerProfileImageUrl", expression = "java(course.getMember().getProfileImageUrl())")
-//    @Mapping(target = "ownerNickname", expression = "java(course.getMember().getNickname())")
-//    CourseInfoDto courseToCourseInfoDto(Course course);
-//
-//    default List<CourseInfoDto> coursesToCourseInfoDtoList(List<Course> courses) {
-//        return courses.stream()
-//                .map(this::courseToCourseInfoDto)
-//                .collect(Collectors.toList());
-//    }
-
     CoursesInPlaceResponse courseSliceToCourseInPlaceResponse(CourseInfo.CoursesInPlaceResponseInfo courseSlice) ;
     CourseInfoDto toDto(CourseInfo.CourseInPlaceInfo courseInPlaceInfo);
 

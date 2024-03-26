@@ -4,6 +4,7 @@ import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.BadRequestException;
@@ -40,7 +41,7 @@ public class SpotServiceImpl implements SpotService {
 	private final SpotReader spotReader;
 	private final PlaceReader placeReader;
 	private final FavorReader favorReader;
-
+	private final FollowReader followReader;
 	private final SpotStore spotStore;
 	private final PlaceStore placeStore;
 	private final PlaceCacheStore placeCacheStore;
@@ -57,7 +58,8 @@ public class SpotServiceImpl implements SpotService {
 			.map(spot -> {
 				boolean isLiked = accessor.isMember() && favorReader.existsByMemberIdAndTravelId(accessor.getMemberId(),
 					spot.getId());
-				return new Main(spot, isLiked);
+				boolean isFollowing = followReader.isFollowing(accessor.getMemberId(), spot.getMember().getId());
+				return new Main(spot, isLiked, isFollowing);
 			}).collect(Collectors.toList());
 		return new Slice(mains, slice.hasNext());
 	}

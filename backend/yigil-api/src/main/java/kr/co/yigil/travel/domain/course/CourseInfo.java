@@ -42,8 +42,9 @@ public class CourseInfo {
         private final String ownerProfileImageUrl;
         private final String ownerNickname;
         private final boolean liked;
+        private final boolean following;
 
-        public CourseInPlaceInfo(Course course, boolean isLiked) {
+        public CourseInPlaceInfo(Course course, boolean isLiked, boolean isFollowing) {
             this.id = course.getId();
             this.title = course.getTitle();
             this.content = course.getDescription();
@@ -55,6 +56,7 @@ public class CourseInfo {
             this.rate = course.getRate();
             this.createDate = course.getCreatedAt();
             this.liked = isLiked;
+            this.following = isFollowing;
         }
     }
 

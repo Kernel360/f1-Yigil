@@ -28,4 +28,6 @@ public class SpotInfoDto {
     private LocalDateTime createDate;
 
     private boolean liked;
+
+    private boolean following;
 }

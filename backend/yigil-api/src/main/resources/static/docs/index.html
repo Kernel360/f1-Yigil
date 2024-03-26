@@ -730,7 +730,12 @@ Host: spring.restdocs.test</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].liked</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자의 좋아요 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot에 좋아요를 눌렀는지 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spot 등록 사용자를 팔로우 했는지 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -740,7 +745,7 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 362
+Content-Length: 387
 
 {
   "spots" : [ {
@@ -751,8 +756,9 @@ Content-Length: 362
     "owner_profile_image_url" : "images/profile.jpg",
     "owner_nickname" : "오너 닉네임",
     "rate" : 4.5,
-    "create_date" : "2024-03-26T00:27:27.299493",
-    "liked" : true
+    "create_date" : "2024-03-26T14:21:21.674051",
+    "liked" : true,
+    "following" : false
   } ],
   "has_next" : true
 }</code></pre>
@@ -1674,6 +1680,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">코스 좋아요 여부</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courses[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 생성자를 팔로잉 했는지 여부</p></td>
+</tr>
 </tbody>
 </table>
 <div class="sect4">
@@ -1682,7 +1693,7 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 347
+Content-Length: 371
 
 {
   "courses" : [ {
@@ -1692,11 +1703,12 @@ Content-Length: 347
     "map_static_image_url" : "test",
     "rate" : 4.5,
     "spot_count" : 10,
-    "create_date" : "2024-03-26T00:27:27.015724",
+    "create_date" : "2024-03-26T14:21:21.394267",
     "owner_id" : 1,
     "owner_profile_image_url" : "test",
     "owner_nickname" : "test",
-    "liked" : true
+    "liked" : true,
+    "following" : true
   } ],
   "has_next" : false
 }</code></pre>
@@ -2175,7 +2187,7 @@ Content-Length: 481
   "rate" : 4.5,
   "map_static_image_url" : "images/static.png",
   "description" : "본문",
-  "created_date" : "2024-03-26T00:27:27.088549",
+  "created_date" : "2024-03-26T14:21:21.459895",
   "line_string_json" : "lineStringJson",
   "spots" : [ {
     "id" : 1,
@@ -2782,7 +2794,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-26T00:27:26.958549"
+    "create_date" : "2024-03-26T14:21:21.347822"
   } ],
   "has_next" : false
 }</code></pre>
@@ -2930,7 +2942,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.984952",
+    "create_date" : "2024-03-26T14:21:21.370647",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2942,7 +2954,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.98528",
+    "create_date" : "2024-03-26T14:21:21.370938",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -2958,7 +2970,7 @@ Host: spring.restdocs.test
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 664
+Content-Length: 665
 
 {
   "spot_details" : [ {
@@ -2968,7 +2980,7 @@ Content-Length: 664
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.984952",
+    "create_date" : "2024-03-26T14:21:21.370647",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2980,7 +2992,7 @@ Content-Length: 664
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T00:27:26.98528",
+    "create_date" : "2024-03-26T14:21:21.370938",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -7332,14 +7344,14 @@ Host: spring.restdocs.test
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-26T00:27:25.879739"
+    "created_at" : "2024-03-26T14:21:20.251706"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-26T00:27:25.879790"
+    "created_at" : "2024-03-26T14:21:20.251756"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7415,14 +7427,14 @@ Content-Length: 326
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-26T00:27:25.879739"
+    "created_at" : "2024-03-26T14:21:20.251706"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-26T00:27:25.879790"
+    "created_at" : "2024-03-26T14:21:20.251756"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7492,7 +7504,7 @@ Host: spring.restdocs.test</code></pre>
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-26T00:27:25.890178"
+  "created_at" : "2024-03-26T14:21:20.262104"
 }</code></pre>
 </div>
 </div>
@@ -7555,7 +7567,7 @@ Content-Length: 129
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-26T00:27:25.890178"
+  "created_at" : "2024-03-26T14:21:20.262104"
 }</code></pre>
 </div>
 </div>

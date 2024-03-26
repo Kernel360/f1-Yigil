@@ -49,7 +49,7 @@ public class CourseApiController {
     }
 
     @PostMapping
-    //@MemberOnly
+    @MemberOnly
     public ResponseEntity<CourseRegisterResponse> registerCourse(
         @ModelAttribute CourseRegisterRequest request,
         @Auth final Accessor accessor

@@ -21,4 +21,5 @@ public class CourseInfoDto {
     private String ownerProfileImageUrl;
     private String ownerNickname;
     private boolean liked;
+    private boolean following;
 }

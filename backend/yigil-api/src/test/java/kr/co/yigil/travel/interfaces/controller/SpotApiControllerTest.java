@@ -72,7 +72,7 @@ class SpotApiControllerTest {
     void getSpotsInPlace_ShouldReturnOk() throws Exception {
         SpotInfo.Slice mockSlice = mock(Slice.class);
         SpotInfoDto spotInfo = new SpotInfoDto(1L, List.of("images/image.png", "images/photo.jpeg"),
-                "설명",1L, "images/profile.jpg", "오너 닉네임", 4.5, LocalDateTime.now(), true);
+                "설명",1L, "images/profile.jpg", "오너 닉네임", 4.5, LocalDateTime.now(), true, false);
         SpotsInPlaceResponse response = new SpotsInPlaceResponse(List.of(spotInfo), true);
 
         when(spotFacade.getSpotSliceInPlace(anyLong(), any(Accessor.class), any(Pageable.class))).thenReturn(mockSlice);
@@ -116,7 +116,9 @@ class SpotApiControllerTest {
                                 fieldWithPath("spots[].create_date").type(JsonFieldType.STRING)
                                         .description("Spot의 생성일시"),
                                 fieldWithPath("spots[].liked").type(JsonFieldType.BOOLEAN)
-                                        .description("로그인한 사용자의 좋아요 여부")
+                                        .description("Spot에 좋아요를 눌렀는지 여부"),
+                                fieldWithPath("spots[].following").type(JsonFieldType.BOOLEAN)
+                                        .description("Spot 등록 사용자를 팔로우 했는지 여부")
                         )
                 ));
 

@@ -85,13 +85,14 @@ public class CourseApiControllerTest {
         courseInfo.setOwnerProfileImageUrl("test");
         courseInfo.setOwnerNickname("test");
         courseInfo.setLiked(true);
+        courseInfo.setFollowing(true);
 
         response.setCourses(List.of(courseInfo));
         response.setHasNext(false);
 
         CourseInfo.CoursesInPlaceResponseInfo info = mock(CourseInfo.CoursesInPlaceResponseInfo.class);
 
-        when(courseFacade.getCourseSliceInPlace(anyLong(),anyLong(), any(PageRequest.class))).thenReturn(info);
+        when(courseFacade.getCourseSliceInPlace(anyLong(), anyLong(), any(PageRequest.class))).thenReturn(info);
         when(courseMapper.courseSliceToCourseInPlaceResponse(any(CourseInfo.CoursesInPlaceResponseInfo.class))).thenReturn(response);
 
         mockMvc.perform(get("/api/v1/courses/place/{placeId}", 1L)
@@ -142,11 +143,13 @@ public class CourseApiControllerTest {
                                 fieldWithPath("courses[].owner_nickname").type(JsonFieldType.STRING)
                                         .description("코스 생성자의 닉네임 정보"),
                                 fieldWithPath("courses[].liked").type(JsonFieldType.BOOLEAN)
-                                        .description("코스 좋아요 여부")
+                                        .description("코스 좋아요 여부"),
+                                fieldWithPath("courses[].following").type(JsonFieldType.BOOLEAN)
+                                        .description("코스 생성자를 팔로잉 했는지 여부")
                         )
                 ));
 
-        verify(courseFacade).getCourseSliceInPlace(anyLong(),anyLong(), any(Pageable.class));
+        verify(courseFacade).getCourseSliceInPlace(anyLong(), anyLong(), any(Pageable.class));
     }
 
     @DisplayName("registerCourse 메서드가 잘 동작하는지")
