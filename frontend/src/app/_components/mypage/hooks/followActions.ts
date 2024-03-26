@@ -78,7 +78,8 @@ export const getFollowerList = async (
 
   try {
     const res = await fetch(
-      `${BASE_URL}/v1/follows/followers?page=${pageNo}&size=${size}&${
+      `${BASE_URL}/v1/follows/followers?page=${pageNo}&size=${size}&
+      ${
         sortOrder === 'id'
           ? 'sortBy=id&sortOrder=asc'
           : `sortBy=created_at&sortOrder=${sortOrder}`
