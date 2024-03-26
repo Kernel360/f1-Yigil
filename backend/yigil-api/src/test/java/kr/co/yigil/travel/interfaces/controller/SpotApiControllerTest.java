@@ -104,7 +104,7 @@ class SpotApiControllerTest {
                                         .description("다음 페이지가 있는지 여부"),
                                 subsectionWithPath("spots").description("spot의 정보"),
                                 fieldWithPath("spots[].id").type(JsonFieldType.NUMBER).description("Spot의 고유 아이디"),
-                                fieldWithPath("spots[].image_url_list").type(JsonFieldType.ARRAY).description("imageUrl의 List"),
+                                fieldWithPath("spots[].image_urls").type(JsonFieldType.ARRAY).description("imageUrl의 List"),
                                 fieldWithPath("spots[].description").type(JsonFieldType.STRING).description("Spot의 설명"),
                                 fieldWithPath("spots[].owner_id").type(JsonFieldType.NUMBER).description("Spot 등록 사용자의 고유 아이디"),
                                 fieldWithPath("spots[].owner_profile_image_url").type(JsonFieldType.STRING)

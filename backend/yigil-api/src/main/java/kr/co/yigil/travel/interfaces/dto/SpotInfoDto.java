@@ -13,7 +13,7 @@ import java.util.List;
 public class SpotInfoDto {
     private Long id;
 
-    private List<String> imageUrlList;
+    private List<String> imageUrls;
 
     private String description;
 

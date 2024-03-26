@@ -693,7 +693,7 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Spot의 고유 아이디</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].image_url_list</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spots[].image_urls</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">imageUrl의 List</p></td>
 </tr>
@@ -745,18 +745,18 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 387
+Content-Length: 382
 
 {
   "spots" : [ {
     "id" : 1,
-    "image_url_list" : [ "images/image.png", "images/photo.jpeg" ],
+    "image_urls" : [ "images/image.png", "images/photo.jpeg" ],
     "description" : "설명",
     "owner_id" : 1,
     "owner_profile_image_url" : "images/profile.jpg",
     "owner_nickname" : "오너 닉네임",
     "rate" : 4.5,
-    "create_date" : "2024-03-26T14:36:58.075116",
+    "create_date" : "2024-03-26T15:40:29.29808",
     "liked" : true,
     "following" : false
   } ],
@@ -1703,7 +1703,7 @@ Content-Length: 371
     "map_static_image_url" : "test",
     "rate" : 4.5,
     "spot_count" : 10,
-    "create_date" : "2024-03-26T14:36:57.786534",
+    "create_date" : "2024-03-26T15:40:29.035781",
     "owner_id" : 1,
     "owner_profile_image_url" : "test",
     "owner_nickname" : "test",
@@ -2187,7 +2187,7 @@ Content-Length: 481
   "rate" : 4.5,
   "map_static_image_url" : "images/static.png",
   "description" : "본문",
-  "created_date" : "2024-03-26T14:36:57.842695",
+  "created_date" : "2024-03-26T15:40:29.091542",
   "line_string_json" : "lineStringJson",
   "spots" : [ {
     "id" : 1,
@@ -2794,7 +2794,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-26T14:36:57.744514"
+    "create_date" : "2024-03-26T15:40:28.993591"
   } ],
   "has_next" : false
 }</code></pre>
@@ -2942,7 +2942,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T14:36:57.765335",
+    "create_date" : "2024-03-26T15:40:29.0147",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2954,7 +2954,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T14:36:57.765598",
+    "create_date" : "2024-03-26T15:40:29.014967",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -2970,7 +2970,7 @@ Host: spring.restdocs.test
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 665
+Content-Length: 663
 
 {
   "spot_details" : [ {
@@ -2980,7 +2980,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T14:36:57.765335",
+    "create_date" : "2024-03-26T15:40:29.0147",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2992,7 +2992,7 @@ Content-Length: 665
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-26T14:36:57.765598",
+    "create_date" : "2024-03-26T15:40:29.014967",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -7344,14 +7344,14 @@ Host: spring.restdocs.test
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-26T14:36:56.702496"
+    "created_at" : "2024-03-26T15:40:27.955342"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-26T14:36:56.702542"
+    "created_at" : "2024-03-26T15:40:27.955389"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7427,14 +7427,14 @@ Content-Length: 326
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-26T14:36:56.702496"
+    "created_at" : "2024-03-26T15:40:27.955342"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-26T14:36:56.702542"
+    "created_at" : "2024-03-26T15:40:27.955389"
   } ],
   "total_page" : 1
 }</code></pre>
@@ -7504,7 +7504,7 @@ Host: spring.restdocs.test</code></pre>
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-26T14:36:56.712041"
+  "created_at" : "2024-03-26T15:40:27.965370"
 }</code></pre>
 </div>
 </div>
@@ -7567,7 +7567,7 @@ Content-Length: 129
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-26T14:36:56.712041"
+  "created_at" : "2024-03-26T15:40:27.965370"
 }</code></pre>
 </div>
 </div>
