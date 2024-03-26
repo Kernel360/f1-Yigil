@@ -52,10 +52,9 @@ public class NotificationApiController {
     private final NotificationFacade notificationFacade;
     private final NotificationMapper notificationMapper;
 
-    @GetMapping(path = "/api/v1/notifications/stream")
-    @MemberOnly
-    public SseEmitter streamNotifications(@Auth Accessor accessor) {
-        return notificationFacade.createEmitter(accessor.getMemberId());
+    @GetMapping(path = "/api/v1/notifications/stream/{id}")
+    public SseEmitter streamNotifications(@PathVariable Long id) {
+        return notificationFacade.createEmitter(id);
     }
 
 
