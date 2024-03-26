@@ -1,8 +1,7 @@
 spring:
   batch:
     job:
-      enabled: true
-      name: demographicPlaceJob
+      enabled: false
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect
