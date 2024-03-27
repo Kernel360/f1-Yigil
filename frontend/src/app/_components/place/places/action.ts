@@ -2,11 +2,16 @@
 
 import { z } from 'zod';
 
+import { parseResult } from '@/utils';
 import { getBaseUrl } from '@/app/utilActions';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
-import { backendErrorSchema, placeSchema } from '@/types/response';
+import {
+  backendErrorSchema,
+  placeSchema,
+  postResponseSchema,
+} from '@/types/response';
 
 import type { TPlace } from '@/types/response';
 
@@ -110,4 +115,31 @@ export async function getPlaces(
   }
 
   return { status: 'succeed', data: result.data.places };
+}
+
+export async function toggleFollowTravelOwner(
+  ownerId: number,
+  following: boolean,
+) {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const action = following ? 'unfollow' : 'follow';
+
+  const response = await fetch(`${BASE_URL}/v1/follows/${action}/${ownerId}`, {
+    method: 'POST',
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+  });
+
+  const json = await response.json();
+
+  const result = parseResult(postResponseSchema, json);
+
+  if (result.status === 'succeed') {
+    revalidateTag('following');
+  }
+
+  return result;
 }
