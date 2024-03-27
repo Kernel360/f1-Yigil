@@ -13,13 +13,13 @@ public class PlaceCacheReaderImpl implements PlaceCacheReader {
     private final SpotReader spotReader;
 
     @Override
-    @Cacheable(value = "spotCount")
+    //@Cacheable(value = "spotCount")
     public int getSpotCount(Long placeId) {
         return spotReader.getSpotCountInPlace(placeId);
     }
 
     @Override
-    @Cacheable(value = "spotTotalRate")
+    //@Cacheable(value = "spotTotalRate")
     public double getSpotTotalRate(Long placeId) {
         return spotReader.getSpotTotalRateInPlace(placeId);
     }
