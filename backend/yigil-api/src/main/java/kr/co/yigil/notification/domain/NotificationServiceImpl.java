@@ -2,12 +2,9 @@ package kr.co.yigil.notification.domain;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -31,8 +28,10 @@ public class NotificationServiceImpl implements NotificationService{
 
     @Transactional(readOnly = true)
     @Override
-    public Slice<Notification> getNotificationSlice(Long memberId, PageRequest pageRequest) {
-        return notificationReader.getNotificationSlice(memberId, pageRequest);
+    public NotificationInfo.NotificationsSlice getNotificationSlice(Long memberId, PageRequest pageRequest) {
+        var notifications = notificationReader.getNotificationSlice(memberId, pageRequest);
+        return new NotificationInfo.NotificationsSlice(notifications);
+
     }
 
     @Transactional

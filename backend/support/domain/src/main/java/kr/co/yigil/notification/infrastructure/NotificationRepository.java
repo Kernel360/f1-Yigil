@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Slice<Notification> findAllByMemberIdAndReadIsFalse(Long memberId, Pageable pageable);
+    Slice<Notification> findAllByReceiverIdAndReadIsFalse(Long memberId, Pageable pageable);
 
-    Optional<Notification> findByIdAndMemberId(Long notificationId, Long memberId);
+    Optional<Notification> findByIdAndReceiverId(Long notificationId, Long memberId);
 }

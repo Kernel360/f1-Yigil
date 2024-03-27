@@ -1,4 +1,8 @@
 import { z } from 'zod';
+import { backendErrorSchema } from './types/response';
+
+import type { ZodType, ZodTypeDef } from 'zod';
+import type { TBackendRequestResult } from './types/response';
 
 export function dataUrlToBlob(dataURI: string) {
   const byteString = atob(dataURI.split(',')[1]);
@@ -61,3 +65,25 @@ export const scrollToTop = () => {
 export const cdnPathToRelativePath = (path: string) => {
   return path.split('http://cdn.yigil.co.kr/')[1];
 };
+
+export function parseResult<TOutput, TInput>(
+  schema: ZodType<TOutput, ZodTypeDef, TInput>,
+  json: unknown,
+): TBackendRequestResult<TOutput> {
+  const error = backendErrorSchema.safeParse(json);
+
+  if (error.success) {
+    const { code, message } = error.data;
+    console.error(`${code} - ${message}`);
+    return { status: 'failed', message, code };
+  }
+
+  const result = schema.safeParse(json);
+
+  if (!result.success) {
+    console.error('알 수 없는 에러입니다!');
+    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  }
+
+  return { status: 'succeed', data: result.data };
+}

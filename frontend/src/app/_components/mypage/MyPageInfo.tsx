@@ -6,6 +6,7 @@ export default function MyPageInfo({
 }: {
   memberInfo: {
     nickname: string;
+    email: string;
     profile_image_url: string;
     follower_count: number;
     following_count: number;
@@ -21,8 +22,9 @@ export default function MyPageInfo({
         size={40}
         height="w-[80px] h-[80px]"
       />
-      <div className="flex flex-col gap-y-3">
+      <div className="flex flex-col gap-y-1">
         <div className="text-2xl text-gray-900">{memberInfo?.nickname}</div>
+        <div className="text-md text-gray-900">{memberInfo?.email}</div>
         <div className="flex items-center">
           <div className="text-gray-500 mr-2">팔로워</div>
           <div className="mr-4">{memberInfo?.follower_count}</div>
@@ -34,8 +36,7 @@ export default function MyPageInfo({
   );
 }
 
-
 /**
- * 
+ *
  * TODO: 마이페이지 들어갔을 때 유저 검증 (memberInfo의 코드에 따라)
  * */
