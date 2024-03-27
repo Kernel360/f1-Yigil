@@ -94,21 +94,30 @@ export default function AddCourseExistSpots() {
         <div className="flex justify-center items-center grow">
           <LoadingIndicator loadingText="데이터 로딩 중입니다..." />
         </div>
-      ) : (
-        allSpots.map((spot) => (
-          <ExistPlaceItem
-            key={spot.spot_id}
-            checked={selectedSpotsId.includes(spot.spot_id)}
-            handleSelect={() => handleSelect(spot.spot_id)}
-            spot={spot}
+      ) : allSpots.length !== 0 ? (
+        <div>
+          {allSpots.map((spot) => (
+            <ExistPlaceItem
+              key={spot.spot_id}
+              checked={selectedSpotsId.includes(spot.spot_id)}
+              handleSelect={() => handleSelect(spot.spot_id)}
+              spot={spot}
+            />
+          ))}
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPage={totalPage}
           />
-        ))
+        </div>
+      ) : (
+        <section className="flex flex-col grow justify-center items-center gap-8">
+          <span className="text-6xl">⚠️</span>
+          <br />
+          <span className="text-3xl">장소 리뷰가 없습니다!</span>
+          <span className="text-xl">새로운 장소 리뷰를 먼저 작성해주세요!</span>
+        </section>
       )}
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPage={totalPage}
-      />
       {error && <ToastMsg title={error} id={Date.now()} timer={2000} />}
     </section>
   );
