@@ -177,7 +177,19 @@ include::{snippets}/courses/get-my-spots-detail-info/response-body.adoc[]
 ===== HTTP Response 예시
 include::{snippets}/courses/get-my-spots-detail-info/http-response.adoc[]
 
+=== 좋아요를 한 코스 목록 조회
 
+==== Request
 
+===== HTTP Request 예시
+include::{snippets}/courses/get-my-favorite-courses/http-request.adoc[]
+로그인 필수 : Y
 
+===== Query Parameter
+include::{snippets}/courses/get-my-favorite-courses/query-parameters.adoc[]
+
+==== Response
+include::{snippets}/courses/get-my-favorite-courses/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/courses/get-my-favorite-courses/http-response.adoc[]
 
