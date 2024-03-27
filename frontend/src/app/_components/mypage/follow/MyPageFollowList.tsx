@@ -1,6 +1,6 @@
 'use client';
 import { TMyPageFollow, TMyPageFollower } from '@/types/myPageResponse';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import Select from '../../ui/select/Select';
 import { getFollowList } from '../hooks/followActions';
@@ -65,35 +65,36 @@ export default function MyPageFollowList({
     setCurrentPage(1);
   };
 
-  const getFollowLists = useCallback(
-    async (pageNo: number, size: number, selectOption: string) => {
-      setIsLoading(true);
-      const followerList = await getFollowList(
-        pageNo,
-        size,
-        selectOption,
-        action,
-      );
-      if (followerList.status === 'failed') {
-        setAllFollowList([]);
-        setErrorText(followerList.message);
-        setTimeout(() => {
-          setErrorText('');
-        }, 1000);
-        setIsLoading(false);
-        return;
-      }
-
-      setAllFollowList(followerList.data.content);
-      setHasNext(followerList.data.has_next);
+  const getFollowLists = async (
+    pageNo: number,
+    size: number,
+    selectOption: string,
+  ) => {
+    setIsLoading(true);
+    const followerList = await getFollowList(
+      pageNo,
+      size,
+      selectOption,
+      action,
+    );
+    if (followerList.status === 'failed') {
+      setAllFollowList([]);
+      setErrorText(followerList.message);
+      setTimeout(() => {
+        setErrorText('');
+      }, 1000);
       setIsLoading(false);
-    },
-    [action],
-  );
+      return;
+    }
+
+    setAllFollowList(followerList.data.content);
+    setHasNext(followerList.data.has_next);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     getFollowLists(1, 5, selectOption);
-  }, [selectOption, getFollowLists]);
+  }, [selectOption]);
   return (
     <div className="px-4">
       <div className="flex justify-end mt-6 mb-10">
