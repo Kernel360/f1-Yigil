@@ -86,6 +86,6 @@ public class Place {
     }
 
     public String getRegionName() {
-        return region.getName();
+        return region != null ? region.getName() : "";
     }
 }
