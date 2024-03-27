@@ -1,17 +1,19 @@
 'use server';
 
+import z from 'zod';
 import { cookies } from 'next/headers';
 import { revalidateTag } from 'next/cache';
 
+import { parseResult } from '@/utils';
 import { getBaseUrl } from '@/app/utilActions';
 import {
-  TBackendRequestResult,
   backendErrorSchema,
   commentSchema,
   fetchableSchema,
   postResponseSchema,
 } from '@/types/response';
-import z from 'zod';
+
+import type { TBackendRequestResult } from '@/types/response';
 
 async function fetchComments(travelId: number, page: number, size: number) {
   const BASE_URL = await getBaseUrl();
@@ -25,13 +27,10 @@ async function fetchComments(travelId: number, page: number, size: number) {
     next: { tags: [`comments/${travelId}`] },
   });
 
-  return response.json();
+  return await response.json();
 }
 
-export async function postComment(
-  travelId: number,
-  content: string,
-): Promise<TBackendRequestResult<null>> {
+export async function postComment(travelId: number, content: string) {
   const session = cookies().get('SESSION')?.value;
   const BASE_URL = await getBaseUrl();
 
@@ -49,24 +48,13 @@ export async function postComment(
 
   const json = await response.json();
 
-  const error = backendErrorSchema.safeParse(json);
+  const result = parseResult(postResponseSchema, json);
 
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
+  if (result.status === 'succeed') {
+    revalidateTag(`comments/${travelId}`);
   }
 
-  const result = postResponseSchema.safeParse(json);
-
-  if (!result.success) {
-    console.error('알 수 없는 에러입니다!');
-    return { status: 'failed', message: '알 수 없는 에러입니다!' };
-  }
-
-  revalidateTag(`comments/${travelId}`);
-
-  return { status: 'succeed', data: null };
+  return result;
 }
 
 const fetchableComments = fetchableSchema(commentSchema);
@@ -86,12 +74,32 @@ export async function getComments(
     return { status: 'failed', message, code };
   }
 
-  const result = fetchableSchema(commentSchema).safeParse(json);
+  const fetchableComments = fetchableSchema(commentSchema);
 
-  if (!result.success) {
-    console.error(`알 수 없는 에러입니다!`);
-    return { status: 'failed', message: '알 수 없는 에러입니다!' };
+  const result = parseResult(fetchableComments, json);
+
+  return result;
+}
+
+export async function deleteComment(travelId: number, commentId: number) {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/comments/${commentId}`, {
+    method: 'DELETE',
+    headers: {
+      Cookie: `SESSION=${session}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const json = await response.json();
+
+  const result = parseResult(postResponseSchema, json);
+
+  if (result.status === 'succeed') {
+    revalidateTag(`comments/${travelId}`);
   }
 
-  return { status: 'succeed', data: result.data };
+  return result;
 }
