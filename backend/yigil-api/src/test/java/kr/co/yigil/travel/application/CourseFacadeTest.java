@@ -217,4 +217,22 @@ public class CourseFacadeTest {
 
         assertThat(result).isInstanceOf(CourseInfo.MySpotsInfo.class);
     }
+
+    @DisplayName("getFavoriteCoursesInfo 메서드가 유효한 요청이 들어왔을 때 CourseInfo의 MyFavoriteCoursesInfo 객체를 잘 반환하는지")
+    @Test
+    void getFavoriteCoursesInfo() {
+        Long memberId = 1L;
+        int totalPages = 1;
+        PageRequest pageable = PageRequest.of(0, 5);
+
+        CourseInfo.MyFavoriteCoursesInfo mockFavoriteCoursesInfo = mock(CourseInfo.MyFavoriteCoursesInfo.class);
+
+        when(courseService.getFavoriteCoursesInfo(eq(memberId), any(PageRequest.class))).thenReturn(mockFavoriteCoursesInfo);
+
+        var result = courseFacade.getFavoriteCoursesInfo(memberId, pageable);
+
+        assertThat(result).isNotNull()
+                .isInstanceOf(CourseInfo.MyFavoriteCoursesInfo.class)
+                .usingRecursiveComparison().isEqualTo(mockFavoriteCoursesInfo);
+    }
 }
