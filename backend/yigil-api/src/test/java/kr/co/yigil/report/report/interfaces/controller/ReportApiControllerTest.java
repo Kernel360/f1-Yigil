@@ -70,10 +70,12 @@ class ReportApiControllerTest {
         ReportDto.TravelReportCreateRequest request = ReportDto.TravelReportCreateRequest.builder()
                 .reportTypeId(1L)
                 .content("content")
-                .travelId(1L)
+                .targetId(1L)
+                .targetType("travel")
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         String json = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(post("/api/v1/reports")
@@ -86,13 +88,13 @@ class ReportApiControllerTest {
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestFields(
-                                fieldWithPath("reportTypeId").type(JsonFieldType.NUMBER).description("신고 타입 아이디"),
-                                fieldWithPath("content").type(JsonFieldType.STRING).description("신고 내용"),
-                                fieldWithPath("travelId").type(JsonFieldType.NUMBER).description("여행 아이디")
+                                fieldWithPath("report_type_id").type(JsonFieldType.NUMBER).description("신고 타입 아이디"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("신고 내용:[디자인에 없어서 안보내주셔도 됩니다]"),
+                                fieldWithPath("target_id").type(JsonFieldType.NUMBER).description("신고 대상 아이디"),
+                                fieldWithPath("target_type").type(JsonFieldType.STRING).description("신고 대상 타입: [travel,comment]")
                         ),
                         responseFields(
                                 fieldWithPath("message").description("응답 메시지")
-
                         )
                 ));
 

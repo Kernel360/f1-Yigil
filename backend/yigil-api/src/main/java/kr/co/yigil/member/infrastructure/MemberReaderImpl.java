@@ -45,4 +45,9 @@ public class MemberReaderImpl implements MemberReader {
     public boolean existsByNickname(String nickname) {
 		return memberRepository.existsByNickname(nickname);
 	}
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
 }

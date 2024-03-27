@@ -1,5 +1,5 @@
 'use client';
-import { TMapPlace } from '@/types/response';
+import { TMapPlace, TMyInfo } from '@/types/response';
 import React, {
   MutableRefObject,
   RefObject,
@@ -17,7 +17,7 @@ import MapMarker from './MapMarker';
 import LoadingIndicator from '../LoadingIndicator';
 import ToastMsg from '../ui/toast/ToastMsg';
 
-export default function ViewTravelMap() {
+export default function ViewTravelMap({ myPlaces }: { myPlaces: number[] }) {
   const navermaps = useNavermaps();
   const mapRef = useRef<naver.maps.Map>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,9 +33,11 @@ export default function ViewTravelMap() {
   });
 
   const [allPlaces, setAllPlaces] = useState<TMapPlace[]>([]);
+  const [writtenByMePlaces, setWrittenByMePlaces] = useState<TMapPlace[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [markerClickedId, setMarkerClickedId] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
   const [isGeolocationLoading, setIsGeolocationLoading] = useState(true);
   const { onSuccessGeolocation, onErrorGeolocation } = useGeolocation(
     mapRef,
@@ -81,13 +83,14 @@ export default function ViewTravelMap() {
     try {
       const placeList = await getNearPlaces(maxMinBounds, currentPage);
       if (!placeList.success) {
-        alert('장소 데이터를 불러오는데 실패했습니다');
+        setToastMsg('장소 데이터를 불러오는데 실패했습니다');
         return;
       }
       setAllPlaces(placeList.data.places);
       setTotalPages(placeList.data.total_pages);
     } catch (error) {
       console.log(error);
+      setToastMsg('알 수 없는 에러 발생');
     } finally {
       setIsLoading(false);
     }
@@ -131,26 +134,28 @@ export default function ViewTravelMap() {
             />
           </div>
         )}
-        {allPlaces.map((place) => (
-          <MapMarker
-            key={place.id}
-            {...place}
-            markerClickedId={markerClickedId}
-            setMarkerClickedId={setMarkerClickedId}
-            isClickedMarker={
-              place.id !== markerClickedId || markerClickedId === -1
-                ? false
-                : true
-            }
-          />
-        ))}
+        {allPlaces.map((place) => {
+          const isWrittenByMe =
+            !!myPlaces.length && myPlaces.includes(place.id);
+          return (
+            <MapMarker
+              key={place.id}
+              {...place}
+              markerClickedId={markerClickedId}
+              setMarkerClickedId={setMarkerClickedId}
+              isClickedMarker={
+                place.id !== markerClickedId || markerClickedId === -1
+                  ? false
+                  : true
+              }
+              setToastMsg={setToastMsg}
+              isWrittenByMe={isWrittenByMe}
+            />
+          );
+        })}
       </NaverMap>
-      {markerClickedId > 0 && (
-        <ToastMsg
-          title="한번 더 클릭하면 장소 상세페이지로 이동합니다"
-          timer={2000}
-          id={markerClickedId}
-        />
+      {toastMsg && (
+        <ToastMsg title={toastMsg} timer={2000} id={markerClickedId} />
       )}
 
       {!allPlaces.length && !isLoading && (

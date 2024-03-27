@@ -29,3 +29,25 @@ include::{snippets}/notifications/stream-notification/http-request.adoc[]
 
 ===== HTTP Response 예시
 include::{snippets}/notifications/stream-notification/http-response.adoc[]
+
+
+== NOTIFICATION API
+
+=== 알림 읽기 처리
+
+==== Request
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/notifications/read-notification/http-request.adoc[]
+===== request body
+include::{snippets}/notifications/read-notification/request-body.adoc[]
+
+==== Response
+
+===== HTTP Response 예시
+
+include::{snippets}/notifications/read-notification/http-response.adoc[]
+```
+
+

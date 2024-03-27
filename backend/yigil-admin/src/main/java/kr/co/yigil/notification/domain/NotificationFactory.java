@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class NotificationFactory {
     public Notification createNotification(NotificationType notificationType, Admin admin, Member receiver) {
         String message = notificationType.composeMessage(admin.getNickname(), receiver.getNickname());
-        return new Notification(receiver, message);
+        return new Notification(receiver, null,message);
     }
 
 }

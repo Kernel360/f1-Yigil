@@ -25,4 +25,6 @@ public interface PlaceService {
     List<Main> getPopularPlaceByDemographicsMore(Long memberId);
 
     Slice<Main> searchPlace(String keyword, Pageable pageable, Accessor accessor);
+
+    List<Long> getMyPlaceIds(Long memberId);
 }

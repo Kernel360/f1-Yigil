@@ -71,7 +71,7 @@ include::{snippets}/follows/get-my-follower-list/http-response.adoc[]
 로그인 필수 : Y
 
 // ===== Path parameter
-// include::{snippets}/follows/get-member-following-list/request-body.adoc[]
+// include::{snippets}/follows/get-receiver-following-list/request-body.adoc[]
 ===== HTTP Request 예시
 include::{snippets}/follows/get-member-following-list/http-request.adoc[]
 ==== Response
@@ -86,7 +86,7 @@ include::{snippets}/follows/get-member-following-list/http-response.adoc[]
 로그인 필수 : Y
 
 // ===== Path parameter
-// include::{snippets}/follows/get-member-follower-list/query-parameters.adoc[]
+// include::{snippets}/follows/get-receiver-follower-list/query-parameters.adoc[]
 ===== HTTP Request 예시
 include::{snippets}/follows/get-member-follower-list/http-request.adoc[]
 ==== Response

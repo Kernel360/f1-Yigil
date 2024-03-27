@@ -1,9 +1,13 @@
 'use client';
 
+import { useContext } from 'react';
+import { MemberContext } from '@/context/MemberContext';
 import Image from 'next/image';
 
 import RoundProfile from '../../ui/profile/RoundProfile';
 import IconWithCounts from '../../IconWithCounts';
+
+import FollowButton from '../FollowButton';
 import Reaction from '../../reaction/Reaction';
 
 import type { TCourse } from '@/types/response';
@@ -17,29 +21,35 @@ export default function Course({
   placeId: number;
   data: TCourse;
 }) {
+  const memberStatus = useContext(MemberContext);
   const {
     id: travelId,
     title,
     map_static_image_url,
+    owner_id,
     owner_nickname,
     owner_profile_image_url,
     rate,
     create_date,
     content,
     liked,
-    owner_id,
+    following,
   } = data;
 
   return (
     <article className="py-2 flex flex-col gap-4">
       <div className="px-4 flex justify-between items-center">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-1 items-center">
           <RoundProfile
             img={owner_profile_image_url}
             size={40}
             height="h-[40px]"
           />
-          <span>{owner_nickname}</span>
+          <span className="pl-2 text-lg font-medium">{owner_nickname}</span>
+          {memberStatus.isLoggedIn === 'true' &&
+            memberStatus.member.member_id !== owner_id && (
+              <FollowButton ownerId={owner_id} initialFollowing={following} />
+            )}
         </div>
         <IconWithCounts
           icon={

@@ -32,4 +32,6 @@ public interface MemberRepository extends JpaRepository <Member, Long> {
     void unbanMemberById(@Param("memberId") Long memberId);
 
 	boolean existsByNickname(String nickname);
+
+    boolean existsByEmail(String email);
 }
