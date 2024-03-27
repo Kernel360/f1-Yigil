@@ -13,6 +13,7 @@ import Reaction from '../../reaction/Reaction';
 import type { TCourse } from '@/types/response';
 
 import StarIcon from '/public/icons/star.svg';
+import ReportButton from '../ReportButton';
 
 export default function Course({
   placeId,
@@ -70,6 +71,9 @@ export default function Course({
       <div className="px-6 flex flex-col gap-2">
         <span className="self-end text-gray-400">{create_date}</span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{content}</div>
+        <div className="self-end">
+          <ReportButton parentId={travelId} />
+        </div>
       </div>
       <Reaction placeId={placeId} travelId={travelId} initialLiked={liked} />
     </article>

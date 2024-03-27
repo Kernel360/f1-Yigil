@@ -13,6 +13,7 @@ import Reaction from '../../reaction/Reaction';
 import StarIcon from '/public/icons/star.svg';
 
 import type { TSpot } from '@/types/response';
+import ReportButton from '../ReportButton';
 
 export default function Spot({
   placeId,
@@ -68,6 +69,9 @@ export default function Spot({
           {create_date.toLocaleDateString('ko-KR')}
         </span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{description}</div>
+        <div className="px-2 flex justify-end">
+          <ReportButton parentId={spotId} />
+        </div>
       </div>
       <Reaction placeId={placeId} travelId={spotId} initialLiked={liked} />
     </article>

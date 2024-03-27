@@ -233,3 +233,14 @@ export const mySpotIds = z.object({
 });
 
 export type TMySpotIds = z.infer<typeof mySpotIds>;
+
+const reportTypeSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+});
+
+export type TReportType = z.infer<typeof reportTypeSchema>;
+
+export const reportTypesSchema = z.object({
+  report_types: z.array(reportTypeSchema),
+});

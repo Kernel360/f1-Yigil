@@ -3,12 +3,14 @@
 import { z } from 'zod';
 import { cookies } from 'next/headers';
 
+import { parseResult } from '@/utils';
 import { getBaseUrl } from '@/app/utilActions';
 import {
   TBackendRequestResult,
   backendErrorSchema,
   courseSchema,
   spotSchema,
+  reportTypesSchema,
 } from '@/types/response';
 
 const spotsResponseSchema = z.object({
@@ -123,4 +125,21 @@ export async function getCourses(
   }
 
   return { status: 'succeed', data: result.data };
+}
+
+export async function getReportTypes() {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/reports/types`, {
+    headers: {
+      Cookie: `SESSION=${session}`,
+    },
+  });
+
+  const json = await response.json();
+
+  const result = parseResult(reportTypesSchema, json);
+
+  return result;
 }

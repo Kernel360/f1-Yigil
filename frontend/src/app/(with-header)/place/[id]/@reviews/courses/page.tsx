@@ -1,11 +1,13 @@
 import MemberProvider from '@/context/MemberContext';
+import ReportProvider from '@/context/ReportContext';
+
+import Courses from '@/app/_components/place/course/Courses';
 
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
-import { getCourses } from '../action';
+import { getCourses, getReportTypes } from '../action';
 
 import type { TMemberStatus } from '@/context/MemberContext';
-import Courses from '@/app/_components/place/course/Courses';
 
 export default async function CoursesPage({
   params,
@@ -19,6 +21,10 @@ export default async function CoursesPage({
     ? { member: memberResult.data, isLoggedIn: 'true' }
     : { isLoggedIn: 'false' };
 
+  const reportTypesResult = await getReportTypes();
+  const reportTypes =
+    reportTypesResult.status === 'succeed' ? reportTypesResult.data : undefined;
+
   const result = await getCourses(params.id);
 
   if (result.status === 'failed') {
@@ -27,11 +33,13 @@ export default async function CoursesPage({
 
   return (
     <MemberProvider status={memberStatus}>
-      <Courses
-        placeId={params.id}
-        initialCourses={result.data.courses}
-        initialHasNext={result.data.has_next}
-      />
+      <ReportProvider backendReportTypes={reportTypes?.report_types}>
+        <Courses
+          placeId={params.id}
+          initialCourses={result.data.courses}
+          initialHasNext={result.data.has_next}
+        />
+      </ReportProvider>
     </MemberProvider>
   );
 }

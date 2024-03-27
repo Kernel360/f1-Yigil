@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 import Spot from './Spot';
 import Spinner from '../../ui/Spinner';

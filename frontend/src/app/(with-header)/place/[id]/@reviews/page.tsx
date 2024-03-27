@@ -1,8 +1,11 @@
+import MemberProvider from '@/context/MemberContext';
+import ReportProvider from '@/context/ReportContext';
+
 import Spots from '@/app/_components/place/spot/Spots';
-import { getSpots } from './action';
+
+import { getReportTypes, getSpots } from './action';
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
-import MemberProvider from '@/context/MemberContext';
 
 import type { TMemberStatus } from '@/context/MemberContext';
 
@@ -18,6 +21,10 @@ export default async function SpotsPage({
     ? { member: memberResult.data, isLoggedIn: 'true' }
     : { isLoggedIn: 'false' };
 
+  const reportTypesResult = await getReportTypes();
+  const reportTypes =
+    reportTypesResult.status === 'succeed' ? reportTypesResult.data : undefined;
+
   const result = await getSpots(params.id);
 
   if (result.status === 'failed') {
@@ -28,12 +35,14 @@ export default async function SpotsPage({
 
   return (
     <MemberProvider status={memberStatus}>
-      <Spots
-        placeId={params.id}
-        initialPage={1}
-        initialHasNext={has_next}
-        initialSpots={spots}
-      />
+      <ReportProvider backendReportTypes={reportTypes?.report_types}>
+        <Spots
+          placeId={params.id}
+          initialPage={1}
+          initialHasNext={has_next}
+          initialSpots={spots}
+        />
+      </ReportProvider>
     </MemberProvider>
   );
 }
