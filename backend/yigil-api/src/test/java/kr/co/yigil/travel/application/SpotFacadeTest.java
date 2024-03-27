@@ -1,18 +1,5 @@
 package kr.co.yigil.travel.application;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.FileUploader;
 import kr.co.yigil.global.Selected;
@@ -31,6 +18,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SpotFacadeTest {
@@ -161,5 +157,20 @@ public class SpotFacadeTest {
         assertThat(result).isNotNull()
             .isInstanceOf(SpotInfo.MySpotsResponse.class)
             .usingRecursiveComparison().isEqualTo(mockSpotListResponse);
+    }
+
+    @DisplayName("getFavoriteSpotsInfo 메서드가 잘 동작하는지")
+    @Test
+    void getFavoriteSpotsInfo() {
+        Long memberId = 1L;
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        SpotInfo.MyFavoriteSpotsInfo mockFavoriteSpotsInfo = mock(SpotInfo.MyFavoriteSpotsInfo.class);
+
+        when(spotService.getFavoriteSpotsInfo(memberId, pageRequest)).thenReturn(mockFavoriteSpotsInfo);
+
+        SpotInfo.MyFavoriteSpotsInfo result = spotFacade.getFavoriteSpotsInfo(memberId, pageRequest);
+
+        assertEquals(mockFavoriteSpotsInfo, result);
+        verify(spotService).getFavoriteSpotsInfo(memberId, pageRequest);
     }
 }

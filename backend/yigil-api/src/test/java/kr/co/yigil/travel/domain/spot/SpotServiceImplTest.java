@@ -5,6 +5,7 @@ import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.AttachFiles;
 import kr.co.yigil.file.FileType;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.global.exception.ExceptionCode;
@@ -64,6 +65,8 @@ public class SpotServiceImplTest {
     private SpotSeriesFactory spotSeriesFactory;
     @Mock
     private FileUploader fileUploader;
+    @Mock
+    private FollowReader followReader;
 
     @InjectMocks
     private SpotServiceImpl spotService;
@@ -349,6 +352,30 @@ public class SpotServiceImplTest {
         assertThat(result.getMySpotDetailDtoList().size()).isEqualTo(2);
     }
 
+
+    @DisplayName("getFavoriteSpotsInfo 를 호출했을 때 즐겨찾기 스팟 정보 조회가 잘 되는지 확인")
+    @Test
+    void getFavoriteSpotsInfo() {
+        Long memberId = 1L;
+        PageRequest pageable = PageRequest.of(0, 10);
+        Spot spot = mock(Spot.class);
+        Place place = mock(Place.class);
+        Member member = mock(Member.class);
+
+        when(spotReader.getFavoriteSpotList(anyLong(), any())).thenReturn(new PageImpl<>(List.of(spot)));
+        when(spot.getPlace()).thenReturn(place);
+        when(spot.getMember()).thenReturn(member);
+        when(member.getProfileImageUrl()).thenReturn("image.utl");
+        when(member.getNickname()).thenReturn("nickname");
+        when(spot.getRate()).thenReturn(3.5);
+        when(spot.getCreatedAt()).thenReturn(LocalDateTime.now());
+        when(followReader.isFollowing(anyLong(), anyLong())).thenReturn(true);
+
+        var result = spotService.getFavoriteSpotsInfo(memberId, pageable);
+
+        assertThat(result).isNotNull().isInstanceOf(SpotInfo.MyFavoriteSpotsInfo.class);
+        assertThat(result.getContents().getFirst()).isInstanceOf(SpotInfo.FavoriteSpotInfo.class);
+    }
 }
 
 
