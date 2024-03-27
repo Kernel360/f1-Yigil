@@ -2,7 +2,10 @@ package kr.co.yigil.login.infrastructure;
 
 import static kr.co.yigil.global.exception.ExceptionCode.INVALID_ACCESS_TOKEN;
 
+import io.micrometer.common.util.StringUtils;
 import java.util.Collections;
+import kr.co.yigil.global.exception.BadRequestException;
+import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.global.exception.InvalidTokenException;
 import kr.co.yigil.login.domain.LoginCommand;
 import kr.co.yigil.login.interfaces.dto.response.GoogleTokenInfoResponse;
@@ -89,6 +92,17 @@ public class GoogleLoginStrategy implements LoginStrategy {
 
     private Member registerNewMember(LoginCommand.LoginRequest loginCommand) {
         Member newMember = loginCommand.toEntity(PROVIDER_NAME);
+        validateNewMember(newMember);
         return memberStore.save(newMember);
+    }
+
+    private void validateNewMember(Member newMember) {
+        if(memberReader.existsByEmail(newMember.getEmail())) {
+            throw new BadRequestException(ExceptionCode.ALREADY_USE_EMAIL);
+        }
+
+        if(StringUtils.isBlank(newMember.getNickname())) {
+            throw new BadRequestException(ExceptionCode.INVALID_REQUEST);
+        }
     }
 }
