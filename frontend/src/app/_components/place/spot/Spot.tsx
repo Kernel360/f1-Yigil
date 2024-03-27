@@ -19,7 +19,7 @@ export default function Spot({
 }) {
   const {
     id,
-    image_url_list,
+    image_urls,
     description,
     owner_profile_image_url,
     owner_nickname,
@@ -49,7 +49,7 @@ export default function Spot({
       </div>
       <div className="px-6 flex flex-col gap-2">
         <ImageCarousel
-          images={image_url_list}
+          images={image_urls}
           label="스팟 이미지들"
           variant="thumbnail"
         />
