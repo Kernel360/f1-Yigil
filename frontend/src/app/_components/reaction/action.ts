@@ -81,6 +81,34 @@ export async function getComments(
   return result;
 }
 
+export async function modifyComment(
+  travelId: number,
+  commentId: number,
+  draft: string,
+) {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/comments/${commentId}`, {
+    method: 'PUT',
+    headers: {
+      Cookie: `SESSION=${session}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ content: draft }),
+  });
+
+  const json = await response.json();
+
+  const result = parseResult(postResponseSchema, json);
+
+  if (result.status === 'succeed') {
+    revalidateTag(`comments/${travelId}`);
+  }
+
+  return result;
+}
+
 export async function deleteComment(travelId: number, commentId: number) {
   const BASE_URL = await getBaseUrl();
   const session = cookies().get('SESSION')?.value;
