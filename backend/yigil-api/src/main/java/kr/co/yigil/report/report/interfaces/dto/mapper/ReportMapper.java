@@ -1,6 +1,7 @@
 package kr.co.yigil.report.report.interfaces.dto.mapper;
 
 
+import kr.co.yigil.report.report.domain.ReportTarget;
 import kr.co.yigil.report.report.domain.dto.ReportCommand;
 import kr.co.yigil.report.report.domain.dto.ReportInfo;
 import kr.co.yigil.report.report.interfaces.dto.ReportDto;
@@ -17,11 +18,17 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface ReportMapper {
-    @Mapping(target = "reporterId", source = "reporterId")
+
     @Mapping(target = "reportTypeId", source = "request.reportTypeId")
     @Mapping(target = "content", source = "request.content")
-    @Mapping(target = "travelId", source = "request.travelId")
+    @Mapping(target = "targetId", source = "request.targetId")
+    @Mapping(target = "targetType", source = "request.targetType")
     ReportCommand.CreateCommand toCommand(ReportDto.TravelReportCreateRequest request, Long reporterId);
+
+    default ReportTarget toReportTarget(String source){
+        return ReportTarget.valueOf(source.toUpperCase());
+    }
+
 
     @Mapping(target = "myReports", source = "reports")
     ReportDto.MyReportsResponse toMyReportsResponse(ReportInfo.ReportsInfo reports);

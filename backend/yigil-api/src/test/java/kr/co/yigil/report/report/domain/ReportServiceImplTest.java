@@ -46,7 +46,7 @@ class ReportServiceImplTest {
                 .reporterId(1L)
                 .reportTypeId(1L)
                 .content("content")
-                .travelId(1L)
+                .targetId(1L)
                 .build();
         Member reporter = mock(Member.class);
         ReportType reportType = mock(ReportType.class);
