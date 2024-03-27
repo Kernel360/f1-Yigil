@@ -11,6 +11,7 @@ import {
   courseSchema,
   spotSchema,
   reportTypesSchema,
+  postResponseSchema,
 } from '@/types/response';
 
 const spotsResponseSchema = z.object({
@@ -142,4 +143,30 @@ export async function getReportTypes() {
   const result = parseResult(reportTypesSchema, json);
 
   return result;
+}
+
+export async function postReport(
+  reportTypeId: number,
+  targetId: number,
+  type: 'travel' | 'comment',
+) {
+  const BASE_URL = await getBaseUrl();
+  const session = cookies().get('SESSION')?.value;
+
+  const response = await fetch(`${BASE_URL}/v1/reports`, {
+    method: 'POST',
+    headers: {
+      Cookie: `SESSION=${session}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      report_type_id: reportTypeId,
+      target_id: targetId,
+      target_type: type,
+    }),
+  });
+
+  const json = await response.json();
+
+  return parseResult(postResponseSchema, json);
 }

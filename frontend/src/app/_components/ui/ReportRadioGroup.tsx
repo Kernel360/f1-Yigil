@@ -1,16 +1,22 @@
 import * as RadioGroup from '@radix-ui/react-radio-group';
 
+import type { Dispatch, SetStateAction } from 'react';
 import type { TReportType } from '@/types/response';
 
 export default function ReportRadioGroup({
   reportTypes,
+  reportTypeId,
+  setReportTypeId,
 }: {
   reportTypes?: TReportType[];
+  reportTypeId: number;
+  setReportTypeId: Dispatch<SetStateAction<number>>;
 }) {
   return (
     <RadioGroup.Root
       className="p-4 flex flex-col items-center gap-4 grow"
-      defaultValue={reportTypes && reportTypes[0].id.toString()}
+      value={reportTypeId.toString()}
+      onValueChange={(value) => setReportTypeId(Number.parseInt(value, 10))}
     >
       {reportTypes?.map(({ id, name }) => (
         <div className="w-full flex items-center gap-3" key={id}>

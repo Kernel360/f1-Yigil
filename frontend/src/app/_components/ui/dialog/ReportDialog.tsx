@@ -4,20 +4,25 @@ import { useEffect, useState } from 'react';
 
 import ViewPortal from '../../Portal';
 import LoadingIndicator from '../../LoadingIndicator';
+import ReportRadioGroup from '../ReportRadioGroup';
 
 import XMarkIcon from '/public/icons/x-mark.svg';
 
+import type { Dispatch, SetStateAction } from 'react';
 import type { TReportType } from '@/types/response';
-import ReportRadioGroup from '../ReportRadioGroup';
 
 export default function ReportDialog({
   reportTypes,
   closeModal,
   handleConfirm,
+  reportTypeId,
+  setReportTypeId,
 }: {
   reportTypes?: TReportType[];
   closeModal: () => void;
   handleConfirm: () => Promise<void>;
+  reportTypeId: number;
+  setReportTypeId: Dispatch<SetStateAction<number>>;
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -68,7 +73,11 @@ export default function ReportDialog({
                 <XMarkIcon className="w-6 h-6 stroke-gray-500" />
               </button>
             </div>
-            <ReportRadioGroup reportTypes={reportTypes} />
+            <ReportRadioGroup
+              reportTypes={reportTypes}
+              reportTypeId={reportTypeId}
+              setReportTypeId={setReportTypeId}
+            />
             <div className="flex justify-end">
               <button
                 className="w-1/4 py-1 text-lg rounded-lg bg-blue-500 text-white"
@@ -81,7 +90,7 @@ export default function ReportDialog({
           {isLoading && (
             <div className="absolute top-0 rounded-xl w-full h-full bg-black/25 z-30 flex justify-center items-center">
               <div className="bg-white rounded-lg w-2/3 h-2/3 flex justify-center items-center">
-                <LoadingIndicator loadingText="신고중" style="rounded-xl" />
+                <LoadingIndicator loadingText="신고 중..." style="rounded-xl" />
               </div>
             </div>
           )}
