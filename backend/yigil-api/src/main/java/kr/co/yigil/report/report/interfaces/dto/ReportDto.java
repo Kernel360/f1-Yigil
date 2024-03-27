@@ -14,7 +14,8 @@ public class ReportDto {
     public static class TravelReportCreateRequest {
         private Long reportTypeId;
         private String content;
-        private Long travelId;
+        private Long targetId;
+        private String targetType;
     }
 
     @Data

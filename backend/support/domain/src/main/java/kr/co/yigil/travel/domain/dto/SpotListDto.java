@@ -1,10 +1,10 @@
 package kr.co.yigil.travel.domain.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import java.time.LocalDateTime;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+import java.time.LocalDateTime;
+@Getter
 public class SpotListDto extends ImageFileDto {
 
     private final Long spotId;
@@ -26,6 +26,4 @@ public class SpotListDto extends ImageFileDto {
         this.createdDate = createdDate;
         this.isPrivate = isPrivate;
     }
-
-
 }

@@ -24,6 +24,7 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private ReportType reportType;
 
+    @Column(length = 200)
     private String content;
 
     @Enumerated(EnumType.STRING)
@@ -35,15 +36,17 @@ public class Report {
     private Long targetId;
 
     @Enumerated(EnumType.STRING)
-    private ReportTargetType reportTargetType;
+    @Column(length = 30)
+    private ReportTarget targetType;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Report(ReportType reportType, String content, Long targetId, Member reporter) {
+    public Report(ReportType reportType, String content, Long targetId, ReportTarget targetType,Member reporter) {
         this.reportType = reportType;
         this.content = content;
         this.targetId = targetId;
+        this.targetType = targetType;
         this.reporter = reporter;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
