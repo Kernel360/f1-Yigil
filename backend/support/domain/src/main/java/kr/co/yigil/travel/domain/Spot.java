@@ -34,7 +34,7 @@ public class Spot extends Travel {
     private Place place;
 
     public Spot(final Long id, final Member member, final Point location, final boolean isInCourse, final String description, final AttachFiles attachFiles,
-        final Place place, final double rate) {
+                final Place place, final double rate) {
         super(id, member, "", description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;
@@ -43,10 +43,9 @@ public class Spot extends Travel {
         this.place.updateLatestUploadedTime();
     }
 
-
     public Spot(final Member member, final Point location, final boolean isInCourse,
-            final String description, final AttachFiles attachFiles, final Place place,
-            final double rate) {
+                final String description, final AttachFiles attachFiles, final Place place,
+                final double rate) {
         super(member, "", description, rate, false);
         this.location = location;
         this.isInCourse = isInCourse;
@@ -63,9 +62,12 @@ public class Spot extends Travel {
     public void changeInCourse() {
         this.isInCourse = true;
     }
-    public void changeOutOfCourse() { this.isInCourse = false; }
 
-    public List<String> getImageUrls(){
+    public void changeOutOfCourse() {
+        this.isInCourse = false;
+    }
+
+    public List<String> getImageUrls() {
         return attachFiles.getUrls();
     }
 }
