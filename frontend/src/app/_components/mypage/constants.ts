@@ -34,8 +34,8 @@ export const myPageMyTab = [
     label: '팔로워',
   },
   {
-    href: '/mypage/my/follow',
-    label: '팔로우',
+    href: '/mypage/my/following',
+    label: '팔로잉',
   },
 ];
 export const myPageTravelTabs = [
