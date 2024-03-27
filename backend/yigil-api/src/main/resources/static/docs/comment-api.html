@@ -598,6 +598,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">comment의 정보</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].deleted</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제 여부</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 id</p></td>
@@ -645,10 +650,11 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 497
+Content-Length: 543
 
 {
   "content" : [ {
+    "deleted" : false,
     "id" : 1,
     "content" : "content",
     "member_id" : 1,
@@ -657,6 +663,7 @@ Content-Length: 497
     "child_count" : 3,
     "created_at" : "2024-03-01"
   }, {
+    "deleted" : false,
     "id" : 2,
     "content" : "content2",
     "member_id" : 1,
@@ -756,6 +763,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">comment의 정보</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].deleted</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제 여부</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 id</p></td>
@@ -803,10 +815,11 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 497
+Content-Length: 543
 
 {
   "content" : [ {
+    "deleted" : false,
     "id" : 1,
     "content" : "content",
     "member_id" : 1,
@@ -815,6 +828,7 @@ Content-Length: 497
     "child_count" : 0,
     "created_at" : "2024-03-01"
   }, {
+    "deleted" : false,
     "id" : 2,
     "content" : "content2",
     "member_id" : 1,

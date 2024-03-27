@@ -23,6 +23,7 @@ public interface CommentMapper {
     //response
 
     CommentDto.CommentsResponse of(CommentInfo.CommentsResponse commentsResponse);
+    CommentDto.CommentsUnitInfo of(CommentInfo.CommentsUnitInfo commentsUnitInfo);
 
     CommentDto.CommentDeleteResponse of(CommentInfo.DeleteResponse commentDeleteResponse);
 
