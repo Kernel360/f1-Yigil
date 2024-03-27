@@ -156,7 +156,7 @@ public class SpotInfo {
             this.placeId = spot.getPlace().getId();
             this.placeName = spot.getPlace().getName();
             this.rate = spot.getRate();
-            this.imageUrl = spot.getAttachFiles().getUrls().get(0);
+            this.imageUrl = spot.getRepresentativeImageUrl();
             this.createdDate = spot.getCreatedAt().toString();
 
             this.writerId = spot.getMember().getId();

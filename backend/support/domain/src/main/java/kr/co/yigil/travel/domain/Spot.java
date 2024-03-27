@@ -68,6 +68,12 @@ public class Spot extends Travel {
     }
 
     public List<String> getImageUrls() {
+        if(attachFiles.getUrls().isEmpty())
+            throw new RuntimeException("Spot에 등록된 이미지가 없습니다.");
         return attachFiles.getUrls();
+    }
+
+    public String getRepresentativeImageUrl(){
+        return getImageUrls().getFirst();
     }
 }

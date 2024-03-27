@@ -10,7 +10,6 @@ import kr.co.yigil.travel.infrastructure.CourseQueryDslRepository;
 import kr.co.yigil.travel.infrastructure.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
@@ -45,7 +44,7 @@ public class CourseReaderImpl implements CourseReader {
     }
 
     @Override
-    public Page<Course> getFavoriteCourses(Long memberId, PageRequest pageRequest) {
+    public Page<Course> getFavoriteCourses(Long memberId, Pageable pageRequest) {
         return courseRepository.findAllMembersFavoriteCourses(memberId, pageRequest);
     }
 }
