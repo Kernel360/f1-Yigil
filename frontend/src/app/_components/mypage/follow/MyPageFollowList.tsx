@@ -42,7 +42,6 @@ export default function MyPageFollowList({
   const ref = useRef<HTMLDivElement | null>(null);
 
   const getMoreFollows = async () => {
-    setCurrentPage((prev) => (prev += 1));
     const followList = await getFollowList(
       currentPage + 1,
       5,
@@ -56,6 +55,7 @@ export default function MyPageFollowList({
     }
     setAllFollowList((prev) => [...prev, ...followList.data.content]);
     setHasNext(followList.data.has_next);
+    setCurrentPage((prev) => (prev += 1));
   };
 
   useIntersectionObserver(ref, getMoreFollows, hasNext);

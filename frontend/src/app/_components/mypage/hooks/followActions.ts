@@ -40,7 +40,7 @@ export const getFollowList = async (
       },
     );
     const followList = await res.json();
-    console.log(followList);
+
     const error = backendErrorSchema.safeParse(followList);
 
     if (error.success) {
@@ -59,7 +59,7 @@ export const getFollowList = async (
       console.error(parsedFollowList.error.message);
       return { status: 'failed', message: '알 수 없는 에러입니다.' };
     }
-    return JSON.parse(JSON.stringify(parsedFollowList));
+    return { status: 'succeed', data: parsedFollowList.data };
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
