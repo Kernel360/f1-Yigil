@@ -9,15 +9,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CourseReaderImplTest {
@@ -72,5 +74,20 @@ public class CourseReaderImplTest {
         Slice<Course> result = courseReader.searchCourseByPlaceName(keyword, pageable);
 
         assertEquals(expectedSlice, result);
+    }
+
+    @DisplayName("getFavoriteCourses 메서드가 Course의 Page를 잘 반환하는지")
+    @Test
+    void getFavoriteCourses() {
+        Long memberId = 1L;
+        Pageable pageable = mock(Pageable.class);
+        Course mockCourse = mock(Course.class);
+        Page<Course> expectedPage = new PageImpl<>(List.of(mockCourse));
+        doReturn(expectedPage).when(courseRepository).findAllMembersFavoriteCourses(memberId, pageable);
+
+        var result = courseReader.getFavoriteCourses(memberId, pageable);
+
+        assertEquals(expectedPage, result);
+
     }
 }

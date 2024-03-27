@@ -12,10 +12,7 @@ import kr.co.yigil.travel.interfaces.dto.CourseDto;
 import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.mapper.CourseMapper;
 import kr.co.yigil.travel.interfaces.dto.request.MySpotsDetailRequest;
-import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
-import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
-import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
-import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
+import kr.co.yigil.travel.interfaces.dto.response.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -601,5 +598,68 @@ public class CourseApiControllerTest {
                         )
                 ));
 
+    }
+
+    @DisplayName("내가 좋아요를 누른 코스 목록 조회가 잘 되는지")
+    @Test
+    void getMyFavoriteCourses() throws Exception {
+
+        MyFavoriteCoursesResponse.FavoriteCourseDto favoriteCourseDto = new MyFavoriteCoursesResponse.FavoriteCourseDto();
+        favoriteCourseDto.setCourseId(1L);
+        favoriteCourseDto.setTitle("test");
+        favoriteCourseDto.setRate(4.5);
+        favoriteCourseDto.setSpotCount(10);
+        favoriteCourseDto.setCreatedDate(LocalDateTime.now().toString());
+        favoriteCourseDto.setMapStaticImageUrl("images/map.jpg");
+        favoriteCourseDto.setWriterId(1L);
+        favoriteCourseDto.setWriterNickname("nickname");
+        favoriteCourseDto.setWriterProfileImageUrl("images/profile.jpg");
+        favoriteCourseDto.setFollowing(true);
+
+        MyFavoriteCoursesResponse response = new MyFavoriteCoursesResponse();
+        response.setContents(List.of(favoriteCourseDto));
+        response.setTotalPages(1);
+
+        when(courseFacade.getFavoriteCoursesInfo(anyLong(), any(PageRequest.class))).thenReturn(mock(CourseInfo.MyFavoriteCoursesInfo.class));
+        when(courseMapper.toMyFavoriteCoursesResponse(any(CourseInfo.MyFavoriteCoursesInfo.class))).thenReturn(response);
+
+
+        mockMvc.perform(get("/api/v1/courses/my/favorite")
+                        .param("page", "1")
+                        .param("size", "5")
+                        .param("sortBy", "title")
+                        .param("sortOrder", "asc")
+                )
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "courses/get-my-favorite-courses",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        queryParameters(
+                                parameterWithName("page").description("현재 페이지 - default:1")
+                                        .optional(),
+                                parameterWithName("size").description("페이지 크기 - default:5")
+                                        .optional(),
+                                parameterWithName("sortBy").description(
+                                        "정렬 옵션 - title(디폴트값) / title").optional(),
+                                parameterWithName("sortOrder").description(
+                                        "정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("contents[].course_id").type(JsonFieldType.NUMBER).description("코스 ID"),
+                                fieldWithPath("contents[].title").type(JsonFieldType.STRING).description("코스 제목"),
+                                fieldWithPath("contents[].rate").type(JsonFieldType.NUMBER).description("코스 평점"),
+                                fieldWithPath("contents[].spot_count").type(JsonFieldType.NUMBER).description("코스 포함 장소 수"),
+                                fieldWithPath("contents[].created_date").type(JsonFieldType.STRING).description("코스 생성일"),
+                                fieldWithPath("contents[].map_static_image_url").type(JsonFieldType.STRING).description(
+                                        "코스 지도 이미지 URL"),
+                                fieldWithPath("contents[].writer_id").type(JsonFieldType.NUMBER).description("코스 작성자 ID"),
+                                fieldWithPath("contents[].writer_nickname").type(JsonFieldType.STRING).description("코스 작성자 닉네임"),
+                                fieldWithPath("contents[].writer_profile_image_url").type(JsonFieldType.STRING).description(
+                                        "코스 작성자 프로필 이미지 URL"),
+                                fieldWithPath("contents[].following").type(JsonFieldType.BOOLEAN).description("팔로잉 여부"),
+                                fieldWithPath("total_pages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+                        )
+                ));
     }
 }

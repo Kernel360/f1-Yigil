@@ -48,6 +48,7 @@ include::{snippets}/notifications/read-notification/request-body.adoc[]
 ===== HTTP Response 예시
 
 include::{snippets}/notifications/read-notification/http-response.adoc[]
-```
+
+
 
 

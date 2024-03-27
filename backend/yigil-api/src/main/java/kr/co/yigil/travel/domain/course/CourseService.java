@@ -7,6 +7,7 @@ import kr.co.yigil.travel.domain.course.CourseCommand.ModifyCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequest;
 import kr.co.yigil.travel.domain.course.CourseCommand.RegisterCourseRequestWithSpotInfo;
 import kr.co.yigil.travel.domain.course.CourseInfo.Main;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 public interface CourseService {
@@ -20,4 +21,6 @@ public interface CourseService {
 
     CourseInfo.MyCoursesResponse retrieveCourseList(Long memberId, Pageable pageable, Selected selected);
     CourseInfo.Slice searchCourseByPlaceName(String keyword, Accessor accessor, Pageable pageable);
+
+    CourseInfo.MyFavoriteCoursesInfo getFavoriteCoursesInfo(Long memberId, PageRequest pageRequest);
 }
