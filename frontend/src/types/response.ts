@@ -227,3 +227,9 @@ export const existingSpotsSchema = z.object({
 
 export type TExistingSpot = z.infer<typeof existingSpotSchema>;
 export type TExistingSpots = z.infer<typeof existingSpotsSchema>;
+
+export const mySpotIds = z.object({
+  ids: z.array(z.number()),
+});
+
+export type TMySpotIds = z.infer<typeof mySpotIds>;
