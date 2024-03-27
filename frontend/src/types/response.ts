@@ -57,6 +57,7 @@ export const courseSchema = z.object({
   owner_nickname: z.string(),
   owner_profile_image_url: z.string(),
   liked: z.boolean(),
+  following: z.boolean(),
 });
 
 export type TCourse = z.infer<typeof courseSchema>;
@@ -175,7 +176,7 @@ export type TRegion = z.infer<typeof regionSchema>;
 
 export const spotSchema = z.object({
   id: z.number().int(),
-  image_url_list: z.array(z.string()),
+  image_urls: z.array(z.string()),
   description: z.string(),
   owner_id: z.number().int(),
   owner_profile_image_url: z.string(),
@@ -183,6 +184,7 @@ export const spotSchema = z.object({
   rate: z.number(),
   create_date: z.coerce.date(),
   liked: z.boolean(),
+  following: z.boolean(),
 });
 
 export type TSpot = z.infer<typeof spotSchema>;
@@ -225,3 +227,9 @@ export const existingSpotsSchema = z.object({
 
 export type TExistingSpot = z.infer<typeof existingSpotSchema>;
 export type TExistingSpots = z.infer<typeof existingSpotsSchema>;
+
+export const mySpotIds = z.object({
+  ids: z.array(z.number()),
+});
+
+export type TMySpotIds = z.infer<typeof mySpotIds>;
