@@ -61,3 +61,12 @@ export const scrollToTop = () => {
 export const cdnPathToRelativePath = (path: string) => {
   return path.split('http://cdn.yigil.co.kr/')[1];
 };
+
+export function checkBatchimEnding(word: string) {
+  const lastLetter = word[word.length - 1];
+  const uni = lastLetter.charCodeAt(0);
+
+  if (uni < 44032 || uni > 55203) return false;
+
+  return (uni - 44032) % 28 != 0;
+}
