@@ -30,6 +30,9 @@ export default function NotificationIcon() {
       eventSource.addEventListener('error', (e) => {
         console.error('EventSource 에러 발생:', e);
         setErrorText('실시간 알림을 위한 서버와의 연결이 끊어졌습니다.');
+        setTimeout(() => {
+          setErrorText('');
+        }, 2000);
         eventSource.close();
       });
 
