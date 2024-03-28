@@ -1,5 +1,5 @@
-('use client');
-import { TMyPageCourse, TMyPagePlace } from '@/types/myPageResponse';
+'use client';
+import { TMyPageFavoriteCourse } from '@/types/myPageResponse';
 import React, { useEffect, useRef, useState } from 'react';
 import Select from '../../ui/select/Select';
 import ToastMsg from '../../ui/toast/ToastMsg';
@@ -8,8 +8,8 @@ import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { scrollToTop } from '@/utils';
 
 import LikeButton from '../../course/LikeButton';
-import MyPagePlaceItem from '../bookmark/MyPagePlaceItem';
-import { getFavoriteCourses, getFavoritePlaces } from './FavoriteActions';
+import { getFavoriteCourses } from './FavoriteActions';
+import CourseItem from '../CourseItem';
 
 const sortOptions = [
   { label: '이름순', value: 'place_name' },
@@ -22,7 +22,7 @@ export default function FavoriteCourseList({
   favoriteCourseList,
   has_next,
 }: {
-  favoriteCourseList: TMyPageCourse[];
+  favoriteCourseList: TMyPageFavoriteCourse['contents'];
   has_next: boolean;
 }) {
   const [sortOption, setSortOption] = useState('desc');
@@ -36,23 +36,29 @@ export default function FavoriteCourseList({
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const getMoreBookMarks = async () => {
-    setCurrentPage((prev) => (prev += 1));
-    const favoriteCourseList = await getFavoritePlaces(
+  const getMoreFavoriteCourses = async () => {
+    const favoriteCourseList = await getFavoriteCourses(
       currentPage + 1,
       divideCount,
       sortOption,
     );
     if (favoriteCourseList.status === 'failed') {
-      setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
+      setErrorText('코스 데이터를 불러오는데 실패했습니다.');
       setIsLoading(false);
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       return;
     }
-    // setHasNext((prev) => (prev = favoriteCourseList.data));
-    // setAllFavoriteCourseList((prev) => [...prev, ...favoriteCourseList.data]);
+    setHasNext((prev) => (prev = favoriteCourseList.data.has_next));
+    setAllFavoriteCourseList((prev) => [
+      ...prev,
+      ...favoriteCourseList.data.contents,
+    ]);
+    setCurrentPage((prev) => (prev += 1));
   };
 
-  useIntersectionObserver(ref, getMoreBookMarks, hasNext);
+  useIntersectionObserver(ref, getMoreFavoriteCourses, hasNext);
 
   const onChangeSortOption = (option: string) => {
     setSortOption(option);
@@ -63,26 +69,24 @@ export default function FavoriteCourseList({
     size: number,
     sortOrder: string,
   ) => {
-    try {
-      setIsLoading(true);
-      const favoritePlaceList = await getFavoriteCourses(
-        pageNum,
-        size,
-        sortOrder,
-      );
-      if (favoritePlaceList.status === 'failed') {
-        // setAllFavoriteCourseList([]);
-        setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
-        setIsLoading(false);
-        return;
-      }
-      // setHasNext((prev) => (prev = favoritePlaceList.data.has_next));
-      // setAllFavoriteCourseList([...favoritePlaceList.data.bookmarks]);
-    } catch (error) {
-      setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
-    } finally {
+    setIsLoading(true);
+    const favoritePlaceList = await getFavoriteCourses(
+      pageNum,
+      size,
+      sortOrder,
+    );
+    if (favoritePlaceList.status === 'failed') {
+      setAllFavoriteCourseList([]);
+      setErrorText('코스 데이터를 불러오는데 실패했습니다.');
       setIsLoading(false);
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
+      return;
     }
+    setHasNext((prev) => (prev = favoritePlaceList.data.has_next));
+    setAllFavoriteCourseList(favoritePlaceList.data.contents);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -106,18 +110,27 @@ export default function FavoriteCourseList({
       {allFavoriteCourseList.map(({ title, course_id, ...course }, idx) => (
         <div
           key={`${title}-${idx}`}
-          className={`flex items-center border-b-2 ${
+          className={`flex items-center border-b-2 py-6 ${
             idx === 0 && 'border-t-2'
           }`}
         >
-          {/* <MyPagePlaceItem place_id={place_id} {...bookmark} /> */}
-          {/** mypageCourseItem */}
-          <LikeButton
-            travelId={course_id}
-            liked={true}
-            sizes="w-5 h-5"
-            position=""
-          />
+          <div className="flex-[5]">
+            <CourseItem
+              course_id={course_id}
+              {...course}
+              title={title}
+              is_private={false}
+            />
+          </div>
+          <div className="relative flex-[1] flex justify-end">
+            <LikeButton
+              travelId={course_id}
+              liked={true}
+              sizes="w-9 h-9"
+              position=""
+              isLoggedIn="true"
+            />
+          </div>
         </div>
       ))}
 

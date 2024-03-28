@@ -15,14 +15,14 @@ export const myPageTabs = [
     label: 'MY',
   },
   {
-    href: '/mypage/favorite',
+    href: '/mypage/favorite/course',
     label: '좋아요',
   },
 ];
 
 export const myPageFavoriteTabs = [
   {
-    href: '/mypage/favorite/place',
+    href: '/mypage/favorite/spot',
     label: '장소',
   },
   {

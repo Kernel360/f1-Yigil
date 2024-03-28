@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import StarIcon from '/public/icons/star.svg';
-import IconWithCounts from '../IconWithCounts';
+
 import { TMyPagePlace } from '@/types/myPageResponse';
 import PlaceholderImage from '/public/images/placeholder.png';
+import IconWithCounts from '../IconWithCounts';
 
 export default function MyPagePlaceItem({
   place_id,

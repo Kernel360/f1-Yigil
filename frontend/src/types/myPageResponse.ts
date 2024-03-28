@@ -101,7 +101,7 @@ export const mypageCourseDetailSchema = z.object({
   map_static_image_url: z.string(),
   description: z.string(),
   line_string_json: z.string().transform((json) => JSON.parse(json)),
-  create_date: z.coerce
+  created_date: z.coerce
     .date()
     .transform((date) => date.toLocaleDateString('ko-kr')),
   spots: z.array(myPageCourseDetailSpotSchema),
@@ -130,8 +130,16 @@ export const myPageFavoriteCourseSchema = z.object({
     .transform((date) => date.toLocaleDateString('ko-kr')),
   map_static_image_url: z.string(),
   writer_id: z.number(),
-  
+  writer_nickname: z.string(),
+  writer_profile_image_url: z.string(),
+  following: z.boolean(),
 });
-/**
- * TODO: 스키마 추가
- */
+
+export const myPageFavoriteCourseResponse = z.object({
+  contents: z.array(myPageFavoriteCourseSchema),
+  has_next: z.boolean(),
+});
+
+export type TMyPageFavoriteCourse = z.infer<
+  typeof myPageFavoriteCourseResponse
+>;

@@ -63,11 +63,11 @@ export default function LikeButton({
       disabled={isLoading}
     >
       {isLoading ? (
-        <Spinner size="w-12 h-12" />
+        <Spinner size={sizes} />
       ) : (
         <HeartIcon
           className={`${sizes} stroke-[3px] ${
-            travelLiked ? 'stroke-red-500 fill-red-500' : 'stroke-white'
+            travelLiked ? 'stroke-red-500 fill-red-500' : 'stroke-[#9CA3AF]'
           }`}
         />
       )}
