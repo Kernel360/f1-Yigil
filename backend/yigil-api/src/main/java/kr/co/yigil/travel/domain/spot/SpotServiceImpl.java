@@ -82,7 +82,16 @@ public class SpotServiceImpl implements SpotService {
         }
 
         var attachFiles = spotSeriesFactory.initAttachFiles(command);
-        Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest(), attachFiles.getFiles().getFirst()));
+
+        Place place = optionalPlace.orElseGet(() -> {
+            AttachFile placeAttachFile = new AttachFile(
+                    attachFiles.getRepresentativeFile().getFileType(),
+                    attachFiles.getRepresentativeFile().getFileUrl(),
+                    attachFiles.getRepresentativeFile().getOriginalFileName(),
+                    attachFiles.getRepresentativeFile().getFileSize()
+            );
+            return registerNewPlace(command.getRegisterPlaceRequest(), placeAttachFile);
+        });
         placeCacheStore.incrementSpotCountInPlace(place.getId());
         placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), command.getRate());
         spotStore.store(command.toEntity(member, place, false, attachFiles));
