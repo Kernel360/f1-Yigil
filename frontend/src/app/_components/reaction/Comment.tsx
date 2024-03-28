@@ -21,6 +21,7 @@ export default function Comment({
 }) {
   const {
     id: commentId,
+    deleted,
     member_image_url,
     member_nickname,
     created_at,
@@ -29,7 +30,7 @@ export default function Comment({
   } = data;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(content === '삭제된 댓글입니다.');
+  const [isDeleted, setIsDeleted] = useState(deleted);
   const [error, setError] = useState('');
 
   const [draft, setDraft] = useState(content);
