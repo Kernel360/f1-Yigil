@@ -56,7 +56,7 @@ export default function CourseDetail({
     map_static_image_url,
     description,
     line_string_json,
-    create_date,
+    created_date,
   } = courseDetail;
 
   const [isMapOpen, setIsMapOpen] = useState(false);
@@ -326,7 +326,7 @@ export default function CourseDetail({
             </button>
           </div>
           <span className="self-end text-gray-400 font-medium">
-            {create_date}
+            {created_date}
           </span>
           <div className="my-4 flex flex-col gap-4">
             {isModifyMode ? (
