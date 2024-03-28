@@ -132,3 +132,6 @@ export const myPageFavoriteCourseSchema = z.object({
   writer_id: z.number(),
   
 });
+/**
+ * TODO: 스키마 추가
+ */
