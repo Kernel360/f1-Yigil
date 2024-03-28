@@ -16,6 +16,6 @@ public interface CourseReader {
 
     Slice<Course> searchCourseByPlaceName(String keyword, Pageable pageable);
 
-    Page<Course> getFavoriteCourses(Long memberId, Pageable pageRequest);
+    Slice<Course> getFavoriteCourses(Long memberId, Pageable pageRequest);
 }
 

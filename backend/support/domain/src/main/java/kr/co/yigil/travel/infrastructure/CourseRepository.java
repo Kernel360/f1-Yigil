@@ -30,5 +30,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Slice<Course> findByPlaceNameContaining(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT c FROM Course c inner JOIN Favor f ON c.id = f.travel.id WHERE c.isDeleted = false AND f.member.id = :memberId")
-    Page<Course> findAllMembersFavoriteCourses(Long memberId, Pageable pageRequest);
+    Slice<Course> findAllMembersFavoriteCourses(Long memberId, Pageable pageRequest);
 }

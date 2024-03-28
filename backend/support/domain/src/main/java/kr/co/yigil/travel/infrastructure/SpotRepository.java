@@ -53,5 +53,5 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     List<Long> findPlaceIdByMemberId(Long memberId);
 
     @Query("SELECT s FROM Spot s INNER JOIN Favor f ON s.id = f.travel.id WHERE s.isDeleted = false AND f.member.id = :memberId")
-    Page<Spot> findAllMembersFavoriteSpot(Long memberId, Pageable pageRequest);
+    Slice<Spot> findAllMembersFavoriteSpot(Long memberId, Pageable pageRequest);
 }
