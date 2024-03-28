@@ -9,7 +9,7 @@ import HeartIcon from '/public/icons/heart.svg';
 
 import type { EventFor } from '@/types/type';
 import { postLikeCourse } from './action';
-import { MemberContext } from '@/context/MemberContext';
+
 import ToastMsg from '../ui/toast/ToastMsg';
 
 export default function LikeButton({
@@ -17,13 +17,14 @@ export default function LikeButton({
   sizes,
   travelId,
   liked,
+  isLoggedIn,
 }: {
   position: string;
   sizes: string;
   travelId: number;
   liked: boolean;
+  isLoggedIn: 'true' | 'false';
 }) {
-  const { isLoggedIn } = useContext(MemberContext);
   const { push } = useRouter();
 
   const [travelLiked, setTravelLiked] = useState(liked);

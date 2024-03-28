@@ -20,16 +20,16 @@ export const myPageSpotListSchema = z.object({
   total_pages: z.number(),
 });
 
-export type TMyPagePlace = z.infer<typeof myPagePlaceItemSchema>;
-export const myPagePlaceItemSchema = z.object({
+export const myPagePlaceSchema = z.object({
   place_id: z.number().int(),
   place_name: z.string(),
   place_image: z.string(),
   rate: z.number(),
 });
+export type TMyPagePlace = z.infer<typeof myPagePlaceSchema>;
 
 export const myPageBookmarkListSchema = z.object({
-  bookmarks: z.array(myPagePlaceItemSchema),
+  bookmarks: z.array(myPagePlaceSchema),
   has_next: z.boolean(),
 });
 
@@ -118,5 +118,17 @@ export const myPageFavoriteSpot = z.object({
   place_id: z.number(),
   place_name: z.string(),
   rate: z.number(),
+});
+
+export const myPageFavoriteCourseSchema = z.object({
+  course_id: z.number(),
+  title: z.string(),
+  rate: z.number(),
+  spot_count: z.number(),
+  created_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
+  map_static_image_url: z.string(),
+  writer_id: z.number(),
   
-})
+});

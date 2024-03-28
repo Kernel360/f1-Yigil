@@ -16,11 +16,15 @@ export default function BookmarkButton({
   placeId,
   bookmarked,
   isLoggedIn,
+  iconSize,
+  iconColor,
 }: {
   className?: string;
   placeId: number;
   bookmarked: boolean;
   isLoggedIn?: boolean;
+  iconSize?: string;
+  iconColor?: string;
 }) {
   const { push } = useRouter();
 
@@ -57,11 +61,13 @@ export default function BookmarkButton({
       disabled={isLoading}
     >
       {isLoading ? (
-        <Spinner size="w-12 h-12" />
+        <Spinner size={`${iconSize ? iconSize : 'w-12 h-12'}`} />
       ) : (
         <BookmarkIcon
-          className={`w-12 h-12 stroke-white stroke-[3px] ${
-            placeBookmarked ? 'fill-white' : 'fill-none'
+          className={`stroke-[3px] ${iconSize ? iconSize : 'w-12 h-12'} ${
+            placeBookmarked
+              ? 'fill-main stroke-main'
+              : 'fill-none stroke-[#9CA3AF]'
           }`}
         />
       )}

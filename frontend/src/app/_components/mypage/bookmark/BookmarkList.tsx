@@ -8,7 +8,7 @@ import LoadingIndicator from '../../LoadingIndicator';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { scrollToTop } from '@/utils';
 import BookmarkButton from '../../place/BookmarkButton';
-import MyPagePlaceItem from '../MyPagePlaceItem';
+import MyPagePlaceItem from './MyPagePlaceItem';
 
 const sortOptions = [
   { label: '최신순', value: 'desc' },
