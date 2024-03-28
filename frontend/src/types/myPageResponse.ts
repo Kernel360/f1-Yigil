@@ -20,16 +20,16 @@ export const myPageSpotListSchema = z.object({
   total_pages: z.number(),
 });
 
-export type TMyPageBookmark = z.infer<typeof myPageBookmarkItemSchema>;
-export const myPageBookmarkItemSchema = z.object({
+export const myPagePlaceSchema = z.object({
   place_id: z.number().int(),
   place_name: z.string(),
   place_image: z.string(),
   rate: z.number(),
 });
+export type TMyPagePlace = z.infer<typeof myPagePlaceSchema>;
 
 export const myPageBookmarkListSchema = z.object({
-  bookmarks: z.array(myPageBookmarkItemSchema),
+  bookmarks: z.array(myPagePlaceSchema),
   has_next: z.boolean(),
 });
 
@@ -101,7 +101,7 @@ export const mypageCourseDetailSchema = z.object({
   map_static_image_url: z.string(),
   description: z.string(),
   line_string_json: z.string().transform((json) => JSON.parse(json)),
-  create_date: z.coerce
+  created_date: z.coerce
     .date()
     .transform((date) => date.toLocaleDateString('ko-kr')),
   spots: z.array(myPageCourseDetailSpotSchema),
@@ -113,6 +113,36 @@ export type TMyPageCourseDetailSpot = z.infer<
   typeof myPageCourseDetailSpotSchema
 >;
 
+export const myPageFavoriteSpot = z.object({
+  spot_id: z.number(),
+  place_id: z.number(),
+  place_name: z.string(),
+  rate: z.number(),
+});
+
+export const myPageFavoriteCourseSchema = z.object({
+  course_id: z.number(),
+  title: z.string(),
+  rate: z.number(),
+  spot_count: z.number(),
+  created_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
+  map_static_image_url: z.string(),
+  writer_id: z.number(),
+  writer_nickname: z.string(),
+  writer_profile_image_url: z.string(),
+  following: z.boolean(),
+});
+
+export const myPageFavoriteCourseResponse = z.object({
+  contents: z.array(myPageFavoriteCourseSchema),
+  has_next: z.boolean(),
+});
+
+export type TMyPageFavoriteCourse = z.infer<
+  typeof myPageFavoriteCourseResponse
+>;
 export const myPageFollowSchema = z.object({
   member_id: z.number().int(),
   nickname: z.string(),

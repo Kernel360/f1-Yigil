@@ -4,6 +4,7 @@ import React from 'react';
 
 export default async function MyPageMyCourse() {
   const courseList = await getMyPageCourses();
+
   if (!courseList.success)
     return (
       <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">

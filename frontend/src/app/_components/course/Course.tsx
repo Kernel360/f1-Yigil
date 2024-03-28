@@ -10,9 +10,12 @@ import type { TCourseDetail } from '@/types/response';
 
 import StarIcon from '/public/icons/star.svg';
 import ReviewIcon from '/public/icons/review.svg';
+import { useContext } from 'react';
+import { MemberContext } from '@/context/MemberContext';
 
 export default function Course({ data }: { data: TCourseDetail }) {
   const { id, title, map_static_image_url, spot_count, rate, liked } = data;
+  const { isLoggedIn } = useContext(MemberContext);
   return (
     <article className="p-4 flex flex-col gap-2">
       <Link className="relative aspect-video" href={`/detail/courses/${id}`}>
@@ -28,6 +31,7 @@ export default function Course({ data }: { data: TCourseDetail }) {
           liked={liked}
           position="top-4 right-4"
           sizes="w-12 h-12"
+          isLoggedIn={isLoggedIn}
         />
       </Link>
       <Link
