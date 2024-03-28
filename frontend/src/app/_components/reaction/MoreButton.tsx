@@ -72,7 +72,7 @@ export default function MoreButton({
     popOverData.push(
       {
         label: '수정하기',
-        icon: <EditIcon className="w-6 h-6 fill-none" />,
+        icon: <EditIcon className="w-6 h-6 fill-none stroke-black" />,
         onClick: () => {
           setEditOrDelete('수정');
         },
