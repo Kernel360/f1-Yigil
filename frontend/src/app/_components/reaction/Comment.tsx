@@ -55,6 +55,10 @@ export default function Comment({
   }
 
   async function modifyThisComment() {
+    if (draft.trim() === '') {
+      return;
+    }
+
     setIsLoading(true);
 
     const result = await modifyComment(travelId, commentId, draft);
