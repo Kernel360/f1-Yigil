@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { ReportContext } from '@/context/ReportContext';
 
 import RoundProfile from '../ui/profile/RoundProfile';
 import MoreButton from './MoreButton';
 
 import ToastMsg from '../ui/toast/ToastMsg';
-import Spinner from '../ui/Spinner';
+import CommentContent from './CommentContent';
 
 import type { TComment } from '@/types/response';
 import { deleteComment, modifyComment } from './action';
-import CommentContent from './CommentContent';
+import { postReport } from '@/app/(with-header)/place/[id]/@reviews/action';
 
 export default function Comment({
   data,
@@ -19,6 +20,7 @@ export default function Comment({
   data: TComment;
   travelId: number;
 }) {
+  const reportTypes = useContext(ReportContext);
   const {
     id: commentId,
     deleted,
@@ -32,12 +34,31 @@ export default function Comment({
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(deleted);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const [draft, setDraft] = useState(content);
 
   const [editOrDelete, setEditOrDelete] = useState<'기본' | '삭제' | '수정'>(
     '기본',
   );
+
+  const [selectedValue, setSelectedValue] = useState(
+    reportTypes ? reportTypes[0].id : 0,
+  );
+  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+
+  async function reportThisComment() {
+    const result = await postReport(selectedValue, commentId, 'comment');
+
+    if (result.status === 'failed') {
+      setError(result.message);
+      setTimeout(() => setError(''), 2000);
+      return;
+    }
+
+    setMessage('신고가 정상적으로 접수되었습니다!');
+    setTimeout(() => setError(''), 2000);
+  }
 
   async function deleteThisComment() {
     setIsLoading(true);
@@ -99,14 +120,21 @@ export default function Comment({
         {!isDeleted && (
           <MoreButton
             ownerId={member_id}
+            reportTypes={reportTypes}
             editOrDelete={editOrDelete}
             setEditOrDelete={setEditOrDelete}
+            isReportDialogOpen={isReportDialogOpen}
+            setIsReportDialogOpen={setIsReportDialogOpen}
+            selectedValue={selectedValue}
+            setSelectedValue={setSelectedValue}
             deleteComment={deleteThisComment}
             modifyComment={modifyThisComment}
+            reportComment={reportThisComment}
           />
         )}
       </div>
       {error && <ToastMsg id={Date.now()} title={error} timer={2000} />}
+      {message && <ToastMsg id={Date.now()} title={message} timer={2000} />}
     </section>
   );
 }

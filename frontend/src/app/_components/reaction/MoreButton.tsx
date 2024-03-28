@@ -4,8 +4,11 @@ import { useContext, useState } from 'react';
 import { MemberContext } from '@/context/MemberContext';
 
 import PopOverIcon from '../ui/popover/PopOverItem';
+import ToastMsg from '../ui/toast/ToastMsg';
+import ReportDialog from '../ui/dialog/ReportDialog';
 
-import { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import type { TReportType } from '@/types/response';
 import type { TPopOverData } from '../ui/popover/types';
 
 import MoreIcon from '/public/icons/more.svg';
@@ -16,20 +19,34 @@ import Dialog from '../ui/dialog/Dialog';
 
 export default function MoreButton({
   ownerId,
+  reportTypes,
   editOrDelete,
   setEditOrDelete,
+  isReportDialogOpen,
+  setIsReportDialogOpen,
+  selectedValue,
+  setSelectedValue,
   deleteComment,
   modifyComment,
+  reportComment,
 }: {
   ownerId: number;
+  reportTypes?: TReportType[];
   editOrDelete: '기본' | '삭제' | '수정';
   setEditOrDelete: Dispatch<SetStateAction<'기본' | '삭제' | '수정'>>;
+  isReportDialogOpen: boolean;
+  setIsReportDialogOpen: Dispatch<SetStateAction<boolean>>;
+  selectedValue: number;
+  setSelectedValue: Dispatch<SetStateAction<number>>;
   deleteComment: () => Promise<void>;
   modifyComment: () => Promise<void>;
+  reportComment: () => Promise<void>;
 }) {
   const memberStatus = useContext(MemberContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [error, setError] = useState('');
 
   if (memberStatus.isLoggedIn === 'false') {
     return null;
@@ -39,6 +56,15 @@ export default function MoreButton({
     {
       label: '신고하기',
       icon: <AlertIcon className="w-6 h-6 fill-gray-500" />,
+      onClick: () => {
+        if (reportTypes === undefined) {
+          setError('신고는 로그인 후 가능합니다!');
+          setTimeout(() => setError(''), 2000);
+          return;
+        }
+
+        setIsReportDialogOpen(true);
+      },
     },
   ];
 
@@ -95,6 +121,11 @@ export default function MoreButton({
     );
   }
 
+  async function handleReport() {
+    setIsReportDialogOpen(false);
+    await reportComment();
+  }
+
   return (
     <button onClick={() => setIsOpen(!isOpen)}>
       <MoreIcon className="w-6 h-6" />
@@ -116,6 +147,16 @@ export default function MoreButton({
           handleConfirm={handleDialogConfirm}
         />
       )}
+      {isReportDialogOpen && (
+        <ReportDialog
+          reportTypes={reportTypes}
+          reportTypeId={selectedValue}
+          setReportTypeId={setSelectedValue}
+          handleConfirm={handleReport}
+          closeModal={() => setIsReportDialogOpen(false)}
+        />
+      )}
+      {error && <ToastMsg id={Date.now()} title={error} timer={2000} />}
     </button>
   );
 }
