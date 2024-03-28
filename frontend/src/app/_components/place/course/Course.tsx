@@ -15,6 +15,7 @@ import Reaction from '../../reaction/Reaction';
 import type { TCourse } from '@/types/response';
 
 import StarIcon from '/public/icons/star.svg';
+import Link from 'next/link';
 
 export default function Course({
   placeId,
@@ -41,6 +42,14 @@ export default function Course({
 
   return (
     <article className="py-2 flex flex-col gap-4">
+      <div className="px-4">
+        <Link
+          className="text-lg font-medium hover:underline"
+          href={`/detail/courses/${travelId}`}
+        >
+          {title}
+        </Link>
+      </div>
       <div className="px-4 flex justify-between items-center">
         <div className="flex gap-1 items-center">
           <RoundProfile

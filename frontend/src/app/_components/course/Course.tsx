@@ -36,7 +36,7 @@ export default function Course({ data }: { data: TCourseDetail }) {
       </Link>
       <Link
         className="px-2 w-full text-gray-500 text-xl font-medium truncate select-none hover:underline text-ellipsis"
-        href={`/courses/${id}`}
+        href={`/detail/courses/${id}`}
       >
         {title}
       </Link>
