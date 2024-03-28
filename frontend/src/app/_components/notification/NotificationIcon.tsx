@@ -4,6 +4,7 @@ import Bell from '/public/icons/bell.svg';
 import { useRouter } from 'next/navigation';
 import ToastMsg from '../ui/toast/ToastMsg';
 import { MemberContext } from '@/context/MemberContext';
+import { NextPublicContext } from '@/context/NextPublicContext';
 
 const BASE_URL =
   process.env.ENVIRONMENT === 'production'
@@ -16,11 +17,12 @@ export default function NotificationIcon() {
   const [errorText, setErrorText] = useState('');
 
   const user = memberStatus.isLoggedIn === 'true' ? memberStatus.member : null;
+  const baseUrl = useContext(NextPublicContext);
 
   useEffect(() => {
     if (user) {
       const eventSource = new EventSource(
-        `${BASE_URL}/v1/notifications/stream/${user?.member_id}`,
+        `${baseUrl}/v1/notifications/stream/${user?.member_id}`,
       );
 
       eventSource.addEventListener('notification', (e) => {
