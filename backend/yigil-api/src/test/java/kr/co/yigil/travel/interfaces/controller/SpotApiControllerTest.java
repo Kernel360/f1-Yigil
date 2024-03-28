@@ -386,7 +386,7 @@ class SpotApiControllerTest {
                 .build();
         MyFavoriteSpotsResponse response = MyFavoriteSpotsResponse.builder()
                 .contents(List.of(favoriteSpotDto))
-                .totalPages(1)
+                .hasNext(true)
                 .build();
 
         when(spotFacade.getFavoriteSpotsInfo(anyLong(), any(PageRequest.class))).thenReturn(mock(SpotInfo.MyFavoriteSpotsInfo.class));
@@ -412,19 +412,19 @@ class SpotApiControllerTest {
                                         .optional()
                         ),
                         responseFields(
-                                fieldWithPath("contents[].spot_id").description("게시글(리뷰) ID"),
-                                fieldWithPath("contents[].place_id").description("장소 ID"),
-                                fieldWithPath("contents[].place_name").description("장소 제목"),
-                                fieldWithPath("contents[].rate").description("장소 평점"),
-                                fieldWithPath("contents[].image_url").description("장소 이미지 URL"),
-                                fieldWithPath("contents[].created_date").description("장소 생성일"),
-                                fieldWithPath("contents[].writer_id").description("작성자 ID"),
-                                fieldWithPath("contents[].writer_nickname").description("작성자 닉네임"),
-                                fieldWithPath("contents[].writer_profile_image_url").description("작성자 프로필 이미지 URL"),
-                                fieldWithPath("contents[].writer_email").description("작성자 이메일"),
-                                fieldWithPath("contents[].following").description("팔로잉 여부"),
+                                fieldWithPath("contents[].spot_id").type(JsonFieldType.NUMBER).description("게시글(리뷰) ID"),
+                                fieldWithPath("contents[].place_id").type(JsonFieldType.NUMBER).description("장소 ID"),
+                                fieldWithPath("contents[].place_name").type(JsonFieldType.STRING).description("장소 제목"),
+                                fieldWithPath("contents[].rate").type(JsonFieldType.NUMBER).description("장소 평점"),
+                                fieldWithPath("contents[].image_url").type(JsonFieldType.STRING).description("장소 이미지 URL"),
+                                fieldWithPath("contents[].created_date").type(JsonFieldType.STRING).description("장소 생성일"),
+                                fieldWithPath("contents[].writer_id").type(JsonFieldType.NUMBER).description("작성자 ID"),
+                                fieldWithPath("contents[].writer_nickname").type(JsonFieldType.STRING).description("작성자 닉네임"),
+                                fieldWithPath("contents[].writer_profile_image_url").type(JsonFieldType.STRING).description("작성자 프로필 이미지 URL"),
+                                fieldWithPath("contents[].writer_email").type(JsonFieldType.STRING).description("작성자 이메일"),
+                                fieldWithPath("contents[].following").type(JsonFieldType.BOOLEAN).description("팔로잉 여부"),
 
-                                fieldWithPath("total_pages").description("총 페이지 수")
+                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지 존재 여부")
                         )
                 ));
     }

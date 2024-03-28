@@ -162,8 +162,6 @@ public class CourseApiControllerTest {
 
         MockMultipartFile spotMapStaticImage = new MockMultipartFile("mapStatic", "mapStatic.png",
                 "image/png", "<<png data>>".getBytes());
-//        MockMultipartFile placeImage = new MockMultipartFile("placeImg", "placeImg.png",
-//                "image/png", "<<png data>>".getBytes());
 
         String requestBody = "{\"title\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"isPrivate\" : false, \"representativeSpotOrder\" : 1, \"lineStringJson\" : \"test\", \"spotRegisterRequests\" : [{\"pointJson\" : \"test\", \"description\" : \"test\", \"rate\" : 4.5, \"placeName\" : \"test\", \"placeAddress\" : \"test\"}]}";
 
@@ -618,7 +616,7 @@ public class CourseApiControllerTest {
 
         MyFavoriteCoursesResponse response = new MyFavoriteCoursesResponse();
         response.setContents(List.of(favoriteCourseDto));
-        response.setTotalPages(1);
+        response.setHasNext(false);
 
         when(courseFacade.getFavoriteCoursesInfo(anyLong(), any(PageRequest.class))).thenReturn(mock(CourseInfo.MyFavoriteCoursesInfo.class));
         when(courseMapper.toMyFavoriteCoursesResponse(any(CourseInfo.MyFavoriteCoursesInfo.class))).thenReturn(response);
@@ -658,7 +656,7 @@ public class CourseApiControllerTest {
                                 fieldWithPath("contents[].writer_profile_image_url").type(JsonFieldType.STRING).description(
                                         "코스 작성자 프로필 이미지 URL"),
                                 fieldWithPath("contents[].following").type(JsonFieldType.BOOLEAN).description("팔로잉 여부"),
-                                fieldWithPath("total_pages").type(JsonFieldType.NUMBER).description("총 페이지 수")
+                                fieldWithPath("has_next").type(JsonFieldType.BOOLEAN).description("다음 페이지가 있는지 여부")
                         )
                 ));
     }
