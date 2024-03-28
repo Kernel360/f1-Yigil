@@ -1,25 +1,5 @@
 package kr.co.yigil.follow.interfaces.controller;
 
-import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
-import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
 import kr.co.yigil.follow.application.FollowFacade;
 import kr.co.yigil.follow.domain.FollowInfo;
 import kr.co.yigil.follow.interfaces.dto.FollowDto.FollowerInfo;
@@ -42,6 +22,23 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
+
+import static kr.co.yigil.RestDocumentUtils.getDocumentRequest;
+import static kr.co.yigil.RestDocumentUtils.getDocumentResponse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @WebMvcTest(FollowApiController.class)
@@ -131,7 +128,7 @@ public class FollowApiControllerTest {
         mockMvc.perform(get("/api/v1/follows/followers")
                 .param("page", "1")
                 .param("size", "5")
-                .param("sortBy", "id")
+                .param("sortBy", "follower_name")
                 .param("sortOrder", "asc")
             )
             .andExpect(status().isOk())
@@ -177,7 +174,7 @@ public class FollowApiControllerTest {
         mockMvc.perform(get("/api/v1/follows/followings")
                 .param("page", "1")
                 .param("size", "5")
-                .param("sortBy", "id")
+                .param("sortBy", "nickname")
                 .param("sortOrder", "asc")
             )
             .andExpect(status().isOk())
@@ -223,7 +220,7 @@ public class FollowApiControllerTest {
         mockMvc.perform(get("/api/v1/follows/{memberId}/followers", 1L)
                 .param("page", "1")
                 .param("size", "5")
-                .param("sortBy", "id")
+                .param("sortBy", "nickname")
                 .param("sortOrder", "asc")
             )
             .andExpect(status().isOk())
