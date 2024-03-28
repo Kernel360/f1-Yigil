@@ -28,4 +28,6 @@ public interface SpotService {
     MySpotsResponse retrieveSpotList(Long memberId, Selected selected, Pageable pageable);
 
     CourseInfo.MySpotsInfo getMySpotsDetailInfo(List<Long> spotIds, Long memberId);
+
+    SpotInfo.MyFavoriteSpotsInfo getFavoriteSpotsInfo(Long memberId, Pageable pageRequest);
 }

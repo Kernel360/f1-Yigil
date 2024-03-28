@@ -4,6 +4,7 @@ import kr.co.yigil.global.exception.BadRequestException;
 import kr.co.yigil.global.exception.ExceptionCode;
 import kr.co.yigil.report.type.domain.ReportType;
 import kr.co.yigil.report.type.domain.ReportTypeReader;
+import kr.co.yigil.report.type.domain.ReportTypeStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class ReportTypeReaderImpl implements ReportTypeReader {
 
     @Override
     public List<ReportType> getReportTypes() {
-        return reportTypeRepository.findAll();
+        return reportTypeRepository.findAllByStatus(ReportTypeStatus.ACTIVE);
     }
 
     @Override

@@ -1,8 +1,9 @@
 package kr.co.yigil.comment.domain;
 
-import java.util.List;
 import lombok.Getter;
 import org.springframework.data.domain.Slice;
+
+import java.util.List;
 
 public class CommentInfo {
 
@@ -51,6 +52,7 @@ public class CommentInfo {
     @Getter
     public static class CommentsUnitInfo {
 
+        private final boolean deleted;
         private final Long id;
         private final String content;
         private final Long memberId;
@@ -60,23 +62,27 @@ public class CommentInfo {
         private final String createdAt;
 
         public CommentsUnitInfo(Comment comment, int childCount) {
-            this.id = comment.getId();
-            this.content = comment.getContent();
-            this.memberId = comment.getMember().getId();
-            this.memberNickname = comment.getMember().getNickname();
-            this.memberImageUrl = comment.getMember().getProfileImageUrl();
-            this.childCount = childCount;
+            this.deleted = comment.isDeleted();
+            if(this.deleted){
+                this.id = -1L;
+                this.content = "삭제된 댓글입니다";
+                this.memberId = -1L;
+                this.memberNickname = "";
+                this.memberImageUrl = "";
+                this.childCount = 0;
+            }else {
+                this.id = comment.getId();
+                this.content = comment.getContent();
+                this.memberId = comment.getMember().getId();
+                this.memberNickname = comment.getMember().getNickname();
+                this.memberImageUrl = comment.getMember().getProfileImageUrl();
+                this.childCount = childCount;
+            }
             this.createdAt = comment.getCreatedAt().toString();
         }
 
         public CommentsUnitInfo(Comment comment) {
-            this.id = comment.getId();
-            this.content = comment.getContent();
-            this.memberId = comment.getMember().getId();
-            this.memberNickname = comment.getMember().getNickname();
-            this.memberImageUrl = comment.getMember().getProfileImageUrl();
-            this.childCount = 0;
-            this.createdAt = comment.getCreatedAt().toString();
+            this(comment, 0);
         }
     }
 

@@ -34,4 +34,6 @@ public interface SpotReader {
     List<Spot> getMemberSpots(Long memberId, List<Long> spotIds);
 
     List<Long> getMySpotPlaceIds(Long memberId);
+
+    Slice<Spot> getFavoriteSpotList(Long memberId, Pageable pageRequest);
 }

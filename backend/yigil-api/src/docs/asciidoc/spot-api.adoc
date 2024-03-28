@@ -136,3 +136,18 @@ include::{snippets}/spots/get-my-spot-list/http-response.adoc[]
 
 '''
 
+=== 좋아요를 한 Spot 목록 조회
+
+==== Request
+
+로그인 필수 : Y
+
+===== HTTP Request 예시
+include::{snippets}/spots/get-my-favorite-spots/http-request.adoc[]
+===== Query Parameter
+include::{snippets}/spots/get-my-favorite-spots/query-parameters.adoc[]
+==== Response
+include::{snippets}/spots/get-my-favorite-spots/response-fields.adoc[]
+===== HTTP Response 예시
+include::{snippets}/spots/get-my-favorite-spots/http-response.adoc[]
+

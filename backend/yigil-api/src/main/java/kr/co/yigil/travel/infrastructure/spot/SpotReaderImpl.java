@@ -94,4 +94,9 @@ public class SpotReaderImpl implements SpotReader {
     public List<Long> getMySpotPlaceIds(Long memberId) {
         return spotRepository.findPlaceIdByMemberId(memberId);
     }
+
+    @Override
+    public Slice<Spot> getFavoriteSpotList(Long memberId, Pageable pageRequest) {
+        return spotRepository.findAllMembersFavoriteSpot(memberId, pageRequest);
+    }
 }

@@ -3,6 +3,7 @@ package kr.co.yigil.travel.domain.course;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.file.AttachFile;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
@@ -22,10 +23,7 @@ import org.locationtech.jts.io.geojson.GeoJsonReader;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -33,7 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -54,6 +53,9 @@ public class CourseServiceImplTest {
 
     @Mock
     private FileUploader fileUploader;
+
+    @Mock
+    private FollowReader followReader;
 
     @InjectMocks
     private CourseServiceImpl courseService;
@@ -214,5 +216,37 @@ public class CourseServiceImplTest {
         var result = courseService.searchCourseByPlaceName(keyword, mockAccessor, pageable);
 
         assertThat(result).isNotNull().isInstanceOf(CourseInfo.Slice.class);
+    }
+
+    @DisplayName("getFavoriteCoursesInfo 메서드가 잘 동작하는지")
+    @Test
+    void getFavoriteCoursesInfo() {
+        Long memberId = 1L;
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Course mockCourse1 = mock(Course.class);
+        Member mockMember = mock(Member.class);
+
+        Page<Course> favoriteCourses = new PageImpl<>(List.of(mockCourse1));
+        when(courseReader.getFavoriteCourses(memberId, pageRequest)).thenReturn(favoriteCourses);
+        when(followReader.isFollowing(anyLong(), anyLong())).thenReturn(true);
+
+        when(mockCourse1.getMember()).thenReturn(mockMember);
+        when(mockCourse1.getId()).thenReturn(1L);
+        when(mockCourse1.getTitle()).thenReturn("test");
+        when(mockCourse1.getCreatedAt()).thenReturn(LocalDateTime.now());
+        when(mockCourse1.getRate()).thenReturn(5.0);
+        when(mockCourse1.getMapStaticImageFileUrl()).thenReturn("test.jpg");
+
+        when(mockMember.getId()).thenReturn(1L);
+        when(mockMember.getNickname()).thenReturn("test");
+
+        when(followReader.isFollowing(anyLong(), anyLong())).thenReturn(true);
+
+        var result = courseService.getFavoriteCoursesInfo(memberId, pageRequest);
+
+        assertThat(result).isNotNull().isInstanceOf(CourseInfo.MyFavoriteCoursesInfo.class);
+
+
     }
 }

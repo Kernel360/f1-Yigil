@@ -190,6 +190,7 @@ export const spotSchema = z.object({
 export type TSpot = z.infer<typeof spotSchema>;
 
 export const commentSchema = z.object({
+  deleted: z.boolean(),
   id: z.number().int(),
   content: z.string(),
   member_id: z.number().int(),
@@ -227,3 +228,20 @@ export const existingSpotsSchema = z.object({
 
 export type TExistingSpot = z.infer<typeof existingSpotSchema>;
 export type TExistingSpots = z.infer<typeof existingSpotsSchema>;
+
+export const mySpotIds = z.object({
+  ids: z.array(z.number()),
+});
+
+export type TMySpotIds = z.infer<typeof mySpotIds>;
+
+const reportTypeSchema = z.object({
+  id: z.number().int(),
+  name: z.string(),
+});
+
+export type TReportType = z.infer<typeof reportTypeSchema>;
+
+export const reportTypesSchema = z.object({
+  report_types: z.array(reportTypeSchema),
+});

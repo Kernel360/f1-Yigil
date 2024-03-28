@@ -143,3 +143,35 @@ export const myPageFavoriteCourseResponse = z.object({
 export type TMyPageFavoriteCourse = z.infer<
   typeof myPageFavoriteCourseResponse
 >;
+export const myPageFollowSchema = z.object({
+  member_id: z.number().int(),
+  nickname: z.string(),
+  profile_image_url: z.string(),
+});
+
+export type TMyPageFollow = z.infer<typeof myPageFollowSchema>;
+
+export const myPageFollowResponseSchema = z.object({
+  content: z.array(myPageFollowSchema),
+  has_next: z.boolean(),
+});
+
+export type TMyPageFollowResponse = z.infer<typeof myPageFollowResponseSchema>;
+
+export const mypageFollowerSchema = z.object({
+  member_id: z.number().int(),
+  nickname: z.string(),
+  profile_image_url: z.string(),
+  following: z.boolean(),
+});
+
+export type TMyPageFollower = z.infer<typeof mypageFollowerSchema>;
+
+export const myPageFollowerResponseSchema = z.object({
+  content: z.array(mypageFollowerSchema),
+  has_next: z.boolean(),
+});
+
+export type TMyPageFollowerResponse = z.infer<
+  typeof myPageFollowerResponseSchema
+>;

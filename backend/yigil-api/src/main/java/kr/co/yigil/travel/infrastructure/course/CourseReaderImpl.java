@@ -42,4 +42,9 @@ public class CourseReaderImpl implements CourseReader {
     public Slice<Course> searchCourseByPlaceName(final String keyword, final Pageable pageable) {
         return courseRepository.findByPlaceNameContaining(keyword, pageable);
     }
+
+    @Override
+    public Slice<Course> getFavoriteCourses(Long memberId, Pageable pageRequest) {
+        return courseRepository.findAllMembersFavoriteCourses(memberId, pageRequest);
+    }
 }

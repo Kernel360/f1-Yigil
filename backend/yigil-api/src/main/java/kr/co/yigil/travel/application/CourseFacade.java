@@ -9,6 +9,7 @@ import kr.co.yigil.travel.domain.course.CourseInfo;
 import kr.co.yigil.travel.domain.course.CourseService;
 import kr.co.yigil.travel.domain.spot.SpotService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +56,9 @@ public class CourseFacade {
 
     public CourseInfo.MySpotsInfo getMySpotsDetailInfo(List<Long> spotIds, Long memberId) {
         return spotService.getMySpotsDetailInfo(spotIds, memberId);
+    }
+
+    public CourseInfo.MyFavoriteCoursesInfo getFavoriteCoursesInfo(Long memberId, PageRequest pageRequest) {
+        return courseService.getFavoriteCoursesInfo(memberId, pageRequest);
     }
 }

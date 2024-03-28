@@ -1,11 +1,24 @@
+import { getFollowList } from '@/app/_components/mypage/hooks/followActions';
 import React from 'react';
 
-export default function FollowerPage() {
+import MyPageFollowList from '@/app/_components/mypage/follow/MyPageFollowList';
+
+export default async function FollowerPage() {
+  const followList = await getFollowList(1, 5, 'id', 'followers');
+
+  if (followList.status === 'failed') throw new Error(followList.message);
   return (
-    <section className="grow flex flex-col justify-center items-center gap-8">
-      <span className="text-6xl">🚧</span>
-      <br />
-      <span className="text-5xl">준비 중입니다!</span>
-    </section>
+    <>
+      {!!followList.data.content.length ? (
+        <MyPageFollowList
+          followList={followList.data.content}
+          action="followers"
+        />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          팔로우 된 유저가 없습니다.
+        </div>
+      )}
+    </>
   );
 }

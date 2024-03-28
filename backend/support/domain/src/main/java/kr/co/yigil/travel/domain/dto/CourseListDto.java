@@ -1,10 +1,11 @@
 package kr.co.yigil.travel.domain.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import java.time.LocalDateTime;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
 public class CourseListDto extends ImageFileDto{
 
     private final Long courseId;

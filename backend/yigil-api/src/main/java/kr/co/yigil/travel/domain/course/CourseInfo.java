@@ -227,4 +227,45 @@ public class CourseInfo {
             this.y = point.getY();
         }
     }
+
+
+    @Data
+    public static class MyFavoriteCoursesInfo {
+        private final List<FavoriteCourseInfo> contents;
+        private final boolean hasNext;
+
+        public MyFavoriteCoursesInfo(List<FavoriteCourseInfo> contents, boolean hasNext) {
+            this.contents = contents;
+            this.hasNext = hasNext;
+        }
+
+    }
+
+    @Data
+    public static class FavoriteCourseInfo {
+        private Long courseId;
+        private String title;
+        private Double rate;
+        private Integer spotCount;
+        private String createdDate;
+        private String mapStaticImageUrl;
+
+        private Long writerId;
+        private String writerNickname;
+        private String writerProfileImageUrl;
+        private boolean following;
+
+        public FavoriteCourseInfo(Course course, boolean isFollowing) {
+            this.courseId = course.getId();
+            this.title = course.getTitle();
+            this.rate = course.getRate();
+            this.spotCount = course.getSpots().size();
+            this.createdDate = course.getCreatedAt().toString();
+            this.mapStaticImageUrl = course.getMapStaticImageFileUrl();
+            this.writerId = course.getMember().getId();
+            this.writerNickname = course.getMember().getNickname();
+            this.writerProfileImageUrl = course.getMember().getProfileImageUrl();
+            this.following = isFollowing;
+        }
+    }
 }

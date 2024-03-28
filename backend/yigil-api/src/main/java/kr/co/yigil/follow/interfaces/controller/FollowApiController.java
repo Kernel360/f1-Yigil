@@ -55,9 +55,12 @@ public class FollowApiController {
     public ResponseEntity<FollowersResponse> getMyFollowerList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "id", required = false) SortBy sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
+        @RequestParam(name = "sortBy", defaultValue = "nickname", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) SortOrder sortOrder
     ) {
+        if(sortBy == SortBy.NICKNAME) {
+            sortBy = SortBy.FOLLOWER_NAME;
+        }
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
             pageable.getPageSize(),
@@ -73,9 +76,12 @@ public class FollowApiController {
     public ResponseEntity<FollowingsResponse> getMyFollowingList(
         @Auth final Accessor accessor,
         @PageableDefault(size = 5, page = 1) Pageable pageable,
-        @RequestParam(name = "sortBy", defaultValue = "id", required = false) SortBy sortBy,
-        @RequestParam(name = "sortOrder", defaultValue = "desc", required = false) SortOrder sortOrder
+        @RequestParam(name = "sortBy", defaultValue = "nickname", required = false) SortBy sortBy,
+        @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) SortOrder sortOrder
     ) {
+        if(sortBy == SortBy.NICKNAME) {
+            sortBy = SortBy.FOLLOWING_NAME;
+        }
         Sort.Direction direction = Sort.Direction.fromString(sortOrder.getValue().toUpperCase());
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1,
             pageable.getPageSize(),
