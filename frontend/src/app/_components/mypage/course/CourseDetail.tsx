@@ -243,7 +243,7 @@ export default function CourseDetail({
   }, [spots]);
 
   return (
-    <div className="mx-4 touch-none">
+    <div className="mx-4">
       <nav className="relative py-4 flex justify-between items-center">
         <BackButton />
         <span className="text-2xl font-light">

@@ -10,6 +10,7 @@ import {
   DragStartEvent,
   KeyboardSensor,
   PointerSensor,
+  TouchSensor,
   UniqueIdentifier,
   useSensor,
   useSensors,
@@ -42,8 +43,15 @@ export default function CourseSpotContainer({
   onClickDeleteSpot: (e: EventFor<'span', 'onClick'>, id: number) => void;
 }) {
   const [activeId, setActiveId] = useState<number | null>(null);
+
+  const sensor =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    )
+      ? TouchSensor
+      : PointerSensor;
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(sensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
