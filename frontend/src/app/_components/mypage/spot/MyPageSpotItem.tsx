@@ -93,7 +93,9 @@ const MyPageSpotItem = ({
             count={rate}
             rating
           />
-          <div className="text-gray-300 font-bold">{created_date}</div>
+          <div className="text-gray-300 font-bold">
+            {created_date.toLocaleDateString('ko-kr')}
+          </div>
         </div>
       </div>
     </div>
