@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { getNotificationList } from './notificationActions';
 import { TNotification } from '@/types/notificationResponse';
 import Select from '../ui/select/Select';
@@ -55,44 +55,44 @@ export default function Notification({
 
   useIntersectionObserver(ref, getMoreNotifications, hasNext);
 
-  const getNotifications = async (
-    page: number,
-    size: number,
-    selectOption: string,
-  ) => {
-    try {
-      setIsLoading(true);
-      const notifications = await getNotificationList(
-        currentPage,
-        size,
-        selectOption,
-      );
+  const getNotifications = useCallback(
+    async (page: number, size: number, selectOption: string) => {
+      try {
+        setIsLoading(true);
+        const notifications = await getNotificationList(
+          page,
+          size,
+          selectOption,
+        );
 
-      if (!notifications.success) {
-        setNotificationList([]);
+        if (!notifications.success) {
+          setNotificationList([]);
+          setErrorText('알림 데이터를 불러오는데 실패했습니다.');
+          setIsLoading(false);
+          return;
+        }
+        setHasNext((prev) => (prev = notifications.data.has_next));
+        setNotificationList(notifications.data.notifications);
+      } catch (error) {
         setErrorText('알림 데이터를 불러오는데 실패했습니다.');
+      } finally {
         setIsLoading(false);
-        return;
       }
-      setHasNext((prev) => (prev = notifications.data.has_next));
-      setNotificationList(notifications.data.notifications);
-    } catch (error) {
-      setErrorText('알림 데이터를 불러오는데 실패했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [currentPage],
+  );
 
   useEffect(() => {
     setCurrentPage(1);
     scrollToTop();
     getNotifications(1, size, selectOption);
-  }, [selectOption]);
+  }, [selectOption, getNotifications]);
 
   return (
     <div className="w-full flex flex-col px-4">
       <div className="flex justify-end">
         <Select
+          selectStyle="p-2"
           list={notificationSelect}
           selectOption={selectOption}
           onChangeSelectOption={onChangeSelectOption}

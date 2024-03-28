@@ -21,6 +21,7 @@ export async function getNotificationList(
     },
   );
   const result = await res.json();
+
   const notifications = notificationResponseSchema.safeParse(result);
   return notifications;
 }
