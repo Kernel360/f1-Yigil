@@ -42,7 +42,7 @@ public class AttachFile {
 
     public String getFileUrl() {
         if(fileUrl.equals("")) return fileUrl;
-
+        if(fileUrl.startsWith("http") || fileUrl.startsWith("https")) return fileUrl;
         return "http://cdn.yigil.co.kr/" + fileUrl;
     }
     public static AttachFile of(String fileUrl) {
