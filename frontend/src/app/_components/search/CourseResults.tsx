@@ -10,6 +10,7 @@ import InfiniteCourses from './InfiniteCourses';
 import { searchCourses } from './action';
 
 import type { TCourseDetail } from '@/types/response';
+import { checkBatchimEnding } from '@/utils';
 
 // 최신순 오래된순 평점순 이름순
 const sortOptions = [
@@ -24,15 +25,6 @@ const sortOptions = [
   //   value: 'title',
   // },
 ];
-
-function checkBatchimEnding(word: string) {
-  const lastLetter = word[word.length - 1];
-  const uni = lastLetter.charCodeAt(0);
-
-  if (uni < 44032 || uni > 55203) return false;
-
-  return (uni - 44032) % 28 != 0;
-}
 
 export default function CourseResults({
   data,

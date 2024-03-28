@@ -21,11 +21,13 @@ public class StatsServiceImpl implements StatsService {
     private final StatsReader statsReader;
     private final TravelReader travelReader;
 
+    @Transactional(readOnly = true)
     @Override
     public List<DailyRegion> getRegionStats(LocalDate startDate, LocalDate endDate) {
         return statsReader.getRegionStats(startDate, endDate);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Recent getRecentRegionStats() {
         long travelCount = travelReader.getTodayTravelCnt();
@@ -33,17 +35,17 @@ public class StatsServiceImpl implements StatsService {
         return new Recent(travelCount, recentTravel);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public StaticInfo.DailyTotalFavorCountInfo getDailyFavors(Pageable pageable) {
-        Page<DailyTotalFavorCount> dailyFavorCountPageable = statsReader.getDailyTotalFavorCounts(pageable);
-        return new StaticInfo.DailyTotalFavorCountInfo(dailyFavorCountPageable);
+    public StaticInfo.DailyTotalFavorCountInfo getDailyFavors(LocalDate startDate, LocalDate endDate) {
+        List<DailyTotalFavorCount> dailyFavorCountList = statsReader.getDailyTotalFavorCounts(startDate, endDate);
+        return new StaticInfo.DailyTotalFavorCountInfo(dailyFavorCountList);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit) {
-        List<DailyFavorCount> topDailyFavorCount = statsReader.getTopDailyFavorCount(startDate, endDate, travelType, limit);
+    public StaticInfo.DailyTravelsFavorCountInfo getTopDailyFavors(LocalDate startDate, LocalDate endDate) {
+        List<DailyFavorCount> topDailyFavorCount = statsReader.getTopDailyFavorCount(startDate, endDate);
 
         return new StaticInfo.DailyTravelsFavorCountInfo(topDailyFavorCount);
     }

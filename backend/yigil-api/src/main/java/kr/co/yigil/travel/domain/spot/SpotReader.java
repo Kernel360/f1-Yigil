@@ -32,4 +32,8 @@ public interface SpotReader {
     boolean isExistSpot(Long spotId, Long memberId);
 
     List<Spot> getMemberSpots(Long memberId, List<Long> spotIds);
+
+    List<Long> getMySpotPlaceIds(Long memberId);
+
+    Page<Spot> getFavoriteSpotList(Long memberId, Pageable pageRequest);
 }

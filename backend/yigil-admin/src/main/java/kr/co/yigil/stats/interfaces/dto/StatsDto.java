@@ -13,7 +13,6 @@ public class StatsDto {
     @NoArgsConstructor
     public static class DailyTotalFavorCountResponse {
     private List<DailyTotalFavorCountDto> dailyFavors;
-        private int totalPages;
     }
 
     @Data
@@ -27,7 +26,6 @@ public class StatsDto {
     @NoArgsConstructor
     public static class DailyTravelFavorsResponse {
         List<TravelFavorDto> dailyFavors;
-        int totalPages;
     }
 
     @Data

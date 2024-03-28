@@ -14,7 +14,7 @@ public interface StatsReader {
 
     List<DailyRegion> getRegionStats(LocalDate startDate, LocalDate endDate);
 
-    public Page<DailyTotalFavorCount> getDailyTotalFavorCounts(Pageable pageable);
+    public List<DailyTotalFavorCount> getDailyTotalFavorCounts(LocalDate startDate, LocalDate endDate);
 
-    public List<DailyFavorCount> getTopDailyFavorCount(LocalDate startDate, LocalDate endDate, TravelType travelType, Integer limit);
+    public List<DailyFavorCount> getTopDailyFavorCount(LocalDate startDate, LocalDate endDate);
 }

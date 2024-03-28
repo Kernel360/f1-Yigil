@@ -1,5 +1,6 @@
 package kr.co.yigil.place.interfaces.controller;
 
+import kr.co.yigil.place.interfaces.dto.response.MyPlaceIdResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -116,7 +117,7 @@ public class PlaceApiController {
     }
 
     @GetMapping("/near")
-    public ResponseEntity<NearPlaceResponse> getNearPlace(NearPlaceRequest request) {
+    public ResponseEntity<NearPlaceResponse> getNearPlace(NearPlaceRequest request, @Auth Accessor accessor) {
         var nearPlaceCommand = placeMapper.toNearPlaceCommand(request);
         var placeInfo = placeFacade.getNearPlace(nearPlaceCommand);
         var response = placeMapper.toNearPlaceResponse(placeInfo);
@@ -144,6 +145,14 @@ public class PlaceApiController {
     public ResponseEntity<PlaceKeywordResponse> getPlaceKeyword(@RequestParam String keyword) {
         var keywordsInfo = placeFacade.getPlaceKeywords(keyword);
         var response = placeMapper.toPlaceKeywordResponse(keywordsInfo);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/me")
+    @MemberOnly
+    public ResponseEntity<MyPlaceIdResponse> getMyPlaceId(@Auth Accessor accessor) {
+        var placeIds = placeFacade.getMyPlaceIds(accessor.getMemberId());
+        var response = new MyPlaceIdResponse(placeIds);
         return ResponseEntity.ok().body(response);
     }
 }

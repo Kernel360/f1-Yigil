@@ -9,8 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -122,5 +121,32 @@ public class SpotReaderImplTest {
         boolean result = spotReader.isExistSpot(spotId, memberId);
 
         assertFalse(result);
+    }
+
+    @DisplayName("getMySpotPlaceIds 메서드가 List<Long>을 잘 반환하는지")
+    @Test
+    void getMySpotPlaceIds_ReturnsListOfLong() {
+        Long memberId = 1L;
+        List<Long> expected = Arrays.asList(1L, 2L, 3L);
+        when(spotRepository.findPlaceIdByMemberId(memberId)).thenReturn(expected);
+
+        List<Long> result = spotReader.getMySpotPlaceIds(memberId);
+
+        assertEquals(expected, result);
+    }
+
+    @DisplayName("getMemberSpots 메서드가 Spot List를 잘 반환하는지")
+    @Test
+    void getFavoriteSpotList() {
+        Long memberId = 1L;
+        Pageable pageable = mock(PageRequest.class);
+        List<Spot> favoriteSpots = Arrays.asList(mock(Spot.class), mock(Spot.class));
+        Page<Spot> expectedSpots = new PageImpl<>(favoriteSpots);
+
+        when(spotRepository.findAllMembersFavoriteSpot(memberId, pageable)).thenReturn(expectedSpots);
+
+        var result = spotReader.getFavoriteSpotList(memberId, pageable);
+
+        assertEquals(expectedSpots, result);
     }
 }

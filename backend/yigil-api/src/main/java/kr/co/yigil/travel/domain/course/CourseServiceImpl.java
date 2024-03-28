@@ -3,6 +3,7 @@ package kr.co.yigil.travel.domain.course;
 import kr.co.yigil.auth.domain.Accessor;
 import kr.co.yigil.favor.domain.FavorReader;
 import kr.co.yigil.file.FileUploader;
+import kr.co.yigil.follow.domain.FollowReader;
 import kr.co.yigil.global.Selected;
 import kr.co.yigil.global.exception.AuthException;
 import kr.co.yigil.member.Member;
@@ -17,6 +18,7 @@ import kr.co.yigil.travel.domain.course.CourseInfo.Main;
 import kr.co.yigil.travel.domain.dto.CourseListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,7 @@ public class CourseServiceImpl implements CourseService {
     private final MemberReader memberReader;
     private final CourseReader courseReader;
     private final FavorReader favorReader;
-
+    private final FollowReader followReader;
     private final CourseStore courseStore;
 
     private final CourseSeriesFactory courseSeriesFactory;
@@ -44,12 +46,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public CourseInfo.CoursesInPlaceResponseInfo getCoursesSliceInPlace(final Long placeId, final Long memberId, final Pageable pageable) {
-        var courseseSlice =  courseReader.getCoursesSliceInPlace(placeId, pageable);
+        var courseseSlice = courseReader.getCoursesSliceInPlace(placeId, pageable);
         List<CourseInfo.CourseInPlaceInfo> courseInPlaceInfoList = courseseSlice.getContent().stream()
                 .map(course -> {
                     boolean isLiked = favorReader.existsByMemberIdAndTravelId(memberId, course.getId());
-                    return new CourseInfo.CourseInPlaceInfo(course, isLiked);
-
+                    boolean isFollowing = followReader.isFollowing(memberId, course.getMember().getId());
+                    return new CourseInfo.CourseInPlaceInfo(course, isLiked, isFollowing);
                 })
                 .toList();
         return new CourseInfo.CoursesInPlaceResponseInfo(courseInPlaceInfoList, courseseSlice.hasNext());
@@ -122,5 +124,18 @@ public class CourseServiceImpl implements CourseService {
                     return new CourseSearchInfo(course, isLiked);
                 }).toList();
         return new CourseInfo.Slice(courses, result.hasNext());
+    }
+
+    @Override
+    public CourseInfo.MyFavoriteCoursesInfo getFavoriteCoursesInfo(Long memberId, PageRequest pageRequest) {
+        Page<Course> favoriteCourses = courseReader.getFavoriteCourses(memberId, pageRequest);
+        List<CourseInfo.FavoriteCourseInfo> favoriteCourseInfoList = favoriteCourses.getContent().stream()
+                .map(course -> {
+                            boolean isFollowing = followReader.isFollowing(memberId, course.getMember().getId());
+                            return new CourseInfo.FavoriteCourseInfo(course, isFollowing);
+                        }
+                )
+                .toList();
+        return new CourseInfo.MyFavoriteCoursesInfo(favoriteCourseInfoList, favoriteCourses.getTotalPages());
     }
 }

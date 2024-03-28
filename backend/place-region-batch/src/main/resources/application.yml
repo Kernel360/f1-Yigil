@@ -1,7 +1,7 @@
 spring:
   batch:
     job:
-      enabled: true
+      enabled: false
   jpa:
     database: postgresql
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect

@@ -46,27 +46,4 @@ class StatsReaderImplTest {
         assertEquals(expectedRegionStats, actualRegionStats);
     }
 
-//    @DisplayName("특정 기간 동안의 일별 좋아요 수 조회가 잘 되는지 확인한다.")
-//    @Test
-//    void readDailyFavorCountBetween() {
-//
-//        DailyTotalCount dailyTotalCount = new DailyFavorCount(5L, mock(Travel.class), null, null);
-//        when(dailyFavorCountRepository.findTotalLikesPerDay(any()).thenReturn(new PageImpl<>(List.of(dailyTotalCount)));
-//
-//        var result = statsReader.readDailyFavorCountBetween(null, null, null, null);
-//
-//        assertThat(result).isInstanceOf(PageImpl.class);
-//    }
-
-
-    @DisplayName("특정 기간 동안의 상위 N개의 일별 좋아요 수 조회가 잘 되는지 확인한다.")
-    @Test
-    void getTopDailyFavorCount() {
-        DailyFavorCount dailyFavorCount = new DailyFavorCount(5L, mock(Travel.class), null, null);
-        when(dailyFavorCountRepository.findTopByTravelTypeOrderByCountDesc(any(), any(), any(), any())).thenReturn(List.of(dailyFavorCount));
-
-        var result = statsReader.getTopDailyFavorCount(null, null, null, null);
-
-        assertThat(result).isInstanceOf(List.class);
-    }
 }

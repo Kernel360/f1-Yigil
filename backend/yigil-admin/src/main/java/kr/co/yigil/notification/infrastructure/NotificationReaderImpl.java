@@ -19,7 +19,7 @@ public class NotificationReaderImpl implements NotificationReader {
     @Override
     public Flux<ServerSentEvent<Notification>> getNotificationStream(Long memberId) {
         return sink.asFlux()
-                .filter(notification -> notification.getMember().getId().equals(memberId))
+                .filter(notification -> notification.getReceiver().getId().equals(memberId))
                 .map(notification -> ServerSentEvent.<Notification>builder()
                         .data(notification)
                         .build());
@@ -27,6 +27,6 @@ public class NotificationReaderImpl implements NotificationReader {
 
     @Override
     public Slice<Notification> getNotificationSlice(Long memberId, Pageable pageable) {
-        return notificationRepository.findAllByMemberIdAndReadIsFalse(memberId, pageable);
+        return notificationRepository.findAllByReceiverIdAndReadIsFalse(memberId, pageable);
     }
 }

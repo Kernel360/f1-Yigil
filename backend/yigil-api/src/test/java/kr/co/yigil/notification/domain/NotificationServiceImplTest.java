@@ -9,9 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -77,7 +75,7 @@ class NotificationServiceImplTest {
     @DisplayName("When valid parameters, readNotification method should be called correctly")
     @Test
     void givenValidParameters_whenReadNotification_thenShouldBeCalledCorrectly() {
-        Notification notification = new Notification(mock(Member.class), "message");
+        Notification notification = new Notification(mock(Member.class), mock(Member.class), "message");
         List<Long> ids = List.of(1L);
         when(notificationReader.getNotification(anyLong(), anyLong())).thenReturn(notification);
 

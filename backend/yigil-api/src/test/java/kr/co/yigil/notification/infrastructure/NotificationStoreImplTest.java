@@ -9,8 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
 public class NotificationStoreImplTest {
@@ -30,7 +29,8 @@ public class NotificationStoreImplTest {
     void whenStore_thenSaveIsCalled() {
         Long memberId = 1L;
         Member member = new Member(memberId, "kiit0901@gmail.com", "123456", "stone", "profile.jpg", SocialLoginType.KAKAO);
-        Notification notification = new Notification(member, "Notification content");
+        Member sender = mock(Member.class);
+        Notification notification = new Notification(member, sender,"Notification content");
 
         notificationStore.store(notification);
 

@@ -1,16 +1,14 @@
 package kr.co.yigil.follow.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.util.Objects;
+import jakarta.persistence.*;
 import kr.co.yigil.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -28,9 +26,13 @@ public class Follow {
     @JoinColumn(name = "following_id")
     private Member following;
 
+    @CreatedDate
+    private LocalDateTime createdAt;
+
     public Follow(final Member follower, final Member following) {
         this.follower = follower;
         this.following = following;
+        createdAt = LocalDateTime.now();
     }
 
 

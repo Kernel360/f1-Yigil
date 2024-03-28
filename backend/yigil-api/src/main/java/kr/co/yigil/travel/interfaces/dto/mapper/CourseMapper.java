@@ -8,10 +8,7 @@ import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
-import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
-import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
-import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
-import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
+import kr.co.yigil.travel.interfaces.dto.response.*;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.geojson.GeoJsonReader;
@@ -26,23 +23,6 @@ import java.util.List;
         uses = {SpotMapper.class}
 )
 public interface CourseMapper {
-
-//    CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
-
-//    @Mapping(target = "mapStaticImageFileUrl", expression = "java(course.getMapStaticImageFile().getFileUrl())")
-//    @Mapping(target = "title", expression = "java(course.getTitle())")
-//    @Mapping(target = "rate", expression = "java(String.valueOf(course.getRate()))")
-//    @Mapping(target = "spotCount", expression = "java(String.valueOf(course.getSpots().size()))")
-//    @Mapping(target = "createDate", expression = "java(course.getCreatedAt().toString())")
-//    @Mapping(target = "ownerProfileImageUrl", expression = "java(course.getMember().getProfileImageUrl())")
-//    @Mapping(target = "ownerNickname", expression = "java(course.getMember().getNickname())")
-//    CourseInfoDto courseToCourseInfoDto(Course course);
-//
-//    default List<CourseInfoDto> coursesToCourseInfoDtoList(List<Course> courses) {
-//        return courses.stream()
-//                .map(this::courseToCourseInfoDto)
-//                .collect(Collectors.toList());
-//    }
 
     CoursesInPlaceResponse courseSliceToCourseInPlaceResponse(CourseInfo.CoursesInPlaceResponseInfo courseSlice) ;
     CourseInfoDto toDto(CourseInfo.CourseInPlaceInfo courseInPlaceInfo);
@@ -123,4 +103,6 @@ public interface CourseMapper {
 
     @Mapping(target = "imageUrls", source = "imageUrls")
     List<MySpotsDetailResponse.SpotDetailDto> toMySpotDetailDtoList(List<CourseInfo.MySpotDetailDto> mySpotDetails);
+
+    MyFavoriteCoursesResponse toMyFavoriteCoursesResponse(CourseInfo.MyFavoriteCoursesInfo result);
 }
