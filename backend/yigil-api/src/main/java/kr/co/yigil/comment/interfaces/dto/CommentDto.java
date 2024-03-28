@@ -1,11 +1,8 @@
 package kr.co.yigil.comment.interfaces.dto;
 
+import lombok.*;
+
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 public class CommentDto {
 
@@ -54,6 +51,7 @@ public class CommentDto {
     @NoArgsConstructor
     public static class CommentsUnitInfo{
 
+        private boolean deleted;
         private Long id;
         private String content;
         private Long memberId;

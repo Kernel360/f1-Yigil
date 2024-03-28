@@ -10,6 +10,7 @@ import kr.co.yigil.travel.domain.spot.SpotInfo.MySpot;
 import kr.co.yigil.travel.domain.spot.SpotInfo.Slice;
 import kr.co.yigil.travel.domain.spot.SpotService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,9 @@ public class SpotFacade {
     public SpotInfo.MySpotsResponse getMemberSpotsInfo(final Long memberId,
         final Selected selected, final Pageable pageable) {
         return spotService.retrieveSpotList(memberId, selected, pageable);
+    }
+
+    public SpotInfo.MyFavoriteSpotsInfo getFavoriteSpotsInfo(Long memberId, PageRequest pageRequest) {
+        return spotService.getFavoriteSpotsInfo(memberId, pageRequest);
     }
 }

@@ -18,7 +18,9 @@ import kr.co.yigil.travel.domain.course.CourseInfo.Main;
 import kr.co.yigil.travel.domain.dto.CourseListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +47,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     @Transactional(readOnly = true)
     public CourseInfo.CoursesInPlaceResponseInfo getCoursesSliceInPlace(final Long placeId, final Long memberId, final Pageable pageable) {
-        var courseseSlice =  courseReader.getCoursesSliceInPlace(placeId, pageable);
+        var courseseSlice = courseReader.getCoursesSliceInPlace(placeId, pageable);
         List<CourseInfo.CourseInPlaceInfo> courseInPlaceInfoList = courseseSlice.getContent().stream()
                 .map(course -> {
                     boolean isLiked = favorReader.existsByMemberIdAndTravelId(memberId, course.getId());
@@ -123,5 +125,18 @@ public class CourseServiceImpl implements CourseService {
                     return new CourseSearchInfo(course, isLiked);
                 }).toList();
         return new CourseInfo.Slice(courses, result.hasNext());
+    }
+
+    @Override
+    public CourseInfo.MyFavoriteCoursesInfo getFavoriteCoursesInfo(Long memberId, PageRequest pageRequest) {
+        Slice<Course> favoriteCourses = courseReader.getFavoriteCourses(memberId, pageRequest);
+        List<CourseInfo.FavoriteCourseInfo> favoriteCourseInfoList = favoriteCourses.getContent().stream()
+                .map(course -> {
+                            boolean isFollowing = followReader.isFollowing(memberId, course.getMember().getId());
+                            return new CourseInfo.FavoriteCourseInfo(course, isFollowing);
+                        }
+                )
+                .toList();
+        return new CourseInfo.MyFavoriteCoursesInfo(favoriteCourseInfoList, favoriteCourses.hasNext());
     }
 }

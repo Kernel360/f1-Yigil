@@ -15,8 +15,19 @@ export const myPageTabs = [
     label: 'MY',
   },
   {
-    href: '/mypage/favorite',
+    href: '/mypage/favorite/course',
     label: '좋아요',
+  },
+];
+
+export const myPageFavoriteTabs = [
+  {
+    href: '/mypage/favorite/spot',
+    label: '장소',
+  },
+  {
+    href: '/mypage/favorite/course',
+    label: '코스',
   },
 ];
 
@@ -34,8 +45,8 @@ export const myPageMyTab = [
     label: '팔로워',
   },
   {
-    href: '/mypage/my/follow',
-    label: '팔로우',
+    href: '/mypage/my/following',
+    label: '팔로잉',
   },
 ];
 export const myPageTravelTabs = [

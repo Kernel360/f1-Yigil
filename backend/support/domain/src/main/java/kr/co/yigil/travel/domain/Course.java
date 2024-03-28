@@ -32,8 +32,8 @@ public class Course extends Travel {
 
 
     public Course(final Member member, final String title, final String description,
-        final double rate, final LineString path, final boolean isPrivate, final List<Spot> spots,
-        final int representativeSpotOrder, final AttachFile mapStaticImageFile) {
+                  final double rate, final LineString path, final boolean isPrivate, final List<Spot> spots,
+                  final int representativeSpotOrder, final AttachFile mapStaticImageFile) {
         super(member, title, description, rate, isPrivate);
         this.path = path;
         this.spots = spots;
@@ -42,8 +42,8 @@ public class Course extends Travel {
     }
 
     public Course(final Long id, final Member member, final String title, final String description,
-        final double rate, final LineString path, final boolean isPrivate, final List<Spot> spots,
-        final int representativeSpotOrder, final AttachFile mapStaticImageFile) {
+                  final double rate, final LineString path, final boolean isPrivate, final List<Spot> spots,
+                  final int representativeSpotOrder, final AttachFile mapStaticImageFile) {
         super(id, member, title, description, rate, isPrivate);
         this.path = path;
         this.spots = spots;
@@ -57,7 +57,7 @@ public class Course extends Travel {
         this.path = lineString;
         this.spots.clear();
         this.spots.addAll(spots);
-        if(mapStaticImageFile != null) {
+        if (mapStaticImageFile != null) {
             this.mapStaticImageFile = mapStaticImageFile;
         }
     }

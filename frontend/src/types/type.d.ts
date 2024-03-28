@@ -14,6 +14,9 @@ declare global {
       BASE_URL: string;
       DEV_BASE_URL: string;
 
+      NEXT_PUBLIC_BASE_URL: string;
+      NEXT_PUBLIC_DEV_BASE_URL: string;
+
       PRODUCTION_FRONTEND_URL: string;
       DEV_FRONTEND_URL: string;
 

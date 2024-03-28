@@ -456,6 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_spot_수정">Spot 수정</a></li>
 <li><a href="#_spot_삭제">Spot 삭제</a></li>
 <li><a href="#_내_spot_목록_조회">내 Spot 목록 조회</a></li>
+<li><a href="#_좋아요를_한_spot_목록_조회">좋아요를 한 Spot 목록 조회</a></li>
 </ul>
 </li>
 <li><a href="#_course_api">COURSE API</a>
@@ -469,6 +470,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_my_course_목록_조회">My Course 목록 조회</a></li>
 <li><a href="#_장소명으로_코스_검색">장소명으로 코스 검색</a></li>
 <li><a href="#_스팟아이디들로_스팟_정보_조회">스팟아이디들로 스팟 정보 조회</a></li>
+<li><a href="#_좋아요를_한_코스_목록_조회">좋아요를 한 코스 목록 조회</a></li>
 </ul>
 </li>
 <li><a href="#_travel_api">Travel API</a>
@@ -555,6 +557,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_notification_api_2">NOTIFICATION API</a>
 <ul class="sectlevel2">
 <li><a href="#_알림_읽기_처리">알림 읽기 처리</a></li>
+</ul>
+</li>
+<li><a href="#_region_api_2">REGION API</a>
+<ul class="sectlevel2">
+<li><a href="#_관심_장소_선택을_위한_정보_조회_2">관심 장소 선택을 위한 정보 조회</a></li>
+<li><a href="#_사용자의_관심_지역_목록_조회_2">사용자의 관심 지역 목록 조회</a></li>
+</ul>
+</li>
+<li><a href="#_report_api">Report API</a>
+<ul class="sectlevel2">
+<li><a href="#_신고하기">신고하기</a></li>
+<li><a href="#_request_63">Request</a></li>
+<li><a href="#_response_63">Response</a></li>
+<li><a href="#_신고_목록_조회">신고 목록 조회</a></li>
+<li><a href="#_request_64">Request</a></li>
+<li><a href="#_response_64">Response</a></li>
+<li><a href="#_신고_상세_조회">신고 상세 조회</a></li>
+<li><a href="#_request_65">Request</a></li>
+<li><a href="#_response_65">Response</a></li>
+<li><a href="#_신고_삭제">신고 삭제</a></li>
+<li><a href="#_request_66">Request</a></li>
+<li><a href="#_response_66">Response</a></li>
+<li><a href="#_신고_타입_목록_조회">신고 타입 목록 조회</a></li>
+<li><a href="#_request_67">Request</a></li>
+<li><a href="#_response_67">Response</a></li>
 </ul>
 </li>
 </ul>
@@ -736,7 +763,7 @@ Content-Length: 383
     "owner_profile_image_url" : "images/profile.jpg",
     "owner_nickname" : "오너 닉네임",
     "rate" : 4.5,
-    "create_date" : "2024-03-27T09:34:34.741058",
+    "create_date" : "2024-03-28T16:34:51.835949",
     "liked" : true,
     "following" : false
   } ],
@@ -1502,6 +1529,163 @@ Content-Length: 235
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_좋아요를_한_spot_목록_조회"><a class="link" href="#_좋아요를_한_spot_목록_조회">좋아요를 한 Spot 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_8"><a class="link" href="#_request_8">Request</a></h4>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_8"><a class="link" href="#_http_request_예시_8">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/spots/my/favorite?page=1&amp;size=5&amp;sortBy=place_name&amp;sortOrder=asc HTTP/1.1
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_query_parameter_3"><a class="link" href="#_query_parameter_3">Query Parameter</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 - default:1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기 - default:5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - place_name(디폴트값) / place_name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_8"><a class="link" href="#_response_8">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].spot_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글(리뷰) ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].place_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].place_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소 평점</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].created_date</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소 생성일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].writer_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].writer_nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].writer_profile_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].writer_email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이메일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로잉 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_8"><a class="link" href="#_http_response_예시_8">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 403
+
+{
+  "contents" : [ {
+    "spot_id" : 1,
+    "place_id" : 1,
+    "place_name" : "test course",
+    "rate" : 4.5,
+    "image_url" : "images/map.jpg",
+    "created_date" : "2024-03-28T16:34:51.820379",
+    "writer_id" : 1,
+    "writer_nickname" : "writer",
+    "writer_profile_image_url" : "images/profile.jpg",
+    "writer_email" : "user1@yigil.co.kr",
+    "following" : false
+  } ],
+  "has_next" : true
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1510,7 +1694,7 @@ Content-Length: 235
 <div class="sect2">
 <h3 id="_장소_내_course_조회"><a class="link" href="#_장소_내_course_조회">장소 내 Course 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_8"><a class="link" href="#_request_8">Request</a></h4>
+<h4 id="_request_9"><a class="link" href="#_request_9">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -1542,7 +1726,7 @@ Content-Length: 235
 </table>
 </div>
 <div class="sect4">
-<h5 id="_query_parameter_3"><a class="link" href="#_query_parameter_3">Query Parameter</a></h5>
+<h5 id="_query_parameter_4"><a class="link" href="#_query_parameter_4">Query Parameter</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1575,7 +1759,7 @@ Content-Length: 235
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_8"><a class="link" href="#_http_request_예시_8">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_9"><a class="link" href="#_http_request_예시_9">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/courses/place/1?page=1&amp;size=5&amp;sortBy=created_at&amp;sortOrder=desc HTTP/1.1
@@ -1585,7 +1769,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_8"><a class="link" href="#_response_8">Response</a></h4>
+<h4 id="_response_9"><a class="link" href="#_response_9">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1668,12 +1852,12 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_8"><a class="link" href="#_http_response_예시_8">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_9"><a class="link" href="#_http_response_예시_9">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 371
+Content-Length: 370
 
 {
   "courses" : [ {
@@ -1683,7 +1867,7 @@ Content-Length: 371
     "map_static_image_url" : "test",
     "rate" : 4.5,
     "spot_count" : 10,
-    "create_date" : "2024-03-27T09:34:34.480801",
+    "create_date" : "2024-03-28T16:34:51.54599",
     "owner_id" : 1,
     "owner_profile_image_url" : "test",
     "owner_nickname" : "test",
@@ -1703,7 +1887,7 @@ Content-Length: 371
 <p>링크 :</p>
 </div>
 <div class="sect3">
-<h4 id="_request_9"><a class="link" href="#_request_9">Request</a></h4>
+<h4 id="_request_10"><a class="link" href="#_request_10">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1813,7 +1997,7 @@ Content-Length: 371
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_9"><a class="link" href="#_http_request_예시_9">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_10"><a class="link" href="#_http_request_예시_10">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/courses HTTP/1.1
@@ -1841,7 +2025,7 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_9"><a class="link" href="#_response_9">Response</a></h4>
+<h4 id="_response_10"><a class="link" href="#_response_10">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1864,7 +2048,7 @@ Host: spring.restdocs.test
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_9"><a class="link" href="#_http_response_예시_9">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_10"><a class="link" href="#_http_response_예시_10">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1885,7 +2069,7 @@ Content-Length: 40
 <p>링크 :</p>
 </div>
 <div class="sect3">
-<h4 id="_request_10"><a class="link" href="#_request_10">Request</a></h4>
+<h4 id="_request_11"><a class="link" href="#_request_11">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1962,7 +2146,7 @@ Content-Length: 40
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_10"><a class="link" href="#_http_request_예시_10">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_11"><a class="link" href="#_http_request_예시_11">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/courses/only HTTP/1.1
@@ -1984,7 +2168,7 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_10"><a class="link" href="#_response_10">Response</a></h4>
+<h4 id="_response_11"><a class="link" href="#_response_11">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2007,7 +2191,7 @@ Host: spring.restdocs.test
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_10"><a class="link" href="#_http_response_예시_10">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_11"><a class="link" href="#_http_response_예시_11">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2025,7 +2209,7 @@ Content-Length: 40
 <div class="sect2">
 <h3 id="_course_상세_정보_조회"><a class="link" href="#_course_상세_정보_조회">Course 상세 정보 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_11"><a class="link" href="#_request_11">Request</a></h4>
+<h4 id="_request_12"><a class="link" href="#_request_12">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -2057,7 +2241,7 @@ Content-Length: 40
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_11"><a class="link" href="#_http_request_예시_11">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_12"><a class="link" href="#_http_request_예시_12">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/courses/1 HTTP/1.1
@@ -2067,7 +2251,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_11"><a class="link" href="#_response_11">Response</a></h4>
+<h4 id="_response_12"><a class="link" href="#_response_12">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2155,7 +2339,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_11"><a class="link" href="#_http_response_예시_11">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_12"><a class="link" href="#_http_response_예시_12">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2167,7 +2351,7 @@ Content-Length: 481
   "rate" : 4.5,
   "map_static_image_url" : "images/static.png",
   "description" : "본문",
-  "created_date" : "2024-03-27T09:34:34.536883",
+  "created_date" : "2024-03-28T16:34:51.603072",
   "line_string_json" : "lineStringJson",
   "spots" : [ {
     "id" : 1,
@@ -2191,7 +2375,7 @@ Content-Length: 481
 <p>링크 :</p>
 </div>
 <div class="sect3">
-<h4 id="_request_12"><a class="link" href="#_request_12">Request</a></h4>
+<h4 id="_request_13"><a class="link" href="#_request_13">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2329,7 +2513,7 @@ Content-Length: 481
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_request_예시_12"><a class="link" href="#_http_request_예시_12">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_13"><a class="link" href="#_http_request_예시_13">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/courses/1 HTTP/1.1
@@ -2356,89 +2540,6 @@ Host: spring.restdocs.test
     } ]
   } ]
 }</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_12"><a class="link" href="#_response_12">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답의 본문 메시지</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_12"><a class="link" href="#_http_response_예시_12">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 40
-
-{
-  "message" : "Course 수정 완료"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_course_삭제"><a class="link" href="#_course_삭제">Course 삭제</a></h3>
-<div class="sect3">
-<h4 id="_request_13"><a class="link" href="#_request_13">Request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>로그인 필수 : Y</p>
-</div>
-<div class="sect4">
-<h5 id="_path_parameter_9"><a class="link" href="#_path_parameter_9">Path Parameter</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. /api/v1/courses/{courseId}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courseId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">코스 아이디</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="_http_request_예시_13"><a class="link" href="#_http_request_예시_13">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/courses/1 HTTP/1.1
-Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 </div>
@@ -2475,7 +2576,7 @@ Content-Type: application/json
 Content-Length: 40
 
 {
-  "message" : "Course 삭제 완료"
+  "message" : "Course 수정 완료"
 }</code></pre>
 </div>
 </div>
@@ -2483,7 +2584,7 @@ Content-Length: 40
 </div>
 </div>
 <div class="sect2">
-<h3 id="_my_course_목록_조회"><a class="link" href="#_my_course_목록_조회">My Course 목록 조회</a></h3>
+<h3 id="_course_삭제"><a class="link" href="#_course_삭제">Course 삭제</a></h3>
 <div class="sect3">
 <h4 id="_request_14"><a class="link" href="#_request_14">Request</a></h4>
 <div class="listingblock">
@@ -2495,7 +2596,90 @@ Content-Length: 40
 <p>로그인 필수 : Y</p>
 </div>
 <div class="sect4">
-<h5 id="_query_parameter_4"><a class="link" href="#_query_parameter_4">Query Parameter</a></h5>
+<h5 id="_path_parameter_9"><a class="link" href="#_path_parameter_9">Path Parameter</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. /api/v1/courses/{courseId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>courseId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_14"><a class="link" href="#_http_request_예시_14">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/courses/1 HTTP/1.1
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_14"><a class="link" href="#_response_14">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답의 본문 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_14"><a class="link" href="#_http_response_예시_14">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 40
+
+{
+  "message" : "Course 삭제 완료"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_my_course_목록_조회"><a class="link" href="#_my_course_목록_조회">My Course 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_15"><a class="link" href="#_request_15">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_query_parameter_5"><a class="link" href="#_query_parameter_5">Query Parameter</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2532,7 +2716,7 @@ Content-Length: 40
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_14"><a class="link" href="#_http_request_예시_14">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_15"><a class="link" href="#_http_request_예시_15">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/courses/my?page=1&amp;size=5&amp;sortBy=created_at&amp;sortOrder=desc&amp;selected=public HTTP/1.1
@@ -2542,7 +2726,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_14"><a class="link" href="#_response_14">Response</a></h4>
+<h4 id="_response_15"><a class="link" href="#_response_15">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2600,7 +2784,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_14"><a class="link" href="#_http_response_예시_14">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_15"><a class="link" href="#_http_response_예시_15">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2627,7 +2811,7 @@ Content-Length: 246
 <div class="sect2">
 <h3 id="_장소명으로_코스_검색"><a class="link" href="#_장소명으로_코스_검색">장소명으로 코스 검색</a></h3>
 <div class="sect3">
-<h4 id="_request_15"><a class="link" href="#_request_15">Request</a></h4>
+<h4 id="_request_16"><a class="link" href="#_request_16">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -2637,7 +2821,7 @@ Content-Length: 246
 <p>로그인 필수 : N</p>
 </div>
 <div class="sect4">
-<h5 id="_query_parameter_5"><a class="link" href="#_query_parameter_5">Query Parameter</a></h5>
+<h5 id="_query_parameter_6"><a class="link" href="#_query_parameter_6">Query Parameter</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2674,7 +2858,7 @@ Content-Length: 246
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_15"><a class="link" href="#_http_request_예시_15">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_16"><a class="link" href="#_http_request_예시_16">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/courses/search?keyword=keyword&amp;page=1&amp;size=5&amp;sortBy=created_at&amp;sortOrder=desc HTTP/1.1
@@ -2684,7 +2868,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_15"><a class="link" href="#_response_15">Response</a></h4>
+<h4 id="_response_16"><a class="link" href="#_response_16">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2757,7 +2941,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_15"><a class="link" href="#_http_response_예시_15">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_16"><a class="link" href="#_http_response_예시_16">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2774,7 +2958,7 @@ Content-Length: 324
     "spot_count" : 3,
     "rate" : 4.5,
     "liked" : false,
-    "create_date" : "2024-03-27T09:34:34.439408"
+    "create_date" : "2024-03-28T16:34:51.487737"
   } ],
   "has_next" : false
 }</code></pre>
@@ -2786,7 +2970,7 @@ Content-Length: 324
 <div class="sect2">
 <h3 id="_스팟아이디들로_스팟_정보_조회"><a class="link" href="#_스팟아이디들로_스팟_정보_조회">스팟아이디들로 스팟 정보 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_16"><a class="link" href="#_request_16">Request</a></h4>
+<h4 id="_request_17"><a class="link" href="#_request_17">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
@@ -2832,7 +3016,7 @@ Content-Length: 324
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_16"><a class="link" href="#_http_request_예시_16">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_17"><a class="link" href="#_http_request_예시_17">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/courses/spots HTTP/1.1
@@ -2848,7 +3032,7 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_16"><a class="link" href="#_response_16">Response</a></h4>
+<h4 id="_response_17"><a class="link" href="#_response_17">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2922,7 +3106,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-27T09:34:34.4601",
+    "create_date" : "2024-03-28T16:34:51.514692",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2934,7 +3118,7 @@ Host: spring.restdocs.test
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-27T09:34:34.460372",
+    "create_date" : "2024-03-28T16:34:51.514976",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -2945,12 +3129,12 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect4">
-<h5 id="_http_response_예시_16"><a class="link" href="#_http_response_예시_16">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_17"><a class="link" href="#_http_response_예시_17">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 663
+Content-Length: 665
 
 {
   "spot_details" : [ {
@@ -2960,7 +3144,7 @@ Content-Length: 663
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-27T09:34:34.4601",
+    "create_date" : "2024-03-28T16:34:51.514692",
     "point" : {
       "x" : 1.0,
       "y" : 1.0
@@ -2972,7 +3156,7 @@ Content-Length: 663
     "rate" : 4.5,
     "description" : "스팟 본문",
     "image_urls" : [ "images/spot.jpg", "images/spotted.png" ],
-    "create_date" : "2024-03-27T09:34:34.460372",
+    "create_date" : "2024-03-28T16:34:51.514976",
     "point" : {
       "x" : 2.0,
       "y" : 2.0
@@ -2984,108 +3168,54 @@ Content-Length: 663
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_travel_api"><a class="link" href="#_travel_api">Travel API</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_게시글_공개_상태로_전환"><a class="link" href="#_게시글_공개_상태로_전환">게시글 공개 상태로 전환</a></h3>
+<h3 id="_좋아요를_한_코스_목록_조회"><a class="link" href="#_좋아요를_한_코스_목록_조회">좋아요를 한 코스 목록 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_17"><a class="link" href="#_request_17">Request</a></h4>
+<h4 id="_request_18"><a class="link" href="#_request_18">Request</a></h4>
+<div class="sect4">
+<h5 id="_http_request_예시_18"><a class="link" href="#_http_request_예시_18">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "travel_id" : 1
-}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/courses/my/favorite?page=1&amp;size=5&amp;sortBy=title&amp;sortOrder=asc HTTP/1.1
+Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
+</div>
 <div class="sect4">
-<h5 id="_http_request_예시_17"><a class="link" href="#_http_request_예시_17">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/travels/change-on-public HTTP/1.1
-Content-Type: application/json
-Content-Length: 21
-Host: spring.restdocs.test
-
-{
-  "travel_id" : 1
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_17"><a class="link" href="#_response_17">Response</a></h4>
+<h5 id="_query_parameter_7"><a class="link" href="#_query_parameter_7">Query Parameter</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Parameter</th>
 <th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답의 본문 메시지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 - default:1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기 - default:5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션 - title(디폴트값) / title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서 - desc(디폴트값) 내림차순 / asc 오름차순</p></td>
 </tr>
 </tbody>
 </table>
-<div class="sect4">
-<h5 id="_http_response_예시_17"><a class="link" href="#_http_response_예시_17">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 54
-
-{
-  "message" : "리뷰 공개 상태 변경 완료"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_게시글_비공개_상태로_전환"><a class="link" href="#_게시글_비공개_상태로_전환">게시글 비공개 상태로 전환</a></h3>
-<div class="sect3">
-<h4 id="_request_18"><a class="link" href="#_request_18">Request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "travel_id" : 2
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>로그인 필수 : Y</p>
-</div>
-<div class="sect4">
-<h5 id="_http_request_예시_18"><a class="link" href="#_http_request_예시_18">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/travels/change-on-private HTTP/1.1
-Content-Type: application/json
-Content-Length: 21
-Host: spring.restdocs.test
-
-{
-  "travel_id" : 2
-}</code></pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect3">
@@ -3105,9 +3235,59 @@ Host: spring.restdocs.test
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].course_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답의 본문 메시지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 평점</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].spot_count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 포함 장소 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].created_date</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 생성일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].map_static_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 지도 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].writer_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 작성자 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].writer_nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 작성자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].writer_profile_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코스 작성자 프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>contents[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로잉 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지가 있는지 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -3117,25 +3297,41 @@ Host: spring.restdocs.test
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 54
+Content-Length: 367
 
 {
-  "message" : "리뷰 공개 상태 변경 완료"
+  "contents" : [ {
+    "course_id" : 1,
+    "title" : "test",
+    "rate" : 4.5,
+    "spot_count" : 10,
+    "created_date" : "2024-03-28T16:34:51.526412",
+    "map_static_image_url" : "images/map.jpg",
+    "writer_id" : 1,
+    "writer_nickname" : "nickname",
+    "writer_profile_image_url" : "images/profile.jpg",
+    "following" : true
+  } ],
+  "has_next" : false
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_travel_api"><a class="link" href="#_travel_api">Travel API</a></h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_게시글_리스트_공개비공개_전환"><a class="link" href="#_게시글_리스트_공개비공개_전환">게시글 리스트 공개/비공개 전환</a></h3>
+<h3 id="_게시글_공개_상태로_전환"><a class="link" href="#_게시글_공개_상태로_전환">게시글 공개 상태로 전환</a></h3>
 <div class="sect3">
 <h4 id="_request_19"><a class="link" href="#_request_19">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "travel_ids" : [ 1 ],
-  "is_private" : false
+  "travel_id" : 1
 }</code></pre>
 </div>
 </div>
@@ -3146,14 +3342,13 @@ Content-Length: 54
 <h5 id="_http_request_예시_19"><a class="link" href="#_http_request_예시_19">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/travels/change-visibility HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/travels/change-on-public HTTP/1.1
 Content-Type: application/json
-Content-Length: 50
+Content-Length: 21
 Host: spring.restdocs.test
 
 {
-  "travel_ids" : [ 1 ],
-  "is_private" : false
+  "travel_id" : 1
 }</code></pre>
 </div>
 </div>
@@ -3178,12 +3373,152 @@ Host: spring.restdocs.test
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">메시지</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답의 본문 메시지</p></td>
 </tr>
 </tbody>
 </table>
 <div class="sect4">
 <h5 id="_http_response_예시_19"><a class="link" href="#_http_response_예시_19">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 54
+
+{
+  "message" : "리뷰 공개 상태 변경 완료"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_게시글_비공개_상태로_전환"><a class="link" href="#_게시글_비공개_상태로_전환">게시글 비공개 상태로 전환</a></h3>
+<div class="sect3">
+<h4 id="_request_20"><a class="link" href="#_request_20">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "travel_id" : 2
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_20"><a class="link" href="#_http_request_예시_20">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/travels/change-on-private HTTP/1.1
+Content-Type: application/json
+Content-Length: 21
+Host: spring.restdocs.test
+
+{
+  "travel_id" : 2
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_20"><a class="link" href="#_response_20">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답의 본문 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_20"><a class="link" href="#_http_response_예시_20">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 54
+
+{
+  "message" : "리뷰 공개 상태 변경 완료"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_게시글_리스트_공개비공개_전환"><a class="link" href="#_게시글_리스트_공개비공개_전환">게시글 리스트 공개/비공개 전환</a></h3>
+<div class="sect3">
+<h4 id="_request_21"><a class="link" href="#_request_21">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "travel_ids" : [ 1 ],
+  "is_private" : false
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_21"><a class="link" href="#_http_request_예시_21">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/travels/change-visibility HTTP/1.1
+Content-Type: application/json
+Content-Length: 50
+Host: spring.restdocs.test
+
+{
+  "travel_ids" : [ 1 ],
+  "is_private" : false
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_21"><a class="link" href="#_response_21">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_21"><a class="link" href="#_http_response_예시_21">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -3206,7 +3541,7 @@ Content-Length: 54
 <div class="sect2">
 <h3 id="_static_image_존재_유무_확인"><a class="link" href="#_static_image_존재_유무_확인">Static Image 존재 유무 확인</a></h3>
 <div class="sect3">
-<h4 id="_request_20"><a class="link" href="#_request_20">Request</a></h4>
+<h4 id="_request_22"><a class="link" href="#_request_22">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -3241,7 +3576,7 @@ Content-Length: 54
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_20"><a class="link" href="#_http_request_예시_20">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_22"><a class="link" href="#_http_request_예시_22">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/static-image?name=%EC%96%B4%EB%8A%90%EC%9E%A5%EC%86%8C&amp;address=%EC%96%B4%EB%8A%90%EC%A3%BC%EC%86%8C HTTP/1.1
@@ -3251,7 +3586,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_20"><a class="link" href="#_response_20">Response</a></h4>
+<h4 id="_response_22"><a class="link" href="#_response_22">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3284,7 +3619,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_20"><a class="link" href="#_http_response_예시_20">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_22"><a class="link" href="#_http_response_예시_22">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -3304,7 +3639,7 @@ Content-Length: 100
 <div class="sect2">
 <h3 id="_인기_장소_목록_조회"><a class="link" href="#_인기_장소_목록_조회">인기 장소 목록 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_21"><a class="link" href="#_request_21">Request</a></h4>
+<h4 id="_request_23"><a class="link" href="#_request_23">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -3314,7 +3649,7 @@ Content-Length: 100
 <p>로그인 필수: N</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_21"><a class="link" href="#_http_request_예시_21">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_23"><a class="link" href="#_http_request_예시_23">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/popular HTTP/1.1
@@ -3324,7 +3659,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_21"><a class="link" href="#_response_21">Response</a></h4>
+<h4 id="_response_23"><a class="link" href="#_response_23">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3377,7 +3712,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_21"><a class="link" href="#_http_response_예시_21">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_23"><a class="link" href="#_http_response_예시_23">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -3402,243 +3737,6 @@ Content-Length: 191
 <div class="sect2">
 <h3 id="_인기_장소_목록_더보기"><a class="link" href="#_인기_장소_목록_더보기">인기 장소 목록 더보기</a></h3>
 <div class="sect3">
-<h4 id="_request_22"><a class="link" href="#_request_22">Request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>로그인 필수: N</p>
-</div>
-<div class="sect4">
-<h5 id="_http_request_예시_22"><a class="link" href="#_http_request_예시_22">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/popular/more HTTP/1.1
-Host: spring.restdocs.test</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_22"><a class="link" href="#_response_22">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">place의 정보</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">place의 고유 Id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].place_name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 장소명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].review_count</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰의 개수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].thumbnail_image_url</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 대표 이미지의 Url</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].rate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 평점 정보</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].bookmarked</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 장소의 북마크 여부</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_22"><a class="link" href="#_http_response_예시_22">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 191
-
-{
-  "places" : [ {
-    "id" : 1,
-    "place_name" : "장소명",
-    "review_count" : "10",
-    "thumbnail_image_url" : "http://image.com",
-    "rate" : "3.5",
-    "bookmarked" : true
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_장소_상세_조회"><a class="link" href="#_장소_상세_조회">장소 상세 조회</a></h3>
-<div class="sect3">
-<h4 id="_request_23"><a class="link" href="#_request_23">Request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>로그인 필수: N</p>
-</div>
-<div class="sect4">
-<h5 id="_path_parameters"><a class="link" href="#_path_parameters">Path Parameters</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. /api/v1/places/{placeId}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>placeId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 고유 아이디</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="_http_request_예시_23"><a class="link" href="#_http_request_예시_23">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/1 HTTP/1.1
-Host: spring.restdocs.test</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_23"><a class="link" href="#_response_23">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 고유 아이디</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>place_name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 장소명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>address</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 주소</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>thumbnail_image_url</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 대표 이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>map_static_image_url</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 지도 이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.x</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 x 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.y</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 y 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarked</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저의 장소 북마크 여부</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rate</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 평점</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>review_count</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소 내의 리뷰 개수</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_23"><a class="link" href="#_http_response_예시_23">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 263
-
-{
-  "id" : 1,
-  "place_name" : "장소명",
-  "address" : "장소주소",
-  "thumbnail_image_url" : "image.com",
-  "map_static_image_url" : "image.net",
-  "point" : {
-    "x" : 1.0,
-    "y" : 1.0
-  },
-  "rate" : 3.0,
-  "review_count" : 50,
-  "bookmarked" : true
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_지역별_장소_목록_조회"><a class="link" href="#_지역별_장소_목록_조회">지역별 장소 목록 조회</a></h3>
-<div class="sect3">
 <h4 id="_request_24"><a class="link" href="#_request_24">Request</a></h4>
 <div class="listingblock">
 <div class="content">
@@ -3649,32 +3747,10 @@ Content-Length: 263
 <p>로그인 필수: N</p>
 </div>
 <div class="sect4">
-<h5 id="_path_parameters_2"><a class="link" href="#_path_parameters_2">Path Parameters</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. /api/v1/places/region/{regionId}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regionId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">지역의 고유 아이디</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
 <h5 id="_http_request_예시_24"><a class="link" href="#_http_request_예시_24">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/region/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/popular/more HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -3757,7 +3833,7 @@ Content-Length: 191
 </div>
 </div>
 <div class="sect2">
-<h3 id="_지역별_장소_목록_더보기"><a class="link" href="#_지역별_장소_목록_더보기">지역별 장소 목록 더보기</a></h3>
+<h3 id="_장소_상세_조회"><a class="link" href="#_장소_상세_조회">장소 상세 조회</a></h3>
 <div class="sect3">
 <h4 id="_request_25"><a class="link" href="#_request_25">Request</a></h4>
 <div class="listingblock">
@@ -3769,9 +3845,148 @@ Content-Length: 191
 <p>로그인 필수: N</p>
 </div>
 <div class="sect4">
-<h5 id="_path_parameters_3"><a class="link" href="#_path_parameters_3">Path Parameters</a></h5>
+<h5 id="_path_parameters"><a class="link" href="#_path_parameters">Path Parameters</a></h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. /api/v1/places/region/{regionId}/more</caption>
+<caption class="title">Table 10. /api/v1/places/{placeId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>placeId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 고유 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_25"><a class="link" href="#_http_request_예시_25">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/1 HTTP/1.1
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_25"><a class="link" href="#_response_25">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 고유 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>place_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 장소명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>thumbnail_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 대표 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>map_static_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 지도 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>point.y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 y 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bookmarked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저의 장소 북마크 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 평점</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>review_count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소 내의 리뷰 개수</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_25"><a class="link" href="#_http_response_예시_25">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 263
+
+{
+  "id" : 1,
+  "place_name" : "장소명",
+  "address" : "장소주소",
+  "thumbnail_image_url" : "image.com",
+  "map_static_image_url" : "image.net",
+  "point" : {
+    "x" : 1.0,
+    "y" : 1.0
+  },
+  "rate" : 3.0,
+  "review_count" : 50,
+  "bookmarked" : true
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_지역별_장소_목록_조회"><a class="link" href="#_지역별_장소_목록_조회">지역별 장소 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_26"><a class="link" href="#_request_26">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수: N</p>
+</div>
+<div class="sect4">
+<h5 id="_path_parameters_2"><a class="link" href="#_path_parameters_2">Path Parameters</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. /api/v1/places/region/{regionId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3791,17 +4006,17 @@ Content-Length: 191
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_25"><a class="link" href="#_http_request_예시_25">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_26"><a class="link" href="#_http_request_예시_26">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/region/1/more HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/region/1 HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_25"><a class="link" href="#_response_25">Response</a></h4>
+<h4 id="_response_26"><a class="link" href="#_response_26">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3854,7 +4069,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_25"><a class="link" href="#_http_response_예시_25">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_26"><a class="link" href="#_http_response_예시_26">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -3877,9 +4092,9 @@ Content-Length: 191
 </div>
 </div>
 <div class="sect2">
-<h3 id="_주변_장소_검색"><a class="link" href="#_주변_장소_검색">주변 장소 검색</a></h3>
+<h3 id="_지역별_장소_목록_더보기"><a class="link" href="#_지역별_장소_목록_더보기">지역별 장소 목록 더보기</a></h3>
 <div class="sect3">
-<h4 id="_request_26"><a class="link" href="#_request_26">Request</a></h4>
+<h4 id="_request_27"><a class="link" href="#_request_27">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -3889,8 +4104,9 @@ Content-Length: 191
 <p>로그인 필수: N</p>
 </div>
 <div class="sect4">
-<h5 id="_query_parameters_2"><a class="link" href="#_query_parameters_2">Query Parameters</a></h5>
+<h5 id="_path_parameters_3"><a class="link" href="#_path_parameters_3">Path Parameters</a></h5>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. /api/v1/places/region/{regionId}/more</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3903,131 +4119,17 @@ Content-Length: 191
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>minX</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">최소 x 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>minY</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">최소 y 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxX</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">최대 x 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxY</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">최대 y 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역의 고유 아이디</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect4">
-<h5 id="_http_request_예시_26"><a class="link" href="#_http_request_예시_26">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/near?minX=1&amp;minY=1&amp;maxX=2&amp;maxY=2&amp;page=1 HTTP/1.1
-Host: spring.restdocs.test</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_26"><a class="link" href="#_response_26">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">주변 장소의 정보</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 고유 아이디</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].place_name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 이름</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].x</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 x 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].y</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 y 좌표</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>current_page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>total_pages</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">총 페이지의 개수</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_26"><a class="link" href="#_http_response_예시_26">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 147
-
-{
-  "places" : [ {
-    "id" : 1,
-    "x" : 127.0,
-    "y" : 38.0,
-    "place_name" : "장소명"
-  } ],
-  "current_page" : 1,
-  "total_pages" : 1
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_개인별_추천_장소_조회"><a class="link" href="#_개인별_추천_장소_조회">개인별 추천 장소 조회</a></h3>
-<div class="sect3">
-<h4 id="_request_27"><a class="link" href="#_request_27">Request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>로그인 필수: Y</p>
 </div>
 <div class="sect4">
 <h5 id="_http_request_예시_27"><a class="link" href="#_http_request_예시_27">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/popular-demographics HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/region/1/more HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -4110,9 +4212,144 @@ Content-Length: 191
 </div>
 </div>
 <div class="sect2">
-<h3 id="_개인별_추천_장소_더보기"><a class="link" href="#_개인별_추천_장소_더보기">개인별 추천 장소 더보기</a></h3>
+<h3 id="_주변_장소_검색"><a class="link" href="#_주변_장소_검색">주변 장소 검색</a></h3>
 <div class="sect3">
 <h4 id="_request_28"><a class="link" href="#_request_28">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수: N</p>
+</div>
+<div class="sect4">
+<h5 id="_query_parameters_2"><a class="link" href="#_query_parameters_2">Query Parameters</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>minX</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최소 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>minY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최소 y 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxX</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최대 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>maxY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최대 y 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_28"><a class="link" href="#_http_request_예시_28">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/near?minX=1&amp;minY=1&amp;maxX=2&amp;maxY=2&amp;page=1 HTTP/1.1
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_28"><a class="link" href="#_response_28">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">주변 장소의 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 고유 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].place_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].x</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 x 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].y</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 y 좌표</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>current_page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>total_pages</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">총 페이지의 개수</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_28"><a class="link" href="#_http_response_예시_28">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 147
+
+{
+  "places" : [ {
+    "id" : 1,
+    "x" : 127.0,
+    "y" : 38.0,
+    "place_name" : "장소명"
+  } ],
+  "current_page" : 1,
+  "total_pages" : 1
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_개인별_추천_장소_조회"><a class="link" href="#_개인별_추천_장소_조회">개인별 추천 장소 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_29"><a class="link" href="#_request_29">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -4122,17 +4359,17 @@ Content-Length: 191
 <p>로그인 필수: Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_28"><a class="link" href="#_http_request_예시_28">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_29"><a class="link" href="#_http_request_예시_29">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/popular-demographics-more HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/popular-demographics HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_28"><a class="link" href="#_response_28">Response</a></h4>
+<h4 id="_response_29"><a class="link" href="#_response_29">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4185,7 +4422,105 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_28"><a class="link" href="#_http_response_예시_28">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_29"><a class="link" href="#_http_response_예시_29">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 191
+
+{
+  "places" : [ {
+    "id" : 1,
+    "place_name" : "장소명",
+    "review_count" : "10",
+    "thumbnail_image_url" : "http://image.com",
+    "rate" : "3.5",
+    "bookmarked" : true
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_개인별_추천_장소_더보기"><a class="link" href="#_개인별_추천_장소_더보기">개인별 추천 장소 더보기</a></h3>
+<div class="sect3">
+<h4 id="_request_30"><a class="link" href="#_request_30">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수: Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_30"><a class="link" href="#_http_request_예시_30">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/popular-demographics-more HTTP/1.1
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_30"><a class="link" href="#_response_30">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">place의 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">place의 고유 Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].place_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 장소명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].review_count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰의 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].thumbnail_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 대표 이미지의 Url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].rate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">장소의 평점 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>places[].bookmarked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 장소의 북마크 여부</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_30"><a class="link" href="#_http_response_예시_30">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4210,7 +4545,7 @@ Content-Length: 191
 <div class="sect2">
 <h3 id="_추천_검색어_조회"><a class="link" href="#_추천_검색어_조회">추천 검색어 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_29"><a class="link" href="#_request_29">Request</a></h4>
+<h4 id="_request_31"><a class="link" href="#_request_31">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -4241,7 +4576,7 @@ Content-Length: 191
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_request_예시_29"><a class="link" href="#_http_request_예시_29">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_31"><a class="link" href="#_http_request_예시_31">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/keyword?keyword=%ED%82%A4%EC%9B%8C%EB%93%9C HTTP/1.1
@@ -4251,7 +4586,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_29"><a class="link" href="#_response_29">Response</a></h4>
+<h4 id="_response_31"><a class="link" href="#_response_31">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4274,7 +4609,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_29"><a class="link" href="#_http_response_예시_29">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_31"><a class="link" href="#_http_response_예시_31">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4292,7 +4627,7 @@ Content-Length: 34
 <div class="sect2">
 <h3 id="_장소_검색"><a class="link" href="#_장소_검색">장소 검색</a></h3>
 <div class="sect3">
-<h4 id="_request_30"><a class="link" href="#_request_30">Request</a></h4>
+<h4 id="_request_32"><a class="link" href="#_request_32">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
@@ -4339,7 +4674,7 @@ Content-Length: 34
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_request_예시_30"><a class="link" href="#_http_request_예시_30">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_32"><a class="link" href="#_http_request_예시_32">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/places/search?keyword=%ED%82%A4%EC%9B%8C%EB%93%9C&amp;page=1&amp;size=5&amp;sortBy=latest_uploaded_time&amp;sortOrder=desc HTTP/1.1
@@ -4349,7 +4684,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_30"><a class="link" href="#_response_30">Response</a></h4>
+<h4 id="_response_32"><a class="link" href="#_response_32">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4407,7 +4742,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_30"><a class="link" href="#_http_response_예시_30">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_32"><a class="link" href="#_http_response_예시_32">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4438,7 +4773,7 @@ Content-Length: 212
 <div class="sect2">
 <h3 id="_관심_장소_선택을_위한_정보_조회"><a class="link" href="#_관심_장소_선택을_위한_정보_조회">관심 장소 선택을 위한 정보 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_31"><a class="link" href="#_request_31">Request</a></h4>
+<h4 id="_request_33"><a class="link" href="#_request_33">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json"></code></pre>
@@ -4448,7 +4783,7 @@ Content-Length: 212
 <p>로그인 필수 : Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_31"><a class="link" href="#_http_request_예시_31">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_33"><a class="link" href="#_http_request_예시_33">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/regions/select HTTP/1.1
@@ -4459,7 +4794,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_31"><a class="link" href="#_response_31">Response</a></h4>
+<h4 id="_response_33"><a class="link" href="#_response_33">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4507,7 +4842,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_31"><a class="link" href="#_http_response_예시_31">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_33"><a class="link" href="#_http_response_예시_33">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4532,7 +4867,7 @@ Content-Length: 178
 <div class="sect2">
 <h3 id="_사용자의_관심_지역_목록_조회"><a class="link" href="#_사용자의_관심_지역_목록_조회">사용자의 관심 지역 목록 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_32"><a class="link" href="#_request_32">Request</a></h4>
+<h4 id="_request_34"><a class="link" href="#_request_34">Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json"></code></pre>
@@ -4542,7 +4877,7 @@ Content-Length: 178
 <p>로그인 필수 : Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_32"><a class="link" href="#_http_request_예시_32">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_34"><a class="link" href="#_http_request_예시_34">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/regions/my HTTP/1.1
@@ -4553,7 +4888,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_32"><a class="link" href="#_response_32">Response</a></h4>
+<h4 id="_response_34"><a class="link" href="#_response_34">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4586,7 +4921,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_32"><a class="link" href="#_http_response_예시_32">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_34"><a class="link" href="#_http_response_예시_34">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4612,7 +4947,7 @@ Content-Length: 72
 <div class="sect2">
 <h3 id="_북마크_추가"><a class="link" href="#_북마크_추가">북마크 추가</a></h3>
 <div class="sect3">
-<h4 id="_request_33"><a class="link" href="#_request_33">Request</a></h4>
+<h4 id="_request_35"><a class="link" href="#_request_35">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
@@ -4639,7 +4974,7 @@ Content-Length: 72
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_33"><a class="link" href="#_http_request_예시_33">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_35"><a class="link" href="#_http_request_예시_35">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/add-bookmark/1 HTTP/1.1
@@ -4650,7 +4985,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_33"><a class="link" href="#_response_33">Response</a></h4>
+<h4 id="_response_35"><a class="link" href="#_response_35">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4673,7 +5008,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_33"><a class="link" href="#_http_response_예시_33">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_35"><a class="link" href="#_http_response_예시_35">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4691,7 +5026,7 @@ Content-Length: 50
 <div class="sect2">
 <h3 id="_북마크_삭제"><a class="link" href="#_북마크_삭제">북마크 삭제</a></h3>
 <div class="sect3">
-<h4 id="_request_34"><a class="link" href="#_request_34">Request</a></h4>
+<h4 id="_request_36"><a class="link" href="#_request_36">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
@@ -4718,7 +5053,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_34"><a class="link" href="#_http_request_예시_34">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_36"><a class="link" href="#_http_request_예시_36">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/delete-bookmark/1 HTTP/1.1
@@ -4729,7 +5064,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_34"><a class="link" href="#_response_34">Response</a></h4>
+<h4 id="_response_36"><a class="link" href="#_response_36">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4752,7 +5087,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_34"><a class="link" href="#_http_response_예시_34">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_36"><a class="link" href="#_http_response_예시_36">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4770,7 +5105,7 @@ Content-Length: 50
 <div class="sect2">
 <h3 id="_북마크_조회"><a class="link" href="#_북마크_조회">북마크 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_35"><a class="link" href="#_request_35">Request</a></h4>
+<h4 id="_request_37"><a class="link" href="#_request_37">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
@@ -4808,7 +5143,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_35"><a class="link" href="#_http_request_예시_35">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_37"><a class="link" href="#_http_request_예시_37">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/bookmarks HTTP/1.1
@@ -4819,7 +5154,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_35"><a class="link" href="#_response_35">Response</a></h4>
+<h4 id="_response_37"><a class="link" href="#_response_37">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4872,7 +5207,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_35"><a class="link" href="#_http_response_예시_35">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_37"><a class="link" href="#_http_response_예시_37">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4902,9 +5237,9 @@ Content-Length: 185
 <div class="sect2">
 <h3 id="_travel_좋아요_하기"><a class="link" href="#_travel_좋아요_하기">TRAVEL 좋아요 하기</a></h3>
 <div class="sect3">
-<h4 id="_request_36"><a class="link" href="#_request_36">Request</a></h4>
+<h4 id="_request_38"><a class="link" href="#_request_38">Request</a></h4>
 <div class="sect4">
-<h5 id="_http_request_예시_36"><a class="link" href="#_http_request_예시_36">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_38"><a class="link" href="#_http_request_예시_38">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/like/1 HTTP/1.1
@@ -4937,7 +5272,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_36"><a class="link" href="#_response_36">Response</a></h4>
+<h4 id="_response_38"><a class="link" href="#_response_38">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4970,7 +5305,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_http_response_예시_36"><a class="link" href="#_http_response_예시_36">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_38"><a class="link" href="#_http_response_예시_38">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4989,9 +5324,9 @@ Content-Length: 55
 <div class="sect2">
 <h3 id="_travel_좋아요_취소하기"><a class="link" href="#_travel_좋아요_취소하기">TRAVEL 좋아요 취소하기</a></h3>
 <div class="sect3">
-<h4 id="_request_37"><a class="link" href="#_request_37">Request</a></h4>
+<h4 id="_request_39"><a class="link" href="#_request_39">Request</a></h4>
 <div class="sect4">
-<h5 id="_http_request_예시_37"><a class="link" href="#_http_request_예시_37">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_39"><a class="link" href="#_http_request_예시_39">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/unlike/1 HTTP/1.1
@@ -5024,7 +5359,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_37"><a class="link" href="#_response_37">Response</a></h4>
+<h4 id="_response_39"><a class="link" href="#_response_39">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -5066,7 +5401,7 @@ Host: spring.restdocs.test</code></pre>
 <div class="sect2">
 <h3 id="_comment_생성"><a class="link" href="#_comment_생성">comment 생성</a></h3>
 <div class="sect3">
-<h4 id="_request_38"><a class="link" href="#_request_38">Request</a></h4>
+<h4 id="_request_40"><a class="link" href="#_request_40">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : N</p>
 </div>
@@ -5079,7 +5414,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_38"><a class="link" href="#_http_request_예시_38">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_40"><a class="link" href="#_http_request_예시_40">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/comments/travels/1 HTTP/1.1
@@ -5096,7 +5431,7 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_38"><a class="link" href="#_response_38">Response</a></h4>
+<h4 id="_response_40"><a class="link" href="#_response_40">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -5119,7 +5454,7 @@ Host: spring.restdocs.test
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_37"><a class="link" href="#_http_response_예시_37">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_39"><a class="link" href="#_http_response_예시_39">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -5137,7 +5472,7 @@ Content-Length: 40
 <div class="sect2">
 <h3 id="_댓글_리스트_조회"><a class="link" href="#_댓글_리스트_조회">댓글 리스트 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_39"><a class="link" href="#_request_39">Request</a></h4>
+<h4 id="_request_41"><a class="link" href="#_request_41">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : N</p>
 </div>
@@ -5186,7 +5521,7 @@ Content-Length: 40
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_39"><a class="link" href="#_http_request_예시_39">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_41"><a class="link" href="#_http_request_예시_41">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/comments/travels/1?page=1&amp;size=5 HTTP/1.1
@@ -5197,7 +5532,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_39"><a class="link" href="#_response_39">Response</a></h4>
+<h4 id="_response_41"><a class="link" href="#_response_41">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -5216,6 +5551,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">comment의 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].deleted</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].id</code></p></td>
@@ -5260,15 +5600,16 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_38"><a class="link" href="#_http_response_예시_38">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_40"><a class="link" href="#_http_response_예시_40">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 497
+Content-Length: 543
 
 {
   "content" : [ {
+    "deleted" : false,
     "id" : 1,
     "content" : "content",
     "member_id" : 1,
@@ -5277,6 +5618,7 @@ Content-Length: 497
     "child_count" : 3,
     "created_at" : "2024-03-01"
   }, {
+    "deleted" : false,
     "id" : 2,
     "content" : "content2",
     "member_id" : 1,
@@ -5295,7 +5637,7 @@ Content-Length: 497
 <div class="sect2">
 <h3 id="_대댓글_리스트_조회"><a class="link" href="#_대댓글_리스트_조회">대댓글 리스트 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_40"><a class="link" href="#_request_40">Request</a></h4>
+<h4 id="_request_42"><a class="link" href="#_request_42">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : N</p>
 </div>
@@ -5344,7 +5686,7 @@ Content-Length: 497
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_40"><a class="link" href="#_http_request_예시_40">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_42"><a class="link" href="#_http_request_예시_42">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/comments/parents/1?page=1&amp;size=5 HTTP/1.1
@@ -5355,7 +5697,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_40"><a class="link" href="#_response_40">Response</a></h4>
+<h4 id="_response_42"><a class="link" href="#_response_42">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -5374,6 +5716,11 @@ Host: spring.restdocs.test</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">comment의 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].deleted</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].id</code></p></td>
@@ -5418,15 +5765,16 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_39"><a class="link" href="#_http_response_예시_39">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_41"><a class="link" href="#_http_response_예시_41">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 497
+Content-Length: 543
 
 {
   "content" : [ {
+    "deleted" : false,
     "id" : 1,
     "content" : "content",
     "member_id" : 1,
@@ -5435,6 +5783,7 @@ Content-Length: 497
     "child_count" : 0,
     "created_at" : "2024-03-01"
   }, {
+    "deleted" : false,
     "id" : 2,
     "content" : "content2",
     "member_id" : 1,
@@ -5453,7 +5802,7 @@ Content-Length: 497
 <div class="sect2">
 <h3 id="_comment_삭제"><a class="link" href="#_comment_삭제">comment 삭제</a></h3>
 <div class="sect3">
-<h4 id="_request_41"><a class="link" href="#_request_41">Request</a></h4>
+<h4 id="_request_43"><a class="link" href="#_request_43">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
@@ -5482,182 +5831,10 @@ Content-Length: 497
 </div>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_41"><a class="link" href="#_http_request_예시_41">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/comments/1 HTTP/1.1
-Content-Type: application/json
-Host: spring.restdocs.test</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_41"><a class="link" href="#_response_41">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_40"><a class="link" href="#_http_response_예시_40">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 40
-
-{
-  "message" : "댓글 삭제 성공"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_comment_수정"><a class="link" href="#_comment_수정">comment 수정</a></h3>
-<div class="sect3">
-<h4 id="_request_42"><a class="link" href="#_request_42">Request</a></h4>
-<div class="paragraph">
-<p>로그인 필수 : Y</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 20. /api/v1/comments/{commentId}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commentId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 id</p></td>
-</tr>
-</tbody>
-</table>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "content" : "content"
-}</code></pre>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_http_request_예시_42"><a class="link" href="#_http_request_예시_42">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/comments/1 HTTP/1.1
-Content-Type: application/json
-Content-Length: 27
-Host: spring.restdocs.test
-
-{
-  "content" : "content"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_42"><a class="link" href="#_response_42">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_41"><a class="link" href="#_http_response_예시_41">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 40
-
-{
-  "message" : "댓글 수정 성공"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_follow_api"><a class="link" href="#_follow_api">FOLLOW API</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_팔로우"><a class="link" href="#_팔로우">팔로우</a></h3>
-<div class="sect3">
-<h4 id="_request_43"><a class="link" href="#_request_43">Request</a></h4>
-<div class="paragraph">
-<p>로그인 필수 : Y</p>
-</div>
-<div class="sect4">
-<h5 id="_path_parameter_12"><a class="link" href="#_path_parameter_12">Path parameter</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 21. /api/v1/follows/follow/{member_id}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우할 회원 아이디</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
 <h5 id="_http_request_예시_43"><a class="link" href="#_http_request_예시_43">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/follows/follow/2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/comments/1 HTTP/1.1
 Content-Type: application/json
 Host: spring.restdocs.test</code></pre>
 </div>
@@ -5693,10 +5870,10 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 36
+Content-Length: 40
 
 {
-  "message" : "팔로우 성공"
+  "message" : "댓글 삭제 성공"
 }</code></pre>
 </div>
 </div>
@@ -5704,16 +5881,14 @@ Content-Length: 36
 </div>
 </div>
 <div class="sect2">
-<h3 id="_언팔로우"><a class="link" href="#_언팔로우">언팔로우</a></h3>
+<h3 id="_comment_수정"><a class="link" href="#_comment_수정">comment 수정</a></h3>
 <div class="sect3">
 <h4 id="_request_44"><a class="link" href="#_request_44">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
-<div class="sect4">
-<h5 id="_path_parameter_13"><a class="link" href="#_path_parameter_13">Path parameter</a></h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 22. /api/v1/follows/unfollow/{member_id}</caption>
+<caption class="title">Table 20. /api/v1/comments/{commentId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -5726,19 +5901,30 @@ Content-Length: 36
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">언팔로우할 회원 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commentId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 id</p></td>
 </tr>
 </tbody>
 </table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "content" : "content"
+}</code></pre>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_http_request_예시_44"><a class="link" href="#_http_request_예시_44">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/follows/unfollow/2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/comments/1 HTTP/1.1
 Content-Type: application/json
-Host: spring.restdocs.test</code></pre>
+Content-Length: 27
+Host: spring.restdocs.test
+
+{
+  "content" : "content"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -5772,6 +5958,169 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
+Content-Length: 40
+
+{
+  "message" : "댓글 수정 성공"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_follow_api"><a class="link" href="#_follow_api">FOLLOW API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_팔로우"><a class="link" href="#_팔로우">팔로우</a></h3>
+<div class="sect3">
+<h4 id="_request_45"><a class="link" href="#_request_45">Request</a></h4>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_path_parameter_12"><a class="link" href="#_path_parameter_12">Path parameter</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 21. /api/v1/follows/follow/{member_id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우할 회원 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_45"><a class="link" href="#_http_request_예시_45">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/follows/follow/2 HTTP/1.1
+Content-Type: application/json
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_45"><a class="link" href="#_response_45">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_44"><a class="link" href="#_http_response_예시_44">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 36
+
+{
+  "message" : "팔로우 성공"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_언팔로우"><a class="link" href="#_언팔로우">언팔로우</a></h3>
+<div class="sect3">
+<h4 id="_request_46"><a class="link" href="#_request_46">Request</a></h4>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_path_parameter_13"><a class="link" href="#_path_parameter_13">Path parameter</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 22. /api/v1/follows/unfollow/{member_id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">언팔로우할 회원 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_46"><a class="link" href="#_http_request_예시_46">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/follows/unfollow/2 HTTP/1.1
+Content-Type: application/json
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_46"><a class="link" href="#_response_46">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_45"><a class="link" href="#_http_response_예시_45">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
 Content-Length: 39
 
 {
@@ -5785,7 +6134,7 @@ Content-Length: 39
 <div class="sect2">
 <h3 id="_내_팔로잉_리스트"><a class="link" href="#_내_팔로잉_리스트">내 팔로잉 리스트</a></h3>
 <div class="sect3">
-<h4 id="_request_45"><a class="link" href="#_request_45">Request</a></h4>
+<h4 id="_request_47"><a class="link" href="#_request_47">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
@@ -5823,202 +6172,10 @@ Content-Length: 39
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_45"><a class="link" href="#_http_request_예시_45">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/followings?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
-Host: spring.restdocs.test</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_45"><a class="link" href="#_response_45">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].member_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].profile_image_url</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_44"><a class="link" href="#_http_response_예시_44">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 171
-
-{
-  "content" : [ {
-    "member_id" : 1,
-    "nickname" : "test user",
-    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg"
-  } ],
-  "has_next" : false
-}</code></pre>
-</div>
-</div>
-<hr>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_내_팔로워_리스트"><a class="link" href="#_내_팔로워_리스트">내 팔로워 리스트</a></h3>
-<div class="sect3">
-<h4 id="_request_46"><a class="link" href="#_request_46">Request</a></h4>
-<div class="paragraph">
-<p>로그인 필수 : Y</p>
-</div>
-<div class="sect4">
-<h5 id="_path_parameter_15"><a class="link" href="#_path_parameter_15">Path parameter</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="_http_request_예시_46"><a class="link" href="#_http_request_예시_46">HTTP Request 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/followers?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
-Host: spring.restdocs.test</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_response_46"><a class="link" href="#_response_46">Response</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].member_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].profile_image_url</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect4">
-<h5 id="_http_response_예시_45"><a class="link" href="#_http_response_예시_45">HTTP Response 예시</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 195
-
-{
-  "content" : [ {
-    "member_id" : 1,
-    "nickname" : "test user",
-    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
-    "following" : true
-  } ],
-  "has_next" : false
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_멤버의_팔로잉_리스트"><a class="link" href="#_멤버의_팔로잉_리스트">멤버의 팔로잉 리스트</a></h3>
-<div class="sect3">
-<h4 id="_request_47"><a class="link" href="#_request_47">Request</a></h4>
-<div class="paragraph">
-<p>로그인 필수 : Y</p>
-</div>
-<div class="sect4">
 <h5 id="_http_request_예시_47"><a class="link" href="#_http_request_예시_47">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/1/followings?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/followings?page=1&amp;size=5&amp;sortBy=nickname&amp;sortOrder=asc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -6068,13 +6225,13 @@ Host: spring.restdocs.test</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 178
+Content-Length: 171
 
 {
   "content" : [ {
     "member_id" : 1,
     "nickname" : "test user",
-    "profile_image_url" : "https://cdn.yigil.co.kr/images/images/profile.jpg"
+    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg"
   } ],
   "has_next" : false
 }</code></pre>
@@ -6085,17 +6242,50 @@ Content-Length: 178
 </div>
 </div>
 <div class="sect2">
-<h3 id="_멤버의_팔로워_리스트"><a class="link" href="#_멤버의_팔로워_리스트">멤버의 팔로워 리스트</a></h3>
+<h3 id="_내_팔로워_리스트"><a class="link" href="#_내_팔로워_리스트">내 팔로워 리스트</a></h3>
 <div class="sect3">
 <h4 id="_request_48"><a class="link" href="#_request_48">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
 <div class="sect4">
+<h5 id="_path_parameter_15"><a class="link" href="#_path_parameter_15">Path parameter</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortBy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 옵션</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sortOrder</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬 순서</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
 <h5 id="_http_request_예시_48"><a class="link" href="#_http_request_예시_48">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/1/followers?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/followers?page=1&amp;size=5&amp;sortBy=nickname&amp;sortOrder=asc HTTP/1.1
 Host: spring.restdocs.test</code></pre>
 </div>
 </div>
@@ -6163,6 +6353,165 @@ Content-Length: 195
 }</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_멤버의_팔로잉_리스트"><a class="link" href="#_멤버의_팔로잉_리스트">멤버의 팔로잉 리스트</a></h3>
+<div class="sect3">
+<h4 id="_request_49"><a class="link" href="#_request_49">Request</a></h4>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_49"><a class="link" href="#_http_request_예시_49">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/1/followings?page=1&amp;size=5&amp;sortBy=id&amp;sortOrder=asc HTTP/1.1
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_49"><a class="link" href="#_response_49">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].profile_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_48"><a class="link" href="#_http_response_예시_48">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 178
+
+{
+  "content" : [ {
+    "member_id" : 1,
+    "nickname" : "test user",
+    "profile_image_url" : "https://cdn.yigil.co.kr/images/images/profile.jpg"
+  } ],
+  "has_next" : false
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_멤버의_팔로워_리스트"><a class="link" href="#_멤버의_팔로워_리스트">멤버의 팔로워 리스트</a></h3>
+<div class="sect3">
+<h4 id="_request_50"><a class="link" href="#_request_50">Request</a></h4>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_50"><a class="link" href="#_http_request_예시_50">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/follows/1/followers?page=1&amp;size=5&amp;sortBy=nickname&amp;sortOrder=asc HTTP/1.1
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_50"><a class="link" href="#_response_50">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].profile_image_url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].following</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">팔로우 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>has_next</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_49"><a class="link" href="#_http_response_예시_49">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 195
+
+{
+  "content" : [ {
+    "member_id" : 1,
+    "nickname" : "test user",
+    "profile_image_url" : "https://cdn.yigil.co.kr/images/profile.jpg",
+    "following" : true
+  } ],
+  "has_next" : false
+}</code></pre>
+</div>
+</div>
 <hr>
 </div>
 </div>
@@ -6175,7 +6524,7 @@ Content-Length: 195
 <div class="sect2">
 <h3 id="_login"><a class="link" href="#_login">Login</a></h3>
 <div class="sect3">
-<h4 id="_request_49"><a class="link" href="#_request_49">Request</a></h4>
+<h4 id="_request_51"><a class="link" href="#_request_51">Request</a></h4>
 <div class="paragraph">
 <p>Login required: Y</p>
 </div>
@@ -6260,7 +6609,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_49"><a class="link" href="#_response_49">Response</a></h4>
+<h4 id="_response_51"><a class="link" href="#_response_51">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6299,7 +6648,7 @@ Content-Length: 30
 <div class="sect2">
 <h3 id="_logout"><a class="link" href="#_logout">Logout</a></h3>
 <div class="sect3">
-<h4 id="_request_50"><a class="link" href="#_request_50">Request</a></h4>
+<h4 id="_request_52"><a class="link" href="#_request_52">Request</a></h4>
 <div class="paragraph">
 <p>Login required: Y</p>
 </div>
@@ -6314,7 +6663,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_50"><a class="link" href="#_response_50">Response</a></h4>
+<h4 id="_response_52"><a class="link" href="#_response_52">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6358,12 +6707,12 @@ Content-Length: 33
 <div class="sect2">
 <h3 id="get-my-info"><a class="link" href="#get-my-info">내 정보 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_51"><a class="link" href="#_request_51">Request</a></h4>
+<h4 id="_request_53"><a class="link" href="#_request_53">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수: Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_49"><a class="link" href="#_http_request_예시_49">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_51"><a class="link" href="#_http_request_예시_51">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/members HTTP/1.1
@@ -6373,7 +6722,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_51"><a class="link" href="#_response_51">Response</a></h4>
+<h4 id="_response_53"><a class="link" href="#_response_53">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6446,7 +6795,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_48"><a class="link" href="#_http_response_예시_48">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_50"><a class="link" href="#_http_response_예시_50">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -6482,12 +6831,12 @@ Content-Length: 354
 <p>노션 링크:</p>
 </div>
 <div class="sect3">
-<h4 id="_request_52"><a class="link" href="#_request_52">Request</a></h4>
+<h4 id="_request_54"><a class="link" href="#_request_54">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수: Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_50"><a class="link" href="#_http_request_예시_50">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_52"><a class="link" href="#_http_request_예시_52">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/members HTTP/1.1
@@ -6528,7 +6877,7 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_52"><a class="link" href="#_response_52">Response</a></h4>
+<h4 id="_response_54"><a class="link" href="#_response_54">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6551,7 +6900,7 @@ Host: spring.restdocs.test
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_49"><a class="link" href="#_http_response_예시_49">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_51"><a class="link" href="#_http_response_예시_51">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -6570,12 +6919,12 @@ Content-Length: 53
 <div class="sect2">
 <h3 id="withdraw"><a class="link" href="#withdraw">탈퇴</a></h3>
 <div class="sect3">
-<h4 id="_request_53"><a class="link" href="#_request_53">Request</a></h4>
+<h4 id="_request_55"><a class="link" href="#_request_55">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수: Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_51"><a class="link" href="#_http_request_예시_51">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_53"><a class="link" href="#_http_request_예시_53">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/members HTTP/1.1
@@ -6585,7 +6934,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_53"><a class="link" href="#_response_53">Response</a></h4>
+<h4 id="_response_55"><a class="link" href="#_response_55">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6608,7 +6957,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_50"><a class="link" href="#_http_response_예시_50">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_52"><a class="link" href="#_http_response_예시_52">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -6630,9 +6979,9 @@ Content-Length: 40
 <p>로그인 필수: N</p>
 </div>
 <div class="sect3">
-<h4 id="_request_54"><a class="link" href="#_request_54">Request</a></h4>
+<h4 id="_request_56"><a class="link" href="#_request_56">Request</a></h4>
 <div class="sect4">
-<h5 id="_http_request_예시_52"><a class="link" href="#_http_request_예시_52">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_54"><a class="link" href="#_http_request_예시_54">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/members/1 HTTP/1.1
@@ -6642,7 +6991,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_54"><a class="link" href="#_response_54">Response</a></h4>
+<h4 id="_response_56"><a class="link" href="#_response_56">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6715,7 +7064,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_51"><a class="link" href="#_http_response_예시_51">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_53"><a class="link" href="#_http_response_예시_53">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -6751,9 +7100,9 @@ Content-Length: 353
 <p>로그인 필수: N</p>
 </div>
 <div class="sect3">
-<h4 id="_request_55"><a class="link" href="#_request_55">Request</a></h4>
+<h4 id="_request_57"><a class="link" href="#_request_57">Request</a></h4>
 <div class="sect4">
-<h5 id="_http_request_예시_53"><a class="link" href="#_http_request_예시_53">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_55"><a class="link" href="#_http_request_예시_55">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/members/nickname_duplicate_check HTTP/1.1
@@ -6769,7 +7118,7 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_55"><a class="link" href="#_response_55">Response</a></h4>
+<h4 id="_response_57"><a class="link" href="#_response_57">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6792,7 +7141,7 @@ Host: spring.restdocs.test
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_52"><a class="link" href="#_http_response_예시_52">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_54"><a class="link" href="#_http_response_예시_54">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -6816,7 +7165,7 @@ Content-Length: 24
 <div class="sect2">
 <h3 id="_알림_조회"><a class="link" href="#_알림_조회">알림 조회</a></h3>
 <div class="sect3">
-<h4 id="_request_56"><a class="link" href="#_request_56">Request</a></h4>
+<h4 id="_request_58"><a class="link" href="#_request_58">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
@@ -6846,7 +7195,7 @@ Content-Length: 24
 </table>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_54"><a class="link" href="#_http_request_예시_54">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_56"><a class="link" href="#_http_request_예시_56">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/notifications HTTP/1.1
@@ -6856,7 +7205,7 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_56"><a class="link" href="#_response_56">Response</a></h4>
+<h4 id="_response_58"><a class="link" href="#_response_58">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -6914,7 +7263,7 @@ Host: spring.restdocs.test</code></pre>
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_http_response_예시_53"><a class="link" href="#_http_response_예시_53">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_55"><a class="link" href="#_http_response_예시_55">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -6947,12 +7296,12 @@ Content-Length: 408
 <div class="sect2">
 <h3 id="_알림_스트림"><a class="link" href="#_알림_스트림">알림 스트림</a></h3>
 <div class="sect3">
-<h4 id="_request_57"><a class="link" href="#_request_57">Request</a></h4>
+<h4 id="_request_59"><a class="link" href="#_request_59">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_55"><a class="link" href="#_http_request_예시_55">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_57"><a class="link" href="#_http_request_예시_57">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/notifications/stream/0 HTTP/1.1
@@ -6962,9 +7311,9 @@ Host: spring.restdocs.test</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_57"><a class="link" href="#_response_57">Response</a></h4>
+<h4 id="_response_59"><a class="link" href="#_response_59">Response</a></h4>
 <div class="sect4">
-<h5 id="_http_response_예시_54"><a class="link" href="#_http_response_예시_54">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_56"><a class="link" href="#_http_response_예시_56">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -6981,12 +7330,12 @@ Host: spring.restdocs.test</code></pre>
 <div class="sect2">
 <h3 id="_알림_읽기_처리"><a class="link" href="#_알림_읽기_처리">알림 읽기 처리</a></h3>
 <div class="sect3">
-<h4 id="_request_58"><a class="link" href="#_request_58">Request</a></h4>
+<h4 id="_request_60"><a class="link" href="#_request_60">Request</a></h4>
 <div class="paragraph">
 <p>로그인 필수 : Y</p>
 </div>
 <div class="sect4">
-<h5 id="_http_request_예시_56"><a class="link" href="#_http_request_예시_56">HTTP Request 예시</a></h5>
+<h5 id="_http_request_예시_58"><a class="link" href="#_http_request_예시_58">HTTP Request 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/notifications/read HTTP/1.1
@@ -7012,9 +7361,9 @@ Host: spring.restdocs.test
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_58"><a class="link" href="#_response_58">Response</a></h4>
+<h4 id="_response_60"><a class="link" href="#_response_60">Response</a></h4>
 <div class="sect4">
-<h5 id="_http_response_예시_55"><a class="link" href="#_http_response_예시_55">HTTP Response 예시</a></h5>
+<h5 id="_http_response_예시_57"><a class="link" href="#_http_response_예시_57">HTTP Response 예시</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -7026,62 +7375,90 @@ Content-Length: 50
 }</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_region_api_2"><a class="link" href="#_region_api_2">REGION API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_관심_장소_선택을_위한_정보_조회_2"><a class="link" href="#_관심_장소_선택을_위한_정보_조회_2">관심 장소 선택을 위한 정보 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_61"><a class="link" href="#_request_61">Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-none hljs">== REGION API
-
-=== 관심 장소 선택을 위한 정보 조회
-
-==== Request
-[source,json,options="nowrap"]
-----
-
-----
-로그인 필수 : Y
-
-===== HTTP Request 예시
-[source,http,options="nowrap"]
-----
-GET /api/v1/regions/select HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json"></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_59"><a class="link" href="#_http_request_예시_59">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/regions/select HTTP/1.1
 Content-Type: application/json
-Host: spring.restdocs.test
-
-----
-
-==== Response
-|===
-|Path|Type|Description
-
-|`+categories+`
-|`+Array+`
-|지역별 카테고리 정보
-
-|`+categories[].category_name+`
-|`+String+`
-|지역별 카테고리 명
-
-|`+categories[].regions+`
-|`+Array+`
-|카테고리 내 지역 정보
-
-|`+categories[].regions[].id+`
-|`+Number+`
-|지역의 고유 id
-
-|`+categories[].regions[].region_name+`
-|`+String+`
-|지역명
-
-|`+categories[].regions[].selected+`
-|`+Boolean+`
-|사용자의 해당 지역의 관심지역 설정 여부
-
-|===
-
-===== HTTP Response 예시
-[source,http,options="nowrap"]
-----
-HTTP/1.1 200 OK
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_61"><a class="link" href="#_response_61">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역별 카테고리 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories[].category_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역별 카테고리 명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories[].regions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 내 지역 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories[].regions[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역의 고유 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories[].regions[].region_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories[].regions[].selected</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자의 해당 지역의 관심지역 설정 여부</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_58"><a class="link" href="#_http_response_예시_58">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 178
 
@@ -7094,49 +7471,73 @@ Content-Length: 178
       "selected" : true
     } ]
   } ]
-}
-----
-
-=== 사용자의 관심 지역 목록 조회
-
-==== Request
-[source,json,options="nowrap"]
-----
-
-----
-로그인 필수 : Y
-
-===== HTTP Request 예시
-[source,http,options="nowrap"]
-----
-GET /api/v1/regions/my HTTP/1.1
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_사용자의_관심_지역_목록_조회_2"><a class="link" href="#_사용자의_관심_지역_목록_조회_2">사용자의 관심 지역 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_62"><a class="link" href="#_request_62">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json"></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>로그인 필수 : Y</p>
+</div>
+<div class="sect4">
+<h5 id="_http_request_예시_60"><a class="link" href="#_http_request_예시_60">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/regions/my HTTP/1.1
 Content-Type: application/json
-Host: spring.restdocs.test
-
-----
-
-==== Response
-|===
-|Path|Type|Description
-
-|`+regions+`
-|`+Array+`
-|지역 정보
-
-|`+regions[].id+`
-|`+Number+`
-|지역의 고유 Id
-
-|`+regions[].name+`
-|`+String+`
-|지역의 이름
-
-|===
-
-===== HTTP Response 예시
-[source,http,options="nowrap"]
-----
-HTTP/1.1 200 OK
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_62"><a class="link" href="#_response_62">Response</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regions[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역의 고유 Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>regions[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">지역의 이름</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_response_예시_59"><a class="link" href="#_http_response_예시_59">HTTP Response 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 72
 
@@ -7145,51 +7546,82 @@ Content-Length: 72
     "id" : 1,
     "name" : "홍대 | 상수"
   } ]
-}
-----
-== Report API
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_report_api"><a class="link" href="#_report_api">Report API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_신고하기"><a class="link" href="#_신고하기">신고하기</a></h3>
 
-=== 신고하기
-=== Request
-로그인 필수: Y
-
-==== Request Body
-location
-[source,json,options="nowrap"]
-----
-{
+</div>
+<div class="sect2">
+<h3 id="_request_63"><a class="link" href="#_request_63">Request</a></h3>
+<div class="paragraph">
+<p>로그인 필수: Y</p>
+</div>
+<div class="sect3">
+<h4 id="_request_body_3"><a class="link" href="#_request_body_3">Request Body</a></h4>
+<div class="paragraph">
+<p>location</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "report_type_id" : 1,
   "content" : "content",
   "target_id" : 1,
   "target_type" : "travel"
-}
-----
-
-|===
-|Path|Type|Description
-
-|`+report_type_id+`
-|`+Number+`
-|신고 타입 아이디
-
-|`+content+`
-|`+String+`
-|신고 내용:[디자인에 없어서 안보내주셔도 됩니다]
-
-|`+target_id+`
-|`+Number+`
-|신고 대상 아이디
-
-|`+target_type+`
-|`+String+`
-|신고 대상 타입: [travel,comment]
-
-|===
-
-===== HTTP Request 예시
-[source,http,options="nowrap"]
-----
-POST /api/v1/reports HTTP/1.1
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_type_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 내용:[디자인에 없어서 안보내주셔도 됩니다]</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>target_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 대상 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>target_type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 대상 타입: [travel,comment]</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect4">
+<h5 id="_http_request_예시_61"><a class="link" href="#_http_request_예시_61">HTTP Request 예시</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/reports HTTP/1.1
 Content-Type: application/json
 Content-Length: 98
 Host: spring.restdocs.test
@@ -7199,71 +7631,115 @@ Host: spring.restdocs.test
   "content" : "content",
   "target_id" : 1,
   "target_type" : "travel"
-}
-----
-
-=== Response
-[source,json,options="nowrap"]
-----
-{
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_63"><a class="link" href="#_response_63">Response</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "message" : "신고글이 등록되었습니다."
-}
-----
-|===
-|Path|Type|Description
-
-|`+message+`
-|`+String+`
-|응답 메시지
-
-|===
-
-==== HTTP Response 예시
-[source,http,options="nowrap"]
-----
-HTTP/1.1 200 OK
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_http_response_예시_60"><a class="link" href="#_http_response_예시_60">HTTP Response 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 55
 
 {
   "message" : "신고글이 등록되었습니다."
-}
-----
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_신고_목록_조회"><a class="link" href="#_신고_목록_조회">신고 목록 조회</a></h3>
 
-=== 신고 목록 조회
-=== Request
-로그인 필수: Y
-
-==== Query Parameters
-|===
-|Parameter|Description
-
-|`+page+`
-|현재 페이지 - default:1
-
-|`+size+`
-|페이지 크기 - default:5
-
-|`+typeId+`
-|신고 타입 아이디
-
-|`+keyword+`
-|검색 키워드
-
-|===
-==== Request Body
-[source,json,options="nowrap"]
-----
-{
+</div>
+<div class="sect2">
+<h3 id="_request_64"><a class="link" href="#_request_64">Request</a></h3>
+<div class="paragraph">
+<p>로그인 필수: Y</p>
+</div>
+<div class="sect3">
+<h4 id="_query_parameters_7"><a class="link" href="#_query_parameters_7">Query Parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지 - default:1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기 - default:5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>typeId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>keyword</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">검색 키워드</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_request_body_4"><a class="link" href="#_request_body_4">Request Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "typeId" : 1,
   "keyword" : "keyword"
-}
-----
-
-==== HTTP Request 예시
-[source,http,options="nowrap"]
-----
-GET /api/v1/reports HTTP/1.1
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_request_예시_62"><a class="link" href="#_http_request_예시_62">HTTP Request 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/reports HTTP/1.1
 Content-Type: application/json
 Content-Length: 43
 Host: spring.restdocs.test
@@ -7271,69 +7747,97 @@ Host: spring.restdocs.test
 {
   "typeId" : 1,
   "keyword" : "keyword"
-}
-----
-
-=== Response
-==== Response Body
-[source,json,options="nowrap"]
-----
-{
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_64"><a class="link" href="#_response_64">Response</a></h3>
+<div class="sect3">
+<h4 id="_response_body_4"><a class="link" href="#_response_body_4">Response Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "my_reports" : [ {
     "id" : 1,
     "report_type" : {
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-27T09:34:33.040539"
+    "created_at" : "2024-03-28T16:34:50.376152"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-27T09:34:33.040689"
+    "created_at" : "2024-03-28T16:34:50.376206"
   } ],
   "total_page" : 1
-}
-----
-==== Response Fields
-|===
-|Path|Type|Description
-
-|`+my_reports+`
-|`+Array+`
-|신고글 목록
-
-|`+my_reports[].id+`
-|`+Number+`
-|신고글 아이디
-
-|`+my_reports[].report_type+`
-|`+Object+`
-|신고 타입
-
-|`+my_reports[].report_type.id+`
-|`+Number+`
-|신고 타입 아이디
-
-|`+my_reports[].report_type.name+`
-|`+String+`
-|신고 타입 이름
-
-|`+my_reports[].created_at+`
-|`+String+`
-|신고글 생성일
-
-|`+total_page+`
-|`+Number+`
-|다음 페이지 존재 여부
-
-|===
-==== HTTP Response 예시
-[source,http,options="nowrap"]
-----
-HTTP/1.1 200 OK
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields"><a class="link" href="#_response_fields">Response Fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>my_reports</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고글 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>my_reports[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고글 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>my_reports[].report_type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>my_reports[].report_type.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>my_reports[].report_type.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>my_reports[].created_at</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고글 생성일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>total_page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response_예시_61"><a class="link" href="#_http_response_예시_61">HTTP Response 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 326
 
@@ -7344,87 +7848,137 @@ Content-Length: 326
       "id" : 1,
       "name" : "광고성 글"
     },
-    "created_at" : "2024-03-27T09:34:33.040539"
+    "created_at" : "2024-03-28T16:34:50.376152"
   }, {
     "id" : 2,
     "report_type" : {
       "id" : 2,
       "name" : "욕설"
     },
-    "created_at" : "2024-03-27T09:34:33.040689"
+    "created_at" : "2024-03-28T16:34:50.376206"
   } ],
   "total_page" : 1
-}
-----
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_신고_상세_조회"><a class="link" href="#_신고_상세_조회">신고 상세 조회</a></h3>
 
-=== 신고 상세 조회
-=== Request
-로그인 필수: Y
-
-==== Path Parameters
-.+/api/v1/reports/{id}+
-|===
-|Parameter|Description
-
-|`+id+`
-|신고글 아이디
-
-|===
-==== Request Body
-[source,json,options="nowrap"]
-----
-
-----
-==== HTTP Request 예시
-[source,http,options="nowrap"]
-----
-GET /api/v1/reports/1 HTTP/1.1
+</div>
+<div class="sect2">
+<h3 id="_request_65"><a class="link" href="#_request_65">Request</a></h3>
+<div class="paragraph">
+<p>로그인 필수: Y</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_8"><a class="link" href="#_path_parameters_8">Path Parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 23. /api/v1/reports/{id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고글 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_request_body_5"><a class="link" href="#_request_body_5">Request Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json"></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_request_예시_63"><a class="link" href="#_http_request_예시_63">HTTP Request 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/reports/1 HTTP/1.1
 Content-Type: application/json
-Host: spring.restdocs.test
-
-----
-=== Response
-==== Response Body
-[source,json,options="nowrap"]
-----
-{
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_65"><a class="link" href="#_response_65">Response</a></h3>
+<div class="sect3">
+<h4 id="_response_body_5"><a class="link" href="#_response_body_5">Response Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "id" : 1,
   "report_type" : {
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-27T09:34:33.060305"
-}
-----
-==== Response Fields
-|===
-|Path|Type|Description
-
-|`+id+`
-|`+Number+`
-|신고글 아이디
-
-|`+report_type+`
-|`+Object+`
-|신고 타입
-
-|`+report_type.id+`
-|`+Number+`
-|신고 타입 아이디
-
-|`+report_type.name+`
-|`+String+`
-|신고 타입 이름
-
-|`+created_at+`
-|`+String+`
-|신고글 생성일
-
-|===
-==== HTTP Response 예시
-[source,http,options="nowrap"]
-----
-HTTP/1.1 200 OK
+  "created_at" : "2024-03-28T16:34:50.388787"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_2"><a class="link" href="#_response_fields_2">Response Fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고글 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_type.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_type.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>created_at</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고글 생성일</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response_예시_62"><a class="link" href="#_http_response_예시_62">HTTP Response 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 129
 
@@ -7434,88 +7988,148 @@ Content-Length: 129
     "id" : 1,
     "name" : "광고성 글"
   },
-  "created_at" : "2024-03-27T09:34:33.060305"
-}
-----
+  "created_at" : "2024-03-28T16:34:50.388787"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_신고_삭제"><a class="link" href="#_신고_삭제">신고 삭제</a></h3>
 
-=== 신고 삭제
-=== Request
-로그인 필수: Y
-
-==== Path Parameters
-.+/api/v1/reports/{report_id}+
-|===
-|Parameter|Description
-
-|`+report_id+`
-|삭제할 신고글 아이디
-
-|===
-==== Request Body
-[source,json,options="nowrap"]
-----
-
-----
-==== HTTP Request 예시
-[source,http,options="nowrap"]
-----
-DELETE /api/v1/reports/1 HTTP/1.1
+</div>
+<div class="sect2">
+<h3 id="_request_66"><a class="link" href="#_request_66">Request</a></h3>
+<div class="paragraph">
+<p>로그인 필수: Y</p>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_9"><a class="link" href="#_path_parameters_9">Path Parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 24. /api/v1/reports/{report_id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제할 신고글 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_request_body_6"><a class="link" href="#_request_body_6">Request Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json"></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_request_예시_64"><a class="link" href="#_http_request_예시_64">HTTP Request 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/reports/1 HTTP/1.1
 Content-Type: application/json
-Host: spring.restdocs.test
-
-----
-=== Response
-==== Response Body
-[source,json,options="nowrap"]
-----
-{
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_66"><a class="link" href="#_response_66">Response</a></h3>
+<div class="sect3">
+<h4 id="_response_body_6"><a class="link" href="#_response_body_6">Response Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "message" : "신고글이 삭제되었습니다."
-}
-----
-==== Response Fields
-|===
-|Path|Type|Description
-
-|`+message+`
-|`+String+`
-|응답 메시지
-
-|===
-==== HTTP Response 예시
-[source,http,options="nowrap"]
-----
-HTTP/1.1 200 OK
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_3"><a class="link" href="#_response_fields_3">Response Fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response_예시_63"><a class="link" href="#_http_response_예시_63">HTTP Response 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 55
 
 {
   "message" : "신고글이 삭제되었습니다."
-}
-----
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_신고_타입_목록_조회"><a class="link" href="#_신고_타입_목록_조회">신고 타입 목록 조회</a></h3>
 
-
-=== 신고 타입 목록 조회
-=== Request
-로그인 필수: Y
-
-==== Request Body
-[source,json,options="nowrap"]
-----
-
-----
-==== HTTP Request 예시
-[source,http,options="nowrap"]
-----
-GET /api/v1/reports/types HTTP/1.1
+</div>
+<div class="sect2">
+<h3 id="_request_67"><a class="link" href="#_request_67">Request</a></h3>
+<div class="paragraph">
+<p>로그인 필수: Y</p>
+</div>
+<div class="sect3">
+<h4 id="_request_body_7"><a class="link" href="#_request_body_7">Request Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json"></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_request_예시_65"><a class="link" href="#_http_request_예시_65">HTTP Request 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/reports/types HTTP/1.1
 Content-Type: application/json
-Host: spring.restdocs.test
-
-----
-=== Response
-==== Response Body
-[source,json,options="nowrap"]
-----
-{
+Host: spring.restdocs.test</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_67"><a class="link" href="#_response_67">Response</a></h3>
+<div class="sect3">
+<h4 id="_response_body_7"><a class="link" href="#_response_body_7">Response Body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "report_types" : [ {
     "id" : 1,
     "name" : "광고성 글"
@@ -7523,29 +8137,49 @@ Host: spring.restdocs.test
     "id" : 2,
     "name" : "욕설"
   } ]
-}
-----
-==== Response Fields
-|===
-|Path|Type|Description
-
-|`+report_types+`
-|`+Array+`
-|신고 타입 목록
-
-|`+report_types[].id+`
-|`+Number+`
-|신고 타입 아이디
-
-|`+report_types[].name+`
-|`+String+`
-|신고 타입 이름
-
-|===
-==== HTTP Response 예시
-[source,http,options="nowrap"]
-----
-HTTP/1.1 200 OK
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_4"><a class="link" href="#_response_fields_4">Response Fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_types</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_types[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>report_types[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 타입 이름</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response_예시_64"><a class="link" href="#_http_response_예시_64">HTTP Response 예시</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 Content-Length: 118
 
@@ -7557,9 +8191,7 @@ Content-Length: 118
     "id" : 2,
     "name" : "욕설"
   } ]
-}
-----</code></pre>
-</div>
+}</code></pre>
 </div>
 </div>
 </div>

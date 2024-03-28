@@ -37,7 +37,12 @@ export default function BackendSearchItem({
       if (search.backendSearchType === 'place') {
         const result = await searchPlaces(name);
 
-        dispatch({ type: 'SEARCH_PLACE', payload: result });
+        if (result.status === 'failed') {
+          dispatch({ type: 'SET_ERROR', payload: result.message });
+          return;
+        }
+
+        dispatch({ type: 'SEARCH_PLACE', payload: result.data });
       }
     } catch (error) {
       console.error(error);

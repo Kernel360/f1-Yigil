@@ -8,10 +8,7 @@ import kr.co.yigil.travel.interfaces.dto.CourseInfoDto;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseRegisterWithoutSeriesRequest;
 import kr.co.yigil.travel.interfaces.dto.request.CourseUpdateRequest;
-import kr.co.yigil.travel.interfaces.dto.response.CourseSearchResponse;
-import kr.co.yigil.travel.interfaces.dto.response.CoursesInPlaceResponse;
-import kr.co.yigil.travel.interfaces.dto.response.MyCoursesResponse;
-import kr.co.yigil.travel.interfaces.dto.response.MySpotsDetailResponse;
+import kr.co.yigil.travel.interfaces.dto.response.*;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.geojson.GeoJsonReader;
@@ -106,4 +103,6 @@ public interface CourseMapper {
 
     @Mapping(target = "imageUrls", source = "imageUrls")
     List<MySpotsDetailResponse.SpotDetailDto> toMySpotDetailDtoList(List<CourseInfo.MySpotDetailDto> mySpotDetails);
+
+    MyFavoriteCoursesResponse toMyFavoriteCoursesResponse(CourseInfo.MyFavoriteCoursesInfo result);
 }

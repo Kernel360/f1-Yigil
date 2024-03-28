@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 @Where(clause = "is_deleted = false")
 public class Travel {
 
+    public static final int MIN_RATE = 0;
+    public static final int MAX_RATE = 5;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +34,7 @@ public class Travel {
 
     @Column(nullable = false, length = 20)
     private String title;
-  
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -51,48 +53,54 @@ public class Travel {
 
 
     protected Travel(Member member, String title, String description, double rate, boolean isPrivate) {
-        this.member = member;
-        this.title = title;
-        this.description = description;
-        this.rate = rate;
-        createdAt = LocalDateTime.now();
-        modifiedAt = LocalDateTime.now();
+        this(member, title, description, rate);
         this.isPrivate = isPrivate;
     }
+
     protected Travel(Member member, String title, String description, double rate) {
-        this(member, title, description, rate, false);
-    }
-
-    public Travel(final Long id,Member member, String title, String description, double rate, boolean isPrivate) {
-        this.id = id;
         this.member = member;
         this.title = title;
         this.description = description;
+        if (isValidateRate(rate)) throw new IllegalArgumentException("rate must be between 0 and 5");
         this.rate = rate;
         createdAt = LocalDateTime.now();
         modifiedAt = LocalDateTime.now();
+    }
+
+    protected Travel(Long id, Member member, String title, String description, double rate) {
+        this(member, title, description, rate, false);
+        this.id = id;
+    }
+
+    public Travel(final Long id, Member member, String title, String description, double rate, boolean isPrivate) {
+        this(id, member, title, description, rate);
         this.isPrivate = isPrivate;
     }
-    protected Travel(Long id, Member member, String title, String description, double rate) {
-        this(id, member, title, description, rate, false);
+
+    public void changeOnPublic() {
+        this.isPrivate = false;
     }
 
-    public void changeOnPublic() { this.isPrivate = false; }
-
-    public void changeOnPrivate() { this.isPrivate = true; }
+    public void changeOnPrivate() {
+        this.isPrivate = true;
+    }
 
     public void updateTravel(String description, double rate) {
-        this.description = description;
-        this.rate = rate;
+        updateTravel(null, description, rate);
     }
 
     public void updateTravel(String title, String description, double rate) {
         this.title = title;
         this.description = description;
+        if (isValidateRate(rate)) throw new IllegalArgumentException("rate must be between 0 and 5");
         this.rate = rate;
     }
 
     public long getWriterId() {
         return member.getId();
+    }
+
+    private static boolean isValidateRate(double rate) {
+        return rate < MIN_RATE || rate > MAX_RATE;
     }
 }

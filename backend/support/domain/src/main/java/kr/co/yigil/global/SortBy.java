@@ -12,7 +12,11 @@ public enum SortBy {
     ID("id"),
     PLACE_NAME("place.name"),
     NAME("name"),
-    LATEST_UPLOADED_TIME("latestUploadedTime");
+    NICKNAME("nickname"),
+    LATEST_UPLOADED_TIME("latestUploadedTime"),
+    FOLLOWER_NAME("follower.nickname"),
+    FOLLOWING_NAME("following.nickname")
+    ;
 
     private String value;
     SortBy(String value) {

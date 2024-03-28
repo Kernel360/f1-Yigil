@@ -1,17 +1,19 @@
 'use client';
 
 import { useContext, useEffect, useRef, useState } from 'react';
-import Comment from './Comment';
-import { MemberContext } from '@/context/MemberContext';
-
-import { EventFor } from '@/types/type';
-import { postResponseSchema, type TComment } from '@/types/response';
-
-import PlusIcon from '/public/icons/plus.svg';
 import { useRouter } from 'next/navigation';
 import { getComments, postComment } from './action';
+
+import { MemberContext } from '@/context/MemberContext';
+
 import Spinner from '../ui/Spinner';
 import ToastMsg from '../ui/toast/ToastMsg';
+import Comment from './Comment';
+
+import type { EventFor } from '@/types/type';
+import type { TComment } from '@/types/response';
+
+import PlusIcon from '/public/icons/plus.svg';
 
 export default function Comments({ parentId }: { parentId: number }) {
   const { push } = useRouter();
@@ -123,7 +125,7 @@ export default function Comments({ parentId }: { parentId: number }) {
         ) : (
           <div className="flex w-full flex-col">
             {comments.map((comment) => (
-              <Comment key={comment.id} data={comment} />
+              <Comment key={comment.id} data={comment} travelId={parentId} />
             ))}
           </div>
         )}
@@ -147,6 +149,7 @@ export default function Comments({ parentId }: { parentId: number }) {
       <div className="w-full p-2 flex gap-2 items-center">
         <textarea
           className="p-3 resize-none overflow-hidden bg-gray-100 rounded-xl grow"
+          rows={1}
           ref={textareaRef}
           disabled={isLoggedIn === 'false' || isLoading}
           placeholder={

@@ -1,18 +1,21 @@
 'use client';
 
 import { useContext } from 'react';
-import { MemberContext } from '@/context/MemberContext';
 import Image from 'next/image';
+import { MemberContext } from '@/context/MemberContext';
+import { ReportContext } from '@/context/ReportContext';
 
 import RoundProfile from '../../ui/profile/RoundProfile';
 import IconWithCounts from '../../IconWithCounts';
 
 import FollowButton from '../FollowButton';
+import ReportButton from '../ReportButton';
 import Reaction from '../../reaction/Reaction';
 
 import type { TCourse } from '@/types/response';
 
 import StarIcon from '/public/icons/star.svg';
+import Link from 'next/link';
 
 export default function Course({
   placeId,
@@ -22,6 +25,7 @@ export default function Course({
   data: TCourse;
 }) {
   const memberStatus = useContext(MemberContext);
+  const reportTypes = useContext(ReportContext);
   const {
     id: travelId,
     title,
@@ -38,6 +42,14 @@ export default function Course({
 
   return (
     <article className="py-2 flex flex-col gap-4">
+      <div className="px-4">
+        <Link
+          className="text-lg font-medium hover:underline"
+          href={`/detail/courses/${travelId}`}
+        >
+          {title}
+        </Link>
+      </div>
       <div className="px-4 flex justify-between items-center">
         <div className="flex gap-1 items-center">
           <RoundProfile
@@ -70,6 +82,11 @@ export default function Course({
       <div className="px-6 flex flex-col gap-2">
         <span className="self-end text-gray-400">{create_date}</span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{content}</div>
+        {reportTypes && reportTypes.length !== 0 && (
+          <div className="self-end">
+            <ReportButton parentId={travelId} />
+          </div>
+        )}
       </div>
       <Reaction placeId={placeId} travelId={travelId} initialLiked={liked} />
     </article>
