@@ -79,7 +79,7 @@ export default function Notification({
         setIsLoading(false);
       }
     },
-    [currentPage],
+    [],
   );
 
   useEffect(() => {
