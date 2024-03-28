@@ -17,7 +17,7 @@ const SortableSpotItem = forwardRef<HTMLDivElement, ItemProps>(
     return (
       <div
         ref={ref}
-        className={`${withOpacity ? 'opacity-50' : 'opacity-100'} ${
+        className={`touch-none ${withOpacity ? 'opacity-50' : 'opacity-100'} ${
           isDragging ? 'cursor-grabbing scale-105' : 'scale-100'
         } ${animationStyle}`}
         {...props}

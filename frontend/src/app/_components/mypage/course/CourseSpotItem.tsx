@@ -111,7 +111,7 @@ const CourseSpotItem = forwardRef<HTMLDivElement, TItemProps>(
     return (
       <article
         ref={ref}
-        className={`flex flex-col bg-white ${
+        className={`touch-none flex flex-col bg-white ${
           withOpacity ? 'opacity-50' : 'opacity-100'
         } ${
           isDragging ? 'cursor-grabbing scale-105' : 'scale-100'
