@@ -2,18 +2,19 @@
 
 import { useContext } from 'react';
 import { MemberContext } from '@/context/MemberContext';
+import { ReportContext } from '@/context/ReportContext';
 
 import IconWithCounts from '../../IconWithCounts';
 import RoundProfile from '../../ui/profile/RoundProfile';
 import ImageCarousel from '../../ui/carousel/ImageCarousel';
 
 import FollowButton from '../FollowButton';
+import ReportButton from '../ReportButton';
 import Reaction from '../../reaction/Reaction';
 
 import StarIcon from '/public/icons/star.svg';
 
 import type { TSpot } from '@/types/response';
-import ReportButton from '../ReportButton';
 
 export default function Spot({
   placeId,
@@ -23,6 +24,7 @@ export default function Spot({
   data: TSpot;
 }) {
   const memberStatus = useContext(MemberContext);
+  const reportTypes = useContext(ReportContext);
   const {
     id: spotId,
     image_urls,
@@ -69,9 +71,11 @@ export default function Spot({
           {create_date.toLocaleDateString('ko-KR')}
         </span>
         <div className="p-4 min-h-32 rounded-lg bg-gray-100">{description}</div>
-        <div className="px-2 flex justify-end">
-          <ReportButton parentId={spotId} />
-        </div>
+        {reportTypes && reportTypes.length !== 0 && (
+          <div className="px-2 flex justify-end">
+            <ReportButton parentId={spotId} />
+          </div>
+        )}
       </div>
       <Reaction placeId={placeId} travelId={spotId} initialLiked={liked} />
     </article>
