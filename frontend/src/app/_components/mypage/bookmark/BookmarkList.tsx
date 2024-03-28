@@ -1,13 +1,14 @@
 'use client';
-import { TMyPageBookmark } from '@/types/myPageResponse';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { TMyPagePlace } from '@/types/myPageResponse';
+import React, { useEffect, useRef, useState } from 'react';
 import Select from '../../ui/select/Select';
 import { getMyPageBookmarks } from './bookmarkActions';
-import MyPageBookmarkItem from './MyPageBookmarkItem';
 import ToastMsg from '../../ui/toast/ToastMsg';
 import LoadingIndicator from '../../LoadingIndicator';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import { scrollToTop } from '@/utils';
+import BookmarkButton from '../../place/BookmarkButton';
+import MyPagePlaceItem from '../MyPagePlaceItem';
 
 const sortOptions = [
   { label: '최신순', value: 'desc' },
@@ -20,7 +21,7 @@ export default function MyPageBookmarkList({
   bookmarkList,
   has_next,
 }: {
-  bookmarkList: TMyPageBookmark[];
+  bookmarkList: TMyPagePlace[];
   has_next: boolean;
 }) {
   const [sortOption, setSortOption] = useState('desc');
@@ -97,13 +98,23 @@ export default function MyPageBookmarkList({
       </div>
 
       {allBookmarkList.map(({ place_id, ...bookmark }, idx) => (
-        <MyPageBookmarkItem
+        <div
           key={`${place_id}-${idx}`}
-          idx={idx}
-          place_id={place_id}
-          {...bookmark}
-        />
+          className={`flex items-center border-b-2 ${
+            idx === 0 && 'border-t-2'
+          }`}
+        >
+          <MyPagePlaceItem place_id={place_id} {...bookmark} />
+          <BookmarkButton
+            isLoggedIn
+            placeId={place_id}
+            bookmarked={true}
+            iconSize="w-5 h-6"
+            iconColor="stroke-main"
+          />
+        </div>
       ))}
+
       <div className="flex justify-center my-8" ref={ref}>
         {hasNext &&
           (isLoading ? (

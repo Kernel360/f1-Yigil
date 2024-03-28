@@ -87,3 +87,4 @@ export function parseResult<TOutput, TInput>(
 
   return { status: 'succeed', data: result.data };
 }
+

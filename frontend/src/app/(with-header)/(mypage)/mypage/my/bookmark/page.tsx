@@ -1,5 +1,5 @@
 import { getMyPageBookmarks } from '@/app/_components/mypage/bookmark/bookmarkActions';
-import MyPageBookmarkList from '@/app/_components/mypage/bookmark/MyPageBookmarkList';
+import MyPageBookmarkList from '@/app/_components/mypage/bookmark/BookmarkList';
 import React from 'react';
 
 export default async function MyPageBookmarkPage() {

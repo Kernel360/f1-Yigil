@@ -20,8 +20,8 @@ export const myPageSpotListSchema = z.object({
   total_pages: z.number(),
 });
 
-export type TMyPageBookmark = z.infer<typeof myPageBookmarkItemSchema>;
-export const myPageBookmarkItemSchema = z.object({
+export type TMyPagePlace = z.infer<typeof myPagePlaceItemSchema>;
+export const myPagePlaceItemSchema = z.object({
   place_id: z.number().int(),
   place_name: z.string(),
   place_image: z.string(),
@@ -29,7 +29,7 @@ export const myPageBookmarkItemSchema = z.object({
 });
 
 export const myPageBookmarkListSchema = z.object({
-  bookmarks: z.array(myPageBookmarkItemSchema),
+  bookmarks: z.array(myPagePlaceItemSchema),
   has_next: z.boolean(),
 });
 
@@ -112,3 +112,11 @@ export type TMyPageCourseDetail = z.infer<typeof mypageCourseDetailSchema>;
 export type TMyPageCourseDetailSpot = z.infer<
   typeof myPageCourseDetailSpotSchema
 >;
+
+export const myPageFavoriteSpot = z.object({
+  spot_id: z.number(),
+  place_id: z.number(),
+  place_name: z.string(),
+  rate: z.number(),
+  
+})

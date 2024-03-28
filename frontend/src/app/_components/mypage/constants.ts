@@ -20,6 +20,17 @@ export const myPageTabs = [
   },
 ];
 
+export const myPageFavoriteTabs = [
+  {
+    href: '/mypage/favorite/place',
+    label: '장소',
+  },
+  {
+    href: '/mypage/favorite/course',
+    label: '코스',
+  },
+];
+
 export const myPageMyTab = [
   {
     href: '/mypage/my/travel/spot',
