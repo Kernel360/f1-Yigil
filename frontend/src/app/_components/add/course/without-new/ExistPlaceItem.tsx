@@ -53,7 +53,9 @@ export default function ExistPlaceItem({
             count={rate}
             rating
           />
-          <div className="text-gray-300 font-bold">{created_date}</div>
+          <div className="text-gray-300 font-bold">
+            {new Date(created_date).toLocaleDateString('ko-KR')}
+          </div>
         </div>
       </div>
     </article>

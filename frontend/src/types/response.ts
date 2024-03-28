@@ -213,9 +213,7 @@ export const existingSpotSchema = z.object({
   rate: z.number(),
   description: z.string(),
   image_urls: z.array(z.string()),
-  create_date: z.coerce
-    .date()
-    .transform((date) => date.toLocaleDateString('ko-kr')),
+  create_date: z.coerce.date(),
   point: z.object({
     x: z.number(),
     y: z.number(),

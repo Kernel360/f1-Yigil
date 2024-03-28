@@ -53,6 +53,7 @@ function convertExistingSpot(existing: TExistingSpot): TSpotState {
 
   return {
     id: spot_id,
+    createDate: create_date,
     place: {
       name: place_name,
       address: place_address,
