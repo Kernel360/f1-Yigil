@@ -28,8 +28,8 @@ export default function FloatingActionButton({
   return (
     <div className="w-min absolute right-24">
       <button
-        className={`fixed bottom-20 w-16 h-16 rounded-full flex justify-center items-center  ${
-          isModalOpened ? 'bg-black cursor-auto' : 'bg-blue-600'
+        className={`fixed bottom-20 w-16 h-16 rounded-full flex justify-center items-center bg-black ${
+          isModalOpened ? 'cursor-auto' : ''
         }`}
         onClick={() => setIsModalOpened(!isModalOpened)}
       >
