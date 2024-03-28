@@ -22,13 +22,13 @@ export default function AddCourseSpotData({
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { place, images, review } = spot;
+  const { place, images, review, createDate } = spot;
 
   const imageUris =
     images.type === 'new'
       ? images.data.map((image) => image.uri)
       : images.data.map((image) => image);
-  const currentDate = new Date(Date.now());
+  const currentDate = createDate ? createDate : new Date(Date.now());
 
   const currentIndex = index !== undefined ? index : -1;
 

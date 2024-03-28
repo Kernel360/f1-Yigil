@@ -56,6 +56,7 @@ export const manyInputImageSchema = z.discriminatedUnion('type', [
 
 export const spotStateSchema = z.object({
   id: z.number().int().optional(),
+  createDate: z.date().optional(),
   place: choosePlaceSchema,
   images: manyInputImageSchema,
   review: reviewSchema,
