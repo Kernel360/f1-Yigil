@@ -10,7 +10,7 @@ export interface TExistingSpot {
   spot_id: number;
   image_url: string;
   rate: number;
-  created_date: string;
+  created_date: Date;
   place_name: string;
 }
 
@@ -54,7 +54,7 @@ export default function ExistPlaceItem({
             rating
           />
           <div className="text-gray-300 font-bold">
-            {new Date(created_date).toLocaleDateString('ko-KR')}
+            {created_date.toLocaleDateString('ko-KR')}
           </div>
         </div>
       </div>

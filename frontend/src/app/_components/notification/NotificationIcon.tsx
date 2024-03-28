@@ -6,11 +6,6 @@ import ToastMsg from '../ui/toast/ToastMsg';
 import { MemberContext } from '@/context/MemberContext';
 import { NextPublicContext } from '@/context/NextPublicContext';
 
-const BASE_URL =
-  process.env.ENVIRONMENT === 'production'
-    ? process.env.NEXT_PUBLIC_BASE_URL
-    : process.env.NEXT_PUBLIC_DEV_BASE_URL;
-
 export default function NotificationIcon() {
   const memberStatus = useContext(MemberContext);
   const [newData, setNewData] = useState('');
@@ -40,7 +35,7 @@ export default function NotificationIcon() {
 
       return () => eventSource.close();
     }
-  }, [user]);
+  }, [user, baseUrl]);
 
   const { push } = useRouter();
   return (
