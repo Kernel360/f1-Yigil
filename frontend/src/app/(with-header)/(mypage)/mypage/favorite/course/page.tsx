@@ -15,10 +15,16 @@ export default async function FavoriteCoursePage() {
   }
   return (
     <>
-      <FavoriteCourseList
-        favoriteCourseList={res.data.contents}
-        has_next={res.data.has_next}
-      />
+      {!!res.data.contents.length ? (
+        <FavoriteCourseList
+          favoriteCourseList={res.data.contents}
+          has_next={res.data.has_next}
+        />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          좋아요 한 코스가 없습니다.
+        </div>
+      )}
     </>
   );
 }
