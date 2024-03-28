@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 
 import React from 'react';
 import { myPageRoutes } from '../constants';
+import NotificationIcon from '../../notification/NotificationIcon';
 
 export function checkPath(path: string, href: string, depth: number) {
   const pathRoot = path.slice(1).split('/')[depth];
@@ -30,6 +31,10 @@ export default function MyPageRoutes() {
           {label}
         </Link>
       ))}
+      <div className="grow"></div>
+      <Link href="/notification">
+        <NotificationIcon />
+      </Link>
     </>
   );
 }
