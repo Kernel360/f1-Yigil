@@ -52,7 +52,15 @@ public class CourseSpotSeriesFactoryImpl implements CourseSpotSeriesFactory {
                             .map(fileUploader::upload)
                             .collect(Collectors.toList()));
 
-                    Place place = optionalPlace.orElseGet(() -> registerNewPlace(registerPlaceRequest, attachFiles.getFiles().getFirst()));
+                    Place place = optionalPlace.orElseGet(() -> {
+                        AttachFile placeAttachFile = new AttachFile(
+                                attachFiles.getRepresentativeFile().getFileType(),
+                                attachFiles.getRepresentativeFile().getFileUrl(),
+                                attachFiles.getRepresentativeFile().getOriginalFileName(),
+                                attachFiles.getRepresentativeFile().getFileSize()
+                        );
+                        return registerNewPlace(registerPlaceRequest, placeAttachFile);
+                    });
 
                     placeCacheStore.incrementSpotCountInPlace(place.getId());
                     placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), registerSpotRequest.getRate());
