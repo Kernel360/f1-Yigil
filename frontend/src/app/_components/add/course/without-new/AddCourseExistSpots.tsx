@@ -13,6 +13,7 @@ import ExistPlaceItem from './ExistPlaceItem';
 import type { TMyPageSpot } from '@/types/myPageResponse';
 import { AddTravelExistsContext } from '@/context/exists/AddTravelExistsContext';
 import Pagination from '@/app/_components/mypage/Pagination';
+import Link from 'next/link';
 
 const sortOptions = [
   { label: '최신순', value: 'desc' },
@@ -116,6 +117,12 @@ export default function AddCourseExistSpots() {
           <br />
           <span className="text-3xl">장소 리뷰가 없습니다!</span>
           <span className="text-xl">새로운 장소 리뷰를 먼저 작성해주세요!</span>
+          <Link
+            href="/add/spot"
+            className="px-3 py-2 text-lg rounded-xl bg-main text-white"
+          >
+            작성하러 가기
+          </Link>
         </section>
       )}
       {error && <ToastMsg title={error} id={Date.now()} timer={2000} />}
