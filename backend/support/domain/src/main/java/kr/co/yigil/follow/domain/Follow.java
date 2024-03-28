@@ -32,6 +32,7 @@ public class Follow {
     public Follow(final Member follower, final Member following) {
         this.follower = follower;
         this.following = following;
+        createdAt = LocalDateTime.now();
     }
 
 
