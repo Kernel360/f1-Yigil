@@ -32,7 +32,7 @@ export default function HomeNavigation() {
           지도
         </Link>
         <Link href="/privacy-policy" className="self-center ml-4">
-          <InfoIcon className="fill-gray-500" />
+          <InfoIcon className="w-6 h-6 fill-gray-500" />
         </Link>
       </div>
       {pathname === '/' && (
