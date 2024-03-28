@@ -128,7 +128,7 @@ public class FollowApiControllerTest {
         mockMvc.perform(get("/api/v1/follows/followers")
                 .param("page", "1")
                 .param("size", "5")
-                .param("sortBy", "follower_name")
+                .param("sortBy", "nickname")
                 .param("sortOrder", "asc")
             )
             .andExpect(status().isOk())

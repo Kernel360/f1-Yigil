@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -128,7 +129,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseInfo.MyFavoriteCoursesInfo getFavoriteCoursesInfo(Long memberId, PageRequest pageRequest) {
-        Page<Course> favoriteCourses = courseReader.getFavoriteCourses(memberId, pageRequest);
+        Slice<Course> favoriteCourses = courseReader.getFavoriteCourses(memberId, pageRequest);
         List<CourseInfo.FavoriteCourseInfo> favoriteCourseInfoList = favoriteCourses.getContent().stream()
                 .map(course -> {
                             boolean isFollowing = followReader.isFollowing(memberId, course.getMember().getId());
@@ -136,6 +137,6 @@ public class CourseServiceImpl implements CourseService {
                         }
                 )
                 .toList();
-        return new CourseInfo.MyFavoriteCoursesInfo(favoriteCourseInfoList, favoriteCourses.getTotalPages());
+        return new CourseInfo.MyFavoriteCoursesInfo(favoriteCourseInfoList, favoriteCourses.hasNext());
     }
 }

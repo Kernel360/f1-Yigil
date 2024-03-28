@@ -44,7 +44,7 @@ public class CourseReaderImpl implements CourseReader {
     }
 
     @Override
-    public Page<Course> getFavoriteCourses(Long memberId, Pageable pageRequest) {
+    public Slice<Course> getFavoriteCourses(Long memberId, Pageable pageRequest) {
         return courseRepository.findAllMembersFavoriteCourses(memberId, pageRequest);
     }
 }

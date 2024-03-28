@@ -129,11 +129,11 @@ public class SpotInfo {
     @Getter
     public static class MyFavoriteSpotsInfo{
         private final List<FavoriteSpotInfo> contents;
-        private final int totalPages;
+        private final boolean hasNext;
 
-        public MyFavoriteSpotsInfo(List<FavoriteSpotInfo> favoriteSpots, int totalPages){
+        public MyFavoriteSpotsInfo(List<FavoriteSpotInfo> favoriteSpots, boolean hasNext){
             this.contents = favoriteSpots;
-            this.totalPages = totalPages;
+            this.hasNext = hasNext;
         }
     }
 

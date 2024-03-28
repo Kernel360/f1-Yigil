@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 public class MyFavoriteSpotsResponse{
     private List<FavoriteSpotDto> contents;
-    private int totalPages;
+    private boolean hasNext;
 
     @Getter
     @Builder

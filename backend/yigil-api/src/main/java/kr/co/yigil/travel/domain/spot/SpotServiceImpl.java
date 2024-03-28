@@ -82,7 +82,16 @@ public class SpotServiceImpl implements SpotService {
         }
 
         var attachFiles = spotSeriesFactory.initAttachFiles(command);
-        Place place = optionalPlace.orElseGet(() -> registerNewPlace(command.getRegisterPlaceRequest(), attachFiles.getFiles().getFirst()));
+
+        Place place = optionalPlace.orElseGet(() -> {
+            AttachFile placeAttachFile = new AttachFile(
+                    attachFiles.getRepresentativeFile().getFileType(),
+                    attachFiles.getRepresentativeFile().getFileUrl(),
+                    attachFiles.getRepresentativeFile().getOriginalFileName(),
+                    attachFiles.getRepresentativeFile().getFileSize()
+            );
+            return registerNewPlace(command.getRegisterPlaceRequest(), placeAttachFile);
+        });
         placeCacheStore.incrementSpotCountInPlace(place.getId());
         placeCacheStore.incrementSpotTotalRateInPlace(place.getId(), command.getRate());
         spotStore.store(command.toEntity(member, place, false, attachFiles));
@@ -146,8 +155,8 @@ public class SpotServiceImpl implements SpotService {
     @Override
     @Transactional(readOnly = true)
     public SpotInfo.MyFavoriteSpotsInfo getFavoriteSpotsInfo(Long memberId, Pageable pageRequest) {
-        var pageSpot = spotReader.getFavoriteSpotList(memberId, pageRequest);
-        List<SpotInfo.FavoriteSpotInfo> spotInfoList = pageSpot.getContent().stream()
+        var sliceSpot = spotReader.getFavoriteSpotList(memberId, pageRequest);
+        List<SpotInfo.FavoriteSpotInfo> spotInfoList = sliceSpot.getContent().stream()
                 .map(spot -> {
                             boolean isFollowing = followReader.isFollowing(memberId, spot.getMember().getId());
                             return new SpotInfo.FavoriteSpotInfo(spot, isFollowing);
@@ -155,6 +164,6 @@ public class SpotServiceImpl implements SpotService {
 
                 )
                 .toList();
-        return new SpotInfo.MyFavoriteSpotsInfo(spotInfoList, pageSpot.getTotalPages());
+        return new SpotInfo.MyFavoriteSpotsInfo(spotInfoList, sliceSpot.hasNext());
     }
 }

@@ -96,7 +96,7 @@ public class SpotReaderImpl implements SpotReader {
     }
 
     @Override
-    public Page<Spot> getFavoriteSpotList(Long memberId, Pageable pageRequest) {
+    public Slice<Spot> getFavoriteSpotList(Long memberId, Pageable pageRequest) {
         return spotRepository.findAllMembersFavoriteSpot(memberId, pageRequest);
     }
 }

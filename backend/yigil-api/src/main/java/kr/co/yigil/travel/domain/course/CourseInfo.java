@@ -232,7 +232,12 @@ public class CourseInfo {
     @Data
     public static class MyFavoriteCoursesInfo {
         private final List<FavoriteCourseInfo> contents;
-        private final int totalPages;
+        private final boolean hasNext;
+
+        public MyFavoriteCoursesInfo(List<FavoriteCourseInfo> contents, boolean hasNext) {
+            this.contents = contents;
+            this.hasNext = hasNext;
+        }
 
     }
 

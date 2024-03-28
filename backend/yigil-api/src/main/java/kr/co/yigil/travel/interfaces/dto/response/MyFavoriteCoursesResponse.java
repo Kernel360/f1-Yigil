@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class MyFavoriteCoursesResponse {
     List<FavoriteCourseDto> contents;
-    int totalPages;
+    boolean hasNext;
 
     @Data
     public static class FavoriteCourseDto {
