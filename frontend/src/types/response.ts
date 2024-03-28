@@ -190,6 +190,7 @@ export const spotSchema = z.object({
 export type TSpot = z.infer<typeof spotSchema>;
 
 export const commentSchema = z.object({
+  deleted: z.boolean(),
   id: z.number().int(),
   content: z.string(),
   member_id: z.number().int(),
