@@ -58,7 +58,7 @@
 
 ## 멤버
 
-![멤버]()
+![멤버](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/team.png?raw=true)
 
 ### 프론트엔드
 
