@@ -46,7 +46,7 @@ export default function FavoriteCourseList({
       setIsLoading(false);
       setTimeout(() => {
         setErrorText('');
-      }, 2000);
+      }, 1000);
       return;
     }
     setHasNext((prev) => (prev = favoriteCourseList.data.has_next));
@@ -80,7 +80,7 @@ export default function FavoriteCourseList({
       setIsLoading(false);
       setTimeout(() => {
         setErrorText('');
-      }, 2000);
+      }, 1000);
       return;
     }
     setHasNext((prev) => (prev = favoriteCourseList.data.has_next));

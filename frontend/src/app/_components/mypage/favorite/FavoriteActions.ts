@@ -20,7 +20,7 @@ export const getFavoriteSpots = async (
     `${BASE_URL}/v1/spots/my/favorite?page=${page}&size=${size}${
       sortOption === 'place_name'
         ? '&sortBy=place_name&sortOrder=asc'
-        : `&sortBy=created_at&sortOption=${sortOption}`
+        : `&sortBy=created_at&sortOrder=${sortOption}`
     }`,
     {
       headers: {
