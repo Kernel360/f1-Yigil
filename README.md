@@ -64,7 +64,7 @@
 
 | <img src="https://avatars.githubusercontent.com/u/97086762?v=4" width="130" height="130"> | <img src ="https://avatars.githubusercontent.com/u/8166749?v=4" width="130" height="130"> |
 | :---------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
-|                         [이경택](https://github.com/davidktlee7)                          |                         [박정욱](https://github.com/hatchling13)                          |
+|                          [이경택](https://github.com/davidktlee)                          |                         [박정욱](https://github.com/hatchling13)                          |
 
 ### 백엔드
 
