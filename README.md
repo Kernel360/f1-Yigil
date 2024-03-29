@@ -30,22 +30,26 @@
 
 ### Backend & Frontend
 
-![기술스택1]()
+![기술스택1](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/skill_stack1.png?raw=true)
 
 ### Infra & Co-op
 
-![기술스택2]()
+![기술스택2](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/skill_stack2.png?raw=true)
 
 <br>
 
 ## 프로젝트 구성도
 
-![프로젝트구성도]()
+![프로젝트구성도](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/project_structure.png?raw=true)
 
 ## CI/CD
 
-![CICD]()
+![CICD](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/ci_cd.png?raw=true)
 
 ## 모니터링 구조도
 
-![모니터링구조도]()
+![모니터링구조도](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/monitor_structure.png?raw=true)
+
+## 배치 시스템
+
+![배치시스템](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/batch_structure.png?raw=true)
