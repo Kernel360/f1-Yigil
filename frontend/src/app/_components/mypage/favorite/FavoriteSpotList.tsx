@@ -42,7 +42,10 @@ export default function FavoriteSpotList({
       sortOption,
     );
     if (favoriteSpotList.status === 'failed') {
-      setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
+      setErrorText('스팟 데이터를 불러오는데 실패했습니다.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 1000);
       setIsLoading(false);
       return;
     }
@@ -69,7 +72,7 @@ export default function FavoriteSpotList({
       setErrorText('스팟 데이터를 불러오는데 실패했습니다.');
       setTimeout(() => {
         setErrorText('');
-      }, 2000);
+      }, 1000);
       setIsLoading(false);
       return;
     }

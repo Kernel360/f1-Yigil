@@ -15,7 +15,7 @@ export const myPageTabs = [
     label: 'MY',
   },
   {
-    href: '/mypage/favorite/course',
+    href: '/mypage/favorite/spot',
     label: '좋아요',
   },
 ];
