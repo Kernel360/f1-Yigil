@@ -53,3 +53,21 @@
 ## 배치 시스템
 
 ![배치시스템](https://github.com/Kernel360/f1-Yigil/blob/develop/assets/batch_structure.png?raw=true)
+
+<br>
+
+## 멤버
+
+![멤버]()
+
+### 프론트엔드
+
+| <img src="https://avatars.githubusercontent.com/u/97086762?v=4" width="130" height="130"> | <img src ="https://avatars.githubusercontent.com/u/8166749?v=4" width="130" height="130"> |
+| :---------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
+|                         [이경택](https://github.com/davidktlee7)                          |                         [박정욱](https://github.com/hatchling13)                          |
+
+### 백엔드
+
+| <img src="https://avatars.githubusercontent.com/u/118032886?v=4" width="130" height="130"> | <img src="https://avatars.githubusercontent.com/u/101683784?v=4" width="130" height="130"> | <img src="https://avatars.githubusercontent.com/u/124959156?v=4" width="130" height="130"> | <img src="https://avatars.githubusercontent.com/u/80247908?v=4" width="130" height="130"> |
+| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
+|                           [손민우](https://github.com/minson96)                            |                          [박석희](https://github.com/stoneHee99)                           |                          [신종민](https://github.com/ShineCorine)                          |                           [장호윤](https://github.com/Uknow928)                           |
