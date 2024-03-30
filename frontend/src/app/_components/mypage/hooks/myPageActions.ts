@@ -1,7 +1,6 @@
 'use server';
 
 import {
-  TMyPageCourseDetail,
   myPageCourseListSchema,
   myPageSpotListSchema,
   mypageCourseDetailSchema,
@@ -15,16 +14,10 @@ import {
   cdnPathToRelativePath,
   dataUrlToBlob,
   getMIMETypeFromDataURI,
+  parseResult,
 } from '@/utils';
-import { TModifyCourse } from '../course/CourseDetail';
 import { TPatchCourse } from '../course/types';
-import { NextResponse } from 'next/server';
-import {
-  TBackendError,
-  backendErrorSchema,
-  postResponseSchema,
-} from '@/types/response';
-import { SafeParseReturnType } from 'zod';
+import { backendErrorSchema, postResponseSchema } from '@/types/response';
 
 export const getMyPageSpots = async (
   pageNo: number = 1,
@@ -47,7 +40,7 @@ export const getMyPageSpots = async (
     },
   );
   const spotList = await res.json();
-  const parsedSpotList = myPageSpotListSchema.safeParse(spotList);
+  const parsedSpotList = parseResult(myPageSpotListSchema, spotList);
   return parsedSpotList;
 };
 
@@ -87,7 +80,7 @@ export const getMyPageCourses = async (
     },
   );
   const courseList = await res.json();
-  const parsedCourseList = myPageCourseListSchema.safeParse(courseList);
+  const parsedCourseList = parseResult(myPageCourseListSchema, courseList); //
   return parsedCourseList;
 };
 

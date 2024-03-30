@@ -6,6 +6,7 @@ import {
   backendErrorSchema,
   mySpotIds,
 } from '@/types/response';
+import { parseResult } from '@/utils';
 import { cookies } from 'next/headers';
 
 export const getNearPlaces = async (
@@ -23,7 +24,7 @@ export const getNearPlaces = async (
     `${BASE_URL}/v1/places/near?minX=${minX}&minY=${minY}&maxX=${maxX}&maxY=${maxY}&page=${page}`,
   );
   const places = await res.json();
-  const parsedPlaces = TMapPlacesSchema.safeParse(places);
+  const parsedPlaces = parseResult(TMapPlacesSchema, places);
   return parsedPlaces;
 };
 
