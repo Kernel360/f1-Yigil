@@ -45,7 +45,7 @@ export default function FavoriteSpotList({
       setErrorText('스팟 데이터를 불러오는데 실패했습니다.');
       setTimeout(() => {
         setErrorText('');
-      }, 9000);
+      }, 2000);
       setIsLoading(false);
       return;
     }
@@ -72,7 +72,7 @@ export default function FavoriteSpotList({
       setErrorText('스팟 데이터를 불러오는데 실패했습니다.');
       setTimeout(() => {
         setErrorText('');
-      }, 9000);
+      }, 2000);
       setIsLoading(false);
       return;
     }
@@ -129,7 +129,7 @@ export default function FavoriteSpotList({
             <button className="py-1 px-8 bg-gray-200 rounded-lg">더보기</button>
           ))}
       </div>
-      {errorText && <ToastMsg title={errorText} timer={9000} />}
+      {errorText && <ToastMsg title={errorText} timer={2000} />}
     </div>
   );
 }
