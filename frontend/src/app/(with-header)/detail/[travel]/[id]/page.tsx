@@ -10,6 +10,36 @@ import SpotDetail from '@/app/_components/mypage/spot/SpotDetail';
 import { myInfoSchema } from '@/types/response';
 import React from 'react';
 
+export async function generateMetaData({
+  params,
+}: {
+  params: { id: number; travel: string };
+}) {
+  if (params.travel === 'spot') {
+    const spotDetail = await getSpotDetail(params.id);
+    if (spotDetail.status === 'succeed') {
+      return {
+        title: spotDetail.data.place_name,
+        description: spotDetail.data.description,
+        openGraph: {
+          images: [spotDetail.data.image_urls[0]],
+        },
+      };
+    }
+  } else {
+    const courseDetail = await getCourseDetail(params.id);
+    if (courseDetail.status === 'succeed') {
+      return {
+        title: courseDetail.data.title,
+        description: courseDetail.data.description,
+        openGraph: {
+          images: [courseDetail.data.map_static_image_url],
+        },
+      };
+    }
+  }
+}
+
 export default async function SpotDetailPage({
   params,
 }: {
