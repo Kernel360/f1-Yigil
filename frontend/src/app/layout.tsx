@@ -14,26 +14,24 @@ const Pretendard = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://yigil.co.kr'),
   title: '이길로그',
-
   icons: {
     icon: [{ url: '/logo/favicon.svg', href: '/logo/favicon.svg' }],
   },
-
   description: '지도 기반 장소 기록·공유 서비스',
   openGraph: {
     title: '이길로그 홈페이지',
     description: '지도 기반 장소 기록·공유 서비스',
-    images: ['/logo/og-logo.png'],
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
     type: 'website',
     siteName: '이길로그',
-    url: 'https://yigil.co.kr',
     locale: 'ko-KR',
   },
   twitter: {
     title: '이길로그 홈페이지',
     description: '지도 기반 장소 기록·공유 서비스',
-    images: ['/logo/og-logo.png'],
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
   },
 };
 

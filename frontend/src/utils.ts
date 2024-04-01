@@ -108,14 +108,11 @@ export async function createMetadata(data: {
     title: title,
     description: description,
     openGraph: {
-      siteName: '이길로그',
       url: url,
-      locale: 'ko-KR',
       images: {
         url: image,
-        alt: title,
+        alt: `${title}-이미지`,
       },
-      type: 'website',
     },
     twitter: {
       title: title,

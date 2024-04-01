@@ -32,7 +32,16 @@ export async function generateMetadata({
         title: '장소 상세 페이지',
         description: '장소 상세 설명',
         openGraph: {
-          images: ['/logo/og-logo.png'],
+          images: {
+            url: '/logo/og-logo.png',
+            alt: '이길로그 로고',
+          },
+        },
+        twitter: {
+          images: {
+            url: '/logo/og-logo.png',
+            alt: '이길로그 로고',
+          },
         },
       };
   } else {
@@ -50,7 +59,16 @@ export async function generateMetadata({
         title: '코스 상세 페이지',
         description: '코스 상세 설명',
         openGraph: {
-          images: ['/logo/favicon.svg'],
+          images: {
+            url: '/logo/og-logo.png',
+            alt: '이길로그 로고',
+          },
+        },
+        twitter: {
+          images: {
+            url: '/logo/og-logo.png',
+            alt: '이길로그 로고',
+          },
         },
       };
   }
