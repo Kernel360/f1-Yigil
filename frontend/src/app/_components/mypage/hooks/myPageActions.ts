@@ -232,7 +232,7 @@ export const getCourseDetail = async (courseId: number) => {
     },
   });
   const result = await res.json();
-  const courseDetail = mypageCourseDetailSchema.safeParse(result);
+  const courseDetail = parseResult(mypageCourseDetailSchema, result);
 
   return courseDetail;
 };
