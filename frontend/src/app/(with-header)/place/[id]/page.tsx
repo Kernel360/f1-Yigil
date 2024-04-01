@@ -1,5 +1,7 @@
 import PlaceDetailWithMySpot from '@/app/_components/place/detail/PlaceDetailWithMySpot';
 
+
+
 export default async function PlaceDetailPage({
   params,
 }: {

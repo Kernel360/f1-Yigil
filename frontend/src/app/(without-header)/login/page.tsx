@@ -11,6 +11,8 @@ import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
 import NaverLoginButton from '@/app/_components/ui/button/NaverLoginButton';
 import { googleOAuthEndPoint } from '@/app/endpoints/api/auth/callback/google/constants';
 
+
+
 export default async function LoginPage() {
   const { KAKAO_ID, GOOGLE_CLIENT_ID, NAVER_SEARCH_ID } = process.env;
 

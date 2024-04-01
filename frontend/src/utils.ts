@@ -97,3 +97,33 @@ export function parseResult<TOutput, TInput>(
   return { status: 'succeed', data: result.data };
 }
 
+export async function createMetadata(data: {
+  title: string;
+  description: string;
+  image: string;
+  url: string;
+}) {
+  const { title, description, image, url } = data;
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      siteName: '이길로그',
+      url: url,
+      locale: 'ko-KR',
+      images: {
+        url: image,
+        alt: title,
+      },
+      type: 'website',
+    },
+    twitter: {
+      title: title,
+      description: description,
+      images: {
+        url: image,
+        alt: `${title}-이미지`,
+      },
+    },
+  };
+}

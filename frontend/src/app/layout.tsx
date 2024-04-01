@@ -21,6 +21,20 @@ export const metadata: Metadata = {
   },
 
   description: '지도 기반 장소 기록·공유 서비스',
+  openGraph: {
+    title: '이길로그 홈페이지',
+    description: '지도 기반 장소 기록·공유 서비스',
+    images: ['/public/logo/og-logo.png'],
+    type: 'website',
+    siteName: '이길로그',
+    url: 'https://yigil.co.kr',
+    locale: 'ko-KR',
+  },
+  twitter: {
+    title: '이길로그 홈페이지',
+    description: '지도 기반 장소 기록·공유 서비스',
+    images: ['/public/logo/og-logo.png'],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

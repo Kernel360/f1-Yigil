@@ -139,7 +139,7 @@ export const getSpotDetail = async (spotId: number) => {
     },
   });
   const result = await res.json();
-  const parsedSpotDetail = mypageSpotDetailSchema.safeParse(result);
+  const parsedSpotDetail = parseResult(mypageSpotDetailSchema, result);
   return parsedSpotDetail;
 };
 

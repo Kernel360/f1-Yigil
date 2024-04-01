@@ -9,34 +9,50 @@ import {
 import SpotDetail from '@/app/_components/mypage/spot/SpotDetail';
 import { myInfoSchema } from '@/types/response';
 import React from 'react';
+import { Metadata } from 'next';
+import { createMetadata } from '@/utils';
 
-export async function generateMetaData({
+export async function generateMetadata({
   params,
 }: {
   params: { id: number; travel: string };
-}) {
+}): Promise<Metadata> {
   if (params.travel === 'spot') {
     const spotDetail = await getSpotDetail(params.id);
     if (spotDetail.status === 'succeed') {
-      return {
+      const data = {
         title: spotDetail.data.place_name,
         description: spotDetail.data.description,
+        image: spotDetail.data.image_urls[0],
+        url: `https://yigil.co.kr/detail/spot/${params.id}`,
+      };
+      return createMetadata(data);
+    } else
+      return {
+        title: '장소 상세 페이지',
+        description: '장소 상세 설명',
         openGraph: {
-          images: [spotDetail.data.image_urls[0]],
+          images: ['/public/logo/og-logo.png'],
         },
       };
-    }
   } else {
     const courseDetail = await getCourseDetail(params.id);
     if (courseDetail.status === 'succeed') {
-      return {
+      const data = {
         title: courseDetail.data.title,
         description: courseDetail.data.description,
+        image: courseDetail.data.map_static_image_url,
+        url: `https://yigil.co.kr/detail/course/${params.id}`,
+      };
+      return createMetadata(data);
+    } else
+      return {
+        title: '코스 상세 페이지',
+        description: '코스 상세 설명',
         openGraph: {
-          images: [courseDetail.data.map_static_image_url],
+          images: ['/public/logo/favicon.svg'],
         },
       };
-    }
   }
 }
 
@@ -52,7 +68,7 @@ export default async function SpotDetailPage({
   if (params.travel === 'spot') {
     const spotDetail = await getSpotDetail(params.id);
 
-    if (!spotDetail.success)
+    if (spotDetail.status === 'failed')
       return (
         <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">
           장소 상세 정보를 불러오는데 실패했습니다. <hr /> 다시 시도해주세요.
