@@ -1,12 +1,24 @@
-// import FavoritePlaceList from '@/app/_components/mypage/favorite/FavoriteSpotList';
+import { getFavoriteSpots } from '@/app/_components/mypage/favorite/FavoriteActions';
+import FavoriteSpotList from '@/app/_components/mypage/favorite/FavoriteSpotList';
 import React from 'react';
 
-export default function FavoriteSpotPage() {
+export default async function FavoriteSpotPage() {
+  const res = await getFavoriteSpots();
+
+  if (res.status === 'failed') throw new Error(res.message);
+
   return (
-    <section className="grow flex flex-col justify-center items-center gap-8">
-      <span className="text-6xl">🚧</span>
-      <br />
-      <span className="text-5xl">준비 중입니다!</span>
-    </section>
+    <>
+      {!!res.data.contents.length ? (
+        <FavoriteSpotList
+          favoriteSpotList={res.data.contents}
+          has_next={res.data.has_next}
+        />
+      ) : (
+        <div className="w-full h-full flex justify-center items-center text-4xl text-center text-main">
+          좋아요 한 장소가 없습니다.
+        </div>
+      )}
+    </>
   );
 }

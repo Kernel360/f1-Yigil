@@ -59,6 +59,9 @@ export default function SettingUserForm({
     if (!userForm.nickname) {
       setNicknameValidation(false);
       setErrorText('1자 이상 20자 이내로 입력해주세요.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       return;
     }
     if (validationNickname(userForm.nickname)) {
@@ -69,9 +72,10 @@ export default function SettingUserForm({
       else {
         setNicknameValidation(false);
         setErrorText('이미 사용중인 닉네임입니다.');
+        setTimeout(() => {
+          setErrorText('');
+        }, 2000);
       }
-    } else {
-      setErrorText('영문/한글 또는 숫자로만 1자이상 20자 이내로 입력해주세요.');
     }
   };
 
@@ -81,8 +85,12 @@ export default function SettingUserForm({
       .filter((region) => region.id !== id)
       .map((region) => region.id);
     const res = await patchFavoriteRegion(restIds);
-    if (!res)
+    if (!res) {
       setErrorText('관심 지역 삭제에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
+    }
   };
 
   const closeModal = () => {
@@ -244,6 +252,7 @@ export default function SettingUserForm({
 }
 
 function validationNickname(nickname: string) {
-  const regExp = /^[a-zA-Z0-9ㄱ-ㅣ가-힣][a-zA-Z0-9ㄱ-ㅣ가-힣]{0,19}$/;
+  const regExp =
+    /^[a-zA-Z0-9ㄱ-ㅣ가-힣][a-zA-Z0-9ㄱ-ㅣ가-힣`~!@#$%^&*|\\\'\";:\/?]{0,19}$/;
   return regExp.test(nickname);
 }

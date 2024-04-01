@@ -19,7 +19,6 @@ import { getCourseStaticMap, getRouteGeoJson } from '../../add/course/action';
 import { TCoords, TLineString } from '@/context/travel/schema';
 import { EventFor } from '@/types/type';
 import { checkCourseDifference } from './util';
-import { TMyInfo } from '@/types/response';
 
 export interface TModifyCourse {
   title: string;
@@ -93,6 +92,9 @@ export default function CourseDetail({
   const onChangeDescription = (description: string) => {
     if (description.length > 30) {
       setErrorText('리뷰를 30자 이내로 입력해야 합니다.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       return;
     }
     setModifyCourse((prev) => ({ ...prev, description }));
@@ -102,6 +104,9 @@ export default function CourseDetail({
   const onChangeTitle = (title: string) => {
     if (!title.trim()) {
       setErrorText('코스 제목을 입력해주세요');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       return;
     }
     setModifyCourse((prev) => ({ ...prev, title }));
@@ -205,6 +210,9 @@ export default function CourseDetail({
     e.stopPropagation();
     if (spots.length === 2) {
       setErrorText('코스는 2개 이상 장소가 존재해야 합니다.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       return;
     }
     const filteredSpot = modifyCourse.spots.filter((spot) => spot.id !== id);

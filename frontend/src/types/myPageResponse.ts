@@ -117,7 +117,21 @@ export const myPageFavoriteSpot = z.object({
   place_id: z.number(),
   place_name: z.string(),
   rate: z.number(),
+  image_url: z.string(),
+  created_date: z.coerce
+    .date()
+    .transform((date) => date.toLocaleDateString('ko-kr')),
+  writer_id: z.number(),
+  writer_nickname: z.string(),
+  writer_profile_image_url: z.string(),
 });
+
+export const myPageFavoriteSpotSchema = z.object({
+  contents: z.array(myPageFavoriteSpot),
+  has_next: z.boolean(),
+});
+
+export type TMyPageFavoriteSpot = z.infer<typeof myPageFavoriteSpotSchema>;
 
 export const myPageFavoriteCourseSchema = z.object({
   course_id: z.number(),

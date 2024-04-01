@@ -90,6 +90,9 @@ const CourseSpotItem = forwardRef<HTMLDivElement, TItemProps>(
     const onChangeDescription = (title: string) => {
       if (description.length > 30) {
         setErrorText('리뷰를 30자 이내로 입력해야 합니다.');
+        setTimeout(() => {
+          setErrorText('');
+        }, 2000);
         return;
       } else {
         const updatedSpot = { ...spot, description: title };

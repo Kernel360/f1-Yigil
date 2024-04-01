@@ -51,6 +51,9 @@ export default function MyPageFollowList({
     if (followList.status === 'failed') {
       setAllFollowList([]);
       setErrorText(followList.message);
+      setTimeout(() => {
+        setErrorText('');
+      }, 1000);
       return;
     }
     setAllFollowList((prev) => [...prev, ...followList.data.content]);

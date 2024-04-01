@@ -12,10 +12,9 @@ import { getFavoriteCourses } from './FavoriteActions';
 import CourseItem from '../CourseItem';
 
 const sortOptions = [
-  { label: '이름순', value: 'place_name' },
+  { label: '이름순', value: 'title' },
   { label: '최신순', value: 'desc' },
   { label: '오래된순', value: 'asc' },
-  { label: '별점순', value: 'rate' },
 ];
 
 export default function FavoriteCourseList({
@@ -25,7 +24,7 @@ export default function FavoriteCourseList({
   favoriteCourseList: TMyPageFavoriteCourse['contents'];
   has_next: boolean;
 }) {
-  const [sortOption, setSortOption] = useState('desc');
+  const [sortOption, setSortOption] = useState('title');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const divideCount = 5;
   const [allFavoriteCourseList, setAllFavoriteCourseList] =
@@ -47,7 +46,7 @@ export default function FavoriteCourseList({
       setIsLoading(false);
       setTimeout(() => {
         setErrorText('');
-      }, 2000);
+      }, 1000);
       return;
     }
     setHasNext((prev) => (prev = favoriteCourseList.data.has_next));
@@ -70,22 +69,22 @@ export default function FavoriteCourseList({
     sortOrder: string,
   ) => {
     setIsLoading(true);
-    const favoritePlaceList = await getFavoriteCourses(
+    const favoriteCourseList = await getFavoriteCourses(
       pageNum,
       size,
       sortOrder,
     );
-    if (favoritePlaceList.status === 'failed') {
+    if (favoriteCourseList.status === 'failed') {
       setAllFavoriteCourseList([]);
       setErrorText('코스 데이터를 불러오는데 실패했습니다.');
       setIsLoading(false);
       setTimeout(() => {
         setErrorText('');
-      }, 2000);
+      }, 1000);
       return;
     }
-    setHasNext((prev) => (prev = favoritePlaceList.data.has_next));
-    setAllFavoriteCourseList(favoritePlaceList.data.contents);
+    setHasNext((prev) => (prev = favoriteCourseList.data.has_next));
+    setAllFavoriteCourseList(favoriteCourseList.data.contents);
     setIsLoading(false);
   };
 
@@ -103,7 +102,7 @@ export default function FavoriteCourseList({
           selectStyle="p-2"
           selectOption={sortOption}
           onChangeSelectOption={onChangeSortOption}
-          defaultValue="최신순"
+          defaultValue="이름순"
         />
       </div>
 
@@ -127,7 +126,7 @@ export default function FavoriteCourseList({
               travelId={course_id}
               liked={true}
               sizes="w-9 h-9"
-              position=""
+              position="top-[-20px]"
               isLoggedIn="true"
             />
           </div>

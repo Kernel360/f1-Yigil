@@ -1,12 +1,14 @@
 'use server';
 
 import { getBaseUrl } from '@/app/utilActions';
-import { myPageFavoriteCourseResponse } from '@/types/myPageResponse';
-import { postResponseSchema } from '@/types/response';
+import {
+  myPageFavoriteCourseResponse,
+  myPageFavoriteSpotSchema,
+} from '@/types/myPageResponse';
 import { parseResult } from '@/utils';
 import { cookies } from 'next/headers';
 
-export const getFavoritePlaces = async (
+export const getFavoriteSpots = async (
   page: number = 1,
   size: number = 5,
   sortOption: string = 'place_name',
@@ -16,9 +18,9 @@ export const getFavoritePlaces = async (
 
   const res = await fetch(
     `${BASE_URL}/v1/spots/my/favorite?page=${page}&size=${size}${
-      sortOption === 'name'
+      sortOption === 'place_name'
         ? '&sortBy=place_name&sortOrder=asc'
-        : `&sortBy=created_at&sortOption=${sortOption}`
+        : `&sortBy=created_at&sortOrder=${sortOption}`
     }`,
     {
       headers: {
@@ -27,7 +29,8 @@ export const getFavoritePlaces = async (
     },
   );
   const result = await res.json();
-  const parsed = parseResult(postResponseSchema, result);
+
+  const parsed = parseResult(myPageFavoriteSpotSchema, result);
 
   return parsed;
 };
