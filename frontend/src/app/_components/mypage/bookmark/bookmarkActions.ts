@@ -2,6 +2,7 @@
 import { myPageBookmarkListSchema } from '@/types/myPageResponse';
 import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
+import { parseResult } from '@/utils';
 
 export const getMyPageBookmarks = async (
   pageNo: number = 1,
@@ -26,6 +27,7 @@ export const getMyPageBookmarks = async (
     },
   );
   const result = await res.json();
-  const bookmarkList = myPageBookmarkListSchema.safeParse(result);
+  const bookmarkList = parseResult(myPageBookmarkListSchema, result);
+
   return bookmarkList;
 };

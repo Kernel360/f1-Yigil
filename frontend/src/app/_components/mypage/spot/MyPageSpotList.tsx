@@ -21,6 +21,7 @@ import {
 import { TMyPageSpot } from '@/types/myPageResponse';
 import LoadingIndicator from '../../LoadingIndicator';
 import ToastMsg from '../../ui/toast/ToastMsg';
+import CalendarIcon from '/public/icons/calendar.svg';
 
 export default function MyPageSpotList({
   placeList,
@@ -64,26 +65,24 @@ export default function MyPageSpotList({
     sortOption: string,
     selectOption: string,
   ) => {
-    try {
-      setIsBackendDataLoading(true);
-      const spotList = await getMyPageSpots(
-        pageNum,
-        size,
-        sortOption,
-        selectOption,
-      );
-      if (!spotList.success) {
-        setAllSpotList([]);
-        setErrorText('데이터를 불러오는데 실패했습니다');
-        return;
-      }
-      setTotalPageCount(spotList.data.total_pages);
-      setAllSpotList([...spotList.data.content]);
-    } catch (error) {
+    setIsBackendDataLoading(true);
+    const spotList = await getMyPageSpots(
+      pageNum,
+      size,
+      sortOption,
+      selectOption,
+    );
+    if (spotList.status === 'failed') {
+      setAllSpotList([]);
       setErrorText('데이터를 불러오는데 실패했습니다');
-    } finally {
-      setIsBackendDataLoading(false);
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
+      return;
     }
+    setTotalPageCount(spotList.data.total_pages);
+    setAllSpotList([...spotList.data.content]);
+    setIsBackendDataLoading(false);
   };
 
   useEffect(() => {
@@ -107,11 +106,11 @@ export default function MyPageSpotList({
             setIsDialogOpened(true);
           },
         },
-        // {
-        //   label: '일정 기록하기',
-        //   href: '/add/course',
-        //   icon: <CalendarIcon className="w-6 h-6" />,
-        // },
+        {
+          label: '일정 기록하기',
+          href: '/add/course',
+          icon: <CalendarIcon className="w-6 h-6" />,
+        },
       ]);
     } else {
       setPopOverData([
@@ -149,6 +148,9 @@ export default function MyPageSpotList({
       await Promise.all(promises);
     } catch (error) {
       setErrorText('삭제에 실패했습니다');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
     } finally {
       closeDialog();
     }
@@ -163,6 +165,9 @@ export default function MyPageSpotList({
       await Promise.all(promises);
     } catch (error) {
       setErrorText('잠금 해제에 실패했습니다');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
     } finally {
       closeDialog();
     }
@@ -177,6 +182,9 @@ export default function MyPageSpotList({
       await Promise.all(promises);
     } catch (error) {
       setErrorText('잠금 처리에 실패했습니다');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
     } finally {
       closeDialog();
     }
@@ -192,18 +200,6 @@ export default function MyPageSpotList({
     }
     setCheckedList([]);
   };
-
-  // const onClickChangeVisibility = async () => {
-  //   if (checkedList[0].is_private) {
-  //     const ids = checkedList.map((checked) => checked.spot_id);
-  //     const res = await changeTravelsVisibility(ids, true);
-  //     console.log(res);
-  //   } else {
-  //     const ids = checkedList.map((checked) => checked.spot_id);
-  //     const res = await changeTravelsVisibility(ids, false);
-  //     console.log(res);
-  //   }
-  // };
 
   const closeDialog = () => {
     setIsDialogOpened(false);

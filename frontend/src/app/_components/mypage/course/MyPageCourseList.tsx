@@ -65,26 +65,24 @@ export default function MyPageCourseList({
     sortOption: string,
     selectOption: string,
   ) => {
-    try {
-      setIsBackendDataLoading(true);
-      const courseList = await getMyPageCourses(
-        pageNum,
-        size,
-        sortOption,
-        selectOption,
-      );
-      if (!courseList.success) {
-        setAllCourseList([]);
-        setErrorText('데이터를 불러오는데 실패했습니다');
-        return;
-      }
-      setTotalPageCount(courseList.data.total_pages);
-      setAllCourseList([...courseList.data.content]);
-    } catch (error) {
+    setIsBackendDataLoading(true);
+    const courseList = await getMyPageCourses(
+      pageNum,
+      size,
+      sortOption,
+      selectOption,
+    );
+    if (courseList.status === 'failed') {
+      setAllCourseList([]);
       setErrorText('데이터를 불러오는데 실패했습니다');
-    } finally {
-      setIsBackendDataLoading(false);
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
+      return;
     }
+    setTotalPageCount(courseList.data.total_pages);
+    setAllCourseList([...courseList.data.content]);
+    setIsBackendDataLoading(false);
   };
 
   useEffect(() => {
@@ -145,6 +143,9 @@ export default function MyPageCourseList({
       await Promise.all(promises);
     } catch (error) {
       setErrorText('삭제에 실패했습니다');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
     } finally {
       closeDialog();
     }
@@ -159,6 +160,9 @@ export default function MyPageCourseList({
       await Promise.all(promises);
     } catch (error) {
       setErrorText('잠금 해제에 실패했습니다');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
     } finally {
       closeDialog();
     }
@@ -172,6 +176,9 @@ export default function MyPageCourseList({
       await Promise.all(promises);
     } catch (error) {
       setErrorText('잠금 처리에 실패했습니다');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
     } finally {
       closeDialog();
     }

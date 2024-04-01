@@ -41,8 +41,11 @@ export default function Notification({
       size,
       selectOption,
     );
-    if (!notifications.success) {
+    if (notifications.status === 'failed') {
       setErrorText('알림 데이터를 불러오는데 실패했습니다.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       setIsLoading(false);
       return;
     }
@@ -57,27 +60,21 @@ export default function Notification({
 
   const getNotifications = useCallback(
     async (page: number, size: number, selectOption: string) => {
-      try {
-        setIsLoading(true);
-        const notifications = await getNotificationList(
-          page,
-          size,
-          selectOption,
-        );
+      setIsLoading(true);
+      const notifications = await getNotificationList(page, size, selectOption);
 
-        if (!notifications.success) {
-          setNotificationList([]);
-          setErrorText('알림 데이터를 불러오는데 실패했습니다.');
-          setIsLoading(false);
-          return;
-        }
-        setHasNext((prev) => (prev = notifications.data.has_next));
-        setNotificationList(notifications.data.notifications);
-      } catch (error) {
+      if (notifications.status === 'failed') {
+        setNotificationList([]);
         setErrorText('알림 데이터를 불러오는데 실패했습니다.');
-      } finally {
+        setTimeout(() => {
+          setErrorText('');
+        }, 2000);
         setIsLoading(false);
+        return;
       }
+      setHasNext((prev) => (prev = notifications.data.has_next));
+      setNotificationList(notifications.data.notifications);
+      setIsLoading(false);
     },
     [],
   );

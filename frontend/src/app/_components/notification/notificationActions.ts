@@ -2,6 +2,7 @@
 
 import { getBaseUrl } from '@/app/utilActions';
 import { notificationResponseSchema } from '@/types/notificationResponse';
+import { parseResult } from '@/utils';
 import { cookies } from 'next/headers';
 
 export async function getNotificationList(
@@ -22,6 +23,6 @@ export async function getNotificationList(
   );
   const result = await res.json();
 
-  const notifications = notificationResponseSchema.safeParse(result);
+  const notifications = parseResult(notificationResponseSchema, result);
   return notifications;
 }
