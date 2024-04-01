@@ -4,14 +4,7 @@ import React from 'react';
 
 export default async function MyPageBookmarkPage() {
   const bookmarkList = await getMyPageBookmarks();
-  if (!bookmarkList.success)
-    return (
-      <>
-        <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">
-          북마크를 불러오는데 실패했습니다. <hr /> 다시 시도해주세요.
-        </div>
-      </>
-    );
+  if (bookmarkList.status === 'failed') throw new Error(bookmarkList.message);
 
   return (
     <>

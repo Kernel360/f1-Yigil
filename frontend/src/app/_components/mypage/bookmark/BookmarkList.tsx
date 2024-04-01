@@ -41,7 +41,7 @@ export default function MyPageBookmarkList({
       divideCount,
       sortOption,
     );
-    if (!bookmarkList.success) {
+    if (bookmarkList.status === 'failed') {
       setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
       setIsLoading(false);
       return;
@@ -64,7 +64,7 @@ export default function MyPageBookmarkList({
     try {
       setIsLoading(true);
       const bookmarkList = await getMyPageBookmarks(pageNum, size, sortOrder);
-      if (!bookmarkList.success) {
+      if (bookmarkList.status === 'failed') {
         setAllBookmarkList([]);
         setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
         setIsLoading(false);
