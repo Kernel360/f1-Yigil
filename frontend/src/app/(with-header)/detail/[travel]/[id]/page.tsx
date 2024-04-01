@@ -33,9 +33,10 @@ export default async function SpotDetailPage({
       return <SpotDetail spotDetail={spotDetail.data} spotId={params.id} />;
 
     const res = await getMyPageSpots();
-    const mySpotList = res.success
-      ? res.data.content.map((spot) => spot.spot_id)
-      : [];
+    const mySpotList =
+      res.status === 'succeed'
+        ? res.data.content.map((spot) => spot.spot_id)
+        : [];
 
     const isMySpot = mySpotList.includes(Number(params.id));
 
@@ -48,7 +49,7 @@ export default async function SpotDetailPage({
     );
   } else {
     const courseDetail = await getCourseDetail(params.id);
-    if (!courseDetail.success)
+    if (courseDetail.status === 'failed')
       return (
         <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">
           코스 상세 정보를 불러오는데 실패했습니다. <hr /> 다시 시도해주세요.
@@ -60,9 +61,10 @@ export default async function SpotDetailPage({
       );
 
     const res = await getMyPageCourses();
-    const myCourseList = res.success
-      ? res.data.content.map((course) => course.course_id)
-      : [];
+    const myCourseList =
+      res.status === 'succeed'
+        ? res.data.content.map((course) => course.course_id)
+        : [];
 
     const isMyCourse = myCourseList.includes(Number(params.id));
 
