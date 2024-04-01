@@ -32,7 +32,7 @@ export async function generateMetadata({
         title: '장소 상세 페이지',
         description: '장소 상세 설명',
         openGraph: {
-          images: ['/public/logo/og-logo.png'],
+          images: ['/logo/og-logo.png'],
         },
       };
   } else {
@@ -50,7 +50,7 @@ export async function generateMetadata({
         title: '코스 상세 페이지',
         description: '코스 상세 설명',
         openGraph: {
-          images: ['/public/logo/favicon.svg'],
+          images: ['/logo/favicon.svg'],
         },
       };
   }

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: '이길로그 홈페이지',
     description: '지도 기반 장소 기록·공유 서비스',
-    images: ['/public/logo/og-logo.png'],
+    images: ['/logo/og-logo.png'],
     type: 'website',
     siteName: '이길로그',
     url: 'https://yigil.co.kr',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   twitter: {
     title: '이길로그 홈페이지',
     description: '지도 기반 장소 기록·공유 서비스',
-    images: ['/public/logo/og-logo.png'],
+    images: ['/logo/og-logo.png'],
   },
 };
 
