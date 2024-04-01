@@ -37,11 +37,11 @@ export default function MapMarker({
       return;
     } else {
       if (isWrittenByMe) {
-        setToastMsg('-> 를 눌러 "장소 기록"으로 이동할 수 있어요.');
-      } else setToastMsg('-> 를 눌러 "장소 상세"로 이동할 수 있어요.');
+        setToastMsg('->를 눌러 "장소 기록"으로 이동할 수 있어요.');
+      } else setToastMsg('->를 눌러 "장소 상세"로 이동할 수 있어요.');
       setTimeout(() => {
         setToastMsg('');
-      }, 1000);
+      }, 2000);
     }
   };
 

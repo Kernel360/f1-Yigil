@@ -5,13 +5,8 @@ import React from 'react';
 export default async function FavoriteSpotPage() {
   const res = await getFavoriteSpots();
 
-  if (res.status === 'failed') {
-    return (
-      <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">
-        장소를 불러오는데 실패했습니다. <hr /> 다시 시도해주세요.
-      </div>
-    );
-  }
+  if (res.status === 'failed') throw new Error(res.message);
+
   return (
     <>
       {!!res.data.contents.length ? (

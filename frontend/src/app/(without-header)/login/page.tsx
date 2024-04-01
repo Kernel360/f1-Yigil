@@ -3,16 +3,13 @@ export const dynamic = 'force-dynamic';
 import React from 'react';
 
 import KakaoBtn from '@/app/_components/ui/button/Kakao';
-// import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
 import LoginLogo from '/public/logo/yigil_logo.svg';
 import CloseButton from '@/app/_components/ui/button/CloseButton';
-
 import { kakaoOAuthEndpoint } from '@/app/endpoints/api/auth/callback/kakao/constants';
 import { naverOAuthEndPoint } from '@/app/endpoints/api/auth/callback/naver/constants';
 import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
 import NaverLoginButton from '@/app/_components/ui/button/NaverLoginButton';
 import { googleOAuthEndPoint } from '@/app/endpoints/api/auth/callback/google/constants';
-// import { googleOAuthEndPoint } from '@/app/endpoints/api/auth/callback/google/constants';
 
 export default async function LoginPage() {
   const { KAKAO_ID, GOOGLE_CLIENT_ID, NAVER_SEARCH_ID } = process.env;

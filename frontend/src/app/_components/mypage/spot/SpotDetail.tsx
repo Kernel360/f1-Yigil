@@ -11,7 +11,6 @@ import Dialog from '../../ui/dialog/Dialog';
 import ToastMsg from '../../ui/toast/ToastMsg';
 import * as Common from '../detailModify';
 import IconWithCounts from '../../IconWithCounts';
-import { TMyInfo } from '@/types/response';
 
 export interface TModifyDetail {
   id: number;
@@ -66,6 +65,9 @@ export default function SpotDetail({
   const onChangeDescription = (description: string) => {
     if (description.length > 30) {
       setErrorText('리뷰를 30자 이내로 입력해야 합니다.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       return;
     } else {
       setModifyDetail((prev) => ({ ...prev, description }));
@@ -80,22 +82,25 @@ export default function SpotDetail({
   const onClickComplete = async () => {
     if (!modifyDetail.description) {
       setErrorText('리뷰를 1자이상 입력해야 합니다.');
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       setIsDialogOpened(false);
       return;
     }
-    try {
-      setErrorText('');
-      const res = await patchSpotDetail(spotId, modifyDetail);
 
-      if (res.status === 'failed') {
-        setErrorText(res.message);
-      }
-    } catch (error) {
-      setErrorText('수정에 실패했습니다.');
-    } finally {
-      setIsDialogOpened(false);
-      setIsModifyMode(false);
+    setErrorText('');
+    const res = await patchSpotDetail(spotId, modifyDetail);
+
+    if (res.status === 'failed') {
+      setErrorText(res.message);
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
     }
+
+    setIsDialogOpened(false);
+    setIsModifyMode(false);
   };
 
   const closeModal = () => {

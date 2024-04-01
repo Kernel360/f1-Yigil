@@ -8,7 +8,7 @@ export default function ErrorComponent({
   reset: () => void;
 }) {
   return (
-    <div className="w-full h-full flex flex-col break-words justify-center items-center text-3xl text-center text-main">
+    <div className="w-full h-full flex flex-col break-keep justify-center items-center text-3xl text-center text-main">
       {title} 불러오는데 실패했습니다. <hr />
       다시 시도해주세요.
       <button

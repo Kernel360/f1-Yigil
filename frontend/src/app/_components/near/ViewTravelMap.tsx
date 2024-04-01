@@ -1,13 +1,6 @@
 'use client';
-import { TMapPlace, TMyInfo } from '@/types/response';
-import React, {
-  MutableRefObject,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { TMapPlace } from '@/types/response';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { NaverMap, useNavermaps } from 'react-naver-maps';
 import CustomControl from '../naver-map/CustomControl';
 import { useGeolocation } from '../naver-map/hooks/useGeolocation';
@@ -33,7 +26,7 @@ export default function ViewTravelMap({ myPlaces }: { myPlaces: number[] }) {
   });
 
   const [allPlaces, setAllPlaces] = useState<TMapPlace[]>([]);
-  const [writtenByMePlaces, setWrittenByMePlaces] = useState<TMapPlace[]>([]);
+
   const [totalPages, setTotalPages] = useState(0);
   const [markerClickedId, setMarkerClickedId] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,20 +73,19 @@ export default function ViewTravelMap({ myPlaces }: { myPlaces: number[] }) {
 
   const getPlaces = useCallback(async () => {
     setMarkerClickedId(-1);
-    try {
-      const placeList = await getNearPlaces(maxMinBounds, currentPage);
-      if (!placeList.success) {
-        setToastMsg('장소 데이터를 불러오는데 실패했습니다');
-        return;
-      }
-      setAllPlaces(placeList.data.places);
-      setTotalPages(placeList.data.total_pages);
-    } catch (error) {
-      console.log(error);
-      setToastMsg('알 수 없는 에러 발생');
-    } finally {
-      setIsLoading(false);
+
+    const placeList = await getNearPlaces(maxMinBounds, currentPage);
+    if (placeList.status === 'failed') {
+      setToastMsg('장소 데이터를 불러오는데 실패했습니다');
+      setTimeout(() => {
+        setToastMsg('');
+      }, 2000);
+      return;
     }
+    setAllPlaces(placeList.data.places);
+    setTotalPages(placeList.data.total_pages);
+
+    setIsLoading(false);
   }, [currentPage, maxMinBounds]);
 
   const timer = useRef<null | NodeJS.Timeout>(null);
