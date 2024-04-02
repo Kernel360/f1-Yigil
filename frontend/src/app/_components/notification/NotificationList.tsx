@@ -1,5 +1,5 @@
 import { TNotification } from '@/types/notificationResponse';
-import React, { Fragment, ReactElement, ReactNode, useMemo } from 'react';
+import React, { Fragment, ReactNode, useMemo } from 'react';
 import NotificationItem from './NotificationItem';
 
 export default function NotificationList({
