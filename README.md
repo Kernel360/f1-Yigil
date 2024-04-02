@@ -71,3 +71,6 @@
 | <img src="https://avatars.githubusercontent.com/u/118032886?v=4" width="130" height="130"> | <img src="https://avatars.githubusercontent.com/u/101683784?v=4" width="130" height="130"> | <img src="https://avatars.githubusercontent.com/u/124959156?v=4" width="130" height="130"> | <img src="https://avatars.githubusercontent.com/u/80247908?v=4" width="130" height="130"> |
 | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
 |                           [손민우](https://github.com/minson96)                            |                          [박석희](https://github.com/stoneHee99)                           |                          [신종민](https://github.com/ShineCorine)                          |                           [장호윤](https://github.com/Uknow928)                           |
+
+
+[발표 자료](https://docs.google.com/presentation/d/1zWhnIH_vPen3pTa0DBEAc3NufRGeVyYHxjKauYC4oB4/edit#slide=id.g2c6a1c5d0e7_0_1)
