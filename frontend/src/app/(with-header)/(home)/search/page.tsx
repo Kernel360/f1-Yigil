@@ -6,6 +6,12 @@ import { myInfoSchema } from '@/types/response';
 import type { TMemberStatus } from '@/context/MemberContext';
 import BackendSearchBar from '@/app/_components/place/BackendSearchBar';
 import TravelSearchResult from '@/app/_components/search/TravelSearchResult';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '이길로그 검색 페이지',
+  description: '원하는 장소/코스를 검색해보세요.',
+};
 
 export default async function SearchPage({
   searchParams,
