@@ -142,52 +142,46 @@ export default function MyPageSpotList({
   }, [selectOption, sortOption]);
 
   const onClickDelete = async (checkedIds: number[]) => {
-    try {
-      setLoadingText('삭제중 입니다');
-      const promises = checkedIds.map((checkedId) => deleteMySpot(checkedId));
-      await Promise.all(promises);
-    } catch (error) {
+    setLoadingText('삭제중 입니다');
+    const promises = checkedIds.map((checkedId) => deleteMySpot(checkedId));
+    const res = await Promise.all(promises);
+    if (res.every((result) => result.status === 'failed')) {
       setErrorText('삭제에 실패했습니다');
       setTimeout(() => {
         setErrorText('');
       }, 2000);
-    } finally {
-      closeDialog();
     }
+    closeDialog();
   };
 
   const onClickUnLock = async () => {
-    try {
-      setLoadingText('잠금 해제중 입니다');
-      const promises = checkedList.map((checked) =>
-        changeOnPublicMyTravel(checked.spot_id),
-      );
-      await Promise.all(promises);
-    } catch (error) {
+    setLoadingText('잠금 해제중 입니다');
+    const promises = checkedList.map((checked) =>
+      changeOnPublicMyTravel(checked.spot_id),
+    );
+    const res = await Promise.all(promises);
+    if (res.every((result) => result.status === 'failed')) {
       setErrorText('잠금 해제에 실패했습니다');
       setTimeout(() => {
         setErrorText('');
       }, 2000);
-    } finally {
-      closeDialog();
     }
+    closeDialog();
   };
 
   const onClickLock = async () => {
-    try {
-      setLoadingText('잠금 처리중 입니다');
-      const promises = checkedList.map((checked) =>
-        changeOnPrivateMyTravel(checked.spot_id),
-      );
-      await Promise.all(promises);
-    } catch (error) {
+    setLoadingText('잠금 처리중 입니다');
+    const promises = checkedList.map((checked) =>
+      changeOnPrivateMyTravel(checked.spot_id),
+    );
+    const res = await Promise.all(promises);
+    if (res.every((result) => result.status === 'failed')) {
       setErrorText('잠금 처리에 실패했습니다');
       setTimeout(() => {
         setErrorText('');
       }, 2000);
-    } finally {
-      closeDialog();
     }
+    closeDialog();
   };
 
   const handleDialogFunc = async () => {
