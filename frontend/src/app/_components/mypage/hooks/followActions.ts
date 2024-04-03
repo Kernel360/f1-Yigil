@@ -5,11 +5,7 @@ import {
   myPageFollowerResponseSchema,
   myPageFollowResponseSchema,
 } from '@/types/myPageResponse';
-import {
-  backendErrorSchema,
-  postResponseSchema,
-  TBackendRequestResult,
-} from '@/types/response';
+import { postResponseSchema, TBackendRequestResult } from '@/types/response';
 import { parseResult } from '@/utils';
 import { cookies } from 'next/headers';
 import z from 'zod';
@@ -46,13 +42,6 @@ export const getFollowList = async (
     },
   );
   const followList = await res.json();
-  const error = backendErrorSchema.safeParse(followList);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const parsedFollowList =
     action === 'followings'
@@ -77,14 +66,6 @@ export const postFollow = async (
   });
 
   const result = await res.json();
-
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const parsed = parseResult(postResponseSchema, result);
   return parsed;

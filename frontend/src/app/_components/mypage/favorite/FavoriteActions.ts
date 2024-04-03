@@ -5,7 +5,7 @@ import {
   myPageFavoriteCourseResponse,
   myPageFavoriteSpotSchema,
 } from '@/types/myPageResponse';
-import { TBackendRequestResult, backendErrorSchema } from '@/types/response';
+import { TBackendRequestResult } from '@/types/response';
 import { parseResult } from '@/utils';
 import { cookies } from 'next/headers';
 import z from 'zod';
@@ -31,13 +31,6 @@ export const getFavoriteSpots = async (
     },
   );
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
   const parsed = parseResult(myPageFavoriteSpotSchema, result);
   return parsed;
 };
@@ -65,14 +58,6 @@ export const getFavoriteCourses = async (
     },
   );
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
-
   const parsed = parseResult(myPageFavoriteCourseResponse, result);
   return parsed;
 };

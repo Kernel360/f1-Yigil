@@ -3,7 +3,7 @@ import { myPageBookmarkListSchema } from '@/types/myPageResponse';
 import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
 import { parseResult } from '@/utils';
-import { TBackendRequestResult, backendErrorSchema } from '@/types/response';
+import { TBackendRequestResult } from '@/types/response';
 import z from 'zod';
 
 export const getMyPageBookmarks = async (
@@ -29,14 +29,6 @@ export const getMyPageBookmarks = async (
     },
   );
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
-
   const bookmarkList = parseResult(myPageBookmarkListSchema, result);
   return bookmarkList;
 };

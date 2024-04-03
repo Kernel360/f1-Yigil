@@ -19,7 +19,6 @@ import {
 import { TPatchCourse } from '../course/types';
 import {
   TBackendRequestResult,
-  backendErrorSchema,
   postResponseSchema,
   postSpotResponseSchema,
 } from '@/types/response';
@@ -46,13 +45,6 @@ export const getMyPageSpots = async (
     },
   );
   const spotList = await res.json();
-  const error = backendErrorSchema.safeParse(spotList);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const parsedSpotList = parseResult(myPageSpotListSchema, spotList);
   return parsedSpotList;
@@ -71,14 +63,6 @@ export const deleteMySpot = async (
   });
 
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
-
   const parsed = parseResult(postResponseSchema, result);
 
   if (res.ok) revalidatePath('/mypage/my/travel/spot');
@@ -107,13 +91,6 @@ export const getMyPageCourses = async (
     },
   );
   const courseList = await res.json();
-  const error = backendErrorSchema.safeParse(courseList);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const parsedCourseList = parseResult(myPageCourseListSchema, courseList); //
   return parsedCourseList;
@@ -132,14 +109,6 @@ export const deleteMyCourse = async (
   });
 
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
-
   const parsed = parseResult(postResponseSchema, result);
 
   if (res.ok) revalidatePath('/mypage/my/travel/course');
@@ -161,15 +130,6 @@ export const changeOnPublicMyTravel = async (
     body: JSON.stringify(travel_id),
   });
   const result = await res.json();
-
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
-
   const parsed = parseResult(postResponseSchema, result);
 
   if (res.ok) revalidatePath('/mypage/my/travel', 'layout');
@@ -191,13 +151,6 @@ export const changeOnPrivateMyTravel = async (
     body: JSON.stringify(travel_id),
   });
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const parsed = parseResult(postSpotResponseSchema, result);
 
@@ -216,13 +169,7 @@ export const getSpotDetail = async (
   });
 
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
 
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
   const parsedSpotDetail = parseResult(mypageSpotDetailSchema, result);
   return parsedSpotDetail;
 };
@@ -292,12 +239,6 @@ export const patchSpotDetail = async (
   });
   const result = await res.json();
 
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    return { status: 'failed', message: error.data.message };
-  }
-
   const parsedResult = parseResult(postResponseSchema, result);
   if (res.ok) revalidateTag(`spotDetail/${spotId}`);
   return parsedResult;
@@ -314,13 +255,6 @@ export const getCourseDetail = async (
     },
   });
   const result = await res.json();
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const courseDetail = parseResult(mypageCourseDetailSchema, result);
   return courseDetail;
@@ -444,13 +378,6 @@ export const patchCourseDetail = async (
   });
 
   const result = await res.json();
-
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    return { status: 'failed', message: error.data.message };
-  }
-
   const parsedResult = parseResult(postResponseSchema, result);
 
   if (res.ok) revalidateTag(`courseDetail/${courseId}`);

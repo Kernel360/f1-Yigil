@@ -4,11 +4,7 @@ import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
 import { dataUrlToBlob, parseResult } from '@/utils';
 import { revalidatePath } from 'next/cache';
-import {
-  TBackendRequestResult,
-  backendErrorSchema,
-  postResponseSchema,
-} from '@/types/response';
+import { TBackendRequestResult, postResponseSchema } from '@/types/response';
 import z from 'zod';
 
 export async function checkIsExistNickname(nickname: string) {
@@ -38,13 +34,6 @@ export async function patchFavoriteRegion(
     body: formData,
   });
   const result = await res.json();
-
-  const error = backendErrorSchema.safeParse(result);
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const parsed = parseResult(postResponseSchema, result);
   if (res.ok) revalidatePath('/setting', 'layout');
@@ -87,13 +76,6 @@ export async function patchUserInfo(infoData: {
     body: formData,
   });
   const result = await res.json();
-
-  const error = backendErrorSchema.safeParse(result);
-  if (error.success) {
-    const { code, message } = error.data;
-    console.error(`${code} - ${message}`);
-    return { status: 'failed', message, code };
-  }
 
   const parsed = parseResult(postResponseSchema, result);
   if (res.ok) revalidatePath('/setting', 'layout');
