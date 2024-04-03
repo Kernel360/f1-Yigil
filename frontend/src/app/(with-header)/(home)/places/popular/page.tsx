@@ -5,6 +5,20 @@ import { myInfoSchema } from '@/types/response';
 
 import { Place } from '@/app/_components/place/places';
 import { getPlaces } from '@/app/_components/place/places/action';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '인기 장소/코스',
+  description: `현재 인기있는 장소/코스를 만나보세요.`,
+  openGraph: {
+    title: '인기 장소/코스',
+    description: `현재 인기있는 장소/코스를 만나보세요.`,
+  },
+  twitter: {
+    title: '인기 장소/코스',
+    description: `현재 인기있는 장소/코스를 만나보세요.`,
+  },
+};
 
 export default async function PopularPlacesPage() {
   const memberJson = await authenticateUser();

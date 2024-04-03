@@ -7,6 +7,20 @@ import { getInterestedRegions, getRegionPlaces } from '../../../action';
 import DummyPlace from '@/app/_components/place/dummy/DummyPlace';
 
 import { RegionPlaces } from '@/app/_components/place/places';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '관심 지역',
+  description: `관심 지역을 설정하고 관심 지역의 장소/코스를 만나보세요.`,
+  openGraph: {
+    title: '관심 지역',
+    description: `관심 지역을 설정하고 관심 지역의 장소/코스를 만나보세요.`,
+  },
+  twitter: {
+    title: '관심 지역',
+    description: `관심 지역을 설정하고 관심 지역의 장소/코스를 만나보세요.`,
+  },
+};
 
 export default async function RegionsPlacePage({
   params,
