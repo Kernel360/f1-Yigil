@@ -10,6 +10,20 @@ import { naverOAuthEndPoint } from '@/app/endpoints/api/auth/callback/naver/cons
 import GoogleLoginButton from '@/app/_components/ui/button/GoogleLoginButton';
 import NaverLoginButton from '@/app/_components/ui/button/NaverLoginButton';
 import { googleOAuthEndPoint } from '@/app/endpoints/api/auth/callback/google/constants';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '로그인',
+  description: `로그인 후 이길로그의 여러 기능을 만나보세요`,
+  openGraph: {
+    title: '로그인',
+    description: `로그인 후 이길로그의 여러 기능을 만나보세요`,
+  },
+  twitter: {
+    title: '로그인',
+    description: `로그인 후 이길로그의 여러 기능을 만나보세요`,
+  },
+};
 
 export default async function LoginPage() {
   const { KAKAO_ID, GOOGLE_CLIENT_ID, NAVER_SEARCH_ID } = process.env;

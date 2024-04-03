@@ -3,6 +3,20 @@ import { myInfoSchema } from '@/types/response';
 
 import { Place } from '@/app/_components/place/places';
 import { getPlaces } from '@/app/_components/place/places/action';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '맞춤 추천',
+  description: `개인별 맞춤 추천 지역의 장소/코스를 만나보세요.`,
+  openGraph: {
+    title: '맞춤 추천',
+    description: `개인별 맞춤 추천 지역의 장소/코스를 만나보세요.`,
+  },
+  twitter: {
+    title: '맞춤 추천',
+    description: `개인별 맞춤 추천 지역의 장소/코스를 만나보세요.`,
+  },
+};
 
 export default async function RecommendedPlacesPage() {
   const memberJson = await authenticateUser();
