@@ -8,10 +8,10 @@ interface TButtonProps {
 }
 
 export default function CloseButton({ containerStyle, style }: TButtonProps) {
-  const router = useRouter();
+  const { push } = useRouter();
 
   return (
-    <button className={containerStyle} onClick={() => router.back()}>
+    <button className={containerStyle} onClick={() => push('/')}>
       <XLogo className={style} />
     </button>
   );

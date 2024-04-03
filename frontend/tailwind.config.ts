@@ -19,6 +19,7 @@ module.exports = {
       },
       animation: {
         appear: 'appear .5s ease-in-out',
+        bounceOne: 'bounce 1.2s ease-in-out',
       },
     },
   },
