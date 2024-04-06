@@ -42,6 +42,7 @@ export default function FavoriteCourseList({
       sortOption,
     );
     if (favoriteCourseList.status === 'failed') {
+      setHasNext(false);
       setErrorText('코스 데이터를 불러오는데 실패했습니다.');
       setIsLoading(false);
       setTimeout(() => {

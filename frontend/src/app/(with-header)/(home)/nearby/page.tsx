@@ -33,7 +33,7 @@ export default async function NearbyPage() {
     );
   }
   const result = await getMySpotIds();
-  const spotIds = result.status === 'success' && result.data.ids;
+  const spotIds = result.status === 'succeed' && result.data.ids;
   if (spotIds) {
     return (
       <section className="w-full h-full">

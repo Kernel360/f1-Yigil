@@ -30,8 +30,7 @@ export default function Notification({
   const [errorText, setErrorText] = useState('');
   const size = 15;
   const ref = useRef(null);
-  const onChangeSelectOption = (option: number | string) => {
-    if (typeof option === 'number') return;
+  const onChangeSelectOption = (option: string) => {
     setSelectOption(option);
   };
   const getMoreNotifications = async () => {
@@ -42,6 +41,7 @@ export default function Notification({
       selectOption,
     );
     if (notifications.status === 'failed') {
+      setHasNext(false);
       setErrorText('알림 데이터를 불러오는데 실패했습니다.');
       setTimeout(() => {
         setErrorText('');

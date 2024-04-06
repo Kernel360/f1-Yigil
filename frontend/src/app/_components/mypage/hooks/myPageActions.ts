@@ -17,14 +17,19 @@ import {
   parseResult,
 } from '@/utils';
 import { TPatchCourse } from '../course/types';
-import { backendErrorSchema, postResponseSchema } from '@/types/response';
+import {
+  TBackendRequestResult,
+  postResponseSchema,
+  postSpotResponseSchema,
+} from '@/types/response';
+import z from 'zod';
 
 export const getMyPageSpots = async (
   pageNo: number = 1,
   size: number = 5,
   sortOrder: string = 'desc',
   selectOption: string = 'all',
-) => {
+): Promise<TBackendRequestResult<z.infer<typeof myPageSpotListSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(
@@ -40,11 +45,14 @@ export const getMyPageSpots = async (
     },
   );
   const spotList = await res.json();
+
   const parsedSpotList = parseResult(myPageSpotListSchema, spotList);
   return parsedSpotList;
 };
 
-export const deleteMySpot = async (spotId: number) => {
+export const deleteMySpot = async (
+  spotId: number,
+): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
@@ -54,9 +62,12 @@ export const deleteMySpot = async (spotId: number) => {
     },
   });
 
-  if (res.ok) {
-    revalidatePath('/mypage/my/travel/spot');
-  }
+  const result = await res.json();
+  const parsed = parseResult(postResponseSchema, result);
+
+  if (res.ok) revalidatePath('/mypage/my/travel/spot');
+
+  return parsed;
 };
 
 export const getMyPageCourses = async (
@@ -64,7 +75,7 @@ export const getMyPageCourses = async (
   size: number = 5,
   sortOrder: string = 'desc',
   selectOption: string = 'all',
-) => {
+): Promise<TBackendRequestResult<z.infer<typeof myPageCourseListSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(
@@ -80,11 +91,14 @@ export const getMyPageCourses = async (
     },
   );
   const courseList = await res.json();
+
   const parsedCourseList = parseResult(myPageCourseListSchema, courseList); //
   return parsedCourseList;
 };
 
-export const deleteMyCourse = async (courseId: number) => {
+export const deleteMyCourse = async (
+  courseId: number,
+): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
@@ -93,13 +107,18 @@ export const deleteMyCourse = async (courseId: number) => {
       Cookie: `SESSION=${cookie}`,
     },
   });
-  if (res.ok) {
-    revalidatePath('/mypage/my/travel/course');
-    return res;
-  }
+
+  const result = await res.json();
+  const parsed = parseResult(postResponseSchema, result);
+
+  if (res.ok) revalidatePath('/mypage/my/travel/course');
+
+  return parsed;
 };
 
-export const changeOnPublicMyTravel = async (travel_id: number) => {
+export const changeOnPublicMyTravel = async (
+  travel_id: number,
+): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(`${BASE_URL}/v1/travels/change-on-public`, {
@@ -110,12 +129,17 @@ export const changeOnPublicMyTravel = async (travel_id: number) => {
     },
     body: JSON.stringify(travel_id),
   });
-  if (res.ok) {
-    revalidatePath('/mypage/my/travel', 'layout');
-  }
+  const result = await res.json();
+  const parsed = parseResult(postResponseSchema, result);
+
+  if (res.ok) revalidatePath('/mypage/my/travel', 'layout');
+
+  return parsed;
 };
 
-export const changeOnPrivateMyTravel = async (travel_id: number) => {
+export const changeOnPrivateMyTravel = async (
+  travel_id: number,
+): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const res = await fetch(`${BASE_URL}/v1/travels/change-on-private`, {
@@ -126,19 +150,26 @@ export const changeOnPrivateMyTravel = async (travel_id: number) => {
     },
     body: JSON.stringify(travel_id),
   });
-  if (res.ok) {
-    revalidatePath('/mypage/my/travel', 'layout');
-  }
+  const result = await res.json();
+
+  const parsed = parseResult(postSpotResponseSchema, result);
+
+  if (res.ok) revalidatePath('/mypage/my/travel', 'layout');
+  return parsed;
 };
 
-export const getSpotDetail = async (spotId: number) => {
+export const getSpotDetail = async (
+  spotId: number,
+): Promise<TBackendRequestResult<z.infer<typeof mypageSpotDetailSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const res = await fetch(`${BASE_URL}/v1/spots/${spotId}`, {
     next: {
       tags: [`spotDetail/${spotId}`],
     },
   });
+
   const result = await res.json();
+
   const parsedSpotDetail = parseResult(mypageSpotDetailSchema, result);
   return parsedSpotDetail;
 };
@@ -146,7 +177,7 @@ export const getSpotDetail = async (spotId: number) => {
 export const patchSpotDetail = async (
   spotId: number,
   modifiedData: TModifyDetail,
-): Promise<{ status: 'succeed' } | { status: 'failed'; message: string }> => {
+): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> => {
   const { id, description, rate, image_urls } = modifiedData;
   const formData = new FormData();
 
@@ -208,22 +239,14 @@ export const patchSpotDetail = async (
   });
   const result = await res.json();
 
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    return { status: 'failed', message: error.data.message };
-  }
-
-  const parsedResult = postResponseSchema.safeParse(result);
-
-  if (!parsedResult.success) {
-    return { status: 'failed', message: 'zod 검증 에러입니다.' };
-  }
-  revalidateTag(`spotDetail/${spotId}`);
-  return { status: 'succeed' };
+  const parsedResult = parseResult(postResponseSchema, result);
+  if (res.ok) revalidateTag(`spotDetail/${spotId}`);
+  return parsedResult;
 };
 
-export const getCourseDetail = async (courseId: number) => {
+export const getCourseDetail = async (
+  courseId: number,
+): Promise<TBackendRequestResult<z.infer<typeof mypageCourseDetailSchema>>> => {
   const BASE_URL = await getBaseUrl();
 
   const res = await fetch(`${BASE_URL}/v1/courses/${courseId}`, {
@@ -232,15 +255,15 @@ export const getCourseDetail = async (courseId: number) => {
     },
   });
   const result = await res.json();
-  const courseDetail = parseResult(mypageCourseDetailSchema, result);
 
+  const courseDetail = parseResult(mypageCourseDetailSchema, result);
   return courseDetail;
 };
 
 export const patchCourseDetail = async (
   courseId: number,
   modifiedData: TPatchCourse,
-): Promise<{ status: 'succeed' } | { status: 'failed'; message: string }> => {
+): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> => {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get(`SESSION`)?.value;
   const {
@@ -355,18 +378,8 @@ export const patchCourseDetail = async (
   });
 
   const result = await res.json();
+  const parsedResult = parseResult(postResponseSchema, result);
 
-  const error = backendErrorSchema.safeParse(result);
-
-  if (error.success) {
-    return { status: 'failed', message: error.data.message };
-  }
-
-  const parsedResult = postResponseSchema.safeParse(result);
-
-  if (!parsedResult.success) {
-    return { status: 'failed', message: 'zod 검증 에러입니다.' };
-  }
-  revalidateTag(`courseDetail/${courseId}`);
-  return { status: 'succeed' };
+  if (res.ok) revalidateTag(`courseDetail/${courseId}`);
+  return parsedResult;
 };
