@@ -8,16 +8,15 @@ import {
 } from './constants';
 
 export async function GET(request: NextRequest) {
+  const baseUrl = await getCallbackUrlBase();
   const { searchParams } = new URL(request.url);
 
   const code = searchParams.get('code');
 
-  if (!code) {
-    return NextResponse.json(
-      { message: 'Failed to get Authorization codew' },
-      { status: 400 },
+  if (!code)
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=code', baseUrl),
     );
-  }
 
   const { KAKAO_ID, KAKAO_SECRET, ENVIRONMENT } = process.env;
 
@@ -36,9 +35,8 @@ export async function GET(request: NextRequest) {
   if (!userTokenResponse.ok) {
     console.log(userTokenJson);
 
-    return NextResponse.json(
-      { message: 'Failed to get token' },
-      { status: 400 },
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=userinfo', baseUrl),
     );
   }
 
@@ -52,9 +50,8 @@ export async function GET(request: NextRequest) {
   if (!userInfoResponse.ok) {
     console.log(userInfoJson);
 
-    return NextResponse.json(
-      { message: 'Failed to get token' },
-      { status: 400 },
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=userinfo', baseUrl),
     );
   }
 
@@ -80,9 +77,8 @@ export async function GET(request: NextRequest) {
 
   if (!backendResponse.ok) {
     console.log(backendJson);
-    return NextResponse.json(
-      { message: 'Failed to login to backend server' },
-      { status: 400 },
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=server', baseUrl),
     );
   }
 
@@ -90,8 +86,6 @@ export async function GET(request: NextRequest) {
     .getSetCookie()[0]
     .split('; ')[0]
     .split('=');
-
-  const baseUrl = await getCallbackUrlBase();
 
   const response = NextResponse.redirect(new URL('/', baseUrl), {
     status: 302,

@@ -61,22 +61,21 @@ export default function MyPageBookmarkList({
     size: number,
     sortOrder: string,
   ) => {
-    try {
-      setIsLoading(true);
-      const bookmarkList = await getMyPageBookmarks(pageNum, size, sortOrder);
-      if (bookmarkList.status === 'failed') {
-        setAllBookmarkList([]);
-        setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
-        setIsLoading(false);
-        return;
-      }
-      setHasNext((prev) => (prev = bookmarkList.data.has_next));
-      setAllBookmarkList([...bookmarkList.data.bookmarks]);
-    } catch (error) {
+    setIsLoading(true);
+    const bookmarkList = await getMyPageBookmarks(pageNum, size, sortOrder);
+    if (bookmarkList.status === 'failed') {
+      setAllBookmarkList([]);
+      setHasNext(false);
       setErrorText('북마크 데이터를 불러오는데 실패했습니다.');
-    } finally {
+      setTimeout(() => {
+        setErrorText('');
+      }, 2000);
       setIsLoading(false);
+      return;
     }
+    setHasNext((prev) => (prev = bookmarkList.data.has_next));
+    setAllBookmarkList([...bookmarkList.data.bookmarks]);
+    setIsLoading(false);
   };
 
   useEffect(() => {

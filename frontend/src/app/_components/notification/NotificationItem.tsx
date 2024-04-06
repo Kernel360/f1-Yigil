@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import RoundProfile from '../ui/profile/RoundProfile';
 import { TNotification } from '@/types/notificationResponse';
 

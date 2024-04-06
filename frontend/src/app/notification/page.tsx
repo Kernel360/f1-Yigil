@@ -4,7 +4,7 @@ import Notification from '../_components/notification/Notification';
 
 async function NotificationPage() {
   const notifications = await getNotificationList();
-  console.log(notifications);
+
   if (notifications.status === 'failed') throw new Error(notifications.message);
 
   return (

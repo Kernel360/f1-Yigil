@@ -3,8 +3,6 @@ import { TMyPageAllArea } from '@/types/myPageResponse';
 import React, { useEffect, useState } from 'react';
 import ChevronDown from '/public/icons/chevron-down.svg';
 import AreaItem from './AreaItem';
-import ToastMsg from '../../ui/toast/ToastMsg';
-import { patchFavoriteRegion } from '../actions';
 
 export default function AreaList({ categories }: TMyPageAllArea) {
   const [clickedRegion, setClickedRegion] = useState('');

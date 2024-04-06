@@ -42,6 +42,7 @@ export default function FavoriteSpotList({
       sortOption,
     );
     if (favoriteSpotList.status === 'failed') {
+      setHasNext(false);
       setErrorText('스팟 데이터를 불러오는데 실패했습니다.');
       setTimeout(() => {
         setErrorText('');
