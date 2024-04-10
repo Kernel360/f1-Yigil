@@ -43,8 +43,8 @@ export async function searchNaverAction(
   const response = await fetch(searchUrl(keyword), {
     method: 'GET',
     headers: {
-      'X-Naver-Client-Id': process.env.NAVER_SEARCH_ID,
-      'X-Naver-Client-Secret': process.env.NAVER_SEARCH_SECRET,
+      'X-Naver-Client-Id': process.env.NAVER_DEVELOPERS_ID,
+      'X-Naver-Client-Secret': process.env.NAVER_DEVELOPERS_SECRET,
     },
   });
 
@@ -71,8 +71,8 @@ export async function searchAction(keyword: string): Promise<TSearchResult> {
   const response = await fetch(searchUrl(keyword), {
     method: 'GET',
     headers: {
-      'X-Naver-Client-Id': process.env.NAVER_SEARCH_ID,
-      'X-Naver-Client-Secret': process.env.NAVER_SEARCH_SECRET,
+      'X-Naver-Client-Id': process.env.NAVER_DEVELOPERS_ID,
+      'X-Naver-Client-Secret': process.env.NAVER_DEVELOPERS_SECRET,
     },
   });
 

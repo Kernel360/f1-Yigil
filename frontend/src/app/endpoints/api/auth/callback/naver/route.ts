@@ -20,15 +20,16 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const { NAVER_SEARCH_ID, NAVER_SEARCH_SECRET, ENVIRONMENT } = process.env;
+  const { NAVER_DEVELOPERS_ID, NAVER_DEVELOPERS_SECRET, ENVIRONMENT } =
+    process.env;
 
   const redirectUri = await naverRedirectUri();
 
   const userTokenResponse = await userTokenRequest(
-    NAVER_SEARCH_ID,
+    NAVER_DEVELOPERS_ID,
     redirectUri,
     code,
-    NAVER_SEARCH_SECRET,
+    NAVER_DEVELOPERS_SECRET,
   );
 
   if (!userTokenResponse.ok) {
