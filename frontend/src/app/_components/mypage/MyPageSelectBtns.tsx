@@ -28,7 +28,6 @@ interface TMyPageSelectBtn {
   ) => void;
 }
 
-// 똑같이 쓰이는 부분이 있다면 컴포넌트 재사용성 고려해야 함.
 export default function MyPageSelectBtns({
   selectOption,
   sortOption,

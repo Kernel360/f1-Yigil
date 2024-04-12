@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 
 import KakaoBtn from '@/app/_components/ui/button/Kakao';
@@ -18,14 +16,23 @@ export const metadata: Metadata = {
   openGraph: {
     title: '로그인',
     description: `로그인 후 이길로그의 여러 기능을 만나보세요`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+    type: 'website',
+    siteName: '이길로그',
+    locale: 'ko-KR',
   },
   twitter: {
     title: '로그인',
     description: `로그인 후 이길로그의 여러 기능을 만나보세요`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
   },
 };
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: { status: string };
+}) {
   const { KAKAO_ID, GOOGLE_CLIENT_ID, NAVER_SEARCH_ID } = process.env;
 
   const kakaoHref = await kakaoOAuthEndpoint(KAKAO_ID);
@@ -38,8 +45,15 @@ export default async function LoginPage() {
         containerStyle="w-full flex justify-end h-1/6 mr-6 mt-5"
         style="cursor-pointer w-12 h-12 stroke-2 stroke-black hover:stroke-gray-700 active:stroke-gray-500"
       />
-      <div className="h-2/6">
+      <div className="h-2/6 flex flex-col justify-stretch">
         <LoginLogo className="w-[290px] h-[96px]" />
+        <div className="grow"></div>
+        {searchParams?.status === 'failed' && (
+          <div className="text-center pb-5 text-white font-semibold animate-appear">
+            로그인에 실패했습니다. <br />
+            다시 시도해주세요.
+          </div>
+        )}
       </div>
       <div className="w-full mx-7 h-2/6">
         <div className="w-full flex gap-x-4 px-8  relative ">

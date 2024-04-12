@@ -4,15 +4,14 @@ import { getCallbackUrlBase } from '../kakao/constants';
 import { googldRedirectUri } from './constants';
 
 export async function GET(request: NextRequest) {
+  const baseUrl = await getCallbackUrlBase();
   const { searchParams } = new URL(request.url);
 
   const token = searchParams.get('code');
-  if (!token) {
-    return NextResponse.json({
-      message: 'Failed to get Authorization code',
-      status: 400,
-    });
-  }
+  if (!token)
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=code', baseUrl),
+    );
 
   const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ENVIRONMENT } = process.env;
 
@@ -26,19 +25,17 @@ export async function GET(request: NextRequest) {
   );
 
   if (!userTokenResponse.ok) {
-    return NextResponse.json({
-      message: 'Failed to get user',
-      status: 400,
-    });
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=userinfo', baseUrl),
+    );
   }
   const userTokenJson = await userTokenResponse.json();
 
   const userInfoResponse = await userInfoRequest(userTokenJson.access_token);
   if (!userInfoResponse.ok) {
-    return NextResponse.json({
-      message: 'Failed to get user info',
-      status: 400,
-    });
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=userinfo', baseUrl),
+    );
   }
   const userInfoJson = await userInfoResponse.json();
 
@@ -56,9 +53,8 @@ export async function GET(request: NextRequest) {
   const backendJson = await backendResponse.json();
 
   if (!backendResponse.ok) {
-    return NextResponse.json(
-      { message: 'Failed to login to backend server' },
-      { status: 400 },
+    return NextResponse.redirect(
+      new URL('/login?status=failed&reason=server', baseUrl),
     );
   }
 
@@ -66,8 +62,6 @@ export async function GET(request: NextRequest) {
     .getSetCookie()[0]
     .split('; ')[0]
     .split('=');
-
-  const baseUrl = await getCallbackUrlBase();
 
   const response = NextResponse.redirect(new URL('/', baseUrl), {
     status: 302,

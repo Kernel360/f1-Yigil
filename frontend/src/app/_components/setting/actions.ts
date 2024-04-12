@@ -2,8 +2,10 @@
 
 import { getBaseUrl } from '@/app/utilActions';
 import { cookies } from 'next/headers';
-import { dataUrlToBlob } from '@/utils';
+import { dataUrlToBlob, parseResult } from '@/utils';
 import { revalidatePath } from 'next/cache';
+import { TBackendRequestResult, postResponseSchema } from '@/types/response';
+import z from 'zod';
 
 export async function checkIsExistNickname(nickname: string) {
   const BASE_URL = await getBaseUrl();
@@ -15,7 +17,9 @@ export async function checkIsExistNickname(nickname: string) {
   return res.json();
 }
 
-export async function patchFavoriteRegion(ids: number[]) {
+export async function patchFavoriteRegion(
+  ids: number[],
+): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> {
   const BASE_URL = await getBaseUrl();
   const cookie = cookies().get('SESSION')?.value;
   const formData = new FormData();
@@ -29,13 +33,16 @@ export async function patchFavoriteRegion(ids: number[]) {
     },
     body: formData,
   });
-  if (res.ok) {
-    revalidatePath('/setting', 'layout');
-    return res.json();
-  }
+  const result = await res.json();
+
+  const parsed = parseResult(postResponseSchema, result);
+  if (res.ok) revalidatePath('/setting', 'layout');
+  return parsed;
 }
 
-export async function patchUserInfo(infoData: { [key: string]: any }) {
+export async function patchUserInfo(infoData: {
+  [key: string]: any;
+}): Promise<TBackendRequestResult<z.infer<typeof postResponseSchema>>> {
   const formData = new FormData();
   for (let key in infoData) {
     if (key === 'profile_image_url') {
@@ -68,9 +75,9 @@ export async function patchUserInfo(infoData: { [key: string]: any }) {
     },
     body: formData,
   });
+  const result = await res.json();
 
-  if (res.ok) {
-    revalidatePath('/settings', 'layout');
-    return res.json();
-  }
+  const parsed = parseResult(postResponseSchema, result);
+  if (res.ok) revalidatePath('/setting', 'layout');
+  return parsed;
 }

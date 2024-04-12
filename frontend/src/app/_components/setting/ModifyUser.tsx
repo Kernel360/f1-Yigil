@@ -18,17 +18,20 @@ export default function UserModifyForm(userData: TMyInfo) {
   });
 
   const patchUserForm = async () => {
-    setToastText('');
-    try {
-      const patchData = checkDifference(userForm, userData);
-      await patchUserInfo(patchData);
-      setToastText('수정 완료되었습니다.');
-    } catch (error) {
+    const patchData = checkDifference(userForm, userData);
+    const res = await patchUserInfo(patchData);
+    if (res.status === 'failed') {
       setToastText('수정에 실패했습니다.');
-      console.log(error);
-    } finally {
-      setIsDialogOpened(false);
+      setTimeout(() => {
+        setToastText('');
+      }, 2000);
     }
+    setToastText('수정 완료되었습니다.');
+    setTimeout(() => {
+      setToastText('');
+    }, 2000);
+
+    setIsDialogOpened(false);
   };
 
   const closeModal = () => {

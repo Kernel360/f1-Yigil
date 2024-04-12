@@ -12,10 +12,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: '장소/코스 검색',
     description: `원하는 장소/코스를 검색해보세요.`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+    type: 'website',
+    siteName: '이길로그',
+    locale: 'ko-KR',
   },
   twitter: {
     title: '장소/코스 검색',
     description: `원하는 장소/코스를 검색해보세요.`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
   },
 };
 
@@ -33,7 +38,7 @@ export default async function NearbyPage() {
     );
   }
   const result = await getMySpotIds();
-  const spotIds = result.status === 'success' && result.data.ids;
+  const spotIds = result.status === 'succeed' && result.data.ids;
   if (spotIds) {
     return (
       <section className="w-full h-full">

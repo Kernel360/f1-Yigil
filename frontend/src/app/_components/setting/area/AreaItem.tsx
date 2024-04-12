@@ -1,5 +1,5 @@
 import { TMyPageRegions } from '@/types/myPageResponse';
-import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import StarIcon from '/public/icons/star.svg';
 import { EventFor } from '@/types/type';
 import ToastMsg from '../../ui/toast/ToastMsg';

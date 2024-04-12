@@ -134,16 +134,16 @@ export default function CourseDetail({
     const modifiedData = checkCourseDifference(courseDetail, modifyCourse);
     setIsModifyMode(false);
     if (!modifiedData) return;
-    try {
-      setIsLoading(true);
-      const res = await patchCourseDetail(courseId, modifiedData);
-      if (res.status === 'failed') setErrorText(res.message);
-    } catch (error) {
-      setErrorText('수정에 실패했습니다.');
-    } finally {
-      setIsDialogOpened(false);
-      setIsLoading(false);
-    }
+
+    setIsLoading(true);
+    const res = await patchCourseDetail(courseId, modifiedData);
+    if (res.status === 'failed') setErrorText(res.message);
+    setErrorText('수정에 실패했습니다.');
+    setTimeout(() => {
+      setErrorText('');
+    }, 2000);
+    setIsDialogOpened(false);
+    setIsLoading(false);
   };
 
   const getCoordsList = async (spots: TModifyCourse['spots']) => {
