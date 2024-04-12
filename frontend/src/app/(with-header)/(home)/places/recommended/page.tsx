@@ -11,10 +11,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: '맞춤 추천',
     description: `개인별 맞춤 추천 지역의 장소/코스를 만나보세요.`,
+
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+    type: 'website',
+    siteName: '이길로그',
+    locale: 'ko-KR',
   },
   twitter: {
     title: '맞춤 추천',
     description: `개인별 맞춤 추천 지역의 장소/코스를 만나보세요.`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
   },
 };
 
