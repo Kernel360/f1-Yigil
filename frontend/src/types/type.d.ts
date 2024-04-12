@@ -22,8 +22,8 @@ declare global {
 
       NAVER_MAPS_CLIENT_ID: string;
       MAP_SECRET: string;
-      NAVER_SEARCH_ID: string;
-      NAVER_SEARCH_SECRET: string;
+      NAVER_DEVELOPERS_ID: string;
+      NAVER_DEVELOPERS_SECRET: string;
 
       ENVIRONMENT: 'production' | 'development' | 'local';
     }

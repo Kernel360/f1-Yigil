@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
             .cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(List.of("http://localhost:3000", "https://yigil.co.kr"));
+                config.setAllowedOrigins(List.of("http://localhost:3000", "https://yigil.co.kr", "http://3.34.236.45:3000"));
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowCredentials(true);
