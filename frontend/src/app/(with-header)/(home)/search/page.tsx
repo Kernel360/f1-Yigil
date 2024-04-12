@@ -11,6 +11,19 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: '이길로그 검색 페이지',
   description: '원하는 장소/코스를 검색해보세요.',
+  openGraph: {
+    title: '이길로그 검색 페이지',
+    description: '원하는 장소/코스를 검색해보세요.',
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+    type: 'website',
+    siteName: '이길로그',
+    locale: 'ko-KR',
+  },
+  twitter: {
+    title: '이길로그 검색 페이지',
+    description: '원하는 장소/코스를 검색해보세요.',
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+  },
 };
 
 export default async function SearchPage({

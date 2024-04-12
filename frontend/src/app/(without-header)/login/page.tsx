@@ -16,10 +16,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: '로그인',
     description: `로그인 후 이길로그의 여러 기능을 만나보세요`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+    type: 'website',
+    siteName: '이길로그',
+    locale: 'ko-KR',
   },
   twitter: {
     title: '로그인',
     description: `로그인 후 이길로그의 여러 기능을 만나보세요`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
   },
 };
 
