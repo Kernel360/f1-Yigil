@@ -1,7 +1,25 @@
 import AddCourse from '@/app/_components/add/course/AddCourse';
 import AddSpot from '@/app/_components/add/spot/AddSpot';
-
 import type { TChoosePlace } from '@/context/travel/schema';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '장소/코스 추가',
+  description: `원하는 장소/코스를 추가하고 공유해보세요.`,
+  openGraph: {
+    title: '장소/코스 추가',
+    description: `원하는 장소/코스를 추가하고 공유해보세요.`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+    type: 'website',
+    siteName: '이길로그',
+    locale: 'ko-KR',
+  },
+  twitter: {
+    title: '장소 / 코스 추가',
+    description: `원하는 장소/코스를 추가하고 공유해보세요.`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+  },
+};
 
 export default function AddPage({
   params,
