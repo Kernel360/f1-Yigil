@@ -1,5 +1,4 @@
 import React from 'react';
-
 import KakaoBtn from '@/app/_components/ui/button/Kakao';
 import LoginLogo from '/public/logo/yigil_logo.svg';
 import CloseButton from '@/app/_components/ui/button/CloseButton';
@@ -28,11 +27,11 @@ export default async function LoginPage({
 }: {
   searchParams: { status: string };
 }) {
-  const { KAKAO_ID, GOOGLE_CLIENT_ID, NAVER_SEARCH_ID } = process.env;
+  const { KAKAO_ID, GOOGLE_CLIENT_ID, NAVER_DEVELOPERS_ID } = process.env;
 
   const kakaoHref = await kakaoOAuthEndpoint(KAKAO_ID);
   const googleHref = await googleOAuthEndPoint(GOOGLE_CLIENT_ID);
-  const naverHref = await naverOAuthEndPoint(NAVER_SEARCH_ID);
+  const naverHref = await naverOAuthEndPoint(NAVER_DEVELOPERS_ID);
 
   return (
     <div className="w-full h-full bg-main flex flex-col items-center">
