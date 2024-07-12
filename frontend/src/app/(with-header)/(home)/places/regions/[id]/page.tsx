@@ -1,11 +1,8 @@
 import Link from 'next/link';
-
 import { authenticateUser } from '@/app/_components/mypage/hooks/authenticateUser';
 import { myInfoSchema } from '@/types/response';
 import { getInterestedRegions, getRegionPlaces } from '../../../action';
-
 import DummyPlace from '@/app/_components/place/dummy/DummyPlace';
-
 import { RegionPlaces } from '@/app/_components/place/places';
 import { Metadata } from 'next';
 
@@ -15,10 +12,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: '관심 지역',
     description: `관심 지역을 설정하고 관심 지역의 장소/코스를 만나보세요.`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
+    type: 'website',
+    siteName: '이길로그',
+    locale: 'ko-KR',
   },
   twitter: {
     title: '관심 지역',
     description: `관심 지역을 설정하고 관심 지역의 장소/코스를 만나보세요.`,
+    images: { url: '/logo/og-logo.png', alt: '이길로그 로고 이미지' },
   },
 };
 
